@@ -8,12 +8,11 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
-using Shaman;
 using Shaman.Runtime;
 using Microsoft.CodeAnalysis.Emit;
 using System.Threading;
 using Microsoft.CodeAnalysis.Diagnostics;
-using System.Globalization;
+// ReSharper disable InconsistentNaming
 
 
 // Disable field never assigned warning
@@ -21,32 +20,30 @@ using System.Globalization;
 
 internal static class Refl
 {
-    public static Assembly Assembly_Csc = typeof(Microsoft.CodeAnalysis.CSharp.CommandLine.Program).GetTypeInfo().Assembly;
-    public static Assembly Assembly_Common = typeof(Microsoft.CodeAnalysis.Compilation).GetTypeInfo().Assembly;
-    public static Assembly Assembly_Csharp = typeof(Microsoft.CodeAnalysis.CSharpExtensions).GetTypeInfo().Assembly;
-    public static Type Type_Csc = Assembly_Csc.GetType("Microsoft.CodeAnalysis.CSharp.CommandLine.Csc");
-    public static Type Type_BuildPaths = typeof(Microsoft.CodeAnalysis.AssemblyMetadata).Assembly.GetType("Microsoft.CodeAnalysis.BuildPaths");
-    public static Type Type_ErrorLogger = Assembly_Common.GetType("Microsoft.CodeAnalysis.ErrorLogger");
-    public static Type Type_CompilerEmitStreamProvider = Assembly_Common.GetType("Microsoft.CodeAnalysis.CommonCompiler+CompilerEmitStreamProvider");
-    public static Type Type_SimpleEmitStreamProvider = Assembly_Common.GetType("Microsoft.CodeAnalysis.Compilation+SimpleEmitStreamProvider");
-    public static Type Type_EmitStreamProvider = Assembly_Common.GetType("Microsoft.CodeAnalysis.Compilation+EmitStreamProvider");
-    public static Type Type_AdditionalTextFile = Assembly_Common.GetType("Microsoft.CodeAnalysis.AdditionalTextFile");
-    public static Type Type_FileUtilities = Assembly_Common.GetType("Roslyn.Utilities.FileUtilities");
+    public static readonly Assembly Assembly_Csc = typeof(Microsoft.CodeAnalysis.CSharp.CommandLine.Program).GetTypeInfo().Assembly;
+    public static readonly Assembly Assembly_Common = typeof(Compilation).GetTypeInfo().Assembly;
+    public static readonly Assembly Assembly_Csharp = typeof(Microsoft.CodeAnalysis.CSharpExtensions).GetTypeInfo().Assembly;
+    public static readonly Type Type_Csc = Assembly_Csc.GetType("Microsoft.CodeAnalysis.CSharp.CommandLine.Csc");
+    public static readonly Type Type_BuildPaths = typeof(AssemblyMetadata).Assembly.GetType("Microsoft.CodeAnalysis.BuildPaths");
+    public static readonly Type Type_ErrorLogger = Assembly_Common.GetType("Microsoft.CodeAnalysis.ErrorLogger");
+    public static readonly Type Type_CompilerEmitStreamProvider = Assembly_Common.GetType("Microsoft.CodeAnalysis.CommonCompiler+CompilerEmitStreamProvider");
+    public static readonly Type Type_SimpleEmitStreamProvider = Assembly_Common.GetType("Microsoft.CodeAnalysis.Compilation+SimpleEmitStreamProvider");
+    public static readonly Type Type_EmitStreamProvider = Assembly_Common.GetType("Microsoft.CodeAnalysis.Compilation+EmitStreamProvider");
+    public static readonly Type Type_AdditionalTextFile = Assembly_Common.GetType("Microsoft.CodeAnalysis.AdditionalTextFile");
+    public static readonly Type Type_FileUtilities = Assembly_Common.GetType("Roslyn.Utilities.FileUtilities");
 
-    public static Type Type_MD5CryptoServiceProvider = Assembly_Common.GetType("Roslyn.Utilities.MD5CryptoServiceProvider");
-    public static Type Type_DiagnosticBag = Assembly_Common.GetType("Microsoft.CodeAnalysis.DiagnosticBag");
+    public static readonly Type Type_MD5CryptoServiceProvider = Assembly_Common.GetType("Roslyn.Utilities.MD5CryptoServiceProvider");
+    public static readonly Type Type_DiagnosticBag = Assembly_Common.GetType("Microsoft.CodeAnalysis.DiagnosticBag");
 
-    public static Type Type_ErrorFacts = Assembly_Csharp.GetType("Microsoft.CodeAnalysis.CSharp.ErrorFacts");
+    public static readonly Type Type_ErrorFacts = Assembly_Csharp.GetType("Microsoft.CodeAnalysis.CSharp.ErrorFacts");
 
-    public static Type Type_MessageId = Assembly_Csharp.GetType("Microsoft.CodeAnalysis.CSharp.MessageID");
-    public static Type Type_LoggingMetadataFileReferenceResolver = Refl.Assembly_Common.GetType("Microsoft.CodeAnalysis.CommonCompiler+LoggingMetadataFileReferenceResolver");
+    public static readonly Type Type_MessageId = Assembly_Csharp.GetType("Microsoft.CodeAnalysis.CSharp.MessageID");
+    public static readonly Type Type_LoggingMetadataFileReferenceResolver = Assembly_Common.GetType("Microsoft.CodeAnalysis.CommonCompiler+LoggingMetadataFileReferenceResolver");
 
+    public static readonly Type Type_CodeAnalysisResources = Assembly_Common.GetType("Microsoft.CodeAnalysis.CodeAnalysisResources");
+    public static readonly Type Type_Compilation = Assembly_Common.GetType("Microsoft.CodeAnalysis.Compilation");
 
-
-    public static Type Type_CodeAnalysisResources = Assembly_Common.GetType("Microsoft.CodeAnalysis.CodeAnalysisResources");
-    public static Type Type_Compilation = Assembly_Common.GetType("Microsoft.CodeAnalysis.Compilation");
-
-    public static Type Type_DiagnosticInfo = Assembly_Common.GetType("Microsoft.CodeAnalysis.DiagnosticInfo", true, false);
+    public static readonly Type Type_DiagnosticInfo = Assembly_Common.GetType("Microsoft.CodeAnalysis.DiagnosticInfo", true, false);
 }
 
 internal static class ReflCSharpCommandLineArguments
@@ -86,7 +83,6 @@ internal static class ReflCoreClrAnalyzerAssemblyLoader
     }
 }
 
-
 internal static class ReflPathUtilities
 {
     public static Func<string, bool> IsAbsolute;
@@ -106,10 +102,6 @@ internal static class ReflFatalError
         ReflectionHelper.InitializeWrapper(typeof(ReflFatalError), Refl.Assembly_Common, "Microsoft.CodeAnalysis.FatalError");
     }
 }
-
-
-
-
 
 internal static class ReflCommandLineParser
 {
@@ -148,8 +140,6 @@ internal static class ReflCommandLineArguments
     }
 }
 
-
-
 internal static class ReflDiagnosticInfo
 {
     public static Func<object, int, object[], object> ctor;
@@ -159,6 +149,7 @@ internal static class ReflDiagnosticInfo
         ReflectionHelper.InitializeWrapper(typeof(ReflDiagnosticInfo), Refl.Assembly_Common, "Microsoft.CodeAnalysis.DiagnosticInfo");
     }
 }
+
 internal static class ReflLoggingMetadataFileReferenceResolver
 {
     public static Func<object, Func<string, MetadataReferenceProperties, PortableExecutableReference>, object, MetadataReferenceResolver> ctor;
@@ -167,6 +158,7 @@ internal static class ReflLoggingMetadataFileReferenceResolver
         ReflectionHelper.InitializeWrapper(typeof(ReflLoggingMetadataFileReferenceResolver), Refl.Type_LoggingMetadataFileReferenceResolver);
     }
 }
+
 internal static class ReflEncodedStringText
 {
 

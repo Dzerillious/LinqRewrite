@@ -4,14 +4,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shaman.Roslyn.LinqRewrite
 {
     public partial class LinqRewriter : CSharpSyntaxRewriter
     {
-
         private ExpressionSyntax TryRewrite(string aggregationMethod, ExpressionSyntax collection, ITypeSymbol semanticReturnType, List<LinqStep> chain, InvocationExpressionSyntax node)
         {
             var returnType = SyntaxFactory.ParseTypeName(semanticReturnType.ToDisplayString());
@@ -24,17 +21,14 @@ namespace Shaman.Roslyn.LinqRewrite
                     Enumerable.Empty<StatementSyntax>(),
                     collection,
                     chain,
-                    (inv, arguments, param) =>
-                    {
-                        return SyntaxFactory.YieldStatement(SyntaxKind.YieldReturnStatement, SyntaxFactory.IdentifierName(param.Identifier.ValueText));
-                    },
+                    (inv, arguments, param) 
+                        => SyntaxFactory.YieldStatement(SyntaxKind.YieldReturnStatement, SyntaxFactory.IdentifierName(param.Identifier.ValueText)),
                     true
                 );
             }
-
             if (aggregationMethod.Contains(".Sum"))
             {
-                var elementType = ((returnType as NullableTypeSyntax)?.ElementType ?? returnType);
+                var elementType = (returnType as NullableTypeSyntax)?.ElementType ?? returnType;
                 return RewriteAsLoop(
                     returnType,
                     new[] { CreateLocalVariableDeclaration("sum_", SyntaxFactory.CastExpression(elementType, SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(0)))) },
@@ -44,18 +38,15 @@ namespace Shaman.Roslyn.LinqRewrite
                     (inv, arguments, param) =>
                     {
                         var currentValue = SyntaxFactory.IdentifierName(param.Identifier.ValueText);
-                        return IfNullableIsNotNull(elementType != returnType, currentValue, x =>
-                        {
-                            return SyntaxFactory.CheckedStatement(SyntaxKind.CheckedStatement, SyntaxFactory.Block(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.AddAssignmentExpression, SyntaxFactory.IdentifierName("sum_"), x))));
-                        });
+                        return IfNullableIsNotNull(elementType != returnType, currentValue, x 
+                            => SyntaxFactory.CheckedStatement(SyntaxKind.CheckedStatement, SyntaxFactory.Block(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.AddAssignmentExpression, SyntaxFactory.IdentifierName("sum_"), x)))));
                     }
                 );
             }
-
             if (aggregationMethod.Contains(".Max") || aggregationMethod.Contains(".Min"))
             {
                 var minmax = aggregationMethod.Contains(".Max") ? "max_" : "min_";
-                var elementType = ((returnType as NullableTypeSyntax)?.ElementType ?? returnType);
+                var elementType = (returnType as NullableTypeSyntax)?.ElementType ?? returnType;
                 return RewriteAsLoop(
                     returnType,
                     new[] {
@@ -80,7 +71,7 @@ namespace Shaman.Roslyn.LinqRewrite
                         {
                             var assignmentExpressionSyntax = SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(minmax), x);
                             var condition = SyntaxFactory.BinaryExpression(aggregationMethod.Contains(".Max") ? SyntaxKind.GreaterThanExpression : SyntaxKind.LessThanExpression, x, SyntaxFactory.IdentifierName(minmax));
-                            var kind = (elementType as PredefinedTypeSyntax).Keyword.Kind();
+                            var kind = ((PredefinedTypeSyntax) elementType).Keyword.Kind();
                             if (kind == SyntaxKind.DoubleKeyword || kind == SyntaxKind.FloatKeyword)
                             {
                                 condition = SyntaxFactory.BinaryExpression(SyntaxKind.LogicalOrExpression, condition, SyntaxFactory.InvocationExpression(SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, elementType, SyntaxFactory.IdentifierName("IsNaN")), CreateArguments(x)));
@@ -91,11 +82,9 @@ namespace Shaman.Roslyn.LinqRewrite
                         });
                     });
             }
-
-
             if (aggregationMethod.Contains(".Average"))
             {
-                var elementType = ((returnType as NullableTypeSyntax)?.ElementType ?? returnType);
+                var elementType = (returnType as NullableTypeSyntax)?.ElementType ?? returnType;
                 var primitive = ((PredefinedTypeSyntax)elementType).Keyword.Kind();
 
                 ExpressionSyntax sumIdentifier = SyntaxFactory.IdentifierName("sum_");
@@ -108,9 +97,7 @@ namespace Shaman.Roslyn.LinqRewrite
                 }
                 ExpressionSyntax division = SyntaxFactory.BinaryExpression(SyntaxKind.DivideExpression, sumIdentifier, countIdentifier);
                 if (primitive != SyntaxKind.DoubleKeyword && primitive != SyntaxKind.DecimalKeyword)
-                {
                     division = SyntaxFactory.CastExpression(elementType, SyntaxFactory.ParenthesizedExpression(division));
-                }
 
                 return RewriteAsLoop(
                     returnType,
@@ -134,20 +121,13 @@ namespace Shaman.Roslyn.LinqRewrite
                     (inv, arguments, param) =>
                     {
                         var currentValue = SyntaxFactory.IdentifierName(param.Identifier.ValueText);
-                        return IfNullableIsNotNull(elementType != returnType, currentValue, x =>
-                        {
-                            return SyntaxFactory.CheckedStatement(SyntaxKind.CheckedStatement, SyntaxFactory.Block(
-                                SyntaxFactory.ExpressionStatement(SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, SyntaxFactory.IdentifierName("count_"))),
-                                SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.AddAssignmentExpression, SyntaxFactory.IdentifierName("sum_"), x))
-                            ));
-                        });
+                        return IfNullableIsNotNull(elementType != returnType, currentValue, x => SyntaxFactory.CheckedStatement(SyntaxKind.CheckedStatement, SyntaxFactory.Block(
+                            SyntaxFactory.ExpressionStatement(SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, SyntaxFactory.IdentifierName("count_"))),
+                            SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.AddAssignmentExpression, SyntaxFactory.IdentifierName("sum_"), x))
+                        )));
                     }
                 );
             }
-
-
-
-
             if (aggregationMethod == AnyMethod || aggregationMethod == AnyWithConditionMethod)
             {
 
@@ -157,13 +137,9 @@ namespace Shaman.Roslyn.LinqRewrite
                     new[] { SyntaxFactory.ReturnStatement(SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression)) },
                     collection,
                     MaybeAddFilter(chain, aggregationMethod == AnyWithConditionMethod),
-                    (inv, arguments, param) =>
-                    {
-                        return SyntaxFactory.ReturnStatement(SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression));
-                    }
-                );
+                    (inv, arguments, param) 
+                        => SyntaxFactory.ReturnStatement(SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression)));
             }
-
             if (aggregationMethod == ListForEachMethod || aggregationMethod == IEnumerableForEachMethod)
             {
                 return RewriteAsLoop(
@@ -179,10 +155,9 @@ namespace Shaman.Roslyn.LinqRewrite
                     }
                     );
             }
-
             if (aggregationMethod == ContainsMethod)
             {
-                var elementType = SyntaxFactory.ParseTypeName(semantic.GetTypeInfo(node.ArgumentList.Arguments.First().Expression).ConvertedType.ToDisplayString());
+                var elementType = SyntaxFactory.ParseTypeName(_semantic.GetTypeInfo(node.ArgumentList.Arguments.First().Expression).ConvertedType.ToDisplayString());
                 var comparerIdentifier = ((elementType as NullableTypeSyntax)?.ElementType ?? elementType) is PredefinedTypeSyntax ? null : SyntaxFactory.IdentifierName("comparer_");
                 return RewriteAsLoop(
                     CreatePrimitiveType(SyntaxKind.BoolKeyword),
@@ -200,7 +175,6 @@ namespace Shaman.Roslyn.LinqRewrite
                     additionalParameters: new[] { Tuple.Create(CreateParameter("_target", elementType), node.ArgumentList.Arguments.First().Expression) }
                 );
             }
-
             if (aggregationMethod == AllWithConditionMethod) // All alone does not exist
             {
 
@@ -219,9 +193,6 @@ namespace Shaman.Roslyn.LinqRewrite
                     }
                 );
             }
-
-
-
             if (aggregationMethod == CountMethod || aggregationMethod == CountWithConditionMethod || aggregationMethod == LongCountMethod || aggregationMethod == LongCountWithConditionMethod)
             {
 
@@ -231,13 +202,9 @@ namespace Shaman.Roslyn.LinqRewrite
                     new[] { SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName("_count")) },
                     collection,
                     MaybeAddFilter(chain, aggregationMethod == CountWithConditionMethod || aggregationMethod == LongCountWithConditionMethod),
-                    (inv, arguments, param) =>
-                    {
-                        return SyntaxFactory.ExpressionStatement(SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, SyntaxFactory.IdentifierName("_count")));
-                    }
-                );
+                    (inv, arguments, param) 
+                        => SyntaxFactory.ExpressionStatement(SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, SyntaxFactory.IdentifierName("_count"))));
             }
-
             if (aggregationMethod == ElementAtMethod || aggregationMethod == ElementAtOrDefaultMethod)
             {
 
@@ -247,14 +214,11 @@ namespace Shaman.Roslyn.LinqRewrite
                     new[] { aggregationMethod == ElementAtMethod ? (StatementSyntax)CreateThrowException("System.InvalidOperationException", "The specified index is not included in the sequence.") : SyntaxFactory.ReturnStatement(SyntaxFactory.DefaultExpression(returnType)) },
                     collection,
                     MaybeAddFilter(chain, aggregationMethod == CountWithConditionMethod || aggregationMethod == LongCountWithConditionMethod),
-                    (inv, arguments, param) =>
-                    {
-                        return SyntaxFactory.IfStatement(SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, SyntaxFactory.IdentifierName("_requestedPosition"), SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, SyntaxFactory.IdentifierName("_count"))), SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName(param.Identifier.ValueText)));
-                    },
+                    (inv, arguments, param) 
+                        => SyntaxFactory.IfStatement(SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, SyntaxFactory.IdentifierName("_requestedPosition"), SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, SyntaxFactory.IdentifierName("_count"))), SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName(param.Identifier.ValueText))),
                     additionalParameters: new[] { Tuple.Create(CreateParameter("_requestedPosition", CreatePrimitiveType(SyntaxKind.IntKeyword)), node.ArgumentList.Arguments.First().Expression) }
                 );
             }
-
             if (aggregationMethod == FirstMethod || aggregationMethod == FirstWithConditionMethod)
             {
                 return RewriteAsLoop(
@@ -263,15 +227,9 @@ namespace Shaman.Roslyn.LinqRewrite
                     new[] { CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements.") },
                     collection,
                     MaybeAddFilter(chain, aggregationMethod == FirstWithConditionMethod),
-                    (inv, arguments, param) =>
-                    {
-                        return SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName(param.Identifier.ValueText));
-                    }
-                );
+                    (inv, arguments, param) 
+                        => SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName(param.Identifier.ValueText)));
             }
-
-
-
             if (aggregationMethod == FirstOrDefaultMethod || aggregationMethod == FirstOrDefaultWithConditionMethod)
             {
                 return RewriteAsLoop(
@@ -280,13 +238,9 @@ namespace Shaman.Roslyn.LinqRewrite
                     new[] { SyntaxFactory.ReturnStatement(SyntaxFactory.DefaultExpression(returnType)) },
                     collection,
                     MaybeAddFilter(chain, aggregationMethod == FirstOrDefaultWithConditionMethod),
-                    (inv, arguments, param) =>
-                    {
-                        return SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName(param.Identifier.ValueText));
-                    }
-                );
+                    (inv, arguments, param) 
+                        => SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName(param.Identifier.ValueText)));
             }
-
             if (aggregationMethod == LastOrDefaultMethod || aggregationMethod == LastOrDefaultWithConditionMethod)
             {
                 return RewriteAsLoop(
@@ -295,11 +249,8 @@ namespace Shaman.Roslyn.LinqRewrite
                     new[] { SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName("_last")) },
                     collection,
                     MaybeAddFilter(chain, aggregationMethod == LastOrDefaultWithConditionMethod),
-                    (inv, arguments, param) =>
-                    {
-                        return SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("_last"), SyntaxFactory.IdentifierName(param.Identifier.ValueText)));
-                    }
-                );
+                    (inv, arguments, param) 
+                        => SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("_last"), SyntaxFactory.IdentifierName(param.Identifier.ValueText))));
             }
             if (aggregationMethod == LastMethod || aggregationMethod == LastWithConditionMethod)
             {
@@ -309,13 +260,9 @@ namespace Shaman.Roslyn.LinqRewrite
                     new StatementSyntax[] { SyntaxFactory.IfStatement(SyntaxFactory.PrefixUnaryExpression(SyntaxKind.LogicalNotExpression, SyntaxFactory.IdentifierName("_found")), CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements.")), SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName("_last")) },
                     collection,
                     MaybeAddFilter(chain, aggregationMethod == LastWithConditionMethod),
-                    (inv, arguments, param) =>
-                    {
-                        return SyntaxFactory.Block(
-                            SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("_found"), SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression))),
-                            SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("_last"), SyntaxFactory.IdentifierName(param.Identifier.ValueText))));
-                    }
-                );
+                    (inv, arguments, param) => SyntaxFactory.Block(
+                        SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("_found"), SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression))),
+                        SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("_last"), SyntaxFactory.IdentifierName(param.Identifier.ValueText)))));
             }
             if (aggregationMethod == SingleMethod || aggregationMethod == SingleWithConditionMethod)
             {
@@ -325,14 +272,10 @@ namespace Shaman.Roslyn.LinqRewrite
                     new StatementSyntax[] { SyntaxFactory.IfStatement(SyntaxFactory.PrefixUnaryExpression(SyntaxKind.LogicalNotExpression, SyntaxFactory.IdentifierName("_found")), CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements.")), SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName("_last")) },
                     collection,
                     MaybeAddFilter(chain, aggregationMethod == SingleWithConditionMethod),
-                    (inv, arguments, param) =>
-                    {
-                        return SyntaxFactory.Block(
-                            SyntaxFactory.IfStatement(SyntaxFactory.IdentifierName("_found"), CreateThrowException("System.InvalidOperationException", "The sequence contains more than one element.")),
-                            SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("_found"), SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression))),
-                            SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("_last"), SyntaxFactory.IdentifierName(param.Identifier.ValueText))));
-                    }
-                );
+                    (inv, arguments, param) => SyntaxFactory.Block(
+                        SyntaxFactory.IfStatement(SyntaxFactory.IdentifierName("_found"), CreateThrowException("System.InvalidOperationException", "The sequence contains more than one element.")),
+                        SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("_found"), SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression))),
+                        SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("_last"), SyntaxFactory.IdentifierName(param.Identifier.ValueText)))));
             }
             if (aggregationMethod == SingleOrDefaultMethod || aggregationMethod == SingleOrDefaultWithConditionMethod)
             {
@@ -342,17 +285,11 @@ namespace Shaman.Roslyn.LinqRewrite
                     new StatementSyntax[] { SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName("_last")) },
                     collection,
                     MaybeAddFilter(chain, aggregationMethod == SingleOrDefaultWithConditionMethod),
-                    (inv, arguments, param) =>
-                    {
-                        return SyntaxFactory.Block(
-                            SyntaxFactory.IfStatement(SyntaxFactory.IdentifierName("_found"), CreateThrowException("System.InvalidOperationException", "The sequence contains more than one element.")),
-                            SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("_found"), SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression))),
-                            SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("_last"), SyntaxFactory.IdentifierName(param.Identifier.ValueText))));
-                    }
-                );
+                    (inv, arguments, param) => SyntaxFactory.Block(
+                        SyntaxFactory.IfStatement(SyntaxFactory.IdentifierName("_found"), CreateThrowException("System.InvalidOperationException", "The sequence contains more than one element.")),
+                        SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("_found"), SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression))),
+                        SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("_last"), SyntaxFactory.IdentifierName(param.Identifier.ValueText)))));
             }
-
-
             if (aggregationMethod == ToListMethod || aggregationMethod == ReverseMethod)
             {
                 var count = chain.All(x => MethodsThatPreserveCount.Contains(x.MethodName)) ? GetCollectionCount(collection, true) : null;
@@ -364,15 +301,8 @@ namespace Shaman.Roslyn.LinqRewrite
                     aggregationMethod == ReverseMethod ? new StatementSyntax[] { SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("_list"), SyntaxFactory.IdentifierName("Reverse")))), SyntaxFactory.ReturnStatement(listIdentifier) } : new[] { SyntaxFactory.ReturnStatement(listIdentifier) },
                     collection,
                     chain,
-                    (inv, arguments, param) =>
-                    {
-                        return CreateStatement(SyntaxFactory.InvocationExpression(SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, listIdentifier, SyntaxFactory.IdentifierName("Add")), CreateArguments(new[] { SyntaxFactory.IdentifierName(param.Identifier.ValueText) })));
-                    }
-                );
+                    (inv, arguments, param) => CreateStatement(SyntaxFactory.InvocationExpression(SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, listIdentifier, SyntaxFactory.IdentifierName("Add")), CreateArguments(SyntaxFactory.IdentifierName(param.Identifier.ValueText)))));
             }
-
-
-
             if (/*aggregationMethod == ToDictionaryWithKeyMethod || */aggregationMethod == ToDictionaryWithKeyValueMethod)
             {
                 var dictIdentifier = SyntaxFactory.IdentifierName("_dict");
@@ -386,16 +316,12 @@ namespace Shaman.Roslyn.LinqRewrite
                     {
                         var keyLambda = (AnonymousFunctionExpressionSyntax)node.ArgumentList.Arguments.First().Expression;
                         var valueLambda = (AnonymousFunctionExpressionSyntax)node.ArgumentList.Arguments.ElementAtOrDefault(1)?.Expression;
-                        return CreateStatement(SyntaxFactory.InvocationExpression(SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, dictIdentifier, SyntaxFactory.IdentifierName("Add")), CreateArguments(new[] {
-                            InlineOrCreateMethod(new Lambda(keyLambda), SyntaxFactory.ParseTypeName( GetLambdaReturnType(keyLambda).ToDisplayString()), arguments, param),
-                            aggregationMethod == ToDictionaryWithKeyValueMethod ?
-                            InlineOrCreateMethod( new Lambda(valueLambda), SyntaxFactory.ParseTypeName( GetLambdaReturnType(valueLambda).ToDisplayString()), arguments, param):
-                             SyntaxFactory.IdentifierName(param.Identifier.ValueText),
-                        })));
+                        return CreateStatement(SyntaxFactory.InvocationExpression(SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, dictIdentifier, SyntaxFactory.IdentifierName("Add")), CreateArguments(InlineOrCreateMethod(new Lambda(keyLambda), SyntaxFactory.ParseTypeName( GetLambdaReturnType(keyLambda).ToDisplayString()), arguments, param), aggregationMethod == ToDictionaryWithKeyValueMethod ?
+                                InlineOrCreateMethod( new Lambda(valueLambda), SyntaxFactory.ParseTypeName( GetLambdaReturnType(valueLambda).ToDisplayString()), arguments, param):
+                                SyntaxFactory.IdentifierName(param.Identifier.ValueText))));
                     }
                 );
             }
-
             if (aggregationMethod == ToArrayMethod)
             {
                 var count = chain.All(x => MethodsThatPreserveCount.Contains(x.MethodName)) ? GetCollectionCount(collection, false) : null;
@@ -405,49 +331,30 @@ namespace Shaman.Roslyn.LinqRewrite
                     var arrayIdentifier = SyntaxFactory.IdentifierName("_array");
                     return RewriteAsLoop(
                         returnType,
-                        new[] { CreateLocalVariableDeclaration("_array", SyntaxFactory.ArrayCreationExpression(SyntaxFactory.ArrayType(((ArrayTypeSyntax)returnType).ElementType, SyntaxFactory.List(new[] { SyntaxFactory.ArrayRankSpecifier(CreateSeparatedList(new[] { count })) })))) },
+                        new[] { CreateLocalVariableDeclaration("_array", SyntaxFactory.ArrayCreationExpression(SyntaxFactory.ArrayType(((ArrayTypeSyntax)returnType).ElementType, SyntaxFactory.List(new[] { SyntaxFactory.ArrayRankSpecifier(CreateSeparatedList(count)) })))) },
                         new[] { SyntaxFactory.ReturnStatement(arrayIdentifier) },
                         collection,
                         chain,
-                        (inv, arguments, param) =>
-                        {
-                            return CreateStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.ElementAccessExpression(arrayIdentifier, SyntaxFactory.BracketedArgumentList(CreateSeparatedList(new[] { SyntaxFactory.Argument(SyntaxFactory.IdentifierName("_index")) }))), SyntaxFactory.IdentifierName(param.Identifier.ValueText)));
-                        }
-                    );
+                        (inv, arguments, param) 
+                            => CreateStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.ElementAccessExpression(arrayIdentifier, SyntaxFactory.BracketedArgumentList(CreateSeparatedList(SyntaxFactory.Argument(SyntaxFactory.IdentifierName("_index"))))), SyntaxFactory.IdentifierName(param.Identifier.ValueText))));
 
                 }
-                else
-                {
-                    var listIdentifier = SyntaxFactory.IdentifierName("_list");
-                    var listType = SyntaxFactory.ParseTypeName("System.Collections.Generic.List<" + ((ArrayTypeSyntax)returnType).ElementType + ">");
-                    return RewriteAsLoop(
-                        returnType,
-                        new[] { CreateLocalVariableDeclaration("_list", SyntaxFactory.ObjectCreationExpression(listType, CreateArguments(Enumerable.Empty<ArgumentSyntax>()), null)) },
-                        new[] { SyntaxFactory.ReturnStatement(SyntaxFactory.InvocationExpression(SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, listIdentifier, SyntaxFactory.IdentifierName("ToArray")))) },
-                        collection,
-                        chain,
-                        (inv, arguments, param) =>
-                        {
-                            return CreateStatement(SyntaxFactory.InvocationExpression(SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, listIdentifier, SyntaxFactory.IdentifierName("Add")), CreateArguments(new[] { SyntaxFactory.IdentifierName(param.Identifier.ValueText) })));
-                        }
-                    );
-                }
+                var listIdentifier = SyntaxFactory.IdentifierName("_list");
+                var listType = SyntaxFactory.ParseTypeName("System.Collections.Generic.List<" + ((ArrayTypeSyntax)returnType).ElementType + ">");
+                return RewriteAsLoop(
+                    returnType,
+                    new[] { CreateLocalVariableDeclaration("_list", SyntaxFactory.ObjectCreationExpression(listType, CreateArguments(Enumerable.Empty<ArgumentSyntax>()), null)) },
+                    new[] { SyntaxFactory.ReturnStatement(SyntaxFactory.InvocationExpression(SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, listIdentifier, SyntaxFactory.IdentifierName("ToArray")))) },
+                    collection,
+                    chain,
+                    (inv, arguments, param) 
+                        => CreateStatement(SyntaxFactory.InvocationExpression(SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, listIdentifier, SyntaxFactory.IdentifierName("Add")), CreateArguments(SyntaxFactory.IdentifierName(param.Identifier.ValueText)))));
             }
 
 #if false
-
-            
-
-
                     if (GetMethodFullName(node) == SumWithSelectorMethod)
                     {
-
                         string itemArg = null;
-
-
-
-
-
                         return RewriteAsLoop(
                            CreatePrimitiveType(SyntaxKind.IntKeyword),
                            new[] { CreateLocalVariableDeclaration("sum_", SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(0))) },
@@ -461,11 +368,7 @@ namespace Shaman.Roslyn.LinqRewrite
                            () => itemArg,
                            collection
                        );
-
-
-
                     }
-
 
                     if (GetMethodFullName(node) == SumIntsMethod)
                     {
@@ -491,53 +394,46 @@ namespace Shaman.Roslyn.LinqRewrite
         private StatementSyntax IfNullableIsNotNull(bool nullable, IdentifierNameSyntax currentValue, Func<ExpressionSyntax, StatementSyntax> p)
         {
             var k = nullable ? (ExpressionSyntax)SyntaxFactory.InvocationExpression(SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, currentValue, SyntaxFactory.IdentifierName("GetValueOrDefault"))) : currentValue;
-            return nullable ? (StatementSyntax)SyntaxFactory.IfStatement(SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, currentValue, SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression)), p(k)) : p(k);
+            return nullable ? SyntaxFactory.IfStatement(SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, currentValue, SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression)), p(k)) : p(k);
         }
 
         private ExpressionSyntax GetCollectionCount(ExpressionSyntax collection, bool allowUnknown)
         {
-            var collectionType = semantic.GetTypeInfo(collection).Type;
+            var collectionType = _semantic.GetTypeInfo(collection).Type;
             if (collectionType is IArrayTypeSymbol)
-            {
                 return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName(ItemsName), SyntaxFactory.IdentifierName("Length"));
-            }
+            
             if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<")))
-            {
                 return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName(ItemsName), SyntaxFactory.IdentifierName("Count"));
-            }
+                
             if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.ICollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.ICollection<")))
-            {
                 return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName(ItemsName), SyntaxFactory.IdentifierName("Count"));
-            }
-            if (allowUnknown)
-            {
-                var items = new int[] { };
-                if (collectionType.IsValueType) return null;
-                var itemType = GetItemType(collectionType);
-                if (itemType == null) return null;
-                return
-                    SyntaxFactory.InvocationExpression(
-                        SyntaxFactory.MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            SyntaxFactory.ParenthesizedExpression(
-                                SyntaxFactory.ConditionalAccessExpression(
-                                    SyntaxFactory.ParenthesizedExpression(
-                                        SyntaxFactory.BinaryExpression(
-                                            SyntaxKind.AsExpression,
-                                            SyntaxFactory.IdentifierName(ItemsName),
-                                            SyntaxFactory.ParseTypeName("System.Collections.Generic.ICollection<" + itemType.ToDisplayString() + ">")
-                                        )
-                                    ),
-                                    SyntaxFactory.MemberBindingExpression(
-                                        SyntaxFactory.IdentifierName("Count")
+
+            if (!allowUnknown) return null;
+            if (collectionType.IsValueType) return null;
+            var itemType = GetItemType(collectionType);
+            if (itemType == null) return null;
+            return
+                SyntaxFactory.InvocationExpression(
+                    SyntaxFactory.MemberAccessExpression(
+                        SyntaxKind.SimpleMemberAccessExpression,
+                        SyntaxFactory.ParenthesizedExpression(
+                            SyntaxFactory.ConditionalAccessExpression(
+                                SyntaxFactory.ParenthesizedExpression(
+                                    SyntaxFactory.BinaryExpression(
+                                        SyntaxKind.AsExpression,
+                                        SyntaxFactory.IdentifierName(ItemsName),
+                                        SyntaxFactory.ParseTypeName("System.Collections.Generic.ICollection<" + itemType.ToDisplayString() + ">")
                                     )
+                                ),
+                                SyntaxFactory.MemberBindingExpression(
+                                    SyntaxFactory.IdentifierName("Count")
                                 )
-                            ),
-                            SyntaxFactory.IdentifierName("GetValueOrDefault")
-                        )
-                    );
-            }
-            return null;
+                            )
+                        ),
+                        SyntaxFactory.IdentifierName("GetValueOrDefault")
+                    )
+                );
         }
 
         private List<LinqStep> MaybeAddFilter(List<LinqStep> chain, bool condition)
@@ -546,7 +442,6 @@ namespace Shaman.Roslyn.LinqRewrite
             var lambda = (LambdaExpressionSyntax)chain.First().Arguments.FirstOrDefault();
             return InsertExpandedShortcutMethod(chain, WhereMethod, lambda);
         }
-
 
         private List<LinqStep> MaybeAddSelect(List<LinqStep> chain, bool condition)
         {
@@ -567,136 +462,120 @@ namespace Shaman.Roslyn.LinqRewrite
         {
 
             if (chainIndex == 0 && !noAggregation || chainIndex == -1)
-            {
                 return currentAggregation(chain[0], arguments, CreateParameter(itemName, itemType));
-            }
 
             var step = chain[chainIndex];
-
-
             var method = step.MethodName;
 
-
-
-            if (method == WhereMethod)
+            switch (method)
             {
-                var lambda = (AnonymousFunctionExpressionSyntax)step.Arguments[0];
-
-                var check = InlineOrCreateMethod(new Lambda(lambda), CreatePrimitiveType(SyntaxKind.BoolKeyword), arguments, CreateParameter(itemName, itemType));
-                var next = CreateProcessingStep(chain, chainIndex - 1, itemType, itemName, arguments, noAggregation);
-                return SyntaxFactory.IfStatement(check, next is BlockSyntax ? next : SyntaxFactory.Block(next));
-            }
-
-
-
-            if (method == OfTypeMethod || method == CastMethod)
-            {
-                var newtype = ((GenericNameSyntax)((MemberAccessExpressionSyntax)step.Invocation.Expression).Name).TypeArgumentList.Arguments.First();
-
-                var newname = "_linqitem" + ++lastId;
-
-                var next = CreateProcessingStep(chain, chainIndex - 1, newtype, newname, arguments, noAggregation);
-
-
-                if (method == CastMethod)
+                case WhereMethod:
                 {
-                    var local = CreateLocalVariableDeclaration(newname, SyntaxFactory.CastExpression(newtype, SyntaxFactory.IdentifierName(itemName)));
-                    var nexts = next is BlockSyntax ? ((BlockSyntax)next).Statements : (IEnumerable<StatementSyntax>)new[] { next };
-                    return SyntaxFactory.Block(new[] { local }.Concat(nexts));
+                    var lambda = (AnonymousFunctionExpressionSyntax)step.Arguments[0];
+
+                    var check = InlineOrCreateMethod(new Lambda(lambda), CreatePrimitiveType(SyntaxKind.BoolKeyword), arguments, CreateParameter(itemName, itemType));
+                    var next = CreateProcessingStep(chain, chainIndex - 1, itemType, itemName, arguments, noAggregation);
+                    return SyntaxFactory.IfStatement(check, next is BlockSyntax ? next : SyntaxFactory.Block(next));
                 }
-                else
+                case OfTypeMethod:
+                case CastMethod:
                 {
-                    var type = semantic.GetTypeInfo(newtype).Type;
-                    if (type.IsValueType)
-                    {
-                        return SyntaxFactory.IfStatement(SyntaxFactory.BinaryExpression(SyntaxKind.IsExpression, SyntaxFactory.IdentifierName(itemName), newtype), SyntaxFactory.Block(
-                                CreateLocalVariableDeclaration(newname, SyntaxFactory.CastExpression(newtype, SyntaxFactory.IdentifierName(itemName))),
-                                next
+                    var newType = ((GenericNameSyntax)((MemberAccessExpressionSyntax)step.Invocation.Expression).Name).TypeArgumentList.Arguments.First();
+                    var newName = "_linqitem" + ++lastId;
+                    var next = CreateProcessingStep(chain, chainIndex - 1, newType, newName, arguments, noAggregation);
 
-                            ));
+
+                    if (method == CastMethod)
+                    {
+                        var local = CreateLocalVariableDeclaration(newName, SyntaxFactory.CastExpression(newType, SyntaxFactory.IdentifierName(itemName)));
+                        var nextStatement = next is BlockSyntax ? ((BlockSyntax)next).Statements : (IEnumerable<StatementSyntax>)new[] { next };
+                        return SyntaxFactory.Block(new[] { local }.Concat(nextStatement));
                     }
                     else
                     {
-                        var local = CreateLocalVariableDeclaration(newname, SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression, SyntaxFactory.IdentifierName(itemName), newtype));
-                        return SyntaxFactory.Block(local, SyntaxFactory.IfStatement(SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, SyntaxFactory.IdentifierName(newname), SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression)),
+                        var type = _semantic.GetTypeInfo(newType).Type;
+                        if (type.IsValueType)
+                        {
+                            return SyntaxFactory.IfStatement(SyntaxFactory.BinaryExpression(SyntaxKind.IsExpression, SyntaxFactory.IdentifierName(itemName), newType), SyntaxFactory.Block(
+                                CreateLocalVariableDeclaration(newName, SyntaxFactory.CastExpression(newType, SyntaxFactory.IdentifierName(itemName))),
+                                next
+
+                            ));
+                        }
+                        var local = CreateLocalVariableDeclaration(newName, SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression, SyntaxFactory.IdentifierName(itemName), newType));
+                        return SyntaxFactory.Block(local, SyntaxFactory.IfStatement(SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, SyntaxFactory.IdentifierName(newName), SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression)),
                             next));
                     }
                 }
+                case SelectMethod:
+                {
+                    var lambda = (AnonymousFunctionExpressionSyntax)step.Arguments[0];
+
+                    var newName = "_linqitem" + ++lastId;
+                    var lambdaType = (INamedTypeSymbol)_semantic.GetTypeInfo(lambda).ConvertedType;
+                    var lambdaBodyType = lambdaType.TypeArguments.Last();
+                    var newType = IsAnonymousType(lambdaBodyType) ? null : SyntaxFactory.ParseTypeName(lambdaBodyType.ToDisplayString());
+
+                    var local = CreateLocalVariableDeclaration(newName, InlineOrCreateMethod(new Lambda(lambda), newType, arguments, CreateParameter(itemName, itemType)));
+                    
+                    var next = CreateProcessingStep(chain, chainIndex - 1, newType, newName, arguments, noAggregation);
+                    var nextStatement = next is BlockSyntax syntax ? syntax.Statements : (IEnumerable<StatementSyntax>)new[] { next };
+                    return SyntaxFactory.Block(new[] { local }.Concat(nextStatement));
+                }
+                default:
+                    throw new NotSupportedException();
             }
-
-
-            if (method == SelectMethod)
-            {
-                var lambda = (AnonymousFunctionExpressionSyntax)step.Arguments[0];
-
-                var newname = "_linqitem" + ++lastId;
-                var lambdaType = (INamedTypeSymbol)semantic.GetTypeInfo(lambda).ConvertedType;
-                var lambdaBodyType = lambdaType.TypeArguments.Last();
-                var newtype = IsAnonymousType(lambdaBodyType) ? null : SyntaxFactory.ParseTypeName(lambdaBodyType.ToDisplayString());
-
-
-                var local = CreateLocalVariableDeclaration(newname, InlineOrCreateMethod(new Lambda(lambda), newtype, arguments, CreateParameter(itemName, itemType)));
-
-
-                var next = CreateProcessingStep(chain, chainIndex - 1, newtype, newname, arguments, noAggregation);
-                var nexts = next is BlockSyntax ? ((BlockSyntax)next).Statements : (IEnumerable<StatementSyntax>)new[] { next };
-                return SyntaxFactory.Block(new[] { local }.Concat(nexts));
-            }
-
-
-
-            throw new NotSupportedException();
         }
 
 
         //readonly static string ToDictionaryWithKeyMethod = "System.Collections.Generic.IEnumerable<TSource>.ToDictionary<TSource, TKey>(System.Func<TSource, TKey>)";
-        readonly static string ToDictionaryWithKeyValueMethod = "System.Collections.Generic.IEnumerable<TSource>.ToDictionary<TSource, TKey, TElement>(System.Func<TSource, TKey>, System.Func<TSource, TElement>)";
-        readonly static string ToArrayMethod = "System.Collections.Generic.IEnumerable<TSource>.ToArray<TSource>()";
-        readonly static string ToListMethod = "System.Collections.Generic.IEnumerable<TSource>.ToList<TSource>()";
-        readonly static string ReverseMethod = "System.Collections.Generic.IEnumerable<TSource>.Reverse<TSource>()";
-        readonly static string FirstMethod = "System.Collections.Generic.IEnumerable<TSource>.First<TSource>()";
-        readonly static string SingleMethod = "System.Collections.Generic.IEnumerable<TSource>.Single<TSource>()";
-        readonly static string LastMethod = "System.Collections.Generic.IEnumerable<TSource>.Last<TSource>()";
-        readonly static string FirstOrDefaultMethod = "System.Collections.Generic.IEnumerable<TSource>.FirstOrDefault<TSource>()";
-        readonly static string SingleOrDefaultMethod = "System.Collections.Generic.IEnumerable<TSource>.SingleOrDefault<TSource>()";
-        readonly static string LastOrDefaultMethod = "System.Collections.Generic.IEnumerable<TSource>.LastOrDefault<TSource>(System.Func<TSource, bool>)";
-        readonly static string FirstWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.First<TSource>(System.Func<TSource, bool>)";
-        readonly static string SingleWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.Single<TSource>(System.Func<TSource, bool>)";
-        readonly static string LastWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.Last<TSource>(System.Func<TSource, bool>)";
-        readonly static string FirstOrDefaultWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.FirstOrDefault<TSource>(System.Func<TSource, bool>)";
-        readonly static string SingleOrDefaultWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.SingleOrDefault<TSource>(System.Func<TSource, bool>)";
-        readonly static string LastOrDefaultWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.LastOrDefault<TSource>(System.Func<TSource, bool>)";
+        private const string ToDictionaryWithKeyValueMethod = "System.Collections.Generic.IEnumerable<TSource>.ToDictionary<TSource, TKey, TElement>(System.Func<TSource, TKey>, System.Func<TSource, TElement>)";
+        private const string ToArrayMethod = "System.Collections.Generic.IEnumerable<TSource>.ToArray<TSource>()";
+        private const string ToListMethod = "System.Collections.Generic.IEnumerable<TSource>.ToList<TSource>()";
+        private const string ReverseMethod = "System.Collections.Generic.IEnumerable<TSource>.Reverse<TSource>()";
+        private const string FirstMethod = "System.Collections.Generic.IEnumerable<TSource>.First<TSource>()";
+        private const string SingleMethod = "System.Collections.Generic.IEnumerable<TSource>.Single<TSource>()";
+        private const string LastMethod = "System.Collections.Generic.IEnumerable<TSource>.Last<TSource>()";
+        private const string FirstOrDefaultMethod = "System.Collections.Generic.IEnumerable<TSource>.FirstOrDefault<TSource>()";
+        private const string SingleOrDefaultMethod = "System.Collections.Generic.IEnumerable<TSource>.SingleOrDefault<TSource>()";
+        private const string LastOrDefaultMethod = "System.Collections.Generic.IEnumerable<TSource>.LastOrDefault<TSource>(System.Func<TSource, bool>)";
+        private const string FirstWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.First<TSource>(System.Func<TSource, bool>)";
+        private const string SingleWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.Single<TSource>(System.Func<TSource, bool>)";
+        private const string LastWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.Last<TSource>(System.Func<TSource, bool>)";
+        private const string FirstOrDefaultWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.FirstOrDefault<TSource>(System.Func<TSource, bool>)";
+        private const string SingleOrDefaultWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.SingleOrDefault<TSource>(System.Func<TSource, bool>)";
+        private const string LastOrDefaultWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.LastOrDefault<TSource>(System.Func<TSource, bool>)";
 
-        readonly static string CountMethod = "System.Collections.Generic.IEnumerable<TSource>.Count<TSource>()";
-        readonly static string CountWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.Count<TSource>(System.Func<TSource, bool>)";
-        readonly static string LongCountMethod = "System.Collections.Generic.IEnumerable<TSource>.LongCount<TSource>()";
-        readonly static string LongCountWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.LongCount<TSource>(System.Func<TSource, bool>)";
+        private const string CountMethod = "System.Collections.Generic.IEnumerable<TSource>.Count<TSource>()";
+        private const string CountWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.Count<TSource>(System.Func<TSource, bool>)";
+        private const string LongCountMethod = "System.Collections.Generic.IEnumerable<TSource>.LongCount<TSource>()";
+        private const string LongCountWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.LongCount<TSource>(System.Func<TSource, bool>)";
 
-        readonly static string ElementAtMethod = "System.Collections.Generic.IEnumerable<TSource>.ElementAt<TSource>(int)";
-        readonly static string ElementAtOrDefaultMethod = "System.Collections.Generic.IEnumerable<TSource>.ElementAtOrDefault<TSource>(int)";
+        private const string ElementAtMethod = "System.Collections.Generic.IEnumerable<TSource>.ElementAt<TSource>(int)";
+        private const string ElementAtOrDefaultMethod = "System.Collections.Generic.IEnumerable<TSource>.ElementAtOrDefault<TSource>(int)";
 
-        readonly static string AnyMethod = "System.Collections.Generic.IEnumerable<TSource>.Any<TSource>()";
-        readonly static string AnyWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.Any<TSource>(System.Func<TSource, bool>)";
+        private const string AnyMethod = "System.Collections.Generic.IEnumerable<TSource>.Any<TSource>()";
+        private const string AnyWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.Any<TSource>(System.Func<TSource, bool>)";
 
-        readonly static string AllWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.All<TSource>(System.Func<TSource, bool>)";
+        private const string AllWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.All<TSource>(System.Func<TSource, bool>)";
 
+        private const string ContainsMethod = "System.Collections.Generic.IEnumerable<TSource>.Contains<TSource>(TSource)";
 
-
-        readonly static string ContainsMethod = "System.Collections.Generic.IEnumerable<TSource>.Contains<TSource>(TSource)";
-
-        readonly static string ListForEachMethod = "System.Collections.Generic.List<T>.ForEach(System.Action<T>)";
-        readonly static string IEnumerableForEachMethod = "System.Collections.Generic.IEnumerable<T>.ForEach<T>(System.Action<T>)";
+        private const string ListForEachMethod = "System.Collections.Generic.List<T>.ForEach(System.Action<T>)";
+        private const string IEnumerableForEachMethod = "System.Collections.Generic.IEnumerable<T>.ForEach<T>(System.Action<T>)";
 
         //readonly static string RecursiveEnumerationMethod = "T.RecursiveEnumeration<T>(System.Func<T, T>)";
 
-        readonly static string WhereMethod = "System.Collections.Generic.IEnumerable<TSource>.Where<TSource>(System.Func<TSource, bool>)";
-        readonly static string SelectMethod = "System.Collections.Generic.IEnumerable<TSource>.Select<TSource, TResult>(System.Func<TSource, TResult>)";
-        readonly static string CastMethod = "System.Collections.IEnumerable.Cast<TResult>()";
-        readonly static string OfTypeMethod = "System.Collections.IEnumerable.OfType<TResult>()";
-        readonly static string[] RootMethodsThatRequireYieldReturn = new[] {
+        private const string WhereMethod = "System.Collections.Generic.IEnumerable<TSource>.Where<TSource>(System.Func<TSource, bool>)";
+        private const string SelectMethod = "System.Collections.Generic.IEnumerable<TSource>.Select<TSource, TResult>(System.Func<TSource, TResult>)";
+        private const string CastMethod = "System.Collections.IEnumerable.Cast<TResult>()";
+        private const string OfTypeMethod = "System.Collections.IEnumerable.OfType<TResult>()";
+
+        private static readonly string[] RootMethodsThatRequireYieldReturn = {
             WhereMethod, SelectMethod, CastMethod, OfTypeMethod
         };
-        readonly static string[] MethodsThatPreserveCount = new[] {
+
+        private static readonly string[] MethodsThatPreserveCount = {
             SelectMethod, CastMethod, ReverseMethod, ToListMethod, ToArrayMethod /*OrderBy*/
         };
     }

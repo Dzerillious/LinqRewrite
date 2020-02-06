@@ -1,10 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shaman.Roslyn.LinqRewrite
 {
@@ -14,17 +9,13 @@ namespace Shaman.Roslyn.LinqRewrite
 
         public LinqStep(string methodName, IReadOnlyList<ExpressionSyntax> arguments, InvocationExpressionSyntax invocation = null)
         {
-            this.MethodName = methodName;
-            this.Arguments = arguments;
-            this.Invocation = invocation;
+            MethodName = methodName;
+            Arguments = arguments;
+            Invocation = invocation;
         }
         public string MethodName { get; }
         public IReadOnlyList<ExpressionSyntax> Arguments { get; }
         public InvocationExpressionSyntax Invocation { get; }
-
-        public override string ToString()
-        {
-            return MethodName;
-        }
+        public override string ToString() => MethodName;
     }
 }

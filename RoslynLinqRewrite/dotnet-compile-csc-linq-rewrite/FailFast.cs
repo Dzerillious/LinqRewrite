@@ -13,11 +13,7 @@ namespace Microsoft.CodeAnalysis
             // EDMAURER Now using the managed API to fail fast so as to default
             // to the managed VS debug engine and hopefully get great
             // Watson bucketing. Before vanishing trigger anyone listening.
-            if (Debugger.IsAttached)
-            {
-                Debugger.Break();
-            }
-
+            if (Debugger.IsAttached) Debugger.Break();
             Environment.FailFast(exception.ToString(), exception);
         }
 
@@ -33,16 +29,8 @@ namespace Microsoft.CodeAnalysis
         [DebuggerHidden]
         internal static void Assert(bool condition, string message = null)
         {
-            if (condition)
-            {
-                return;
-            }
-
-            if (Debugger.IsAttached)
-            {
-                Debugger.Break();
-            }
-
+            if (condition) return;
+            if (Debugger.IsAttached) Debugger.Break();
             Environment.FailFast("ASSERT FAILED" + Environment.NewLine + message);
         }
     }

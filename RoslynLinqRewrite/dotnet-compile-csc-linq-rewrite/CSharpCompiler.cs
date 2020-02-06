@@ -8,10 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
-using Roslyn.Utilities;
 using Shaman.Runtime;
 using Shaman.Runtime.ReflectionExtensions;
 using CommonMessageProvider = System.Object;
@@ -36,8 +34,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             _diagnosticFormatter = ReflCommandLineDiagnosticFormatter.ctor(baseDirectory, Arguments.PrintFullPaths, ReflCSharpCommandLineArguments.get_ShouldIncludeErrorEndLocation(Arguments));
         }
 
-        public override DiagnosticFormatter DiagnosticFormatter { get { return _diagnosticFormatter; } }
-        protected internal new CSharpCommandLineArguments Arguments { get { return (CSharpCommandLineArguments)base.Arguments; } }
+        public override DiagnosticFormatter DiagnosticFormatter => _diagnosticFormatter;
+        protected internal new CSharpCommandLineArguments Arguments => (CSharpCommandLineArguments)base.Arguments;
 
         public override Compilation CreateCompilation(TextWriter consoleOutput, TouchedFileLogger touchedFilesLogger, ErrorLogger2 errorLogger)
         {
@@ -47,13 +45,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             // case there are many script files.
             var scriptParseOptions = parseOptions.WithKind(SourceCodeKind.Script);
 
-            bool hadErrors = false;
+            var hadErrors = false;
 
             var sourceFiles = Arguments.SourceFiles;
             var trees = new SyntaxTree[sourceFiles.Length];
             var normalizedFilePaths = new String[sourceFiles.Length];
 
-            for (int i = 0; i < sourceFiles.Length; i++)
+            for (var i = 0; i < sourceFiles.Length; i++)
             {
                 //NOTE: order of trees is important!!
                 trees[i] = ParseFile(consoleOutput, parseOptions, scriptParseOptions, ref hadErrors, sourceFiles[i], errorLogger, out normalizedFilePaths[i]);
@@ -69,32 +67,28 @@ namespace Microsoft.CodeAnalysis.CSharp
             var diagnostics = typeof(List<>).MakeGenericTypeFast(Refl.Type_DiagnosticInfo).InvokeFunction(".ctor");
 
             var uniqueFilePaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            for (int i = 0; i < sourceFiles.Length; i++)
+            for (var i = 0; i < sourceFiles.Length; i++)
             {
                 var normalizedFilePath = normalizedFilePaths[i];
                 Debug.Assert(normalizedFilePath != null);
                 Debug.Assert(ReflPathUtilities.IsAbsolute(normalizedFilePath));
 
-                if (!uniqueFilePaths.Add(normalizedFilePath))
-                {
-                    // warning CS2002: Source file '{0}' specified multiple times
-                    diagnostics.InvokeAction("Add", ReflDiagnosticInfo.ctor(MessageProvider, (int)Compatibility.WRN_FileAlreadyIncluded,
-                        new object[] { Arguments.PrintFullPaths ? normalizedFilePath : ReflCommandLineDiagnosticFormatter.RelativizeNormalizedPath(_diagnosticFormatter, normalizedFilePath)}));
+                if (uniqueFilePaths.Add(normalizedFilePath)) continue;
+                // warning CS2002: Source file '{0}' specified multiple times
+                diagnostics.InvokeAction("Add", ReflDiagnosticInfo.ctor(MessageProvider, Compatibility.WRN_FileAlreadyIncluded,
+                    new object[] { Arguments.PrintFullPaths ? normalizedFilePath : ReflCommandLineDiagnosticFormatter.RelativizeNormalizedPath(_diagnosticFormatter, normalizedFilePath)}));
 
-                    trees[i] = null;
-                }
+                trees[i] = null;
             }
 
             if (Arguments.TouchedFilesPath != null)
             {
                 foreach (var path in uniqueFilePaths)
-                {
                     ReflTouchedFileLogger.AddRead(touchedFilesLogger, path);
-                }
             }
 
             var assemblyIdentityComparer = DesktopAssemblyIdentityComparer.Default;
-            var appConfigPath = this.Arguments.AppConfigPath;
+            var appConfigPath = Arguments.AppConfigPath;
             if (appConfigPath != null)
             {
                 try
@@ -105,25 +99,20 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
 
                     if (touchedFilesLogger != null)
-                    {
                         ReflTouchedFileLogger.AddRead(touchedFilesLogger, appConfigPath);
-                    }
                 }
                 catch (Exception ex)
                 {
-                    diagnostics.InvokeAction("Add", ReflDiagnosticInfo.ctor(MessageProvider, (int)Compatibility.ERR_CantReadConfigFile, new object[]{ appConfigPath, ex.Message}));
+                    diagnostics.InvokeAction("Add", ReflDiagnosticInfo.ctor(MessageProvider, Compatibility.ERR_CantReadConfigFile, new object[]{ appConfigPath, ex.Message}));
                 }
             }
 
             var xmlFileResolver = ReflLoggingXmlFileResolver.ctor(Arguments.BaseDirectory, touchedFilesLogger);
             var sourceFileResolver = ReflLoggingSourceFileResolver.ctor(ImmutableArray<string>.Empty, Arguments.BaseDirectory, Arguments.PathMap, touchedFilesLogger);
 
-            MetadataReferenceResolver referenceDirectiveResolver;
-            var resolvedReferences = ResolveMetadataReferences(diagnostics, touchedFilesLogger, out referenceDirectiveResolver);
+            var resolvedReferences = ResolveMetadataReferences(diagnostics, touchedFilesLogger, out var referenceDirectiveResolver);
             if (ReportErrors((IEnumerable<DiagnosticInfo>)diagnostics, consoleOutput, errorLogger))
-            {
                 return null;
-            }
 
             var strongNameProvider = ReflLoggingStrongNameProvider.ctor(Arguments.KeyFileSearchPaths, touchedFilesLogger, null);
 
@@ -160,10 +149,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 hadErrors = true;
                 return null;
             }
-            else
-            {
-                return ParseFile(parseOptions, scriptParseOptions, content, file);
-            }
+            else return ParseFile(parseOptions, scriptParseOptions, content, file);
         }
 
         private static SyntaxTree ParseFile(
@@ -180,8 +166,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // prepopulate line tables.
             // we will need line tables anyways and it is better to not wait until we are in emit
             // where things run sequentially.
-            bool isHiddenDummy;
-            ReflSyntaxTree.GetMappedLineSpanAndVisibility(tree, default(TextSpan), out isHiddenDummy);
+            ReflSyntaxTree.GetMappedLineSpanAndVisibility(tree, default, out _);
 
             return tree;
         }
@@ -203,49 +188,35 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         protected override string GetOutputFileName(Compilation compilation, CancellationToken cancellationToken)
         {
-            if (Arguments.OutputFileName == null)
+            if (Arguments.OutputFileName != null) return base.GetOutputFileName(compilation, cancellationToken);
+            
+            Debug.Assert(
+                Arguments.CompilationOptions.OutputKind == OutputKind.ConsoleApplication ||
+                Arguments.CompilationOptions.OutputKind == OutputKind.WindowsApplication ||
+                Arguments.CompilationOptions.OutputKind == OutputKind.WindowsRuntimeApplication);
+
+            var comp = (CSharpCompilation)compilation;
+
+            ISymbol entryPoint = comp.ScriptClass;
+            if (entryPoint == null)
             {
-                Debug.Assert(
-                    Arguments.CompilationOptions.OutputKind == OutputKind.ConsoleApplication ||
-                    Arguments.CompilationOptions.OutputKind == OutputKind.WindowsApplication ||
-                    Arguments.CompilationOptions.OutputKind == OutputKind.WindowsRuntimeApplication);
-
-                var comp = (CSharpCompilation)compilation;
-
-                ISymbol entryPoint = comp.ScriptClass;
-                if ((object)entryPoint == null)
-                {
-                    var method = comp.GetEntryPoint(cancellationToken);
-                    if ((object)method != null)
-                    {
-                        entryPoint = method.PartialImplementationPart ?? method;
-                    }
-                }
-
-                if ((object)entryPoint != null)
-                {
-                    var syntaxTree = entryPoint.Locations.First().SourceTree;
-                    var location = syntaxTree.FilePath;
-                    if (location == null) OriginalPaths.TryGetValue(syntaxTree, out location);
-                    string entryPointFileName = ReflPathUtilities.GetFileName(location, true);
-                    return Path.ChangeExtension(entryPointFileName, ".exe");
-                }
-                else
-                {
-                    // no entrypoint found - an error will be reported and the compilation won't be emitted
-                    return "error";
-                }
+                var method = comp.GetEntryPoint(cancellationToken);
+                if (method != null) entryPoint = method.PartialImplementationPart ?? method;
             }
-            else
-            {
-                return base.GetOutputFileName(compilation, cancellationToken);
-            }
+
+            if (entryPoint == null) return "error";
+                
+            var syntaxTree = entryPoint.Locations.First().SourceTree;
+            var location = syntaxTree.FilePath;
+            if (location == null) OriginalPaths.TryGetValue(syntaxTree, out location);
+            var entryPointFileName = ReflPathUtilities.GetFileName(location, true);
+            return Path.ChangeExtension(entryPointFileName, ".exe");
+
+            // no entrypoint found - an error will be reported and the compilation won't be emitted
         }
 
         internal override bool SuppressDefaultResponseFile(IEnumerable<string> args)
-        {
-            return args.Any(arg => new[] { "/noconfig", "-noconfig" }.Contains(arg.ToLowerInvariant()));
-        }
+            => args.Any(arg => new[] { "/noconfig", "-noconfig" }.Contains(arg.ToLowerInvariant()));
 
         /// <summary>
         /// Print compiler logo
@@ -253,22 +224,18 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="consoleOutput"></param>
         public override void PrintLogo(TextWriter consoleOutput)
         {
-            
             consoleOutput.WriteLine(ErrorFacts_GetMessage(MessageID.IDS_LogoLine1, Culture), GetToolName(), GetAssemblyFileVersion());
             consoleOutput.WriteLine(ErrorFacts_GetMessage(MessageID.IDS_LogoLine2, Culture), Culture);
             consoleOutput.WriteLine("LINQ Rewriter version");
             consoleOutput.WriteLine();
         }
 
-        internal override string GetToolName()
-        {
-            return ErrorFacts_GetMessage(MessageID.IDS_ToolName, Culture);
-        }
+        internal override string GetToolName() => ErrorFacts_GetMessage(MessageID.IDS_ToolName, Culture);
 
         public static string ErrorFacts_GetMessage(MessageID messageId, CultureInfo culture)
         {
             var func = Refl.Type_ErrorFacts.GetMethods().Single(x => x.Name == "GetMessage" && x.GetParameters().Length == 2 && x.GetParameters()[0].ParameterType == Refl.Type_MessageId);
-            return (string)func.Invoke(null, new object[] { Enum.ToObject(Refl.Type_MessageId, (int)messageId), culture });
+            return (string)func.Invoke(null, new [] { Enum.ToObject(Refl.Type_MessageId, (int)messageId), culture });
         }
 
         /// <summary>
@@ -276,14 +243,10 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="consoleOutput"></param>
         public override void PrintHelp(TextWriter consoleOutput)
-        {
-            consoleOutput.WriteLine(ErrorFacts_GetMessage(MessageID.IDS_CSCHelp, Culture));
-        }
+            => consoleOutput.WriteLine(ErrorFacts_GetMessage(MessageID.IDS_CSCHelp, Culture));
 
         protected override bool TryGetCompilerDiagnosticCode(string diagnosticId, out uint code)
-        {
-            return CommonCompiler.TryGetCompilerDiagnosticCode(diagnosticId, "CS", out code);
-        }
+            => CommonCompiler.TryGetCompilerDiagnosticCode(diagnosticId, "CS", out code);
 
         protected override ImmutableArray<DiagnosticAnalyzer> ResolveAnalyzersAndGeneratorsFromArguments(object diagnostics, CommonMessageProvider messageProvider, TouchedFileLogger touchedFiles)
         {

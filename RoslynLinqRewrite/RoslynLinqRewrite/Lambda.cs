@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -11,7 +6,6 @@ namespace Shaman.Roslyn.LinqRewrite
 {
     class Lambda
     {
-
         public CSharpSyntaxNode Body { get; }
         public IReadOnlyList<ParameterSyntax> Parameters { get; }
         public AnonymousFunctionExpressionSyntax Syntax { get; }
@@ -20,9 +14,18 @@ namespace Shaman.Roslyn.LinqRewrite
         {
             Body = lambda.Body;
             Syntax = lambda;
-            if (lambda is ParenthesizedLambdaExpressionSyntax) Parameters = ((ParenthesizedLambdaExpressionSyntax)lambda).ParameterList.Parameters;
-            if (lambda is AnonymousMethodExpressionSyntax) Parameters = ((AnonymousMethodExpressionSyntax)lambda).ParameterList.Parameters;
-            if (lambda is SimpleLambdaExpressionSyntax) Parameters = new[] { ((SimpleLambdaExpressionSyntax)lambda).Parameter };
+            switch (lambda)
+            {
+                case ParenthesizedLambdaExpressionSyntax syntax:
+                    Parameters = syntax.ParameterList.Parameters;
+                    break;
+                case AnonymousMethodExpressionSyntax expressionSyntax:
+                    Parameters = expressionSyntax.ParameterList.Parameters;
+                    break;
+                case SimpleLambdaExpressionSyntax lambdaExpressionSyntax:
+                    Parameters = new[] { lambdaExpressionSyntax.Parameter };
+                    break;
+            }
         }
 
         public Lambda(CSharpSyntaxNode statement, ParameterSyntax[] parameters)

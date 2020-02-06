@@ -24,9 +24,7 @@ namespace Microsoft.CodeAnalysis
         protected override Assembly LoadFromPathImpl(string fullPath)
         {
             if (Interlocked.CompareExchange(ref _hookedAssemblyResolve, 0, 1) == 0)
-            {
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-            }
 
             return LoadImpl(fullPath);
         }

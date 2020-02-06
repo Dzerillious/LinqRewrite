@@ -6,7 +6,7 @@ static class Meow
 {
     static void Main()
     {
-        var sdfsdf = (new Exception()).RecursiveEnumeration(x => x.InnerException).Last();
+        var sdfsdf = new Exception().RecursiveEnumeration(x => x.InnerException).Last();
         var arr = new[] { 5, 457, 7464, 66 };
         var arr2 = new[] { "a", "b" };
         var capture = 5;

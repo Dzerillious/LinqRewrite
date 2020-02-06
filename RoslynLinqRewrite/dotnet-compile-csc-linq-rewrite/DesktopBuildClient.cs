@@ -2,21 +2,15 @@
 #if DESKTOP
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Security.Principal;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal class DesktopBuildClient : BuildClient
     {
-        
+        // ReSharper disable once NotAccessedField.Local
         private readonly RequestLanguage _language;
         private readonly CompileFunc _compileFunc;
         private readonly IAnalyzerAssemblyLoader _analyzerAssemblyLoader;
@@ -34,23 +28,16 @@ namespace Microsoft.CodeAnalysis.CommandLine
             var clientDir = AppDomain.CurrentDomain.BaseDirectory;
             var sdkDir = RuntimeEnvironment.GetRuntimeDirectory();
             var workingDir = Directory.GetCurrentDirectory();
-            string tempPath = Path.GetTempPath();
+            var tempPath = Path.GetTempPath();
             var buildPaths = new BuildPathsAlt(clientDir: clientDir, workingDir: workingDir, sdkDir: sdkDir, tempDir: tempPath);
-            var originalArguments = BuildClient.GetCommandLineArgs(arguments).Concat(extraArguments).ToArray();
+            var originalArguments = GetCommandLineArgs(arguments).Concat(extraArguments).ToArray();
             return client.RunCompilation(originalArguments, buildPaths).ExitCode;
         }
 
         protected override int RunLocalCompilation(string[] arguments, BuildPathsAlt buildPaths, TextWriter textWriter)
-        {
-            return _compileFunc(arguments, buildPaths, textWriter, _analyzerAssemblyLoader);
-        }
-        
-        protected override string GetSessionKey(BuildPathsAlt buildPaths)
-        {
-            return string.Empty;
-        }
+            => _compileFunc(arguments, buildPaths, textWriter, _analyzerAssemblyLoader);
 
-        
+        protected override string GetSessionKey(BuildPathsAlt buildPaths) => string.Empty;
     }
 }
 #endif

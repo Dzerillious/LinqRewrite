@@ -1,11 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Globalization;
-using System.Threading;
 using System.Collections.Immutable;
 using System.Collections.Generic;
-using System.IO;
-using System.Diagnostics;
 
 internal static class Compatibility
 {
@@ -22,11 +19,8 @@ internal static class Compatibility
 
     public static ImmutableArray<T> AsImmutableOrNull<T>(this IEnumerable<T> items)
     {
-        if (items == null)
-        {
-            return default(ImmutableArray<T>);
-        }
-        return ImmutableArray.CreateRange<T>(items);
+        if (items == null) return default;
+        return ImmutableArray.CreateRange(items);
     }
 
 }

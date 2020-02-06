@@ -2,12 +2,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,7 +15,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
     internal struct BuildPathsAlt
     {
         /// <summary>
-        /// The path which containts the compiler binaries and response files.
+        /// The path which contains the compiler binaries and response files.
         /// </summary>
         internal string ClientDirectory { get; }
 
@@ -74,22 +71,12 @@ namespace Microsoft.CodeAnalysis.CommandLine
         /// </summary>
         internal RunCompilationResult RunCompilation(IEnumerable<string> originalArguments, BuildPathsAlt buildPaths, TextWriter textWriter = null)
         {
-            textWriter = textWriter ?? Console.Out;
+            textWriter ??= Console.Out;
 
             var args = originalArguments.Select(arg => arg.Trim()).ToArray();
 
-            bool hasShared;
-            string keepAlive;
-            string errorMessage;
-            string sessionKey;
-            List<string> parsedArgs;
             if (!ReflCommandLineParser.TryParseClientArgs(
-                    args,
-                    out parsedArgs,
-                    out hasShared,
-                    out keepAlive,
-                    out sessionKey,
-                    out errorMessage))
+                    args, out var parsedArgs, out _, out _, out _, out var errorMessage))
             {
                 Console.Out.WriteLine(errorMessage);
                 return RunCompilationResult.Failed;
@@ -104,7 +91,12 @@ namespace Microsoft.CodeAnalysis.CommandLine
         public Task<RunCompilationResult> RunCompilationAsync(IEnumerable<string> originalArguments, BuildPathsAlt buildPaths, TextWriter textWriter = null)
         {
             var tcs = new TaskCompletionSource<RunCompilationResult>();
-            ThreadStart action = () =>
+
+            var thread = new Thread(ThreadStart);
+            thread.Start();
+
+            return tcs.Task;
+            void ThreadStart()
             {
                 try
                 {
@@ -115,12 +107,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 {
                     tcs.SetException(ex);
                 }
-            };
-
-            var thread = new Thread(action);
-            thread.Start();
-
-            return tcs.Task;
+            }
         }
 
         protected abstract int RunLocalCompilation(string[] arguments, BuildPathsAlt buildPaths, TextWriter textWriter);
@@ -129,12 +116,9 @@ namespace Microsoft.CodeAnalysis.CommandLine
 
         protected static IEnumerable<string> GetCommandLineArgs(IEnumerable<string> args)
         {
-            if (IsRunningOnWindows)
-            {
-                return GetCommandLineWindows(args).Where(x => x != "--csc");
-            }
-
-            return args;
+            return IsRunningOnWindows 
+                ? GetCommandLineWindows(args).Where(x => x != "--csc") 
+                : args;
         }
 
         /// <summary>
@@ -152,11 +136,8 @@ namespace Microsoft.CodeAnalysis.CommandLine
         /// </summary>
         private static IEnumerable<string> GetCommandLineWindows(IEnumerable<string> args)
         {
-            IntPtr ptr = Compatibility.GetCommandLine();
-            if (ptr == IntPtr.Zero)
-            {
-                return args;
-            }
+            var ptr = Compatibility.GetCommandLine();
+            if (ptr == IntPtr.Zero) return args;
 
             // This memory is owned by the operating system hence we shouldn't (and can't)
             // free the memory.  

@@ -53,18 +53,12 @@ namespace Roslyn.Utilities
         /// Obtain the number of elements in the set.
         /// </summary>
         /// <returns>The number of elements in the set.</returns>
-        public int Count
-        {
-            get { return _dictionary.Count; }
-        }
+        public int Count => _dictionary.Count;
 
         /// <summary>
         /// Determine whether the set is empty.</summary>
         /// <returns>true if the set is empty; otherwise, false.</returns>
-        public bool IsEmpty
-        {
-            get { return _dictionary.IsEmpty; }
-        }
+        public bool IsEmpty => _dictionary.IsEmpty;
 
         public bool IsReadOnly => false;
 
@@ -73,30 +67,19 @@ namespace Roslyn.Utilities
         /// </summary>
         /// <param name="value">The value to test.</param>
         /// <returns>true if the set contains the specified value; otherwise, false.</returns>
-        public bool Contains(T value)
-        {
-            return _dictionary.ContainsKey(value);
-        }
+        public bool Contains(T value) => _dictionary.ContainsKey(value);
 
         /// <summary>
         /// Attempts to add a value to the set.
         /// </summary>
         /// <param name="value">The value to add.</param>
         /// <returns>true if the value was added to the set. If the value already exists, this method returns false.</returns>
-        public bool Add(T value)
-        {
-            return _dictionary.TryAdd(value, 0);
-        }
+        public bool Add(T value) => _dictionary.TryAdd(value, 0);
 
         public void AddRange(IEnumerable<T> values)
         {
-            if (values != null)
-            {
-                foreach (var v in values)
-                {
-                    Add(v);
-                }
-            }
+            if (values == null) return;
+            foreach (var v in values) Add(v);
         }
 
         /// <summary>
@@ -104,43 +87,26 @@ namespace Roslyn.Utilities
         /// </summary>
         /// <param name="value">The value to remove.</param>
         /// <returns>true if the value was removed successfully; otherwise false.</returns>
-        public bool Remove(T value)
-        {
-            byte b;
-            return _dictionary.TryRemove(value, out b);
-        }
+        public bool Remove(T value) 
+            => _dictionary.TryRemove(value, out _);
 
         /// <summary>
         /// Clear the set
         /// </summary>
-        public void Clear()
-        {
-            _dictionary.Clear();
-        }
+        public void Clear() => _dictionary.Clear();
 
         public struct KeyEnumerator
         {
             private readonly IEnumerator<KeyValuePair<T, byte>> _kvpEnumerator;
 
             internal KeyEnumerator(IEnumerable<KeyValuePair<T, byte>> data)
-            {
-                _kvpEnumerator = data.GetEnumerator();
-            }
+                => _kvpEnumerator = data.GetEnumerator();
 
-            public T Current
-            {
-                get { return _kvpEnumerator.Current.Key; }
-            }
+            public T Current => _kvpEnumerator.Current.Key;
 
-            public bool MoveNext()
-            {
-                return _kvpEnumerator.MoveNext();
-            }
+            public bool MoveNext() => _kvpEnumerator.MoveNext();
 
-            public void Reset()
-            {
-                _kvpEnumerator.Reset();
-            }
+            public void Reset() => _kvpEnumerator.Reset();
         }
 
         /// <summary>
@@ -161,25 +127,14 @@ namespace Roslyn.Utilities
             // of the collection resulting in a List<T> allocation. Instead, use the
             // KeyValuePair enumerator and pick off the Key part.
             foreach (var kvp in _dictionary)
-            {
                 yield return kvp.Key;
-            }
         }
 
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            return GetEnumeratorImpl();
-        }
+        IEnumerator<T> IEnumerable<T>.GetEnumerator() => GetEnumeratorImpl();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumeratorImpl();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumeratorImpl();
 
-        void ICollection<T>.Add(T item)
-        {
-            Add(item);
-        }
+        void ICollection<T>.Add(T item) => Add(item);
 
         public void CopyTo(T[] array, int arrayIndex)
         {

@@ -1,19 +1,12 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Runtime;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using System.Reflection;
-using Newtonsoft.Json.Linq;
-using System.Text.RegularExpressions;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
+
 #if false
 using Microsoft.Dnx.Runtime;
 using Microsoft.Dnx.Tooling;
@@ -83,7 +76,7 @@ namespace Shaman.Roslyn.LinqRewrite
                 args = args.Where(x => x != "--csc").ToArray();
                 return Microsoft.CodeAnalysis.CSharp.CommandLine.ProgramLinqRewrite.MainInternal(args);
             }
-            if ((args.Contains("-h") || args.Contains("--help") || args.Contains("/?")))
+            if (args.Contains("-h") || args.Contains("--help") || args.Contains("/?"))
             {
                 PrintUsage();
                 return 0;
@@ -104,53 +97,40 @@ namespace Shaman.Roslyn.LinqRewrite
                 return 0;
             }
 
-            
-
             var release = args.Contains("/p:Configuration=Release");
-
-
             var a = new List<object>();
       
             // MSBuild doesn't take CscToolPath into account when deciding whether to recompile. Rebuild always.
 
             if(!args.Any(x => x.StartsWith("/t:") || x.StartsWith("/target:")))
-                a.Add(new Shaman.Runtime.ProcessUtils.RawCommandLineArgument("/t:Rebuild"));
+                a.Add(new ProcessUtils.RawCommandLineArgument("/t:Rebuild"));
 
-            var infofile = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".txt");
-            Environment.SetEnvironmentVariable("ROSLYN_LINQ_REWRITE_OUT_STATISTICS_TO", infofile);
+            var infoFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".txt");
+            Environment.SetEnvironmentVariable("ROSLYN_LINQ_REWRITE_OUT_STATISTICS_TO", infoFile);
 
-            a.Add(new Shaman.Runtime.ProcessUtils.RawCommandLineArgument("/p:CscToolPath=\"" + Path.GetDirectoryName(typeof(Program).GetTypeInfo().Assembly.Location) + "\""));
-
-
+            a.Add(new ProcessUtils.RawCommandLineArgument("/p:CscToolPath=\"" + Path.GetDirectoryName(typeof(Program).GetTypeInfo().Assembly.Location) + "\""));
             a.AddRange(args);
-            int exitcode = 0;
+            var exitCode = 0;
             try
             {
                 RunMsbuild(a);
             }
             catch (ProcessException ex)
             {
-                exitcode = ex.ExitCode;
+                exitCode = ex.ExitCode;
             }
 
             Console.WriteLine();
-            if (File.Exists(infofile))
+            if (File.Exists(infoFile))
             {
-                Console.WriteLine(File.ReadAllText(infofile));
-                File.Delete(infofile);
+                Console.WriteLine(File.ReadAllText(infoFile));
+                File.Delete(infoFile);
             }
 
-            if (!release)
-            {
-                Console.WriteLine("Note: for consistency with MSBuild, this tool compiles by default in debug mode. Consider specifying /p:Configuration=Release.");
-            }
-            return exitcode;
-            
-
-
+            // if (!release)  Console.WriteLine("Note: for consistency with MSBuild, this tool compiles by default in debug mode. Consider specifying /p:Configuration=Release.");
+            return exitCode;
         }
 
-   
         private void PrintUsage()
         {
             Console.WriteLine("roslyn-linq-rewrite " + typeof(Program).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion);
@@ -177,11 +157,12 @@ However, you won't see statistics about the rewritten methods.
         {
             var source = File.ReadAllText(devPath ? Path.Combine("../../Samples/", path) : path);
             var isScript = Path.GetExtension(path).Equals(".csx");
+            
             var syntaxTree = CSharpSyntaxTree.ParseText(source, new CSharpParseOptions(kind: isScript ? SourceCodeKind.Script : SourceCodeKind.Regular));
             var references = new[] {
                 MetadataReference.CreateFromFile(typeof(int).GetTypeInfo().Assembly.Location), // mscorlib
                 MetadataReference.CreateFromFile(typeof(Uri).GetTypeInfo().Assembly.Location), // System
-                MetadataReference.CreateFromFile(typeof(System.Linq.Enumerable).GetTypeInfo().Assembly.Location), // System.Core
+                MetadataReference.CreateFromFile(typeof(Enumerable).GetTypeInfo().Assembly.Location), // System.Core
                 };
             var compilation = isScript
                 ? CSharpCompilation.CreateScriptCompilation("LinqRewriteExample", syntaxTree, references)
@@ -200,7 +181,6 @@ However, you won't see statistics about the rewritten methods.
             var rewriter = new LinqRewriter(compilation.GetSemanticModel(syntaxTree));
             var rewritten = rewriter.Visit(syntaxTree.GetRoot());
 
-            hasErrs = false;
             foreach (var item in compilation.GetDiagnostics())
             {
                 if (item.Severity == DiagnosticSeverity.Error) hasErrs = true;
@@ -209,15 +189,21 @@ However, you won't see statistics about the rewritten methods.
             }
             if (hasErrs) return;
             Console.WriteLine(rewritten.ToString());
-
-
         }
 
         private static void PrintDiagnostic(Diagnostic item)
         {
-            if (item.Severity == DiagnosticSeverity.Hidden) return;
-            if (item.Severity == DiagnosticSeverity.Error) Console.ForegroundColor = ConsoleColor.Red;
-            if (item.Severity == DiagnosticSeverity.Warning) Console.ForegroundColor = ConsoleColor.Yellow;
+            switch (item.Severity)
+            {
+                case DiagnosticSeverity.Hidden:
+                    return;
+                case DiagnosticSeverity.Error:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+                case DiagnosticSeverity.Warning:
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    break;
+            }
             Console.WriteLine(item);
             Console.ResetColor();
         }
@@ -269,7 +255,6 @@ However, you won't see statistics about the rewritten methods.
             {
             }
 
-            
             try
             {
                 ProcessUtils.RunPassThrough("msbuild", argsArray);
@@ -285,15 +270,12 @@ However, you won't see statistics about the rewritten methods.
                         return;
                     }
 
-                    if (path.Contains("\\amd64"))
-                    {
-                        path = path.Replace("\\amd64", string.Empty);
-                        if (File.Exists(path))
-                        {
-                            ProcessUtils.RunPassThrough(path, argsArray);
-                            return;
-                        }
-                    }
+                    if (!path.Contains("\\amd64")) continue;
+                    path = path.Replace("\\amd64", string.Empty);
+                    
+                    if (!File.Exists(path)) continue;
+                    ProcessUtils.RunPassThrough(path, argsArray);
+                    return;
                 }
                 ProcessUtils.RunPassThrough("xbuild", argsArray);
             }
