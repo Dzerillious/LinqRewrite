@@ -108,7 +108,7 @@ namespace Shaman.Roslyn.LinqRewrite
                 if (containingForEach != null)
                 {
                     chain.Insert(0,
-                        new LinqStep(IEnumerableForEachMethod,
+                        new LinqStep(MethodNames.IEnumerableForEachMethod,
                             new[]
                             {
                                 SyntaxFactory.SimpleLambdaExpression(
@@ -125,7 +125,7 @@ namespace Shaman.Roslyn.LinqRewrite
                 }
 
                 if (!chain.Any(x => x.Arguments.Any(y => y is AnonymousFunctionExpressionSyntax))) return null;
-                if (chain.Count == 1 && RootMethodsThatRequireYieldReturn.Contains(chain[0].MethodName)) return null;
+                if (chain.Count == 1 && MethodNames.RootMethodsThatRequireYieldReturn.Contains(chain[0].MethodName)) return null;
 
 
                 var flowsIn = new List<ISymbol>();
@@ -262,7 +262,7 @@ namespace Shaman.Roslyn.LinqRewrite
             var name = GetMethodFullName(invocation);
             if (!IsSupportedMethod(name)) return false;
             if (invocation.ArgumentList.Arguments.Count == 0) return true;
-            if (name == ElementAtMethod || name == ElementAtOrDefaultMethod || name == ContainsMethod) return true;
+            if (name == MethodNames.ElementAtMethod || name == MethodNames.ElementAtOrDefaultMethod || name == MethodNames.ContainsMethod) return true;
 
             // Passing things like .Select(Method) is not supported.
             return invocation.ArgumentList.Arguments.All(x => x.Expression is AnonymousFunctionExpressionSyntax);
