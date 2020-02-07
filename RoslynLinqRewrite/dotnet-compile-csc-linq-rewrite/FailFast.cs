@@ -31,7 +31,7 @@ namespace Microsoft.CodeAnalysis
         {
             if (condition) return;
             if (Debugger.IsAttached) Debugger.Break();
-            Environment.FailFast("ASSERT FAILED" + Environment.NewLine + message);
+            Environment.FailFast($"ASSERT FAILED{Environment.NewLine}{message}");
         }
     }
 }

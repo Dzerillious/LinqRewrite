@@ -46,8 +46,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 : collectionType.AllInterfaces
                     .Concat(new[] {collectionType})
                     .OfType<INamedTypeSymbol>()
-                    .FirstOrDefault(x => x.IsGenericType && x.ConstructUnboundGenericType().ToString() ==
-                                         "System.Collections.Generic.IEnumerable<>")?
+                    .FirstOrDefault(x => x.IsGenericType && x.ConstructUnboundGenericType().ToString() == "System.Collections.Generic.IEnumerable<>")?
                     .TypeArguments.First();
 
         public ITypeSymbol GetLambdaReturnType(AnonymousFunctionExpressionSyntax lambda)

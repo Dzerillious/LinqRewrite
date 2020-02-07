@@ -14,9 +14,10 @@ namespace Shaman.Roslyn.LinqRewrite.Services
     {
         private static CodeCreationService _instance;
         public static CodeCreationService Instance => _instance ??= new CodeCreationService();
-
+        
         private readonly RewriteDataService _data;
         private readonly SyntaxInformationService _info;
+
         public CodeCreationService()
         {
             _data = RewriteDataService.Instance;
@@ -27,17 +28,20 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             => SyntaxFactory.ExpressionStatement(expression);
 
         public ThrowStatementSyntax CreateThrowException(string type, string message = null)
-            => SyntaxFactory.ThrowStatement(SyntaxFactory.ObjectCreationExpression(SyntaxFactory.ParseTypeName(type),
-                CreateArguments(message != null
-                    ? new ExpressionSyntax[]
-                    {
-                        SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression,
-                            SyntaxFactory.Literal(message))
-                    }
-                    : new ExpressionSyntax[] { }), null));
+            => SyntaxFactory.ThrowStatement(
+                SyntaxFactory.ObjectCreationExpression(
+                    SyntaxFactory.ParseTypeName(type),
+                    CreateArguments(message != null
+                        ? new ExpressionSyntax[]
+                        {
+                            SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression,
+                                SyntaxFactory.Literal(message))
+                        }
+                        : new ExpressionSyntax[] { }), null));
 
         public LocalDeclarationStatementSyntax CreateLocalVariableDeclaration(string name, ExpressionSyntax value)
-            => SyntaxFactory.LocalDeclarationStatement(SyntaxFactory.VariableDeclaration(
+            => SyntaxFactory.LocalDeclarationStatement(
+                SyntaxFactory.VariableDeclaration(
                 SyntaxFactory.IdentifierName("var"),
                 CreateSeparatedList(SyntaxFactory.VariableDeclarator(name).WithInitializer(SyntaxFactory.EqualsValueClause(value)))));
 
@@ -74,99 +78,10 @@ namespace Shaman.Roslyn.LinqRewrite.Services
         public PredefinedTypeSyntax CreatePrimitiveType(SyntaxKind keyword) 
             => SyntaxFactory.PredefinedType(SyntaxFactory.Token(keyword));
 
-        public StatementSyntax CreateProcessingStep(List<LinqStep> chain, int chainIndex, TypeSyntax itemType,
-            string itemName, ArgumentListSyntax arguments, bool noAggregation)
-        {
-            if (chainIndex == 0 && !noAggregation || chainIndex == -1)
-                return _data.CurrentAggregation(chain[0], arguments, CreateParameter(itemName, itemType));
-
-            var step = chain[chainIndex];
-            var method = step.MethodName;
-
-            switch (method)
-            {
-                case Constants.WhereMethod:
-                {
-                    var lambda = (AnonymousFunctionExpressionSyntax) step.Arguments[0];
-
-                    var check = InlineOrCreateMethod(new Lambda(lambda), CreatePrimitiveType(SyntaxKind.BoolKeyword), CreateParameter(itemName, itemType));
-                    var next = CreateProcessingStep(chain, chainIndex - 1, itemType, itemName, arguments,
-                        noAggregation);
-                    return SyntaxFactory.IfStatement(check, next is BlockSyntax ? next : SyntaxFactory.Block(next));
-                }
-                case Constants.OfTypeMethod:
-                case Constants.CastMethod:
-                {
-                    var newType = ((GenericNameSyntax) ((MemberAccessExpressionSyntax) step.Invocation.Expression).Name)
-                        .TypeArgumentList.Arguments.First();
-                    var newName = "_linqitem" + ++_data.LastId;
-                    var next = CreateProcessingStep(chain, chainIndex - 1, newType, newName, arguments, noAggregation);
-
-                    if (method == Constants.CastMethod)
-                    {
-                        var local = CreateLocalVariableDeclaration(newName,
-                            SyntaxFactory.CastExpression(newType, SyntaxFactory.IdentifierName(itemName)));
-                        var nextStatement = next is BlockSyntax
-                            ? ((BlockSyntax) next).Statements
-                            : (IEnumerable<StatementSyntax>) new[] {next};
-                        return SyntaxFactory.Block(new[] {local}.Concat(nextStatement));
-                    }
-                    else
-                    {
-                        var type = _data.Semantic.GetTypeInfo(newType).Type;
-                        if (type.IsValueType)
-                        {
-                            return SyntaxFactory.IfStatement(
-                                SyntaxFactory.BinaryExpression(SyntaxKind.IsExpression,
-                                    SyntaxFactory.IdentifierName(itemName), newType), SyntaxFactory.Block(
-                                    CreateLocalVariableDeclaration(newName,
-                                        SyntaxFactory.CastExpression(newType, SyntaxFactory.IdentifierName(itemName))),
-                                    next
-
-                                ));
-                        }
-
-                        var local = CreateLocalVariableDeclaration(newName,
-                            SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression,
-                                SyntaxFactory.IdentifierName(itemName), newType));
-                        return SyntaxFactory.Block(local,
-                            SyntaxFactory.IfStatement(
-                                SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression,
-                                    SyntaxFactory.IdentifierName(newName),
-                                    SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression)), next));
-                    }
-                }
-                case Constants.SelectMethod:
-                {
-                    var lambda = (AnonymousFunctionExpressionSyntax) step.Arguments[0];
-
-                    var newName = "_linqitem" + ++_data.LastId;
-                    var lambdaType = (INamedTypeSymbol) _data.Semantic.GetTypeInfo(lambda).ConvertedType;
-                    var lambdaBodyType = lambdaType.TypeArguments.Last();
-                    var newType = SyntaxExtensions.IsAnonymousType(lambdaBodyType)
-                        ? null
-                        : SyntaxFactory.ParseTypeName(lambdaBodyType.ToDisplayString());
-
-                    var local = CreateLocalVariableDeclaration(newName,
-                        InlineOrCreateMethod(new Lambda(lambda), newType,
-                            CreateParameter(itemName, itemType)));
-
-                    var next = CreateProcessingStep(chain, chainIndex - 1, newType, newName, arguments, noAggregation);
-                    var nextStatement = next is BlockSyntax syntax
-                        ? syntax.Statements
-                        : (IEnumerable<StatementSyntax>) new[] {next};
-                    return SyntaxFactory.Block(new[] {local}.Concat(nextStatement));
-                }
-                default: throw new NotSupportedException();
-            }
-        }
-
         public ExpressionSyntax CreateCollectionCount(ExpressionSyntax collection, bool allowUnknown)
         {
             var collectionType = _data.Semantic.GetTypeInfo(collection).Type;
-            if (collectionType is IArrayTypeSymbol)
-                return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName(Constants.ItemsName), SyntaxFactory.IdentifierName("Length"));
-            
+            if (collectionType is IArrayTypeSymbol) return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName(Constants.ItemsName), SyntaxFactory.IdentifierName("Length"));
             if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<")))
                 return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName(Constants.ItemsName), SyntaxFactory.IdentifierName("Count"));
                 
@@ -177,6 +92,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             if (collectionType.IsValueType) return null;
             var itemType = _info.GetItemType(collectionType);
             if (itemType == null) return null;
+            
             return SyntaxFactory.InvocationExpression(
                 SyntaxFactory.MemberAccessExpression(
                     SyntaxKind.SimpleMemberAccessExpression,
@@ -187,12 +103,10 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                                     SyntaxKind.AsExpression,
                                     SyntaxFactory.IdentifierName(Constants.ItemsName),
                                     SyntaxFactory.ParseTypeName(
-                                        "System.Collections.Generic.ICollection<" + itemType.ToDisplayString() + ">")
+                                        $"System.Collections.Generic.ICollection<{itemType.ToDisplayString()}>")
                                 )
                             ),
-                            SyntaxFactory.MemberBindingExpression(
-                                SyntaxFactory.IdentifierName("Count")
-                            )
+                            SyntaxFactory.MemberBindingExpression(SyntaxFactory.IdentifierName("Count"))
                         )
                     ),
                     SyntaxFactory.IdentifierName("GetValueOrDefault")
@@ -202,10 +116,11 @@ namespace Shaman.Roslyn.LinqRewrite.Services
 
         public ExpressionSyntax CreateMethodNameSyntaxWithCurrentTypeParameters(string fn)
             => (_data.CurrentMethodTypeParameters?.Parameters.Count).GetValueOrDefault() != 0
-                ? SyntaxFactory.GenericName(SyntaxFactory.Identifier(fn),
-                    SyntaxFactory.TypeArgumentList(CreateSeparatedList(
-                        _data.CurrentMethodTypeParameters.Parameters.Select(x =>
-                            SyntaxFactory.ParseTypeName(x.Identifier.ValueText)))))
+                ? SyntaxFactory.GenericName(
+                    SyntaxFactory.Identifier(fn),
+                    SyntaxFactory.TypeArgumentList(
+                        CreateSeparatedList(_data.CurrentMethodTypeParameters.Parameters
+                            .Select(x => SyntaxFactory.ParseTypeName(x.Identifier.ValueText)))))
                 : (NameSyntax) SyntaxFactory.IdentifierName(fn);
 
         public ExpressionSyntax InlineOrCreateMethod(Lambda lambda, TypeSyntax returnType, ParameterSyntax param)
@@ -227,18 +142,18 @@ namespace Shaman.Roslyn.LinqRewrite.Services
         public ExpressionSyntax InlineOrCreateMethod(CSharpSyntaxNode body, TypeSyntax returnType,
             ParameterSyntax param, IEnumerable<VariableCapture> captures)
         {
-            var fn = _info.GetUniqueName(_data.CurrentMethodName + "_ProceduralLinqHelper");
-
+            var fn = _info.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinqHelper");
             if (body is ExpressionSyntax syntax) return syntax;
 
-            if (captures.Any(x => SyntaxExtensions.IsAnonymousType(_info.GetSymbolType(x.Symbol)))) throw new NotSupportedException();
+            if (captures.Any(x => SyntaxExtensions.IsAnonymousType(_info.GetSymbolType(x.Symbol)))) 
+                throw new NotSupportedException();
             if (returnType == null) throw new NotSupportedException(); // Anonymous type
+            
             var method = SyntaxFactory.MethodDeclaration(returnType, fn)
                 .WithParameterList(SyntaxFactory.ParameterList(SyntaxFactory.SeparatedList(
-                    new[]
-                    {
-                        param
-                    }.Union(captures.Select(x => CreateParameter(x.Name, _info.GetSymbolType(x)).WithRef(x.Changes)))
+                    new[] { param }
+                        .Union(captures.Select(x => CreateParameter(x.Name, _info.GetSymbolType(x))
+                        .WithRef(x.Changes)))
                 )))
                 .WithBody(body as BlockSyntax ?? (body is StatementSyntax statementSyntax
                               ? SyntaxFactory.Block(statementSyntax)
@@ -249,31 +164,30 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 .NormalizeWhitespace();
 
             _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, method));
-            return SyntaxFactory.InvocationExpression(CreateMethodNameSyntaxWithCurrentTypeParameters(fn),
-                CreateArguments(
-                    new[] {SyntaxFactory.Argument(SyntaxFactory.IdentifierName(param.Identifier.ValueText))}.Union(
-                        captures.Select(x =>
-                            SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Name)).WithRef(x.Changes)))));
+            return SyntaxFactory.InvocationExpression(
+                CreateMethodNameSyntaxWithCurrentTypeParameters(fn),
+                CreateArguments(new[] { SyntaxFactory.Argument(SyntaxFactory.IdentifierName(param.Identifier.ValueText))}
+                    .Union(captures.Select(x =>  SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Name)).WithRef(x.Changes)))));
         }
 
-        public static List<LinqStep> MaybeAddFilter(List<LinqStep> chain, bool condition)
+        public List<LinqStep> MaybeAddFilter(List<LinqStep> chain, bool condition)
         {
             if (!condition) return chain;
             var lambda = (LambdaExpressionSyntax)chain.First().Arguments.FirstOrDefault();
             return InsertExpandedShortcutMethod(chain, Constants.WhereMethod, lambda);
         }
 
-        public static List<LinqStep> MaybeAddSelect(List<LinqStep> chain, bool condition)
+        public List<LinqStep> MaybeAddSelect(List<LinqStep> chain, bool condition)
         {
             if (!condition) return chain;
             var lambda = (LambdaExpressionSyntax)chain.First().Arguments.FirstOrDefault();
             return InsertExpandedShortcutMethod(chain, Constants.SelectMethod, lambda);
         }
 
-        private static List<LinqStep> InsertExpandedShortcutMethod(List<LinqStep> chain, string methodFullName, LambdaExpressionSyntax lambda)
+        private List<LinqStep> InsertExpandedShortcutMethod(List<LinqStep> chain, string methodFullName, LambdaExpressionSyntax lambda)
         {
             var ch = chain.ToList();
-            //    var baseExpression = ((MemberAccessExpressionSyntax)chain.First().Expression).Expression;
+            // var baseExpression = ((MemberAccessExpressionSyntax)chain.First().Expression).Expression;
             ch.Insert(1, new LinqStep(methodFullName, new[] { lambda }));
             return ch;
         }
@@ -282,15 +196,16 @@ namespace Shaman.Roslyn.LinqRewrite.Services
         {
             var oldParameter = _info.GetLambdaParameter(container, argIndex).Identifier.ValueText;
             //var oldsymbol = semantic.GetDeclaredSymbol(oldparameter);
-            var tokensToRename = container.Body.DescendantNodesAndSelf().Where(x =>
+            var tokensToRename = container.Body.DescendantNodesAndSelf()
+                .Where(x =>
             {
                 var sem = _data.Semantic.GetSymbolInfo(x).Symbol;
                 return sem != null && (sem is ILocalSymbol || sem is IParameterSymbol) && sem.Name == oldParameter;
                 //  if (sem.Symbol == oldsymbol) return true;
             });
             var syntax = SyntaxFactory.ParenthesizedLambdaExpression(
-                CreateParameters(container.Parameters.Select((x, i) =>
-                    i == argIndex ? SyntaxFactory.Parameter(SyntaxFactory.Identifier(newname)).WithType(x.Type) : x)),
+                CreateParameters(container.Parameters
+                    .Select((x, i) =>  i == argIndex ? SyntaxFactory.Parameter(SyntaxFactory.Identifier(newname)).WithType(x.Type) : x)),
                 container.Body.ReplaceNodes(tokensToRename, (a, b) =>
                 {
                     if (b is IdentifierNameSyntax ide) return ide.WithIdentifier(SyntaxFactory.Identifier(newname));

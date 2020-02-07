@@ -64,7 +64,7 @@ namespace Microsoft.CodeAnalysis
 
             Debug.Assert(null == responseFile || ReflPathUtilities.IsAbsolute(responseFile));
             if (!SuppressDefaultResponseFile(args) && File.Exists(responseFile))
-                allArgs = new[] { "@" + responseFile }.Concat(allArgs);
+                allArgs = new[] {$"@{responseFile}"}.Concat(allArgs);
 
             Arguments = parser.Parse(allArgs, baseDirectory, sdkDirectoryOpt, additionalReferenceDirectories);
             MessageProvider = ReflCommandLineParser.get_MessageProvider(parser);
@@ -575,7 +575,7 @@ namespace Microsoft.CodeAnalysis
                     if (finalXmlFilePath != null)
                         touchedFilesLogger.InvokeAction("AddWritten", finalXmlFilePath);
 
-                    var readStream = OpenFile(Arguments.TouchedFilesPath + ".read", consoleOutput, mode: FileMode.OpenOrCreate);
+                    var readStream = OpenFile($"{Arguments.TouchedFilesPath}.read", consoleOutput, mode: FileMode.OpenOrCreate);
                     if (readStream == null) return Failed;
 
                     using (var writer = new StreamWriter(readStream))
@@ -583,7 +583,7 @@ namespace Microsoft.CodeAnalysis
                         touchedFilesLogger.InvokeAction("WriteReadPaths", writer);
                     }
 
-                    var writtenStream = OpenFile(Arguments.TouchedFilesPath + ".write", consoleOutput, mode: FileMode.OpenOrCreate);
+                    var writtenStream = OpenFile($"{Arguments.TouchedFilesPath}.write", consoleOutput, mode: FileMode.OpenOrCreate);
                     if (writtenStream == null) return Failed;
 
                     using (var writer = new StreamWriter(writtenStream))
@@ -650,7 +650,7 @@ namespace Microsoft.CodeAnalysis
                 string.Format(culture, "{0,8:<0.000}", 0.001) :
                 string.Format(culture, "{0,8:##0.000}", d);
             Func<int, string> getFormattedPercentage = i => $"{(i < 1 ? "<1" : i.ToString()),5}";
-            Func<string, string> getFormattedAnalyzerName = s => "   " + s;
+            Func<string, string> getFormattedAnalyzerName = s => $"   {s}";
 
             // Table header
             var analyzerTimeColumn = string.Format("{0,8}", (string)Refl.Type_CodeAnalysisResources.InvokeFunction("get_AnalyzerExecutionTimeColumnHeader"));
@@ -678,7 +678,7 @@ namespace Microsoft.CodeAnalysis
 
                     analyzerTimeColumn = getFormattedTime(executionTime);
                     analyzerPercentageColumn = getFormattedPercentage(percentage);
-                    analyzerNameColumn = getFormattedAnalyzerName("   " + kvp.Key);
+                    analyzerNameColumn = getFormattedAnalyzerName($"   {kvp.Key}");
 
                     consoleOutput.WriteLine(analyzerTimeColumn + analyzerPercentageColumn + analyzerNameColumn);
                 }
@@ -810,7 +810,7 @@ namespace Microsoft.CodeAnalysis
         private static void EmitDeterminismKey(CommandLineArguments args, string[] rawArgs, string baseDirectory, CommandLineParser parser)
         {
             var key = CreateDeterminismKey(args, rawArgs, baseDirectory, parser);
-            var filePath = Path.Combine(args.OutputDirectory, args.OutputFileName + ".key");
+            var filePath = Path.Combine(args.OutputDirectory, $"{args.OutputFileName}.key");
             using var stream = File.OpenWrite(filePath);
             var bytes = Encoding.UTF8.GetBytes(key);
             stream.Write(bytes, 0, bytes.Length);

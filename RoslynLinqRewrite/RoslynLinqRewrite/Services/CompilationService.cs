@@ -37,7 +37,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             var buildArgs = GetBuildArgs(args);
             var exitCode = 0;
             
-            var infoFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".txt");
+            var infoFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.txt");
             Environment.SetEnvironmentVariable("ROSLYN_LINQ_REWRITE_OUT_STATISTICS_TO", infoFile);
             
             try
@@ -61,7 +61,8 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             if(!args.Any(x => x.StartsWith("/t:") || x.StartsWith("/target:")))
                 buildArgs.Add(new ProcessUtils.RawCommandLineArgument("/t:Rebuild"));
 
-            buildArgs.Add(new ProcessUtils.RawCommandLineArgument("/p:CscToolPath=\"" + Path.GetDirectoryName(typeof(Program).GetTypeInfo().Assembly.Location) + "\""));
+            buildArgs.Add(new ProcessUtils.RawCommandLineArgument(
+                $"/p:CscToolPath=\"{Path.GetDirectoryName(typeof(Program).GetTypeInfo().Assembly.Location)}\""));
             buildArgs.AddRange(args);
 
             return buildArgs;

@@ -29,6 +29,11 @@ namespace Shaman.Roslyn.LinqRewrite
             _runtimeEnv = runtimeEnv;
         }
 #endif
+        public Program()
+        {
+            _compilationService = CompilationService.Instance;
+            _printService = PrintService.Instance;
+        }
         
         public static int Main(string[] args)
         {
@@ -46,12 +51,6 @@ namespace Shaman.Roslyn.LinqRewrite
                 program.OnException(ex);
                 return 1;
             }
-        }
-
-        public Program()
-        {
-            _compilationService = CompilationService.Instance;
-            _printService = PrintService.Instance;
         }
 
         public void OnException(Exception ex)

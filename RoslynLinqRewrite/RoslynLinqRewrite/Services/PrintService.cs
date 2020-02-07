@@ -12,16 +12,16 @@ namespace Shaman.Roslyn.LinqRewrite.Services
 
         public int PrintHelp()
         {
-            Console.WriteLine("roslyn-linq-rewrite " + typeof(Program).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion);
+            Console.WriteLine($"roslyn-linq-rewrite {typeof(Program).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion}");
             Console.WriteLine(
-                @"github.com/antiufo/roslyn-linq-rewrite
+                $@"github.com/antiufo/roslyn-linq-rewrite
 
 Usage:
   roslyn-linq-rewrite <path-to-csproj> [msbuild-options]
   roslyn-linq-rewrite <path-to-sln> [msbuild-options]
   roslyn-linq-rewrite --show <path-to-cs>
 
-If you prefer to call msbuild directly, use msbuild /t:Rebuild /p:CscToolPath=""" + Path.GetDirectoryName(typeof(Program).Assembly.Location) +@"""
+If you prefer to call msbuild directly, use msbuild /t:Rebuild /p:CscToolPath=""{Path.GetDirectoryName(typeof(Program).Assembly.Location)}""
 However, you won't see statistics about the rewritten methods.
 
 ");
