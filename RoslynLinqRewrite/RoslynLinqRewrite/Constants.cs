@@ -1,8 +1,10 @@
-﻿namespace Shaman.Roslyn.LinqRewrite
+﻿using System.Collections.Generic;
+
+namespace Shaman.Roslyn.LinqRewrite
 {
-    public static class MethodNames
+    public static class Constants
     {
-        //readonly static string ToDictionaryWithKeyMethod = "System.Collections.Generic.IEnumerable<TSource>.ToDictionary<TSource, TKey>(System.Func<TSource, TKey>)";
+        //public const string ToDictionaryWithKeyMethod = "System.Collections.Generic.IEnumerable<TSource>.ToDictionary<TSource, TKey>(System.Func<TSource, TKey>)";
         public const string ToDictionaryWithKeyValueMethod = "System.Collections.Generic.IEnumerable<TSource>.ToDictionary<TSource, TKey, TElement>(System.Func<TSource, TKey>, System.Func<TSource, TElement>)";
         public const string ToArrayMethod = "System.Collections.Generic.IEnumerable<TSource>.ToArray<TSource>()";
         public const string ToListMethod = "System.Collections.Generic.IEnumerable<TSource>.ToList<TSource>()";
@@ -12,7 +14,7 @@
         public const string LastMethod = "System.Collections.Generic.IEnumerable<TSource>.Last<TSource>()";
         public const string FirstOrDefaultMethod = "System.Collections.Generic.IEnumerable<TSource>.FirstOrDefault<TSource>()";
         public const string SingleOrDefaultMethod = "System.Collections.Generic.IEnumerable<TSource>.SingleOrDefault<TSource>()";
-        public const string LastOrDefaultMethod = "System.Collections.Generic.IEnumerable<TSource>.LastOrDefault<TSource>(System.Func<TSource, bool>)";
+        public const string LastOrDefaultMethod = "System.Collections.Generic.IEnumerable<TSource>.LastOrDefault<TSource>()";
         public const string FirstWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.First<TSource>(System.Func<TSource, bool>)";
         public const string SingleWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.Single<TSource>(System.Func<TSource, bool>)";
         public const string LastWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.Last<TSource>(System.Func<TSource, bool>)";
@@ -36,7 +38,7 @@
         public const string ContainsMethod = "System.Collections.Generic.IEnumerable<TSource>.Contains<TSource>(TSource)";
 
         public const string ListForEachMethod = "System.Collections.Generic.List<T>.ForEach(System.Action<T>)";
-        public const string IEnumerableForEachMethod = "System.Collections.Generic.IEnumerable<T>.ForEach<T>(System.Action<T>)";
+        public const string EnumerableForEachMethod = "System.Collections.Generic.IEnumerable<T>.ForEach<T>(System.Action<T>)";
 
         //readonly static string RecursiveEnumerationMethod = "T.RecursiveEnumeration<T>(System.Func<T, T>)";
 
@@ -45,6 +47,28 @@
         public const string CastMethod = "System.Collections.IEnumerable.Cast<TResult>()";
         public const string OfTypeMethod = "System.Collections.IEnumerable.OfType<TResult>()";
 
+        public static readonly HashSet<string> KnownMethods = new HashSet<string>
+        {
+            ToDictionaryWithKeyValueMethod, ToArrayMethod, ToListMethod, ReverseMethod, 
+            
+            FirstMethod, SingleMethod, LastMethod,
+            FirstOrDefaultMethod, SingleOrDefaultMethod, LastOrDefaultMethod,
+            FirstWithConditionMethod, SingleWithConditionMethod, LastWithConditionMethod,
+            FirstOrDefaultWithConditionMethod, SingleOrDefaultWithConditionMethod, LastOrDefaultWithConditionMethod,
+            
+            CountMethod, CountWithConditionMethod, LongCountMethod, LongCountWithConditionMethod,
+            
+            ElementAtMethod, ElementAtOrDefaultMethod,
+            
+            AnyMethod, AnyWithConditionMethod, AllWithConditionMethod,
+            
+            ContainsMethod,
+            
+            ListForEachMethod,
+            
+            EnumerableForEachMethod
+        };
+
         public static readonly string[] RootMethodsThatRequireYieldReturn = {
             WhereMethod, SelectMethod, CastMethod, OfTypeMethod
         };
@@ -52,5 +76,10 @@
         public static readonly string[] MethodsThatPreserveCount = {
             SelectMethod, CastMethod, ReverseMethod, ToListMethod, ToArrayMethod /*OrderBy*/
         };
+
+        public const string ItemsName = "_linqitems";
+        public const string ItemName = "_linqitem";
+
+        public const int MaximumSizeForByValStruct = 128 / 8; // eg. two longs, or two references
     }
 }

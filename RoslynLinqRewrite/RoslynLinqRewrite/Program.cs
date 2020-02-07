@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Shaman.Roslyn.LinqRewrite.DataStructures;
 using Shaman.Roslyn.LinqRewrite.Services;
 
 #if false

@@ -1,9 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
-using System;
+﻿using System;
+using Microsoft.CodeAnalysis;
 
-namespace Shaman.Roslyn.LinqRewrite
+namespace Shaman.Roslyn.LinqRewrite.DataStructures
 {
-
     public class LiteralString : LocalizableString
     {
         private readonly string _str;
