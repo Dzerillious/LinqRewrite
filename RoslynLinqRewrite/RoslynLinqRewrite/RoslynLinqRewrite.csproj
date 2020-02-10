@@ -118,6 +118,7 @@
     <Compile Include="DataStructures\VariableCapture.cs" />
     <Compile Include="Extensions\SyntaxExtensions.cs" />
     <Compile Include="Extensions\StructureExtensions.cs" />
+    <Compile Include="Extensions\SyntaxFactoryHelper.cs" />
     <Compile Include="InvocationRewriter.cs" />
     <Compile Include="LinqRewriter.cs" />
     <Compile Include="Constants.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="RewriteRules\RewriteLast.cs" />
     <Compile Include="RewriteRules\RewriteLastOrDefault.cs" />
     <Compile Include="RewriteRules\RewriteMinMax.cs" />
+    <Compile Include="RewriteRules\RewriteRange.cs" />
     <Compile Include="RewriteRules\RewriteSingle.cs" />
     <Compile Include="RewriteRules\RewriteSingleOrDefault.cs" />
     <Compile Include="RewriteRules\RewriteSum.cs" />

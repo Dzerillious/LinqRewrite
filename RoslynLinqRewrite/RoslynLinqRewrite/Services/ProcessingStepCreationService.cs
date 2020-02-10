@@ -46,16 +46,14 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             var lambda = (AnonymousFunctionExpressionSyntax) step.Arguments[0];
 
             var check = _code.InlineOrCreateMethod(new Lambda(lambda), _code.CreatePrimitiveType(SyntaxKind.BoolKeyword), _code.CreateParameter(itemName, itemType));
-            var next = CreateProcessingStep(chain, chainIndex - 1, itemType, itemName, arguments,
-                noAggregation);
+            var next = CreateProcessingStep(chain, chainIndex - 1, itemType, itemName, arguments, noAggregation);
             return SyntaxFactory.IfStatement(check, next is BlockSyntax ? next : SyntaxFactory.Block(next));
         }
 
         private StatementSyntax CastProcessingStep(List<LinqStep> chain, int chainIndex, TypeSyntax itemType,
             string itemName, ArgumentListSyntax arguments, bool noAggregation, LinqStep step)
         {
-            var newType = ((GenericNameSyntax) ((MemberAccessExpressionSyntax) step.Invocation.Expression).Name)
-                .TypeArgumentList.Arguments.First();
+            var newType = ((GenericNameSyntax) ((MemberAccessExpressionSyntax) step.Invocation.Expression).Name).TypeArgumentList.Arguments.First();
             var newName = $"_linqitem{++_data.LastId}";
             var next = CreateProcessingStep(chain, chainIndex - 1, newType, newName, arguments, noAggregation);
                     

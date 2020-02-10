@@ -13,12 +13,13 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public readonly RewriteDataService Data;
         public readonly SyntaxInformationService Info;
         
-        public string AggregationMethod;
         public ExpressionSyntax Collection;
-        public TypeSyntax ReturnType;
         public List<LinqStep> Chain;
         public InvocationExpressionSyntax Node;
         public ITypeSymbol SemanticReturnType;
+        
+        public TypeSyntax ReturnType;
+        public IdentifierNameSyntax LastIdentifier { get; set; }
         
         public RewriteParameters()
         {
@@ -28,10 +29,8 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
             Info = SyntaxInformationService.Instance;
         }
 
-        public void SetData(string aggregationMethod, ExpressionSyntax collection,
-            TypeSyntax returnType, ITypeSymbol semanticReturnType, List<LinqStep> chain, InvocationExpressionSyntax node)
+        public void SetData(ExpressionSyntax collection, TypeSyntax returnType, ITypeSymbol semanticReturnType, List<LinqStep> chain, InvocationExpressionSyntax node)
         {
-            AggregationMethod = aggregationMethod;
             Collection = collection;
             ReturnType = returnType;
             Chain = chain;

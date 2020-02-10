@@ -102,8 +102,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                                 SyntaxFactory.BinaryExpression(
                                     SyntaxKind.AsExpression,
                                     SyntaxFactory.IdentifierName(Constants.ItemsName),
-                                    SyntaxFactory.ParseTypeName(
-                                        $"System.Collections.Generic.ICollection<{itemType.ToDisplayString()}>")
+                                    SyntaxFactory.ParseTypeName($"System.Collections.Generic.ICollection<{itemType.ToDisplayString()}>")
                                 )
                             ),
                             SyntaxFactory.MemberBindingExpression(SyntaxFactory.IdentifierName("Count"))

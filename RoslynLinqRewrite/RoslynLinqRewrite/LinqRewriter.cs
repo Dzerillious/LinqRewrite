@@ -109,9 +109,9 @@ namespace Shaman.Roslyn.LinqRewrite
             var aggregationMethod = chain.First().MethodName;
             
             using var parameters = RewriteParametersHolder.BorrowParameters();
-            parameters.SetData(aggregationMethod, collection, returnType, semanticReturnType, chain, node);
+            parameters.SetData(collection, returnType, semanticReturnType, chain, node);
 
-            return InvocationRewriter.TryRewrite(parameters, aggregationMethod)
+            return InvocationRewriter.TryRewrite(parameters)
                 .WithLeadingTrivia(((CSharpSyntaxNode) containingForEach ?? node).GetLeadingTrivia())
                 .WithTrailingTrivia(((CSharpSyntaxNode) containingForEach ?? node).GetTrailingTrivia());
         }
@@ -184,12 +184,12 @@ namespace Shaman.Roslyn.LinqRewrite
 
         private (bool, ExpressionSyntax, ITypeSymbol) CheckIfRewriteInvocation(List<LinqStep> chain, InvocationExpressionSyntax node, InvocationExpressionSyntax lastNode)
         {
-            if (!chain.Any(x => x.Arguments
-                .Any(y => y is AnonymousFunctionExpressionSyntax)))
-                return (false, null, null);
+            // if (!chain.Any(x => x.Arguments
+            //     .Any(y => y is AnonymousFunctionExpressionSyntax)))
+            //     return (false, null, null);
             
-            if (chain.Count == 1 && Constants.RootMethodsThatRequireYieldReturn.Contains(chain[0].MethodName)) 
-                return (false, null, null);
+            // if (chain.Count == 1 && Constants.RootMethodsThatRequireYieldReturn.Contains(chain[0].MethodName)) 
+            //     return (false, null, null);
             
             var (flowsIn, flowsOut) = GetFlows(chain);
             _data.CurrentFlow = flowsIn.Union(flowsOut)
@@ -268,7 +268,7 @@ namespace Shaman.Roslyn.LinqRewrite
             var name = _info.GetMethodFullName(invocation);
             if (!IsSupportedMethod(name)) return false;
             if (invocation.ArgumentList.Arguments.Count == 0) return true;
-            if (name == Constants.ElementAtMethod || name == Constants.ElementAtOrDefaultMethod || name == Constants.ContainsMethod) return true;
+            if (Constants.MethodsWithIntParams.Contains(name)) return true;
 
             // Passing things like .Select(Method) is not supported.
             return invocation.ArgumentList.Arguments.All(x => x.Expression is AnonymousFunctionExpressionSyntax);

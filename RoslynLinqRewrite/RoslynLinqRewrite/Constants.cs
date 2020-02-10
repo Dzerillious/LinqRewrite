@@ -8,6 +8,7 @@ namespace Shaman.Roslyn.LinqRewrite
         public const string ToDictionaryWithKeyValueMethod = "System.Collections.Generic.IEnumerable<TSource>.ToDictionary<TSource, TKey, TElement>(System.Func<TSource, TKey>, System.Func<TSource, TElement>)";
         public const string ToArrayMethod = "System.Collections.Generic.IEnumerable<TSource>.ToArray<TSource>()";
         public const string ToListMethod = "System.Collections.Generic.IEnumerable<TSource>.ToList<TSource>()";
+       
         public const string ReverseMethod = "System.Collections.Generic.IEnumerable<TSource>.Reverse<TSource>()";
         public const string FirstMethod = "System.Collections.Generic.IEnumerable<TSource>.First<TSource>()";
         public const string SingleMethod = "System.Collections.Generic.IEnumerable<TSource>.Single<TSource>()";
@@ -39,6 +40,8 @@ namespace Shaman.Roslyn.LinqRewrite
 
         public const string ListForEachMethod = "System.Collections.Generic.List<T>.ForEach(System.Action<T>)";
         public const string EnumerableForEachMethod = "System.Collections.Generic.IEnumerable<T>.ForEach<T>(System.Action<T>)";
+        
+        public const string RangeMethod = "System.Linq.Enumerable.Range(int, int)";
 
         //readonly static string RecursiveEnumerationMethod = "T.RecursiveEnumeration<T>(System.Func<T, T>)";
 
@@ -66,15 +69,21 @@ namespace Shaman.Roslyn.LinqRewrite
             
             ListForEachMethod,
             
+            RangeMethod,
+            
             EnumerableForEachMethod
         };
 
-        public static readonly string[] RootMethodsThatRequireYieldReturn = {
+        public static readonly HashSet<string> RootMethodsThatRequireYieldReturn = new HashSet<string> {
             WhereMethod, SelectMethod, CastMethod, OfTypeMethod
         };
 
-        public static readonly string[] MethodsThatPreserveCount = {
-            SelectMethod, CastMethod, ReverseMethod, ToListMethod, ToArrayMethod /*OrderBy*/
+        public static readonly HashSet<string> MethodsThatPreserveCount = new HashSet<string> {
+            SelectMethod, CastMethod, ReverseMethod, ToListMethod, ToArrayMethod, RangeMethod /*OrderBy*/
+        };
+        
+        public static readonly HashSet<string> MethodsWithIntParams = new HashSet<string> {
+            ElementAtMethod, ElementAtOrDefaultMethod, ContainsMethod, RangeMethod
         };
 
         public const string ItemsName = "_linqitems";
