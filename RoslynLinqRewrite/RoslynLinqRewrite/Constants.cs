@@ -42,6 +42,7 @@ namespace Shaman.Roslyn.LinqRewrite
         public const string EnumerableForEachMethod = "System.Collections.Generic.IEnumerable<T>.ForEach<T>(System.Action<T>)";
         
         public const string RangeMethod = "System.Linq.Enumerable.Range(int, int)";
+        public const string RepeatMethod = "System.Linq.Enumerable.Repeat<TResult>(TResult, int)";
 
         //readonly static string RecursiveEnumerationMethod = "T.RecursiveEnumeration<T>(System.Func<T, T>)";
 
@@ -49,6 +50,9 @@ namespace Shaman.Roslyn.LinqRewrite
         public const string SelectMethod = "System.Collections.Generic.IEnumerable<TSource>.Select<TSource, TResult>(System.Func<TSource, TResult>)";
         public const string CastMethod = "System.Collections.IEnumerable.Cast<TResult>()";
         public const string OfTypeMethod = "System.Collections.IEnumerable.OfType<TResult>()";
+        
+        public const string ListPrefix = "System.Collections.Generic.List";
+        public const string IEnumerablePrefix = "System.Collections.Generic.IEnumerable";
 
         public static readonly HashSet<string> KnownMethods = new HashSet<string>
         {
@@ -69,7 +73,7 @@ namespace Shaman.Roslyn.LinqRewrite
             
             ListForEachMethod,
             
-            RangeMethod,
+            RangeMethod, RepeatMethod,
             
             EnumerableForEachMethod
         };
@@ -83,7 +87,9 @@ namespace Shaman.Roslyn.LinqRewrite
         };
         
         public static readonly HashSet<string> MethodsWithIntParams = new HashSet<string> {
-            ElementAtMethod, ElementAtOrDefaultMethod, ContainsMethod, RangeMethod
+            ElementAtMethod, ElementAtOrDefaultMethod, ContainsMethod, 
+            
+            RangeMethod, RepeatMethod
         };
 
         public const string ItemsName = "_linqitems";

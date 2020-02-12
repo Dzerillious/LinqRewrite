@@ -58,7 +58,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             var newName = $"_linqitem{++_data.LastId}";
             var next = CreateProcessingStep(chain, chainIndex - 1, newType, newName, arguments, noAggregation);
                     
-            var local = SyntaxFactoryHelper.LocalVariableCreation(newName,
+            var local = VariableExtensions.LocalVariableCreation(newName,
                 SyntaxFactory.CastExpression(newType, SyntaxFactory.IdentifierName(itemName)));
             var nextStatement = next is BlockSyntax syntax
                 ? syntax.Statements
@@ -80,14 +80,14 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 return SyntaxFactory.IfStatement(
                     SyntaxFactory.BinaryExpression(SyntaxKind.IsExpression,
                         SyntaxFactory.IdentifierName(itemName), newType), SyntaxFactory.Block(
-                        SyntaxFactoryHelper.LocalVariableCreation(newName,
+                        VariableExtensions.LocalVariableCreation(newName,
                             SyntaxFactory.CastExpression(newType, SyntaxFactory.IdentifierName(itemName))),
                         next
 
                     ));
             }
 
-            var local = SyntaxFactoryHelper.LocalVariableCreation(newName,
+            var local = VariableExtensions.LocalVariableCreation(newName,
                 SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression,
                     SyntaxFactory.IdentifierName(itemName), newType));
             return SyntaxFactory.Block(local,
@@ -109,7 +109,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 ? null
                 : SyntaxFactory.ParseTypeName(lambdaBodyType.ToDisplayString());
 
-            var local = SyntaxFactoryHelper.LocalVariableCreation(newName,
+            var local = VariableExtensions.LocalVariableCreation(newName,
                 _code.InlineOrCreateMethod(new Lambda(lambda), newType,
                     SyntaxFactoryHelper.CreateParameter(itemName, itemType)));
 

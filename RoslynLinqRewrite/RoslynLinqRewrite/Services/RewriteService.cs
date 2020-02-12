@@ -87,7 +87,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             var loopContent = _processingStep.CreateProcessingStep(chain, chain.Count - 1,
                 SyntaxFactory.ParseTypeName("tmp"), Constants.ItemName, arguments, noAggregation);
 
-            var foreachStatement = GetForStatement("__i", SyntaxFactoryHelper.IntExpression(0), SyntaxFactoryHelper.IntExpression(100), loopContent);
+            var foreachStatement = GetForStatement("__i", VariableExtensions.IntValue(0), VariableExtensions.IntValue(100), loopContent);
 
             var coreFunction = GetCoreMethod(returnType, functionName, parameters,
                 prologue.Concat(new []{foreachStatement}).Concat(epilogue).ToList());
@@ -127,20 +127,18 @@ namespace Shaman.Roslyn.LinqRewrite.Services
 
         public ForStatementSyntax GetForStatement(string name, ExpressionSyntax min, ExpressionSyntax max, StatementSyntax loopContent)
             => SyntaxFactory.ForStatement(
-                SyntaxFactoryHelper.VariableCreation(name, min),
+                VariableExtensions.VariableCreation(name, min),
                 default,
                 SyntaxFactory.BinaryExpression(SyntaxKind.LessThanExpression,
                     SyntaxFactory.IdentifierName(name),
                     max),
-                SyntaxFactoryHelper.PostIncrement(name),
+                OperatorExpressionExtensions.PostIncrement(name),
                 loopContent);
         
-        private StatementSyntax GetForEachStatement(StatementSyntax loopContent)
+        public StatementSyntax GetForEachStatement(string name, ExpressionSyntax collection, StatementSyntax loopContent)
             => SyntaxFactory.ForEachStatement(
                 SyntaxFactory.IdentifierName("var"),
-                Constants.ItemName,
-                SyntaxFactory.IdentifierName(Constants.ItemsName),
-                loopContent is BlockSyntax ? loopContent : SyntaxFactory.Block(loopContent));
+                name, collection, loopContent);
         
         private IEnumerable<StatementSyntax> CreateSourceThrow(ITypeSymbol? collectionSemanticType) =>
             collectionSemanticType.IsValueType

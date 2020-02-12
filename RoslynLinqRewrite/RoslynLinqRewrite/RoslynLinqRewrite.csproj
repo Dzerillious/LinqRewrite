@@ -116,9 +116,9 @@
     <Compile Include="DataStructures\LiteralString.cs" />
     <Compile Include="DataStructures\RewriteParameters.cs" />
     <Compile Include="DataStructures\VariableCapture.cs" />
-    <Compile Include="Extensions\BinaryExpressionExtensions.cs" />
+    <Compile Include="Extensions\OperatorExpressionExtensions.cs" />
     <Compile Include="Extensions\SymbolExtensions.cs" />
-    <Compile Include="Extensions\SyntaxTypeExtensions.cs" />
+    <Compile Include="Extensions\VariableExtensions.cs" />
     <Compile Include="Extensions\SyntaxExtensions.cs" />
     <Compile Include="Extensions\StructureExtensions.cs" />
     <Compile Include="Extensions\SyntaxFactoryHelper.cs" />
@@ -132,6 +132,7 @@
     <Compile Include="RewriteRules\RewriteAll.cs" />
     <Compile Include="RewriteRules\RewriteAny.cs" />
     <Compile Include="RewriteRules\RewriteAverage.cs" />
+    <Compile Include="RewriteRules\RewriteCollectionEnumeration.cs" />
     <Compile Include="RewriteRules\RewriteContains.cs" />
     <Compile Include="RewriteRules\RewriteCount.cs" />
     <Compile Include="RewriteRules\RewriteElementAt.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="RewriteRules\RewriteLastOrDefault.cs" />
     <Compile Include="RewriteRules\RewriteMinMax.cs" />
     <Compile Include="RewriteRules\RewriteRange.cs" />
+    <Compile Include="RewriteRules\RewriteRepeat.cs" />
     <Compile Include="RewriteRules\RewriteSingle.cs" />
     <Compile Include="RewriteRules\RewriteSingleOrDefault.cs" />
     <Compile Include="RewriteRules\RewriteSum.cs" />

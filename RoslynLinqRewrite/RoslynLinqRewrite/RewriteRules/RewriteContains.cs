@@ -14,7 +14,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         public static ExpressionSyntax Rewrite(RewriteParameters p)
         {
             var elementType = SyntaxFactory.ParseTypeName(ModelExtensions
-                .GetTypeInfo(p.Data.Semantic, p.Node.ArgumentList.Arguments.First().Expression).ConvertedType
+                .GetTypeInfo(p.Semantic, p.Node.ArgumentList.Arguments.First().Expression).ConvertedType
                 .ToDisplayString());
             
             var comparerIdentifier = ((elementType as NullableTypeSyntax)?.ElementType ?? elementType) is PredefinedTypeSyntax
@@ -25,7 +25,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                 comparerIdentifier != null
                     ? new StatementSyntax[]
                     {
-                        SyntaxFactoryHelper.LocalVariableCreation("comparer_",
+                        VariableExtensions.LocalVariableCreation("comparer_",
                             SyntaxFactory.ParseExpression(
                                 $"System.Collections.Generic.EqualityComparer<{elementType}>.Default"))
                     }

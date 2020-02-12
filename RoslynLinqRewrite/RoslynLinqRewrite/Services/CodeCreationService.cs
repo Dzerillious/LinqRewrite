@@ -75,7 +75,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 .DataFlowsOut
                 .Union(currentFlow.DataFlowsIn)
                 .Where(x => x.Name != p && (x as IParameterSymbol)?.IsThis != true)
-                .Select(x => SyntaxTypeExtensions.CreateVariableCapture(x, currentFlow.DataFlowsOut))
+                .Select(x => VariableExtensions.CreateVariableCapture(x, currentFlow.DataFlowsOut))
                 .ToList();
 
             lambda = RenameSymbol(lambda, 0, param.Identifier.ValueText);

@@ -3,57 +3,34 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
 
 namespace Shaman.Roslyn.LinqRewrite.Extensions
 {
     public static class SyntaxFactoryHelper
     {
-        public static LiteralExpressionSyntax IntExpression(int x)
-            => SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(x));
+        public static SeparatedSyntaxList<ExpressionSyntax> CreateSeparatedExpressionList<T>(params T[] items) where T : SyntaxNode
+            => SyntaxFactory.SeparatedList(items.Cast<ExpressionSyntax>());
         
-        public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, ExpressionSyntax value)
-            =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, value));
-
-        public static VariableDeclarationSyntax VariableCreation(string name, ExpressionSyntax value)
-            =>  SyntaxFactory.VariableDeclaration(
-                SyntaxFactory.IdentifierName("var"),
-                SyntaxFactory.SeparatedList(new []{SyntaxFactory.VariableDeclarator(name)
-                    .WithInitializer(SyntaxFactory.EqualsValueClause(value))}));
-
-        public static SeparatedSyntaxList<ExpressionSyntax> PostIncrement(string name)
-            => SyntaxFactory.SeparatedList(new ExpressionSyntax[]
-            {
-                SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression,
-                    SyntaxFactory.IdentifierName(name))
-            });
-
         public static SeparatedSyntaxList<T> CreateSeparatedList<T>(params T[] items) where T : SyntaxNode
             => SyntaxFactory.SeparatedList(items);
 
-        public static StatementSyntax CreateLocalArray(string name, TypeSyntax itemType, ExpressionSyntax size)
-            => LocalVariableCreation(name,
-                SyntaxFactory.ArrayCreationExpression(
-                    SyntaxFactory.ArrayType(itemType)
-                        .WithRankSpecifiers(SyntaxFactory.SingletonList(SyntaxFactory.ArrayRankSpecifier(
-                            CreateSeparatedList(size))))));
+        public static ElementAccessExpressionSyntax ArrayAccess(ExpressionSyntax array, ExpressionSyntax index)
+            => SyntaxFactory.ElementAccessExpression(
+                array, SyntaxFactory.BracketedArgumentList(CreateSeparatedList(SyntaxFactory.Argument(index))));
 
         public static ElementAccessExpressionSyntax ArrayAccess(string arrayName, ExpressionSyntax index)
             => SyntaxFactory.ElementAccessExpression(
                 SyntaxFactory.IdentifierName(arrayName),
-                SyntaxFactory.BracketedArgumentList(
-                    CreateSeparatedList(SyntaxFactory.Argument(index))));
+                SyntaxFactory.BracketedArgumentList(CreateSeparatedList(SyntaxFactory.Argument(index))));
 
-        public static StatementSyntax AggregateStatementSyntax(List<StatementSyntax> syntax)
-        {
-            return syntax.Count switch
+        public static StatementSyntax AggregateStatementSyntax(List<StatementSyntax> syntax) 
+            => syntax.Count switch
             {
                 0 => SyntaxFactory.EmptyStatement(),
                 1 => syntax[0],
                 _ => SyntaxFactory.Block(syntax)
             };
-        }
-        
+
         public static StatementSyntax CreateStatement(ExpressionSyntax expression)
             => SyntaxFactory.ExpressionStatement(expression);
 

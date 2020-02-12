@@ -103,10 +103,9 @@ namespace Shaman.Roslyn.LinqRewrite
             
             var (rewrite, collection, semanticReturnType) = CheckIfRewriteInvocation(chain, node, lastNode);
             if (!rewrite) return null;
-
-            var returnType = SyntaxFactory.ParseTypeName(semanticReturnType.ToDisplayString());
-            var aggregationMethod = chain.First().MethodName;
             
+            var returnType = SyntaxFactory.ParseTypeName(semanticReturnType.ToDisplayString());
+
             using var parameters = RewriteParametersHolder.BorrowParameters();
             parameters.SetData(collection, returnType, semanticReturnType, chain, node);
 
@@ -193,7 +192,7 @@ namespace Shaman.Roslyn.LinqRewrite
             var (flowsIn, flowsOut) = GetFlows(chain);
             _data.CurrentFlow = flowsIn.Union(flowsOut)
                 .Where(x => (x as IParameterSymbol)?.IsThis != true)
-                .Select(x => SyntaxTypeExtensions.CreateVariableCapture(x, flowsOut));
+                .Select(x => VariableExtensions.CreateVariableCapture(x, flowsOut));
 
             var collection = ((MemberAccessExpressionSyntax) lastNode.Expression).Expression;
             if (SyntaxExtensions.IsAnonymousType(_data.Semantic.GetTypeInfo(collection).Type)) return (false, null, null);

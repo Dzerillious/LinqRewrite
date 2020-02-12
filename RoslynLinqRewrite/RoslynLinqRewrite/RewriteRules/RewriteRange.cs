@@ -1,7 +1,9 @@
 ﻿using System;
-using Microsoft.CodeAnalysis.CSharp;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
-using Shaman.Roslyn.LinqRewrite.Extensions;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
+using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
@@ -9,21 +11,18 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            var last = p.Chain[chainIndex];
-            if (last.MethodName != Constants.RangeMethod) throw new InvalidOperationException("Enumerable.Range should be first expression.");
+            if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Enumerable.Range should be first expression.");
 
-            var from = p.Chain[1].Arguments[0];
-            var count = p.Chain[1].Arguments[1];
+            var from = p.Chain[chainIndex].Arguments[0];
+            var count = p.Chain[chainIndex].Arguments[1];
             
-            p.AddToPrefix(SyntaxFactoryHelper.LocalVariableCreation(
-                "__sum", BinaryExpressionExtensions.Add(from, count)
-            ));
-            p.ForBounds = (p.Chain[1].Arguments[0], SyntaxFactory.IdentifierName("__sum"));
-            
-            p.LastIdentifier = SyntaxFactory.IdentifierName("__i");
-            p.LastIdentifierType = SyntaxTypeExtensions.IntType;
+            p.AddToPrefix(LocalVariableCreation(
+                "__sum", Add(from, count)));
 
-            p.ArraySize = count;
+            p.GetFor = body => p.Rewrite.GetForStatement("__i", p.Chain[1].Arguments[0], IdentifierName("__sum"),
+                AggregateStatementSyntax(body));
+            p.LastItem = IdentifierName("__i");
+            p.ResultSize = count;
         }
     }
 }

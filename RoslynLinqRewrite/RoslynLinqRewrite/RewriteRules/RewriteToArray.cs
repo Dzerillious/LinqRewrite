@@ -1,6 +1,10 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using System;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
-using Shaman.Roslyn.LinqRewrite.Extensions;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
+using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
@@ -9,19 +13,16 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         private const string ResultArrayName = "__result";
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            // var first = p.Chain[chainIndex];
-            // if (first.MethodName != Constants.ToArrayMethod) throw new InvalidOperationException("ToArray should be last expression.");
+            if (chainIndex != 0) throw new InvalidOperationException("ToArray should be last expression.");
 
-            if (p.ArraySize != null)
+            if (p.ResultSize != null)
             {
-                p.AddToPrefix(SyntaxFactoryHelper.CreateLocalArray(ResultArrayName, SyntaxTypeExtensions.IntType, p.ArraySize));
+                p.AddToPrefix(CreateLocalArray(ResultArrayName, (ArrayTypeSyntax)p.ReturnType, p.ResultSize));
 
-                p.AddToBody(SyntaxFactory.ExpressionStatement(
-                    BinaryExpressionExtensions.Assign(
-                        SyntaxFactoryHelper.ArrayAccess(ResultArrayName, SyntaxFactory.IdentifierName("_index")),
-                        p.LastIdentifier)));
+                p.AddToBody(ExpressionStatement(
+                    Assign(ArrayAccess(ResultArrayName, IdentifierName("_index")), p.LastItem)));
             
-                p.AddToPostfix(SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName(ResultArrayName)));
+                p.AddToPostfix(ReturnStatement(IdentifierName(ResultArrayName)));
             }
         }
         

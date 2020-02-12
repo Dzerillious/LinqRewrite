@@ -14,21 +14,21 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public readonly RewriteService Rewrite;
         public readonly CodeCreationService Code;
         public readonly RewriteDataService Data;
+        public SemanticModel Semantic => Data.Semantic;
         
         public ExpressionSyntax Collection;
         public List<LinqStep> Chain;
         public InvocationExpressionSyntax Node;
         
         public TypeSyntax ReturnType;
-        public ExpressionSyntax ArraySize;
+        public ExpressionSyntax ResultSize;
         
-        public TypeSyntax LastIdentifierType;
-        public IdentifierNameSyntax LastIdentifier;
-        public (ExpressionSyntax min, ExpressionSyntax max)? ForBounds;
+        public ExpressionSyntax LastItem;
         
         private List<StatementSyntax> _preForBody = new List<StatementSyntax>();
         private List<StatementSyntax> _forBody = new List<StatementSyntax>();
         private List<StatementSyntax> _postForBody = new List<StatementSyntax>();
+        public Func<List<StatementSyntax>, StatementSyntax> GetFor;
         
         public RewriteParameters()
         {
@@ -54,14 +54,9 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {
-            if (ForBounds == null)
-                return _preForBody.Concat(_postForBody);
-
-            return _preForBody.Concat(new StatementSyntax[]
-                {
-                    Rewrite.GetForStatement("__i", ForBounds.Value.min, ForBounds.Value.max, SyntaxFactoryHelper.AggregateStatementSyntax(_forBody))
-                })
-                .Concat(_postForBody);
+            if (GetFor != null) _preForBody.Add(GetFor(_forBody));
+            _preForBody.AddRange(_postForBody);
+            return _preForBody;
         }
 
         public void Dispose() => RewriteParametersHolder.ReturnParameters(this);

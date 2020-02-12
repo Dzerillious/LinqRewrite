@@ -33,5 +33,8 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
 
         public static bool IsAnonymousType(ITypeSymbol t) 
             => t.ToDisplayString().Contains("anonymous type:");
+
+        public static TypeSyntax GetTypeFromExpression(this SemanticModel model, ExpressionSyntax syntax)
+            => SyntaxFactory.ParseTypeName(model.GetTypeInfo(syntax).Type.ToDisplayString());
     }
 }
