@@ -15,7 +15,6 @@ namespace Shaman.Roslyn.LinqRewrite.Services
         public static RewriteService Instance => _instance ??= new RewriteService();
 
         private readonly RewriteDataService _data;
-        private readonly SyntaxInformationService _info;
         private readonly CodeCreationService _code;
         private readonly ProcessingStepCreationService _processingStep;
         public Func<SyntaxNode, SyntaxNode> Visit;
@@ -23,7 +22,6 @@ namespace Shaman.Roslyn.LinqRewrite.Services
         public RewriteService()
         {
             _data = RewriteDataService.Instance;
-            _info = SyntaxInformationService.Instance;
             _code = CodeCreationService.Instance;
             _processingStep = ProcessingStepCreationService.Instance;
         }
@@ -42,11 +40,11 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             // var collectionSemanticType = _data.Semantic.GetTypeInfo(collection).Type;
 
             var parameters = 
-                _data.CurrentFlow.Select(x => _code.CreateParameter(x.Name, _info.GetSymbolType(x.Symbol)).WithRef(x.Changes));
+                _data.CurrentFlow.Select(x => SyntaxFactoryHelper.CreateParameter(x.Name, SymbolExtensions.GetSymbolType(x.Symbol)).WithRef(x.Changes));
             if (additionalParameters != null) parameters = parameters.Concat(additionalParameters.Select(x => x.Item1));
 
-            var functionName = _info.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
-            var arguments = _code.CreateArguments(new[] {SyntaxFactory.Argument(SyntaxFactory.IdentifierName(Constants.ItemName))}.Concat(
+            var functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
+            var arguments = SyntaxFactoryHelper.CreateArguments(new[] {SyntaxFactory.Argument(SyntaxFactory.IdentifierName(Constants.ItemName))}.Concat(
                 _data.CurrentFlow.Select(x => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Name)).WithRef(x.Changes))));
 
             // var loopContent = _processingStep.CreateProcessingStep(chain, chain.Count - 1,
@@ -66,7 +64,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             //
             // if (additionalParameters != null) args = args.Concat(additionalParameters.Select(x => SyntaxFactory.Argument(x.Item2)));
             var inv = SyntaxFactory.InvocationExpression(
-                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), _code.CreateArguments());
+                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), SyntaxFactoryHelper.CreateArguments());
 
             _data.CurrentAggregation = old;
             return inv;
@@ -80,16 +78,16 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             var old = _data.CurrentAggregation;
             _data.CurrentAggregation = k;
 
-            var parameters = _data.CurrentFlow.Select(x => _code.CreateParameter(x.Name, _info.GetSymbolType(x.Symbol)).WithRef(x.Changes));
+            var parameters = _data.CurrentFlow.Select(x => SyntaxFactoryHelper.CreateParameter(x.Name, SymbolExtensions.GetSymbolType(x.Symbol)).WithRef(x.Changes));
             if (additionalParameters != null) parameters = parameters.Concat(additionalParameters.Select(x => x.Item1));
 
-            var functionName = _info.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
-            var arguments = _code.CreateArguments(_data.CurrentFlow.Select(x => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Name)).WithRef(x.Changes)));
+            var functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
+            var arguments = SyntaxFactoryHelper.CreateArguments(_data.CurrentFlow.Select(x => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Name)).WithRef(x.Changes)));
 
             var loopContent = _processingStep.CreateProcessingStep(chain, chain.Count - 1,
                 SyntaxFactory.ParseTypeName("tmp"), Constants.ItemName, arguments, noAggregation);
 
-            var foreachStatement = GetForStatement(SyntaxFactoryHelper.IntExpression(0), SyntaxFactoryHelper.IntExpression(100), loopContent);
+            var foreachStatement = GetForStatement("__i", SyntaxFactoryHelper.IntExpression(0), SyntaxFactoryHelper.IntExpression(100), loopContent);
 
             var coreFunction = GetCoreMethod(returnType, functionName, parameters,
                 prologue.Concat(new []{foreachStatement}).Concat(epilogue).ToList());
@@ -100,19 +98,19 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             
             if (additionalParameters != null) args = args.Concat(additionalParameters.Select(x => SyntaxFactory.Argument(x.Item2)));
             var inv = SyntaxFactory.InvocationExpression(
-                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), _code.CreateArguments(args));
+                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), SyntaxFactoryHelper.CreateArguments(args));
 
             _data.CurrentAggregation = old;
             return inv;
         }
         
-        internal ExpressionSyntax GetInvocationExpression(RewriteParameters p, List<StatementSyntax> body)
+        internal ExpressionSyntax GetInvocationExpression(RewriteParameters p, IEnumerable<StatementSyntax> body)
         {
-            var parameters = _data.CurrentFlow.Select(x => _code.CreateParameter(x.Name, _info.GetSymbolType(x.Symbol)).WithRef(x.Changes));
+            var parameters = _data.CurrentFlow.Select(x => SyntaxFactoryHelper.CreateParameter(x.Name, SymbolExtensions.GetSymbolType(x.Symbol)).WithRef(x.Changes));
             //if (additionalParameters != null) parameters = parameters.Concat(additionalParameters.Select(x => x.Item1));
 
-            var functionName = _info.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
-            var arguments = _code.CreateArguments(_data.CurrentFlow.Select(x => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Name)).WithRef(x.Changes)));
+            var functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
+            var arguments = SyntaxFactoryHelper.CreateArguments(_data.CurrentFlow.Select(x => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Name)).WithRef(x.Changes)));
 
             var coreFunction = GetCoreMethod(p.ReturnType, functionName, parameters, body);
 
@@ -121,21 +119,21 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             
             // if (additionalParameters != null) args = args.Concat(additionalParameters.Select(x => SyntaxFactory.Argument(x.Item2)));
             var inv = SyntaxFactory.InvocationExpression(
-                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), _code.CreateArguments(args));
+                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), SyntaxFactoryHelper.CreateArguments(args));
 
             // _data.CurrentAggregation = old;
             return inv;
         }
 
-        public StatementSyntax GetForStatement(ExpressionSyntax min, ExpressionSyntax max, StatementSyntax loopContent)
+        public ForStatementSyntax GetForStatement(string name, ExpressionSyntax min, ExpressionSyntax max, StatementSyntax loopContent)
             => SyntaxFactory.ForStatement(
-                SyntaxFactoryHelper.VariableCreation(SyntaxKind.IntKeyword, "_index", min),
+                SyntaxFactoryHelper.VariableCreation(name, min),
                 default,
                 SyntaxFactory.BinaryExpression(SyntaxKind.LessThanExpression,
-                    SyntaxFactory.IdentifierName("_index"),
+                    SyntaxFactory.IdentifierName(name),
                     max),
-                SyntaxFactoryHelper.PostIncrement("_index"),
-                SyntaxFactory.Block((loopContent as BlockSyntax)?.Statements ?? (IEnumerable<StatementSyntax>) new[] {loopContent}));
+                SyntaxFactoryHelper.PostIncrement(name),
+                loopContent);
         
         private StatementSyntax GetForEachStatement(StatementSyntax loopContent)
             => SyntaxFactory.ForEachStatement(
@@ -153,15 +151,15 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                         SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression,
                             SyntaxFactory.IdentifierName(Constants.ItemsName),
                             SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression)),
-                        _code.CreateThrowException("System.ArgumentNullException"))
+                        SyntaxFactoryHelper.CreateThrowException("System.ArgumentNullException"))
                 };
 
         public MethodDeclarationSyntax GetCoreMethod(TypeSyntax returnType, 
             string functionName, 
             IEnumerable<ParameterSyntax> parameters,
-            List<StatementSyntax> body)
+            IEnumerable<StatementSyntax> body)
             => SyntaxFactory.MethodDeclaration(returnType, functionName)
-                .WithParameterList(_code.CreateParameters(parameters))
+                .WithParameterList(SyntaxFactoryHelper.CreateParameters(parameters))
                 .WithBody(SyntaxFactory.Block(body))
                 .WithStatic(_data.CurrentMethodIsStatic)
                 .WithTypeParameterList(_data.CurrentMethodTypeParameters)

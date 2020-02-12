@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
 using Shaman.Roslyn.LinqRewrite.RewriteRules;
@@ -10,8 +11,13 @@ namespace Shaman.Roslyn.LinqRewrite
     {
         public static ExpressionSyntax TryRewrite(RewriteParameters parameters)
         {
-            var body = new List<StatementSyntax>();
-            RewriteRange.Rewrite(parameters, body);
+            var count = parameters.Chain.Count;
+            RewriteRange.Rewrite(parameters, --count);
+            RewriteToArray.Rewrite(parameters, --count);
+
+            // var collectionType = parameters.Data.Semantic.GetTypeInfo(parameters.Collection).Type;
+            // var collectionItemType = parameters.Info.GetItemType(collectionType);
+            var body = parameters.GetMethodBody();
             return parameters.Rewrite.GetInvocationExpression(parameters, body);
             //     if (Constants.RootMethodsThatRequireYieldReturn.Contains(aggregationMethod)) return RewriteWhenNeedsYieldReturn.Rewrite(parameters);
             //     if (aggregationMethod.Contains(".Sum")) return RewriteSum.Rewrite(parameters);

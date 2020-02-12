@@ -116,6 +116,9 @@
     <Compile Include="DataStructures\LiteralString.cs" />
     <Compile Include="DataStructures\RewriteParameters.cs" />
     <Compile Include="DataStructures\VariableCapture.cs" />
+    <Compile Include="Extensions\BinaryExpressionExtensions.cs" />
+    <Compile Include="Extensions\SymbolExtensions.cs" />
+    <Compile Include="Extensions\SyntaxTypeExtensions.cs" />
     <Compile Include="Extensions\SyntaxExtensions.cs" />
     <Compile Include="Extensions\StructureExtensions.cs" />
     <Compile Include="Extensions\SyntaxFactoryHelper.cs" />
@@ -156,7 +159,6 @@
     <Compile Include="Services\ProcessingStepCreationService.cs" />
     <Compile Include="Services\RewriteDataService.cs" />
     <Compile Include="Services\RewriteService.cs" />
-    <Compile Include="Services\SyntaxInformationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

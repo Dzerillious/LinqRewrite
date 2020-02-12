@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
+using Shaman.Roslyn.LinqRewrite.Extensions;
 using Shaman.Roslyn.LinqRewrite.Services;
 using SyntaxExtensions = Shaman.Roslyn.LinqRewrite.Extensions.SyntaxExtensions;
 
@@ -13,7 +14,6 @@ namespace Shaman.Roslyn.LinqRewrite
     public class LinqRewriter : CSharpSyntaxRewriter
     {
         private readonly RewriteDataService _data;
-        private readonly SyntaxInformationService _info;
         private readonly CodeCreationService _code;
 
         public int RewrittenMethods { get; private set; }
@@ -22,7 +22,6 @@ namespace Shaman.Roslyn.LinqRewrite
         public LinqRewriter(SemanticModel semantic)
         {
             _data = RewriteDataService.Instance;
-            _info = SyntaxInformationService.Instance;
             _code = CodeCreationService.Instance;
             
             _data.Semantic = semantic;
@@ -164,7 +163,7 @@ namespace Shaman.Roslyn.LinqRewrite
         {
             var chain = new List<LinqStep>
             {
-                new LinqStep(_info.GetMethodFullName(node),
+                new LinqStep(_code.GetMethodFullName(node),
                     node.ArgumentList.Arguments.Select(x => x.Expression).ToArray(), node)
             };
             lastNode = node;
@@ -173,7 +172,7 @@ namespace Shaman.Roslyn.LinqRewrite
                 node = syntax.Expression as InvocationExpressionSyntax;
                 if (node != null && IsSupportedMethod(node))
                 {
-                    chain.Add(new LinqStep(_info.GetMethodFullName(node),
+                    chain.Add(new LinqStep(_code.GetMethodFullName(node),
                         node.ArgumentList.Arguments.Select(x => x.Expression).ToArray(), node));
                     lastNode = node;
                 }
@@ -194,14 +193,14 @@ namespace Shaman.Roslyn.LinqRewrite
             var (flowsIn, flowsOut) = GetFlows(chain);
             _data.CurrentFlow = flowsIn.Union(flowsOut)
                 .Where(x => (x as IParameterSymbol)?.IsThis != true)
-                .Select(x => _code.CreateVariableCapture(x, flowsOut));
+                .Select(x => SyntaxTypeExtensions.CreateVariableCapture(x, flowsOut));
 
             var collection = ((MemberAccessExpressionSyntax) lastNode.Expression).Expression;
             if (SyntaxExtensions.IsAnonymousType(_data.Semantic.GetTypeInfo(collection).Type)) return (false, null, null);
 
             var semanticReturnType = _data.Semantic.GetTypeInfo(node).Type;
             if (SyntaxExtensions.IsAnonymousType(semanticReturnType) ||
-                _data.CurrentFlow.Any(x => SyntaxExtensions.IsAnonymousType(_info.GetSymbolType(x.Symbol)))) 
+                _data.CurrentFlow.Any(x => SyntaxExtensions.IsAnonymousType(SymbolExtensions.GetSymbolType(x.Symbol)))) 
                 return (false, null, null);
 
             return (true, collection, semanticReturnType);
@@ -220,7 +219,7 @@ namespace Shaman.Roslyn.LinqRewrite
                     Lambda = new Lambda(forEach.Statement,
                         new[]
                         {
-                            _code.CreateParameter(forEach.Identifier,
+                            SyntaxFactoryHelper.CreateParameter(forEach.Identifier,
                                 _data.Semantic.GetTypeInfo(forEach.Type).ConvertedType)
                         })
                 });
@@ -265,7 +264,7 @@ namespace Shaman.Roslyn.LinqRewrite
 
         private bool IsSupportedMethod(InvocationExpressionSyntax invocation)
         {
-            var name = _info.GetMethodFullName(invocation);
+            var name = _code.GetMethodFullName(invocation);
             if (!IsSupportedMethod(name)) return false;
             if (invocation.ArgumentList.Arguments.Count == 0) return true;
             if (Constants.MethodsWithIntParams.Contains(name)) return true;

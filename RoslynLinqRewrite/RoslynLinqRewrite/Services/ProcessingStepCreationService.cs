@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
+using Shaman.Roslyn.LinqRewrite.Extensions;
 using SyntaxExtensions = Shaman.Roslyn.LinqRewrite.Extensions.SyntaxExtensions;
 
 namespace Shaman.Roslyn.LinqRewrite.Services
@@ -27,7 +28,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             string itemName, ArgumentListSyntax arguments, bool noAggregation)
         {
             if (chainIndex == 0 && !noAggregation || chainIndex == -1)
-                return _data.CurrentAggregation(chain[0], arguments, _code.CreateParameter(itemName, itemType));
+                return _data.CurrentAggregation(chain[0], arguments, SyntaxFactoryHelper.CreateParameter(itemName, itemType));
 
             var step = chain[chainIndex];
             return step.MethodName switch
@@ -45,7 +46,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
         {
             var lambda = (AnonymousFunctionExpressionSyntax) step.Arguments[0];
 
-            var check = _code.InlineOrCreateMethod(new Lambda(lambda), _code.CreatePrimitiveType(SyntaxKind.BoolKeyword), _code.CreateParameter(itemName, itemType));
+            var check = _code.InlineOrCreateMethod(new Lambda(lambda), SyntaxFactoryHelper.CreatePrimitiveType(SyntaxKind.BoolKeyword), SyntaxFactoryHelper.CreateParameter(itemName, itemType));
             var next = CreateProcessingStep(chain, chainIndex - 1, itemType, itemName, arguments, noAggregation);
             return SyntaxFactory.IfStatement(check, next is BlockSyntax ? next : SyntaxFactory.Block(next));
         }
@@ -57,7 +58,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             var newName = $"_linqitem{++_data.LastId}";
             var next = CreateProcessingStep(chain, chainIndex - 1, newType, newName, arguments, noAggregation);
                     
-            var local = _code.CreateLocalVariableDeclaration(newName,
+            var local = SyntaxFactoryHelper.LocalVariableCreation(newName,
                 SyntaxFactory.CastExpression(newType, SyntaxFactory.IdentifierName(itemName)));
             var nextStatement = next is BlockSyntax syntax
                 ? syntax.Statements
@@ -79,14 +80,14 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 return SyntaxFactory.IfStatement(
                     SyntaxFactory.BinaryExpression(SyntaxKind.IsExpression,
                         SyntaxFactory.IdentifierName(itemName), newType), SyntaxFactory.Block(
-                        _code.CreateLocalVariableDeclaration(newName,
+                        SyntaxFactoryHelper.LocalVariableCreation(newName,
                             SyntaxFactory.CastExpression(newType, SyntaxFactory.IdentifierName(itemName))),
                         next
 
                     ));
             }
 
-            var local = _code.CreateLocalVariableDeclaration(newName,
+            var local = SyntaxFactoryHelper.LocalVariableCreation(newName,
                 SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression,
                     SyntaxFactory.IdentifierName(itemName), newType));
             return SyntaxFactory.Block(local,
@@ -108,9 +109,9 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 ? null
                 : SyntaxFactory.ParseTypeName(lambdaBodyType.ToDisplayString());
 
-            var local = _code.CreateLocalVariableDeclaration(newName,
+            var local = SyntaxFactoryHelper.LocalVariableCreation(newName,
                 _code.InlineOrCreateMethod(new Lambda(lambda), newType,
-                    _code.CreateParameter(itemName, itemType)));
+                    SyntaxFactoryHelper.CreateParameter(itemName, itemType)));
 
             var next = CreateProcessingStep(chain, chainIndex - 1, newType, newName, arguments, noAggregation);
             var nextStatement = next is BlockSyntax syntax

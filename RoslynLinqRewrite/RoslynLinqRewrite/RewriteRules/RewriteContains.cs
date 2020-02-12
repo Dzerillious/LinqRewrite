@@ -4,6 +4,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
+using Shaman.Roslyn.LinqRewrite.Extensions;
+using Shaman.Roslyn.LinqRewrite.Services;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
@@ -19,11 +21,11 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                     ? null : SyntaxFactory.IdentifierName("comparer_");
             
             return p.Rewrite.RewriteAsLoop(
-                p.Code.CreatePrimitiveType(SyntaxKind.BoolKeyword),
+                SyntaxFactoryHelper.CreatePrimitiveType(SyntaxKind.BoolKeyword),
                 comparerIdentifier != null
                     ? new StatementSyntax[]
                     {
-                        p.Code.CreateLocalVariableDeclaration("comparer_",
+                        SyntaxFactoryHelper.LocalVariableCreation("comparer_",
                             SyntaxFactory.ParseExpression(
                                 $"System.Collections.Generic.EqualityComparer<{elementType}>.Default"))
                     }
@@ -40,7 +42,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                     var current = SyntaxFactory.IdentifierName(param.Identifier.ValueText);
                     var condition = comparerIdentifier != null
                         ? SyntaxFactory.InvocationExpression(
-                            SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, comparerIdentifier, SyntaxFactory.IdentifierName("Equals")), p.Code.CreateArguments(current, target))
+                            SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, comparerIdentifier, SyntaxFactory.IdentifierName("Equals")), SyntaxFactoryHelper.CreateArguments(current, target))
                         : (ExpressionSyntax) SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, current, target);
                     
                     return SyntaxFactory.IfStatement(condition,
@@ -48,7 +50,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                 },
                 additionalParameters: new[]
                 {
-                    Tuple.Create(p.Code.CreateParameter("_target", elementType), p.Node.ArgumentList.Arguments.First().Expression)
+                    Tuple.Create(SyntaxFactoryHelper.CreateParameter("_target", elementType), p.Node.ArgumentList.Arguments.First().Expression)
                 }
             );
         }

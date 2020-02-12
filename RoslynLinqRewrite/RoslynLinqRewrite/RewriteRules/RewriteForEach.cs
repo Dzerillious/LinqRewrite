@@ -2,6 +2,8 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
+using Shaman.Roslyn.LinqRewrite.Extensions;
+using Shaman.Roslyn.LinqRewrite.Services;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
@@ -9,7 +11,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
     {
         public static ExpressionSyntax Rewrite(RewriteParameters p)
             => p.Rewrite.RewriteAsLoop(
-                p.Code.CreatePrimitiveType(SyntaxKind.VoidKeyword),
+                SyntaxFactoryHelper.CreatePrimitiveType(SyntaxKind.VoidKeyword),
                 Enumerable.Empty<StatementSyntax>(),
                 Enumerable.Empty<StatementSyntax>(),
                 p.Collection,
@@ -17,7 +19,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                 (inv, arguments, param) =>
                 {
                     var lambda = inv.Lambda ?? new Lambda((AnonymousFunctionExpressionSyntax) inv.Arguments.First());
-                    return SyntaxFactory.ExpressionStatement(p.Code.InlineOrCreateMethod(lambda, p.Code.CreatePrimitiveType(SyntaxKind.VoidKeyword), param));
+                    return SyntaxFactory.ExpressionStatement(p.Code.InlineOrCreateMethod(lambda, SyntaxFactoryHelper.CreatePrimitiveType(SyntaxKind.VoidKeyword), param));
                 }
             );
     }

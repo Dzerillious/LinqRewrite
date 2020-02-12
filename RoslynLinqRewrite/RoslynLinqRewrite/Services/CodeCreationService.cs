@@ -16,67 +16,11 @@ namespace Shaman.Roslyn.LinqRewrite.Services
         public static CodeCreationService Instance => _instance ??= new CodeCreationService();
         
         private readonly RewriteDataService _data;
-        private readonly SyntaxInformationService _info;
 
         public CodeCreationService()
         {
             _data = RewriteDataService.Instance;
-            _info = SyntaxInformationService.Instance;
         }
-        
-        public StatementSyntax CreateStatement(ExpressionSyntax expression)
-            => SyntaxFactory.ExpressionStatement(expression);
-
-        public ThrowStatementSyntax CreateThrowException(string type, string message = null)
-            => SyntaxFactory.ThrowStatement(
-                SyntaxFactory.ObjectCreationExpression(
-                    SyntaxFactory.ParseTypeName(type),
-                    CreateArguments(message != null
-                        ? new ExpressionSyntax[]
-                        {
-                            SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression,
-                                SyntaxFactory.Literal(message))
-                        }
-                        : new ExpressionSyntax[] { }), null));
-
-        public LocalDeclarationStatementSyntax CreateLocalVariableDeclaration(string name, ExpressionSyntax value)
-            => SyntaxFactory.LocalDeclarationStatement(
-                SyntaxFactory.VariableDeclaration(
-                SyntaxFactory.IdentifierName("var"),
-                CreateSeparatedList(SyntaxFactory.VariableDeclarator(name).WithInitializer(SyntaxFactory.EqualsValueClause(value)))));
-
-        public SeparatedSyntaxList<T> CreateSeparatedList<T>(IEnumerable<T> items) where T : SyntaxNode
-            => SyntaxFactory.SeparatedList(items);
-
-        public SeparatedSyntaxList<T> CreateSeparatedList<T>(params T[] items) where T : SyntaxNode
-            => SyntaxFactory.SeparatedList(items);
-
-        public ArgumentListSyntax CreateArguments(IEnumerable<ExpressionSyntax> items)
-            => CreateArguments(items.Select(x => SyntaxFactory.Argument(x)));
-
-        public ArgumentListSyntax CreateArguments(params ExpressionSyntax[] items)
-            => CreateArguments((IEnumerable<ExpressionSyntax>) items);
-
-        public ArgumentListSyntax CreateArguments(IEnumerable<ArgumentSyntax> items)
-            => SyntaxFactory.ArgumentList(CreateSeparatedList(items));
-
-        public ParameterListSyntax CreateParameters(IEnumerable<ParameterSyntax> items)
-            => SyntaxFactory.ParameterList(CreateSeparatedList(items));
-
-        public ParameterSyntax CreateParameter(SyntaxToken name, ITypeSymbol type)
-            => SyntaxFactory.Parameter(name).WithType(SyntaxFactory.ParseTypeName(type.ToDisplayString()));
-
-        public ParameterSyntax CreateParameter(SyntaxToken name, TypeSyntax type)
-            => SyntaxFactory.Parameter(name).WithType(type);
-
-        public ParameterSyntax CreateParameter(string name, ITypeSymbol type)
-            => CreateParameter(SyntaxFactory.Identifier(name), type);
-
-        public ParameterSyntax CreateParameter(string name, TypeSyntax type)
-            => CreateParameter(SyntaxFactory.Identifier(name), type);
-
-        public PredefinedTypeSyntax CreatePrimitiveType(SyntaxKind keyword) 
-            => SyntaxFactory.PredefinedType(SyntaxFactory.Token(keyword));
 
         public ExpressionSyntax CreateCollectionCount(ExpressionSyntax collection, bool allowUnknown)
         {
@@ -90,7 +34,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
 
             if (!allowUnknown) return null;
             if (collectionType.IsValueType) return null;
-            var itemType = _info.GetItemType(collectionType);
+            var itemType = SymbolExtensions.GetItemType(collectionType);
             if (itemType == null) return null;
             
             return SyntaxFactory.InvocationExpression(
@@ -118,20 +62,20 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 ? SyntaxFactory.GenericName(
                     SyntaxFactory.Identifier(fn),
                     SyntaxFactory.TypeArgumentList(
-                        CreateSeparatedList(_data.CurrentMethodTypeParameters.Parameters
+                        SyntaxFactoryHelper.CreateSeparatedList(_data.CurrentMethodTypeParameters.Parameters
                             .Select(x => SyntaxFactory.ParseTypeName(x.Identifier.ValueText)))))
                 : (NameSyntax) SyntaxFactory.IdentifierName(fn);
 
         public ExpressionSyntax InlineOrCreateMethod(Lambda lambda, TypeSyntax returnType, ParameterSyntax param)
         {
-            var p = _info.GetLambdaParameter(lambda, 0).Identifier.ValueText;
+            var p = SymbolExtensions.GetLambdaParameter(lambda, 0).Identifier.ValueText;
             //var lambdaParameter = semantic.GetDeclaredSymbol(p);
             var currentFlow = _data.Semantic.AnalyzeDataFlow(lambda.Body);
             var currentCaptures = currentFlow
                 .DataFlowsOut
                 .Union(currentFlow.DataFlowsIn)
                 .Where(x => x.Name != p && (x as IParameterSymbol)?.IsThis != true)
-                .Select(x => CreateVariableCapture(x, currentFlow.DataFlowsOut))
+                .Select(x => SyntaxTypeExtensions.CreateVariableCapture(x, currentFlow.DataFlowsOut))
                 .ToList();
 
             lambda = RenameSymbol(lambda, 0, param.Identifier.ValueText);
@@ -141,17 +85,17 @@ namespace Shaman.Roslyn.LinqRewrite.Services
         public ExpressionSyntax InlineOrCreateMethod(CSharpSyntaxNode body, TypeSyntax returnType,
             ParameterSyntax param, IEnumerable<VariableCapture> captures)
         {
-            var fn = _info.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinqHelper");
+            var fn = GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinqHelper");
             if (body is ExpressionSyntax syntax) return syntax;
 
-            if (captures.Any(x => SyntaxExtensions.IsAnonymousType(_info.GetSymbolType(x.Symbol)))) 
+            if (captures.Any(x => SyntaxExtensions.IsAnonymousType(SymbolExtensions.GetSymbolType(x.Symbol)))) 
                 throw new NotSupportedException();
             if (returnType == null) throw new NotSupportedException(); // Anonymous type
             
             var method = SyntaxFactory.MethodDeclaration(returnType, fn)
                 .WithParameterList(SyntaxFactory.ParameterList(SyntaxFactory.SeparatedList(
                     new[] { param }
-                        .Union(captures.Select(x => CreateParameter(x.Name, _info.GetSymbolType(x))
+                        .Union(captures.Select(x => SyntaxFactoryHelper.CreateParameter(x.Name, SymbolExtensions.GetSymbolType(x))
                         .WithRef(x.Changes)))
                 )))
                 .WithBody(body as BlockSyntax ?? (body is StatementSyntax statementSyntax
@@ -165,35 +109,13 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, method));
             return SyntaxFactory.InvocationExpression(
                 CreateMethodNameSyntaxWithCurrentTypeParameters(fn),
-                CreateArguments(new[] { SyntaxFactory.Argument(SyntaxFactory.IdentifierName(param.Identifier.ValueText))}
+                SyntaxFactoryHelper.CreateArguments(new[] { SyntaxFactory.Argument(SyntaxFactory.IdentifierName(param.Identifier.ValueText))}
                     .Union(captures.Select(x =>  SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Name)).WithRef(x.Changes)))));
-        }
-
-        public List<LinqStep> MaybeAddFilter(List<LinqStep> chain, bool condition)
-        {
-            if (!condition) return chain;
-            var lambda = (LambdaExpressionSyntax)chain.First().Arguments.FirstOrDefault();
-            return InsertExpandedShortcutMethod(chain, Constants.WhereMethod, lambda);
-        }
-
-        public List<LinqStep> MaybeAddSelect(List<LinqStep> chain, bool condition)
-        {
-            if (!condition) return chain;
-            var lambda = (LambdaExpressionSyntax)chain.First().Arguments.FirstOrDefault();
-            return InsertExpandedShortcutMethod(chain, Constants.SelectMethod, lambda);
-        }
-
-        private List<LinqStep> InsertExpandedShortcutMethod(List<LinqStep> chain, string methodFullName, LambdaExpressionSyntax lambda)
-        {
-            var ch = chain.ToList();
-            // var baseExpression = ((MemberAccessExpressionSyntax)chain.First().Expression).Expression;
-            ch.Insert(1, new LinqStep(methodFullName, new[] { lambda }));
-            return ch;
         }
 
         private Lambda RenameSymbol(Lambda container, int argIndex, string newname)
         {
-            var oldParameter = _info.GetLambdaParameter(container, argIndex).Identifier.ValueText;
+            var oldParameter = SymbolExtensions.GetLambdaParameter(container, argIndex).Identifier.ValueText;
             //var oldsymbol = semantic.GetDeclaredSymbol(oldparameter);
             var tokensToRename = container.Body.DescendantNodesAndSelf()
                 .Where(x =>
@@ -203,7 +125,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 //  if (sem.Symbol == oldsymbol) return true;
             });
             var syntax = SyntaxFactory.ParenthesizedLambdaExpression(
-                CreateParameters(container.Parameters
+                SyntaxFactoryHelper.CreateParameters(container.Parameters
                     .Select((x, i) =>  i == argIndex ? SyntaxFactory.Parameter(SyntaxFactory.Identifier(newname)).WithType(x.Type) : x)),
                 container.Body.ReplaceNodes(tokensToRename, (a, b) =>
                 {
@@ -227,20 +149,27 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             //return annotated.WithoutAnnotations();
         }
 
-        public VariableCapture CreateVariableCapture(ISymbol symbol, IReadOnlyList<ISymbol> flowsOut)
+        public string GetMethodFullName(InvocationExpressionSyntax invocation)
         {
-            var changes = flowsOut.Contains(symbol);
-            if (changes) return new VariableCapture(symbol, changes);
+            var n = (_data.Semantic.GetSymbolInfo(invocation.Expression).Symbol as IMethodSymbol)?.OriginalDefinition
+                .ToDisplayString();
+            const string iEnumerableOfTSource = "System.Collections.Generic.IEnumerable<TSource>";
 
-            if (!(symbol is ILocalSymbol local)) return new VariableCapture(symbol, changes);
-            var type = local.Type;
+            return n?.Replace("System.Collections.Generic.List<TSource>", iEnumerableOfTSource)
+                .Replace("TSource[]", iEnumerableOfTSource);
+        }
 
-            if (!type.IsValueType) return new VariableCapture(symbol, changes);
+        public ITypeSymbol GetLambdaReturnType(AnonymousFunctionExpressionSyntax lambda)
+            => ((INamedTypeSymbol) _data.Semantic.GetTypeInfo(lambda).ConvertedType).TypeArguments.Last();
 
-            // Pass big structs by ref for performance.
-            var size = StructureExtensions.GetStructSize(type);
-            if (size > Constants.MaximumSizeForByValStruct) changes = true;
-            return new VariableCapture(symbol, changes);
+        public string GetUniqueName(string v)
+        {
+            for (var i = 1;; i++)
+            {
+                var name = v + i;
+                if (_data.MethodsToAddToCurrentType.Any(x => x.Item2.Identifier.ValueText == name)) continue;
+                return name;
+            }
         }
     }
 }
