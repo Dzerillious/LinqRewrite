@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SimpleCollections.SimpleList;
 
 namespace Shaman.Roslyn.LinqRewrite.Extensions
 {
@@ -14,14 +16,23 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static SeparatedSyntaxList<T> CreateSeparatedList<T>(params T[] items) where T : SyntaxNode
             => SyntaxFactory.SeparatedList(items);
 
-        public static ElementAccessExpressionSyntax ArrayAccess(ExpressionSyntax array, ExpressionSyntax index)
+        public static ElementAccessExpressionSyntax ArrayAccess(this ExpressionSyntax array, ExpressionSyntax index)
             => SyntaxFactory.ElementAccessExpression(
                 array, SyntaxFactory.BracketedArgumentList(CreateSeparatedList(SyntaxFactory.Argument(index))));
 
-        public static ElementAccessExpressionSyntax ArrayAccess(string arrayName, ExpressionSyntax index)
+        public static ElementAccessExpressionSyntax ArrayAccess(this ExpressionSyntax array, string identifier)
+            => SyntaxFactory.ElementAccessExpression(
+                array, SyntaxFactory.BracketedArgumentList(CreateSeparatedList(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(identifier)))));
+
+        public static ElementAccessExpressionSyntax ArrayAccess(this string arrayName, ExpressionSyntax index)
             => SyntaxFactory.ElementAccessExpression(
                 SyntaxFactory.IdentifierName(arrayName),
                 SyntaxFactory.BracketedArgumentList(CreateSeparatedList(SyntaxFactory.Argument(index))));
+
+        public static ElementAccessExpressionSyntax ArrayAccess(this string arrayName, string identifier)
+            => SyntaxFactory.ElementAccessExpression(
+                SyntaxFactory.IdentifierName(arrayName),
+                SyntaxFactory.BracketedArgumentList(CreateSeparatedList(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(identifier)))));
 
         public static StatementSyntax AggregateStatementSyntax(List<StatementSyntax> syntax) 
             => syntax.Count switch
@@ -50,11 +61,26 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
             => SyntaxFactory.SeparatedList(items);
 
         public static ArgumentListSyntax CreateArguments(IEnumerable<ExpressionSyntax> items)
-            => CreateArguments(items.Select(x => SyntaxFactory.Argument(x)));
+            => CreateArguments(items.Select(SyntaxFactory.Argument));
 
         public static ArgumentListSyntax CreateArguments(params ExpressionSyntax[] items)
             => CreateArguments((IEnumerable<ExpressionSyntax>) items);
 
+        public static ArgumentSyntax Argument(string name)
+            => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(name));
+        
+        public static ArgumentSyntax RefArgument(string name)
+            => SyntaxFactory.Argument(null, SyntaxFactory.Token(SyntaxKind.RefKeyword), SyntaxFactory.IdentifierName(name));
+
+        public static ArgumentSyntax OutArgument(string name)
+            => SyntaxFactory.Argument(null, SyntaxFactory.Token(SyntaxKind.OutKeyword), SyntaxFactory.IdentifierName(name));
+
+        public static InvocationExpressionSyntax Invoke(ExpressionSyntax invoked, params ArgumentSyntax[] args)
+            => SyntaxFactory.InvocationExpression(invoked, SyntaxFactory.ArgumentList(CreateSeparatedList(args)));
+
+        public static ArgumentListSyntax CreateArguments(params ArgumentSyntax[] items)
+            => SyntaxFactory.ArgumentList(CreateSeparatedList(items));
+        
         public static ArgumentListSyntax CreateArguments(IEnumerable<ArgumentSyntax> items)
             => SyntaxFactory.ArgumentList(CreateSeparatedList(items));
 

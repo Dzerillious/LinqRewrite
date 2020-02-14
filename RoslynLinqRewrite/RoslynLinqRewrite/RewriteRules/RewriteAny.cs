@@ -14,15 +14,14 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             if (chainIndex == p.Chain.Count - 1) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
             if (p.Chain[chainIndex].Arguments.Length == 0)
-                p.AddToBody(ReturnStatement(TrueValue));
+                p.ForAdd(ReturnStatement(TrueValue));
             else if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
             {
-                p.AddToBody(IfStatement(p.Code.InlineOrCreateMethod(new Lambda(lambda),
-                        CreatePrimitiveType(SyntaxKind.BoolKeyword), p.LastItem),
+                p.ForAdd(IfStatement(p.Code.InlineLambda(p.Semantic, lambda, p.LastItem),
                     ReturnStatement(TrueValue)));
             }
             
-            p.AddToPostfix(ReturnStatement(FalseValue));
+            p.PostForAdd(ReturnStatement(FalseValue));
         }
     }
 }

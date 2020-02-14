@@ -1,7 +1,7 @@
-﻿﻿using System;
+﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace AotLinq
+namespace SimpleCollections
 {
     public static class EnlargeExtensions
     {

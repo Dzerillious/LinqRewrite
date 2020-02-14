@@ -13,8 +13,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             if (chainIndex == p.Chain.Count - 1) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             var lambda = (SimpleLambdaExpressionSyntax)p.Chain[chainIndex].Arguments[0];
             
-            p.AddToBody(ExpressionStatement(p.Code.InlineOrCreateMethod(new Lambda(lambda), 
-                CreatePrimitiveType(SyntaxKind.VoidKeyword), p.LastItem)));
+            p.ForAdd(p.Code.InlineLambda(p.Semantic, lambda, p.LastItem));
         }
     }
 }

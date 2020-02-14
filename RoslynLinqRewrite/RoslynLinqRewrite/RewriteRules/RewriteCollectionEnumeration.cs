@@ -26,30 +26,37 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                     AggregateStatementSyntax(body));
                 p.GetReverseFor = body => p.Rewrite.GetReverseForStatement("__i", IntValue(0), count,
                     AggregateStatementSyntax(body));
-                p.LastItem = ArrayAccess(p.Collection, IdentifierName("__i"));
+                
+                
+                p.LastItem = p.Collection.ArrayAccess("__i");
                 p.ResultSize = count;
+                p.SourceSize = count;
                 return;
             }
 
             var collectionName = collectionType.ToString();
-            if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
+            if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase) 
+                || collectionName.StartsWith(SimpleListPrefix, StringComparison.OrdinalIgnoreCase))
             {
-                p.AddToPrefix( IfStatement(EqualsExpr(p.Collection, NullValue),
+                p.PreForAdd( IfStatement(p.Collection.EqualsExpr(NullValue),
                     CreateThrowException("System.InvalidOperationException", "Collection was null.")));
                 
-                p.AddToPrefix(LocalVariableCreation(SourceCount,
-                        InvokeMethod(p.Collection, "Count")));
+                p.PreForAdd(LocalVariableCreation(SourceCount,
+                    p.Collection.InvokeMethod("Count")));
                 
                 p.GetFor = body => p.Rewrite.GetForStatement("__i", IntValue(0), IdentifierName(SourceCount),
                     AggregateStatementSyntax(body));
+                
                 p.GetReverseFor = body => p.Rewrite.GetReverseForStatement("__i", IntValue(0), IdentifierName(SourceCount),
                     AggregateStatementSyntax(body));
-                p.LastItem = ArrayAccess(p.Collection, IdentifierName("__i"));
+                
+                p.LastItem = p.Collection.ArrayAccess("__i");
                 p.ResultSize = IdentifierName(SourceCount);
+                p.SourceSize = IdentifierName(SourceCount);
             }
             else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
             {
-                p.AddToPrefix( IfStatement(EqualsExpr(p.Collection, NullValue),
+                p.PreForAdd( IfStatement(p.Collection.EqualsExpr(NullValue),
                         CreateThrowException("System.InvalidOperationException", "Collection was null.")));
                 
                 p.GetFor = body => p.Rewrite.GetForEachStatement("__item", p.Collection, 

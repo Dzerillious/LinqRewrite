@@ -64,7 +64,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             //
             // if (additionalParameters != null) args = args.Concat(additionalParameters.Select(x => SyntaxFactory.Argument(x.Item2)));
             var inv = SyntaxFactory.InvocationExpression(
-                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), SyntaxFactoryHelper.CreateArguments());
+                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), SyntaxFactoryHelper.CreateArguments(new ExpressionSyntax[0]));
 
             _data.CurrentAggregation = old;
             return inv;
@@ -129,18 +129,16 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             => SyntaxFactory.ForStatement(
                 VariableCreation(name, min),
                 default,
-                LThan(SyntaxFactory.IdentifierName(name),
-                    max),
-                PostIncrement(name),
+                SyntaxFactory.IdentifierName(name).LThan(max),
+                name.SeparatedPostIncrement(),
                 loopContent);
 
         public ForStatementSyntax GetReverseForStatement(string name, ExpressionSyntax min, ExpressionSyntax max, StatementSyntax loopContent)
             => SyntaxFactory.ForStatement(
-                VariableCreation(name, Sub(max, IntValue(1))),
+                VariableCreation(name, max.Sub(IntValue(1))),
                 default,
-                GeThan(SyntaxFactory.IdentifierName(name),
-                    min),
-                PostDecrement(name),
+                SyntaxFactory.IdentifierName(name).GeThan(min),
+                name.SeparatedPostDecrement(),
                 loopContent);
         
         public StatementSyntax GetForEachStatement(string name, ExpressionSyntax collection, StatementSyntax loopContent)

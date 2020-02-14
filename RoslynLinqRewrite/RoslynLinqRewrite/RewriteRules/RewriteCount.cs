@@ -15,17 +15,17 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         {
             if (chainIndex == p.Chain.Count - 1) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
-            p.AddToPrefix(LocalVariableCreation("__count",  IntValue(0)));
+            p.PreForAdd(LocalVariableCreation("__count",  IntValue(0)));
             if (p.Chain[chainIndex].Arguments.Length == 0)
-                p.AddToBody(ExpressionStatement(Add(IdentifierName("__count"), IntValue(1))));
+                p.ForAdd("__count".PostIncrement());
+            
             else if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
             {
-                p.AddToBody(IfStatement(p.Code.InlineOrCreateMethod(new Lambda(lambda),
-                        CreatePrimitiveType(SyntaxKind.BoolKeyword), p.LastItem),
-                    ExpressionStatement(Add(IdentifierName("__count"), IntValue(1)))));
+                p.ForAdd(IfStatement(p.Code.InlineLambda(p.Semantic, lambda, p.LastItem),
+                    ExpressionStatement("__count".PostIncrement())));
             }
             
-            p.AddToPostfix(ReturnStatement(IdentifierName("__count")));
+            p.PostForAdd(ReturnStatement(IdentifierName("__count")));
         }
     }
 }

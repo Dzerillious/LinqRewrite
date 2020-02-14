@@ -1,7 +1,7 @@
-﻿﻿using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace AotLinq
+namespace SimpleCollections
 {
     public static class IntExtensions
     {

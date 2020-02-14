@@ -4,18 +4,20 @@ using System.Runtime.CompilerServices;
 
 namespace SimpleCollections
 {
-    public static class FastArrayExtensions
+    public static class SimpleArrayExtensions
     {
         public static TSource Single<TSource>(this TSource[] array)
         {
             if (array.Length > 1) throw new InvalidOperationException("Sequence contains more than one element");
             return array[0];
         }
+        
         public static TSource Single<TSource>(this List<TSource> array)
         {
             if (array.Count > 1) throw new InvalidOperationException("Sequence contains more than one element");
             return array[0];
         }
+        
         public static TSource First<TSource>(this TSource[] array) => array[0];
 
         public static TSource First<TSource>(this List<TSource> array) => array[0];
@@ -36,6 +38,7 @@ namespace SimpleCollections
             
             throw new InvalidOperationException("No items match the specified search criteria.");
         }
+        
         public static TSource FirstOrDefault<TSource>(this TSource[] array, Func<TSource, bool> condition)
         {
             for (var i = 0; i < array.Length; i++)
@@ -43,6 +46,7 @@ namespace SimpleCollections
             
             return default;
         }
+        
         public static TSource FirstOrDefault<TSource>(this List<TSource> array, Func<TSource, bool> condition)
         {
             var len = array.Count;
@@ -72,6 +76,7 @@ namespace SimpleCollections
             if (array.Count > 1) throw new InvalidOperationException("Sequence contains more than one element");
             return array.Count == 0 ? default : array[0];
         }
+        
         public static TSource Last<TSource>(this List<TSource> array)
             => array[array.Count - 1];
 
@@ -90,6 +95,7 @@ namespace SimpleCollections
                 if (condition(array[i])) return true;
             return false;
         }
+        
         public static bool Any<TSource>(this List<TSource> array)
             => array.Count != 0;
 
@@ -104,6 +110,7 @@ namespace SimpleCollections
             
             return false;
         }
+        
         public static bool All<TSource>(this TSource[] array, Func<TSource, bool> condition)
         {
             for (var i = 0; i < array.Length; i++)
@@ -111,6 +118,7 @@ namespace SimpleCollections
             
             return true;
         }
+        
         public static bool All<TSource>(this List<TSource> array, Func<TSource, bool> condition)
         {
             var len = array.Count;
@@ -119,6 +127,7 @@ namespace SimpleCollections
             
             return true;
         }
+        
         public static TSource[] ToArray<TSource>(this List<TSource> array)
         {
             var len = array.Count;

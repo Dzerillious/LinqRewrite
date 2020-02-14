@@ -51,6 +51,7 @@ namespace Shaman.Roslyn.LinqRewrite
         public const string CastMethod = "System.Collections.IEnumerable.Cast<TResult>()";
         public const string OfTypeMethod = "System.Collections.IEnumerable.OfType<TResult>()";
         
+        public const string SimpleListPrefix = "SimpleCollections.SimpleList.SimpleList";
         public const string ListPrefix = "System.Collections.Generic.List";
         public const string IEnumerablePrefix = "System.Collections.Generic.IEnumerable";
 

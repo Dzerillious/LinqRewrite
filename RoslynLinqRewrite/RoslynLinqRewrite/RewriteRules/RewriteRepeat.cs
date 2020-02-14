@@ -17,8 +17,11 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             p.GetFor = body => p.Rewrite.GetForStatement("__i", 
                 item, count, AggregateStatementSyntax(body));
             p.GetReverseFor = p.GetFor;
-            p.LastItem = IdentifierName("__i");
+            
             p.ResultSize = count;
+            p.SourceSize = count;
+            
+            p.LastItem = IdentifierName("__i");
         }
     }
 }

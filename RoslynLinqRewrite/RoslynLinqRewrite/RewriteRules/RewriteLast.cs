@@ -14,22 +14,21 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         {
             if (chainIndex == p.Chain.Count - 1) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
-            p.AddToPrefix(LocalVariableCreation("_found", NullableType(p.ReturnType), NullValue));
+            p.PreForAdd(LocalVariableCreation("_found", NullableType(p.ReturnType), NullValue));
 
             if (p.Chain[chainIndex].Arguments.Length == 0)
             {
-                p.AddToBody(  ExpressionStatement(Assign("_found", p.LastItem)));
+                p.ForAdd("_found".Assign(p.LastItem));
             }
             else if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
             {
-                p.AddToBody(IfStatement(p.Code.InlineOrCreateMethod(new Lambda(lambda),
-                        CreatePrimitiveType(SyntaxKind.BoolKeyword), p.LastItem),
-                    ExpressionStatement(Assign("_found", p.LastItem))));
+                p.ForAdd(If(p.Code.InlineLambda(p.Semantic, lambda, p.LastItem),
+                    "_found".Assign(p.LastItem)));
             }
             
-            p.AddToPostfix(IfStatement(EqualsExpr(IdentifierName("_found"), NullValue),
+            p.PostForAdd(If("_found".EqualsExpr(NullValue),
                 CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."), 
-                ElseClause(ReturnStatement(CastExpression(p.ReturnType, IdentifierName("_found"))))));
+                Else(ReturnStatement("_found".Cast(p.ReturnType)))));
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SimpleCollections
 {
-    public static class FastCollectionExtensions
+    public static class SimpleCollectionExtensions
     {
         public static T[] AppendRange<T>(this ICollection<T> collection, T[] appended)
         {

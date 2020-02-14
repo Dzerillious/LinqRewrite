@@ -66,6 +66,24 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                             .Select(x => SyntaxFactory.ParseTypeName(x.Identifier.ValueText)))))
                 : (NameSyntax) SyntaxFactory.IdentifierName(fn);
 
+        public ExpressionSyntax InlineLambda(SemanticModel semantic, SimpleLambdaExpressionSyntax simpleLambda, ExpressionSyntax replace)
+        {
+            var lambda = new Lambda(simpleLambda);
+            var returnType = semantic.GetTypeFromExpression(simpleLambda.ExpressionBody);
+            
+            var p = SymbolExtensions.GetLambdaParameter(lambda, 0);
+            var currentFlow = _data.Semantic.AnalyzeDataFlow(lambda.Body);
+            var currentCaptures = currentFlow
+                .DataFlowsOut
+                .Union(currentFlow.DataFlowsIn)
+                .Where(x => x.Name != p.Identifier.ValueText && (x as IParameterSymbol)?.IsThis != true)
+                .Select(x => VariableExtensions.CreateVariableCapture(x, currentFlow.DataFlowsOut))
+                .ToList();
+
+            lambda = RenameSymbol(lambda, 0, replace);
+            return InlineOrCreateMethod(lambda.Body, returnType, p, currentCaptures);
+        }
+
         public ExpressionSyntax InlineOrCreateMethod(Lambda lambda, TypeSyntax returnType, ExpressionSyntax replace)
         {
             var p = SymbolExtensions.GetLambdaParameter(lambda, 0);

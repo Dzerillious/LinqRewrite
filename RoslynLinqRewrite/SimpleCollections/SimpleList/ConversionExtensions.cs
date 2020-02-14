@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace SimpleCollections.SimpleList
 {
-    public static class ToFastListExtensions
+    public static class ToSimpleListExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SimpleList<T> TakeSimpleList<T>(this T[] array) 

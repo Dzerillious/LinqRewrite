@@ -14,7 +14,6 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public readonly RewriteService Rewrite;
         public readonly CodeCreationService Code;
         public readonly RewriteDataService Data;
-        public SemanticModel Semantic => Data.Semantic;
         
         public ExpressionSyntax Collection;
         public List<LinqStep> Chain;
@@ -23,6 +22,7 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public bool IsReversed;
         public TypeSyntax ReturnType;
         public ExpressionSyntax ResultSize;
+        public ExpressionSyntax SourceSize;
         
         public ExpressionSyntax LastItem;
         
@@ -32,6 +32,8 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         
         public Func<List<StatementSyntax>, StatementSyntax> GetFor;
         public Func<List<StatementSyntax>, StatementSyntax> GetReverseFor;
+        
+        public SemanticModel Semantic => Data.Semantic;
         
         public RewriteParameters()
         {
@@ -51,9 +53,12 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
             Node = node;
         }
 
-        public void AddToPrefix(StatementSyntax syntax) => _preForBody.Add(syntax);
-        public void AddToBody(StatementSyntax syntax) => _forBody.Add(syntax);
-        public void AddToPostfix(StatementSyntax syntax) => _postForBody.Add(syntax);
+        public void PreForAdd(StatementSyntax syntax) => _preForBody.Add(syntax);
+        public void PreForAdd(ExpressionSyntax expression) => _preForBody.Add(SyntaxFactory.ExpressionStatement(expression));
+        public void ForAdd(StatementSyntax syntax) => _forBody.Add(syntax);
+        public void ForAdd(ExpressionSyntax expression) => _forBody.Add(SyntaxFactory.ExpressionStatement(expression));
+        public void PostForAdd(StatementSyntax syntax) => _postForBody.Add(syntax);
+        public void PostForAdd(ExpressionSyntax expression) => _postForBody.Add(SyntaxFactory.ExpressionStatement(expression));
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {

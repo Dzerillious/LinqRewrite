@@ -13,15 +13,14 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             if (chainIndex == p.Chain.Count - 1) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
             if (p.Chain[chainIndex].Arguments.Length == 0)
-                p.AddToBody(ReturnStatement(p.LastItem));
+                p.ForAdd(ReturnStatement(p.LastItem));
             else if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
             {
-                p.AddToBody(IfStatement(p.Code.InlineOrCreateMethod(new Lambda(lambda),
-                        CreatePrimitiveType(SyntaxKind.BoolKeyword), p.LastItem),
+                p.ForAdd(IfStatement(p.Code.InlineLambda(p.Semantic, lambda, p.LastItem),
                     ReturnStatement(p.LastItem)));
             }
             
-            p.AddToPostfix(CreateThrowException("System.InvalidOperationException",
+            p.PostForAdd(CreateThrowException("System.InvalidOperationException",
             "The sequence did not contain any elements."));
         }
     }

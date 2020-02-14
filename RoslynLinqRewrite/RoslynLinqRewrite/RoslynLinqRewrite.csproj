@@ -149,7 +149,9 @@
     <Compile Include="RewriteRules\RewriteToArray.cs" />
     <Compile Include="RewriteRules\RewriteToDict.cs" />
     <Compile Include="RewriteRules\RewriteToList.cs" />
+    <Compile Include="RewriteRules\RewriteToSimpleList.cs" />
     <Compile Include="RewriteRules\RewriteWhenNeedsYieldReturn.cs" />
+    <Compile Include="RewriteRules\RewriteWhere.cs" />
     <Compile Include="Samples\Example3.cs" />
     <Compile Include="Samples\Example2.cs" />
     <Compile Include="Samples\Example1.cs" />
@@ -179,6 +181,12 @@
     <PackageReference Include="Shaman.Reflection">
       <Version>1.0.0.24</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleCollections\SimpleCollections.csproj">
+      <Project>{67a073a7-0ccf-438d-b0df-95b94d543bdc}</Project>
+      <Name>SimpleCollections</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

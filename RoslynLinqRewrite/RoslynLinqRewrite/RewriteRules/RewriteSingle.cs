@@ -14,28 +14,27 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         {
             if (chainIndex == p.Chain.Count - 1) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
-            p.AddToPrefix(LocalVariableCreation("_found", NullableType(p.ReturnType), NullValue));
+            p.PreForAdd(LocalVariableCreation("__found", NullableType(p.ReturnType), NullValue));
 
             if (p.Chain[chainIndex].Arguments.Length == 0)
             {
-                p.AddToBody(IfStatement(EqualsExpr(IdentifierName("_found"), NullValue),
-                    ExpressionStatement(Assign("_found", p.LastItem)), 
-                    ElseClause(CreateThrowException("System.InvalidOperationException",
+                p.ForAdd(If("__found".EqualsExpr(NullValue),
+                    "__found".Assign(p.LastItem), 
+                    Else(CreateThrowException("System.InvalidOperationException",
                         "The sequence contains more than single matching element."))));
             }
             else if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
             {
-                p.AddToBody(IfStatement(p.Code.InlineOrCreateMethod(new Lambda(lambda),
-                        CreatePrimitiveType(SyntaxKind.BoolKeyword), p.LastItem),
-                    IfStatement(EqualsExpr(IdentifierName("_found"), NullValue),
-                        ExpressionStatement(Assign("_found", p.LastItem)),
-                        ElseClause(CreateThrowException("System.InvalidOperationException",
+                p.ForAdd(IfStatement(p.Code.InlineLambda(p.Semantic, lambda, p.LastItem),
+                    If("__found".EqualsExpr(NullValue),
+                        "__found".Assign(p.LastItem),
+                        Else(CreateThrowException("System.InvalidOperationException",
                             "The sequence contains more than single matching element.")))));
             }
             
-            p.AddToPostfix(IfStatement(EqualsExpr(IdentifierName("_found"), NullValue),
+            p.PostForAdd(If("_found".EqualsExpr(NullValue),
                 CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."), 
-                ElseClause(ReturnStatement(CastExpression(p.ReturnType, IdentifierName("_found"))))));
+                Else(ReturnStatement("_found".Cast(p.ReturnType)))));
         }
     }
 }

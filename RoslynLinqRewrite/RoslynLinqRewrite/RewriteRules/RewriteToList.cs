@@ -3,6 +3,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
 using Shaman.Roslyn.LinqRewrite.Extensions;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static Shaman.Roslyn.LinqRewrite.RewriteRules.RewriteToArray;
 using SyntaxExtensions = Shaman.Roslyn.LinqRewrite.Extensions.SyntaxExtensions;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules
@@ -15,10 +18,10 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             var itemType = SymbolExtensions.GetItemType(collectionType)
                 .GetTypeSyntaxFromExpression();
             
-            RewriteToArray.RewriteOther(p, chainIndex, itemType);
-            p.AddToPostfix(SyntaxFactory.ReturnStatement(
-                SyntaxFactory.ObjectCreationExpression(p.ReturnType, 
-                    SyntaxFactoryHelper.CreateArguments(SyntaxFactory.IdentifierName(RewriteToArray.ResultArrayName)),
+            RewriteOther(p, chainIndex, itemType);
+            p.PostForAdd(ReturnStatement(
+                ObjectCreationExpression(p.ReturnType, 
+                    CreateArguments(IdentifierName(ResultArrayName)),
                     null)));
         }
     }

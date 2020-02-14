@@ -16,9 +16,8 @@ namespace Shaman.Roslyn.LinqRewrite
             
             
             //RewriteRepeat.Rewrite(parameters, --count);
-            RewriteSelect.Rewrite(parameters, --count);
-            RewriteSelect.Rewrite(parameters, --count);
-            RewriteToList.Rewrite(parameters, --count);
+            RewriteWhere.Rewrite(parameters, --count);
+            RewriteToArray.Rewrite(parameters, --count);
 
             // var collectionType = parameters.Data.Semantic.GetTypeInfo(parameters.Collection).Type;
             // var collectionItemType = parameters.Info.GetItemType(collectionType);
