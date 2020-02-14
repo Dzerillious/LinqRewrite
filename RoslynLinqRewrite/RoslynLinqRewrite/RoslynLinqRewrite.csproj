@@ -106,9 +106,6 @@
     <Compile Include="..\dotnet-compile-csc-linq-rewrite\RequestLanguage.cs">
       <Link>DotnetCli\RequestLanguage.cs</Link>
     </Compile>
-    <Compile Include="..\Shaman.FastLinq.Sources\FastLinqExtensions.cs">
-      <Link>Extensions\FastLinqExtensions.cs</Link>
-    </Compile>
     <Compile Include="DataStructures\CanReWrapForeachVisitor.cs" />
     <Compile Include="DataStructures\ExitException.cs" />
     <Compile Include="DataStructures\Lambda.cs" />
