@@ -53,12 +53,12 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
             Node = node;
         }
 
-        public void PreForAdd(StatementSyntax syntax) => _preForBody.Add(syntax);
-        public void PreForAdd(ExpressionSyntax expression) => _preForBody.Add(SyntaxFactory.ExpressionStatement(expression));
-        public void ForAdd(StatementSyntax syntax) => _forBody.Add(syntax);
-        public void ForAdd(ExpressionSyntax expression) => _forBody.Add(SyntaxFactory.ExpressionStatement(expression));
-        public void PostForAdd(StatementSyntax syntax) => _postForBody.Add(syntax);
-        public void PostForAdd(ExpressionSyntax expression) => _postForBody.Add(SyntaxFactory.ExpressionStatement(expression));
+        public void PreForAdd(StatementSyntax _) => _preForBody.Add(_);
+        public void PreForAdd(ExpressionSyntax _) => _preForBody.Add(SyntaxFactory.ExpressionStatement(_));
+        public void ForAdd(StatementSyntax _) => _forBody.Add(_);
+        public void ForAdd(ExpressionSyntax _) => _forBody.Add(SyntaxFactory.ExpressionStatement(_));
+        public void PostForAdd(StatementSyntax _) => _postForBody.Add(_);
+        public void PostForAdd(ExpressionSyntax _) => _postForBody.Add(SyntaxFactory.ExpressionStatement(_));
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {

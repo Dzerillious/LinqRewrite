@@ -10,29 +10,31 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
     public static class RewriteSingleOrDefault
     {
+        private const string FoundVariable = "__found";
+        
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
             if (chainIndex == p.Chain.Count - 1) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
-            p.PreForAdd(LocalVariableCreation("_found", NullableType(p.ReturnType), NullValue));
+            p.PreForAdd(LocalVariableCreation(FoundVariable, NullableType(p.ReturnType), NullValue));
 
             if (p.Chain[chainIndex].Arguments.Length == 0)
             {
-                p.ForAdd(If("_found".EqualsExpr(NullValue),
-                    "_found".Assign(p.LastItem), 
-                    Else(ReturnStatement(DefaultExpression(p.ReturnType)))));
+                p.ForAdd(If(FoundVariable.EqualsExpr(NullValue),
+                            FoundVariable.Assign(p.LastItem), 
+                            Else(Return(Default(p.ReturnType)))));
             }
             else if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
             {
                 p.ForAdd(If(p.Code.InlineLambda(p.Semantic, lambda, p.LastItem),
-                    If("_found".EqualsExpr(NullValue),
-                        "_found".Assign(p.LastItem),
-                        Else(ReturnStatement(DefaultExpression(p.ReturnType))))));
+                            If(FoundVariable.EqualsExpr(NullValue),
+                                FoundVariable.Assign(p.LastItem),
+                                Else(Return(Default(p.ReturnType))))));
             }
             
-            p.PostForAdd(If("_found".EqualsExpr(NullValue),
-                ReturnStatement(DefaultExpression(p.ReturnType)), 
-                Else(ReturnStatement("_found".Cast(p.ReturnType)))));
+            p.PostForAdd(If(FoundVariable.EqualsExpr(NullValue),
+                            Return(Default(p.ReturnType)), 
+                            Else(Return(FoundVariable.Cast(p.ReturnType)))));
         }
     }
 }

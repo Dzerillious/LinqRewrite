@@ -68,6 +68,9 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
 
         public static ArgumentSyntax Argument(string name)
             => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(name));
+
+        public static ArgumentSyntax Argument(int value)
+            => SyntaxFactory.Argument(VariableExtensions.IntValue(value));
         
         public static ArgumentSyntax RefArgument(string name)
             => SyntaxFactory.Argument(null, SyntaxFactory.Token(SyntaxKind.RefKeyword), SyntaxFactory.IdentifierName(name));

@@ -11,21 +11,23 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
     public static class RewriteCount
     {
+        private const string CountVariable = "__count";
+        
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
             if (chainIndex == p.Chain.Count - 1) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
-            p.PreForAdd(LocalVariableCreation("__count",  IntValue(0)));
+            p.PreForAdd(LocalVariableCreation(CountVariable, 0));
             if (p.Chain[chainIndex].Arguments.Length == 0)
-                p.ForAdd("__count".PostIncrement());
+                p.ForAdd(CountVariable.PostIncrement());
             
             else if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
             {
                 p.ForAdd(IfStatement(p.Code.InlineLambda(p.Semantic, lambda, p.LastItem),
-                    ExpressionStatement("__count".PostIncrement())));
+                                ExpressionStatement(CountVariable.PostIncrement())));
             }
             
-            p.PostForAdd(ReturnStatement(IdentifierName("__count")));
+            p.PostForAdd(Return(CountVariable));
         }
     }
 }

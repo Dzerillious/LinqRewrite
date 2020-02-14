@@ -10,6 +10,8 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
     public static class RewriteSingle
     {
+        private const string FoundVariable = "__found";
+        
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
             if (chainIndex == p.Chain.Count - 1) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
@@ -18,23 +20,23 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
             if (p.Chain[chainIndex].Arguments.Length == 0)
             {
-                p.ForAdd(If("__found".EqualsExpr(NullValue),
-                    "__found".Assign(p.LastItem), 
-                    Else(CreateThrowException("System.InvalidOperationException",
-                        "The sequence contains more than single matching element."))));
+                p.ForAdd(If(FoundVariable.EqualsExpr(NullValue),
+                            FoundVariable.Assign(p.LastItem), 
+                            Else(CreateThrowException("System.InvalidOperationException",
+                                "The sequence contains more than single matching element."))));
             }
             else if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
             {
-                p.ForAdd(IfStatement(p.Code.InlineLambda(p.Semantic, lambda, p.LastItem),
-                    If("__found".EqualsExpr(NullValue),
-                        "__found".Assign(p.LastItem),
-                        Else(CreateThrowException("System.InvalidOperationException",
-                            "The sequence contains more than single matching element.")))));
+                p.ForAdd(If(p.Code.InlineLambda(p.Semantic, lambda, p.LastItem),
+                            If(FoundVariable.EqualsExpr(NullValue),
+                                FoundVariable.Assign(p.LastItem),
+                                Else(CreateThrowException("System.InvalidOperationException",
+                                    "The sequence contains more than single matching element.")))));
             }
             
-            p.PostForAdd(If("_found".EqualsExpr(NullValue),
-                CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."), 
-                Else(ReturnStatement("_found".Cast(p.ReturnType)))));
+            p.PostForAdd(If(FoundVariable.EqualsExpr(NullValue),
+                            CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."), 
+                            Else(Return(FoundVariable.Cast(p.ReturnType)))));
         }
     }
 }

@@ -7,9 +7,9 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
     public static class RewriteElementAt
     {
-        public static ExpressionSyntax Rewrite(RewriteParameters p)
-        {
-            return null;
+        // public static ExpressionSyntax Rewrite(RewriteParameters p)
+        // {
+        //     return null;
             // return p.Rewrite.RewriteAsLoop(
             //     p.ReturnType,
             //     new[]
@@ -46,6 +46,6 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             //             p.Node.ArgumentList.Arguments.First().Expression)
             //     }
             // );
-        }
+        // }
     }
 }

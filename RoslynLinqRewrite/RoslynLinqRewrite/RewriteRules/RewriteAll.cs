@@ -16,12 +16,11 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             
             if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
             {
-                p.ForAdd(IfStatement(
-                    Not(ParenthesizedExpression(p.Code.InlineLambda(p.Semantic, lambda, p.LastItem))),
-                    ReturnStatement(FalseValue)));
+                p.ForAdd(If(Not(p.Code.InlineLambda(p.Semantic, lambda, p.LastItem)),
+                            Return(FalseValue)));
             }
             
-            p.PostForAdd(ReturnStatement(TrueValue));
+            p.PostForAdd(Return(TrueValue));
         }
     }
 }

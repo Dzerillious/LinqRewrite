@@ -13,7 +13,12 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
     public static class RewriteToArray
     {
-        public const string ResultArrayName = "__result";
+        public const string ResultVariable = "__result";
+        public const string CurrentVariable = "__current";
+        public const string IndexVariable = "__index";
+        public const string LogVariable = "__log";
+        public const string CurrentLengthVariable = "__currentLength";
+        
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
             if (chainIndex != 0) throw new InvalidOperationException("ToArray should be last expression.");
@@ -24,9 +29,8 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                 if (p.SourceSize != null) KnownSourceSize(p);
                 else UnknownSourceSize(p);
                 
-                p.PostForAdd(ReturnStatement(
-                    Invoke("SimpleCollections".Access("SimpleArrayExtensions", "EnsureFullArray"), 
-                            Argument("__result"), Argument("__current"))));
+                p.PostForAdd(Return(Invoke("SimpleCollections".Access("SimpleArrayExtensions", "EnsureFullArray"), 
+                        Argument(ResultVariable), Argument(CurrentVariable))));
             }
         }
         
@@ -36,65 +40,63 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
             if (p.ResultSize != null)
             {
-                p.PreForAdd(CreateLocalArray(ResultArrayName, ArrayType(itemType), p.ResultSize));
+                p.PreForAdd(CreateLocalArray(ResultVariable, ArrayType(itemType), p.ResultSize));
 
-                p.ForAdd(ExpressionStatement(
-                    ResultArrayName.ArrayAccess("__index").Assign(p.LastItem)));
+                p.ForAdd(ResultVariable.ArrayAccess(IndexVariable).Assign(p.LastItem));
             }
         }
 
         private static void KnownSize(RewriteParameters p)
         {
-            p.PreForAdd(CreateLocalArray(ResultArrayName, p.ReturnType, p.ResultSize));
+            p.PreForAdd(CreateLocalArray(ResultVariable, p.ReturnType, p.ResultSize));
 
-            p.ForAdd(ExpressionStatement(
-                ResultArrayName.ArrayAccess("__index").Assign(p.LastItem)));
+            p.ForAdd(ResultVariable.ArrayAccess(IndexVariable).Assign(p.LastItem));
             
-            p.PostForAdd(ReturnStatement(IdentifierName(ResultArrayName)));
+            p.PostForAdd(Return(ResultVariable));
         }
 
         private static void KnownSourceSize(RewriteParameters p)
         {
-            p.PreForAdd(LocalVariableCreation("__current", IntValue(0)));
+            p.PreForAdd(LocalVariableCreation(CurrentVariable, 0));
                 
-            p.PreForAdd(LocalVariableCreation("__log", 
-                Invoke("SimpleCollections".Access("IntExtensions", "Log2"),
-                        Argument(CastExpression(CreatePrimitiveType(SyntaxKind.UIntKeyword), p.SourceSize)))
-                    .Sub(IntValue(3))));
+            p.PreForAdd(LocalVariableCreation(LogVariable, 
+                        Invoke("SimpleCollections".Access("IntExtensions", "Log2"),
+                                Argument(p.SourceSize.Cast(SyntaxKind.UIntKeyword)))
+                                .Sub(3)));
                 
-            p.PreForAdd(ExpressionStatement("__log".AssignSubtract("__log".Mod(IntValue(2)))));
-            p.PreForAdd(LocalVariableCreation("__currentLength", IntValue(8)));
+            p.PreForAdd(ExpressionStatement(LogVariable.AssignSubtract(LogVariable.Mod(2))));
+            p.PreForAdd(LocalVariableCreation(CurrentLengthVariable, 8));
 
             var result = (ArrayTypeSyntax) p.ReturnType;
-            p.PreForAdd(CreateLocalArray(ResultArrayName, result, IntValue(8)));
+            p.PreForAdd(CreateLocalArray(ResultVariable, result, 8));
                 
-            p.ForAdd(IfStatement("__current".GeThan(IdentifierName("__currentLength")),
+            p.ForAdd(IfStatement(CurrentVariable.GeThan(CurrentLengthVariable),
                 ExpressionStatement(Invoke("SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray"), 
-                        Argument(IntValue(2)),
+                        Argument(2),
                         Argument(p.SourceSize),
-                        RefArgument("__result"),
-                        RefArgument("__log"),
-                        OutArgument("__currentLength")))));
+                        RefArgument(ResultVariable),
+                        RefArgument(LogVariable),
+                        OutArgument(CurrentLengthVariable)))));
                 
             p.ForAdd(ExpressionStatement(
-                ResultArrayName.ArrayAccess("__index").Assign(p.LastItem)));
+                ResultVariable.ArrayAccess(IndexVariable).Assign(p.LastItem)));
         }
 
         private static void UnknownSourceSize(RewriteParameters p)
         {
-            p.PreForAdd(LocalVariableCreation("__current", IntValue(0)));
-            p.PreForAdd(LocalVariableCreation("__currentLength", IntValue(8)));
+            p.PreForAdd(LocalVariableCreation(CurrentVariable,0));
+            p.PreForAdd(LocalVariableCreation(CurrentLengthVariable, 8));
             var result = (ArrayTypeSyntax) p.ReturnType;
-            p.PreForAdd(CreateLocalArray(ResultArrayName, result, IntValue(8)));
+            p.PreForAdd(CreateLocalArray(ResultVariable, result, 8));
                 
-            p.ForAdd(IfStatement("__current".GeThan(IdentifierName("__currentLength")),
+            p.ForAdd(IfStatement(CurrentVariable.GeThan(CurrentLengthVariable),
                 ExpressionStatement(Invoke("SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray"), 
-                        Argument(IntValue(2)),
-                        RefArgument("__result"),
-                        RefArgument("__currentLength")))));
+                        Argument(2),
+                        RefArgument(ResultVariable),
+                        RefArgument(CurrentLengthVariable)))));
                 
             p.ForAdd(ExpressionStatement(
-                ResultArrayName.ArrayAccess("__index").Assign(p.LastItem)));
+                ResultVariable.ArrayAccess(IndexVariable).Assign(p.LastItem)));
         }
     }
 }

@@ -27,6 +27,10 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, ExpressionSyntax value)
             =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, value));
         
+        public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, int value)
+            =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, 
+                SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(value))));
+        
         public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, TypeSyntax type, ExpressionSyntax value)
             =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, type, value));
 
@@ -47,6 +51,12 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
                 SyntaxFactory.ArrayCreationExpression(
                     arrayType.WithRankSpecifiers(SyntaxFactory.SingletonList(SyntaxFactory.ArrayRankSpecifier(
                             SyntaxFactoryHelper.CreateSeparatedList(size))))));
+
+        public static StatementSyntax CreateLocalArray(string name, ArrayTypeSyntax arrayType, int size)
+            => LocalVariableCreation(name,
+                SyntaxFactory.ArrayCreationExpression(
+                    arrayType.WithRankSpecifiers(SyntaxFactory.SingletonList(SyntaxFactory.ArrayRankSpecifier(
+                        SyntaxFactoryHelper.CreateSeparatedList((ExpressionSyntax)IntValue(size)))))));
         public static StatementSyntax CreateLocalArray(string name, TypeSyntax itemType, ExpressionSyntax size)
             => LocalVariableCreation(name,
                 SyntaxFactory.ArrayCreationExpression(
