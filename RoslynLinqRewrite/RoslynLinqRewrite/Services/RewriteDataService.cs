@@ -12,7 +12,6 @@ namespace Shaman.Roslyn.LinqRewrite.Services
         public static RewriteDataService Instance => _instance ??= new RewriteDataService();
         
         public SemanticModel Semantic;
-        public int LastId;
         
         public IEnumerable<VariableCapture> CurrentFlow;
         public TypeDeclarationSyntax CurrentType;

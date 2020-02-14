@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -36,5 +37,8 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
 
         public static TypeSyntax GetTypeFromExpression(this SemanticModel model, ExpressionSyntax syntax)
             => SyntaxFactory.ParseTypeName(model.GetTypeInfo(syntax).Type.ToDisplayString());
+        
+        public static TypeSyntax GetTypeSyntaxFromExpression(this ITypeSymbol type)
+            => SyntaxFactory.ParseTypeName(type.ToDisplayString());
     }
 }

@@ -16,12 +16,10 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                 p.AddToBody(ReturnStatement(p.LastItem));
             else if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
             {
-                p.AddToBody(IfStatement(InvocationExpression(lambda, CreateArguments(p.LastItem)), 
+                p.AddToBody(IfStatement(p.Code.InlineOrCreateMethod(new Lambda(lambda),
+                        CreatePrimitiveType(SyntaxKind.BoolKeyword), p.LastItem),
                     ReturnStatement(p.LastItem)));
             }
-            //else p.AddToBody(),
-                // CreateThrowException("System.InvalidOperationException", "Collection was null."))););
-            //p.AddToBody();
             
             p.AddToPostfix(CreateThrowException("System.InvalidOperationException",
             "The sequence did not contain any elements."));

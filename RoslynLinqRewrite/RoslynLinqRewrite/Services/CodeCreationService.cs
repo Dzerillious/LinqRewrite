@@ -25,12 +25,12 @@ namespace Shaman.Roslyn.LinqRewrite.Services
         public ExpressionSyntax CreateCollectionCount(ExpressionSyntax collection, bool allowUnknown)
         {
             var collectionType = _data.Semantic.GetTypeInfo(collection).Type;
-            if (collectionType is IArrayTypeSymbol) return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName(Constants.ItemsName), SyntaxFactory.IdentifierName("Length"));
+            if (collectionType is IArrayTypeSymbol) return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, collection, SyntaxFactory.IdentifierName("Length"));
             if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<")))
-                return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName(Constants.ItemsName), SyntaxFactory.IdentifierName("Count"));
+                return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, collection, SyntaxFactory.IdentifierName("Count"));
                 
             if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.ICollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.ICollection<")))
-                return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName(Constants.ItemsName), SyntaxFactory.IdentifierName("Count"));
+                return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, collection, SyntaxFactory.IdentifierName("Count"));
 
             if (!allowUnknown) return null;
             if (collectionType.IsValueType) return null;
@@ -66,20 +66,19 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                             .Select(x => SyntaxFactory.ParseTypeName(x.Identifier.ValueText)))))
                 : (NameSyntax) SyntaxFactory.IdentifierName(fn);
 
-        public ExpressionSyntax InlineOrCreateMethod(Lambda lambda, TypeSyntax returnType, ParameterSyntax param)
+        public ExpressionSyntax InlineOrCreateMethod(Lambda lambda, TypeSyntax returnType, ExpressionSyntax replace)
         {
-            var p = SymbolExtensions.GetLambdaParameter(lambda, 0).Identifier.ValueText;
-            //var lambdaParameter = semantic.GetDeclaredSymbol(p);
+            var p = SymbolExtensions.GetLambdaParameter(lambda, 0);
             var currentFlow = _data.Semantic.AnalyzeDataFlow(lambda.Body);
             var currentCaptures = currentFlow
                 .DataFlowsOut
                 .Union(currentFlow.DataFlowsIn)
-                .Where(x => x.Name != p && (x as IParameterSymbol)?.IsThis != true)
+                .Where(x => x.Name != p.Identifier.ValueText && (x as IParameterSymbol)?.IsThis != true)
                 .Select(x => VariableExtensions.CreateVariableCapture(x, currentFlow.DataFlowsOut))
                 .ToList();
 
-            lambda = RenameSymbol(lambda, 0, param.Identifier.ValueText);
-            return InlineOrCreateMethod(lambda.Body, returnType, param, currentCaptures);
+            lambda = RenameSymbol(lambda, 0, replace);
+            return InlineOrCreateMethod(lambda.Body, returnType, p, currentCaptures);
         }
 
         public ExpressionSyntax InlineOrCreateMethod(CSharpSyntaxNode body, TypeSyntax returnType,
@@ -113,7 +112,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                     .Union(captures.Select(x =>  SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Name)).WithRef(x.Changes)))));
         }
 
-        private Lambda RenameSymbol(Lambda container, int argIndex, string newname)
+        private Lambda RenameSymbol(Lambda container, int argIndex, ExpressionSyntax replace)
         {
             var oldParameter = SymbolExtensions.GetLambdaParameter(container, argIndex).Identifier.ValueText;
             //var oldsymbol = semantic.GetDeclaredSymbol(oldparameter);
@@ -125,11 +124,10 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 //  if (sem.Symbol == oldsymbol) return true;
             });
             var syntax = SyntaxFactory.ParenthesizedLambdaExpression(
-                SyntaxFactoryHelper.CreateParameters(container.Parameters
-                    .Select((x, i) =>  i == argIndex ? SyntaxFactory.Parameter(SyntaxFactory.Identifier(newname)).WithType(x.Type) : x)),
+                SyntaxFactoryHelper.CreateParameters(container.Parameters.Select((x, i) =>  x)),
                 container.Body.ReplaceNodes(tokensToRename, (a, b) =>
                 {
-                    if (b is IdentifierNameSyntax ide) return ide.WithIdentifier(SyntaxFactory.Identifier(newname));
+                    if (b is IdentifierNameSyntax ide) return replace;
                     throw new NotImplementedException();
                 }));
             return new Lambda(syntax);
@@ -158,6 +156,9 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             return n?.Replace("System.Collections.Generic.List<TSource>", iEnumerableOfTSource)
                 .Replace("TSource[]", iEnumerableOfTSource);
         }
+        
+        public TypeSyntax GetLambdaType(SimpleLambdaExpressionSyntax lambda)
+            => _data.Semantic.GetTypeFromExpression(lambda.ExpressionBody);
 
         public ITypeSymbol GetLambdaReturnType(AnonymousFunctionExpressionSyntax lambda)
             => ((INamedTypeSymbol) _data.Semantic.GetTypeInfo(lambda).ConvertedType).TypeArguments.Last();

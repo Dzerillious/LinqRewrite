@@ -12,11 +12,13 @@ namespace Shaman.Roslyn.LinqRewrite
         public static ExpressionSyntax TryRewrite(RewriteParameters parameters)
         {
             var count = parameters.Chain.Count;
-            RewriteFirst.Rewrite(parameters, --count);
+            // RewriteSingleOrDefault.Rewrite(parameters, --count);
             
             
-            // RewriteRepeat.Rewrite(parameters, --count);
-            // RewriteToArray.Rewrite(parameters, --count);
+            //RewriteRepeat.Rewrite(parameters, --count);
+            RewriteSelect.Rewrite(parameters, --count);
+            RewriteSelect.Rewrite(parameters, --count);
+            RewriteToList.Rewrite(parameters, --count);
 
             // var collectionType = parameters.Data.Semantic.GetTypeInfo(parameters.Collection).Type;
             // var collectionItemType = parameters.Info.GetItemType(collectionType);

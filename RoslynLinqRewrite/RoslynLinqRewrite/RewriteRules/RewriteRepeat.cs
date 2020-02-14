@@ -1,6 +1,6 @@
 ﻿using System;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
-using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules
@@ -14,9 +14,10 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             var item = p.Chain[chainIndex].Arguments[0];
             var count = p.Chain[chainIndex].Arguments[1];
             
-            p.GetFor = body => p.Rewrite.GetForStatement("__i", IntValue(0), count,
-                AggregateStatementSyntax(body));
-            p.LastItem = item;
+            p.GetFor = body => p.Rewrite.GetForStatement("__i", 
+                item, count, AggregateStatementSyntax(body));
+            p.GetReverseFor = p.GetFor;
+            p.LastItem = IdentifierName("__i");
             p.ResultSize = count;
         }
     }

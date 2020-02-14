@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
 using Shaman.Roslyn.LinqRewrite.Extensions;
@@ -21,9 +20,11 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             var collectionType = p.Semantic.GetTypeFromExpression(p.Collection);
             if (collectionType is ArrayTypeSyntax)
             {
-                var count = Access(p.Collection, "Length");
+                var count = p.Code.CreateCollectionCount(p.Collection, false);
                 
                 p.GetFor = body => p.Rewrite.GetForStatement("__i", IntValue(0), count,
+                    AggregateStatementSyntax(body));
+                p.GetReverseFor = body => p.Rewrite.GetReverseForStatement("__i", IntValue(0), count,
                     AggregateStatementSyntax(body));
                 p.LastItem = ArrayAccess(p.Collection, IdentifierName("__i"));
                 p.ResultSize = count;
@@ -33,8 +34,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             var collectionName = collectionType.ToString();
             if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
             {
-                p.AddToPrefix( IfStatement(BinaryExpression(SyntaxKind.EqualsExpression, 
-                        p.Collection, NullValue),
+                p.AddToPrefix( IfStatement(EqualsExpr(p.Collection, NullValue),
                     CreateThrowException("System.InvalidOperationException", "Collection was null.")));
                 
                 p.AddToPrefix(LocalVariableCreation(SourceCount,
@@ -42,13 +42,14 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                 
                 p.GetFor = body => p.Rewrite.GetForStatement("__i", IntValue(0), IdentifierName(SourceCount),
                     AggregateStatementSyntax(body));
+                p.GetReverseFor = body => p.Rewrite.GetReverseForStatement("__i", IntValue(0), IdentifierName(SourceCount),
+                    AggregateStatementSyntax(body));
                 p.LastItem = ArrayAccess(p.Collection, IdentifierName("__i"));
                 p.ResultSize = IdentifierName(SourceCount);
             }
             else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
             {
-                p.AddToPrefix( IfStatement(BinaryExpression(SyntaxKind.EqualsExpression, 
-                           p.Collection, NullValue),
+                p.AddToPrefix( IfStatement(EqualsExpr(p.Collection, NullValue),
                         CreateThrowException("System.InvalidOperationException", "Collection was null.")));
                 
                 p.GetFor = body => p.Rewrite.GetForEachStatement("__item", p.Collection, 

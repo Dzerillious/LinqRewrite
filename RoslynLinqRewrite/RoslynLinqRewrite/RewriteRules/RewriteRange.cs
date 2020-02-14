@@ -16,10 +16,11 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             var from = p.Chain[chainIndex].Arguments[0];
             var count = p.Chain[chainIndex].Arguments[1];
             
-            p.AddToPrefix(LocalVariableCreation(
-                "__sum", Add(from, count)));
+            p.AddToPrefix(LocalVariableCreation("__sum", Add(from, count)));
 
             p.GetFor = body => p.Rewrite.GetForStatement("__i", p.Chain[1].Arguments[0], IdentifierName("__sum"),
+                AggregateStatementSyntax(body));
+            p.GetReverseFor = body => p.Rewrite.GetReverseForStatement("__i", p.Chain[1].Arguments[0], IdentifierName("__sum"),
                 AggregateStatementSyntax(body));
             p.LastItem = IdentifierName("__i");
             p.ResultSize = count;

@@ -20,6 +20,7 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public List<LinqStep> Chain;
         public InvocationExpressionSyntax Node;
         
+        public bool IsReversed;
         public TypeSyntax ReturnType;
         public ExpressionSyntax ResultSize;
         
@@ -28,7 +29,9 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         private List<StatementSyntax> _preForBody = new List<StatementSyntax>();
         private List<StatementSyntax> _forBody = new List<StatementSyntax>();
         private List<StatementSyntax> _postForBody = new List<StatementSyntax>();
+        
         public Func<List<StatementSyntax>, StatementSyntax> GetFor;
+        public Func<List<StatementSyntax>, StatementSyntax> GetReverseFor;
         
         public RewriteParameters()
         {
@@ -54,7 +57,11 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {
-            if (GetFor != null) _preForBody.Add(GetFor(_forBody));
+            if (GetFor != null)
+            {
+                if (IsReversed) _preForBody.Add(GetReverseFor(_forBody));
+                else _preForBody.Add(GetFor(_forBody));
+            }
             _preForBody.AddRange(_postForBody);
             return _preForBody;
         }

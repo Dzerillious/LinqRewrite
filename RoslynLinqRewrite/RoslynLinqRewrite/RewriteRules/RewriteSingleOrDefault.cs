@@ -1,35 +1,39 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
+using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
     public static class RewriteSingleOrDefault
     {
-        public static ExpressionSyntax Rewrite(RewriteParameters p)
+        public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            return null;
-            // return p.Rewrite.RewriteAsLoop(
-            //     p.ReturnType,
-            //     new[]
-            //     {
-            //         p.Code.CreateLocalVariableDeclaration("_last", SyntaxFactory.DefaultExpression(p.ReturnType)),
-            //         p.Code.CreateLocalVariableDeclaration("_found",
-            //             SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression))
-            //     },
-            //     new StatementSyntax[] {SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName("_last"))},
-            //     p.Collection,
-            //     p.Code.MaybeAddFilter(p.Chain, p.AggregationMethod == Constants.SingleOrDefaultWithConditionMethod),
-            //     (inv, arguments, param) => SyntaxFactory.Block(
-            //         SyntaxFactory.IfStatement(SyntaxFactory.IdentifierName("_found"),
-            //             p.Code.CreateThrowException("System.InvalidOperationException",
-            //                 "The sequence contains more than one element.")),
-            //         SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(
-            //             SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("_found"),
-            //             SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression))),
-            //         SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(
-            //             SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("_last"),
-            //             SyntaxFactory.IdentifierName(param.Identifier.ValueText)))));
+            if (chainIndex == p.Chain.Count - 1) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
+            
+            p.AddToPrefix(LocalVariableCreation("_found", NullableType(p.ReturnType), NullValue));
+
+            if (p.Chain[chainIndex].Arguments.Length == 0)
+            {
+                p.AddToBody(IfStatement(EqualsExpr(IdentifierName("_found"), NullValue),
+                    ExpressionStatement(Assign("_found", p.LastItem)), 
+                    ElseClause(ReturnStatement(DefaultExpression(p.ReturnType)))));
+            }
+            else if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
+            {
+                p.AddToBody(IfStatement(p.Code.InlineOrCreateMethod(new Lambda(lambda),
+                        CreatePrimitiveType(SyntaxKind.BoolKeyword), p.LastItem),
+                    IfStatement(EqualsExpr(IdentifierName("_found"), NullValue),
+                        ExpressionStatement(Assign("_found", p.LastItem)),
+                        ElseClause((ReturnStatement(DefaultExpression(p.ReturnType)))))));
+            }
+            
+            p.AddToPostfix(IfStatement(EqualsExpr(IdentifierName("_found"), NullValue),
+                ReturnStatement(DefaultExpression(p.ReturnType)), 
+                ElseClause(ReturnStatement(CastExpression(p.ReturnType, IdentifierName("_found"))))));
         }
     }
 }

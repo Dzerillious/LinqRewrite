@@ -1,33 +1,27 @@
-﻿using System.Linq;
-using Microsoft.CodeAnalysis.CSharp;
+﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
-using Shaman.Roslyn.LinqRewrite.Extensions;
-using Shaman.Roslyn.LinqRewrite.Services;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
+using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
     public static class RewriteAll
     {
-        public static ExpressionSyntax Rewrite(RewriteParameters p)
-            => p.Rewrite.RewriteAsLoop(
-                SyntaxFactoryHelper.CreatePrimitiveType(SyntaxKind.BoolKeyword),
-                Enumerable.Empty<StatementSyntax>(),
-                new[]
-                {
-                    SyntaxFactory.ReturnStatement(SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression))
-                },
-                p.Collection,
-                p.Chain,
-                (inv, arguments, param) =>
-                {
-                    var lambda = (LambdaExpressionSyntax) inv.Arguments.First();
-                    return SyntaxFactory.IfStatement(
-                        SyntaxFactory.PrefixUnaryExpression(SyntaxKind.LogicalNotExpression,
-                            SyntaxFactory.ParenthesizedExpression(
-                                p.Code.InlineOrCreateMethod(new Lambda(lambda),
-                                    SyntaxFactoryHelper.CreatePrimitiveType(SyntaxKind.BoolKeyword), param))),
-                        SyntaxFactory.ReturnStatement(SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression)));
-                });
+        public static void Rewrite(RewriteParameters p, int chainIndex)
+        {
+            if (chainIndex == p.Chain.Count - 1) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
+            
+            if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
+            {
+                p.AddToBody(IfStatement(Not(
+                        p.Code.InlineOrCreateMethod(new Lambda(lambda), CreatePrimitiveType(SyntaxKind.BoolKeyword), p.LastItem)),
+                    ReturnStatement(FalseValue)));
+            }
+            
+            p.AddToPostfix(ReturnStatement(TrueValue));
+        }
     }
 }

@@ -19,17 +19,26 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         
         public static TypeSyntax BoolType
             => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.BoolKeyword));
-        public static LiteralExpressionSyntax TrueValue()
+        public static LiteralExpressionSyntax TrueValue
             => SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression);
-        public static LiteralExpressionSyntax FalseValue()
+        public static LiteralExpressionSyntax FalseValue
             => SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression);
         
         public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, ExpressionSyntax value)
             =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, value));
+        
+        public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, TypeSyntax type, ExpressionSyntax value)
+            =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, type, value));
 
         public static VariableDeclarationSyntax VariableCreation(string name, ExpressionSyntax value)
             =>  SyntaxFactory.VariableDeclaration(
                 SyntaxFactory.IdentifierName("var"),
+                SyntaxFactory.SeparatedList(new []{SyntaxFactory.VariableDeclarator(name)
+                    .WithInitializer(SyntaxFactory.EqualsValueClause(value))}));
+
+        public static VariableDeclarationSyntax VariableCreation(string name, TypeSyntax type, ExpressionSyntax value)
+            =>  SyntaxFactory.VariableDeclaration(
+                type,
                 SyntaxFactory.SeparatedList(new []{SyntaxFactory.VariableDeclarator(name)
                     .WithInitializer(SyntaxFactory.EqualsValueClause(value))}));
 

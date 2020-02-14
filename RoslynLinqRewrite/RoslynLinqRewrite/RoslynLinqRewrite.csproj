@@ -144,6 +144,8 @@
     <Compile Include="RewriteRules\RewriteMinMax.cs" />
     <Compile Include="RewriteRules\RewriteRange.cs" />
     <Compile Include="RewriteRules\RewriteRepeat.cs" />
+    <Compile Include="RewriteRules\RewriteReverse.cs" />
+    <Compile Include="RewriteRules\RewriteSelect.cs" />
     <Compile Include="RewriteRules\RewriteSingle.cs" />
     <Compile Include="RewriteRules\RewriteSingleOrDefault.cs" />
     <Compile Include="RewriteRules\RewriteSum.cs" />
@@ -158,7 +160,6 @@
     <Compile Include="Services\CompilationService.cs" />
     <Compile Include="Services\MsBuildService.cs" />
     <Compile Include="Services\PrintService.cs" />
-    <Compile Include="Services\ProcessingStepCreationService.cs" />
     <Compile Include="Services\RewriteDataService.cs" />
     <Compile Include="Services\RewriteService.cs" />
   </ItemGroup>

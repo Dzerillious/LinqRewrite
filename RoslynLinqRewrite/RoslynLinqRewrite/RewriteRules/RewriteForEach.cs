@@ -1,26 +1,20 @@
-﻿using System.Linq;
-using Microsoft.CodeAnalysis.CSharp;
+﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
-using Shaman.Roslyn.LinqRewrite.Extensions;
-using Shaman.Roslyn.LinqRewrite.Services;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
     public static class RewriteForEach
     {
-        public static ExpressionSyntax Rewrite(RewriteParameters p)
-            => p.Rewrite.RewriteAsLoop(
-                SyntaxFactoryHelper.CreatePrimitiveType(SyntaxKind.VoidKeyword),
-                Enumerable.Empty<StatementSyntax>(),
-                Enumerable.Empty<StatementSyntax>(),
-                p.Collection,
-                p.Chain,
-                (inv, arguments, param) =>
-                {
-                    var lambda = inv.Lambda ?? new Lambda((AnonymousFunctionExpressionSyntax) inv.Arguments.First());
-                    return SyntaxFactory.ExpressionStatement(p.Code.InlineOrCreateMethod(lambda, SyntaxFactoryHelper.CreatePrimitiveType(SyntaxKind.VoidKeyword), param));
-                }
-            );
+        public static void Rewrite(RewriteParameters p, int chainIndex)
+        {
+            if (chainIndex == p.Chain.Count - 1) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
+            var lambda = (SimpleLambdaExpressionSyntax)p.Chain[chainIndex].Arguments[0];
+            
+            p.AddToBody(ExpressionStatement(p.Code.InlineOrCreateMethod(new Lambda(lambda), 
+                CreatePrimitiveType(SyntaxKind.VoidKeyword), p.LastItem)));
+        }
     }
 }

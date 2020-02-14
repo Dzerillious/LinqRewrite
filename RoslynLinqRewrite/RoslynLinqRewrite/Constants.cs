@@ -73,6 +73,8 @@ namespace Shaman.Roslyn.LinqRewrite
             
             ListForEachMethod,
             
+            SelectMethod, WhereMethod,
+            
             RangeMethod, RepeatMethod,
             
             EnumerableForEachMethod
