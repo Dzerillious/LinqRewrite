@@ -1,11 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
-using Shaman.Roslyn.LinqRewrite.Extensions;
-using Shaman.Roslyn.LinqRewrite.Services;
-using SyntaxExtensions = Shaman.Roslyn.LinqRewrite.Extensions.SyntaxExtensions;
-
-namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+﻿namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
     public static class RewriteAverage
     {

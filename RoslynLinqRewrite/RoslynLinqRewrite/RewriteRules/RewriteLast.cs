@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
@@ -23,7 +22,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             }
             else if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
             {
-                p.ForAdd(If(p.Code.InlineLambda(p.Semantic, lambda, p.LastItem),
+                p.ForAdd(If(p.Code.Inline(p.Semantic, lambda, p.LastItem),
                             FoundVariable.Assign(p.LastItem)));
             }
             

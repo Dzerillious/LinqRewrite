@@ -1,11 +1,9 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
 using Shaman.Roslyn.LinqRewrite.Extensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
-using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
+using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
@@ -23,8 +21,8 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             
             else if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
             {
-                p.ForAdd(IfStatement(p.Code.InlineLambda(p.Semantic, lambda, p.LastItem),
-                                ExpressionStatement(CountVariable.PostIncrement())));
+                p.ForAdd(If(p.Code.Inline(p.Semantic, lambda, p.LastItem),
+                            CountVariable.PostIncrement()));
             }
             
             p.PostForAdd(Return(CountVariable));

@@ -6,7 +6,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
 using Shaman.Roslyn.LinqRewrite.Extensions;
-using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
 
 namespace Shaman.Roslyn.LinqRewrite.Services
@@ -18,7 +17,6 @@ namespace Shaman.Roslyn.LinqRewrite.Services
 
         private readonly RewriteDataService _data;
         private readonly CodeCreationService _code;
-        public Func<SyntaxNode, SyntaxNode> Visit;
 
         public RewriteService()
         {
@@ -125,7 +123,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             return inv;
         }
 
-        public ForStatementSyntax GetForStatement(string name, ExpressionSyntax min, ExpressionSyntax max, StatementSyntax loopContent)
+        public ForStatementSyntax GetForStatement(string name, ValueBridge min, ValueBridge max, StatementSyntax loopContent)
             => SyntaxFactory.ForStatement(
                 VariableCreation(name, min),
                 default,
@@ -133,7 +131,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 name.SeparatedPostIncrement(),
                 loopContent);
 
-        public ForStatementSyntax GetReverseForStatement(string name, ExpressionSyntax min, ExpressionSyntax max, StatementSyntax loopContent)
+        public ForStatementSyntax GetReverseForStatement(string name, ValueBridge min, ValueBridge max, StatementSyntax loopContent)
             => SyntaxFactory.ForStatement(
                 VariableCreation(name, max.Sub(IntValue(1))),
                 default,

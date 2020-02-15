@@ -25,7 +25,6 @@ namespace Shaman.Roslyn.LinqRewrite
             _code = CodeCreationService.Instance;
             
             _data.Semantic = semantic;
-            RewriteService.Instance.Visit = Visit;
         }
         public override SyntaxNode VisitInvocationExpression(InvocationExpressionSyntax node)
             => TryVisitInvocationExpression(node, null) ?? base.VisitInvocationExpression(node);

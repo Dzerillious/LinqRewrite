@@ -66,7 +66,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                             .Select(x => SyntaxFactory.ParseTypeName(x.Identifier.ValueText)))))
                 : (NameSyntax) SyntaxFactory.IdentifierName(fn);
 
-        public ExpressionSyntax InlineLambda(SemanticModel semantic, SimpleLambdaExpressionSyntax simpleLambda, ExpressionSyntax replace)
+        public ExpressionSyntax Inline(SemanticModel semantic, SimpleLambdaExpressionSyntax simpleLambda, ExpressionSyntax replace)
         {
             var lambda = new Lambda(simpleLambda);
             var returnType = semantic.GetTypeFromExpression(simpleLambda.ExpressionBody);

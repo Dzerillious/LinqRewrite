@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules

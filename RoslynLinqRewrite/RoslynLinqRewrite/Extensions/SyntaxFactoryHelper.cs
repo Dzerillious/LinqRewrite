@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SimpleCollections.SimpleList;
+using Shaman.Roslyn.LinqRewrite.DataStructures;
 
 namespace Shaman.Roslyn.LinqRewrite.Extensions
 {
@@ -16,24 +15,6 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static SeparatedSyntaxList<T> CreateSeparatedList<T>(params T[] items) where T : SyntaxNode
             => SyntaxFactory.SeparatedList(items);
 
-        public static ElementAccessExpressionSyntax ArrayAccess(this ExpressionSyntax array, ExpressionSyntax index)
-            => SyntaxFactory.ElementAccessExpression(
-                array, SyntaxFactory.BracketedArgumentList(CreateSeparatedList(SyntaxFactory.Argument(index))));
-
-        public static ElementAccessExpressionSyntax ArrayAccess(this ExpressionSyntax array, string identifier)
-            => SyntaxFactory.ElementAccessExpression(
-                array, SyntaxFactory.BracketedArgumentList(CreateSeparatedList(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(identifier)))));
-
-        public static ElementAccessExpressionSyntax ArrayAccess(this string arrayName, ExpressionSyntax index)
-            => SyntaxFactory.ElementAccessExpression(
-                SyntaxFactory.IdentifierName(arrayName),
-                SyntaxFactory.BracketedArgumentList(CreateSeparatedList(SyntaxFactory.Argument(index))));
-
-        public static ElementAccessExpressionSyntax ArrayAccess(this string arrayName, string identifier)
-            => SyntaxFactory.ElementAccessExpression(
-                SyntaxFactory.IdentifierName(arrayName),
-                SyntaxFactory.BracketedArgumentList(CreateSeparatedList(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(identifier)))));
-
         public static StatementSyntax AggregateStatementSyntax(List<StatementSyntax> syntax) 
             => syntax.Count switch
             {
@@ -41,9 +22,6 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
                 1 => syntax[0],
                 _ => SyntaxFactory.Block(syntax)
             };
-
-        public static StatementSyntax CreateStatement(ExpressionSyntax expression)
-            => SyntaxFactory.ExpressionStatement(expression);
 
         public static ThrowStatementSyntax CreateThrowException(string type, string message = null)
             => SyntaxFactory.ThrowStatement(
@@ -66,23 +44,29 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static ArgumentListSyntax CreateArguments(params ExpressionSyntax[] items)
             => CreateArguments((IEnumerable<ExpressionSyntax>) items);
 
-        public static ArgumentSyntax Argument(string name)
-            => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(name));
-
-        public static ArgumentSyntax Argument(int value)
-            => SyntaxFactory.Argument(VariableExtensions.IntValue(value));
+        public static ArgumentSyntax Argument(ValueBridge name)
+            => SyntaxFactory.Argument(name);
         
-        public static ArgumentSyntax RefArgument(string name)
-            => SyntaxFactory.Argument(null, SyntaxFactory.Token(SyntaxKind.RefKeyword), SyntaxFactory.IdentifierName(name));
+        public static ArgumentSyntax RefArgument(VariableBridge name)
+            => SyntaxFactory.Argument(null, SyntaxFactory.Token(SyntaxKind.RefKeyword), name);
 
-        public static ArgumentSyntax OutArgument(string name)
-            => SyntaxFactory.Argument(null, SyntaxFactory.Token(SyntaxKind.OutKeyword), SyntaxFactory.IdentifierName(name));
+        public static ArgumentSyntax OutArgument(VariableBridge name)
+            => SyntaxFactory.Argument(null, SyntaxFactory.Token(SyntaxKind.OutKeyword), name);
 
-        public static InvocationExpressionSyntax Invoke(ExpressionSyntax invoked, params ArgumentSyntax[] args)
+        public static InvocationExpressionSyntax Invoke(this string identifier)
+            => SyntaxFactory.InvocationExpression(SyntaxFactory.IdentifierName(identifier));
+        public static InvocationExpressionSyntax Invoke(this ExpressionSyntax source)
+            => SyntaxFactory.InvocationExpression(source);
+        public static InvocationExpressionSyntax Invoke(this ExpressionSyntax invoked, params ArgumentSyntax[] args)
             => SyntaxFactory.InvocationExpression(invoked, SyntaxFactory.ArgumentList(CreateSeparatedList(args)));
+        public static InvocationExpressionSyntax Invoke(this ExpressionSyntax invoked, params ValueBridge[] args)
+            => SyntaxFactory.InvocationExpression(invoked, SyntaxFactory.ArgumentList(CreateSeparatedList(args.Select(Argument))));
 
         public static ArgumentListSyntax CreateArguments(params ArgumentSyntax[] items)
             => SyntaxFactory.ArgumentList(CreateSeparatedList(items));
+        
+        public static ArgumentListSyntax CreateArguments(params ValueBridge[] items)
+            => SyntaxFactory.ArgumentList(CreateSeparatedList(items.Select(Argument)));
         
         public static ArgumentListSyntax CreateArguments(IEnumerable<ArgumentSyntax> items)
             => SyntaxFactory.ArgumentList(CreateSeparatedList(items));
@@ -102,7 +86,36 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static ParameterSyntax CreateParameter(string name, TypeSyntax type)
             => CreateParameter(SyntaxFactory.Identifier(name), type);
 
-        public static PredefinedTypeSyntax CreatePrimitiveType(SyntaxKind keyword) 
-            => SyntaxFactory.PredefinedType(SyntaxFactory.Token(keyword));
+        public static ContinueStatementSyntax Continue()
+            => SyntaxFactory.ContinueStatement();
+
+        public static ObjectCreationExpressionSyntax New(TypeBridge type, params ValueBridge[] args)
+            => SyntaxFactory.ObjectCreationExpression(type, CreateArguments(args.Select(Argument)), null);
+
+        public static IfStatementSyntax If(ValueBridge @if, StatementSyntax @do)
+            => SyntaxFactory.IfStatement(@if, @do);
+
+        public static IfStatementSyntax If(ValueBridge @if, ExpressionSyntax @do)
+            => SyntaxFactory.IfStatement(@if, SyntaxFactory.ExpressionStatement(@do));
+
+        public static IfStatementSyntax If(ValueBridge @if, StatementSyntax @do, ElseClauseSyntax @else)
+            => SyntaxFactory.IfStatement(@if, @do, @else);
+
+        public static IfStatementSyntax If(ValueBridge @if, ExpressionSyntax @do, ElseClauseSyntax @else)
+            => SyntaxFactory.IfStatement(@if, SyntaxFactory.ExpressionStatement(@do), @else);
+
+        
+        public static ElseClauseSyntax Else(StatementSyntax @else)
+            => SyntaxFactory.ElseClause(@else);
+
+        public static ElseClauseSyntax Else(ValueBridge @else)
+            => SyntaxFactory.ElseClause(SyntaxFactory.ExpressionStatement(@else));
+
+        
+        public static ReturnStatementSyntax Return(ValueBridge @returned)
+            => SyntaxFactory.ReturnStatement(@returned);
+
+        public static DefaultExpressionSyntax Default(TypeBridge @type)
+            => SyntaxFactory.DefaultExpression(@type);
     }
 }

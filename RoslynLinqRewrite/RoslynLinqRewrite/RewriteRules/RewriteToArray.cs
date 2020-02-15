@@ -1,11 +1,9 @@
 ﻿using System;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
 using Shaman.Roslyn.LinqRewrite.Extensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
 
@@ -29,8 +27,8 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                 if (p.SourceSize != null) KnownSourceSize(p);
                 else UnknownSourceSize(p);
                 
-                p.PostForAdd(Return(Invoke("SimpleCollections".Access("SimpleArrayExtensions", "EnsureFullArray"), 
-                        Argument(ResultVariable), Argument(CurrentVariable))));
+                p.PostForAdd(Return("SimpleCollections".Access("SimpleArrayExtensions", "EnsureFullArray")
+                        .Invoke(ResultVariable, CurrentVariable)));
             }
         }
         
@@ -60,26 +58,25 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             p.PreForAdd(LocalVariableCreation(CurrentVariable, 0));
                 
             p.PreForAdd(LocalVariableCreation(LogVariable, 
-                        Invoke("SimpleCollections".Access("IntExtensions", "Log2"),
-                                Argument(p.SourceSize.Cast(SyntaxKind.UIntKeyword)))
-                                .Sub(3)));
+                        "SimpleCollections".Access("IntExtensions", "Log2")
+                                .Invoke(p.SourceSize.Cast(SyntaxKind.UIntKeyword))
+                                    .Sub(3)));
                 
-            p.PreForAdd(ExpressionStatement(LogVariable.AssignSubtract(LogVariable.Mod(2))));
+            p.PreForAdd(LogVariable.AssignSubtract(LogVariable.Mod(2)));
             p.PreForAdd(LocalVariableCreation(CurrentLengthVariable, 8));
 
             var result = (ArrayTypeSyntax) p.ReturnType;
             p.PreForAdd(CreateLocalArray(ResultVariable, result, 8));
+
+            p.ForAdd(If(CurrentVariable.GeThan(CurrentLengthVariable),
+                        "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")
+                                .Invoke(Argument(2), 
+                                    Argument(p.SourceSize), 
+                                    RefArgument(ResultVariable), 
+                                    RefArgument(LogVariable),
+                                    OutArgument(CurrentLengthVariable))));
                 
-            p.ForAdd(IfStatement(CurrentVariable.GeThan(CurrentLengthVariable),
-                ExpressionStatement(Invoke("SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray"), 
-                        Argument(2),
-                        Argument(p.SourceSize),
-                        RefArgument(ResultVariable),
-                        RefArgument(LogVariable),
-                        OutArgument(CurrentLengthVariable)))));
-                
-            p.ForAdd(ExpressionStatement(
-                ResultVariable.ArrayAccess(IndexVariable).Assign(p.LastItem)));
+            p.ForAdd(ResultVariable.ArrayAccess(IndexVariable).Assign(p.LastItem));
         }
 
         private static void UnknownSourceSize(RewriteParameters p)
@@ -89,14 +86,13 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             var result = (ArrayTypeSyntax) p.ReturnType;
             p.PreForAdd(CreateLocalArray(ResultVariable, result, 8));
                 
-            p.ForAdd(IfStatement(CurrentVariable.GeThan(CurrentLengthVariable),
-                ExpressionStatement(Invoke("SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray"), 
-                        Argument(2),
-                        RefArgument(ResultVariable),
-                        RefArgument(CurrentLengthVariable)))));
+            p.ForAdd(If(CurrentVariable.GeThan(CurrentLengthVariable),
+                            "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")
+                                    .Invoke(Argument(2),
+                                        RefArgument(ResultVariable),
+                                        RefArgument(CurrentLengthVariable))));
                 
-            p.ForAdd(ExpressionStatement(
-                ResultVariable.ArrayAccess(IndexVariable).Assign(p.LastItem)));
+            p.ForAdd(ResultVariable.ArrayAccess(IndexVariable).Assign(p.LastItem));
         }
     }
 }

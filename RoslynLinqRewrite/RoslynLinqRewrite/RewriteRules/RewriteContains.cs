@@ -1,13 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
-using Shaman.Roslyn.LinqRewrite.Extensions;
-using Shaman.Roslyn.LinqRewrite.Services;
-
-namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+﻿namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
     public static class RewriteContains
     {

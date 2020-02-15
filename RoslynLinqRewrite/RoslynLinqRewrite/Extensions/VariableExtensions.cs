@@ -19,6 +19,7 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         
         public static TypeSyntax BoolType
             => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.BoolKeyword));
+        
         public static LiteralExpressionSyntax TrueValue
             => SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression);
         public static LiteralExpressionSyntax FalseValue
