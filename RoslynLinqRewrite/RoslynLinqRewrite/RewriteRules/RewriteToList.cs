@@ -15,7 +15,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                 .GetTypeSyntaxFromExpression();
             
             RewriteOther(p, chainIndex, itemType);
-            p.PostForAdd(Return(New(p.ReturnType, ResultVariable)));
+            p.PostForAdd(Return(New(p.ReturnType, Constants.GlobalResultVariable)));
         }
     }
 }

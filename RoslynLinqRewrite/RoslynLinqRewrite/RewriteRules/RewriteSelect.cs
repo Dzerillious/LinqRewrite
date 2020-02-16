@@ -7,15 +7,15 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
     public static class RewriteSelect
     {
-        public const string ItemVariable = "__item0";
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
+            var itemVariable = "__item" + chainIndex;
             if (chainIndex == p.Chain.Count - 1) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
 
             var lambda = (SimpleLambdaExpressionSyntax)p.Chain[chainIndex].Arguments[0];
             
-            p.ForAdd(LocalVariableCreation(ItemVariable, p.Code.Inline(p.Semantic, lambda, p.LastItem)));
-            p.LastItem = IdentifierName(ItemVariable);
+            p.ForAdd(LocalVariableCreation(itemVariable, p.Code.Inline(p.Semantic, lambda, p.LastItem)));
+            p.LastItem = IdentifierName(itemVariable);
             
             // p.AddToBody(LocalVariableCreation(itemName, 
             //     p.Code.InlineOrCreateMethod(new Lambda(lambda), returnType, p.LastItem)));

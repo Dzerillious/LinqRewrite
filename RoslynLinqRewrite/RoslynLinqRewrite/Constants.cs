@@ -54,6 +54,10 @@ namespace Shaman.Roslyn.LinqRewrite
         public const string SimpleListPrefix = "SimpleCollections.SimpleList.SimpleList";
         public const string ListPrefix = "System.Collections.Generic.List";
         public const string IEnumerablePrefix = "System.Collections.Generic.IEnumerable";
+        
+        public const string GlobalIndexerVariable = "__i";
+        public const string GlobalItemVariable = "__item";
+        public const string GlobalResultVariable = "__result";
 
         public static readonly HashSet<string> KnownMethods = new HashSet<string>
         {

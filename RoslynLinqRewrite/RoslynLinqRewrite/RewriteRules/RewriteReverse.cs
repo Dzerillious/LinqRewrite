@@ -6,7 +6,14 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            p.IsReversed = !p.IsReversed;
+            if (!p.DifferentEnumeration)
+            {
+                p.IsReversed = !p.IsReversed;
+                return;
+            }
+            else
+            {
+            }
         }
     }
 }

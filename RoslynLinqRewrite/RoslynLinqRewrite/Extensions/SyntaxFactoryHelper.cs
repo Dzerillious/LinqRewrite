@@ -89,6 +89,9 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static ContinueStatementSyntax Continue()
             => SyntaxFactory.ContinueStatement();
 
+        public static BreakStatementSyntax Break()
+            => SyntaxFactory.BreakStatement();
+
         public static ObjectCreationExpressionSyntax New(TypeBridge type, params ValueBridge[] args)
             => SyntaxFactory.ObjectCreationExpression(type, CreateArguments(args.Select(Argument)), null);
 

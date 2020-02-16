@@ -148,7 +148,9 @@
     <Compile Include="RewriteRules\RewriteSelect.cs" />
     <Compile Include="RewriteRules\RewriteSingle.cs" />
     <Compile Include="RewriteRules\RewriteSingleOrDefault.cs" />
+    <Compile Include="RewriteRules\RewriteSkip.cs" />
     <Compile Include="RewriteRules\RewriteSum.cs" />
+    <Compile Include="RewriteRules\RewriteTake.cs" />
     <Compile Include="RewriteRules\RewriteToArray.cs" />
     <Compile Include="RewriteRules\RewriteToDict.cs" />
     <Compile Include="RewriteRules\RewriteToList.cs" />

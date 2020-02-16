@@ -29,18 +29,18 @@ namespace Shaman.Roslyn.LinqRewrite
         public override SyntaxNode VisitInvocationExpression(InvocationExpressionSyntax node)
             => TryVisitInvocationExpression(node, null) ?? base.VisitInvocationExpression(node);
 
-        private bool insideConditionalExpression;
+        private bool _insideConditionalExpression;
         public override SyntaxNode VisitConditionalAccessExpression(ConditionalAccessExpressionSyntax node)
         {
-            var old = insideConditionalExpression;
-            insideConditionalExpression = true;
+            var old = _insideConditionalExpression;
+            _insideConditionalExpression = true;
             try
             {
                 return base.VisitConditionalAccessExpression(node);
             }
             finally
             {
-                insideConditionalExpression = old;
+                _insideConditionalExpression = old;
             }
         }
 
@@ -64,7 +64,7 @@ namespace Shaman.Roslyn.LinqRewrite
 
         private ExpressionSyntax TryVisitInvocationExpression(InvocationExpressionSyntax node, ForEachStatementSyntax containingForEach)
         {
-            if (insideConditionalExpression) return null;
+            if (_insideConditionalExpression) return null;
             var methodIdx = _data.MethodsToAddToCurrentType.Count;
             try
             {

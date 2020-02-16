@@ -14,14 +14,14 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             var item = p.Chain[chainIndex].Arguments[0];
             var count = p.Chain[chainIndex].Arguments[1];
             
-            p.GetFor = body => p.Rewrite.GetForStatement("__i", 
-                item, count, AggregateStatementSyntax(body));
-            p.GetReverseFor = p.GetFor;
+            p.Collection = null;
+            p.ForMin = p.ForReMin = 0;
+            p.ForMax = p.ForReMax = count;
             
             p.ResultSize = count;
             p.SourceSize = count;
             
-            p.LastItem = IdentifierName("__i");
+            p.LastItem = item;
         }
     }
 }

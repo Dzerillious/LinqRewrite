@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Operations;
+using Shaman.Roslyn.LinqRewrite.Extensions;
 using Shaman.Roslyn.LinqRewrite.Services;
 
 namespace Shaman.Roslyn.LinqRewrite.DataStructures
@@ -13,23 +15,27 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public readonly CodeCreationService Code;
         public readonly RewriteDataService Data;
         
+        public InvocationExpressionSyntax Node;
         public ExpressionSyntax Collection;
         public List<LinqStep> Chain;
-        public InvocationExpressionSyntax Node;
         
-        public bool IsReversed;
         public TypeSyntax ReturnType;
+        
         public ExpressionSyntax ResultSize;
         public ExpressionSyntax SourceSize;
+        public bool DifferentEnumeration;
         
         public ExpressionSyntax LastItem;
         
         private List<StatementSyntax> _preForBody = new List<StatementSyntax>();
         private List<StatementSyntax> _forBody = new List<StatementSyntax>();
         private List<StatementSyntax> _postForBody = new List<StatementSyntax>();
-        
-        public Func<List<StatementSyntax>, StatementSyntax> GetFor;
-        public Func<List<StatementSyntax>, StatementSyntax> GetReverseFor;
+
+        public bool IsReversed;
+        public ValueBridge ForMin;
+        public ValueBridge ForMax;
+        public ValueBridge ForReMin;
+        public ValueBridge ForReMax;
         
         public SemanticModel Semantic => Data.Semantic;
         
@@ -39,6 +45,7 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
             Code = CodeCreationService.Instance;
             Data = RewriteDataService.Instance;
         }
+        
         public void SetData(ExpressionSyntax collection, TypeSyntax returnType, ITypeSymbol semanticReturnType, List<LinqStep> chain, InvocationExpressionSyntax node)
         {
             _preForBody = new List<StatementSyntax>();
@@ -60,11 +67,22 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {
-            if (GetFor != null)
+            if (ForMin == null)
             {
-                if (IsReversed) _preForBody.Add(GetReverseFor(_forBody));
-                else _preForBody.Add(GetFor(_forBody));
+                _preForBody.Add(Rewrite.GetForEachStatement(Constants.GlobalItemVariable, Collection,
+                    SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
             }
+            else if (IsReversed)
+            {
+                _preForBody.Add(Rewrite.GetForStatement(
+                    Constants.GlobalIndexerVariable, ForReMin, ForReMax, SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
+            }
+            else 
+            {
+                _preForBody.Add(Rewrite.GetReverseForStatement(
+                    Constants.GlobalIndexerVariable, ForMin, ForMax, SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
+            }
+            
             _preForBody.AddRange(_postForBody);
             return _preForBody;
         }

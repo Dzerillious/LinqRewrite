@@ -55,6 +55,8 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
             => SyntaxFactory.AssignmentExpression(SyntaxKind.SubtractAssignmentExpression, a, b);
         
         
+        public static BinaryExpressionSyntax Add(this ValueBridge a, ValueBridge b)
+            => SyntaxFactory.BinaryExpression(SyntaxKind.AddExpression, a, b);
         public static BinaryExpressionSyntax Add(this ExpressionSyntax a, ValueBridge b)
             => SyntaxFactory.BinaryExpression(SyntaxKind.AddExpression, a, b);
         public static BinaryExpressionSyntax Add(this string identifier, ValueBridge b)

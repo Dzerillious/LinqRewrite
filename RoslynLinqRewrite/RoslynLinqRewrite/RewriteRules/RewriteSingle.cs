@@ -9,31 +9,30 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
     public static class RewriteSingle
     {
-        private const string FoundVariable = "__found";
-        
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
+            var foundVariable = "__found" + chainIndex;
             if (chainIndex == p.Chain.Count - 1) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
-            p.PreForAdd(LocalVariableCreation(FoundVariable, NullableType(p.ReturnType), NullValue));
+            p.PreForAdd(LocalVariableCreation(foundVariable, NullableType(p.ReturnType), NullValue));
 
             if (p.Chain[chainIndex].Arguments.Length == 0)
             {
-                p.ForAdd(If(FoundVariable.EqualsExpr(NullValue),
-                            FoundVariable.Assign(p.LastItem), 
+                p.ForAdd(If(foundVariable.EqualsExpr(NullValue),
+                            foundVariable.Assign(p.LastItem), 
                             Else(CreateThrowException("System.InvalidOperationException", "The sequence contains more than single matching element."))));
             }
             else if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
             {
                 p.ForAdd(If(p.Code.Inline(p.Semantic, lambda, p.LastItem),
-                            If(FoundVariable.EqualsExpr(NullValue),
-                                FoundVariable.Assign(p.LastItem),
+                            If(foundVariable.EqualsExpr(NullValue),
+                                foundVariable.Assign(p.LastItem),
                                 Else(CreateThrowException("System.InvalidOperationException", "The sequence contains more than single matching element.")))));
             }
             
-            p.PostForAdd(If(FoundVariable.EqualsExpr(NullValue),
+            p.PostForAdd(If(foundVariable.EqualsExpr(NullValue),
                             CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."), 
-                            Else(Return(FoundVariable.Cast(p.ReturnType)))));
+                            Else(Return(foundVariable.Cast(p.ReturnType)))));
         }
     }
 }
