@@ -74,13 +74,13 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
             }
             else if (IsReversed)
             {
-                _preForBody.Add(Rewrite.GetForStatement(
-                    Constants.GlobalIndexerVariable, ForReMin, ForReMax, SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
+                _preForBody.Add(Rewrite.GetReverseForStatement(
+                    Constants.GlobalIndexerVariable, ForMin, ForMax, SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
             }
             else 
             {
-                _preForBody.Add(Rewrite.GetReverseForStatement(
-                    Constants.GlobalIndexerVariable, ForMin, ForMax, SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
+                _preForBody.Add(Rewrite.GetForStatement(
+                    Constants.GlobalIndexerVariable, ForReMin, ForReMax, SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
             }
             
             _preForBody.AddRange(_postForBody);

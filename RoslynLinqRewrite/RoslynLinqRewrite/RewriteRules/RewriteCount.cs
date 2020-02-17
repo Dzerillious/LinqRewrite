@@ -12,7 +12,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         {
             var countVariable = "__count" + chainIndex;
             
-            if (chainIndex == p.Chain.Count - 1) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
+            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
             p.PreForAdd(LocalVariableCreation(countVariable, 0));
             if (p.Chain[chainIndex].Arguments.Length == 0)

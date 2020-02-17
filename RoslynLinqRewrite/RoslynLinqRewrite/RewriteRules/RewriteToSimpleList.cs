@@ -1,7 +1,7 @@
 ﻿namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
-    public class RewriteToSimpleList
-    {
-        
-    }
+    // public class RewriteToSimpleList
+    // {
+    //     
+    // }
 }

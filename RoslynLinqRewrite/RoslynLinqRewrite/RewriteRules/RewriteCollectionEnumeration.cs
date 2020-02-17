@@ -13,7 +13,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Collection enumeration should be first expression.");
+            if (chainIndex != 0) throw new InvalidOperationException("Collection enumeration should be first expression.");
 
             var collectionType = p.Semantic.GetTypeFromExpression(p.Collection);
             var collectionName = collectionType.ToString();

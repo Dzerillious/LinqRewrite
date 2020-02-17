@@ -20,13 +20,13 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
             RewriteOther(p, chainIndex);
-            if (p.SourceSize == null) p.PostForAdd(Return("SimpleCollections".Access("SimpleArrayExtensions", "EnsureFullArray")
+            if (p.ResultSize == null) p.PostForAdd(Return("SimpleCollections".Access("SimpleArrayExtensions", "EnsureFullArray")
                 .Invoke(GlobalResultVariable, CurrentVariable)));
         }
         
         public static void RewriteOther(RewriteParameters p, int chainIndex, TypeSyntax itemType = null)
         {
-            if (chainIndex != 0) throw new InvalidOperationException("ToArray should be last expression.");
+            if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("ToArray should be last expression.");
             
             if (p.ResultSize != null) KnownSize(p, itemType);
             else if (p.SourceSize != null) KnownSourceSize(p);
@@ -35,8 +35,9 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
         private static void KnownSize(RewriteParameters p, TypeSyntax itemType = null)
         {
-            itemType = itemType == null ? p.ReturnType : ArrayType(itemType);
-            p.PreForAdd(CreateLocalArray(GlobalResultVariable, itemType, p.ResultSize));
+            p.PreForAdd(itemType == null
+                ? CreateLocalArray(GlobalResultVariable, (ArrayTypeSyntax) p.ReturnType, p.ResultSize)
+                : CreateLocalArray(GlobalResultVariable, ArrayType(itemType), p.ResultSize));
 
             p.ForAdd(GlobalResultVariable.ArrayAccess(IndexVariable).Assign(p.LastItem));
             

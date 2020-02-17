@@ -155,7 +155,6 @@
     <Compile Include="RewriteRules\RewriteToDict.cs" />
     <Compile Include="RewriteRules\RewriteToList.cs" />
     <Compile Include="RewriteRules\RewriteToSimpleList.cs" />
-    <Compile Include="RewriteRules\RewriteWhenNeedsYieldReturn.cs" />
     <Compile Include="RewriteRules\RewriteWhere.cs" />
     <Compile Include="Samples\Example3.cs" />
     <Compile Include="Samples\Example2.cs" />

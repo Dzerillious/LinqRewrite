@@ -13,7 +13,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
             var sumVariable = "__sum" + chainIndex;
-            if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Enumerable.Range should be first expression.");
+            if (chainIndex != 0) throw new InvalidOperationException("Enumerable.Range should be first expression.");
 
             var from = p.Chain[chainIndex].Arguments[0];
             var count = p.Chain[chainIndex].Arguments[1];

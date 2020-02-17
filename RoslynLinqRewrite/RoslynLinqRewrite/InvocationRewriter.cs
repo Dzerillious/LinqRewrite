@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using System.Text.RegularExpressions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
 using Shaman.Roslyn.LinqRewrite.RewriteRules;
 
@@ -8,63 +9,39 @@ namespace Shaman.Roslyn.LinqRewrite
     {
         public static ExpressionSyntax TryRewrite(RewriteParameters parameters)
         {
-            var count = parameters.Chain.Count;
-            // RewriteSingleOrDefault.Rewrite(parameters, --count);
-            
-            
-            //RewriteRepeat.Rewrite(parameters, --count);
-            RewriteWhere.Rewrite(parameters, --count);
-            RewriteToArray.Rewrite(parameters, --count);
+            var regex = new Regex("(.*\\.)?(.*?)(\\<.*\\>)?\\(.*");
+            for (var i = 0; i < parameters.Chain.Count; i++)
+            {
+                var step = parameters.Chain[i];
+                var match = regex.Match(step.MethodName);
 
-            // var collectionType = parameters.Data.Semantic.GetTypeInfo(parameters.Collection).Type;
-            // var collectionItemType = parameters.Info.GetItemType(collectionType);
+                var last = match.Groups[1].Value.EndsWith(".")
+                    ? match.Groups[2].Value : match.Groups[1].Value;
+                switch (last)
+                {
+                    case "All": RewriteAll.Rewrite(parameters, i); continue;
+                    case "Any": RewriteAny.Rewrite(parameters, i); continue;
+                    case "Count": RewriteCount.Rewrite(parameters, i); continue;
+                    case "First": RewriteFirst.Rewrite(parameters, i); continue;
+                    case "FirstOrDefault": RewriteFirstOrDefault.Rewrite(parameters, i); continue;
+                    case "ForEach": RewriteForEach.Rewrite(parameters, i); continue;
+                    case "Last": RewriteLast.Rewrite(parameters, i); continue;
+                    case "LastOrDefault": RewriteLastOrDefault.Rewrite(parameters, i); continue;
+                    case "Range": RewriteRange.Rewrite(parameters, i); continue;
+                    case "Repeat": RewriteRepeat.Rewrite(parameters, i); continue;
+                    case "Reverse": RewriteReverse.Rewrite(parameters, i); continue;
+                    case "Select": RewriteSelect.Rewrite(parameters, i); continue;
+                    case "Single": RewriteSingle.Rewrite(parameters, i); continue;
+                    case "SingleOrDefault": RewriteSingleOrDefault.Rewrite(parameters, i); continue;
+                    case "Skip": RewriteSkip.Rewrite(parameters, i); continue;
+                    case "Take": RewriteTake.Rewrite(parameters, i); continue;
+                    case "ToArray": RewriteToArray.Rewrite(parameters, i); continue;
+                    case "ToList": RewriteToList.Rewrite(parameters, i); continue;
+                    case "Where": RewriteWhere.Rewrite(parameters, i); continue;
+                }
+            }
             var body = parameters.GetMethodBody();
             return parameters.Rewrite.GetInvocationExpression(parameters, body);
-            //     if (Constants.RootMethodsThatRequireYieldReturn.Contains(aggregationMethod)) return RewriteWhenNeedsYieldReturn.Rewrite(parameters);
-            //     if (aggregationMethod.Contains(".Sum")) return RewriteSum.Rewrite(parameters);
-            //     if (aggregationMethod.Contains(".Max")) return RewriteMinMax.Rewrite(parameters);
-            //     if (aggregationMethod.Contains(".Min")) return RewriteMinMax.Rewrite(parameters);
-            //     if (aggregationMethod.Contains(".Average")) return RewriteAverage.Rewrite(parameters);
-            //
-            //     return aggregationMethod switch
-            //     {
-            //         Constants.AnyMethod                          => RewriteAny.Rewrite(parameters),
-            //         Constants.AnyWithConditionMethod             => RewriteAny.Rewrite(parameters),
-            //         Constants.AllWithConditionMethod             => RewriteAll.Rewrite(parameters),
-            //         
-            //         Constants.ListForEachMethod                  => RewriteForEach.Rewrite(parameters),
-            //         Constants.EnumerableForEachMethod            => RewriteForEach.Rewrite(parameters),
-            //         
-            //         Constants.ContainsMethod                     => RewriteContains.Rewrite(parameters),
-            //         Constants.CountMethod                        => RewriteCount.Rewrite(parameters),
-            //         Constants.CountWithConditionMethod           => RewriteCount.Rewrite(parameters),
-            //         Constants.LongCountMethod                    => RewriteCount.Rewrite(parameters),
-            //         Constants.LongCountWithConditionMethod       => RewriteCount.Rewrite(parameters),
-            //         
-            //         Constants.ElementAtMethod                    => RewriteElementAt.Rewrite(parameters),
-            //         Constants.ElementAtOrDefaultMethod           => RewriteElementAt.Rewrite(parameters),
-            //         
-            //         Constants.FirstMethod                        => RewriteFirst.Rewrite(parameters),
-            //         Constants.FirstWithConditionMethod           => RewriteFirst.Rewrite(parameters),
-            //         Constants.FirstOrDefaultMethod               => RewriteFirstOrDefault.Rewrite(parameters),
-            //         Constants.FirstOrDefaultWithConditionMethod  => RewriteFirstOrDefault.Rewrite(parameters),
-            //         Constants.LastOrDefaultMethod                => RewriteLastOrDefault.Rewrite(parameters),
-            //         Constants.LastOrDefaultWithConditionMethod   => RewriteLastOrDefault.Rewrite(parameters),
-            //         Constants.LastMethod                         => RewriteLast.Rewrite(parameters),
-            //         Constants.LastWithConditionMethod            => RewriteLast.Rewrite(parameters),
-            //         Constants.SingleMethod                       => RewriteSingle.Rewrite(parameters),
-            //         Constants.SingleWithConditionMethod          => RewriteSingle.Rewrite(parameters),
-            //         Constants.SingleOrDefaultMethod              => RewriteSingleOrDefault.Rewrite(parameters),
-            //         Constants.SingleOrDefaultWithConditionMethod => RewriteSingleOrDefault.Rewrite(parameters),
-            //         
-            //         Constants.RangeMethod                        => RewriteRange.Rewrite(parameters),
-            //         Constants.ReverseMethod                      => RewriteToList.Rewrite(parameters),
-            //         Constants.ToListMethod                       => RewriteToList.Rewrite(parameters),
-            //         Constants.ToDictionaryWithKeyValueMethod     => RewriteToDict.Rewrite(parameters),
-            //         Constants.ToArrayMethod                      => RewriteToArray.Rewrite(parameters),
-            //         _ => null
-            //     };
-            // }
         }
     }
 }

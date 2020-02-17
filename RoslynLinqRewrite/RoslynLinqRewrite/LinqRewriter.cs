@@ -170,7 +170,7 @@ namespace Shaman.Roslyn.LinqRewrite
                 node = syntax.Expression as InvocationExpressionSyntax;
                 if (node != null && IsSupportedMethod(node))
                 {
-                    chain.Add(new LinqStep(_code.GetMethodFullName(node),
+                    chain.Insert(0, new LinqStep(_code.GetMethodFullName(node),
                         node.ArgumentList.Arguments.Select(x => x.Expression).ToArray(), node));
                     lastNode = node;
                 }

@@ -8,7 +8,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            if (chainIndex == p.Chain.Count - 1) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
+            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
             if (p.Chain[chainIndex].Arguments.Length == 0)
                 p.ForAdd(Return(true));
