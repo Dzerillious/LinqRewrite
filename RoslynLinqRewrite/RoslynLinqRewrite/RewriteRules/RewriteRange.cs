@@ -3,7 +3,6 @@ using Shaman.Roslyn.LinqRewrite.DataStructures;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static Shaman.Roslyn.LinqRewrite.Constants;
 using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
-using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules
@@ -21,7 +20,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             p.PreForAdd(LocalVariableCreation(sumVariable, from.Add(count)));
 
             p.Collection = null;
-            p.ForMin = p.ForReMin = p.Chain[1].Arguments[0];
+            p.ForMin = p.ForReMin = p.Chain[chainIndex].Arguments[0];
             p.ForMax = p.ForReMax = sumVariable;
             
             p.LastItem = IdentifierName(GlobalIndexerVariable);

@@ -13,7 +13,6 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
     public static class RewriteToArray
     {
         public const string CurrentVariable = "__current";
-        public const string IndexVariable = "__index";
         public const string LogVariable = "__log";
         public const string CurrentLengthVariable = "__currentLength";
         

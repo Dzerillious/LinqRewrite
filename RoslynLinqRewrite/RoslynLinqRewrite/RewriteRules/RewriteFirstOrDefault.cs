@@ -1,5 +1,8 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
+using Shaman.Roslyn.LinqRewrite.Extensions;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using static Shaman.Roslyn.LinqRewrite.Constants;
 using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules
@@ -21,5 +24,12 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             
             p.PostForAdd(Return(Default(p.ReturnType)));
         }
+
+        public static ExpressionSyntax RewriteSimple(RewriteParameters p)
+            => ConditionalExpression(
+                p.Code.CreateCollectionCount(ItemsName, p.Collection, false)
+                    .EqualsExpr(0),
+                ItemsName.ArrayAccess(0),
+                Default(p.ReturnType));
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
@@ -27,14 +26,10 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             if (canJoin) p.LastItem = p.Code.Inline(p.Semantic, lambda, p.LastItem);
             else
             {
-                p.ForAdd(LocalVariableCreation(itemVariable, p.Code.Inline(p.Semantic, lambda, p.LastItem)));
+                p.ForAdd(LocalVariableCreation(itemVariable, p.LastItem));
                 p.LastItem = IdentifierName(itemVariable);
+                p.LastItem = p.Code.Inline(p.Semantic, lambda, p.LastItem);
             }
-            
-            // p.AddToBody(LocalVariableCreation(itemName, 
-            //     p.Code.InlineOrCreateMethod(new Lambda(lambda), returnType, p.LastItem)));
-            
-            // p.LastItem = p.Code.InlineOrCreateMethod(new Lambda(lambda), returnType, p.LastItem);
         }
     }
 }

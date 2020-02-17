@@ -1,7 +1,5 @@
 ﻿using System;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {

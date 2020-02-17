@@ -182,13 +182,6 @@ namespace Shaman.Roslyn.LinqRewrite
 
         private (bool, ExpressionSyntax, ITypeSymbol) CheckIfRewriteInvocation(List<LinqStep> chain, InvocationExpressionSyntax node, InvocationExpressionSyntax lastNode)
         {
-            // if (!chain.Any(x => x.Arguments
-            //     .Any(y => y is AnonymousFunctionExpressionSyntax)))
-            //     return (false, null, null);
-            
-            // if (chain.Count == 1 && Constants.RootMethodsThatRequireYieldReturn.Contains(chain[0].MethodName)) 
-            //     return (false, null, null);
-            
             var (flowsIn, flowsOut) = GetFlows(chain);
             _data.CurrentFlow = flowsIn.Union(flowsOut)
                 .Where(x => (x as IParameterSymbol)?.IsThis != true)

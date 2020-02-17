@@ -7,7 +7,31 @@ namespace Shaman.Roslyn.LinqRewrite
 {
     public static class InvocationRewriter
     {
-        public static ExpressionSyntax TryRewrite(RewriteParameters parameters)
+        public static ExpressionSyntax TryRewrite(RewriteParameters parameters) 
+            => parameters.Chain.Count == 1 
+                ? SimpleRewrite(parameters) ?? CompositeRewrite(parameters)
+                : CompositeRewrite(parameters);
+
+        private static ExpressionSyntax SimpleRewrite(RewriteParameters parameters)
+        {
+            var regex = new Regex("(.*\\.)?(.*?)(\\<.*\\>)?\\(.*");
+            var step = parameters.Chain[0];
+            var match = regex.Match(step.MethodName);
+
+            var last = match.Groups[1].Value.EndsWith(".")
+                ? match.Groups[2].Value : match.Groups[1].Value;
+            switch (last)
+            {
+                case "Count": return RewriteCount.RewriteSimple(parameters);
+                case "First": return RewriteFirst.RewriteSimple(parameters);
+                case "FirstOrDefault": return RewriteFirstOrDefault.RewriteSimple(parameters);
+                case "Last": return RewriteLast.RewriteSimple(parameters);
+                case "LastOrDefault": return RewriteLastOrDefault.RewriteSimple(parameters);
+                default: return null;
+            }
+        }
+
+        private static ExpressionSyntax CompositeRewrite(RewriteParameters parameters)
         {
             var regex = new Regex("(.*\\.)?(.*?)(\\<.*\\>)?\\(.*");
             for (var i = 0; i < parameters.Chain.Count; i++)
@@ -41,7 +65,9 @@ namespace Shaman.Roslyn.LinqRewrite
                 }
             }
             var body = parameters.GetMethodBody();
-            return parameters.Rewrite.GetInvocationExpression(parameters, body);
+
+            if (parameters.Collection == null) return parameters.Rewrite.GetInvocationExpression(parameters, body);
+            return parameters.Rewrite.GetCollectionInvocationExpression(parameters, body);
         }
     }
 }

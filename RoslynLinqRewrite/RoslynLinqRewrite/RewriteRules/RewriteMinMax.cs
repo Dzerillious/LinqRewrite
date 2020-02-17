@@ -1,7 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
-
-namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+﻿namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
     // public static class RewriteMinMax
     // {
