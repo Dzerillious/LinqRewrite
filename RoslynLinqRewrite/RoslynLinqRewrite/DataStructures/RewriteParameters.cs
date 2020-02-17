@@ -20,6 +20,7 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public List<LinqStep> Chain;
         
         public TypeSyntax ReturnType;
+        public ITypeSymbol SemanticReturnType;
         
         public ExpressionSyntax ResultSize;
         public ExpressionSyntax SourceSize;
@@ -56,6 +57,7 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
             ReturnType = returnType;
             Chain = chain;
             Node = node;
+            SemanticReturnType = semanticReturnType;
         }
 
         public void PreForAdd(StatementSyntax _) => _preForBody.Add(_);

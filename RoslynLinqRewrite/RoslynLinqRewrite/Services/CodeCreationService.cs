@@ -22,15 +22,15 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             _data = RewriteDataService.Instance;
         }
 
-        public ExpressionSyntax CreateCollectionCount(ExpressionSyntax collection, bool allowUnknown)
+        public ExpressionSyntax CreateCollectionCount(VariableBridge identifier, ExpressionSyntax collection, bool allowUnknown)
         {
             var collectionType = _data.Semantic.GetTypeInfo(collection).Type;
-            if (collectionType is IArrayTypeSymbol) return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, collection, SyntaxFactory.IdentifierName("Length"));
+            if (collectionType is IArrayTypeSymbol) return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, SyntaxFactory.IdentifierName("Length"));
             if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<")))
-                return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, collection, SyntaxFactory.IdentifierName("Count"));
+                return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, SyntaxFactory.IdentifierName("Count"));
                 
             if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.ICollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.ICollection<")))
-                return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, collection, SyntaxFactory.IdentifierName("Count"));
+                return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, SyntaxFactory.IdentifierName("Count"));
 
             if (!allowUnknown) return null;
             if (collectionType.IsValueType) return null;
@@ -103,7 +103,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             ParameterSyntax param, IEnumerable<VariableCapture> captures)
         {
             var fn = GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinqHelper");
-            if (body is ExpressionSyntax syntax) return syntax;
+            if (body is ExpressionSyntax syntax) return SyntaxFactory.ParenthesizedExpression(syntax);
 
             if (captures.Any(x => SyntaxExtensions.IsAnonymousType(SymbolExtensions.GetSymbolType(x.Symbol)))) 
                 throw new NotSupportedException();
@@ -124,10 +124,10 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 .NormalizeWhitespace();
 
             _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, method));
-            return SyntaxFactory.InvocationExpression(
+            return SyntaxFactory.ParenthesizedExpression(SyntaxFactory.InvocationExpression(
                 CreateMethodNameSyntaxWithCurrentTypeParameters(fn),
                 SyntaxFactoryHelper.CreateArguments(new[] { SyntaxFactory.Argument(SyntaxFactory.IdentifierName(param.Identifier.ValueText))}
-                    .Union(captures.Select(x =>  SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Name)).WithRef(x.Changes)))));
+                    .Union(captures.Select(x =>  SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Name)).WithRef(x.Changes))))));
         }
 
         private Lambda RenameSymbol(Lambda container, int argIndex, ExpressionSyntax replace)

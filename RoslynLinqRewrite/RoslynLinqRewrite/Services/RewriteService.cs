@@ -71,7 +71,9 @@ namespace Shaman.Roslyn.LinqRewrite.Services
         
         internal ExpressionSyntax GetInvocationExpression(RewriteParameters p, IEnumerable<StatementSyntax> body)
         {
-            var parameters =  _data.CurrentFlow.Select(x => SyntaxFactoryHelper.CreateParameter(x.Name, SymbolExtensions.GetSymbolType(x.Symbol)).WithRef(x.Changes));
+            var source = _data.Semantic.GetTypeInfo(p.Collection).Type;
+            var parameters =  new[] { SyntaxFactoryHelper.CreateParameter(Constants.ItemsName, source) }
+                .Concat(_data.CurrentFlow.Select(x => SyntaxFactoryHelper.CreateParameter(x.Name, SymbolExtensions.GetSymbolType(x.Symbol)).WithRef(x.Changes)));
            
             var functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
             var arguments = SyntaxFactoryHelper.CreateArguments(new[] {SyntaxFactory.Argument(p.Collection)}.Concat(

@@ -28,12 +28,12 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
         public static void ArrayEnumeration(RewriteParameters p)
         {
-            var count = p.Code.CreateCollectionCount(p.Collection, false);
+            var count = p.Code.CreateCollectionCount(ItemsName, p.Collection, false);
 
             p.ForMin = p.ForReMin = 0;
             p.ForMax = p.ForReMax = count;
 
-            p.LastItem = p.Collection.ArrayAccess(GlobalIndexerVariable);
+            p.LastItem = ItemsName.ArrayAccess(GlobalIndexerVariable);
             p.ResultSize = count;
             p.SourceSize = count;
         }
@@ -42,23 +42,23 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         {
             var sourceCount = "__sourceCount" + chainIndex;
             
-            p.PreForAdd( If(p.Collection.EqualsExpr(NullValue),
+            p.PreForAdd( If(ItemsName.EqualsExpr(NullValue),
                 CreateThrowException("System.InvalidOperationException", "Collection was null.")));
                 
             p.PreForAdd(LocalVariableCreation(sourceCount,
-                p.Collection.Access("Count").Invoke()));
+                ItemsName.Access("Count").Invoke()));
 
             p.ForMin = p.ForReMin = 0;
             p.ForMax = p.ForReMax = sourceCount;
             
-            p.LastItem = p.Collection.ArrayAccess(GlobalIndexerVariable);
+            p.LastItem = ItemsName.ArrayAccess(GlobalIndexerVariable);
             p.ResultSize = IdentifierName(sourceCount);
             p.SourceSize = IdentifierName(sourceCount);
         }
 
         public static void IEnumerableEnumeration(RewriteParameters p)
         {
-            p.PreForAdd(If(p.Collection.EqualsExpr(NullValue),
+            p.PreForAdd(If(ItemsName.EqualsExpr(NullValue),
                 CreateThrowException("System.InvalidOperationException", "Collection was null.")));
 
             p.IsReversed = false;

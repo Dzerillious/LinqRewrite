@@ -39,7 +39,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                 ? CreateLocalArray(GlobalResultVariable, (ArrayTypeSyntax) p.ReturnType, p.ResultSize)
                 : CreateLocalArray(GlobalResultVariable, ArrayType(itemType), p.ResultSize));
 
-            p.ForAdd(GlobalResultVariable.ArrayAccess(IndexVariable).Assign(p.LastItem));
+            p.ForAdd(GlobalResultVariable.ArrayAccess(GlobalIndexerVariable).Assign(p.LastItem));
             
             p.PostForAdd(Return(GlobalResultVariable));
         }
@@ -67,7 +67,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                                     RefArgument(LogVariable),
                                     OutArgument(CurrentLengthVariable))));
                 
-            p.ForAdd(GlobalResultVariable.ArrayAccess(IndexVariable).Assign(p.LastItem));
+            p.ForAdd(GlobalResultVariable.ArrayAccess(CurrentVariable).Assign(p.LastItem));
         }
 
         private static void UnknownSourceSize(RewriteParameters p)
@@ -83,7 +83,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                                         RefArgument(GlobalResultVariable),
                                         RefArgument(CurrentLengthVariable))));
                 
-            p.ForAdd(GlobalResultVariable.ArrayAccess(IndexVariable).Assign(p.LastItem));
+            p.ForAdd(GlobalResultVariable.ArrayAccess(CurrentVariable).Assign(p.LastItem));
         }
     }
 }
