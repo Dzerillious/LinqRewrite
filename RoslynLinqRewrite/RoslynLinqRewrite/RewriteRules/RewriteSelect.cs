@@ -12,23 +12,27 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         {
             var itemVariable = "__item" + chainIndex;
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
+            var method = p.Chain[chainIndex].Arguments[0];
 
-            var lambda = (SimpleLambdaExpressionSyntax)p.Chain[chainIndex].Arguments[0];
-
-            var count = Regex.Matches(lambda.ToString(), lambda.Parameter.ToString()).Count;
-            var canJoin = count == 2 ||
-                          !(p.LastItem is BinaryExpressionSyntax)
-                          && !(p.LastItem is PostfixUnaryExpressionSyntax)
-                          && !(p.LastItem is PrefixUnaryExpressionSyntax)
-                          && !(p.LastItem is InvocationExpressionSyntax)
-                          && !(p.LastItem is ParenthesizedExpressionSyntax);
+            var canJoin = true;
+            if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
+            {
+                var count = Regex.Matches(lambda.ToString(), lambda.Parameter.ToString()).Count;
+                canJoin = count == 2 ||
+                              !(p.LastItem is BinaryExpressionSyntax)
+                              && !(p.LastItem is PostfixUnaryExpressionSyntax)
+                              && !(p.LastItem is PrefixUnaryExpressionSyntax)
+                              && !(p.LastItem is InvocationExpressionSyntax)
+                              && !(p.LastItem is ParenthesizedExpressionSyntax);
             
-            if (canJoin) p.LastItem = p.Code.Inline(p.Semantic, lambda, p.LastItem);
+            }
+            
+            if (canJoin) p.LastItem = p.Code.InlineLambda(p.Semantic, method, p.LastItem);
             else
             {
                 p.ForAdd(LocalVariableCreation(itemVariable, p.LastItem));
                 p.LastItem = IdentifierName(itemVariable);
-                p.LastItem = p.Code.Inline(p.Semantic, lambda, p.LastItem);
+                p.LastItem = p.Code.InlineLambda(p.Semantic, method, p.LastItem);
             }
         }
     }

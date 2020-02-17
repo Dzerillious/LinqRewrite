@@ -257,28 +257,18 @@ namespace Shaman.Roslyn.LinqRewrite
         private bool IsSupportedMethod(InvocationExpressionSyntax invocation)
         {
             var name = _code.GetMethodFullName(invocation);
-            if (!IsSupportedMethod(name)) return false;
-            if (invocation.ArgumentList.Arguments.Count == 0) return true;
-            if (Constants.MethodsWithIntParams.Contains(name)) return true;
-
-            // Passing things like .Select(Method) is not supported.
-            return invocation.ArgumentList.Arguments.All(x => x.Expression is AnonymousFunctionExpressionSyntax);
-        }
-
-        private static bool IsSupportedMethod(string v)
-        {
-            if (v == null) return false;
-            if (Constants.KnownMethods.Contains(v)) return true;
+            if (name == null) return false;
+            if (Constants.KnownMethods.Contains(name)) return true;
             
-            if (!v.StartsWith("System.Collections.Generic.IEnumerable<")) return false;
-            var k = v.Replace("<", "(");
+            if (!name.StartsWith("System.Collections.Generic.IEnumerable<")) return false;
+            var k = name.Replace("<", "(");
             
             if (!k.Contains(">.Sum(") && !k.Contains(">.Average(") && !k.Contains(">.Min(") &&
                 !k.Contains(">.Max(")) return false;
             
             if (k.Contains("TResult")) return false;
-            if (v == "System.Collections.Generic.IEnumerable<TSource>.Min()") return false;
-            if (v == "System.Collections.Generic.IEnumerable<TSource>.Max()") return false;
+            if (name == "System.Collections.Generic.IEnumerable<TSource>.Min()") return false;
+            if (name == "System.Collections.Generic.IEnumerable<TSource>.Max()") return false;
             return true;
         }
 

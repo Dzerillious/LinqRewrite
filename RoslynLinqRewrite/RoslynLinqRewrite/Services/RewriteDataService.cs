@@ -22,8 +22,5 @@ namespace Shaman.Roslyn.LinqRewrite.Services
         
         public readonly List<Tuple<TypeDeclarationSyntax, MethodDeclarationSyntax>> MethodsToAddToCurrentType =
             new List<Tuple<TypeDeclarationSyntax, MethodDeclarationSyntax>>();
-        
-        internal delegate StatementSyntax AggregationDelegate(LinqStep invocation, ArgumentListSyntax arguments, ParameterSyntax param);
-        internal AggregationDelegate CurrentAggregation;
     }
 }

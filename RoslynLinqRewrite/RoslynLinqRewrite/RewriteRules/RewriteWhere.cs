@@ -14,26 +14,29 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         {
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
 
-            var lambda = (SimpleLambdaExpressionSyntax)p.Chain[chainIndex].Arguments[0];
-            
-            var count = Regex.Matches(lambda.ToString(), lambda.Parameter.ToString()).Count;
-            var canJoin = count == 2 
-                          && !(p.LastItem is BinaryExpressionSyntax)
+            var canJoin = !(p.LastItem is BinaryExpressionSyntax)
                           && !(p.LastItem is PostfixUnaryExpressionSyntax)
                           && !(p.LastItem is PrefixUnaryExpressionSyntax)
                           && !(p.LastItem is InvocationExpressionSyntax)
                           && !(p.LastItem is ParenthesizedExpressionSyntax);
 
+            var method = p.Chain[chainIndex].Arguments[0];
+            if (method is SimpleLambdaExpressionSyntax lambda)
+            {
+                var count = Regex.Matches(lambda.ToString(), lambda.Parameter.ToString()).Count;
+                canJoin = canJoin && count == 2;
+            }
+            
             if (canJoin)
             {
-                p.ForAdd(If(Not(p.Code.Inline(p.Semantic, lambda, p.LastItem)),
+                p.ForAdd(If(Not(p.Code.InlineLambda(p.Semantic, method, p.LastItem)),
                     Continue()));
             }
             else
             {
                 var conditionVariable = "__item" + chainIndex;
                 p.ForAdd(LocalVariableCreation(conditionVariable, p.LastItem));
-                p.ForAdd(If(Not(p.Code.Inline(p.Semantic, lambda, IdentifierName(conditionVariable))), Continue()));
+                p.ForAdd(If(Not(p.Code.InlineLambda(p.Semantic, method, IdentifierName(conditionVariable))), Continue()));
                 p.LastItem = IdentifierName(conditionVariable);
             }
 

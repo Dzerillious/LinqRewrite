@@ -16,9 +16,10 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             if (p.Chain[chainIndex].Arguments.Length == 0)
                 p.ForAdd(Return(p.LastItem));
             
-            else if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
+            else
             {
-                p.ForAdd(If(p.Code.Inline(p.Semantic, lambda, p.LastItem),
+                var method = p.Chain[chainIndex].Arguments[0];
+                p.ForAdd(If(p.Code.InlineLambda(p.Semantic, method, p.LastItem),
                             Return(p.LastItem)));
             }
             
@@ -26,10 +27,13 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         }
 
         public static ExpressionSyntax RewriteSimple(RewriteParameters p)
-            => ConditionalExpression(
+        {
+            if (p.Chain[0].Arguments.Length != 0) return null;
+            return ConditionalExpression(
                 p.Code.CreateCollectionCount(ItemsName, p.Collection, false)
                     .EqualsExpr(0),
                 ItemsName.ArrayAccess(0),
                 Default(p.ReturnType));
+        }
     }
 }

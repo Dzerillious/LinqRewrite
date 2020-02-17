@@ -21,9 +21,10 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             {
                 p.ForAdd(foundVariable.Assign(p.LastItem));
             }
-            else if (p.Chain[chainIndex].Arguments[0] is SimpleLambdaExpressionSyntax lambda)
+            else
             {
-                p.ForAdd(If(p.Code.Inline(p.Semantic, lambda, p.LastItem),
+                var method = p.Chain[chainIndex].Arguments[0];
+                p.ForAdd(If(p.Code.InlineLambda(p.Semantic, method, p.LastItem),
                             foundVariable.Assign(p.LastItem)));
             }
             
