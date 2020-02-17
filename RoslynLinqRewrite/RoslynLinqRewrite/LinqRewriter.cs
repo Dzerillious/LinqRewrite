@@ -23,6 +23,7 @@ namespace Shaman.Roslyn.LinqRewrite
         {
             _data = RewriteDataService.Instance;
             _code = CodeCreationService.Instance;
+            RewriteService.Instance.Visit = VisitListElement;
             
             _data.Semantic = semantic;
         }

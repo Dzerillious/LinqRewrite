@@ -57,14 +57,14 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             );
         }
 
-        public ExpressionSyntax CreateMethodNameSyntaxWithCurrentTypeParameters(string fn)
+        public ExpressionSyntax CreateMethodNameSyntaxWithCurrentTypeParameters(string identifier)
             => (_data.CurrentMethodTypeParameters?.Parameters.Count).GetValueOrDefault() != 0
                 ? SyntaxFactory.GenericName(
-                    SyntaxFactory.Identifier(fn),
+                    SyntaxFactory.Identifier(identifier),
                     SyntaxFactory.TypeArgumentList(
                         SyntaxFactoryHelper.CreateSeparatedList(_data.CurrentMethodTypeParameters.Parameters
                             .Select(x => SyntaxFactory.ParseTypeName(x.Identifier.ValueText)))))
-                : (NameSyntax) SyntaxFactory.IdentifierName(fn);
+                : (NameSyntax) SyntaxFactory.IdentifierName(identifier);
 
         public ExpressionSyntax Inline(SemanticModel semantic, SimpleLambdaExpressionSyntax simpleLambda, ExpressionSyntax replace)
         {
