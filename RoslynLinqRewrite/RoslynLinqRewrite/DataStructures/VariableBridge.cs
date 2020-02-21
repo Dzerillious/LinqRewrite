@@ -7,12 +7,12 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
     {
         private readonly IdentifierNameSyntax _name;
 
-        public VariableBridge(IdentifierNameSyntax name)
+        private VariableBridge(IdentifierNameSyntax name)
         {
             _name = name;
         }
 
-        public VariableBridge(string name)
+        private VariableBridge(string name)
         {
             _name = SyntaxFactory.IdentifierName(name);
         }

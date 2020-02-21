@@ -18,17 +18,16 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                p.ForAdd(If(p.Code.InlineLambda(p.Semantic, method, p.LastItem),
+                p.ForAdd(If(method.InlineForLast(p),
                             Return(p.LastItem)));
             }
             
             p.PostForAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."));
         }
 
-        public static ExpressionSyntax RewriteSimple(RewriteParameters p)
-        {
-            if (p.Chain[0].Arguments.Length != 0) return null;
-            return ItemsName.ArrayAccess(0);
-        }
+        public static ExpressionSyntax RewriteSimple(RewriteParameters p) 
+            => p.Chain[0].Arguments.Length == 0 
+                ? ItemsName.ArrayAccess(0) 
+                : null;
     }
 }

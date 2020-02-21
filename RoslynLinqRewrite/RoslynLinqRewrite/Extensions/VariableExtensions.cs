@@ -25,28 +25,30 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static LiteralExpressionSyntax FalseValue
             => SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression);
         
-        public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, ExpressionSyntax value)
+        public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, ValueBridge value)
             =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, value));
         
-        public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, int value)
-            =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, 
-                SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(value))));
-        
-        public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, TypeSyntax type, ExpressionSyntax value)
+        public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, TypeBridge type, ValueBridge value)
             =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, type, value));
 
-        public static VariableDeclarationSyntax VariableCreation(string name, ExpressionSyntax value)
+        public static VariableDeclarationSyntax VariableCreation(string name, ValueBridge value)
             =>  SyntaxFactory.VariableDeclaration(
                 SyntaxFactory.IdentifierName("var"),
                 SyntaxFactory.SeparatedList(new []{SyntaxFactory.VariableDeclarator(name)
                     .WithInitializer(SyntaxFactory.EqualsValueClause(value))}));
 
-        public static VariableDeclarationSyntax VariableCreation(string name, TypeSyntax type, ExpressionSyntax value)
+        public static VariableDeclarationSyntax VariableCreation(string name, TypeBridge type, ValueBridge value)
             =>  SyntaxFactory.VariableDeclaration(
                 type,
                 SyntaxFactory.SeparatedList(new []{SyntaxFactory.VariableDeclarator(name)
                     .WithInitializer(SyntaxFactory.EqualsValueClause(value))}));
 
+        public static StatementSyntax CreateLocalArray(string name, TypeBridge arrayType, ValueBridge size)
+            => CreateLocalArray(name, arrayType, size);
+
+        public static StatementSyntax CreateLocalArray(string name, ArrayTypeSyntax arrayType, ValueBridge size)
+            => CreateLocalArray(name, arrayType, size);
+        
         public static StatementSyntax CreateLocalArray(string name, ArrayTypeSyntax arrayType, ExpressionSyntax size)
             => LocalVariableCreation(name,
                 SyntaxFactory.ArrayCreationExpression(

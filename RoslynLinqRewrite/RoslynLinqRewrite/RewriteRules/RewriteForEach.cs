@@ -1,4 +1,5 @@
 ﻿using Shaman.Roslyn.LinqRewrite.DataStructures;
+using Shaman.Roslyn.LinqRewrite.Extensions;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
@@ -9,7 +10,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             var method = p.Chain[chainIndex].Arguments[0];
             
-            p.ForAdd(p.Code.InlineLambda(p.Semantic, method, p.LastItem));
+            p.ForAdd(method.InlineForLast(p));
         }
     }
 }

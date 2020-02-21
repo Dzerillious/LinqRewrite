@@ -36,6 +36,9 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
                 SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, SyntaxFactory.IdentifierName(identifier)));
         
         
+        public static CastExpressionSyntax Cast(this int a, TypeBridge type)
+            => Cast((ValueBridge)a, type);
+        
         public static CastExpressionSyntax Cast(this string identifier, TypeBridge type)
             => SyntaxFactory.CastExpression(type, SyntaxFactory.IdentifierName(identifier));
         
@@ -49,10 +52,15 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
             => SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, a, b);
         
         
-        public static AssignmentExpressionSyntax AssignSubtract(this string identifier, ValueBridge b)
+        public static AssignmentExpressionSyntax SubAssign(this string identifier, ValueBridge b)
             => SyntaxFactory.AssignmentExpression(SyntaxKind.SubtractAssignmentExpression, SyntaxFactory.IdentifierName(identifier), b);
-        public static AssignmentExpressionSyntax AssignSubtract(this ExpressionSyntax a, ValueBridge b)
+        public static AssignmentExpressionSyntax SubAssign(this ExpressionSyntax a, ValueBridge b)
             => SyntaxFactory.AssignmentExpression(SyntaxKind.SubtractAssignmentExpression, a, b);
+        
+        public static AssignmentExpressionSyntax AddAssign(this string identifier, ValueBridge b)
+            => SyntaxFactory.AssignmentExpression(SyntaxKind.AddAssignmentExpression, SyntaxFactory.IdentifierName(identifier), b);
+        public static AssignmentExpressionSyntax AddAssign(this ExpressionSyntax a, ValueBridge b)
+            => SyntaxFactory.AssignmentExpression(SyntaxKind.AddAssignmentExpression, a, b);
         
         
         public static BinaryExpressionSyntax Add(this ValueBridge a, ValueBridge b)

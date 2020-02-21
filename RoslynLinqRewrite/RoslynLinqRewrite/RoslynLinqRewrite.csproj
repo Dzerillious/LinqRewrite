@@ -112,6 +112,7 @@
     <Compile Include="DataStructures\LinqStep.cs" />
     <Compile Include="DataStructures\LiteralString.cs" />
     <Compile Include="DataStructures\RewriteParameters.cs" />
+    <Compile Include="DataStructures\StatementBridge.cs" />
     <Compile Include="DataStructures\TypeBridge.cs" />
     <Compile Include="DataStructures\ValueBridge.cs" />
     <Compile Include="DataStructures\VariableBridge.cs" />
@@ -128,7 +129,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RewriteParametersHolder.cs" />
-    <Compile Include="RewriteRules\NotImplementedRewrite.cs" />
     <Compile Include="RewriteRules\RewriteAll.cs" />
     <Compile Include="RewriteRules\RewriteAny.cs" />
     <Compile Include="RewriteRules\RewriteAverage.cs" />

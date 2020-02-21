@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -59,15 +60,13 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
             SemanticReturnType = semanticReturnType;
         }
 
-        public void PreForAdd(StatementSyntax _) => _preForBody.Add(_);
-        public void PreForAdd(ExpressionSyntax _) => _preForBody.Add(SyntaxFactory.ExpressionStatement(_));
-        public void ForAdd(StatementSyntax _) => _forBody.Add(_);
-        public void ForAdd(ExpressionSyntax _) => _forBody.Add(SyntaxFactory.ExpressionStatement(_));
-        public void PostForAdd(StatementSyntax _) => _postForBody.Add(_);
-        public void PostForAdd(ExpressionSyntax _) => _postForBody.Add(SyntaxFactory.ExpressionStatement(_));
+        public void PreForAdd(StatementBridge _) => _preForBody.Add(_);
+        public void ForAdd(StatementBridge _) => _forBody.Add(_);
+        public void PostForAdd(StatementBridge _) => _postForBody.Add(_);
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {
+            if (_forBody.Count == 0) return _preForBody.Concat(_postForBody);
             if (ForMin == null)
             {
                 _preForBody.Add(Rewrite.GetForEachStatement(Constants.GlobalItemVariable, Collection,

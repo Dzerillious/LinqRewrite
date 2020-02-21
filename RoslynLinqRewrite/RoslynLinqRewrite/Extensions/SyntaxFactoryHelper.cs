@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -23,8 +24,8 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
                 _ => SyntaxFactory.Block(syntax)
             };
 
-        public static ThrowStatementSyntax CreateThrowException(string type, string message = null)
-            => SyntaxFactory.ThrowStatement(
+        public static ThrowExpressionSyntax CreateThrowException(string type, string message = null)
+            => SyntaxFactory.ThrowExpression(
                 SyntaxFactory.ObjectCreationExpression(
                     SyntaxFactory.ParseTypeName(type),
                     CreateArguments(message != null
@@ -95,24 +96,11 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static ObjectCreationExpressionSyntax New(TypeBridge type, params ValueBridge[] args)
             => SyntaxFactory.ObjectCreationExpression(type, CreateArguments(args.Select(Argument)), null);
 
-        public static IfStatementSyntax If(ValueBridge @if, StatementSyntax @do)
+        public static IfStatementSyntax If(ValueBridge @if, StatementBridge @do)
             => SyntaxFactory.IfStatement(@if, @do);
 
-        public static IfStatementSyntax If(ValueBridge @if, ExpressionSyntax @do)
-            => SyntaxFactory.IfStatement(@if, SyntaxFactory.ExpressionStatement(@do));
-
-        public static IfStatementSyntax If(ValueBridge @if, StatementSyntax @do, ElseClauseSyntax @else)
-            => SyntaxFactory.IfStatement(@if, @do, @else);
-
-        public static IfStatementSyntax If(ValueBridge @if, ExpressionSyntax @do, ElseClauseSyntax @else)
-            => SyntaxFactory.IfStatement(@if, SyntaxFactory.ExpressionStatement(@do), @else);
-
-        
-        public static ElseClauseSyntax Else(StatementSyntax @else)
-            => SyntaxFactory.ElseClause(@else);
-
-        public static ElseClauseSyntax Else(ValueBridge @else)
-            => SyntaxFactory.ElseClause(SyntaxFactory.ExpressionStatement(@else));
+        public static IfStatementSyntax If(ValueBridge @if, StatementBridge @do, StatementBridge @else)
+            => SyntaxFactory.IfStatement(@if, @do, SyntaxFactory.ElseClause(@else));
 
         
         public static ReturnStatementSyntax Return(ValueBridge @returned)
@@ -120,5 +108,58 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
 
         public static DefaultExpressionSyntax Default(TypeBridge @type)
             => SyntaxFactory.DefaultExpression(@type);
+
+        private static int _inlineCounter;
+        public static ExpressionSyntax InlinePreForLast(this ExpressionSyntax method, RewriteParameters p)
+        {
+            if (p.LastItem.IsExpressionSimple() && method.IsLambdaExpressionSimple())
+                return method.Inline(p, p.LastItem);
+            
+            var inlineVariable = "__inlined" + _inlineCounter++;
+            p.PreForAdd(VariableExtensions.LocalVariableCreation(inlineVariable, method.Inline(p, p.LastItem)));
+            return SyntaxFactory.IdentifierName(inlineVariable);
+        }
+        
+        public static ExpressionSyntax InlineForLast(this ExpressionSyntax method, RewriteParameters p)
+        {
+            if (p.LastItem.IsExpressionSimple() && method.IsLambdaExpressionSimple())
+                return method.Inline(p, p.LastItem);
+            
+            var inlineVariable = "__inlined" + _inlineCounter++;
+            p.ForAdd(VariableExtensions.LocalVariableCreation(inlineVariable, method.Inline(p, p.LastItem)));
+            return SyntaxFactory.IdentifierName(inlineVariable);
+        }
+        
+        public static ExpressionSyntax InlinePostLast(this ExpressionSyntax method, RewriteParameters p)
+        {
+            if (p.LastItem.IsExpressionSimple() && method.IsLambdaExpressionSimple())
+                return method.Inline(p, p.LastItem);
+            
+            var inlineVariable = "__inlined" + _inlineCounter++;
+            p.PostForAdd(VariableExtensions.LocalVariableCreation(inlineVariable, method.Inline(p, p.LastItem)));
+            return SyntaxFactory.IdentifierName(inlineVariable);
+        }
+
+        public static ExpressionSyntax Inline(this ExpressionSyntax method, RewriteParameters p, ExpressionSyntax last)
+            => p.Code.InlineLambda(p.Semantic, method, last);
+
+        public static bool IsExpressionSimple(this ExpressionSyntax e)
+            => !(e is BinaryExpressionSyntax)
+               && !(e is PostfixUnaryExpressionSyntax)
+               && !(e is PrefixUnaryExpressionSyntax)
+               && !(e is InvocationExpressionSyntax)
+               && !(e is ParenthesizedExpressionSyntax)
+               && !(e is ConditionalExpressionSyntax);
+
+        public static bool IsLambdaExpressionSimple(this ExpressionSyntax e)
+        {
+            if (!(e is SimpleLambdaExpressionSyntax l)) return false;
+            
+            var count = Regex.Matches(l.ToString(), l.Parameter.ToString()).Count;
+            return count <= 2
+                   && !(l.Body is InvocationExpressionSyntax)
+                   && !(l.Body is ParenthesizedExpressionSyntax)
+                   && !(l.Body is ConditionalExpressionSyntax);
+        }
     }
 }

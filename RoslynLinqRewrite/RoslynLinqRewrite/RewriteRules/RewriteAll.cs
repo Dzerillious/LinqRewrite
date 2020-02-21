@@ -11,7 +11,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
             var method = p.Chain[chainIndex].Arguments[0];
-            p.ForAdd(If(Not(p.Code.InlineLambda(p.Semantic, method, p.LastItem)),
+            p.ForAdd(If(Not(method.InlineForLast(p)),
                 Return(false)));
             
             p.PostForAdd(Return(true));

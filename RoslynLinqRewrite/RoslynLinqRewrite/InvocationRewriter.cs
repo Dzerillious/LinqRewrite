@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
 using Shaman.Roslyn.LinqRewrite.RewriteRules;
@@ -27,6 +29,8 @@ namespace Shaman.Roslyn.LinqRewrite
                 case "FirstOrDefault": return RewriteFirstOrDefault.RewriteSimple(parameters);
                 case "Last": return RewriteLast.RewriteSimple(parameters);
                 case "LastOrDefault": return RewriteLastOrDefault.RewriteSimple(parameters);
+                case "Single": return RewriteSingle.RewriteSimple(parameters);
+                case "SingleOrDefault": return RewriteSingleOrDefault.RewriteSimple(parameters);
                 default: return null;
             }
         }
@@ -59,6 +63,7 @@ namespace Shaman.Roslyn.LinqRewrite
                     case "SingleOrDefault": RewriteSingleOrDefault.Rewrite(parameters, i); continue;
                     case "Skip": RewriteSkip.Rewrite(parameters, i); continue;
                     case "Take": RewriteTake.Rewrite(parameters, i); continue;
+                    case "Sum": RewriteSum.Rewrite(parameters, i); continue;
                     case "ToArray": RewriteToArray.Rewrite(parameters, i); continue;
                     case "ToList": RewriteToList.Rewrite(parameters, i); continue;
                     case "Where": RewriteWhere.Rewrite(parameters, i); continue;

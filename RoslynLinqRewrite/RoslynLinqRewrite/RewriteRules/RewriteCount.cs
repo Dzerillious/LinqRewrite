@@ -21,14 +21,16 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                p.ForAdd(If(p.Code.InlineLambda(p.Semantic, method, p.LastItem),
+                p.ForAdd(If(method.InlineForLast(p),
                             countVariable.PostIncrement()));
             }
             
             p.PostForAdd(Return(countVariable));
         }
 
-        public static ExpressionSyntax RewriteSimple(RewriteParameters p)
-            => p.Code.CreateCollectionCount(ItemsName, p.Collection, false);
+        public static ExpressionSyntax RewriteSimple(RewriteParameters p) 
+            => p.Chain[0].Arguments.Length == 0 
+                ? p.Code.CreateCollectionCount(ItemsName, p.Collection, false) 
+                : null;
     }
 }

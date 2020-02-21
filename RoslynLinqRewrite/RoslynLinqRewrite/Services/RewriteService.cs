@@ -91,7 +91,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 ? Enumerable.Empty<StatementSyntax>()
                 : new[]
                 {
-                    SyntaxFactory.IfStatement(
+                    SyntaxFactoryHelper.If(
                         SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression,
                             SyntaxFactory.IdentifierName(Constants.ItemsName),
                             SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression)),

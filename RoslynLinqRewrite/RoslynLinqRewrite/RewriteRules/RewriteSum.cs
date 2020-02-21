@@ -1,30 +1,40 @@
-﻿namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+﻿using System;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Shaman.Roslyn.LinqRewrite.DataStructures;
+using Shaman.Roslyn.LinqRewrite.Extensions;
+using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
+using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+
+namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
-    // public static class RewriteSum
-    // {
-    //     // public static ExpressionSyntax Rewrite(RewriteParameters p)
-    //     // {
-    //     //     var elementType = (p.ReturnType as NullableTypeSyntax)?.ElementType ?? p.ReturnType;
-    //     //     return p.Rewrite.RewriteAsLoop(
-    //     //         p.ReturnType,
-    //     //         new[]
-    //     //         {
-    //     //             SyntaxFactoryHelper.LocalVariableCreation("sum_",
-    //     //                 SyntaxFactory.CastExpression(elementType,
-    //     //                     SyntaxFactoryHelper.IntExpression(0)))
-    //     //         },
-    //     //         new[] {SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName("sum_"))},
-    //     //         p.Collection,
-    //     //         p.Code.MaybeAddSelect(p.Chain, p.Node.ArgumentList.Arguments.Count != 0),
-    //     //         (inv, arguments, param) =>
-    //     //         {
-    //     //             var currentValue = SyntaxFactory.IdentifierName(param.Identifier.ValueText);
-    //     //             return SyntaxExtensions.IfNullableIsNotNull(elementType != p.ReturnType, currentValue, x
-    //     //                 => SyntaxFactory.CheckedStatement(SyntaxKind.CheckedStatement,
-    //     //                     SyntaxFactory.Block(SyntaxFactory.ExpressionStatement(
-    //     //                         SyntaxFactory.AssignmentExpression(SyntaxKind.AddAssignmentExpression, SyntaxFactory.IdentifierName("sum_"), x)))));
-    //     //         }
-    //     //     );
-    //     // }
-    // }
+    public static class RewriteSum
+    {
+        public static void Rewrite(RewriteParameters p, int chainIndex)
+        {
+            var sumVariable = "__sum" + chainIndex;
+            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
+            if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Sum should be last expression.");
+
+            var isNullable = p.ReturnType is NullableTypeSyntax;
+            var elementType = isNullable ? ((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
+            p.PreForAdd(LocalVariableCreation(sumVariable, 0.Cast(elementType)));
+
+            if (p.Chain[chainIndex].Arguments.Length == 0)
+                p.ForAdd(sumVariable.AddAssign(p.LastItem));
+            else if (isNullable)
+            {
+                var method = p.Chain[chainIndex].Arguments[0];
+                var inlined = method.InlineForLast(p);
+                p.ForAdd(If(inlined.NotEqualsExpr(NullValue),
+                    sumVariable.AddAssign(inlined)));
+            }
+            else
+            {
+                var method = p.Chain[chainIndex].Arguments[0];
+                p.ForAdd(sumVariable.AddAssign(method.InlineForLast(p)));
+            }
+            
+            p.PostForAdd(Return(sumVariable));
+        }
+    }
 }

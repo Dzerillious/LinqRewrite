@@ -18,6 +18,11 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
+            if (p.Chain.Count == 1)
+            {
+                RewriteSimple(p);
+                return;
+            }
             RewriteOther(p, chainIndex);
             if (p.ResultSize == null) p.PostForAdd(Return("SimpleCollections".Access("SimpleArrayExtensions", "EnsureFullArray")
                 .Invoke(GlobalResultVariable, CurrentVariable)));
@@ -52,7 +57,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                                 .Invoke(p.SourceSize.Cast(SyntaxKind.UIntKeyword))
                                     .Sub(3)));
                 
-            p.PreForAdd(LogVariable.AssignSubtract(LogVariable.Mod(2)));
+            p.PreForAdd(LogVariable.SubAssign(LogVariable.Mod(2)));
             p.PreForAdd(LocalVariableCreation(CurrentLengthVariable, 8));
 
             var result = (ArrayTypeSyntax) p.ReturnType;
@@ -83,6 +88,22 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                                         RefArgument(CurrentLengthVariable))));
                 
             p.ForAdd(GlobalResultVariable.ArrayAccess(CurrentVariable).Assign(p.LastItem));
+        }
+
+        private static void RewriteSimple(RewriteParameters p)
+        {
+            var collectionType = p.Semantic.GetTypeFromExpression(p.Collection);
+            var collectionName = collectionType.ToString();
+
+            if (collectionType is ArrayTypeSyntax)
+            {
+                var count = p.Code.CreateCollectionCount(ItemsName, p.Collection, false);
+                p.PreForAdd(CreateLocalArray(GlobalResultVariable, (ArrayTypeSyntax) p.ReturnType, count));
+                p.PreForAdd("Array".Access("Copy")
+                    .Invoke(ItemsName, 0, GlobalResultVariable, 0, count));
+                p.PreForAdd(Return(GlobalResultVariable));
+                
+            }
         }
     }
 }

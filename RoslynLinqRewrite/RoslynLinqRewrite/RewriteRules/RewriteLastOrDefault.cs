@@ -24,17 +24,18 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                p.ForAdd(If(p.Code.InlineLambda(p.Semantic, method, p.LastItem),
+                p.ForAdd(If(method.InlineForLast(p),
                             foundVariable.Assign(p.LastItem)));
             }
             
             p.PostForAdd(If(foundVariable.EqualsExpr(NullValue),
                             Return(Default(p.ReturnType)), 
-                            Else(Return(foundVariable.Cast(p.ReturnType)))));
+                            Return(foundVariable.Cast(p.ReturnType))));
         }
 
         public static ExpressionSyntax RewriteSimple(RewriteParameters p)
         {
+            if (p.Chain[0].Arguments.Length == 0) return null;
             RewriteCollectionEnumeration.Rewrite(p, 0);
             if (p.SourceSize == null) return null;
             

@@ -7,12 +7,12 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
     {
         private readonly TypeSyntax _type;
 
-        public TypeBridge(TypeSyntax type)
+        private TypeBridge(TypeSyntax type)
         {
             _type = type;
         }
 
-        public TypeBridge(SyntaxKind type)
+        private TypeBridge(SyntaxKind type)
         {
             _type = SyntaxFactory.PredefinedType(SyntaxFactory.Token(type));
         }

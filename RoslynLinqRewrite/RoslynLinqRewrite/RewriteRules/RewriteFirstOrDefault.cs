@@ -19,7 +19,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                p.ForAdd(If(p.Code.InlineLambda(p.Semantic, method, p.LastItem),
+                p.ForAdd(If(method.InlineForLast(p),
                             Return(p.LastItem)));
             }
             
@@ -30,8 +30,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         {
             if (p.Chain[0].Arguments.Length != 0) return null;
             return ConditionalExpression(
-                p.Code.CreateCollectionCount(ItemsName, p.Collection, false)
-                    .EqualsExpr(0),
+                p.Code.CreateCollectionCount(ItemsName, p.Collection, false).EqualsExpr(0),
                 ItemsName.ArrayAccess(0),
                 Default(p.ReturnType));
         }

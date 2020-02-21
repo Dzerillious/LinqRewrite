@@ -8,29 +8,29 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
     {
         private readonly ExpressionSyntax _value;
 
-        public ValueBridge(bool value)
+        private ValueBridge(bool value)
         {
             _value = value
                 ? SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression)
                 : SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression);
         }
 
-        public ValueBridge(int value)
+        private ValueBridge(int value)
         {
             _value = SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(value));
         }
 
-        public ValueBridge(ExpressionSyntax value)
+        private ValueBridge(ExpressionSyntax value)
         {
             _value = value;
         }
 
-        public ValueBridge(IdentifierNameSyntax name)
+        private ValueBridge(IdentifierNameSyntax name)
         {
             _value = name;
         }
 
-        public ValueBridge(string name)
+        private ValueBridge(string name)
         {
             _value = SyntaxFactory.IdentifierName(name);
         }
