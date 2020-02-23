@@ -109,57 +109,81 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static DefaultExpressionSyntax Default(TypeBridge @type)
             => SyntaxFactory.DefaultExpression(@type);
 
-        private static int _inlineCounter;
-        public static ExpressionSyntax InlinePreForLast(this ExpressionSyntax method, RewriteParameters p)
-        {
-            if (p.LastItem.IsExpressionSimple() && method.IsLambdaExpressionSimple())
-                return method.Inline(p, p.LastItem);
-            
-            var inlineVariable = "__inlined" + _inlineCounter++;
-            p.PreForAdd(VariableExtensions.LocalVariableCreation(inlineVariable, method.Inline(p, p.LastItem)));
-            return SyntaxFactory.IdentifierName(inlineVariable);
-        }
+        private static int _tmpCounter;
         
-        public static ExpressionSyntax InlineForLast(this ExpressionSyntax method, RewriteParameters p)
+        public static ExpressionSyntax Reusable(this ExpressionSyntax e, RewriteParameters p)
         {
-            if (p.LastItem.IsExpressionSimple() && method.IsLambdaExpressionSimple())
-                return method.Inline(p, p.LastItem);
+            if (e.IsExpressionReusable()) return e;
             
-            var inlineVariable = "__inlined" + _inlineCounter++;
-            p.ForAdd(VariableExtensions.LocalVariableCreation(inlineVariable, method.Inline(p, p.LastItem)));
-            return SyntaxFactory.IdentifierName(inlineVariable);
-        }
-        
-        public static ExpressionSyntax InlinePostLast(this ExpressionSyntax method, RewriteParameters p)
-        {
-            if (p.LastItem.IsExpressionSimple() && method.IsLambdaExpressionSimple())
-                return method.Inline(p, p.LastItem);
-            
-            var inlineVariable = "__inlined" + _inlineCounter++;
-            p.PostForAdd(VariableExtensions.LocalVariableCreation(inlineVariable, method.Inline(p, p.LastItem)));
-            return SyntaxFactory.IdentifierName(inlineVariable);
+            var tmpVariable = "__tmp" + _tmpCounter++;
+            p.ForAdd(VariableExtensions.LocalVariableCreation(tmpVariable, e));
+            return SyntaxFactory.IdentifierName(tmpVariable);
         }
 
         public static ExpressionSyntax Inline(this ExpressionSyntax method, RewriteParameters p, ExpressionSyntax last)
             => p.Code.InlineLambda(p.Semantic, method, last);
-
-        public static bool IsExpressionSimple(this ExpressionSyntax e)
-            => !(e is BinaryExpressionSyntax)
-               && !(e is PostfixUnaryExpressionSyntax)
-               && !(e is PrefixUnaryExpressionSyntax)
-               && !(e is InvocationExpressionSyntax)
-               && !(e is ParenthesizedExpressionSyntax)
-               && !(e is ConditionalExpressionSyntax);
-
-        public static bool IsLambdaExpressionSimple(this ExpressionSyntax e)
+        
+        public static ExpressionSyntax InlineForLast(this ExpressionSyntax e, RewriteParameters p)
         {
-            if (!(e is SimpleLambdaExpressionSyntax l)) return false;
+            if (e.IsLambdaExpressionSimple(p.LastItem))
+                return e.Inline(p, p.LastItem);
+            
+            var inlineVariable = "__tmp" + _tmpCounter++;
+            p.ForAdd(VariableExtensions.LocalVariableCreation(inlineVariable, p.LastItem));
+            return e.Inline(p, SyntaxFactory.IdentifierName(inlineVariable));
+        }
+
+        public static bool IsLambdaExpressionSimple(this ExpressionSyntax e, ExpressionSyntax body)
+        {
+            if (!(e is SimpleLambdaExpressionSyntax l)) return true;
             
             var count = Regex.Matches(l.ToString(), l.Parameter.ToString()).Count;
-            return count <= 2
-                   && !(l.Body is InvocationExpressionSyntax)
-                   && !(l.Body is ParenthesizedExpressionSyntax)
-                   && !(l.Body is ConditionalExpressionSyntax);
+            return count switch
+            {
+                1 => true,
+                2 => true, // Counts left side of lambda too
+                // 3 => NotVeryCostly(body),
+                // 4 => (NotVeryCostly(body) && !(body is BinaryExpressionSyntax)),
+                //
+                // 5 => (NotVeryCostly(body) && !(body is BinaryExpressionSyntax) &&
+                //       !(body is PostfixUnaryExpressionSyntax) && !(body is PrefixUnaryExpressionSyntax) &&
+                //       !(body is SizeOfExpressionSyntax) && !(body is TypeOfExpressionSyntax)),
+                //
+                // _ => body.IsExpressionReusable()
+                _ => IsExpressionReusable(body)
+            };
         }
+
+        public static bool NotVeryCostly(this ExpressionSyntax e)
+            => !(e is InvocationExpressionSyntax)
+               && !(e is ParenthesizedExpressionSyntax)
+               && !(e is ConditionalExpressionSyntax)
+               && !(e is AwaitExpressionSyntax)
+               && !(e is SimpleLambdaExpressionSyntax)
+               && !(e is ParenthesizedLambdaExpressionSyntax)
+               && !(e is ObjectCreationExpressionSyntax)
+               && !(e is IsPatternExpressionSyntax)
+               && !(e is InterpolatedStringExpressionSyntax)
+               && !(e is ArrayCreationExpressionSyntax)
+               && !(e is TupleExpressionSyntax)
+               && !(e is SwitchExpressionSyntax)
+               && !(e is RangeExpressionSyntax)
+               && !(e is QueryExpressionSyntax)
+               && !(e is LambdaExpressionSyntax)
+               && !(e is InitializerExpressionSyntax);
+
+        public static bool IsExpressionReusable(this ExpressionSyntax e) =>
+            e is BaseExpressionSyntax
+            || e is ThisExpressionSyntax
+            || e is IdentifierNameSyntax
+            || e is LiteralExpressionSyntax
+            || e is DefaultExpressionSyntax
+            || e is RefExpressionSyntax
+            || e is SizeOfExpressionSyntax
+            || e is TypeOfExpressionSyntax
+            || e is ElementAccessExpressionSyntax
+            || e is MemberAccessExpressionSyntax
+            || e is PostfixUnaryExpressionSyntax
+            || e is PrefixUnaryExpressionSyntax;
     }
 }

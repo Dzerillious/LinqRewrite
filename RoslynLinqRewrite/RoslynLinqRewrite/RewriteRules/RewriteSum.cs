@@ -24,7 +24,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             else if (isNullable)
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                var inlined = method.InlineForLast(p);
+                var inlined = method.InlineForLast(p).Reusable(p);
                 p.ForAdd(If(inlined.NotEqualsExpr(NullValue),
                     sumVariable.AddAssign(inlined)));
             }

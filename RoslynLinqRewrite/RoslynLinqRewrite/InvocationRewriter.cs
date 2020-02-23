@@ -49,6 +49,8 @@ namespace Shaman.Roslyn.LinqRewrite
                 {
                     case "All": RewriteAll.Rewrite(parameters, i); continue;
                     case "Any": RewriteAny.Rewrite(parameters, i); continue;
+                    case "Min": RewriteMin.Rewrite(parameters, i); continue;
+                    case "Max": RewriteMax.Rewrite(parameters, i); continue;
                     case "Count": RewriteCount.Rewrite(parameters, i); continue;
                     case "First": RewriteFirst.Rewrite(parameters, i); continue;
                     case "FirstOrDefault": RewriteFirstOrDefault.Rewrite(parameters, i); continue;

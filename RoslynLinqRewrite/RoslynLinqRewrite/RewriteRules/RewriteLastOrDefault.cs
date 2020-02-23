@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using System;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
 using Shaman.Roslyn.LinqRewrite.Extensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
@@ -14,6 +15,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         {
             var foundVariable = "__found" + chainIndex;
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
+            if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("LastOrDefault should be last expression.");
             
             p.PreForAdd(LocalVariableCreation(foundVariable, NullableType(p.ReturnType), NullValue));
 

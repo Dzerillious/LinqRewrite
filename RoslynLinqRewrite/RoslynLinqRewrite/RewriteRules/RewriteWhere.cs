@@ -10,8 +10,10 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         {
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
 
-            var method = p.Chain[chainIndex].Arguments[0];
-            p.ForAdd(If(Not(method.InlineForLast(p)),
+            var lambda = p.Chain[chainIndex].Arguments[0];
+
+            p.LastItem = p.LastItem.Reusable(p);
+            p.ForAdd(If(Not(lambda.InlineForLast(p)),
                 Continue()));
 
             p.ResultSize = null;

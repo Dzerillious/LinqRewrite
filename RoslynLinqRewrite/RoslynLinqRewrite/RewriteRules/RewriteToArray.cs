@@ -39,9 +39,8 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
         private static void KnownSize(RewriteParameters p, TypeSyntax itemType = null)
         {
-            p.PreForAdd(itemType == null
-                ? CreateLocalArray(GlobalResultVariable, (ArrayTypeSyntax) p.ReturnType, p.ResultSize)
-                : CreateLocalArray(GlobalResultVariable, ArrayType(itemType), p.ResultSize));
+            var arrayType = itemType == null ? (ArrayTypeSyntax) p.ReturnType : ArrayType(itemType);
+            CreateLocalArray(GlobalResultVariable, arrayType, p.ResultSize);
 
             p.ForAdd(GlobalResultVariable.ArrayAccess(GlobalIndexerVariable).Assign(p.LastItem));
             

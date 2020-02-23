@@ -36,6 +36,12 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
                 SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, SyntaxFactory.IdentifierName(identifier)));
         
         
+        public static CastExpressionSyntax Cast(this double a, TypeBridge type)
+            => Cast((ValueBridge)a, type);
+        
+        public static CastExpressionSyntax Cast(this float a, TypeBridge type)
+            => Cast((ValueBridge)a, type);
+        
         public static CastExpressionSyntax Cast(this int a, TypeBridge type)
             => Cast((ValueBridge)a, type);
         
@@ -101,6 +107,12 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
             => SyntaxFactory.BinaryExpression(SyntaxKind.GreaterThanOrEqualExpression, SyntaxFactory.IdentifierName(identifier), b);
         public static BinaryExpressionSyntax GeThan(this ExpressionSyntax a, ValueBridge b)
             => SyntaxFactory.BinaryExpression(SyntaxKind.GreaterThanOrEqualExpression, a, b);
+        
+        
+        public static BinaryExpressionSyntax GThan(this string identifier, ValueBridge b)
+            => SyntaxFactory.BinaryExpression(SyntaxKind.GreaterThanExpression, SyntaxFactory.IdentifierName(identifier), b);
+        public static BinaryExpressionSyntax GThan(this ExpressionSyntax a, ValueBridge b)
+            => SyntaxFactory.BinaryExpression(SyntaxKind.GreaterThanExpression, a, b);
         
         
         public static BinaryExpressionSyntax NotEqualsExpr(this ExpressionSyntax a, ExpressionSyntax b)

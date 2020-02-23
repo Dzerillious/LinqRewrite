@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using System;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
 using Shaman.Roslyn.LinqRewrite.Extensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
@@ -12,6 +13,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
+            if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("FirstOrDefault should be last expression.");
             
             if (p.Chain[chainIndex].Arguments.Length == 0)
                 p.ForAdd(Return(p.LastItem));
