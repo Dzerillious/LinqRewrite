@@ -96,10 +96,10 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
             if (collectionType is ArrayTypeSyntax)
             {
-                var count = p.Code.CreateCollectionCount(ItemsName, p.Collection, false);
+                var count = p.Code.CreateCollectionCount(GlobalItemsName, p.Collection, false);
                 p.PreForAdd(CreateLocalArray(GlobalResultVariable, (ArrayTypeSyntax) p.ReturnType, count));
                 p.PreForAdd("Array".Access("Copy")
-                    .Invoke(ItemsName, 0, GlobalResultVariable, 0, count));
+                    .Invoke(GlobalItemsName, 0, GlobalResultVariable, 0, count));
                 p.PreForAdd(Return(GlobalResultVariable));
                 
             }

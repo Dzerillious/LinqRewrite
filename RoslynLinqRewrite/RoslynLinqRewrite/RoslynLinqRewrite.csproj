@@ -158,15 +158,15 @@
     <Compile Include="RewriteRules\RewriteToList.cs" />
     <Compile Include="RewriteRules\RewriteToSimpleList.cs" />
     <Compile Include="RewriteRules\RewriteWhere.cs" />
-    <Compile Include="Samples\Example3.cs" />
-    <Compile Include="Samples\Example2.cs" />
-    <Compile Include="Samples\Example1.cs" />
     <Compile Include="Services\CodeCreationService.cs" />
     <Compile Include="Services\CompilationService.cs" />
     <Compile Include="Services\MsBuildService.cs" />
     <Compile Include="Services\PrintService.cs" />
     <Compile Include="Services\RewriteDataService.cs" />
     <Compile Include="Services\RewriteService.cs" />
+    <Content Include="test.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

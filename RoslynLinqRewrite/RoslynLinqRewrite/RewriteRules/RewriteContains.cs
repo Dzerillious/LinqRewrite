@@ -1,49 +1,35 @@
-﻿namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+﻿using System;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Shaman.Roslyn.LinqRewrite.DataStructures;
+using Shaman.Roslyn.LinqRewrite.Extensions;
+using static Shaman.Roslyn.LinqRewrite.Constants;
+using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+
+namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
-    // public static class RewriteContains
-    // {
-    //     // public static ExpressionSyntax Rewrite(RewriteParameters p)
-    //     // {
-    //     //     var elementType = SyntaxFactory.ParseTypeName(ModelExtensions
-    //     //         .GetTypeInfo(p.Semantic, p.Node.ArgumentList.Arguments.First().Expression).ConvertedType
-    //     //         .ToDisplayString());
-    //     //     
-    //     //     var comparerIdentifier = ((elementType as NullableTypeSyntax)?.ElementType ?? elementType) is PredefinedTypeSyntax
-    //     //             ? null : SyntaxFactory.IdentifierName("comparer_");
-    //     //     
-    //     //     return p.Rewrite.RewriteAsLoop(
-    //     //         SyntaxFactoryHelper.CreatePrimitiveType(SyntaxKind.BoolKeyword),
-    //     //         comparerIdentifier != null
-    //     //             ? new StatementSyntax[]
-    //     //             {
-    //     //                 VariableExtensions.LocalVariableCreation("comparer_",
-    //     //                     SyntaxFactory.ParseExpression(
-    //     //                         $"System.Collections.Generic.EqualityComparer<{elementType}>.Default"))
-    //     //             }
-    //     //             : Enumerable.Empty<StatementSyntax>(),
-    //     //         new[]
-    //     //         {
-    //     //             SyntaxFactory.ReturnStatement(SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression))
-    //     //         },
-    //     //         p.Collection,
-    //     //         p.Chain,
-    //     //         (inv, arguments, param) =>
-    //     //         {
-    //     //             var target = SyntaxFactory.IdentifierName("_target");
-    //     //             var current = SyntaxFactory.IdentifierName(param.Identifier.ValueText);
-    //     //             var condition = comparerIdentifier != null
-    //     //                 ? SyntaxFactory.InvocationExpression(
-    //     //                     SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, comparerIdentifier, SyntaxFactory.IdentifierName("Equals")), SyntaxFactoryHelper.CreateArguments(current, target))
-    //     //                 : (ExpressionSyntax) SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, current, target);
-    //     //             
-    //     //             return SyntaxFactory.IfStatement(condition,
-    //     //                 SyntaxFactory.ReturnStatement(SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression)));
-    //     //         },
-    //     //         additionalParameters: new[]
-    //     //         {
-    //     //             Tuple.Create(SyntaxFactoryHelper.CreateParameter("_target", elementType), p.Node.ArgumentList.Arguments.First().Expression)
-    //     //         }
-    //     //     );
-    //     // }
-    // }
+    public static class RewriteContains
+    {
+        public static void Rewrite(RewriteParameters p, int chainIndex)
+        {
+            var element = p.Node.ArgumentList.Arguments.First().Expression;
+
+            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
+            if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Any should be last expression.");
+            
+            if (p.Chain[chainIndex].Arguments.Length == 1)
+                p.ForAdd(If(p.LastItem.EqualsExpr(element),
+                            Return(true)));
+            
+            else
+            {
+                var comparer = p.Chain[chainIndex].Arguments[1];
+                p.ForAdd(If(comparer.Access("Equals").Invoke(p.LastItem, element),
+                    Return(true)));
+            }
+            
+            p.PostForAdd(Return(false));
+        }
+    }
 }

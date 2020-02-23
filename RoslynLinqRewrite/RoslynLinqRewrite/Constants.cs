@@ -37,6 +37,7 @@ namespace Shaman.Roslyn.LinqRewrite
         public const string AllWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.All<TSource>(System.Func<TSource, bool>)";
 
         public const string ContainsMethod = "System.Collections.Generic.IEnumerable<TSource>.Contains<TSource>(TSource)";
+        public const string ContainsEqualityMethod = "System.Collections.Generic.IEnumerable<TSource>.Contains<TSource>(TSource, System.Collections.Generic.IEqualityComparer<TSource>)";
 
         public const string ListForEachMethod = "System.Collections.Generic.List<T>.ForEach(System.Action<T>)";
         public const string EnumerableForEachMethod = "System.Collections.Generic.IEnumerable<T>.ForEach<T>(System.Action<T>)";
@@ -58,6 +59,7 @@ namespace Shaman.Roslyn.LinqRewrite
         public const string GlobalIndexerVariable = "__i";
         public const string GlobalItemVariable = "__item";
         public const string GlobalResultVariable = "__result";
+        public const string GlobalItemsName = "_linqitems";
 
         public static readonly HashSet<string> KnownMethods = new HashSet<string>
         {
@@ -74,7 +76,7 @@ namespace Shaman.Roslyn.LinqRewrite
             
             AnyMethod, AnyWithConditionMethod, AllWithConditionMethod,
             
-            ContainsMethod,
+            ContainsMethod, ContainsEqualityMethod,
             
             ListForEachMethod,
             
@@ -84,23 +86,6 @@ namespace Shaman.Roslyn.LinqRewrite
             
             EnumerableForEachMethod
         };
-
-        public static readonly HashSet<string> RootMethodsThatRequireYieldReturn = new HashSet<string> {
-            WhereMethod, SelectMethod, CastMethod, OfTypeMethod
-        };
-
-        public static readonly HashSet<string> MethodsThatPreserveCount = new HashSet<string> {
-            SelectMethod, CastMethod, ReverseMethod, ToListMethod, ToArrayMethod, RangeMethod /*OrderBy*/
-        };
-        
-        public static readonly HashSet<string> MethodsWithIntParams = new HashSet<string> {
-            ElementAtMethod, ElementAtOrDefaultMethod, ContainsMethod, 
-            
-            RangeMethod, RepeatMethod
-        };
-
-        public const string ItemsName = "_linqitems";
-        public const string ItemName = "_linqitem";
 
         public const int MaximumSizeForByValStruct = 128 / 8; // eg. two longs, or two references
     }

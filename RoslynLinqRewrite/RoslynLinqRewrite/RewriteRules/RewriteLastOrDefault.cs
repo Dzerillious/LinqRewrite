@@ -42,9 +42,9 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             if (p.SourceSize == null) return null;
             
             return ConditionalExpression(
-                p.Code.CreateCollectionCount(ItemsName, p.Collection, false)
+                p.Code.CreateCollectionCount(GlobalItemsName, p.Collection, false)
                     .EqualsExpr(0),
-                ItemsName.ArrayAccess(p.Code.CreateCollectionCount(ItemsName, p.Collection, false).Sub(1)),
+                GlobalItemsName.ArrayAccess(p.Code.CreateCollectionCount(GlobalItemsName, p.Collection, false).Sub(1)),
                 Default(p.ReturnType));
         }
     }

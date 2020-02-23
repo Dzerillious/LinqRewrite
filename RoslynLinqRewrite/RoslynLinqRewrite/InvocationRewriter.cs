@@ -49,26 +49,33 @@ namespace Shaman.Roslyn.LinqRewrite
                 {
                     case "All": RewriteAll.Rewrite(parameters, i); continue;
                     case "Any": RewriteAny.Rewrite(parameters, i); continue;
+                    case "Contains": RewriteContains.Rewrite(parameters, i); continue;
+                    case "Count": RewriteCount.Rewrite(parameters, i); continue;
+
                     case "Min": RewriteMin.Rewrite(parameters, i); continue;
                     case "Max": RewriteMax.Rewrite(parameters, i); continue;
-                    case "Count": RewriteCount.Rewrite(parameters, i); continue;
+                    case "Average": RewriteAverage.Rewrite(parameters, i); continue;
+                    
+                    case "ForEach": RewriteForEach.Rewrite(parameters, i); continue;
+                    
                     case "First": RewriteFirst.Rewrite(parameters, i); continue;
                     case "FirstOrDefault": RewriteFirstOrDefault.Rewrite(parameters, i); continue;
-                    case "ForEach": RewriteForEach.Rewrite(parameters, i); continue;
                     case "Last": RewriteLast.Rewrite(parameters, i); continue;
                     case "LastOrDefault": RewriteLastOrDefault.Rewrite(parameters, i); continue;
-                    case "Range": RewriteRange.Rewrite(parameters, i); continue;
-                    case "Repeat": RewriteRepeat.Rewrite(parameters, i); continue;
-                    case "Reverse": RewriteReverse.Rewrite(parameters, i); continue;
-                    case "Select": RewriteSelect.Rewrite(parameters, i); continue;
                     case "Single": RewriteSingle.Rewrite(parameters, i); continue;
                     case "SingleOrDefault": RewriteSingleOrDefault.Rewrite(parameters, i); continue;
+                    
+                    case "Range": RewriteRange.Rewrite(parameters, i); continue;
+                    case "Repeat": RewriteRepeat.Rewrite(parameters, i); continue;
+                    
+                    case "Reverse": RewriteReverse.Rewrite(parameters, i); continue;
+                    case "Select": RewriteSelect.Rewrite(parameters, i); continue;
                     case "Skip": RewriteSkip.Rewrite(parameters, i); continue;
                     case "Take": RewriteTake.Rewrite(parameters, i); continue;
-                    case "Sum": RewriteSum.Rewrite(parameters, i); continue;
+                    case "Where": RewriteWhere.Rewrite(parameters, i); continue;
+                    
                     case "ToArray": RewriteToArray.Rewrite(parameters, i); continue;
                     case "ToList": RewriteToList.Rewrite(parameters, i); continue;
-                    case "Where": RewriteWhere.Rewrite(parameters, i); continue;
                 }
             }
             var body = parameters.GetMethodBody();

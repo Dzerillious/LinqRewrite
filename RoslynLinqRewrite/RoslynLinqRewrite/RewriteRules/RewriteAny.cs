@@ -29,7 +29,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
         public static ExpressionSyntax RewriteSimple(RewriteParameters p) 
             => p.Chain[0].Arguments.Length == 0 
-                ? p.Code.CreateCollectionCount(ItemsName, p.Collection, false).LThan(0) 
+                ? p.Code.CreateCollectionCount(GlobalItemsName, p.Collection, false).LThan(0) 
                 : null;
     }
 }

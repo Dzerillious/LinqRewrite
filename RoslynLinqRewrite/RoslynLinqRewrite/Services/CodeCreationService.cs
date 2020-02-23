@@ -45,7 +45,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                             SyntaxFactory.ParenthesizedExpression(
                                 SyntaxFactory.BinaryExpression(
                                     SyntaxKind.AsExpression,
-                                    SyntaxFactory.IdentifierName(Constants.ItemsName),
+                                    SyntaxFactory.IdentifierName(Constants.GlobalItemsName),
                                     SyntaxFactory.ParseTypeName($"System.Collections.Generic.ICollection<{itemType.ToDisplayString()}>")
                                 )
                             ),

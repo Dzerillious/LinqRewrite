@@ -27,7 +27,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
         
         internal ExpressionSyntax GetCollectionInvocationExpression(RewriteParameters p, IEnumerable<StatementSyntax> body)
         {
-            var items = new[] {SyntaxFactoryHelper.CreateParameter(Constants.ItemsName, 
+            var items = new[] {SyntaxFactoryHelper.CreateParameter(Constants.GlobalItemsName, 
                     _data.Semantic.GetTypeInfo(p.Collection).Type)};
             var parameters = items.Concat(_data.CurrentFlow.Select(x => SyntaxFactoryHelper.CreateParameter(x.Name, SymbolExtensions.GetSymbolType(x.Symbol)).WithRef(x.Changes)));
            
@@ -93,7 +93,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 {
                     SyntaxFactoryHelper.If(
                         SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression,
-                            SyntaxFactory.IdentifierName(Constants.ItemsName),
+                            SyntaxFactory.IdentifierName(Constants.GlobalItemsName),
                             SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression)),
                         SyntaxFactoryHelper.CreateThrowException("System.ArgumentNullException"))
                 };

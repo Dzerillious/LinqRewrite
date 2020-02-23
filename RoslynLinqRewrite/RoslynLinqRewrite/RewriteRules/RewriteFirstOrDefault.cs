@@ -32,8 +32,8 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         {
             if (p.Chain[0].Arguments.Length != 0) return null;
             return ConditionalExpression(
-                p.Code.CreateCollectionCount(ItemsName, p.Collection, false).EqualsExpr(0),
-                ItemsName.ArrayAccess(0),
+                p.Code.CreateCollectionCount(GlobalItemsName, p.Collection, false).EqualsExpr(0),
+                GlobalItemsName.ArrayAccess(0),
                 Default(p.ReturnType));
         }
     }

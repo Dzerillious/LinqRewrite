@@ -85,6 +85,14 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
             => SyntaxFactory.BinaryExpression(SyntaxKind.SubtractExpression, a, b);
         
         
+        public static BinaryExpressionSyntax Div(this ValueBridge a, ValueBridge b)
+            => SyntaxFactory.BinaryExpression(SyntaxKind.DivideExpression, a, b);
+        public static BinaryExpressionSyntax Div(this ExpressionSyntax a, ValueBridge b)
+            => SyntaxFactory.BinaryExpression(SyntaxKind.DivideExpression, a, b);
+        public static BinaryExpressionSyntax Div(this string identifier, ValueBridge b)
+            => SyntaxFactory.BinaryExpression(SyntaxKind.DivideExpression, SyntaxFactory.IdentifierName(identifier), b);
+        
+        
         public static BinaryExpressionSyntax Mod(this string identifier, ValueBridge b)
             => SyntaxFactory.BinaryExpression(SyntaxKind.ModuloExpression, SyntaxFactory.IdentifierName(identifier), b);
         public static BinaryExpressionSyntax Mod(this ExpressionSyntax a, ValueBridge b)

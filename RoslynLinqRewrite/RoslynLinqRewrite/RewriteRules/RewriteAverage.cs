@@ -1,63 +1,48 @@
-﻿namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+﻿using System;
+using System.Linq;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Shaman.Roslyn.LinqRewrite.DataStructures;
+using Shaman.Roslyn.LinqRewrite.Extensions;
+using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
+using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+
+namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
-    // public static class RewriteAverage
-    // {
-    //     // public static ExpressionSyntax Rewrite(RewriteParameters p)
-    //     // {
-    //     //     var elementType = (p.ReturnType as NullableTypeSyntax)?.ElementType ?? p.ReturnType;
-    //     //     var primitive = ((PredefinedTypeSyntax) elementType).Keyword.Kind();
-    //     //
-    //     //     ExpressionSyntax sumIdentifier = SyntaxFactory.IdentifierName("sum_");
-    //     //     ExpressionSyntax countIdentifier = SyntaxFactory.IdentifierName("count_");
-    //     //
-    //     //     if (primitive != SyntaxKind.DecimalKeyword)
-    //     //     {
-    //     //         sumIdentifier = SyntaxFactory.CastExpression(SyntaxFactoryHelper.CreatePrimitiveType(SyntaxKind.DoubleKeyword), sumIdentifier);
-    //     //         countIdentifier =  SyntaxFactory.CastExpression(SyntaxFactoryHelper.CreatePrimitiveType(SyntaxKind.DoubleKeyword), countIdentifier);
-    //     //     }
-    //     //
-    //     //     ExpressionSyntax division = SyntaxFactory.BinaryExpression(SyntaxKind.DivideExpression, sumIdentifier, countIdentifier);
-    //     //     if (primitive != SyntaxKind.DoubleKeyword && primitive != SyntaxKind.DecimalKeyword)
-    //     //         division = SyntaxFactory.CastExpression(elementType, SyntaxFactory.ParenthesizedExpression(division));
-    //     //
-    //     //     return p.Rewrite.RewriteAsLoop(
-    //     //         p.ReturnType,
-    //     //         new[]
-    //     //         {
-    //     //             SyntaxFactoryHelper.LocalVariableCreation("sum_",
-    //     //                 SyntaxFactory.CastExpression(
-    //     //                     primitive == SyntaxKind.IntKeyword || primitive == SyntaxKind.LongKeyword
-    //     //                         ? SyntaxFactoryHelper.CreatePrimitiveType(SyntaxKind.LongKeyword)
-    //     //                         : primitive == SyntaxKind.DecimalKeyword
-    //     //                             ? SyntaxFactoryHelper.CreatePrimitiveType(SyntaxKind.DecimalKeyword)
-    //     //                             : SyntaxFactoryHelper.CreatePrimitiveType(SyntaxKind.DoubleKeyword),
-    //     //                     SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(0)))),
-    //     //             SyntaxFactoryHelper.LocalVariableCreation("count_", SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.ParseToken("0L")))
-    //     //         },
-    //     //         new[]
-    //     //         {
-    //     //             SyntaxFactory.Block(
-    //     //                 SyntaxFactory.IfStatement(SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression,
-    //     //                         SyntaxFactory.IdentifierName("count_"), SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.ParseToken("0"))),
-    //     //                     p.ReturnType == elementType
-    //     //                         ? (StatementSyntax) SyntaxFactoryHelper.CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements.")
-    //     //                         : SyntaxFactory.ReturnStatement(SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression))
-    //     //                 ),
-    //     //                 SyntaxFactory.ReturnStatement(division)
-    //     //             )
-    //     //         },
-    //     //         p.Collection,
-    //     //         p.Code.MaybeAddSelect(p.Chain, p.Node.ArgumentList.Arguments.Count != 0),
-    //     //         (inv, arguments, param) =>
-    //     //         {
-    //     //             var currentValue = SyntaxFactory.IdentifierName(param.Identifier.ValueText);
-    //     //             return SyntaxExtensions.IfNullableIsNotNull(elementType != p.ReturnType, currentValue, x =>
-    //     //                 SyntaxFactory.CheckedStatement(SyntaxKind.CheckedStatement, SyntaxFactory.Block(
-    //     //                     SyntaxFactory.ExpressionStatement(SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, SyntaxFactory.IdentifierName("count_"))),
-    //     //                     SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.AddAssignmentExpression, SyntaxFactory.IdentifierName("sum_"), x))
-    //     //                 )));
-    //     //         }
-    //     //     );
-    //     // }
-    // }
+    public static class RewriteAverage
+    {
+        public static void Rewrite(RewriteParameters p, int chainIndex)
+        {
+            var sumVariable = "__sum" + chainIndex;
+            var countVariable = "__count" + chainIndex;
+            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
+            if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Sum should be last expression.");
+
+            var isNullable = p.ReturnType is NullableTypeSyntax;
+            var elementType = isNullable ? ((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
+            p.PreForAdd(LocalVariableCreation(sumVariable, 0.Cast(elementType)));
+
+            if (p.Chain[chainIndex].Arguments.Length == 0)
+                p.ForAdd(sumVariable.AddAssign(p.LastItem));
+            else if (isNullable)
+            {
+                var method = p.Chain[chainIndex].Arguments[0];
+                var inlined = method.InlineForLast(p).Reusable(p);
+                p.ForAdd(If(inlined.NotEqualsExpr(NullValue),
+                    sumVariable.AddAssign(inlined)));
+            }
+            else
+            {
+                var method = p.Chain[chainIndex].Arguments[0];
+                p.ForAdd(sumVariable.AddAssign(method.InlineForLast(p)));
+            }
+
+            if (p.ResultSize == null)
+            {
+                p.PreForAdd(LocalVariableCreation(countVariable, 0));
+                p.ForAdd(countVariable.PostIncrement());
+                p.PostForAdd(Return(sumVariable.Div(countVariable)));
+            }
+            else p.PostForAdd(Return(sumVariable.Div(p.ResultSize)));
+        }
+    }
 }

@@ -103,8 +103,8 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
             => SyntaxFactory.IfStatement(@if, @do, SyntaxFactory.ElseClause(@else));
 
         
-        public static ReturnStatementSyntax Return(ValueBridge @returned)
-            => SyntaxFactory.ReturnStatement(@returned);
+        public static ReturnStatementSyntax Return(ValueBridge _)
+            => SyntaxFactory.ReturnStatement(_);
 
         public static DefaultExpressionSyntax Default(TypeBridge @type)
             => SyntaxFactory.DefaultExpression(@type);
