@@ -45,6 +45,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             }
             
             p.PostForAdd(Return(minVariable));
+            p.HasResultMethod = true;
         }
     }
 }

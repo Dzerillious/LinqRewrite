@@ -25,6 +25,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             }
             
             p.PostForAdd(Return(false));
+            p.HasResultMethod = true;
         }
 
         public static ExpressionSyntax RewriteSimple(RewriteParameters p) 

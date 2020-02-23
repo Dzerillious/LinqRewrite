@@ -11,6 +11,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             var method = p.Chain[chainIndex].Arguments[0];
             
             p.ForAdd(method.InlineForLast(p));
+            p.HasResultMethod = true;
         }
     }
 }

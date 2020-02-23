@@ -24,12 +24,13 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             
             else
             {
-                var comparer = p.Chain[chainIndex].Arguments[1];
+                var comparer = p.Chain[chainIndex].Arguments[1].PreReusable(p);
                 p.ForAdd(If(comparer.Access("Equals").Invoke(p.LastItem, element),
                     Return(true)));
             }
             
             p.PostForAdd(Return(false));
+            p.HasResultMethod = true;
         }
     }
 }

@@ -25,6 +25,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             }
             
             p.PostForAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."));
+            p.HasResultMethod = true;
         }
 
         public static ExpressionSyntax RewriteSimple(RewriteParameters p) 

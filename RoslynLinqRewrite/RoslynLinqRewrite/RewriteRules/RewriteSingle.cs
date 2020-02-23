@@ -37,6 +37,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             p.PostForAdd(If(foundVariable.EqualsExpr(NullValue),
                             CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."), 
                             Return(foundVariable.Cast(p.ReturnType))));
+            p.HasResultMethod = true;
         }
 
         public static ExpressionSyntax RewriteSimple(RewriteParameters p) 

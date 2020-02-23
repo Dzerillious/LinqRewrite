@@ -37,6 +37,7 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public ValueBridge ForMax;
         public ValueBridge ForReMin;
         public ValueBridge ForReMax;
+        public bool HasResultMethod;
         
         public SemanticModel Semantic => Data.Semantic;
         

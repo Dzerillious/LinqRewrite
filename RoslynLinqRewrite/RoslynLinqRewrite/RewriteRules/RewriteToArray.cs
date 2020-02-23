@@ -87,6 +87,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                                         RefArgument(CurrentLengthVariable))));
                 
             p.ForAdd(GlobalResultVariable.ArrayAccess(CurrentVariable).Assign(p.LastItem));
+            p.HasResultMethod = true;
         }
 
         private static void RewriteSimple(RewriteParameters p)

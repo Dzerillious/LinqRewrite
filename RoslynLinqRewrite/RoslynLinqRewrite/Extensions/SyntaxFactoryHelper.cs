@@ -111,6 +111,15 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
 
         private static int _tmpCounter;
         
+        public static ExpressionSyntax PreReusable(this ExpressionSyntax e, RewriteParameters p)
+        {
+            if (e.IsExpressionReusable()) return e;
+            
+            var tmpVariable = "__tmp" + _tmpCounter++;
+            p.PreForAdd(VariableExtensions.LocalVariableCreation(tmpVariable, e));
+            return SyntaxFactory.IdentifierName(tmpVariable);
+        }
+        
         public static ExpressionSyntax Reusable(this ExpressionSyntax e, RewriteParameters p)
         {
             if (e.IsExpressionReusable()) return e;
@@ -182,7 +191,6 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
             || e is SizeOfExpressionSyntax
             || e is TypeOfExpressionSyntax
             || e is ElementAccessExpressionSyntax
-            || e is MemberAccessExpressionSyntax
             || e is PostfixUnaryExpressionSyntax
             || e is PrefixUnaryExpressionSyntax;
     }

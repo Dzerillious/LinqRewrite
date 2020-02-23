@@ -143,7 +143,6 @@
     <Compile Include="RewriteRules\RewriteLastOrDefault.cs" />
     <Compile Include="RewriteRules\RewriteMax.cs" />
     <Compile Include="RewriteRules\RewriteMin.cs" />
-    <Compile Include="RewriteRules\RewriteMinMax.cs" />
     <Compile Include="RewriteRules\RewriteRange.cs" />
     <Compile Include="RewriteRules\RewriteRepeat.cs" />
     <Compile Include="RewriteRules\RewriteReverse.cs" />

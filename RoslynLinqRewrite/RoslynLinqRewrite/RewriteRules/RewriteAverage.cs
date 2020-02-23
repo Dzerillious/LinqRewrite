@@ -43,6 +43,8 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                 p.PostForAdd(Return(sumVariable.Div(countVariable)));
             }
             else p.PostForAdd(Return(sumVariable.Div(p.ResultSize)));
+            
+            p.HasResultMethod = true;
         }
     }
 }
