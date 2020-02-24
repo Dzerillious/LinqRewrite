@@ -27,6 +27,7 @@ namespace Shaman.Roslyn.LinqRewrite
         public const string CountWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.Count<TSource>(System.Func<TSource, bool>)";
         public const string LongCountMethod = "System.Collections.Generic.IEnumerable<TSource>.LongCount<TSource>()";
         public const string LongCountWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.LongCount<TSource>(System.Func<TSource, bool>)";
+        public const string AggregateMethod = "System.Collections.Generic.IEnumerable<TSource>.Aggregate<TSource>(System.Func<TSource, TSource, TSource>)";
 
         public const string ElementAtMethod = "System.Collections.Generic.IEnumerable<TSource>.ElementAt<TSource>(int)";
         public const string ElementAtOrDefaultMethod = "System.Collections.Generic.IEnumerable<TSource>.ElementAtOrDefault<TSource>(int)";
@@ -45,12 +46,15 @@ namespace Shaman.Roslyn.LinqRewrite
         public const string RangeMethod = "System.Linq.Enumerable.Range(int, int)";
         public const string RepeatMethod = "System.Linq.Enumerable.Repeat<TResult>(TResult, int)";
 
-        //readonly static string RecursiveEnumerationMethod = "T.RecursiveEnumeration<T>(System.Func<T, T>)";
-
         public const string WhereMethod = "System.Collections.Generic.IEnumerable<TSource>.Where<TSource>(System.Func<TSource, bool>)";
         public const string SelectMethod = "System.Collections.Generic.IEnumerable<TSource>.Select<TSource, TResult>(System.Func<TSource, TResult>)";
         public const string CastMethod = "System.Collections.IEnumerable.Cast<TResult>()";
         public const string OfTypeMethod = "System.Collections.IEnumerable.OfType<TResult>()";
+
+        public const string SkipMethod = "System.Collections.Generic.IEnumerable<TSource>.Skip<TSource>(int)";
+        public const string TakeMethod = "System.Collections.Generic.IEnumerable<TSource>.Take<TSource>(int)";
+        public const string SkipWhileMethod = "System.Collections.Generic.IEnumerable<TSource>.SkipWhile<TSource>(System.Func<TSource, bool>)";
+        public const string TakeWhileMethod = "System.Collections.Generic.IEnumerable<TSource>.TakeWhile<TSource>(System.Func<TSource, bool>)";
         
         public const string SimpleListPrefix = "SimpleCollections.SimpleList.SimpleList";
         public const string ListPrefix = "System.Collections.Generic.List";
@@ -59,7 +63,7 @@ namespace Shaman.Roslyn.LinqRewrite
         public const string GlobalIndexerVariable = "__i";
         public const string GlobalItemVariable = "__item";
         public const string GlobalResultVariable = "__result";
-        public const string GlobalItemsName = "_linqitems";
+        public const string GlobalItemsVariable = "_linqitems";
 
         public static readonly HashSet<string> KnownMethods = new HashSet<string>
         {
@@ -71,6 +75,7 @@ namespace Shaman.Roslyn.LinqRewrite
             FirstOrDefaultWithConditionMethod, SingleOrDefaultWithConditionMethod, LastOrDefaultWithConditionMethod,
             
             CountMethod, CountWithConditionMethod, LongCountMethod, LongCountWithConditionMethod,
+            AggregateMethod,
             
             ElementAtMethod, ElementAtOrDefaultMethod,
             
@@ -80,9 +85,11 @@ namespace Shaman.Roslyn.LinqRewrite
             
             ListForEachMethod,
             
-            SelectMethod, WhereMethod,
+            SelectMethod, WhereMethod, CastMethod, OfTypeMethod,
             
             RangeMethod, RepeatMethod,
+            
+            SkipMethod, SkipWhileMethod, TakeMethod, TakeWhileMethod,
             
             EnumerableForEachMethod
         };

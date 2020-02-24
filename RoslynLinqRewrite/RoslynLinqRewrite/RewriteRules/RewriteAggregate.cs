@@ -8,32 +8,21 @@ using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
-    public static class RewriteCount
+    public static class RewriteAggregate
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            var countVariable = "__count" + chainIndex;
+            var resultVariable = "__result" + chainIndex;
             
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Count should be last expression.");
             
-            p.PreForAdd(LocalVariableCreation(countVariable, 0));
-            if (p.Chain[chainIndex].Arguments.Length == 0)
-                p.ForAdd(countVariable.PostIncrement());
-            else
-            {
-                var method = p.Chain[chainIndex].Arguments[0];
-                p.ForAdd(If(method.InlineForLast(p),
-                            countVariable.PostIncrement()));
-            }
+            p.PreForAdd(LocalVariableCreation(resultVariable, GlobalItemsVariable.ArrayAccess(0)));
+            var aggregation = p.Chain[chainIndex].Arguments[0];
+            p.ForAdd(resultVariable.Assign(aggregation.Inline(p, resultVariable, p.LastItem)));
             
-            p.PostForAdd(Return(countVariable));
+            p.PostForAdd(Return(resultVariable));
             p.HasResultMethod = true;
         }
-
-        public static ExpressionSyntax RewriteSimple(RewriteParameters p) 
-            => p.Chain[0].Arguments.Length == 0 
-                ? p.Code.CreateCollectionCount(GlobalItemsVariable, p.Collection, false) 
-                : null;
     }
 }

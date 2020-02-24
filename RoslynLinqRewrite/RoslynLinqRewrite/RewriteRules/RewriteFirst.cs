@@ -30,7 +30,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
         public static ExpressionSyntax RewriteSimple(RewriteParameters p) 
             => p.Chain[0].Arguments.Length == 0 
-                ? GlobalItemsName.ArrayAccess(0) 
+                ? GlobalItemsVariable.ArrayAccess(0) 
                 : null;
     }
 }

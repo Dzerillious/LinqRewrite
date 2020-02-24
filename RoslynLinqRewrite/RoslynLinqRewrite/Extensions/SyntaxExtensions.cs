@@ -7,24 +7,21 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
 {
     public static class SyntaxExtensions
     {
-        public static MethodDeclarationSyntax WithStatic(this MethodDeclarationSyntax syntax, bool isStatic)
-        {
-            return isStatic 
+        public static MethodDeclarationSyntax WithStatic(this MethodDeclarationSyntax syntax, bool isStatic) 
+            => isStatic 
                 ? syntax.AddModifiers(SyntaxFactory.Token(SyntaxKind.StaticKeyword)) 
                 : syntax.WithModifiers(SyntaxFactory.TokenList());
-        }
-        public static ParameterSyntax WithRef(this ParameterSyntax syntax, bool isRef)
-        {
-            return isRef 
+
+        public static ParameterSyntax WithRef(this ParameterSyntax syntax, bool isRef) 
+            => isRef 
                 ? syntax.AddModifiers(SyntaxFactory.Token(SyntaxKind.RefKeyword)) 
                 : syntax.WithModifiers(SyntaxFactory.TokenList());
-        }
-        public static ArgumentSyntax WithRef(this ArgumentSyntax syntax, bool isRef)
-        {
-            return syntax.WithRefOrOutKeyword(isRef 
+
+        public static ArgumentSyntax WithRef(this ArgumentSyntax syntax, bool isRef) 
+            => syntax.WithRefOrOutKeyword(isRef 
                 ? SyntaxFactory.Token(SyntaxKind.RefKeyword) 
                 : default);
-        }
+
         public static StatementSyntax IfNullableIsNotNull(bool nullable, IdentifierNameSyntax currentValue, Func<ExpressionSyntax, StatementSyntax> p)
         {
             var k = nullable ? (ExpressionSyntax)SyntaxFactory.InvocationExpression(SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, currentValue, SyntaxFactory.IdentifierName("GetValueOrDefault"))) : currentValue;

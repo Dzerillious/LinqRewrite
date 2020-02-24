@@ -19,12 +19,7 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         
         public static TypeSyntax BoolType
             => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.BoolKeyword));
-        
-        public static LiteralExpressionSyntax TrueValue
-            => SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression);
-        public static LiteralExpressionSyntax FalseValue
-            => SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression);
-        
+
         public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, ValueBridge value)
             =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, value));
         
@@ -42,12 +37,6 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
                 type,
                 SyntaxFactory.SeparatedList(new []{SyntaxFactory.VariableDeclarator(name)
                     .WithInitializer(SyntaxFactory.EqualsValueClause(value))}));
-
-        public static StatementSyntax CreateLocalArray(string name, TypeBridge arrayType, ValueBridge size)
-            => CreateLocalArray(name, arrayType, size);
-
-        public static StatementSyntax CreateLocalArray(string name, ArrayTypeSyntax arrayType, ValueBridge size)
-            => CreateLocalArray(name, arrayType, size);
         
         public static StatementSyntax CreateLocalArray(string name, ArrayTypeSyntax arrayType, ExpressionSyntax size)
             => LocalVariableCreation(name,

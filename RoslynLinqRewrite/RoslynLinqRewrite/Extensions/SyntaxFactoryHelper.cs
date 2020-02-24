@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
@@ -113,7 +114,7 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         
         public static ExpressionSyntax PreReusable(this ExpressionSyntax e, RewriteParameters p)
         {
-            if (e.IsExpressionReusable()) return e;
+            if (IsExpressionReusable(e)) return e;
             
             var tmpVariable = "__tmp" + _tmpCounter++;
             p.PreForAdd(VariableExtensions.LocalVariableCreation(tmpVariable, e));
@@ -122,45 +123,54 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         
         public static ExpressionSyntax Reusable(this ExpressionSyntax e, RewriteParameters p)
         {
-            if (e.IsExpressionReusable()) return e;
+            if (IsExpressionReusable(e)) return e;
             
             var tmpVariable = "__tmp" + _tmpCounter++;
             p.ForAdd(VariableExtensions.LocalVariableCreation(tmpVariable, e));
             return SyntaxFactory.IdentifierName(tmpVariable);
         }
 
-        public static ExpressionSyntax Inline(this ExpressionSyntax method, RewriteParameters p, ExpressionSyntax last)
-            => p.Code.InlineLambda(p.Semantic, method, last);
-        
-        public static ExpressionSyntax InlineForLast(this ExpressionSyntax e, RewriteParameters p)
+        public static ExpressionSyntax Inline(this ExpressionSyntax e, RewriteParameters p, ValueBridge a)
         {
-            if (e.IsLambdaExpressionSimple(p.LastItem))
-                return e.Inline(p, p.LastItem);
-            
+            if (e.IsLambdaExpressionSimple() || IsExpressionReusable(p.LastItem))
+                return p.Code.InlineLambda(p.Semantic, e, a);
+
             var inlineVariable = "__tmp" + _tmpCounter++;
             p.ForAdd(VariableExtensions.LocalVariableCreation(inlineVariable, p.LastItem));
-            return e.Inline(p, SyntaxFactory.IdentifierName(inlineVariable));
+            return p.Code.InlineLambda(p.Semantic, e, SyntaxFactory.IdentifierName(inlineVariable));
         }
 
-        public static bool IsLambdaExpressionSimple(this ExpressionSyntax e, ExpressionSyntax body)
+        public static ExpressionSyntax Inline(this ExpressionSyntax e, RewriteParameters p, ValueBridge a, ValueBridge b)
         {
-            if (!(e is SimpleLambdaExpressionSyntax l)) return true;
-            
-            var count = Regex.Matches(l.ToString(), l.Parameter.ToString()).Count;
-            return count switch
+            if (e.IsLambdaExpressionSimple()) return p.Code.InlineLambda(p.Semantic, e, a, b);
+            if (!IsExpressionReusable(a))
             {
-                1 => true,
-                2 => true, // Counts left side of lambda too
-                // 3 => NotVeryCostly(body),
-                // 4 => (NotVeryCostly(body) && !(body is BinaryExpressionSyntax)),
-                //
-                // 5 => (NotVeryCostly(body) && !(body is BinaryExpressionSyntax) &&
-                //       !(body is PostfixUnaryExpressionSyntax) && !(body is PrefixUnaryExpressionSyntax) &&
-                //       !(body is SizeOfExpressionSyntax) && !(body is TypeOfExpressionSyntax)),
-                //
-                // _ => body.IsExpressionReusable()
-                _ => IsExpressionReusable(body)
-            };
+                var inlineVariable = "__tmp" + _tmpCounter++;
+                p.ForAdd(VariableExtensions.LocalVariableCreation(inlineVariable, a));
+                a = SyntaxFactory.IdentifierName(inlineVariable);
+            }
+            if (!IsExpressionReusable(b))
+            {
+                var inlineVariable = "__tmp" + _tmpCounter++;
+                p.ForAdd(VariableExtensions.LocalVariableCreation(inlineVariable, b));
+                b = SyntaxFactory.IdentifierName(inlineVariable);
+            }
+            return p.Code.InlineLambda(p.Semantic, e, a, b);
+        }
+
+        public static ExpressionSyntax InlineForLast(this ExpressionSyntax e, RewriteParameters p)
+            => e.Inline(p, p.LastItem);
+
+        public static bool IsLambdaExpressionSimple(this ExpressionSyntax e)
+        {
+            int maxParams;
+            if (e is SimpleLambdaExpressionSyntax l)
+                maxParams = Regex.Matches(l.ToString(), l.Parameter.ToString()).Count;
+            else if (e is ParenthesizedLambdaExpressionSyntax p)
+                maxParams = p.ParameterList.Parameters.Max(x => Regex.Matches(p.ToString(), x.ToString()).Count);
+            else return true;
+
+            return maxParams <= 2;
         }
 
         public static bool NotVeryCostly(this ExpressionSyntax e)
@@ -181,7 +191,7 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
                && !(e is LambdaExpressionSyntax)
                && !(e is InitializerExpressionSyntax);
 
-        public static bool IsExpressionReusable(this ExpressionSyntax e) =>
+        public static bool IsExpressionReusable(ExpressionSyntax e) =>
             e is BaseExpressionSyntax
             || e is ThisExpressionSyntax
             || e is IdentifierNameSyntax

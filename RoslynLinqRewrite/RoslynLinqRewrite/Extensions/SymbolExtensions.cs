@@ -9,15 +9,13 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
     public static class SymbolExtensions
     {
         public static ITypeSymbol GetSymbolType(ISymbol x)
-        {
-            switch (x)
+            => x switch
             {
-                case ILocalSymbol local: return local.Type;
-                case IParameterSymbol param: return param.Type;
-                default: throw new NotImplementedException();
-            }
-        }
-        
+                ILocalSymbol local => local.Type,
+                IParameterSymbol param => param.Type,
+                _ => throw new NotImplementedException()
+            };
+
         public static ITypeSymbol GetSymbolType(VariableCapture x) 
             => GetSymbolType(x.Symbol);
 

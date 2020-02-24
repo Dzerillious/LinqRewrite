@@ -12,18 +12,18 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             var countVariable = "__count" + chainIndex;
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
-            var lambda = p.Chain[chainIndex].Arguments[0];
+            var take = p.Chain[chainIndex].Arguments[0];
             if (!p.DifferentEnumeration)
             {
-                p.ForMax = p.ForMax.Sub(lambda);
-                p.ForReMin = p.ForReMin.Add(lambda);
+                p.ForMax = p.ForMin.Add(take);
+                p.ForReMin = p.ForReMax.Sub(take);
             }
             else
             {
                 p.PreForAdd(LocalVariableCreation(countVariable, 0));
                 
                 p.ForAdd(countVariable.PostIncrement());
-                p.ForAdd(If(countVariable.GeThan(lambda), Break()));
+                p.ForAdd(If(countVariable.GeThan(take), Break()));
             }
         }
     }

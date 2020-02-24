@@ -129,13 +129,16 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RewriteParametersHolder.cs" />
+    <Compile Include="RewriteRules\RewriteAggregate.cs" />
     <Compile Include="RewriteRules\RewriteAll.cs" />
     <Compile Include="RewriteRules\RewriteAny.cs" />
     <Compile Include="RewriteRules\RewriteAverage.cs" />
+    <Compile Include="RewriteRules\RewriteCast.cs" />
     <Compile Include="RewriteRules\RewriteCollectionEnumeration.cs" />
     <Compile Include="RewriteRules\RewriteContains.cs" />
     <Compile Include="RewriteRules\RewriteCount.cs" />
     <Compile Include="RewriteRules\RewriteElementAt.cs" />
+    <Compile Include="RewriteRules\RewriteElementAtOrDefault.cs" />
     <Compile Include="RewriteRules\RewriteFirst.cs" />
     <Compile Include="RewriteRules\RewriteFirstOrDefault.cs" />
     <Compile Include="RewriteRules\RewriteForEach.cs" />
@@ -143,6 +146,7 @@
     <Compile Include="RewriteRules\RewriteLastOrDefault.cs" />
     <Compile Include="RewriteRules\RewriteMax.cs" />
     <Compile Include="RewriteRules\RewriteMin.cs" />
+    <Compile Include="RewriteRules\RewriteOfType.cs" />
     <Compile Include="RewriteRules\RewriteRange.cs" />
     <Compile Include="RewriteRules\RewriteRepeat.cs" />
     <Compile Include="RewriteRules\RewriteReverse.cs" />
@@ -150,8 +154,10 @@
     <Compile Include="RewriteRules\RewriteSingle.cs" />
     <Compile Include="RewriteRules\RewriteSingleOrDefault.cs" />
     <Compile Include="RewriteRules\RewriteSkip.cs" />
+    <Compile Include="RewriteRules\RewriteSkipWhile.cs" />
     <Compile Include="RewriteRules\RewriteSum.cs" />
     <Compile Include="RewriteRules\RewriteTake.cs" />
+    <Compile Include="RewriteRules\RewriteTakeWhile.cs" />
     <Compile Include="RewriteRules\RewriteToArray.cs" />
     <Compile Include="RewriteRules\RewriteToDict.cs" />
     <Compile Include="RewriteRules\RewriteToList.cs" />

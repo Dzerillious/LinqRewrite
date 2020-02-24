@@ -32,6 +32,8 @@ namespace Shaman.Roslyn.LinqRewrite
                 case "LastOrDefault": return RewriteLastOrDefault.RewriteSimple(parameters);
                 case "Single": return RewriteSingle.RewriteSimple(parameters);
                 case "SingleOrDefault": return RewriteSingleOrDefault.RewriteSimple(parameters);
+                case "ElementAt": return RewriteElementAt.RewriteSimple(parameters);
+                case "ElementAtOrDefault": return RewriteElementAtOrDefault.RewriteSimple(parameters);
                 default: return null;
             }
         }
@@ -73,6 +75,7 @@ namespace Shaman.Roslyn.LinqRewrite
                 case "Min": RewriteMin.Rewrite(parameters, i); return;
                 case "Max": RewriteMax.Rewrite(parameters, i); return;
                 case "Average": RewriteAverage.Rewrite(parameters, i); return;
+                case "Aggregate": RewriteAggregate.Rewrite(parameters, i); return;
                 
                 case "ForEach": RewriteForEach.Rewrite(parameters, i); return;
                 
@@ -82,18 +85,26 @@ namespace Shaman.Roslyn.LinqRewrite
                 case "LastOrDefault": RewriteLastOrDefault.Rewrite(parameters, i); return;
                 case "Single": RewriteSingle.Rewrite(parameters, i); return;
                 case "SingleOrDefault": RewriteSingleOrDefault.Rewrite(parameters, i); return;
+                case "ElementAt": RewriteElementAt.Rewrite(parameters, i); return;
+                case "ElementAtOrDefault": RewriteElementAtOrDefault.Rewrite(parameters, i); return;
                 
                 case "Range": RewriteRange.Rewrite(parameters, i); return;
                 case "Repeat": RewriteRepeat.Rewrite(parameters, i); return;
                 
+                case "Skip": RewriteSkip.Rewrite(parameters, i); return;
+                case "SkipWhile": RewriteSkipWhile.Rewrite(parameters, i); return;
+                case "Take": RewriteTake.Rewrite(parameters, i); return;
+                case "TakeWhile": RewriteTakeWhile.Rewrite(parameters, i); return;
+                
                 case "Reverse": RewriteReverse.Rewrite(parameters, i); return;
                 case "Select": RewriteSelect.Rewrite(parameters, i); return;
-                case "Skip": RewriteSkip.Rewrite(parameters, i); return;
-                case "Take": RewriteTake.Rewrite(parameters, i); return;
                 case "Where": RewriteWhere.Rewrite(parameters, i); return;
+                case "Cast": RewriteCast.Rewrite(parameters, i); return;
+                case "OfType": RewriteOfType.Rewrite(parameters, i); return;
                 
                 case "ToArray": RewriteToArray.Rewrite(parameters, i); return;
                 case "ToList": RewriteToList.Rewrite(parameters, i); return;
+                default: throw new NotImplementedException($"Rewrite of {last} not implemented");
             }
         }
     }

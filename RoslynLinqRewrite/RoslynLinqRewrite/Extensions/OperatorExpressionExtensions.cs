@@ -111,6 +111,12 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
             => SyntaxFactory.BinaryExpression(SyntaxKind.LessThanExpression, a, b);
         
         
+        public static BinaryExpressionSyntax LeThan(this string identifier, ValueBridge b)
+            => SyntaxFactory.BinaryExpression(SyntaxKind.LessThanOrEqualExpression, SyntaxFactory.IdentifierName(identifier), b);
+        public static BinaryExpressionSyntax LeThan(this ExpressionSyntax a, ValueBridge b)
+            => SyntaxFactory.BinaryExpression(SyntaxKind.LessThanOrEqualExpression, a, b);
+        
+        
         public static BinaryExpressionSyntax GeThan(this string identifier, ValueBridge b)
             => SyntaxFactory.BinaryExpression(SyntaxKind.GreaterThanOrEqualExpression, SyntaxFactory.IdentifierName(identifier), b);
         public static BinaryExpressionSyntax GeThan(this ExpressionSyntax a, ValueBridge b)

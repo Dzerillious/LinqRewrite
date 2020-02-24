@@ -29,6 +29,7 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public ExpressionSyntax LastItem;
         
         private List<StatementSyntax> _preForBody = new List<StatementSyntax>();
+        private List<StatementSyntax> _lastFors;
         private List<StatementSyntax> _forBody = new List<StatementSyntax>();
         private List<StatementSyntax> _postForBody = new List<StatementSyntax>();
 
@@ -64,24 +65,36 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public void PreForAdd(StatementBridge _) => _preForBody.Add(_);
         public void ForAdd(StatementBridge _) => _forBody.Add(_);
         public void PostForAdd(StatementBridge _) => _postForBody.Add(_);
+        public List<StatementSyntax> CopyFor()
+        {
+            if (_lastFors == null) _lastFors = new List<StatementSyntax>(_forBody);
+            else _lastFors.AddRange(_forBody);
+            return _lastFors;
+        }
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {
             if (_forBody.Count == 0) return _preForBody.Concat(_postForBody);
             if (ForMin == null)
             {
+                if (_lastFors != null) _preForBody.Add(Rewrite.GetForEachStatement(Constants.GlobalItemVariable, Collection,
+                    SyntaxFactoryHelper.AggregateStatementSyntax(_lastFors)));
                 _preForBody.Add(Rewrite.GetForEachStatement(Constants.GlobalItemVariable, Collection,
                     SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
             }
             else if (IsReversed)
             {
+                if (_lastFors != null) _preForBody.Add(Rewrite.GetReverseForStatement(
+                    Constants.GlobalIndexerVariable, ForReMin, ForReMax, SyntaxFactoryHelper.AggregateStatementSyntax(_lastFors)));
                 _preForBody.Add(Rewrite.GetReverseForStatement(
-                    Constants.GlobalIndexerVariable, ForMin, ForMax, SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
+                    Constants.GlobalIndexerVariable, ForReMin, ForReMax, SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
             }
             else 
             {
+                if (_lastFors != null) _preForBody.Add(Rewrite.GetForStatement(
+                    Constants.GlobalIndexerVariable, ForMin, ForMax, SyntaxFactoryHelper.AggregateStatementSyntax(_lastFors)));
                 _preForBody.Add(Rewrite.GetForStatement(
-                    Constants.GlobalIndexerVariable, ForReMin, ForReMax, SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
+                    Constants.GlobalIndexerVariable, ForMin, ForMax, SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
             }
             
             _preForBody.AddRange(_postForBody);

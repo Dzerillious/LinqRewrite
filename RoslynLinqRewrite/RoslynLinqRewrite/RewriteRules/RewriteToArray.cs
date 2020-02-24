@@ -26,6 +26,8 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             RewriteOther(p, chainIndex);
             if (p.ResultSize == null) p.PostForAdd(Return("SimpleCollections".Access("SimpleArrayExtensions", "EnsureFullArray")
                 .Invoke(GlobalResultVariable, CurrentVariable)));
+
+            p.HasResultMethod = true;
         }
         
         public static void RewriteOther(RewriteParameters p, int chainIndex, TypeSyntax itemType = null)
@@ -97,12 +99,11 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
             if (collectionType is ArrayTypeSyntax)
             {
-                var count = p.Code.CreateCollectionCount(GlobalItemsName, p.Collection, false);
+                var count = p.Code.CreateCollectionCount(GlobalItemsVariable, p.Collection, false);
                 p.PreForAdd(CreateLocalArray(GlobalResultVariable, (ArrayTypeSyntax) p.ReturnType, count));
                 p.PreForAdd("Array".Access("Copy")
-                    .Invoke(GlobalItemsName, 0, GlobalResultVariable, 0, count));
+                    .Invoke(GlobalItemsVariable, 0, GlobalResultVariable, 0, count));
                 p.PreForAdd(Return(GlobalResultVariable));
-                
             }
         }
     }

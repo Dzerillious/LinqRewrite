@@ -1,46 +1,39 @@
-﻿namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+﻿using System;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Shaman.Roslyn.LinqRewrite.DataStructures;
+using Shaman.Roslyn.LinqRewrite.Extensions;
+using static Shaman.Roslyn.LinqRewrite.Constants;
+using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
+using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+
+namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
-    // public static class RewriteElementAt
-    // {
-    //     // public static ExpressionSyntax Rewrite(RewriteParameters p)
-    //     // {
-    //     //     return null;
-    //         // return p.Rewrite.RewriteAsLoop(
-    //         //     p.ReturnType,
-    //         //     new[]
-    //         //     {
-    //         //         p.Code.CreateLocalVariableDeclaration("_count",
-    //         //             SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression,
-    //         //                 SyntaxFactory.ParseToken(p.AggregationMethod == Constants.LongCountMethod ||
-    //         //                                          p.AggregationMethod == Constants.LongCountWithConditionMethod
-    //         //                     ? "0L"
-    //         //                     : "0")))
-    //         //     },
-    //         //     new[]
-    //         //     {
-    //         //         p.AggregationMethod == Constants.ElementAtMethod
-    //         //             ? (StatementSyntax) p.Code.CreateThrowException("System.InvalidOperationException",
-    //         //                 "The specified index is not included in the sequence.")
-    //         //             : SyntaxFactory.ReturnStatement(SyntaxFactory.DefaultExpression(p.ReturnType))
-    //         //     },
-    //         //     p.Collection,
-    //         //     p.Code.MaybeAddFilter(p.Chain,
-    //         //         p.AggregationMethod == Constants.CountWithConditionMethod ||
-    //         //         p.AggregationMethod == Constants.LongCountWithConditionMethod),
-    //         //     (inv, arguments, param)
-    //         //         => SyntaxFactory.IfStatement(
-    //         //             SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression,
-    //         //                 SyntaxFactory.IdentifierName("_requestedPosition"),
-    //         //                 SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression,
-    //         //                     SyntaxFactory.IdentifierName("_count"))),
-    //         //             SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName(param.Identifier.ValueText))),
-    //         //     additionalParameters: new[]
-    //         //     {
-    //         //         Tuple.Create(
-    //         //             p.Code.CreateParameter("_requestedPosition", p.Code.CreatePrimitiveType(SyntaxKind.IntKeyword)),
-    //         //             p.Node.ArgumentList.Arguments.First().Expression)
-    //         //     }
-    //         // );
-    //     // }
-    // }
+    public static class RewriteElementAt
+    {
+        public static void Rewrite(RewriteParameters p, int chainIndex)
+        {
+            var countVariable = "__count" + chainIndex;
+            
+            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
+            if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Count should be last expression.");
+            
+            p.PreForAdd(LocalVariableCreation(countVariable, 0));
+            var position = p.Chain[chainIndex].Arguments[0];
+            p.ForAdd(If(countVariable.PostIncrement().EqualsExpr(position),
+                Return(p.LastItem)));
+            
+            p.PostForAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not enough elements."));
+            p.HasResultMethod = true;
+        }
+
+        public static ExpressionSyntax RewriteSimple(RewriteParameters p)
+        {
+            if (p.Chain[0].Arguments.Length == 0) return null;
+            RewriteCollectionEnumeration.Rewrite(p, 0);
+            
+            return p.SourceSize == null 
+                ? null 
+                : GlobalItemsVariable.ArrayAccess(p.Chain[0].Arguments[0]);
+        }
+    }
 }

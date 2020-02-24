@@ -45,7 +45,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                             SyntaxFactory.ParenthesizedExpression(
                                 SyntaxFactory.BinaryExpression(
                                     SyntaxKind.AsExpression,
-                                    SyntaxFactory.IdentifierName(Constants.GlobalItemsName),
+                                    SyntaxFactory.IdentifierName(Constants.GlobalItemsVariable),
                                     SyntaxFactory.ParseTypeName($"System.Collections.Generic.ICollection<{itemType.ToDisplayString()}>")
                                 )
                             ),
@@ -66,35 +66,33 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                             .Select(x => SyntaxFactory.ParseTypeName(x.Identifier.ValueText)))))
                 : (NameSyntax) SyntaxFactory.IdentifierName(identifier);
 
-        public ExpressionSyntax InlineLambda(SemanticModel semantic, ExpressionSyntax expression, ExpressionSyntax parameter)
+        public ExpressionSyntax InlineLambda(SemanticModel semantic, ExpressionSyntax expression, params ValueBridge[] p)
         {
             if (expression is IdentifierNameSyntax identifier)
-                return identifier.Invoke(parameter);
+                return identifier.Invoke(p);
             
-            var simpleLambda = (SimpleLambdaExpressionSyntax) expression;
+            var simpleLambda = (LambdaExpressionSyntax) expression;
             var lambda = new Lambda(simpleLambda);
             
             var returnType = simpleLambda.ExpressionBody == null 
                 ? semantic.GetTypeFromExpression(((ReturnStatementSyntax) simpleLambda.Block.Statements.Last()).Expression)
                 : semantic.GetTypeFromExpression(simpleLambda.ExpressionBody);
-            
-            var p = SymbolExtensions.GetLambdaParameter(lambda, 0);
+
+            var pS = p.Select((x, i) => SymbolExtensions.GetLambdaParameter(lambda, i)).ToArray();
             var currentFlow = _data.Semantic.AnalyzeDataFlow(lambda.Body);
             var currentCaptures = currentFlow
                 .DataFlowsOut
                 .Union(currentFlow.DataFlowsIn)
-                .Where(x => x.Name != p.Identifier.ValueText && (x as IParameterSymbol)?.IsThis != true)
+                .Where(x => pS.All(y => x.Name != y.Identifier.ValueText) &&(x as IParameterSymbol)?.IsThis != true)
                 .Select(x => VariableExtensions.CreateVariableCapture(x, currentFlow.DataFlowsOut))
                 .ToList();
 
-            p = p.WithType(returnType);
-            if (simpleLambda.ExpressionBody != null)
-                lambda = RenameSymbol(lambda, 0, parameter);
-            return InlineOrCreateMethod(lambda.Body, returnType, p, currentCaptures);
+            lambda = RenameSymbol(lambda, p);
+            return InlineOrCreateMethod(lambda.Body, returnType, currentCaptures, pS);
         }
 
         public ExpressionSyntax InlineOrCreateMethod(CSharpSyntaxNode body, TypeSyntax returnType,
-            ParameterSyntax param, IEnumerable<VariableCapture> captures)
+            IEnumerable<VariableCapture> captures, params ParameterSyntax[] param)
         {
             var fn = GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinqHelper");
             if (body is ExpressionSyntax syntax) return SyntaxFactory.ParenthesizedExpression(syntax);
@@ -105,8 +103,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             
             var method = SyntaxFactory.MethodDeclaration(returnType, fn)
                 .WithParameterList(SyntaxFactory.ParameterList(SyntaxFactory.SeparatedList(
-                    new[] { param }
-                        .Union(captures.Select(x => SyntaxFactoryHelper.CreateParameter(x.Name, SymbolExtensions.GetSymbolType(x))
+                    param.Union(captures.Select(x => SyntaxFactoryHelper.CreateParameter(x.Name, SymbolExtensions.GetSymbolType(x))
                         .WithRef(x.Changes)))
                 )))
                 .WithBody(body as BlockSyntax ?? (body is StatementSyntax statementSyntax
@@ -120,26 +117,29 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, method));
             return SyntaxFactory.ParenthesizedExpression(SyntaxFactory.InvocationExpression(
                 CreateMethodNameSyntaxWithCurrentTypeParameters(fn),
-                SyntaxFactoryHelper.CreateArguments(new[] { SyntaxFactory.Argument(SyntaxFactory.IdentifierName(param.Identifier.ValueText))}
+                SyntaxFactoryHelper.CreateArguments(param.Select(x => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Identifier.ValueText)))
                     .Union(captures.Select(x =>  SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Name)).WithRef(x.Changes))))));
         }
 
-        private Lambda RenameSymbol(Lambda container, int argIndex, ExpressionSyntax replace)
+        private Lambda RenameSymbol(Lambda container, ValueBridge[] replace)
         {
-            var oldParameter = SymbolExtensions.GetLambdaParameter(container, argIndex).Identifier.ValueText;
-            //var oldsymbol = semantic.GetDeclaredSymbol(oldparameter);
+            var parameters = replace.Select((x, i) => SymbolExtensions.GetLambdaParameter(container, i)).ToArray();
             var tokensToRename = container.Body.DescendantNodesAndSelf()
                 .Where(x =>
             {
                 var sem = _data.Semantic.GetSymbolInfo(x).Symbol;
-                return sem != null && (sem is ILocalSymbol || sem is IParameterSymbol) && sem.Name == oldParameter;
-                //  if (sem.Symbol == oldsymbol) return true;
+                return sem != null && (sem is ILocalSymbol || sem is IParameterSymbol) 
+                                   && parameters.Any(y => y.Identifier.ValueText == sem.Name);
             });
             var syntax = SyntaxFactory.ParenthesizedLambdaExpression(
                 SyntaxFactoryHelper.CreateParameters(container.Parameters.Select((x, i) =>  x)),
                 container.Body.ReplaceNodes(tokensToRename, (a, b) =>
                 {
-                    if (b is IdentifierNameSyntax ide) return replace;
+                    if (!(b is IdentifierNameSyntax ide)) throw new NotImplementedException();
+                    
+                    for (var i = 0; i < parameters.Length; i++)
+                        if (parameters[i].ToString() == ide.ToString())
+                            return (ExpressionSyntax)replace[i];
                     throw new NotImplementedException();
                 }));
             return new Lambda(syntax);
