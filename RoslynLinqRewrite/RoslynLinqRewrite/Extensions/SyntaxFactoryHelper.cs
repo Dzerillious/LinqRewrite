@@ -49,10 +49,10 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static ArgumentSyntax Argument(ValueBridge name)
             => SyntaxFactory.Argument(name);
         
-        public static ArgumentSyntax RefArgument(VariableBridge name)
+        public static ArgumentSyntax RefArg(VariableBridge name)
             => SyntaxFactory.Argument(null, SyntaxFactory.Token(SyntaxKind.RefKeyword), name);
 
-        public static ArgumentSyntax OutArgument(VariableBridge name)
+        public static ArgumentSyntax OutArg(VariableBridge name)
             => SyntaxFactory.Argument(null, SyntaxFactory.Token(SyntaxKind.OutKeyword), name);
 
         public static InvocationExpressionSyntax Invoke(this string identifier)
@@ -121,7 +121,25 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
             return SyntaxFactory.IdentifierName(tmpVariable);
         }
         
+        public static ExpressionSyntax PreReusable(this ValueBridge e, RewriteParameters p)
+        {
+            if (IsExpressionReusable(e)) return e;
+            
+            var tmpVariable = "__tmp" + _tmpCounter++;
+            p.PreForAdd(VariableExtensions.LocalVariableCreation(tmpVariable, e));
+            return SyntaxFactory.IdentifierName(tmpVariable);
+        }
+        
         public static ExpressionSyntax Reusable(this ExpressionSyntax e, RewriteParameters p)
+        {
+            if (IsExpressionReusable(e)) return e;
+            
+            var tmpVariable = "__tmp" + _tmpCounter++;
+            p.ForAdd(VariableExtensions.LocalVariableCreation(tmpVariable, e));
+            return SyntaxFactory.IdentifierName(tmpVariable);
+        }
+        
+        public static ExpressionSyntax Reusable(this ValueBridge e, RewriteParameters p)
         {
             if (IsExpressionReusable(e)) return e;
             
@@ -157,9 +175,6 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
             }
             return p.Code.InlineLambda(p.Semantic, e, a, b);
         }
-
-        public static ExpressionSyntax InlineForLast(this ExpressionSyntax e, RewriteParameters p)
-            => e.Inline(p, p.LastItem);
 
         public static bool IsLambdaExpressionSimple(this ExpressionSyntax e)
         {

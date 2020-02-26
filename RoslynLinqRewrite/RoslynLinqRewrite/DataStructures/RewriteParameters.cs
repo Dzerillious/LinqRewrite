@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.Extensions;
 using Shaman.Roslyn.LinqRewrite.Services;
+using SimpleCollections;
+using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
 
 namespace Shaman.Roslyn.LinqRewrite.DataStructures
 {
@@ -26,10 +27,11 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public ExpressionSyntax SourceSize;
         public bool DifferentEnumeration;
         
-        public ExpressionSyntax LastItem;
+        public ValueBridge LastItem;
+        public ValueBridge LastIndex;
         
         private List<StatementSyntax> _preForBody = new List<StatementSyntax>();
-        private List<StatementSyntax> _lastFors;
+        private List<List<StatementSyntax>> _lastFors = new List<List<StatementSyntax>>();
         private List<StatementSyntax> _forBody = new List<StatementSyntax>();
         private List<StatementSyntax> _postForBody = new List<StatementSyntax>();
 
@@ -67,9 +69,14 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public void PostForAdd(StatementBridge _) => _postForBody.Add(_);
         public List<StatementSyntax> CopyFor()
         {
-            if (_lastFors == null) _lastFors = new List<StatementSyntax>(_forBody);
-            else _lastFors.AddRange(_forBody);
-            return _lastFors;
+            _lastFors.Add(new List<StatementSyntax>(_forBody));
+            return _lastFors.Last();
+        }
+        
+        public List<StatementSyntax> CopyForReference()
+        {
+            _lastFors.Add(_forBody);
+            return _lastFors.Last();
         }
 
         public IEnumerable<StatementSyntax> GetMethodBody()
@@ -77,22 +84,22 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
             if (_forBody.Count == 0) return _preForBody.Concat(_postForBody);
             if (ForMin == null)
             {
-                if (_lastFors != null) _preForBody.Add(Rewrite.GetForEachStatement(Constants.GlobalItemVariable, Collection,
-                    SyntaxFactoryHelper.AggregateStatementSyntax(_lastFors)));
+                _lastFors.ForEach(x => _preForBody.Add(Rewrite.GetForEachStatement(Constants.GlobalItemVariable, Collection,
+                    SyntaxFactoryHelper.AggregateStatementSyntax(x))));
                 _preForBody.Add(Rewrite.GetForEachStatement(Constants.GlobalItemVariable, Collection,
                     SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
             }
             else if (IsReversed)
             {
-                if (_lastFors != null) _preForBody.Add(Rewrite.GetReverseForStatement(
-                    Constants.GlobalIndexerVariable, ForReMin, ForReMax, SyntaxFactoryHelper.AggregateStatementSyntax(_lastFors)));
+                _lastFors.ForEach(x => _preForBody.Add(Rewrite.GetReverseForStatement(
+                    Constants.GlobalIndexerVariable, ForReMin, ForReMax, SyntaxFactoryHelper.AggregateStatementSyntax(x))));
                 _preForBody.Add(Rewrite.GetReverseForStatement(
                     Constants.GlobalIndexerVariable, ForReMin, ForReMax, SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
             }
             else 
             {
-                if (_lastFors != null) _preForBody.Add(Rewrite.GetForStatement(
-                    Constants.GlobalIndexerVariable, ForMin, ForMax, SyntaxFactoryHelper.AggregateStatementSyntax(_lastFors)));
+                _lastFors.ForEach(x => _preForBody.Add(Rewrite.GetForStatement(
+                    Constants.GlobalIndexerVariable, ForMin, ForMax, SyntaxFactoryHelper.AggregateStatementSyntax(x))));
                 _preForBody.Add(Rewrite.GetForStatement(
                     Constants.GlobalIndexerVariable, ForMin, ForMax, SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
             }
@@ -102,5 +109,17 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         }
 
         public void Dispose() => RewriteParametersHolder.ReturnParameters(this);
+
+        private static int _indexer;
+        public ValueBridge GetIndexer()
+        {
+            if (LastIndex != null) return LastIndex;
+
+            var indexer = "__indexer" + _indexer++;
+            PreForAdd(VariableExtensions.LocalVariableCreation(indexer, 0));
+            
+            LastIndex = indexer;
+            return indexer.PostIncrement();
+        }
     }
 }

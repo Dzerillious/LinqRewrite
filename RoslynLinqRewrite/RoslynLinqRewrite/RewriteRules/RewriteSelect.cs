@@ -14,7 +14,9 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             var method = p.Chain[chainIndex].Arguments[0];
 
-            p.LastItem = method.InlineForLast(p);
+            p.LastItem = method is SimpleLambdaExpressionSyntax 
+                ? method.Inline(p, p.LastItem) 
+                : method.Inline(p, p.LastItem, p.GetIndexer());
         }
     }
 }

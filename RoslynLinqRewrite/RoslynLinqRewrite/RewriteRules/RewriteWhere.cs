@@ -1,4 +1,5 @@
-﻿using Shaman.Roslyn.LinqRewrite.DataStructures;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Shaman.Roslyn.LinqRewrite.DataStructures;
 using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
 
@@ -10,13 +11,17 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         {
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
 
-            var lambda = p.Chain[chainIndex].Arguments[0];
+            var method = p.Chain[chainIndex].Arguments[0];
 
             p.LastItem = p.LastItem.Reusable(p);
-            p.ForAdd(If(Not(lambda.InlineForLast(p)),
+            if (method is SimpleLambdaExpressionSyntax)
+                p.ForAdd(If(Not(method.Inline(p, p.LastItem)),
+                    Continue()));
+            else p.ForAdd(If(Not(method.Inline(p, p.LastItem, p.GetIndexer())),
                 Continue()));
 
             p.ResultSize = null;
+            p.LastIndex = null;
             p.DifferentEnumeration = true;
         }
     }

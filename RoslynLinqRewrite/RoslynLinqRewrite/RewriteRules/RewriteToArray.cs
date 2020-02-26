@@ -12,7 +12,6 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
     public static class RewriteToArray
     {
-        public const string CurrentVariable = "__current";
         public const string LogVariable = "__log";
         public const string CurrentLengthVariable = "__currentLength";
         
@@ -25,7 +24,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             }
             RewriteOther(p, chainIndex);
             if (p.ResultSize == null) p.PostForAdd(Return("SimpleCollections".Access("SimpleArrayExtensions", "EnsureFullArray")
-                .Invoke(GlobalResultVariable, CurrentVariable)));
+                .Invoke(GlobalResultVariable, p.LastIndex)));
 
             p.HasResultMethod = true;
         }
@@ -42,16 +41,16 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         private static void KnownSize(RewriteParameters p, TypeSyntax itemType = null)
         {
             var arrayType = itemType == null ? (ArrayTypeSyntax) p.ReturnType : ArrayType(itemType);
-            CreateLocalArray(GlobalResultVariable, arrayType, p.ResultSize);
+            p.PreForAdd(CreateLocalArray(GlobalResultVariable, arrayType, p.ResultSize));
 
-            p.ForAdd(GlobalResultVariable.ArrayAccess(GlobalIndexerVariable).Assign(p.LastItem));
+            p.ForAdd(GlobalResultVariable.ArrayAccess(p.GetIndexer()).Assign(p.LastItem));
             
             p.PostForAdd(Return(GlobalResultVariable));
         }
 
         private static void KnownSourceSize(RewriteParameters p)
         {
-            p.PreForAdd(LocalVariableCreation(CurrentVariable, 0));
+            var indexer = p.GetIndexer();
                 
             p.PreForAdd(LocalVariableCreation(LogVariable, 
                         "SimpleCollections".Access("IntExtensions", "Log2")
@@ -64,31 +63,30 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             var result = (ArrayTypeSyntax) p.ReturnType;
             p.PreForAdd(CreateLocalArray(GlobalResultVariable, result, 8));
 
-            p.ForAdd(If(CurrentVariable.GeThan(CurrentLengthVariable),
+            p.ForAdd(If(p.LastIndex.GeThan(CurrentLengthVariable),
                         "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")
                                 .Invoke(Argument(2), 
                                     Argument(p.SourceSize), 
-                                    RefArgument(GlobalResultVariable), 
-                                    RefArgument(LogVariable),
-                                    OutArgument(CurrentLengthVariable))));
+                                    RefArg(GlobalResultVariable), 
+                                    RefArg(LogVariable),
+                                    OutArg(CurrentLengthVariable))));
                 
-            p.ForAdd(GlobalResultVariable.ArrayAccess(CurrentVariable).Assign(p.LastItem));
+            p.ForAdd(GlobalResultVariable.ArrayAccess(indexer).Assign(p.LastItem));
         }
 
         private static void UnknownSourceSize(RewriteParameters p)
         {
-            p.PreForAdd(LocalVariableCreation(CurrentVariable,0));
+            var indexer = p.GetIndexer();
+            
             p.PreForAdd(LocalVariableCreation(CurrentLengthVariable, 8));
             var result = (ArrayTypeSyntax) p.ReturnType;
             p.PreForAdd(CreateLocalArray(GlobalResultVariable, result, 8));
                 
-            p.ForAdd(If(CurrentVariable.GeThan(CurrentLengthVariable),
+            p.ForAdd(If(p.LastIndex.GeThan(CurrentLengthVariable),
                             "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")
-                                    .Invoke(Argument(2),
-                                        RefArgument(GlobalResultVariable),
-                                        RefArgument(CurrentLengthVariable))));
+                                    .Invoke(Argument(2), RefArg(GlobalResultVariable), RefArg(CurrentLengthVariable))));
                 
-            p.ForAdd(GlobalResultVariable.ArrayAccess(CurrentVariable).Assign(p.LastItem));
+            p.ForAdd(GlobalResultVariable.ArrayAccess(indexer).Assign(p.LastItem));
             p.HasResultMethod = true;
         }
 

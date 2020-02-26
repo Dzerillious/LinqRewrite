@@ -23,6 +23,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             p.LastItem = p.LastItem.Cast(type);
 
             p.ResultSize = null;
+            p.LastIndex = null;
             p.DifferentEnumeration = true;
         }
     }

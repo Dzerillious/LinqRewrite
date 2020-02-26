@@ -28,7 +28,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                p.ForAdd(If(method.InlineForLast(p),
+                p.ForAdd(If(method.Inline(p, p.LastItem),
                             If(foundVariable.EqualsExpr(NullValue),
                                 foundVariable.Assign(p.LastItem),
                                 Return(Default(p.ReturnType)))));

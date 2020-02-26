@@ -10,14 +10,15 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         {
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
-            var lambda = p.Chain[chainIndex].Arguments[0];
+            var method = p.Chain[chainIndex].Arguments[0];
             p.LastItem = p.LastItem.Reusable(p);
 
             var lastFor = p.CopyFor();
-            lastFor.Add(If(Not(lambda.InlineForLast(p)),
+            lastFor.Add(If(Not(method.Inline(p, p.LastItem)),
                 Break()));
 
             p.ResultSize = null;
+            p.LastIndex = null;
         }
     }
 }

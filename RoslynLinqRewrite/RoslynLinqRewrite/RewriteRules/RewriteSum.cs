@@ -24,14 +24,14 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             else if (isNullable)
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                var inlined = method.InlineForLast(p).Reusable(p);
+                var inlined = method.Inline(p, p.LastItem).Reusable(p);
                 p.ForAdd(If(inlined.NotEqualsExpr(NullValue),
                     sumVariable.AddAssign(inlined)));
             }
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                p.ForAdd(sumVariable.AddAssign(method.InlineForLast(p)));
+                p.ForAdd(sumVariable.AddAssign(method.Inline(p, p.LastItem)));
             }
             
             p.PostForAdd(Return(sumVariable));

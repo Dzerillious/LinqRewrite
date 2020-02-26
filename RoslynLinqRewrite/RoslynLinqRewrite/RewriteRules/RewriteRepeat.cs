@@ -1,5 +1,6 @@
 ﻿using System;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
+using static Shaman.Roslyn.LinqRewrite.Constants;
 
 namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
@@ -20,6 +21,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             p.SourceSize = count;
             
             p.LastItem = item;
+            p.LastIndex = GlobalIndexerVariable;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             var method = p.Chain[chainIndex].Arguments[0];
             
-            p.ForAdd(method.InlineForLast(p));
+            p.ForAdd(method.Inline(p, p.LastItem));
             p.HasResultMethod = true;
         }
     }

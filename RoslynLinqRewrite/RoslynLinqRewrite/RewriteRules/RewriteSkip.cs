@@ -25,6 +25,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                 p.ForAdd(If(countVariable.LThan(skipped), Continue()));
                 p.ForAdd(countVariable.PostIncrement());
             }
+            p.LastIndex = null;
         }
     }
 }

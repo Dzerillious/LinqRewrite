@@ -47,7 +47,10 @@ namespace Shaman.Roslyn.LinqRewrite
         public const string RepeatMethod = "System.Linq.Enumerable.Repeat<TResult>(TResult, int)";
 
         public const string WhereMethod = "System.Collections.Generic.IEnumerable<TSource>.Where<TSource>(System.Func<TSource, bool>)";
+        public const string WhereIMethod = "System.Collections.Generic.IEnumerable<TSource>.Where<TSource>(System.Func<TSource, int, bool>)";
         public const string SelectMethod = "System.Collections.Generic.IEnumerable<TSource>.Select<TSource, TResult>(System.Func<TSource, TResult>)";
+        public const string SelectIMethod = "System.Collections.Generic.IEnumerable<TSource>.Select<TSource, TResult>(System.Func<TSource, int, TResult>)";
+        
         public const string CastMethod = "System.Collections.IEnumerable.Cast<TResult>()";
         public const string OfTypeMethod = "System.Collections.IEnumerable.OfType<TResult>()";
 
@@ -85,7 +88,7 @@ namespace Shaman.Roslyn.LinqRewrite
             
             ListForEachMethod,
             
-            SelectMethod, WhereMethod, CastMethod, OfTypeMethod,
+            SelectMethod, SelectIMethod, WhereMethod, WhereIMethod, CastMethod, OfTypeMethod,
             
             RangeMethod, RepeatMethod,
             

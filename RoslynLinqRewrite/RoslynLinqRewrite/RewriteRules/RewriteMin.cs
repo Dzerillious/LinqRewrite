@@ -31,7 +31,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             else if (isNullable)
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                var reusable = method.InlineForLast(p).Reusable(p);
+                var reusable = method.Inline(p, p.LastItem).Reusable(p);
                 p.ForAdd(If(reusable.NotEqualsExpr(NullValue),
                             If(reusable.LThan(minVariable),
                                 minVariable.Assign(reusable))));
@@ -39,7 +39,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                var reusable = method.InlineForLast(p).Reusable(p);
+                var reusable = method.Inline(p, p.LastItem).Reusable(p);
                 p.ForAdd(If(reusable.LThan(minVariable),
                             minVariable.Assign(reusable)));
             }

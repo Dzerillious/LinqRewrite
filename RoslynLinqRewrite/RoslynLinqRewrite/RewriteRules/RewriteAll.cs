@@ -13,7 +13,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("All should be last expression.");
             
             var method = p.Chain[chainIndex].Arguments[0];
-            p.ForAdd(If(Not(method.InlineForLast(p)),
+            p.ForAdd(If(Not(method.Inline(p, p.LastItem)),
                 Return(false)));
             
             p.PostForAdd(Return(true));

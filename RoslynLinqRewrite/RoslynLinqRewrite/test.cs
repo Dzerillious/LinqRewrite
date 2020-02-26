@@ -6,6 +6,6 @@ static class Example2
     static void Main()
     {
 		var arr = new int[10];
-		var test = arr.OfType<int>().ToArray();
+		var test = arr.Select((x, i) => x + i).ToArray();
     }
 }

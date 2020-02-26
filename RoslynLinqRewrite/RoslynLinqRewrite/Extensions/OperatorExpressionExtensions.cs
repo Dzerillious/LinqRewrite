@@ -51,6 +51,9 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static CastExpressionSyntax Cast(this ExpressionSyntax a, TypeBridge type)
             => SyntaxFactory.CastExpression(type, a);
         
+        public static CastExpressionSyntax Cast(this ValueBridge a, TypeBridge type)
+            => SyntaxFactory.CastExpression(type, a);
+        
         
         public static AssignmentExpressionSyntax Assign(this string identifier, ValueBridge b)
             => SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(identifier), b);
@@ -103,6 +106,8 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
             => SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, SyntaxFactory.IdentifierName(identifier), b);
         public static BinaryExpressionSyntax EqualsExpr(this ExpressionSyntax a, ValueBridge b)
             => SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, a, b);
+        public static BinaryExpressionSyntax EqualsExpr(this ValueBridge a, ValueBridge b)
+            => SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, a, b);
         
         
         public static BinaryExpressionSyntax LThan(this string identifier, ValueBridge b)
@@ -120,6 +125,8 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static BinaryExpressionSyntax GeThan(this string identifier, ValueBridge b)
             => SyntaxFactory.BinaryExpression(SyntaxKind.GreaterThanOrEqualExpression, SyntaxFactory.IdentifierName(identifier), b);
         public static BinaryExpressionSyntax GeThan(this ExpressionSyntax a, ValueBridge b)
+            => SyntaxFactory.BinaryExpression(SyntaxKind.GreaterThanOrEqualExpression, a, b);
+        public static BinaryExpressionSyntax GeThan(this ValueBridge a, ValueBridge b)
             => SyntaxFactory.BinaryExpression(SyntaxKind.GreaterThanOrEqualExpression, a, b);
         
         

@@ -14,6 +14,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             else
             {
             }
+            p.LastIndex = null;
         }
     }
 }
