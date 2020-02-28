@@ -141,8 +141,9 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static BinaryExpressionSyntax NotEqualsExpr(this string identifier, ExpressionSyntax b)
             => SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, SyntaxFactory.IdentifierName(identifier), b);
 
-        
-        
+        public static BinaryExpressionSyntax As(this string identifier, ValueBridge b)
+            => SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression, SyntaxFactory.IdentifierName(identifier), b);
+
         public static MemberAccessExpressionSyntax Access(this string identifier, VariableBridge accessed)
             => SyntaxFactory.MemberAccessExpression(
                 SyntaxKind.SimpleMemberAccessExpression,

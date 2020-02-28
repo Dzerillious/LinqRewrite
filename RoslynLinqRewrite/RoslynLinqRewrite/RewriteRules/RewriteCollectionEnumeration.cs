@@ -34,7 +34,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             p.ForMax = p.ForReMax = count;
 
             p.LastItem = GlobalItemsVariable.ArrayAccess(GlobalIndexerVariable);
-            p.LastIndex = GlobalIndexerVariable;
+            p.Indexer = GlobalIndexerVariable;
             p.ResultSize = count;
             p.SourceSize = count;
         }
@@ -53,7 +53,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             p.ForMax = p.ForReMax = sourceCount;
             
             p.LastItem = GlobalItemsVariable.ArrayAccess(GlobalIndexerVariable);
-            p.LastIndex = GlobalIndexerVariable;
+            p.Indexer = GlobalIndexerVariable;
             
             p.ResultSize = IdentifierName(sourceCount);
             p.SourceSize = IdentifierName(sourceCount);

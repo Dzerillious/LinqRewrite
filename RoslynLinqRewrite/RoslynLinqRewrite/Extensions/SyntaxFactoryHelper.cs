@@ -17,7 +17,7 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static SeparatedSyntaxList<T> CreateSeparatedList<T>(params T[] items) where T : SyntaxNode
             => SyntaxFactory.SeparatedList(items);
 
-        public static StatementSyntax AggregateStatementSyntax(List<StatementSyntax> syntax) 
+        public static StatementSyntax AggregateStatementSyntax(IList<StatementSyntax> syntax) 
             => syntax.Count switch
             {
                 0 => SyntaxFactory.EmptyStatement(),

@@ -3,7 +3,7 @@ using Shaman.Roslyn.LinqRewrite.DataStructures;
 
 namespace Shaman.Roslyn.LinqRewrite
 {
-    public static class RewriteParametersHolder
+    public static class RewriteParametersFactory
     {
         private static readonly object Lock = new object();
         private static readonly List<RewriteParameters> Capital = new List<RewriteParameters>();

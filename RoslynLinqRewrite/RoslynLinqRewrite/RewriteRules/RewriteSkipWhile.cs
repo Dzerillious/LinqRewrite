@@ -14,11 +14,11 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             p.LastItem = p.LastItem.Reusable(p);
 
             var lastFor = p.CopyFor();
-            lastFor.Add(If(Not(method.Inline(p, p.LastItem)),
+            lastFor.ForAdd(If(Not(method.Inline(p, p.LastItem)),
                 Break()));
 
             p.ResultSize = null;
-            p.LastIndex = null;
+            p.Indexer = null;
         }
     }
 }

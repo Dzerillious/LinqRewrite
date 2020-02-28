@@ -6,6 +6,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
 using Shaman.Roslyn.LinqRewrite.Extensions;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using static Shaman.Roslyn.LinqRewrite.Extensions.SymbolExtensions;
+using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
 
 namespace Shaman.Roslyn.LinqRewrite.Services
@@ -27,63 +30,64 @@ namespace Shaman.Roslyn.LinqRewrite.Services
         
         internal ExpressionSyntax GetCollectionInvocationExpression(RewriteParameters p, IEnumerable<StatementSyntax> body)
         {
-            var items = new[] {SyntaxFactoryHelper.CreateParameter(Constants.GlobalItemsVariable, 
+            var items = new[] {CreateParameter(Constants.GlobalItemsVariable, 
                     _data.Semantic.GetTypeInfo(p.Collection).Type)};
-            var parameters = items.Concat(_data.CurrentFlow.Select(x => SyntaxFactoryHelper.CreateParameter(x.Name, SymbolExtensions.GetSymbolType(x.Symbol)).WithRef(x.Changes)));
+            var parameters = items.Concat(
+                _data.CurrentFlow.Select(x => CreateParameter(x.Name, GetSymbolType(x.Symbol)).WithRef(x.Changes)));
            
             var functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
-            var arguments = SyntaxFactoryHelper.CreateArguments(new[] {SyntaxFactory.Argument(p.Collection)}.Concat(
-                _data.CurrentFlow.Select(x => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Name)).WithRef(x.Changes))));
+            var arguments = CreateArguments(new[] {Argument(p.Collection)}
+                .Concat( _data.CurrentFlow.Select(x => Argument(x.Name).WithRef(x.Changes))));
 
             var coreFunction = GetCoreMethod(p.ReturnType, functionName, parameters, body);
 
             _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, coreFunction));
-            var args = new[] {SyntaxFactory.Argument(p.Collection)}.Concat(arguments.Arguments.Skip(1));
+            var args = new[] {Argument(p.Collection)}.Concat(arguments.Arguments.Skip(1));
             
-            var inv = SyntaxFactory.InvocationExpression(
-                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), SyntaxFactoryHelper.CreateArguments(args));
+            var inv = InvocationExpression(
+                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), CreateArguments(args));
 
             return inv;
         }
         
         internal ExpressionSyntax GetInvocationExpression(RewriteParameters p, IEnumerable<StatementSyntax> body)
         {
-            var parameters = _data.CurrentFlow.Select(x => SyntaxFactoryHelper.CreateParameter(x.Name, SymbolExtensions.GetSymbolType(x.Symbol)).WithRef(x.Changes));
+            var parameters = _data.CurrentFlow.Select(x => CreateParameter(x.Name, GetSymbolType(x.Symbol)).WithRef(x.Changes));
            
             var functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
-            var arguments = SyntaxFactoryHelper.CreateArguments(
-                _data.CurrentFlow.Select(x => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Name)).WithRef(x.Changes)));
+            var arguments = CreateArguments(
+                _data.CurrentFlow.Select(x => Argument(x.Name).WithRef(x.Changes)));
 
             var coreFunction = GetCoreMethod(p.ReturnType, functionName, parameters, body);
 
             _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, coreFunction));
             var args = arguments.Arguments;
             
-            var inv = SyntaxFactory.InvocationExpression(
-                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), SyntaxFactoryHelper.CreateArguments(args));
+            var inv = InvocationExpression(
+                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), CreateArguments(args));
 
             return inv;
         }
 
         public ForStatementSyntax GetForStatement(string name, ValueBridge min, ValueBridge max, StatementSyntax loopContent)
-            => SyntaxFactory.ForStatement(
+            => ForStatement(
                 VariableCreation(name, min),
                 default,
-                SyntaxFactory.IdentifierName(name).LThan(max),
+                IdentifierName(name).LThan(max),
                 name.SeparatedPostIncrement(),
                 loopContent);
 
         public ForStatementSyntax GetReverseForStatement(string name, ValueBridge min, ValueBridge max, StatementSyntax loopContent)
-            => SyntaxFactory.ForStatement(
-                VariableCreation(name, max.Sub(IntValue(1))),
+            => ForStatement(
+                VariableCreation(name, max.Sub(1)),
                 default,
-                SyntaxFactory.IdentifierName(name).GeThan(min),
+                IdentifierName(name).GeThan(min),
                 name.SeparatedPostDecrement(),
                 loopContent);
         
         public StatementSyntax GetForEachStatement(string name, ExpressionSyntax collection, StatementSyntax loopContent)
-            => SyntaxFactory.ForEachStatement(
-                SyntaxFactory.IdentifierName("var"),
+            => ForEachStatement(
+                IdentifierName("var"),
                 name, collection, loopContent);
         
         private IEnumerable<StatementSyntax> CreateSourceThrow(ITypeSymbol? collectionSemanticType) =>
@@ -91,20 +95,20 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 ? Enumerable.Empty<StatementSyntax>()
                 : new[]
                 {
-                    SyntaxFactoryHelper.If(
-                        SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression,
-                            SyntaxFactory.IdentifierName(Constants.GlobalItemsVariable),
-                            SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression)),
-                        SyntaxFactoryHelper.CreateThrowException("System.ArgumentNullException"))
+                    If(
+                        BinaryExpression(SyntaxKind.EqualsExpression,
+                            IdentifierName(Constants.GlobalItemsVariable),
+                            LiteralExpression(SyntaxKind.NullLiteralExpression)),
+                        CreateThrowException("System.ArgumentNullException"))
                 };
 
         public MethodDeclarationSyntax GetCoreMethod(TypeSyntax returnType, 
             string functionName, 
             IEnumerable<ParameterSyntax> parameters,
             IEnumerable<StatementSyntax> body)
-            => SyntaxFactory.MethodDeclaration(returnType, functionName)
-                .WithParameterList(SyntaxFactoryHelper.CreateParameters(parameters))
-                .WithBody(SyntaxFactory.Block(body))
+            => MethodDeclaration(returnType, functionName)
+                .WithParameterList(CreateParameters(parameters))
+                .WithBody(Block(body))
                 .WithStatic(_data.CurrentMethodIsStatic)
                 .WithTypeParameterList(_data.CurrentMethodTypeParameters)
                 .WithConstraintClauses(_data.CurrentMethodConstraintClauses)

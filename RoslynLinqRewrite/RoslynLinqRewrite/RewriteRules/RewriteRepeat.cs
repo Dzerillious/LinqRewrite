@@ -21,7 +21,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             p.SourceSize = count;
             
             p.LastItem = item;
-            p.LastIndex = GlobalIndexerVariable;
+            p.Indexer = GlobalIndexerVariable;
         }
     }
 }

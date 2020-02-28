@@ -5,8 +5,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.Extensions;
 using Shaman.Roslyn.LinqRewrite.Services;
-using SimpleCollections;
-using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
 
 namespace Shaman.Roslyn.LinqRewrite.DataStructures
 {
@@ -21,26 +19,47 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public List<LinqStep> Chain;
         
         public TypeSyntax ReturnType;
-        public ITypeSymbol SemanticReturnType;
         
         public ExpressionSyntax ResultSize;
         public ExpressionSyntax SourceSize;
-        public bool DifferentEnumeration;
         
         public ValueBridge LastItem;
-        public ValueBridge LastIndex;
-        
-        private List<StatementSyntax> _preForBody = new List<StatementSyntax>();
-        private List<List<StatementSyntax>> _lastFors = new List<List<StatementSyntax>>();
-        private List<StatementSyntax> _forBody = new List<StatementSyntax>();
-        private List<StatementSyntax> _postForBody = new List<StatementSyntax>();
+        public ValueBridge Indexer;
+
+        private List<EnumerationParameters> _enumerations;
+
+        private List<StatementSyntax> _preForBody;
+        private EnumerationParameters _forBody;
+        private List<StatementSyntax> _postForBody;
 
         public bool IsReversed;
-        public ValueBridge ForMin;
-        public ValueBridge ForMax;
-        public ValueBridge ForReMin;
-        public ValueBridge ForReMax;
         public bool HasResultMethod;
+        public bool ListsEnumeration;
+        public bool ModifiedEnumeration;
+
+        public ValueBridge ForMin
+        {
+            get => _forBody.ForMin;
+            set => _forBody.ForMin = value;
+        }
+        
+        public ValueBridge ForMax
+        {
+            get => _forBody.ForMax;
+            set => _forBody.ForMax = value;
+        }
+        
+        public ValueBridge ForReMin
+        {
+            get => _forBody.ForReMin;
+            set => _forBody.ForReMin = value;
+        }
+        
+        public ValueBridge ForReMax
+        {
+            get => _forBody.ForReMax;
+            set => _forBody.ForReMax = value;
+        }
         
         public SemanticModel Semantic => Data.Semantic;
         
@@ -51,74 +70,69 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
             Data = RewriteDataService.Instance;
         }
         
-        public void SetData(ExpressionSyntax collection, TypeSyntax returnType, ITypeSymbol semanticReturnType, List<LinqStep> chain, InvocationExpressionSyntax node)
+        public void SetData(ExpressionSyntax collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node)
         {
             _preForBody = new List<StatementSyntax>();
-            _forBody = new List<StatementSyntax>();
+            _forBody = new EnumerationParameters(Constants.GlobalIndexerVariable);
             _postForBody = new List<StatementSyntax>();
+            
+            _enumerations = new List<EnumerationParameters>{_forBody};
             
             Collection = collection;
             ReturnType = returnType;
             Chain = chain;
             Node = node;
-            SemanticReturnType = semanticReturnType;
         }
 
         public void PreForAdd(StatementBridge _) => _preForBody.Add(_);
-        public void ForAdd(StatementBridge _) => _forBody.Add(_);
+        public void ForAdd(StatementBridge _) => _forBody.Body.Add((StatementSyntaxBridge)_);
         public void PostForAdd(StatementBridge _) => _postForBody.Add(_);
-        public List<StatementSyntax> CopyFor()
+        
+        public EnumerationParameters CopyFor()
         {
-            _lastFors.Add(new List<StatementSyntax>(_forBody));
-            return _lastFors.Last();
+            var oldBody = _forBody;
+            _forBody = _forBody.Copy();
+            _enumerations.Add(_forBody);
+            return oldBody;
         }
         
-        public List<StatementSyntax> CopyForReference()
+        public EnumerationParameters CopyForReference()
         {
-            _lastFors.Add(_forBody);
-            return _lastFors.Last();
+            var oldBody = _forBody;
+            _forBody = _forBody.CopyReference();
+            _enumerations.Add(_forBody);
+            return oldBody;
         }
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {
-            if (_forBody.Count == 0) return _preForBody.Concat(_postForBody);
-            if (ForMin == null)
+            if (_enumerations.Count == 1 && _forBody.Body.Count == 0) return _preForBody.Concat(_postForBody);
+            if (IsReversed)
             {
-                _lastFors.ForEach(x => _preForBody.Add(Rewrite.GetForEachStatement(Constants.GlobalItemVariable, Collection,
-                    SyntaxFactoryHelper.AggregateStatementSyntax(x))));
-                _preForBody.Add(Rewrite.GetForEachStatement(Constants.GlobalItemVariable, Collection,
-                    SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
+                for (var i = _enumerations.Count - 1; i >= 0; i--)
+                    _preForBody.Add(_enumerations[i].GetStatementSyntax(this));
             }
-            else if (IsReversed)
+            else
             {
-                _lastFors.ForEach(x => _preForBody.Add(Rewrite.GetReverseForStatement(
-                    Constants.GlobalIndexerVariable, ForReMin, ForReMax, SyntaxFactoryHelper.AggregateStatementSyntax(x))));
-                _preForBody.Add(Rewrite.GetReverseForStatement(
-                    Constants.GlobalIndexerVariable, ForReMin, ForReMax, SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
-            }
-            else 
-            {
-                _lastFors.ForEach(x => _preForBody.Add(Rewrite.GetForStatement(
-                    Constants.GlobalIndexerVariable, ForMin, ForMax, SyntaxFactoryHelper.AggregateStatementSyntax(x))));
-                _preForBody.Add(Rewrite.GetForStatement(
-                    Constants.GlobalIndexerVariable, ForMin, ForMax, SyntaxFactoryHelper.AggregateStatementSyntax(_forBody)));
+                for (var i = 0; i < _enumerations.Count; i++)
+                    _preForBody.Add(_enumerations[i].GetStatementSyntax(this));
             }
             
             _preForBody.AddRange(_postForBody);
             return _preForBody;
         }
 
-        public void Dispose() => RewriteParametersHolder.ReturnParameters(this);
+        public void Dispose() => RewriteParametersFactory.ReturnParameters(this);
 
         private static int _indexer;
         public ValueBridge GetIndexer()
         {
-            if (LastIndex != null) return LastIndex;
+            if (Indexer != null) return Indexer;
 
             var indexer = "__indexer" + _indexer++;
             PreForAdd(VariableExtensions.LocalVariableCreation(indexer, 0));
             
-            LastIndex = indexer;
+            Indexer = indexer;
             return indexer.PostIncrement();
         }
     }

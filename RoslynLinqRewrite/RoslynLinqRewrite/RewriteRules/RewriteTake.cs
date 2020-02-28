@@ -13,7 +13,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
             var take = p.Chain[chainIndex].Arguments[0];
-            if (!p.DifferentEnumeration)
+            if (!p.ModifiedEnumeration)
             {
                 p.ForMax = p.ForMin.Add(take);
                 p.ForReMin = p.ForReMax.Sub(take);
@@ -25,7 +25,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                 p.ForAdd(countVariable.PostIncrement());
                 p.ForAdd(If(countVariable.GeThan(take), Break()));
             }
-            p.LastIndex = null;
+            p.Indexer = null;
         }
     }
 }

@@ -106,8 +106,8 @@ namespace Shaman.Roslyn.LinqRewrite
             
             var returnType = SyntaxFactory.ParseTypeName(semanticReturnType.ToDisplayString());
 
-            using var parameters = RewriteParametersHolder.BorrowParameters();
-            parameters.SetData(collection, returnType, semanticReturnType, chain, node);
+            using var parameters = RewriteParametersFactory.BorrowParameters();
+            parameters.SetData(collection, returnType, chain, node);
 
             return InvocationRewriter.TryRewrite(parameters)
                 .WithLeadingTrivia(((CSharpSyntaxNode) containingForEach ?? node).GetLeadingTrivia())
@@ -217,10 +217,10 @@ namespace Shaman.Roslyn.LinqRewrite
                 });
         }
 
-        private (List<ISymbol>, List<ISymbol>) GetFlows(List<LinqStep> chain)
+        private (ISymbol[], ISymbol[]) GetFlows(List<LinqStep> chain)
         {
-            var flowsIn = new List<ISymbol>();
-            var flowsOut = new List<ISymbol>();
+            var flowsIn = Array.Empty<ISymbol>();
+            var flowsOut = Array.Empty<ISymbol>();
             foreach (var item in chain)
             {
                 foreach (var syntax in item.Arguments)
@@ -229,25 +229,16 @@ namespace Shaman.Roslyn.LinqRewrite
                     {
                         var dataFlow = _data.Semantic.AnalyzeDataFlow(item.Lambda.Body);
                         var pName = item.Lambda.Parameters.Single().Identifier.ValueText;
-                        foreach (var k in dataFlow.DataFlowsIn)
-                        {
-                            if (k.Name == pName) continue;
-                            if (!flowsIn.Contains(k)) flowsIn.Add(k);
-                        }
-                        foreach (var k in dataFlow.DataFlowsOut)
-                        {
-                            if (k.Name == pName) continue;
-                            if (!flowsOut.Contains(k)) flowsOut.Add(k);
-                        }
+                        flowsIn = flowsIn.Union(
+                            dataFlow.DataFlowsIn.Where(x => x.Name == pName)).ToArray();
+                        flowsOut = flowsOut.Union(
+                            dataFlow.DataFlowsOut.Where(x => x.Name == pName)).ToArray();
                     }
                     else
                     {
                         var dataFlow = _data.Semantic.AnalyzeDataFlow(syntax);
-                        foreach (var k in dataFlow.DataFlowsIn)
-                            if (!flowsIn.Contains(k)) flowsIn.Add(k);
-
-                        foreach (var k in dataFlow.DataFlowsOut)
-                            if (!flowsOut.Contains(k)) flowsOut.Add(k);
+                        flowsIn = flowsIn.Union(dataFlow.DataFlowsIn).ToArray();
+                        flowsOut = flowsOut.Union(dataFlow.DataFlowsOut).ToArray();
                     }
                 }
             }

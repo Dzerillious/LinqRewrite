@@ -21,8 +21,8 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                 Continue()));
 
             p.ResultSize = null;
-            p.LastIndex = null;
-            p.DifferentEnumeration = true;
+            p.Indexer = null;
+            p.ModifiedEnumeration = true;
         }
     }
 }

@@ -6,7 +6,12 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
 using Shaman.Roslyn.LinqRewrite.Extensions;
-using SyntaxExtensions = Shaman.Roslyn.LinqRewrite.Extensions.SyntaxExtensions;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using static Shaman.Roslyn.LinqRewrite.Constants;
+using static Shaman.Roslyn.LinqRewrite.Extensions.SymbolExtensions;
+using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxExtensions;
+using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
 
 namespace Shaman.Roslyn.LinqRewrite.Services
 {
@@ -25,46 +30,36 @@ namespace Shaman.Roslyn.LinqRewrite.Services
         public ExpressionSyntax CreateCollectionCount(VariableBridge identifier, ExpressionSyntax collection, bool allowUnknown)
         {
             var collectionType = _data.Semantic.GetTypeInfo(collection).Type;
-            if (collectionType is IArrayTypeSymbol) return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, SyntaxFactory.IdentifierName("Length"));
+            if (collectionType is IArrayTypeSymbol) return MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, IdentifierName("Length"));
             if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<")))
-                return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, SyntaxFactory.IdentifierName("Count"));
+                return MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, IdentifierName("Count"));
                 
             if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.ICollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.ICollection<")))
-                return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, SyntaxFactory.IdentifierName("Count"));
+                return MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, IdentifierName("Count"));
 
             if (!allowUnknown) return null;
             if (collectionType.IsValueType) return null;
-            var itemType = SymbolExtensions.GetItemType(collectionType);
+            var itemType = GetItemType(collectionType);
             if (itemType == null) return null;
             
-            return SyntaxFactory.InvocationExpression(
-                SyntaxFactory.MemberAccessExpression(
-                    SyntaxKind.SimpleMemberAccessExpression,
-                    SyntaxFactory.ParenthesizedExpression(
-                        SyntaxFactory.ConditionalAccessExpression(
-                            SyntaxFactory.ParenthesizedExpression(
-                                SyntaxFactory.BinaryExpression(
-                                    SyntaxKind.AsExpression,
-                                    SyntaxFactory.IdentifierName(Constants.GlobalItemsVariable),
-                                    SyntaxFactory.ParseTypeName($"System.Collections.Generic.ICollection<{itemType.ToDisplayString()}>")
-                                )
-                            ),
-                            SyntaxFactory.MemberBindingExpression(SyntaxFactory.IdentifierName("Count"))
-                        )
+            return ParenthesizedExpression(
+                ConditionalAccessExpression(
+                    ParenthesizedExpression(
+                        GlobalItemsVariable.As(ParseTypeName($"System.Collections.Generic.ICollection<{itemType.ToDisplayString()}>"))
                     ),
-                    SyntaxFactory.IdentifierName("GetValueOrDefault")
+                    MemberBindingExpression(IdentifierName("Count"))
                 )
-            );
+            ).Access("GetValueOrDefault").Invoke();
         }
 
         public ExpressionSyntax CreateMethodNameSyntaxWithCurrentTypeParameters(string identifier)
             => (_data.CurrentMethodTypeParameters?.Parameters.Count).GetValueOrDefault() != 0
-                ? SyntaxFactory.GenericName(
-                    SyntaxFactory.Identifier(identifier),
-                    SyntaxFactory.TypeArgumentList(
-                        SyntaxFactoryHelper.CreateSeparatedList(_data.CurrentMethodTypeParameters.Parameters
-                            .Select(x => SyntaxFactory.ParseTypeName(x.Identifier.ValueText)))))
-                : (NameSyntax) SyntaxFactory.IdentifierName(identifier);
+                ? GenericName(
+                    Identifier(identifier),
+                    TypeArgumentList(
+                        CreateSeparatedList(_data.CurrentMethodTypeParameters.Parameters
+                            .Select(x => ParseTypeName(x.Identifier.ValueText)))))
+                : (NameSyntax) IdentifierName(identifier);
 
         public ExpressionSyntax InlineLambda(SemanticModel semantic, ExpressionSyntax expression, params ValueBridge[] p)
         {
@@ -78,13 +73,13 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 ? semantic.GetTypeFromExpression(((ReturnStatementSyntax) simpleLambda.Block.Statements.Last()).Expression)
                 : semantic.GetTypeFromExpression(simpleLambda.ExpressionBody);
 
-            var pS = p.Select((x, i) => SymbolExtensions.GetLambdaParameter(lambda, i)).ToArray();
+            var pS = p.Select((x, i) => GetLambdaParameter(lambda, i)).ToArray();
             var currentFlow = _data.Semantic.AnalyzeDataFlow(lambda.Body);
             var currentCaptures = currentFlow
                 .DataFlowsOut
                 .Union(currentFlow.DataFlowsIn)
                 .Where(x => pS.All(y => x.Name != y.Identifier.ValueText) &&(x as IParameterSymbol)?.IsThis != true)
-                .Select(x => VariableExtensions.CreateVariableCapture(x, currentFlow.DataFlowsOut))
+                .Select(x => CreateVariableCapture(x, currentFlow.DataFlowsOut))
                 .ToList();
 
             lambda = RenameSymbol(lambda, p);
@@ -95,35 +90,35 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             IEnumerable<VariableCapture> captures, params ParameterSyntax[] param)
         {
             var fn = GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinqHelper");
-            if (body is ExpressionSyntax syntax) return SyntaxFactory.ParenthesizedExpression(syntax);
+            if (body is ExpressionSyntax syntax) return ParenthesizedExpression(syntax);
 
-            if (captures.Any(x => SyntaxExtensions.IsAnonymousType(SymbolExtensions.GetSymbolType(x.Symbol)))) 
+            if (captures.Any(x => IsAnonymousType(GetSymbolType(x.Symbol)))) 
                 throw new NotSupportedException();
             if (returnType == null) throw new NotSupportedException(); // Anonymous type
             
-            var method = SyntaxFactory.MethodDeclaration(returnType, fn)
-                .WithParameterList(SyntaxFactory.ParameterList(SyntaxFactory.SeparatedList(
-                    param.Union(captures.Select(x => SyntaxFactoryHelper.CreateParameter(x.Name, SymbolExtensions.GetSymbolType(x))
+            var method = MethodDeclaration(returnType, fn)
+                .WithParameterList(ParameterList(SeparatedList(
+                    param.Union(captures.Select(x => CreateParameter(x.Name, GetSymbolType(x))
                         .WithRef(x.Changes)))
                 )))
                 .WithBody(body as BlockSyntax ?? (body is StatementSyntax statementSyntax
-                              ? SyntaxFactory.Block(statementSyntax)
-                              : SyntaxFactory.Block(SyntaxFactory.ReturnStatement((ExpressionSyntax) body))))
+                              ? Block(statementSyntax)
+                              : Block(ReturnStatement((ExpressionSyntax) body))))
                 .WithStatic(_data.CurrentMethodIsStatic)
                 .WithTypeParameterList(_data.CurrentMethodTypeParameters)
                 .WithConstraintClauses(_data.CurrentMethodConstraintClauses)
                 .NormalizeWhitespace();
 
             _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, method));
-            return SyntaxFactory.ParenthesizedExpression(SyntaxFactory.InvocationExpression(
+            return ParenthesizedExpression(InvocationExpression(
                 CreateMethodNameSyntaxWithCurrentTypeParameters(fn),
-                SyntaxFactoryHelper.CreateArguments(param.Select(x => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Identifier.ValueText)))
-                    .Union(captures.Select(x =>  SyntaxFactory.Argument(SyntaxFactory.IdentifierName(x.Name)).WithRef(x.Changes))))));
+                CreateArguments(param.Select(x => SyntaxFactory.Argument(IdentifierName(x.Identifier.ValueText)))
+                    .Union(captures.Select(x =>  SyntaxFactory.Argument(IdentifierName(x.Name)).WithRef(x.Changes))))));
         }
 
         private Lambda RenameSymbol(Lambda container, ValueBridge[] replace)
         {
-            var parameters = replace.Select((x, i) => SymbolExtensions.GetLambdaParameter(container, i)).ToArray();
+            var parameters = replace.Select((x, i) => GetLambdaParameter(container, i)).ToArray();
             var tokensToRename = container.Body.DescendantNodesAndSelf()
                 .Where(x =>
             {
@@ -131,8 +126,8 @@ namespace Shaman.Roslyn.LinqRewrite.Services
                 return sem != null && (sem is ILocalSymbol || sem is IParameterSymbol) 
                                    && parameters.Any(y => y.Identifier.ValueText == sem.Name);
             });
-            var syntax = SyntaxFactory.ParenthesizedLambdaExpression(
-                SyntaxFactoryHelper.CreateParameters(container.Parameters.Select((x, i) =>  x)),
+            var syntax = ParenthesizedLambdaExpression(
+                CreateParameters(container.Parameters.Select((x, i) =>  x)),
                 container.Body.ReplaceNodes(tokensToRename, (a, b) =>
                 {
                     if (!(b is IdentifierNameSyntax ide)) throw new NotImplementedException();

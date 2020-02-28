@@ -24,7 +24,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             }
             RewriteOther(p, chainIndex);
             if (p.ResultSize == null) p.PostForAdd(Return("SimpleCollections".Access("SimpleArrayExtensions", "EnsureFullArray")
-                .Invoke(GlobalResultVariable, p.LastIndex)));
+                .Invoke(GlobalResultVariable, p.Indexer)));
 
             p.HasResultMethod = true;
         }
@@ -63,7 +63,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             var result = (ArrayTypeSyntax) p.ReturnType;
             p.PreForAdd(CreateLocalArray(GlobalResultVariable, result, 8));
 
-            p.ForAdd(If(p.LastIndex.GeThan(CurrentLengthVariable),
+            p.ForAdd(If(p.Indexer.GeThan(CurrentLengthVariable),
                         "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")
                                 .Invoke(Argument(2), 
                                     Argument(p.SourceSize), 
@@ -82,7 +82,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             var result = (ArrayTypeSyntax) p.ReturnType;
             p.PreForAdd(CreateLocalArray(GlobalResultVariable, result, 8));
                 
-            p.ForAdd(If(p.LastIndex.GeThan(CurrentLengthVariable),
+            p.ForAdd(If(p.Indexer.GeThan(CurrentLengthVariable),
                             "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")
                                     .Invoke(Argument(2), RefArg(GlobalResultVariable), RefArg(CurrentLengthVariable))));
                 
