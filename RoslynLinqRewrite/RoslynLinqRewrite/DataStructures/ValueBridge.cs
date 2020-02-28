@@ -1,8 +1,8 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Shaman.Roslyn.LinqRewrite.Extensions;
 
-namespace Shaman.Roslyn.LinqRewrite.DataStructures
+namespace LinqRewrite.DataStructures
 {
     public class ValueBridge
     {
@@ -16,24 +16,16 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         }
 
         private ValueBridge(int value)
-        {
-            _value = SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(value));
-        }
+            => _value = SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(value));
 
         private ValueBridge(ExpressionSyntax value)
-        {
-            _value = value;
-        }
+            => _value = value;
 
         private ValueBridge(IdentifierNameSyntax name)
-        {
-            _value = name;
-        }
+            => _value = name;
 
         private ValueBridge(string name)
-        {
-            _value = SyntaxFactory.IdentifierName(name);
-        }
+            => _value = SyntaxFactory.IdentifierName(name);
         
         public static implicit operator ValueBridge(int value)
             => new ValueBridge(value);

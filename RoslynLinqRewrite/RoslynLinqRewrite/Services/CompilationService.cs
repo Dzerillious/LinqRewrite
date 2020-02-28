@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Shaman.Runtime;
 
-namespace Shaman.Roslyn.LinqRewrite.Services
+namespace LinqRewrite.Services
 {
     public class CompilationService
     {

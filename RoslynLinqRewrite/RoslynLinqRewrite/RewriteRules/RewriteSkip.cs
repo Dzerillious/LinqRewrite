@@ -1,9 +1,8 @@
-﻿using Shaman.Roslyn.LinqRewrite.DataStructures;
-using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
-using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
-using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
+﻿using LinqRewrite.DataStructures;
+using static LinqRewrite.Extensions.OperatorExpressionExtensions;
+using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
-namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+namespace LinqRewrite.RewriteRules
 {
     public static class RewriteSkip
     {
@@ -12,7 +11,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
             var skipped = p.Chain[chainIndex].Arguments[0];
-            if (!p.ModifiedEnumeration)
+            if (p.ListsEnumeration)
             {
                 p.ForMin = p.ForMin.Add(skipped);
                 p.ForReMax = p.ForReMin.Sub(skipped);

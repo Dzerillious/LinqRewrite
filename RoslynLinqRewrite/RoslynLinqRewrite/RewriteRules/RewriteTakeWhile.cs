@@ -1,8 +1,8 @@
-﻿using Shaman.Roslyn.LinqRewrite.DataStructures;
-using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
-using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+﻿using LinqRewrite.DataStructures;
+using static LinqRewrite.Extensions.OperatorExpressionExtensions;
+using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
-namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+namespace LinqRewrite.RewriteRules
 {
     public static class RewriteTakeWhile
     {
@@ -14,7 +14,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             p.LastItem = p.LastItem.Reusable(p);
             
             p.ForAdd(If(Not(method.Inline(p, p.LastItem)),
-                Break()));
+                        Break()));
 
             p.ResultSize = null;
             p.Indexer = null;

@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Linq;
+using LinqRewrite.DataStructures;
+using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
-using Shaman.Roslyn.LinqRewrite.Extensions;
-using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
-using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.Extensions.VariableExtensions;
+using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
-namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+namespace LinqRewrite.RewriteRules
 {
     public static class RewriteAverage
     {
@@ -21,13 +20,15 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             p.PreForAdd(LocalVariableCreation(sumVariable, 0.Cast(elementType)));
 
             if (p.Chain[chainIndex].Arguments.Length == 0)
+            {
                 p.ForAdd(sumVariable.AddAssign(p.LastItem));
+            }
             else if (isNullable)
             {
                 var method = p.Chain[chainIndex].Arguments[0];
                 var inlined = method.Inline(p, p.LastItem).Reusable(p);
                 p.ForAdd(If(inlined.NotEqualsExpr(NullValue),
-                    sumVariable.AddAssign(inlined)));
+                            sumVariable.AddAssign(inlined)));
             }
             else
             {

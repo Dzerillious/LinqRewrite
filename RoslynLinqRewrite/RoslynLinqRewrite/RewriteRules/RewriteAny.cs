@@ -1,11 +1,10 @@
 ﻿using System;
+using LinqRewrite.DataStructures;
+using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
-using Shaman.Roslyn.LinqRewrite.Extensions;
-using static Shaman.Roslyn.LinqRewrite.Constants;
-using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
-namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+namespace LinqRewrite.RewriteRules
 {
     public static class RewriteAny
     {

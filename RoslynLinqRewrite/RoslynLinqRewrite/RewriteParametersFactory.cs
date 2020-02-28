@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
+using LinqRewrite.DataStructures;
 
-namespace Shaman.Roslyn.LinqRewrite
+namespace LinqRewrite
 {
     public static class RewriteParametersFactory
     {

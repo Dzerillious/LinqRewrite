@@ -1,10 +1,10 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using LinqRewrite.DataStructures;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
-using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
-using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.Extensions.OperatorExpressionExtensions;
+using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
-namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+namespace LinqRewrite.RewriteRules
 {
     public static class RewriteOfType
     {
@@ -18,7 +18,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
             p.LastItem = p.LastItem.Reusable(p);
             p.ForAdd(If(Not(SyntaxFactory.IsPatternExpression(p.LastItem, SyntaxFactory.ConstantPattern(type))),
-                Continue()));
+                        Continue()));
 
             p.LastItem = p.LastItem.Cast(type);
 

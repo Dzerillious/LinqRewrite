@@ -1,21 +1,17 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Shaman.Roslyn.LinqRewrite.DataStructures
+namespace LinqRewrite.DataStructures
 {
     public class StatementBridge
     {
         private readonly StatementSyntax _statement;
 
         private StatementBridge(StatementSyntax statement)
-        {
-            _statement = statement;
-        }
+            => _statement = statement;
 
         private StatementBridge(ExpressionSyntax expression)
-        {
-            _statement = SyntaxFactory.ExpressionStatement(expression);
-        }
+            => _statement = SyntaxFactory.ExpressionStatement(expression);
         
         public static implicit operator StatementBridge(StatementSyntax statement)
             => new StatementBridge(statement);

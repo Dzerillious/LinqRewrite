@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 
-namespace Shaman.Roslyn.LinqRewrite.Extensions
+namespace LinqRewrite.Extensions
 {
     public static class StructureExtensions
     {

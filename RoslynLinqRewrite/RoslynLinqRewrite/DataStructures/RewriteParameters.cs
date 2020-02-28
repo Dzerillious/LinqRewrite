@@ -1,29 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LinqRewrite.Extensions;
+using LinqRewrite.Services;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Shaman.Roslyn.LinqRewrite.Extensions;
-using Shaman.Roslyn.LinqRewrite.Services;
+using SimpleCollections;
 
-namespace Shaman.Roslyn.LinqRewrite.DataStructures
+namespace LinqRewrite.DataStructures
 {
     public class RewriteParameters : IDisposable
     {
-        public readonly RewriteService Rewrite;
-        public readonly CodeCreationService Code;
-        public readonly RewriteDataService Data;
+        public RewriteService Rewrite { get; }
+        public CodeCreationService Code { get; }
+        public RewriteDataService Data { get; }
         
-        public InvocationExpressionSyntax Node;
-        public ExpressionSyntax Collection;
-        public List<LinqStep> Chain;
+        public InvocationExpressionSyntax Node { get; set; }
+        public ExpressionSyntax Collection { get; set; }
+        public List<LinqStep> Chain { get; set; }
         
-        public TypeSyntax ReturnType;
+        public TypeSyntax ReturnType { get; set; }
         
-        public ExpressionSyntax ResultSize;
-        public ExpressionSyntax SourceSize;
+        public ExpressionSyntax ResultSize { get; set; }
+        public ExpressionSyntax SourceSize { get; set; }
         
-        public ValueBridge LastItem;
+        public ValueBridge LastItem { get; set; }
 
         private List<EnumerationParameters> _enumerations;
 
@@ -34,7 +35,7 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public bool IsReversed;
         public bool HasResultMethod;
 
-        private bool _listsEnumeration;
+        private bool _listsEnumeration = true;
         public bool ListsEnumeration
         {
             get => _listsEnumeration;
@@ -48,10 +49,10 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
             set
             {
                 _modifiedEnumeration = value;
-                if (value && Indexer != null)
+                if (value && _indexer != null)
                 {
                     ResultSize = null;
-                    Indexer = null;
+                    _indexer = null;
                 }
             }
         }
@@ -108,7 +109,7 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public void SetData(ExpressionSyntax collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node)
         {
             _preForBody = new List<StatementSyntax>();
-            _forBody = new EnumerationParameters(Constants.GlobalIndexerVariable);
+            _forBody = new EnumerationParameters(Constants.GlobalIndexerVariable, collection);
             _postForBody = new List<StatementSyntax>();
             
             _enumerations = new List<EnumerationParameters>{_forBody};
@@ -120,8 +121,20 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         }
 
         public void PreForAdd(StatementBridge _) => _preForBody.Add(_);
-        public void ForAdd(StatementBridge _) => _forBody.Body.Add((StatementSyntaxBridge)_);
+        public void ForAdd(StatementBridge _)
+        {
+            _enumerations.Where(x => !x.Finished)
+                .ForEach(x => x.Body.Add((StatementSyntaxBridge) _));
+        }
         public void PostForAdd(StatementBridge _) => _postForBody.Add(_);
+        
+        public EnumerationParameters AddFor(ExpressionSyntax collection)
+        {
+            var oldBody = _forBody;
+            _forBody = new EnumerationParameters(Constants.GlobalIndexerVariable, collection);
+            _enumerations.Add(_forBody);
+            return oldBody;
+        }
         
         public EnumerationParameters CopyFor()
         {

@@ -2,8 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
-using Shaman.Roslyn.LinqRewrite.Services;
+using LinqRewrite.CompileCsc;
+using LinqRewrite.DataStructures;
+using LinqRewrite.Services;
 
 #if false
 using Microsoft.Dnx.Runtime;
@@ -11,7 +12,7 @@ using Microsoft.Dnx.Tooling;
 using Microsoft.Dnx.Runtime.Common.CommandLine;
 #endif
 
-namespace Shaman.Roslyn.LinqRewrite
+namespace LinqRewrite
 {
     public class Program
     {
@@ -98,7 +99,7 @@ namespace Shaman.Roslyn.LinqRewrite
                 }
             }
             args = args.Where(x => x != "--csc").ToArray();
-            return Microsoft.CodeAnalysis.CSharp.CommandLine.ProgramLinqRewrite.MainInternal(args);
+            return ProgramLinqRewrite.MainInternal(args);
         }
         
         private static bool FilesLookEqual(string a, string b)

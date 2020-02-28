@@ -1,10 +1,10 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
-using Shaman.Roslyn.LinqRewrite.Extensions;
-using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
-using static Shaman.Roslyn.LinqRewrite.RewriteRules.RewriteToArray;
+﻿using LinqRewrite.DataStructures;
+using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis.CSharp;
+using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.RewriteRules.RewriteToArray;
 
-namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+namespace LinqRewrite.RewriteRules
 {
     public static class RewriteToList
     {

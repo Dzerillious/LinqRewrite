@@ -1,15 +1,15 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
-using Shaman.Roslyn.LinqRewrite.Extensions;
-using Shaman.Roslyn.LinqRewrite.Services;
-using SyntaxExtensions = Shaman.Roslyn.LinqRewrite.Extensions.SyntaxExtensions;
+using LinqRewrite.DataStructures;
+using LinqRewrite.Extensions;
+using LinqRewrite.Services;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SyntaxExtensions = LinqRewrite.Extensions.SyntaxExtensions;
 
-namespace Shaman.Roslyn.LinqRewrite
+namespace LinqRewrite
 {
     public class LinqRewriter : CSharpSyntaxRewriter
     {

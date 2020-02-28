@@ -137,6 +137,7 @@
     <Compile Include="RewriteRules\RewriteAverage.cs" />
     <Compile Include="RewriteRules\RewriteCast.cs" />
     <Compile Include="RewriteRules\RewriteCollectionEnumeration.cs" />
+    <Compile Include="RewriteRules\RewriteConcat.cs" />
     <Compile Include="RewriteRules\RewriteContains.cs" />
     <Compile Include="RewriteRules\RewriteCount.cs" />
     <Compile Include="RewriteRules\RewriteElementAt.cs" />

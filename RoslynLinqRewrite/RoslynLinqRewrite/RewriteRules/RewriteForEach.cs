@@ -1,7 +1,7 @@
-﻿using Shaman.Roslyn.LinqRewrite.DataStructures;
-using Shaman.Roslyn.LinqRewrite.Extensions;
+﻿using LinqRewrite.DataStructures;
+using LinqRewrite.Extensions;
 
-namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+namespace LinqRewrite.RewriteRules
 {
     public static class RewriteForEach
     {

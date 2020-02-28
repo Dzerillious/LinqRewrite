@@ -1,4 +1,4 @@
-﻿namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+﻿namespace LinqRewrite.RewriteRules
 {
     public static class RewriteToDict
     {

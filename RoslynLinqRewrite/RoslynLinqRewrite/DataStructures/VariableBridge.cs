@@ -1,17 +1,14 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
+﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Shaman.Roslyn.LinqRewrite.DataStructures
+namespace LinqRewrite.DataStructures
 {
     public class VariableBridge
     {
         private readonly string _name;
 
         private VariableBridge(string name)
-        {
-            _name = name;
-        }
+            => _name = name;
         
         public static implicit operator VariableBridge(string name)
             => new VariableBridge(name);

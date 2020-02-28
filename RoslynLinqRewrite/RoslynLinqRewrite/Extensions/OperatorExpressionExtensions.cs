@@ -1,10 +1,10 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using LinqRewrite.DataStructures;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace Shaman.Roslyn.LinqRewrite.Extensions
+namespace LinqRewrite.Extensions
 {
     public static class OperatorExpressionExtensions
     {

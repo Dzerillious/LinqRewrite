@@ -1,13 +1,9 @@
 ﻿using System;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
-using Shaman.Roslyn.LinqRewrite.Extensions;
-using static Shaman.Roslyn.LinqRewrite.Constants;
-using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+using LinqRewrite.DataStructures;
+using LinqRewrite.Extensions;
+using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
-namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+namespace LinqRewrite.RewriteRules
 {
     public static class RewriteContains
     {
@@ -26,7 +22,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             {
                 var comparer = p.Chain[chainIndex].Arguments[1].PreReusable(p);
                 p.ForAdd(If(comparer.Access("Equals").Invoke(p.LastItem, element),
-                    Return(true)));
+                            Return(true)));
             }
             
             p.PostForAdd(Return(false));

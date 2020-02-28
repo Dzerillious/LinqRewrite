@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Text.RegularExpressions;
+using LinqRewrite.DataStructures;
+using LinqRewrite.RewriteRules;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
-using Shaman.Roslyn.LinqRewrite.RewriteRules;
 
-namespace Shaman.Roslyn.LinqRewrite
+namespace LinqRewrite
 {
     public static class InvocationRewriter
     {
@@ -103,6 +102,8 @@ namespace Shaman.Roslyn.LinqRewrite
                 case "Where": RewriteWhere.Rewrite(parameters, i); return;
                 case "Cast": RewriteCast.Rewrite(parameters, i); return;
                 case "OfType": RewriteOfType.Rewrite(parameters, i); return;
+                
+                case "Concat": RewriteConcat.Rewrite(parameters, i); return;
                 
                 case "ToArray": RewriteToArray.Rewrite(parameters, i); return;
                 case "ToList": RewriteToList.Rewrite(parameters, i); return;

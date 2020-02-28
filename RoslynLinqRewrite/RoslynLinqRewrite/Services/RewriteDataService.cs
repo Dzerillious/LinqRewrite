@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using LinqRewrite.DataStructures;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
 
-namespace Shaman.Roslyn.LinqRewrite.Services
+namespace LinqRewrite.Services
 {
     public class RewriteDataService
     {

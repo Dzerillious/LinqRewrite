@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
 
-namespace Shaman.Roslyn.LinqRewrite.Services
+namespace LinqRewrite.Services
 {
     public class PrintService
     {

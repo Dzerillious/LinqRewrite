@@ -1,9 +1,9 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
-using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
-using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+﻿using LinqRewrite.DataStructures;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Extensions.OperatorExpressionExtensions;
+using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
-namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+namespace LinqRewrite.RewriteRules
 {
     public static class RewriteWhere
     {
@@ -16,9 +16,9 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             p.LastItem = p.LastItem.Reusable(p);
             if (method is SimpleLambdaExpressionSyntax)
                 p.ForAdd(If(Not(method.Inline(p, p.LastItem)),
-                    Continue()));
+                            Continue()));
             else p.ForAdd(If(Not(method.Inline(p, p.LastItem, p.Indexer)),
-                Continue()));
+                            Continue()));
 
             p.ModifiedEnumeration = true;
         }

@@ -1,11 +1,11 @@
 ﻿using System;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
+using LinqRewrite.DataStructures;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-using static Shaman.Roslyn.LinqRewrite.Constants;
-using static Shaman.Roslyn.LinqRewrite.Extensions.OperatorExpressionExtensions;
-using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
+using static LinqRewrite.Constants;
+using static LinqRewrite.Extensions.OperatorExpressionExtensions;
+using static LinqRewrite.Extensions.VariableExtensions;
 
-namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+namespace LinqRewrite.RewriteRules
 {
     public static class RewriteRange
     {

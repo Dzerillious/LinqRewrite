@@ -1,12 +1,10 @@
 ﻿using System;
+using LinqRewrite.DataStructures;
+using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
-using Shaman.Roslyn.LinqRewrite.Extensions;
-using static Shaman.Roslyn.LinqRewrite.Constants;
-using static Shaman.Roslyn.LinqRewrite.Extensions.VariableExtensions;
-using static Shaman.Roslyn.LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
-namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+namespace LinqRewrite.RewriteRules
 {
     public static class RewriteElementAt
     {
@@ -17,7 +15,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             
             var position = p.Chain[chainIndex].Arguments[0];
             p.ForAdd(If(p.Indexer.EqualsExpr(position),
-                Return(p.LastItem)));
+                        Return(p.LastItem)));
             
             p.PostForAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not enough elements."));
             p.HasResultMethod = true;

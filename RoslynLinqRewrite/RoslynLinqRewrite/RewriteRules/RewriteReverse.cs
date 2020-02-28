@@ -1,6 +1,6 @@
-﻿using Shaman.Roslyn.LinqRewrite.DataStructures;
+﻿using LinqRewrite.DataStructures;
 
-namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+namespace LinqRewrite.RewriteRules
 {
     public class RewriteReverse
     {

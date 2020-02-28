@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Shaman.Roslyn.LinqRewrite.Extensions
+namespace LinqRewrite.Extensions
 {
     public static class SyntaxExtensions
     {

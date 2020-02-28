@@ -1,21 +1,17 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Shaman.Roslyn.LinqRewrite.DataStructures
+namespace LinqRewrite.DataStructures
 {
     public class TypeBridge
     {
         private readonly TypeSyntax _type;
 
         private TypeBridge(TypeSyntax type)
-        {
-            _type = type;
-        }
+            => _type = type;
 
         private TypeBridge(SyntaxKind type)
-        {
-            _type = SyntaxFactory.PredefinedType(SyntaxFactory.Token(type));
-        }
+            => _type = SyntaxFactory.PredefinedType(SyntaxFactory.Token(type));
         
         public static implicit operator TypeBridge(SyntaxKind kind)
             => new TypeBridge(kind);

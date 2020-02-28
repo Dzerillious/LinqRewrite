@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Shaman.Runtime;
 
-namespace Shaman.Roslyn.LinqRewrite.Services
+namespace LinqRewrite.Services
 {
     public class MsBuildService
     {

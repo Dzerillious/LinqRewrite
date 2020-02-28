@@ -1,23 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>Turing.FastCollections</PackageId>
-    <Version>1.0.1</Version>
-    <AssemblyVersion>1.0.1.0</AssemblyVersion>
-    <FileVersion>1.0.1.0</FileVersion>
+    <Version>1.0.5</Version>
+    <AssemblyVersion>1.0.5.0</AssemblyVersion>
+    <FileVersion>1.0.5.0</FileVersion>
     <LangVersion>latest</LangVersion>
-    <PackageReleaseNotes>Added queue clear</PackageReleaseNotes>
-    <PackageIconUrl>http://oi63.tinypic.com/2mzfuj9.jpg</PackageIconUrl>
-    <Authors>Turing Technology s.r.o.</Authors>
-    <Copyright>Copyright 2019 © Turing Technology s.r.o.</Copyright>
-    <Product>Turing ecosystem</Product>
     <Description>Optimized C# collections for faster operations over large amounts of data</Description>
-    <PackageProjectUrl>https://bitbucket.org/turingtech/fast-collections/</PackageProjectUrl>
-    <RepositoryUrl>https://bitbucket.org/turingtech/fast-collections/</RepositoryUrl>
-    <PackageTags>collection;utils;fast</PackageTags>
-    <PackageVersion>1.0.2.7</PackageVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <TargetFrameworks>net462;net48;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFramework>net462</TargetFramework>
   </PropertyGroup>
 
 </Project>

@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Shaman.Roslyn.LinqRewrite.DataStructures
+namespace LinqRewrite.DataStructures
 {
     public class Lambda
     {
@@ -14,18 +14,13 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         {
             Body = lambda.Body;
             Syntax = lambda;
-            switch (lambda)
+            Parameters = lambda switch
             {
-                case ParenthesizedLambdaExpressionSyntax syntax:
-                    Parameters = syntax.ParameterList.Parameters;
-                    break;
-                case AnonymousMethodExpressionSyntax expressionSyntax:
-                    Parameters = expressionSyntax.ParameterList.Parameters;
-                    break;
-                case SimpleLambdaExpressionSyntax lambdaExpressionSyntax:
-                    Parameters = new[] { lambdaExpressionSyntax.Parameter };
-                    break;
-            }
+                ParenthesizedLambdaExpressionSyntax syntax => syntax.ParameterList.Parameters,
+                AnonymousMethodExpressionSyntax expressionSyntax => expressionSyntax.ParameterList.Parameters,
+                SimpleLambdaExpressionSyntax lambdaExpressionSyntax => new[] {lambdaExpressionSyntax.Parameter},
+                _ => Parameters
+            };
         }
 
         public Lambda(CSharpSyntaxNode statement, ParameterSyntax[] parameters)

@@ -1,8 +1,8 @@
 ﻿using System;
-using Shaman.Roslyn.LinqRewrite.DataStructures;
-using static Shaman.Roslyn.LinqRewrite.Constants;
+using LinqRewrite.DataStructures;
+using static LinqRewrite.Constants;
 
-namespace Shaman.Roslyn.LinqRewrite.RewriteRules
+namespace LinqRewrite.RewriteRules
 {
     public static class RewriteRepeat
     {

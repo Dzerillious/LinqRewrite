@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Shaman.Roslyn.LinqRewrite.DataStructures
+namespace LinqRewrite.DataStructures
 {
     public interface IStatementSyntax
     {
@@ -12,9 +12,7 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         private readonly StatementSyntax _statementSyntax;
 
         public StatementSyntaxBridge(StatementSyntax statementSyntax)
-        {
-            _statementSyntax = statementSyntax;
-        }
+            => _statementSyntax = statementSyntax;
         
         public StatementSyntax GetStatementSyntax(RewriteParameters p)
             => _statementSyntax;

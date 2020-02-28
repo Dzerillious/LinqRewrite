@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Shaman.Roslyn.LinqRewrite
+namespace LinqRewrite
 {
     public static class Constants
     {
@@ -62,9 +62,10 @@ namespace Shaman.Roslyn.LinqRewrite
         public const string SimpleListPrefix = "SimpleCollections.SimpleList.SimpleList";
         public const string ListPrefix = "System.Collections.Generic.List";
         public const string IEnumerablePrefix = "System.Collections.Generic.IEnumerable";
+
+        public const string ConcatMethod = "System.Collections.Generic.IEnumerable<TSource>.Concat<TSource>(System.Collections.Generic.IEnumerable<TSource>)";
         
         public const string GlobalIndexerVariable = "__i";
-        public const string GlobalItemVariable = "__item";
 
         public static readonly HashSet<string> KnownMethods = new HashSet<string>
         {
@@ -91,6 +92,8 @@ namespace Shaman.Roslyn.LinqRewrite
             RangeMethod, RepeatMethod,
             
             SkipMethod, SkipWhileMethod, TakeMethod, TakeWhileMethod,
+            
+            ConcatMethod,
             
             EnumerableForEachMethod
         };
