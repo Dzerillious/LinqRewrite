@@ -12,7 +12,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            var resultVariable = "__result" + chainIndex;
+            var resultVariable = p.CreateVariable("__result");
             
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Count should be last expression.");

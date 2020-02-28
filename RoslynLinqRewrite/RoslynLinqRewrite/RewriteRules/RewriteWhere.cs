@@ -20,8 +20,6 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             else p.ForAdd(If(Not(method.Inline(p, p.LastItem, p.Indexer)),
                 Continue()));
 
-            p.ResultSize = null;
-            p.Indexer = null;
             p.ModifiedEnumeration = true;
         }
     }

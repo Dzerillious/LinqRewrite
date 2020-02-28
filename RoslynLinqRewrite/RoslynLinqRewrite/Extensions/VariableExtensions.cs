@@ -26,7 +26,7 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, TypeBridge type, ValueBridge value)
             =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, type, value));
 
-        public static VariableDeclarationSyntax VariableCreation(string name, ValueBridge value)
+        public static VariableDeclarationSyntax VariableCreation(VariableBridge name, ValueBridge value)
             =>  SyntaxFactory.VariableDeclaration(
                 SyntaxFactory.IdentifierName("var"),
                 SyntaxFactory.SeparatedList(new []{SyntaxFactory.VariableDeclarator(name)

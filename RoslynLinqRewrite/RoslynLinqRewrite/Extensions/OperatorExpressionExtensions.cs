@@ -2,46 +2,46 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Shaman.Roslyn.LinqRewrite.DataStructures;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Shaman.Roslyn.LinqRewrite.Extensions
 {
     public static class OperatorExpressionExtensions
     {
         public static ElementAccessExpressionSyntax ArrayAccess(this ExpressionSyntax array, ValueBridge index)
-            => SyntaxFactory.ElementAccessExpression(
-                array, SyntaxFactory.BracketedArgumentList(SyntaxFactoryHelper.CreateSeparatedList(SyntaxFactory.Argument(index))));
+            => ElementAccessExpression(
+                array, BracketedArgumentList(SyntaxFactoryHelper.CreateSeparatedList(Argument(index))));
 
-        public static ElementAccessExpressionSyntax ArrayAccess(this string identifier, ValueBridge index)
-            => SyntaxFactory.ElementAccessExpression(
-                SyntaxFactory.IdentifierName(identifier),
-                SyntaxFactory.BracketedArgumentList(SyntaxFactoryHelper.CreateSeparatedList(SyntaxFactory.Argument(index))));
+        public static ElementAccessExpressionSyntax ArrayAccess(this VariableBridge identifier, ValueBridge index)
+            => ElementAccessExpression(
+                identifier,
+                BracketedArgumentList(SyntaxFactoryHelper.CreateSeparatedList(Argument(index))));
 
         
         public static PrefixUnaryExpressionSyntax Not(ValueBridge a)
-            => SyntaxFactory.PrefixUnaryExpression(SyntaxKind.LogicalNotExpression, SyntaxFactory.ParenthesizedExpression(a));
+            => PrefixUnaryExpression(SyntaxKind.LogicalNotExpression, ParenthesizedExpression(a));
 
-        
-        
+
         public static PostfixUnaryExpressionSyntax PostDecrement(this string identifier)
-            => SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostDecrementExpression, SyntaxFactory.IdentifierName(identifier));
+            => PostfixUnaryExpression(SyntaxKind.PostDecrementExpression, IdentifierName(identifier));
         public static SeparatedSyntaxList<ExpressionSyntax> SeparatedPostDecrement(this string identifier)
             => SyntaxFactoryHelper.CreateSeparatedExpressionList(
-                SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostDecrementExpression, SyntaxFactory.IdentifierName(identifier)));
+                PostfixUnaryExpression(SyntaxKind.PostDecrementExpression, IdentifierName(identifier)));
         
         public static PostfixUnaryExpressionSyntax PostIncrement(this ValueBridge identifier)
-            => SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, identifier);
+            => PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, identifier);
         
         public static PostfixUnaryExpressionSyntax PostIncrement(this string identifier)
-            => SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, SyntaxFactory.IdentifierName(identifier));
+            => PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, IdentifierName(identifier));
         public static SeparatedSyntaxList<ExpressionSyntax> SeparatedPostIncrement(this string identifier)
             => SyntaxFactoryHelper.CreateSeparatedExpressionList(
-                SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, SyntaxFactory.IdentifierName(identifier)));
+                PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, IdentifierName(identifier)));
         
-        public static PrefixUnaryExpressionSyntax PreIncrement(this ValueBridge identifier)
-            => SyntaxFactory.PrefixUnaryExpression(SyntaxKind.PreIncrementExpression, identifier);
+        public static PrefixUnaryExpressionSyntax PreIncrement(this VariableBridge identifier)
+            => PrefixUnaryExpression(SyntaxKind.PreIncrementExpression, identifier);
         
         public static PrefixUnaryExpressionSyntax PreIncrement(this string identifier)
-            => SyntaxFactory.PrefixUnaryExpression(SyntaxKind.PreIncrementExpression, SyntaxFactory.IdentifierName(identifier));
+            => PrefixUnaryExpression(SyntaxKind.PreIncrementExpression, IdentifierName(identifier));
 
         public static CastExpressionSyntax Cast(this double a, TypeBridge type)
             => Cast((ValueBridge)a, type);
@@ -52,115 +52,147 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static CastExpressionSyntax Cast(this int a, TypeBridge type)
             => Cast((ValueBridge)a, type);
         
-        public static CastExpressionSyntax Cast(this string identifier, TypeBridge type)
-            => SyntaxFactory.CastExpression(type, SyntaxFactory.IdentifierName(identifier));
+        public static CastExpressionSyntax Cast(this VariableBridge identifier, TypeBridge type)
+            => CastExpression(type, identifier);
         
         public static CastExpressionSyntax Cast(this ExpressionSyntax a, TypeBridge type)
-            => SyntaxFactory.CastExpression(type, a);
+            => CastExpression(type, a);
         
         public static CastExpressionSyntax Cast(this ValueBridge a, TypeBridge type)
-            => SyntaxFactory.CastExpression(type, a);
+            => CastExpression(type, a);
         
         
-        public static AssignmentExpressionSyntax Assign(this string identifier, ValueBridge b)
-            => SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(identifier), b);
+        public static AssignmentExpressionSyntax Assign(this VariableBridge a, ValueBridge b)
+            => AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, a, b);
         public static AssignmentExpressionSyntax Assign(this ExpressionSyntax a, ValueBridge b)
-            => SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, a, b);
+            => AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, a, b);
         
         
-        public static AssignmentExpressionSyntax SubAssign(this string identifier, ValueBridge b)
-            => SyntaxFactory.AssignmentExpression(SyntaxKind.SubtractAssignmentExpression, SyntaxFactory.IdentifierName(identifier), b);
+        public static AssignmentExpressionSyntax SubAssign(this VariableBridge a, ValueBridge b)
+            => AssignmentExpression(SyntaxKind.SubtractAssignmentExpression, a, b);
         public static AssignmentExpressionSyntax SubAssign(this ExpressionSyntax a, ValueBridge b)
-            => SyntaxFactory.AssignmentExpression(SyntaxKind.SubtractAssignmentExpression, a, b);
+            => AssignmentExpression(SyntaxKind.SubtractAssignmentExpression, a, b);
         
-        public static AssignmentExpressionSyntax AddAssign(this string identifier, ValueBridge b)
-            => SyntaxFactory.AssignmentExpression(SyntaxKind.AddAssignmentExpression, SyntaxFactory.IdentifierName(identifier), b);
+        public static AssignmentExpressionSyntax AddAssign(this VariableBridge a, ValueBridge b)
+            => AssignmentExpression(SyntaxKind.AddAssignmentExpression, a, b);
         public static AssignmentExpressionSyntax AddAssign(this ExpressionSyntax a, ValueBridge b)
-            => SyntaxFactory.AssignmentExpression(SyntaxKind.AddAssignmentExpression, a, b);
+            => AssignmentExpression(SyntaxKind.AddAssignmentExpression, a, b);
         
         
         public static BinaryExpressionSyntax Add(this ValueBridge a, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.AddExpression, a, b);
+            => BinaryExpression(SyntaxKind.AddExpression, a, b);
         public static BinaryExpressionSyntax Add(this ExpressionSyntax a, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.AddExpression, a, b);
-        public static BinaryExpressionSyntax Add(this string identifier, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.AddExpression, SyntaxFactory.IdentifierName(identifier), b);
+            => BinaryExpression(SyntaxKind.AddExpression, a, b);
+        public static BinaryExpressionSyntax Add(this VariableBridge a, ValueBridge b)
+            => BinaryExpression(SyntaxKind.AddExpression, a, b);
         
         
-        public static BinaryExpressionSyntax Sub(this string identifier, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.SubtractExpression, SyntaxFactory.IdentifierName(identifier), b);
+        public static BinaryExpressionSyntax Sub(this VariableBridge a, ValueBridge b)
+            => BinaryExpression(SyntaxKind.SubtractExpression, a, b);
         public static BinaryExpressionSyntax Sub(this ExpressionSyntax a, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.SubtractExpression, a, b);
+            => BinaryExpression(SyntaxKind.SubtractExpression, a, b);
         public static BinaryExpressionSyntax Sub(this ValueBridge a, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.SubtractExpression, a, b);
+            => BinaryExpression(SyntaxKind.SubtractExpression, a, b);
         
         
         public static BinaryExpressionSyntax Div(this ValueBridge a, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.DivideExpression, a, b);
+            => BinaryExpression(SyntaxKind.DivideExpression, a, b);
         public static BinaryExpressionSyntax Div(this ExpressionSyntax a, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.DivideExpression, a, b);
-        public static BinaryExpressionSyntax Div(this string identifier, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.DivideExpression, SyntaxFactory.IdentifierName(identifier), b);
+            => BinaryExpression(SyntaxKind.DivideExpression, a, b);
+        public static BinaryExpressionSyntax Div(this VariableBridge a, ValueBridge b)
+            => BinaryExpression(SyntaxKind.DivideExpression, a, b);
         
         
-        public static BinaryExpressionSyntax Mod(this string identifier, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.ModuloExpression, SyntaxFactory.IdentifierName(identifier), b);
         public static BinaryExpressionSyntax Mod(this ExpressionSyntax a, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.ModuloExpression, a, b);
+            => BinaryExpression(SyntaxKind.ModuloExpression, a, b);
+        public static BinaryExpressionSyntax Mod(this VariableBridge a, ValueBridge b)
+            => BinaryExpression(SyntaxKind.ModuloExpression, a, b);
         
         
-        public static BinaryExpressionSyntax EqualsExpr(this string identifier, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, SyntaxFactory.IdentifierName(identifier), b);
         public static BinaryExpressionSyntax EqualsExpr(this ExpressionSyntax a, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, a, b);
+            => BinaryExpression(SyntaxKind.EqualsExpression, a, b);
         public static BinaryExpressionSyntax EqualsExpr(this ValueBridge a, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, a, b);
+            => BinaryExpression(SyntaxKind.EqualsExpression, a, b);
+        public static BinaryExpressionSyntax EqualsExpr(this VariableBridge a, ValueBridge b)
+            => BinaryExpression(SyntaxKind.EqualsExpression, a, b);
         
         
-        public static BinaryExpressionSyntax LThan(this string identifier, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.LessThanExpression, SyntaxFactory.IdentifierName(identifier), b);
         public static BinaryExpressionSyntax LThan(this ExpressionSyntax a, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.LessThanExpression, a, b);
+            => BinaryExpression(SyntaxKind.LessThanExpression, a, b);
+        public static BinaryExpressionSyntax LThan(this VariableBridge a, ValueBridge b)
+            => BinaryExpression(SyntaxKind.LessThanExpression, a, b);
         public static BinaryExpressionSyntax LThan(this ValueBridge a, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.LessThanExpression, a, b);
+            => BinaryExpression(SyntaxKind.LessThanExpression, a, b);
         
         
-        public static BinaryExpressionSyntax LeThan(this string identifier, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.LessThanOrEqualExpression, SyntaxFactory.IdentifierName(identifier), b);
         public static BinaryExpressionSyntax LeThan(this ExpressionSyntax a, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.LessThanOrEqualExpression, a, b);
+            => BinaryExpression(SyntaxKind.LessThanOrEqualExpression, a, b);
+        public static BinaryExpressionSyntax LeThan(this VariableBridge a, ValueBridge b)
+            => BinaryExpression(SyntaxKind.LessThanOrEqualExpression, a, b);
         
         
-        public static BinaryExpressionSyntax GeThan(this string identifier, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.GreaterThanOrEqualExpression, SyntaxFactory.IdentifierName(identifier), b);
+        public static BinaryExpressionSyntax GeThan(this VariableBridge a, ValueBridge b)
+            => BinaryExpression(SyntaxKind.GreaterThanOrEqualExpression, a, b);
         public static BinaryExpressionSyntax GeThan(this ExpressionSyntax a, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.GreaterThanOrEqualExpression, a, b);
+            => BinaryExpression(SyntaxKind.GreaterThanOrEqualExpression, a, b);
         public static BinaryExpressionSyntax GeThan(this ValueBridge a, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.GreaterThanOrEqualExpression, a, b);
+            => BinaryExpression(SyntaxKind.GreaterThanOrEqualExpression, a, b);
         
         
-        public static BinaryExpressionSyntax GThan(this string identifier, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.GreaterThanExpression, SyntaxFactory.IdentifierName(identifier), b);
         public static BinaryExpressionSyntax GThan(this ExpressionSyntax a, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.GreaterThanExpression, a, b);
+            => BinaryExpression(SyntaxKind.GreaterThanExpression, a, b);
+        public static BinaryExpressionSyntax GThan(this VariableBridge a, ValueBridge b)
+            => BinaryExpression(SyntaxKind.GreaterThanExpression, a, b);
         
         
         public static BinaryExpressionSyntax NotEqualsExpr(this ExpressionSyntax a, ExpressionSyntax b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, a, b);
-        public static BinaryExpressionSyntax NotEqualsExpr(this string identifier, ExpressionSyntax b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, SyntaxFactory.IdentifierName(identifier), b);
+            => BinaryExpression(SyntaxKind.NotEqualsExpression, a, b);
+        public static BinaryExpressionSyntax NotEqualsExpr(this VariableBridge a, ExpressionSyntax b)
+            => BinaryExpression(SyntaxKind.NotEqualsExpression, a, b);
 
-        public static BinaryExpressionSyntax As(this string identifier, ValueBridge b)
-            => SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression, SyntaxFactory.IdentifierName(identifier), b);
+        public static BinaryExpressionSyntax As(this VariableBridge identifier, ValueBridge b)
+            => BinaryExpression(SyntaxKind.AsExpression, IdentifierName(identifier), b);
 
         public static MemberAccessExpressionSyntax Access(this string identifier, VariableBridge accessed)
-            => SyntaxFactory.MemberAccessExpression(
+            => MemberAccessExpression(
                 SyntaxKind.SimpleMemberAccessExpression,
-                SyntaxFactory.IdentifierName(identifier),
+                IdentifierName(identifier),
                 accessed);
         
+        public static MemberAccessExpressionSyntax Access(this string identifier, params VariableBridge[] accessed)
+        {
+            var item = (ExpressionSyntax)IdentifierName(identifier);
+            for (var i = 0; i < accessed.Length; i++)
+            {
+                item = MemberAccessExpression(
+                    SyntaxKind.SimpleMemberAccessExpression,
+                    item,
+                    accessed[i]);
+            }
+            return (MemberAccessExpressionSyntax)item;
+        }
+
+        public static MemberAccessExpressionSyntax Access(this VariableBridge identifier, VariableBridge accessed)
+            => MemberAccessExpression(
+                SyntaxKind.SimpleMemberAccessExpression,
+                identifier,
+                accessed);
+        
+        public static MemberAccessExpressionSyntax Access(this VariableBridge identifier, params VariableBridge[] accessed)
+        {
+            var item = (ExpressionSyntax)identifier;
+            for (var i = 0; i < accessed.Length; i++)
+            {
+                item = MemberAccessExpression(
+                    SyntaxKind.SimpleMemberAccessExpression,
+                    item,
+                    accessed[i]);
+            }
+            return (MemberAccessExpressionSyntax)item;
+        }
+        
         public static MemberAccessExpressionSyntax Access(this ExpressionSyntax source, VariableBridge accessed)
-            => SyntaxFactory.MemberAccessExpression(
+            => MemberAccessExpression(
                 SyntaxKind.SimpleMemberAccessExpression,
                 source,
                 accessed);
@@ -170,20 +202,7 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
             var item = source;
             for (var i = 0; i < accessed.Length; i++)
             {
-                item = SyntaxFactory.MemberAccessExpression(
-                    SyntaxKind.SimpleMemberAccessExpression,
-                    item,
-                    accessed[i]);
-            }
-            return (MemberAccessExpressionSyntax)item;
-        }
-        
-        public static MemberAccessExpressionSyntax Access(this string identifier, params VariableBridge[] accessed)
-        {
-            var item = (ExpressionSyntax)SyntaxFactory.IdentifierName(identifier);
-            for (var i = 0; i < accessed.Length; i++)
-            {
-                item = SyntaxFactory.MemberAccessExpression(
+                item = MemberAccessExpression(
                     SyntaxKind.SimpleMemberAccessExpression,
                     item,
                     accessed[i]);

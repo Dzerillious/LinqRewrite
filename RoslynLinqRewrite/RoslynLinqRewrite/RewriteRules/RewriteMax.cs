@@ -11,7 +11,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            var maxVariable = "__max" + chainIndex;
+            var maxVariable = p.CreateVariable("__max");
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Sum should be last expression.");
 

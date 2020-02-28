@@ -50,13 +50,12 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
                 _modifiedEnumeration = value;
                 if (value && Indexer != null)
                 {
-                    
+                    ResultSize = null;
                     Indexer = null;
                 }
             }
         }
 
-        private static int _indexerCounter;
         private ValueBridge _indexer;
         public ValueBridge Indexer
         {
@@ -64,11 +63,11 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
             {
                 if (_indexer != null) return _indexer;
 
-                var indexer = "__indexer" + _indexerCounter++;
+                var indexer = CreateVariable("__indexer");
                 PreForAdd(VariableExtensions.LocalVariableCreation(indexer, -1));
+                ForAdd(indexer.PreIncrement());
             
-                _indexer = indexer;
-                return indexer.PreIncrement();
+                return _indexer = indexer;
             }
             set => _indexer = value;
         }
@@ -157,6 +156,10 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
             _preForBody.AddRange(_postForBody);
             return _preForBody;
         }
+
+        private int _variableIndex;
+        public VariableBridge CreateVariable(string name)
+            => name + _variableIndex++;
 
         public void Dispose() => RewriteParametersFactory.ReturnParameters(this);
     }

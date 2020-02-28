@@ -45,8 +45,7 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             return ParenthesizedExpression(
                 ConditionalAccessExpression(
                     ParenthesizedExpression(
-                        // TODO: Fix
-                        /*GlobalItemsVariable*/"".As(ParseTypeName($"System.Collections.Generic.ICollection<{itemType.ToDisplayString()}>"))
+                        ((VariableBridge)collection.ToString()).As(ParseTypeName($"System.Collections.Generic.ICollection<{itemType.ToDisplayString()}>"))
                     ),
                     MemberBindingExpression(IdentifierName("Count"))
                 )

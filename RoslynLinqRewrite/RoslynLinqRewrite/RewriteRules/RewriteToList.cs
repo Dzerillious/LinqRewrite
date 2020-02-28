@@ -10,12 +10,14 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
+            var resultVariable = p.CreateVariable("__result");
             var collectionType = p.Semantic.GetTypeInfo(p.Node).Type;
             var itemType = SymbolExtensions.GetItemType(collectionType)
                 .GetTypeSyntaxFromExpression();
             
-            RewriteOther(p, chainIndex, itemType);
-            p.PostForAdd(Return(New(p.ReturnType, Constants.GlobalResultVariable)));
+            RewriteOther(p, chainIndex, resultVariable, itemType);
+            p.PostForAdd(Return(New(p.ReturnType, resultVariable)));
+           
             p.HasResultMethod = true;
         }
     }

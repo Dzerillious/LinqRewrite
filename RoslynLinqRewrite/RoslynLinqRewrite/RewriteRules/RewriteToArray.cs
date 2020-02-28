@@ -12,85 +12,86 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 {
     public static class RewriteToArray
     {
-        public const string LogVariable = "__log";
-        public const string CurrentLengthVariable = "__currentLength";
-        
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
+            var resultVariable = p.CreateVariable("__result");
             if (p.Chain.Count == 1)
             {
-                RewriteSimple(p);
+                RewriteSimple(p, resultVariable);
                 return;
             }
-            RewriteOther(p, chainIndex);
+            RewriteOther(p, chainIndex, resultVariable);
             if (p.ResultSize == null) p.PostForAdd(Return("SimpleCollections".Access("SimpleArrayExtensions", "EnsureFullArray")
-                .Invoke(GlobalResultVariable, p.Indexer)));
+                .Invoke(resultVariable, p.Indexer)));
 
             p.HasResultMethod = true;
         }
         
-        public static void RewriteOther(RewriteParameters p, int chainIndex, TypeSyntax itemType = null)
+        public static void RewriteOther(RewriteParameters p, int chainIndex, VariableBridge resultVariable, TypeSyntax itemType = null)
         {
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("ToArray should be last expression.");
             
-            if (p.ResultSize != null) KnownSize(p, itemType);
-            else if (p.SourceSize != null) KnownSourceSize(p);
-            else UnknownSourceSize(p);
+            if (p.ResultSize != null) KnownSize(p, resultVariable, itemType);
+            else if (p.SourceSize != null) KnownSourceSize(p, resultVariable);
+            else UnknownSourceSize(p, resultVariable);
         }
 
-        private static void KnownSize(RewriteParameters p, TypeSyntax itemType = null)
+        private static void KnownSize(RewriteParameters p, VariableBridge resultVariable, TypeSyntax itemType = null)
         {
             var arrayType = itemType == null ? (ArrayTypeSyntax) p.ReturnType : ArrayType(itemType);
-            p.PreForAdd(CreateLocalArray(GlobalResultVariable, arrayType, p.ResultSize));
+            p.PreForAdd(CreateLocalArray(resultVariable, arrayType, p.ResultSize));
 
-            p.ForAdd(GlobalResultVariable.ArrayAccess(p.Indexer).Assign(p.LastItem));
+            p.ForAdd(resultVariable.ArrayAccess(p.Indexer).Assign(p.LastItem));
             
-            p.PostForAdd(Return(GlobalResultVariable));
+            p.PostForAdd(Return(resultVariable));
         }
 
-        private static void KnownSourceSize(RewriteParameters p)
+        private static void KnownSourceSize(RewriteParameters p, VariableBridge resultVariable)
         {
+            var logVariable = p.CreateVariable("__log");
+            var currentLengthVariable = p.CreateVariable("__currentLength");
             var indexer = p.Indexer;
                 
-            p.PreForAdd(LocalVariableCreation(LogVariable, 
+            p.PreForAdd(LocalVariableCreation(logVariable, 
                         "SimpleCollections".Access("IntExtensions", "Log2")
                                 .Invoke(p.SourceSize.Cast(SyntaxKind.UIntKeyword))
                                     .Sub(3)));
                 
-            p.PreForAdd(LogVariable.SubAssign(LogVariable.Mod(2)));
-            p.PreForAdd(LocalVariableCreation(CurrentLengthVariable, 8));
+            p.PreForAdd(logVariable.SubAssign(logVariable.Mod(2)));
+            p.PreForAdd(LocalVariableCreation(currentLengthVariable, 8));
 
             var result = (ArrayTypeSyntax) p.ReturnType;
-            p.PreForAdd(CreateLocalArray(GlobalResultVariable, result, 8));
+            p.PreForAdd(CreateLocalArray(resultVariable, result, 8));
 
-            p.ForAdd(If(p.Indexer.GeThan(CurrentLengthVariable),
+            p.ForAdd(If(p.Indexer.GeThan(currentLengthVariable),
                         "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")
                                 .Invoke(Argument(2), 
                                     Argument(p.SourceSize), 
-                                    RefArg(GlobalResultVariable), 
-                                    RefArg(LogVariable),
-                                    OutArg(CurrentLengthVariable))));
+                                    RefArg(resultVariable), 
+                                    RefArg(logVariable),
+                                    OutArg(currentLengthVariable))));
                 
-            p.ForAdd(GlobalResultVariable.ArrayAccess(indexer).Assign(p.LastItem));
+            p.ForAdd(resultVariable.ArrayAccess(indexer).Assign(p.LastItem));
         }
 
-        private static void UnknownSourceSize(RewriteParameters p)
+        private static void UnknownSourceSize(RewriteParameters p, VariableBridge resultVariable)
         {
+            var currentLengthVariable = p.CreateVariable("__currentLength");
             var indexer = p.Indexer;
             
-            p.PreForAdd(LocalVariableCreation(CurrentLengthVariable, 8));
+            p.PreForAdd(LocalVariableCreation(currentLengthVariable, 8));
             var result = (ArrayTypeSyntax) p.ReturnType;
-            p.PreForAdd(CreateLocalArray(GlobalResultVariable, result, 8));
+            p.PreForAdd(CreateLocalArray(resultVariable, result, 8));
                 
-            p.ForAdd(If(p.Indexer.GeThan(CurrentLengthVariable),
+            p.ForAdd(If(p.Indexer.GeThan(currentLengthVariable),
                             "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")
-                                    .Invoke(Argument(2), RefArg(GlobalResultVariable), RefArg(CurrentLengthVariable))));
+                                    .Invoke(Argument(2), RefArg(resultVariable), RefArg(currentLengthVariable))));
                 
-            p.ForAdd(GlobalResultVariable.ArrayAccess(indexer).Assign(p.LastItem));
+            p.ForAdd(resultVariable.ArrayAccess(indexer).Assign(p.LastItem));
             p.HasResultMethod = true;
         }
 
-        private static void RewriteSimple(RewriteParameters p)
+        private static void RewriteSimple(RewriteParameters p, VariableBridge resultVariable)
         {
             var collectionType = p.Semantic.GetTypeFromExpression(p.Collection);
             var collectionName = collectionType.ToString();
@@ -98,10 +99,10 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             if (collectionType is ArrayTypeSyntax)
             {
                 var count = p.Code.CreateCollectionCount(p.Collection, false);
-                p.PreForAdd(CreateLocalArray(GlobalResultVariable, (ArrayTypeSyntax) p.ReturnType, count));
+                p.PreForAdd(CreateLocalArray(resultVariable, (ArrayTypeSyntax) p.ReturnType, count));
                 p.PreForAdd("Array".Access("Copy")
-                    .Invoke(p.Collection, 0, GlobalResultVariable, 0, count));
-                p.PreForAdd(Return(GlobalResultVariable));
+                    .Invoke(p.Collection, 0, resultVariable, 0, count));
+                p.PreForAdd(Return(resultVariable));
             }
         }
     }

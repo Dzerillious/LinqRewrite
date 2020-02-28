@@ -6,7 +6,6 @@ static class Example2
     static void Main()
     {
 		var arr = new int[10].AsEnumerable();
-		var add = 3;
-		var test = arr.Select((x, i) => x + add).ToArray();
+		var test = arr.Select((x, i) => x + i).ToArray();
     }
 }
