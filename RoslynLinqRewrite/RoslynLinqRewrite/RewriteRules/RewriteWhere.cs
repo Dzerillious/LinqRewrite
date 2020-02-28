@@ -17,7 +17,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             if (method is SimpleLambdaExpressionSyntax)
                 p.ForAdd(If(Not(method.Inline(p, p.LastItem)),
                     Continue()));
-            else p.ForAdd(If(Not(method.Inline(p, p.LastItem, p.GetIndexer())),
+            else p.ForAdd(If(Not(method.Inline(p, p.LastItem, p.Indexer)),
                 Continue()));
 
             p.ResultSize = null;

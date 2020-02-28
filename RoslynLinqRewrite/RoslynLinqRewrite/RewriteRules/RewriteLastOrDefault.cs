@@ -43,9 +43,9 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             if (p.SourceSize == null) return null;
             
             return ConditionalExpression(
-                p.Code.CreateCollectionCount(GlobalItemsVariable, p.Collection, false)
+                p.Code.CreateCollectionCount(p.Collection, false)
                     .EqualsExpr(0),
-                GlobalItemsVariable.ArrayAccess(p.Code.CreateCollectionCount(GlobalItemsVariable, p.Collection, false).Sub(1)),
+                p.Collection.ArrayAccess(p.Code.CreateCollectionCount(p.Collection, false).Sub(1)),
                 Default(p.ReturnType));
         }
     }

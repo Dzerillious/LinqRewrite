@@ -42,8 +42,8 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
         public static ExpressionSyntax RewriteSimple(RewriteParameters p) 
             => p.Chain[0].Arguments.Length == 0 
-                ? ConditionalExpression(p.Code.CreateCollectionCount(GlobalItemsVariable, p.Collection, false).EqualsExpr(1),
-                    GlobalItemsVariable.ArrayAccess(0),
+                ? ConditionalExpression(p.Code.CreateCollectionCount(p.Collection, false).EqualsExpr(1),
+                    p.Collection.ArrayAccess(0),
                     Default(p.ReturnType)) 
                 : null;
     }

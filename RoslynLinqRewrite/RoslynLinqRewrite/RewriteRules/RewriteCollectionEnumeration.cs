@@ -28,12 +28,12 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
         public static void ArrayEnumeration(RewriteParameters p)
         {
-            var count = p.Code.CreateCollectionCount(GlobalItemsVariable, p.Collection, false);
+            var count = p.Code.CreateCollectionCount(p.Collection, false);
 
             p.ForMin = p.ForReMin = 0;
             p.ForMax = p.ForReMax = count;
 
-            p.LastItem = GlobalItemsVariable.ArrayAccess(GlobalIndexerVariable);
+            p.LastItem = p.Collection.ArrayAccess(GlobalIndexerVariable);
             p.Indexer = GlobalIndexerVariable;
             p.ResultSize = count;
             p.SourceSize = count;
@@ -43,16 +43,15 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
         {
             var sourceCount = "__sourceCount" + chainIndex;
             
-            p.PreForAdd( If(GlobalItemsVariable.EqualsExpr(NullValue),
+            p.PreForAdd( If(p.Collection.EqualsExpr(NullValue),
                 CreateThrowException("System.InvalidOperationException", "Collection was null.")));
                 
-            p.PreForAdd(LocalVariableCreation(sourceCount,
-                GlobalItemsVariable.Access("Count").Invoke()));
+            p.PreForAdd(p.Code.CreateCollectionCount(p.Collection, false));
 
             p.ForMin = p.ForReMin = 0;
             p.ForMax = p.ForReMax = sourceCount;
             
-            p.LastItem = GlobalItemsVariable.ArrayAccess(GlobalIndexerVariable);
+            p.LastItem = p.Collection.ArrayAccess(GlobalIndexerVariable);
             p.Indexer = GlobalIndexerVariable;
             
             p.ResultSize = IdentifierName(sourceCount);
@@ -61,7 +60,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
         public static void IEnumerableEnumeration(RewriteParameters p)
         {
-            p.PreForAdd(If(GlobalItemsVariable.EqualsExpr(NullValue),
+            p.PreForAdd(If(p.Collection.EqualsExpr(NullValue),
                 CreateThrowException("System.InvalidOperationException", "Collection was null.")));
 
             p.IsReversed = false;

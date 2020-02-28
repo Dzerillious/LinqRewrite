@@ -12,14 +12,11 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            var countVariable = "__count" + chainIndex;
-            
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Count should be last expression.");
             
-            p.PreForAdd(LocalVariableCreation(countVariable, 0));
             var position = p.Chain[chainIndex].Arguments[0];
-            p.ForAdd(If(countVariable.PostIncrement().EqualsExpr(position),
+            p.ForAdd(If(p.Indexer.EqualsExpr(position),
                 Return(p.LastItem)));
             
             p.PostForAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not enough elements."));
@@ -33,7 +30,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             
             return p.SourceSize == null 
                 ? null 
-                : GlobalItemsVariable.ArrayAccess(p.Chain[0].Arguments[0]);
+                : p.Collection.ArrayAccess(p.Chain[0].Arguments[0]);
         }
     }
 }

@@ -28,14 +28,21 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
             => SyntaxFactoryHelper.CreateSeparatedExpressionList(
                 SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostDecrementExpression, SyntaxFactory.IdentifierName(identifier)));
         
+        public static PostfixUnaryExpressionSyntax PostIncrement(this ValueBridge identifier)
+            => SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, identifier);
+        
         public static PostfixUnaryExpressionSyntax PostIncrement(this string identifier)
             => SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, SyntaxFactory.IdentifierName(identifier));
-
         public static SeparatedSyntaxList<ExpressionSyntax> SeparatedPostIncrement(this string identifier)
             => SyntaxFactoryHelper.CreateSeparatedExpressionList(
                 SyntaxFactory.PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, SyntaxFactory.IdentifierName(identifier)));
         
+        public static PrefixUnaryExpressionSyntax PreIncrement(this ValueBridge identifier)
+            => SyntaxFactory.PrefixUnaryExpression(SyntaxKind.PreIncrementExpression, identifier);
         
+        public static PrefixUnaryExpressionSyntax PreIncrement(this string identifier)
+            => SyntaxFactory.PrefixUnaryExpression(SyntaxKind.PreIncrementExpression, SyntaxFactory.IdentifierName(identifier));
+
         public static CastExpressionSyntax Cast(this double a, TypeBridge type)
             => Cast((ValueBridge)a, type);
         
@@ -113,6 +120,8 @@ namespace Shaman.Roslyn.LinqRewrite.Extensions
         public static BinaryExpressionSyntax LThan(this string identifier, ValueBridge b)
             => SyntaxFactory.BinaryExpression(SyntaxKind.LessThanExpression, SyntaxFactory.IdentifierName(identifier), b);
         public static BinaryExpressionSyntax LThan(this ExpressionSyntax a, ValueBridge b)
+            => SyntaxFactory.BinaryExpression(SyntaxKind.LessThanExpression, a, b);
+        public static BinaryExpressionSyntax LThan(this ValueBridge a, ValueBridge b)
             => SyntaxFactory.BinaryExpression(SyntaxKind.LessThanExpression, a, b);
         
         

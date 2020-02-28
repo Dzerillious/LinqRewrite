@@ -43,7 +43,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             
             return p.SourceSize == null 
                 ? null 
-                : GlobalItemsVariable.ArrayAccess(p.Code.CreateCollectionCount(GlobalItemsVariable, p.Collection, false).Sub(1));
+                : p.Collection.ArrayAccess(p.Code.CreateCollectionCount(p.Collection, false).Sub(1));
         }
     }
 }

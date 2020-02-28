@@ -9,7 +9,6 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            var countVariable = "__count" + chainIndex;
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
             var skipped = p.Chain[chainIndex].Arguments[0];
@@ -20,12 +19,9 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             }
             else
             {
-                p.PreForAdd(LocalVariableCreation(countVariable, 0));
-                
-                p.ForAdd(If(countVariable.LThan(skipped), Continue()));
-                p.ForAdd(countVariable.PostIncrement());
+                p.ForAdd(If(p.Indexer.LThan(skipped), Continue()));
+                p.ModifiedEnumeration = true;
             }
-            p.Indexer = null;
         }
     }
 }

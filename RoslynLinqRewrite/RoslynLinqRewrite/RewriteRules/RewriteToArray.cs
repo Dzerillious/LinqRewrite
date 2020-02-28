@@ -43,14 +43,14 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
             var arrayType = itemType == null ? (ArrayTypeSyntax) p.ReturnType : ArrayType(itemType);
             p.PreForAdd(CreateLocalArray(GlobalResultVariable, arrayType, p.ResultSize));
 
-            p.ForAdd(GlobalResultVariable.ArrayAccess(p.GetIndexer()).Assign(p.LastItem));
+            p.ForAdd(GlobalResultVariable.ArrayAccess(p.Indexer).Assign(p.LastItem));
             
             p.PostForAdd(Return(GlobalResultVariable));
         }
 
         private static void KnownSourceSize(RewriteParameters p)
         {
-            var indexer = p.GetIndexer();
+            var indexer = p.Indexer;
                 
             p.PreForAdd(LocalVariableCreation(LogVariable, 
                         "SimpleCollections".Access("IntExtensions", "Log2")
@@ -76,7 +76,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
         private static void UnknownSourceSize(RewriteParameters p)
         {
-            var indexer = p.GetIndexer();
+            var indexer = p.Indexer;
             
             p.PreForAdd(LocalVariableCreation(CurrentLengthVariable, 8));
             var result = (ArrayTypeSyntax) p.ReturnType;
@@ -97,10 +97,10 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
             if (collectionType is ArrayTypeSyntax)
             {
-                var count = p.Code.CreateCollectionCount(GlobalItemsVariable, p.Collection, false);
+                var count = p.Code.CreateCollectionCount(p.Collection, false);
                 p.PreForAdd(CreateLocalArray(GlobalResultVariable, (ArrayTypeSyntax) p.ReturnType, count));
                 p.PreForAdd("Array".Access("Copy")
-                    .Invoke(GlobalItemsVariable, 0, GlobalResultVariable, 0, count));
+                    .Invoke(p.Collection, 0, GlobalResultVariable, 0, count));
                 p.PreForAdd(Return(GlobalResultVariable));
             }
         }

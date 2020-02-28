@@ -24,7 +24,6 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public ExpressionSyntax SourceSize;
         
         public ValueBridge LastItem;
-        public ValueBridge Indexer;
 
         private List<EnumerationParameters> _enumerations;
 
@@ -34,8 +33,45 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
 
         public bool IsReversed;
         public bool HasResultMethod;
-        public bool ListsEnumeration;
-        public bool ModifiedEnumeration;
+
+        private bool _listsEnumeration;
+        public bool ListsEnumeration
+        {
+            get => _listsEnumeration;
+            set => _listsEnumeration = value;
+        }
+
+        private bool _modifiedEnumeration;
+        public bool ModifiedEnumeration
+        {
+            get => _modifiedEnumeration;
+            set
+            {
+                _modifiedEnumeration = value;
+                if (value && Indexer != null)
+                {
+                    
+                    Indexer = null;
+                }
+            }
+        }
+
+        private static int _indexerCounter;
+        private ValueBridge _indexer;
+        public ValueBridge Indexer
+        {
+            get 
+            {
+                if (_indexer != null) return _indexer;
+
+                var indexer = "__indexer" + _indexerCounter++;
+                PreForAdd(VariableExtensions.LocalVariableCreation(indexer, -1));
+            
+                _indexer = indexer;
+                return indexer.PreIncrement();
+            }
+            set => _indexer = value;
+        }
 
         public ValueBridge ForMin
         {
@@ -123,17 +159,5 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         }
 
         public void Dispose() => RewriteParametersFactory.ReturnParameters(this);
-
-        private static int _indexer;
-        public ValueBridge GetIndexer()
-        {
-            if (Indexer != null) return Indexer;
-
-            var indexer = "__indexer" + _indexer++;
-            PreForAdd(VariableExtensions.LocalVariableCreation(indexer, 0));
-            
-            Indexer = indexer;
-            return indexer.PostIncrement();
-        }
     }
 }

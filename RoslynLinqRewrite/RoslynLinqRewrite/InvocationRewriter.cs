@@ -25,6 +25,7 @@ namespace Shaman.Roslyn.LinqRewrite
                 ? match.Groups[2].Value : match.Groups[1].Value;
             switch (last)
             {
+                case "Any": return RewriteAny.RewriteSimple(parameters);
                 case "Count": return RewriteCount.RewriteSimple(parameters);
                 case "First": return RewriteFirst.RewriteSimple(parameters);
                 case "FirstOrDefault": return RewriteFirstOrDefault.RewriteSimple(parameters);
@@ -76,6 +77,7 @@ namespace Shaman.Roslyn.LinqRewrite
                 case "Max": RewriteMax.Rewrite(parameters, i); return;
                 case "Average": RewriteAverage.Rewrite(parameters, i); return;
                 case "Aggregate": RewriteAggregate.Rewrite(parameters, i); return;
+                case "Sum": RewriteSum.Rewrite(parameters, i); return;
                 
                 case "ForEach": RewriteForEach.Rewrite(parameters, i); return;
                 

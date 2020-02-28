@@ -36,14 +36,10 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
                 p.ForAdd(sumVariable.AddAssign(method.Inline(p, p.LastItem)));
             }
 
-            if (p.ResultSize == null)
-            {
-                p.PreForAdd(LocalVariableCreation(countVariable, 0));
-                p.ForAdd(countVariable.PostIncrement());
-                p.PostForAdd(Return(sumVariable.Div(countVariable)));
-            }
-            else p.PostForAdd(Return(sumVariable.Div(p.ResultSize)));
-            
+            p.PostForAdd(Return(p.ResultSize == null
+                ? sumVariable.Div(p.Indexer.Add(1))
+                : sumVariable.Div(p.ResultSize)));
+
             p.HasResultMethod = true;
         }
     }

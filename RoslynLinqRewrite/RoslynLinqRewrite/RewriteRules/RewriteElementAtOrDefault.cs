@@ -13,14 +13,11 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            var countVariable = "__count" + chainIndex;
-            
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Count should be last expression.");
             
-            p.PreForAdd(LocalVariableCreation(countVariable, 0));
             var position = p.Chain[chainIndex].Arguments[0];
-            p.ForAdd(If(countVariable.PostIncrement().EqualsExpr(position),
+            p.ForAdd(If(p.Indexer.EqualsExpr(position),
                 Return(p.LastItem)));
             
             p.PostForAdd(Return(Default(p.ReturnType)));
@@ -34,8 +31,8 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
             if (p.SourceSize == null) return null;
             return ConditionalExpression(
-                p.Code.CreateCollectionCount(GlobalItemsVariable, p.Collection, false).LeThan(p.Chain[0].Arguments[0]),
-                GlobalItemsVariable.ArrayAccess(p.Chain[0].Arguments[0]),
+                p.Code.CreateCollectionCount(p.Collection, false).LeThan(p.Chain[0].Arguments[0]),
+                p.Collection.ArrayAccess(p.Chain[0].Arguments[0]),
                 Default(p.ReturnType));
         }
     }

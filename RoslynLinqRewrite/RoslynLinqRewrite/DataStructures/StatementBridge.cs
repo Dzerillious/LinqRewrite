@@ -23,6 +23,9 @@ namespace Shaman.Roslyn.LinqRewrite.DataStructures
         public static implicit operator StatementBridge(ExpressionSyntax expression)
             => new StatementBridge(expression);
         
+        public static implicit operator StatementBridge(ValueBridge expression)
+            => new StatementBridge(expression);
+        
         public static implicit operator StatementSyntax(StatementBridge statement)
             => statement._statement;
         

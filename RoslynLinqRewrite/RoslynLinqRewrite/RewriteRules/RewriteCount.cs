@@ -12,28 +12,25 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            var countVariable = "__count" + chainIndex;
-            
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Count should be last expression.");
             
-            p.PreForAdd(LocalVariableCreation(countVariable, 0));
             if (p.Chain[chainIndex].Arguments.Length == 0)
-                p.ForAdd(countVariable.PostIncrement());
+                p.ForAdd(p.Indexer);
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
                 p.ForAdd(If(method.Inline(p, p.LastItem),
-                            countVariable.PostIncrement()));
+                            p.Indexer));
             }
             
-            p.PostForAdd(Return(countVariable));
+            p.PostForAdd(Return(p.Indexer));
             p.HasResultMethod = true;
         }
 
         public static ExpressionSyntax RewriteSimple(RewriteParameters p) 
             => p.Chain[0].Arguments.Length == 0 
-                ? p.Code.CreateCollectionCount(GlobalItemsVariable, p.Collection, false) 
+                ? p.Code.CreateCollectionCount(p.Collection, false) 
                 : null;
     }
 }

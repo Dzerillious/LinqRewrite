@@ -66,7 +66,6 @@ namespace Shaman.Roslyn.LinqRewrite
         public const string GlobalIndexerVariable = "__i";
         public const string GlobalItemVariable = "__item";
         public const string GlobalResultVariable = "__result";
-        public const string GlobalItemsVariable = "_linqitems";
 
         public static readonly HashSet<string> KnownMethods = new HashSet<string>
         {

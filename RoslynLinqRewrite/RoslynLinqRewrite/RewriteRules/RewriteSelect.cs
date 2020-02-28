@@ -16,7 +16,7 @@ namespace Shaman.Roslyn.LinqRewrite.RewriteRules
 
             p.LastItem = method is SimpleLambdaExpressionSyntax 
                 ? method.Inline(p, p.LastItem) 
-                : method.Inline(p, p.LastItem, p.GetIndexer());
+                : method.Inline(p, p.LastItem, p.Indexer);
         }
     }
 }

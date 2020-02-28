@@ -27,15 +27,15 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             _data = RewriteDataService.Instance;
         }
 
-        public ExpressionSyntax CreateCollectionCount(VariableBridge identifier, ExpressionSyntax collection, bool allowUnknown)
+        public ExpressionSyntax CreateCollectionCount(ExpressionSyntax collection, bool allowUnknown)
         {
             var collectionType = _data.Semantic.GetTypeInfo(collection).Type;
-            if (collectionType is IArrayTypeSymbol) return MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, IdentifierName("Length"));
+            if (collectionType is IArrayTypeSymbol) return MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, collection, IdentifierName("Length"));
             if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<")))
-                return MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, IdentifierName("Count"));
+                return MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, collection, IdentifierName("Count"));
                 
             if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.ICollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.ICollection<")))
-                return MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, IdentifierName("Count"));
+                return MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, collection, IdentifierName("Count"));
 
             if (!allowUnknown) return null;
             if (collectionType.IsValueType) return null;
@@ -45,7 +45,8 @@ namespace Shaman.Roslyn.LinqRewrite.Services
             return ParenthesizedExpression(
                 ConditionalAccessExpression(
                     ParenthesizedExpression(
-                        GlobalItemsVariable.As(ParseTypeName($"System.Collections.Generic.ICollection<{itemType.ToDisplayString()}>"))
+                        // TODO: Fix
+                        /*GlobalItemsVariable*/"".As(ParseTypeName($"System.Collections.Generic.ICollection<{itemType.ToDisplayString()}>"))
                     ),
                     MemberBindingExpression(IdentifierName("Count"))
                 )
