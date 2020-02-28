@@ -12,11 +12,10 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            var foundVariable = p.CreateVariable("__found");
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Single should be last expression.");
             
-            p.PreForAdd(LocalVariableCreation(foundVariable, NullableType(p.ReturnType), NullValue));
+            var foundVariable = p.CreateLocalVariable("__found", NullableType(p.ReturnType), NullValue);
 
             if (p.Chain[chainIndex].Arguments.Length == 0)
             {

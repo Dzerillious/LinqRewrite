@@ -10,12 +10,9 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            var resultVariable = p.CreateVariable("__result");
-            
-            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Count should be last expression.");
-            
-            p.PreForAdd(LocalVariableCreation(resultVariable, p.Collection.ArrayAccess(0)));
+
+            var resultVariable = p.CreateLocalVariable("__result", p.Collection.ArrayAccess(0));
             var aggregation = p.Chain[chainIndex].Arguments[0];
             p.ForAdd(resultVariable.Assign(aggregation.Inline(p, resultVariable, p.LastItem)));
             

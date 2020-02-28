@@ -11,16 +11,17 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            var minVariable = p.CreateVariable("__min");
+            VariableBridge minVariable;
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Sum should be last expression.");
 
             var isNullable = p.ReturnType is NullableTypeSyntax;
             var elementType = isNullable ? ((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
             
-            if (elementType.ToString() == "int") p.PreForAdd(LocalVariableCreation(minVariable, int.MaxValue.Cast(elementType)));
-            else if (elementType.ToString() == "float") p.PreForAdd(LocalVariableCreation(minVariable, float.MaxValue.Cast(elementType)));
-            else if (elementType.ToString() == "double") p.PreForAdd(LocalVariableCreation(minVariable, double.MaxValue.Cast(elementType)));
+            if (elementType.ToString() == "int") minVariable = p.CreateLocalVariable("__min", int.MaxValue.Cast(elementType));
+            else if (elementType.ToString() == "float") minVariable = p.CreateLocalVariable("__min", float.MaxValue.Cast(elementType));
+            else if (elementType.ToString() == "double") minVariable = p.CreateLocalVariable("__min", double.MaxValue.Cast(elementType));
+            else minVariable = null;
 
             if (p.Chain[chainIndex].Arguments.Length == 0)
             {

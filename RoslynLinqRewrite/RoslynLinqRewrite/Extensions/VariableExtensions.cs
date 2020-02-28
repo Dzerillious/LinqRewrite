@@ -38,23 +38,10 @@ namespace LinqRewrite.Extensions
                 SyntaxFactory.SeparatedList(new []{SyntaxFactory.VariableDeclarator(name)
                     .WithInitializer(SyntaxFactory.EqualsValueClause(value))}));
         
-        public static StatementSyntax CreateLocalArray(string name, ArrayTypeSyntax arrayType, ExpressionSyntax size)
-            => LocalVariableCreation(name,
-                SyntaxFactory.ArrayCreationExpression(
+        public static ArrayCreationExpressionSyntax CreateArray(ArrayTypeSyntax arrayType, ValueBridge size)
+            => SyntaxFactory.ArrayCreationExpression(
                     arrayType.WithRankSpecifiers(SyntaxFactory.SingletonList(SyntaxFactory.ArrayRankSpecifier(
-                            SyntaxFactoryHelper.CreateSeparatedList(size))))));
-
-        public static StatementSyntax CreateLocalArray(string name, ArrayTypeSyntax arrayType, int size)
-            => LocalVariableCreation(name,
-                SyntaxFactory.ArrayCreationExpression(
-                    arrayType.WithRankSpecifiers(SyntaxFactory.SingletonList(SyntaxFactory.ArrayRankSpecifier(
-                        SyntaxFactoryHelper.CreateSeparatedList((ExpressionSyntax)IntValue(size)))))));
-        public static StatementSyntax CreateLocalArray(string name, TypeSyntax itemType, ExpressionSyntax size)
-            => LocalVariableCreation(name,
-                SyntaxFactory.ArrayCreationExpression(
-                    SyntaxFactory.ArrayType(itemType)
-                        .WithRankSpecifiers(SyntaxFactory.SingletonList(SyntaxFactory.ArrayRankSpecifier(
-                            SyntaxFactoryHelper.CreateSeparatedList(size))))));
+                        SyntaxFactoryHelper.CreateSeparatedList((ExpressionSyntax)size)))));
         
         public static VariableCapture CreateVariableCapture(ISymbol symbol, IReadOnlyList<ISymbol> flowsOut)
         {

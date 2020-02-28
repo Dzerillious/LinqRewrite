@@ -11,13 +11,12 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            var sumVariable = p.CreateVariable("__sum");
             if (chainIndex != 0) throw new InvalidOperationException("Enumerable.Range should be first expression.");
 
             var from = p.Chain[chainIndex].Arguments[0];
             var count = p.Chain[chainIndex].Arguments[1];
             
-            p.PreForAdd(LocalVariableCreation(sumVariable, from.Add(count)));
+            var sumVariable = p.CreateLocalVariable("__sum", from.Add(count));
 
             p.Collection = null;
             p.ForMin = p.ForReMin = p.Chain[chainIndex].Arguments[0];

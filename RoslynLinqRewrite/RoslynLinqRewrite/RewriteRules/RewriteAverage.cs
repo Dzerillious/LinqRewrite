@@ -11,13 +11,12 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, int chainIndex)
         {
-            var sumVariable = p.CreateVariable("__sum");
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Sum should be last expression.");
 
             var isNullable = p.ReturnType is NullableTypeSyntax;
             var elementType = isNullable ? ((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
-            p.PreForAdd(LocalVariableCreation(sumVariable, 0.Cast(elementType)));
+            var sumVariable = p.CreateLocalVariable("__sum", 0.Cast(elementType));
 
             if (p.Chain[chainIndex].Arguments.Length == 0)
             {

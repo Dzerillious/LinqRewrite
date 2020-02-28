@@ -57,12 +57,11 @@ namespace LinqRewrite.RewriteRules
 
         public static void ListEnumeration(RewriteParameters p, ExpressionSyntax collection, ValueBridge indexer, int chainIndex)
         {
-            var sourceCount = "__sourceCount" + chainIndex;
             
             p.PreForAdd( If(collection.EqualsExpr(NullValue),
                             CreateThrowException("System.InvalidOperationException", "Collection was null.")));
                 
-            p.PreForAdd(p.Code.CreateCollectionCount(collection, false));
+            var sourceCount = p.CreateLocalVariable("__sourceCount", p.Code.CreateCollectionCount(collection, false));
 
             p.ForMin = p.ForReMin = 0;
             p.ForMax = p.ForReMax = sourceCount;

@@ -64,11 +64,11 @@ namespace LinqRewrite.DataStructures
             {
                 if (_indexer != null) return _indexer;
 
-                var indexer = CreateVariable("__indexer");
-                PreForAdd(VariableExtensions.LocalVariableCreation(indexer, -1));
-                ForAdd(indexer.PreIncrement());
+                var indexerVariable = CreateLocalVariable("__indexer", -1);
+                PreForAdd(VariableExtensions.LocalVariableCreation(indexerVariable, -1));
+                ForAdd(indexerVariable.PreIncrement());
             
-                return _indexer = indexer;
+                return _indexer = indexerVariable;
             }
             set => _indexer = value;
         }
@@ -171,8 +171,18 @@ namespace LinqRewrite.DataStructures
         }
 
         private int _variableIndex;
-        public VariableBridge CreateVariable(string name)
-            => name + _variableIndex++;
+        public VariableBridge CreateLocalVariable(string name, ValueBridge value)
+        {
+            var variable = name + _variableIndex++;
+            PreForAdd(VariableExtensions.LocalVariableCreation(name, value));
+            return variable;
+        }
+        public VariableBridge CreateLocalVariable(string name, TypeBridge type, ValueBridge value)
+        {
+            var variable = name + _variableIndex++;
+            PreForAdd(VariableExtensions.LocalVariableCreation(name, type, value));
+            return variable;
+        }
 
         public void Dispose() => RewriteParametersFactory.ReturnParameters(this);
     }
