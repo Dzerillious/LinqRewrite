@@ -19,11 +19,11 @@ namespace LinqRewrite.RewriteRules
             var collectionName = collectionType.ToString();
             
             if (collectionType is ArrayTypeSyntax)
-                ArrayEnumeration(p, p.Collection, GlobalIndexerVariable);
+                ArrayEnumeration(p, p.Collection, p.ForIndexerName);
             else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
-                ListEnumeration(p, p.Collection, GlobalIndexerVariable, chainIndex);
+                ListEnumeration(p, p.Collection, p.ForIndexerName, chainIndex);
             else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
-                IEnumerableEnumeration(p, p.Collection, GlobalIndexerVariable);
+                EnumerableEnumeration(p, p.Collection, p.ForIndexerName);
         }
         
         public static void RewriteOther(RewriteParameters p, ExpressionSyntax collection, ValueBridge indexer, int chainIndex)
@@ -38,7 +38,7 @@ namespace LinqRewrite.RewriteRules
             else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
                 ListEnumeration(p, collection, indexer, chainIndex);
             else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
-                IEnumerableEnumeration(p, collection, indexer);
+                EnumerableEnumeration(p, collection, indexer);
         }
 
         public static void ArrayEnumeration(RewriteParameters p, ExpressionSyntax collection, ValueBridge indexer)
@@ -73,14 +73,20 @@ namespace LinqRewrite.RewriteRules
             p.SourceSize = IdentifierName(sourceCount);
         }
 
-        public static void IEnumerableEnumeration(RewriteParameters p, ExpressionSyntax collection, ValueBridge itemName)
+        public static void EnumerableEnumeration(RewriteParameters p, ExpressionSyntax collection, ValueBridge itemName)
         {
             p.PreForAdd(If(collection.EqualsExpr(NullValue),
                             CreateThrowException("System.InvalidOperationException", "Collection was null.")));
 
+            p.ForMin = p.ForReMin = null;
+            p.ForMax = p.ForReMax = null;
+
             p.IsReversed = false;
             p.LastItem = itemName;
             p.ListsEnumeration = false;
+
+            p.SourceSize = null;
+            p.ResultSize = null;
         }
     }
 }

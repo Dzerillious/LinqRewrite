@@ -22,6 +22,9 @@ namespace LinqRewrite.DataStructures
         public static implicit operator ValueBridge(VariableBridge name)
             => SyntaxFactory.IdentifierName(name._name);
         
+        public static implicit operator StatementBridge(VariableBridge name)
+            => SyntaxFactory.ExpressionStatement(SyntaxFactory.IdentifierName(name._name));
+        
         public static implicit operator string(VariableBridge name)
             => name._name;
     }

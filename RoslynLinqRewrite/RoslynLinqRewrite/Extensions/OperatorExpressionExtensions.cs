@@ -40,6 +40,9 @@ namespace LinqRewrite.Extensions
         public static PrefixUnaryExpressionSyntax PreIncrement(this VariableBridge identifier)
             => PrefixUnaryExpression(SyntaxKind.PreIncrementExpression, identifier);
         
+        public static PrefixUnaryExpressionSyntax PreIncrement(this ValueBridge identifier)
+            => PrefixUnaryExpression(SyntaxKind.PreIncrementExpression, identifier);
+        
         public static PrefixUnaryExpressionSyntax PreIncrement(this string identifier)
             => PrefixUnaryExpression(SyntaxKind.PreIncrementExpression, IdentifierName(identifier));
 

@@ -69,12 +69,28 @@ namespace LinqRewrite.Services
             return inv;
         }
 
+        public ForStatementSyntax GetNotInitializingForStatement(string name, ValueBridge max, StatementSyntax loopContent)
+            => ForStatement(
+                null,
+                default,
+                IdentifierName(name).LThan(max),
+                name.SeparatedPostIncrement(),
+                loopContent);
+
         public ForStatementSyntax GetForStatement(string name, ValueBridge min, ValueBridge max, StatementSyntax loopContent)
             => ForStatement(
                 VariableCreation(name, min),
                 default,
                 IdentifierName(name).LThan(max),
                 name.SeparatedPostIncrement(),
+                loopContent);
+
+        public ForStatementSyntax GetNotInitializingReverseForStatement(string name, ValueBridge min, StatementSyntax loopContent)
+            => ForStatement(
+                null,
+                default,
+                IdentifierName(name).GeThan(min),
+                name.SeparatedPostDecrement(),
                 loopContent);
 
         public ForStatementSyntax GetReverseForStatement(string name, ValueBridge min, ValueBridge max, StatementSyntax loopContent)
@@ -86,9 +102,7 @@ namespace LinqRewrite.Services
                 loopContent);
         
         public StatementSyntax GetForEachStatement(string name, ExpressionSyntax collection, StatementSyntax loopContent)
-            => ForEachStatement(
-                IdentifierName("var"),
-                name, collection, loopContent);
+            => ForEachStatement(IdentifierName("var"), name, collection, loopContent);
         
         private IEnumerable<StatementSyntax> CreateSourceThrow(ITypeSymbol? collectionSemanticType) =>
             collectionSemanticType.IsValueType

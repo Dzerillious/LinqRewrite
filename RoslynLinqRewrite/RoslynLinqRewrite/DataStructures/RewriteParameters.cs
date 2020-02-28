@@ -14,28 +14,29 @@ namespace LinqRewrite.DataStructures
         public RewriteService Rewrite { get; }
         public CodeCreationService Code { get; }
         public RewriteDataService Data { get; }
-        
+
         public InvocationExpressionSyntax Node { get; set; }
         public ExpressionSyntax Collection { get; set; }
         public List<LinqStep> Chain { get; set; }
-        
+
         public TypeSyntax ReturnType { get; set; }
-        
+
         public ExpressionSyntax ResultSize { get; set; }
         public ExpressionSyntax SourceSize { get; set; }
-        
+
         public ValueBridge LastItem { get; set; }
 
         private List<EnumerationParameters> _enumerations;
 
         private List<StatementSyntax> _preForBody;
-        private EnumerationParameters _forBody;
+        public EnumerationParameters ForBody;
         private List<StatementSyntax> _postForBody;
 
         public bool IsReversed;
         public bool HasResultMethod;
 
         private bool _listsEnumeration = true;
+
         public bool ListsEnumeration
         {
             get => _listsEnumeration;
@@ -43,58 +44,59 @@ namespace LinqRewrite.DataStructures
         }
 
         private bool _modifiedEnumeration;
+
         public bool ModifiedEnumeration
         {
             get => _modifiedEnumeration;
             set
             {
                 _modifiedEnumeration = value;
-                if (value && _indexer != null)
+                if (value && CurrentIndexer != null)
                 {
                     ResultSize = null;
-                    _indexer = null;
+                    CurrentIndexer = null;
                 }
             }
         }
 
-        private ValueBridge _indexer;
+        public ValueBridge CurrentIndexer { get; set; }
+
         public ValueBridge Indexer
         {
-            get 
+            get
             {
-                if (_indexer != null) return _indexer;
+                if (CurrentIndexer != null) return CurrentIndexer;
 
                 var indexerVariable = CreateLocalVariable("__indexer", -1);
-                PreForAdd(VariableExtensions.LocalVariableCreation(indexerVariable, -1));
                 ForAdd(indexerVariable.PreIncrement());
-            
-                return _indexer = indexerVariable;
+
+                return CurrentIndexer = indexerVariable;
             }
-            set => _indexer = value;
+            set => CurrentIndexer = value;
         }
 
         public ValueBridge ForMin
         {
-            get => _forBody.ForMin;
-            set => _forBody.ForMin = value;
+            get => ForBody.ForMin;
+            set => ForBody.ForMin = value;
         }
         
         public ValueBridge ForMax
         {
-            get => _forBody.ForMax;
-            set => _forBody.ForMax = value;
+            get => ForBody.ForMax;
+            set => ForBody.ForMax = value;
         }
         
         public ValueBridge ForReMin
         {
-            get => _forBody.ForReMin;
-            set => _forBody.ForReMin = value;
+            get => ForBody.ForReMin;
+            set => ForBody.ForReMin = value;
         }
         
         public ValueBridge ForReMax
         {
-            get => _forBody.ForReMax;
-            set => _forBody.ForReMax = value;
+            get => ForBody.ForReMax;
+            set => ForBody.ForReMax = value;
         }
         
         public SemanticModel Semantic => Data.Semantic;
@@ -109,10 +111,10 @@ namespace LinqRewrite.DataStructures
         public void SetData(ExpressionSyntax collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node)
         {
             _preForBody = new List<StatementSyntax>();
-            _forBody = new EnumerationParameters(Constants.GlobalIndexerVariable, collection);
+            ForBody = new EnumerationParameters(this, ForIndexerName, collection);
             _postForBody = new List<StatementSyntax>();
             
-            _enumerations = new List<EnumerationParameters>{_forBody};
+            _enumerations = new List<EnumerationParameters>{ForBody};
             
             Collection = collection;
             ReturnType = returnType;
@@ -123,38 +125,38 @@ namespace LinqRewrite.DataStructures
         public void PreForAdd(StatementBridge _) => _preForBody.Add(_);
         public void ForAdd(StatementBridge _)
         {
-            _enumerations.Where(x => !x.Finished)
+            _enumerations.Where(x => !x.Complete)
                 .ForEach(x => x.Body.Add((StatementSyntaxBridge) _));
         }
         public void PostForAdd(StatementBridge _) => _postForBody.Add(_);
         
         public EnumerationParameters AddFor(ExpressionSyntax collection)
         {
-            var oldBody = _forBody;
-            _forBody = new EnumerationParameters(Constants.GlobalIndexerVariable, collection);
-            _enumerations.Add(_forBody);
+            var oldBody = ForBody;
+            ForBody = new EnumerationParameters(this, ForIndexerName, collection);
+            _enumerations.Add(ForBody);
             return oldBody;
         }
         
         public EnumerationParameters CopyFor()
         {
-            var oldBody = _forBody;
-            _forBody = _forBody.Copy();
-            _enumerations.Add(_forBody);
+            var oldBody = ForBody;
+            ForBody = ForBody.Copy();
+            _enumerations.Add(ForBody);
             return oldBody;
         }
         
         public EnumerationParameters CopyForReference()
         {
-            var oldBody = _forBody;
-            _forBody = _forBody.CopyReference();
-            _enumerations.Add(_forBody);
+            var oldBody = ForBody;
+            ForBody = ForBody.CopyReference();
+            _enumerations.Add(ForBody);
             return oldBody;
         }
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {
-            if (_enumerations.Count == 1 && _forBody.Body.Count == 0) return _preForBody.Concat(_postForBody);
+            if (_enumerations.Count == 1 && ForBody.Body.Count == 0) return _preForBody.Concat(_postForBody);
             if (IsReversed)
             {
                 for (var i = _enumerations.Count - 1; i >= 0; i--)
@@ -171,18 +173,38 @@ namespace LinqRewrite.DataStructures
         }
 
         private int _variableIndex;
+        public string GetVariableName(string name) => name + _variableIndex++;
+        
         public VariableBridge CreateLocalVariable(string name, ValueBridge value)
         {
             var variable = name + _variableIndex++;
-            PreForAdd(VariableExtensions.LocalVariableCreation(name, value));
+            PreForAdd(VariableExtensions.LocalVariableCreation(variable, value));
             return variable;
         }
+        
         public VariableBridge CreateLocalVariable(string name, TypeBridge type, ValueBridge value)
         {
             var variable = name + _variableIndex++;
             PreForAdd(VariableExtensions.LocalVariableCreation(name, type, value));
             return variable;
         }
+        
+        public VariableBridge CreateForVariable(string name, ValueBridge value)
+        {
+            var variable = name + _variableIndex++;
+            ForBody.BodyAdd(VariableExtensions.LocalVariableCreation(variable, value));
+            return variable;
+        }
+        
+        private int _globalForIndexersCounter;
+        public VariableBridge CreateGlobalIndexer(string name, ValueBridge value)
+        {
+            var variable = name + _globalForIndexersCounter++;
+            PreForAdd(VariableExtensions.LocalVariableCreation(name, value));
+            return variable;
+        }
+
+        public string ForIndexerName => Constants.GlobalIndexerVariable + _globalForIndexersCounter;
 
         public void Dispose() => RewriteParametersFactory.ReturnParameters(this);
     }

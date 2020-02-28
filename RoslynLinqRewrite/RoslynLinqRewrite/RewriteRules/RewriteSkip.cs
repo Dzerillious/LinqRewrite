@@ -15,12 +15,14 @@ namespace LinqRewrite.RewriteRules
             {
                 p.ForMin = p.ForMin.Add(skipped);
                 p.ForReMax = p.ForReMin.Sub(skipped);
+                p.ResultSize = p.ResultSize.Sub(skipped);
             }
             else
             {
                 p.ForAdd(If(p.Indexer.LThan(skipped), Continue()));
                 p.ModifiedEnumeration = true;
             }
+            p.Indexer = null;
         }
     }
 }
