@@ -17,7 +17,7 @@ namespace LinqRewrite.RewriteRules
                 p.ForReMin = p.ForReMax.Sub(take);
             }
             else p.ForAdd(If(p.Indexer.GeThan(take), Break()));
-            p.Indexer = null;
+            p.CurrentIndexer = null;
         }
     }
 }

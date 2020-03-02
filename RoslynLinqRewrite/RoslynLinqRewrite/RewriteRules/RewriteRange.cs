@@ -1,5 +1,6 @@
 ﻿using System;
 using LinqRewrite.DataStructures;
+using LinqRewrite.Extensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static LinqRewrite.Constants;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
@@ -22,9 +23,9 @@ namespace LinqRewrite.RewriteRules
             p.ForMin = p.ForReMin = p.Chain[chainIndex].Arguments[0];
             p.ForMax = p.ForReMax = sumVariable;
             
-            p.Indexer = p.CreateLocalVariable("__i", IntType);
+            p.CurrentIndexer = p.CreateLocalVariable("__i", IntType);
             p.Body.Indexer = p.Indexer;
-            p.LastItem = p.Indexer;
+            p.Last = (p.Indexer, IntType);
             
             p.ResultSize = count;
             p.SourceSize = count;

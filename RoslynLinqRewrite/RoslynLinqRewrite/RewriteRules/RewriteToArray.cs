@@ -39,7 +39,7 @@ namespace LinqRewrite.RewriteRules
             var arrayType = itemType == null ? (ArrayTypeSyntax) p.ReturnType : ArrayType(itemType);
             var resultVariable = p.CreateGlobalVariable(resultName, arrayType, CreateArray(arrayType, p.ResultSize));
 
-            p.ForAdd(resultVariable.ArrayAccess(p.Indexer).Assign(p.LastItem));
+            p.ForAdd(resultVariable.ArrayAccess(p.Indexer).Assign(p.Last.Value));
             
             p.FinalAdd(Return(resultVariable));
             return resultVariable;
@@ -68,7 +68,7 @@ namespace LinqRewrite.RewriteRules
                                     RefArg(logVariable),
                                     OutArg(currentLengthVariable))));
                 
-            p.ForAdd(resultVariable.ArrayAccess(indexer).Assign(p.LastItem));
+            p.ForAdd(resultVariable.ArrayAccess(indexer).Assign(p.Last.Value));
             return resultVariable;
         }
 
@@ -84,7 +84,7 @@ namespace LinqRewrite.RewriteRules
                             "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")
                                     .Invoke(Argument(2), RefArg(resultVariable), RefArg(currentLengthVariable))));
                 
-            p.ForAdd(resultVariable.ArrayAccess(indexer).Assign(p.LastItem));
+            p.ForAdd(resultVariable.ArrayAccess(indexer).Assign(p.Last.Value));
             p.HasResultMethod = true;
             return resultVariable;
         }

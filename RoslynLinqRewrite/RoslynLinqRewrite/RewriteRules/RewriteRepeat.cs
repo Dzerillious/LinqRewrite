@@ -1,5 +1,6 @@
 ﻿using System;
 using LinqRewrite.DataStructures;
+using LinqRewrite.Extensions;
 using static LinqRewrite.Constants;
 using static LinqRewrite.Extensions.VariableExtensions;
 
@@ -21,8 +22,8 @@ namespace LinqRewrite.RewriteRules
             p.ResultSize = count;
             p.SourceSize = count;
             
-            p.LastItem = item;
-            p.Indexer = p.CreateLocalVariable("__i", IntType);
+            p.Last = (item, VariableExtensions.IntType);
+            p.CurrentIndexer = p.CreateLocalVariable("__i", IntType);
             p.Body.Indexer = p.Indexer;
         }
     }

@@ -5,28 +5,25 @@ namespace LinqRewrite.DataStructures
 {
     public class VariableBridge : ValueBridge
     {
-        private readonly string _name;
+        public string Name { get; }
 
-        private VariableBridge(string name) 
+        protected VariableBridge(string name) 
             : base(SyntaxFactory.IdentifierName(name))
-            => _name = name;
+            => Name = name;
         
         public static implicit operator VariableBridge(string name)
             => new VariableBridge(name);
         
-        public static implicit operator VariableBridge(LocalVariable variable)
-            => new VariableBridge(variable.Name);
-        
         public static implicit operator IdentifierNameSyntax(VariableBridge name)
-            => SyntaxFactory.IdentifierName(name._name);
+            => SyntaxFactory.IdentifierName(name.Name);
         
         public static implicit operator ExpressionSyntax(VariableBridge name)
-            => SyntaxFactory.IdentifierName(name._name);
+            => SyntaxFactory.IdentifierName(name.Name);
         
         public static implicit operator StatementBridge(VariableBridge name)
-            => SyntaxFactory.ExpressionStatement(SyntaxFactory.IdentifierName(name._name));
+            => SyntaxFactory.ExpressionStatement(SyntaxFactory.IdentifierName(name.Name));
         
         public static implicit operator string(VariableBridge name)
-            => name._name;
+            => name.Name;
     }
 }

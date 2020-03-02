@@ -14,13 +14,13 @@ namespace LinqRewrite.RewriteRules
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("First should be last expression.");
             
             if (p.Chain[chainIndex].Arguments.Length == 0)
-                p.ForAdd(Return(p.LastItem));
+                p.ForAdd(Return(p.Last.Value));
             
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                p.ForAdd(If(method.Inline(p, p.LastItem),
-                            Return(p.LastItem)));
+                p.ForAdd(If(method.Inline(p, p.Last.Value),
+                            Return(p.Last.Value)));
             }
             
             p.FinalAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."));

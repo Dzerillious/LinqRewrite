@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace LinqRewrite.DataStructures
 {
-    public class ValueBridge
+    public class  ValueBridge
     {
         private readonly ExpressionSyntax _value;
 

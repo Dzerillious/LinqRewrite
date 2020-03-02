@@ -110,29 +110,32 @@ namespace LinqRewrite.Extensions
         public static DefaultExpressionSyntax Default(TypeBridge @type)
             => SyntaxFactory.DefaultExpression(@type);
 
-        public static ExpressionSyntax Reusable(this ExpressionSyntax e, RewriteParameters p)
+        public static (ExpressionSyntax, TypeSyntax) Reusable(this ExpressionSyntax e, RewriteParameters p)
         {
-            if (IsExpressionReusable(e)) return e;
+            // TODO: Fix type
+            if (IsExpressionReusable(e)) return (e, VariableExtensions.IntType);
 
             var tmpVariable = p.CreateLocalVariable("__tmp", VariableExtensions.IntType, e);
-            return SyntaxFactory.IdentifierName(tmpVariable);
+            return (SyntaxFactory.IdentifierName(tmpVariable), VariableExtensions.IntType);
         }
         
-        public static ExpressionSyntax Reusable(this ValueBridge e, RewriteParameters p)
+        public static (ValueBridge, TypeBridge) Reusable(this (ValueBridge, TypeBridge) e, RewriteParameters p)
         {
-            if (IsExpressionReusable(e)) return e;
+            if (IsExpressionReusable(e.Item1)) return e;
             
-            var tmpVariable = p.CreateLocalVariable("__tmp", VariableExtensions.IntType, e);
-            return SyntaxFactory.IdentifierName(tmpVariable);
+            // TODO: Fix type
+            var tmpVariable = p.CreateLocalVariable("__tmp", VariableExtensions.IntType, e.Item1);
+            return (SyntaxFactory.IdentifierName(tmpVariable), VariableExtensions.IntType);
         }
 
         public static ExpressionSyntax Inline(this ExpressionSyntax e, RewriteParameters p, ValueBridge a)
         {
-            if (e.IsLambdaExpressionSimple() || IsExpressionReusable(p.LastItem))
+            if (e.IsLambdaExpressionSimple() || IsExpressionReusable(p.Last.Value))
                 return p.Code.InlineLambda(p.Semantic, e, a);
 
             // TODO: Fix type
-            var inlineVariable = p.CreateLocalVariable("__tmp", VariableExtensions.IntType, e);
+            var inlineVariable = p.CreateLocalVariable("__tmp", VariableExtensions.IntType);
+            p.ForAdd(inlineVariable.Assign(a));
             return p.Code.InlineLambda(p.Semantic, e, SyntaxFactory.IdentifierName(inlineVariable));
         }
 

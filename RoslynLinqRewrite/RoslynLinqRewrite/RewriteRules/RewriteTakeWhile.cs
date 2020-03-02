@@ -11,13 +11,13 @@ namespace LinqRewrite.RewriteRules
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             
             var method = p.Chain[chainIndex].Arguments[0];
-            p.LastItem = p.LastItem.Reusable(p);
+            p.Last = p.Last.Reusable(p);
             
-            p.ForAdd(If(Not(method.Inline(p, p.LastItem)),
+            p.ForAdd(If(Not(method.Inline(p, p.Last.Value)),
                         Break()));
 
             p.ResultSize = null;
-            p.Indexer = null;
+            p.CurrentIndexer = null;
         }
     }
 }

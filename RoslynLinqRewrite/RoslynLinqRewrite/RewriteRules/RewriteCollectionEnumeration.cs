@@ -48,9 +48,9 @@ namespace LinqRewrite.RewriteRules
             p.ForMin = p.ForReMin = 0;
             p.ForMax = p.ForReMax = count;
 
-            p.Indexer = p.CreateLocalVariable("__i", IntType);
+            p.CurrentIndexer = p.CreateLocalVariable("__i", IntType);
             p.Body.Indexer = p.Indexer;
-            p.LastItem = collection.ArrayAccess(p.Indexer);
+            p.Last = (collection.ArrayAccess(p.Indexer), IntType);
             
             p.ResultSize = count;
             p.SourceSize = count;
@@ -67,9 +67,9 @@ namespace LinqRewrite.RewriteRules
             p.ForMin = p.ForReMin = 0;
             p.ForMax = p.ForReMax = sourceCount;
             
-            p.Indexer = p.CreateLocalVariable("__i", IntType);
+            p.CurrentIndexer = p.CreateLocalVariable("__i", IntType);
             p.Body.Indexer = p.Indexer;
-            p.LastItem = collection.ArrayAccess(p.Indexer);
+            p.Last = (collection.ArrayAccess(p.Indexer), IntType);
             
             p.ResultSize = IdentifierName(sourceCount);
             p.SourceSize = IdentifierName(sourceCount);
@@ -82,8 +82,8 @@ namespace LinqRewrite.RewriteRules
 
             p.IsReversed = false;
             p.ListsEnumeration = false;
-            p.Indexer = p.CreateLocalVariable("__i", collection.ItemType(p));
-            p.LastItem = p.Body.Indexer = p.Indexer;
+            p.Body.IndexerValue = p.CreateLocalVariable("__i", collection.ItemType(p));
+            p.Last = (p.Body.IndexerValue, IntType);
 
             p.SourceSize = null;
             p.ResultSize = null;

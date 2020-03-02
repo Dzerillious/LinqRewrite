@@ -17,35 +17,33 @@ namespace LinqRewrite.RewriteRules
             
             var collection = p.Chain[chainIndex].Arguments[0];
             var indexer = p.CurrentIndexer;
-            if (indexer != null && (ExpressionSyntax) indexer is IdentifierNameSyntax identifier && identifier.Identifier.ToString() == p.Body.Indexer)
+            if (indexer != null && indexer.Name == p.Body.Indexer)
                 indexer.IsGlobal = true;
-            
 
             LocalVariable itemVariable;
-            if (p.LastItem != null && p.LastItem is LocalVariable lastVariable)
+            if (p.Last.Value != null && p.Last.Value is LocalVariable lastVariable)
             {
                 itemVariable = lastVariable;
             }
             else
             {
                 itemVariable = p.CreateLocalVariable("__i", VariableExtensions.IntType);
-                p.ForAdd(itemVariable.Assign(p.LastItem));
-                p.LastItem = itemVariable;
+                p.ForAdd(itemVariable.Assign(p.Last.Value));
+                p.Last = (itemVariable, VariableExtensions.IntType);
             }
             
-            p.AddFor(collection);
+            p.AddIterator(collection);
             if (indexer != null)
             {
                 p.PreForAdd(indexer.PreDecrement());
-                p.Body.BodyAdd(indexer.PreIncrement());
+                p.LastForAdd(indexer.PreIncrement());
             }
             p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
             RewriteCollectionEnumeration.RewriteOther(p, collection, 0);
-            p.Indexer = indexer;
+            p.CurrentIndexer = indexer;
             
-            var last = p.CreateLocalVariable(itemVariable, VariableExtensions.IntType);
-            p.Body.BodyAdd(last.Assign(p.LastItem));
-            p.LastItem = last;
+            p.LastForAdd(itemVariable.Assign(p.Last.Value));
+            p.Last = (itemVariable, itemVariable.Type);
 
             if (sourceSize != null && p.SourceSize != null) p.SourceSize = p.SourceSize.Add(sourceSize);
             else p.SourceSize = null;
@@ -53,10 +51,5 @@ namespace LinqRewrite.RewriteRules
             if (resultSize != null && p.ResultSize != null) p.ResultSize = p.ResultSize.Add(resultSize);
             else p.ResultSize = null;
         }
-
-        public static ExpressionSyntax RewriteSimple(RewriteParameters p) 
-            => p.Chain[0].Arguments.Length == 0 
-                ? p.Code.CreateCollectionCount(p.Collection, false) 
-                : null;
     }
 }

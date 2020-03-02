@@ -4,11 +4,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace LinqRewrite.DataStructures
 {
-    public class EnumerationParameters : IStatementSyntax
+    public class IteratorParameters : IStatementSyntax
     {
         private readonly RewriteParameters _parameters;
         
-        public LocalVariable Indexer { get; set; }
         public ValueBridge ForMin { get; set; }
         public ValueBridge ForMax { get; set; }
         public ValueBridge ForReMin { get; set; }
@@ -18,17 +17,19 @@ namespace LinqRewrite.DataStructures
         public List<StatementSyntax> Pre { get; } = new List<StatementSyntax>();
         public List<IStatementSyntax> Body { get; } = new List<IStatementSyntax>();
         public bool Complete { get; set; }
-        public bool GlobalIndexer { get; set; }
-
-        public void BodyAdd(StatementBridge _) => Body.Add((StatementSyntaxBridge)_);
         
-        public EnumerationParameters(RewriteParameters parameters, ValueBridge collection)
+        public LocalVariable Indexer { get; set; }
+        public LocalVariable IndexerValue { get; set; }
+
+        public void BodyAdd(StatementBridge _) => Body.Add(_);
+        
+        public IteratorParameters(RewriteParameters parameters, ValueBridge collection)
         {
             _parameters = parameters;
             Collection = collection;
         }
 
-        public EnumerationParameters(RewriteParameters parameters, List<IStatementSyntax> items, ValueBridge collection)
+        public IteratorParameters(RewriteParameters parameters, List<IStatementSyntax> items, ValueBridge collection)
         {
             _parameters = parameters;
             
@@ -36,8 +37,8 @@ namespace LinqRewrite.DataStructures
             Collection = collection;
         }
 
-        public EnumerationParameters Copy() =>
-            new EnumerationParameters(_parameters, new List<IStatementSyntax>(Body), Collection)
+        public IteratorParameters Copy() =>
+            new IteratorParameters(_parameters, new List<IStatementSyntax>(Body), Collection)
             {
                 ForMin = ForMin,
                 ForMax = ForMax,
@@ -46,8 +47,8 @@ namespace LinqRewrite.DataStructures
                 Indexer = Indexer
             };
 
-        public EnumerationParameters CopyReference() =>
-            new EnumerationParameters(_parameters, Body, Collection)
+        public IteratorParameters CopyReference() =>
+            new IteratorParameters(_parameters, Body, Collection)
             {
                 ForMin = ForMin,
                 ForMax = ForMax,
@@ -61,7 +62,7 @@ namespace LinqRewrite.DataStructures
             if (ForMin == null)
             {
                 var enumeratorVariable = p.CreateGlobalVariable("enumerable", p.WrappedItemType("IEnumerator<", Collection, ">"));
-                return p.Rewrite.GetForEachStatement(p, enumeratorVariable, Indexer, Collection, Body);
+                return p.Rewrite.GetForEachStatement(p, enumeratorVariable, IndexerValue, Collection, Body);
             }
             else if (p.IsReversed)
             {

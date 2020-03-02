@@ -16,7 +16,7 @@ namespace LinqRewrite.RewriteRules
             
             var position = p.Chain[chainIndex].Arguments[0];
             p.ForAdd(If(p.Indexer.EqualsExpr(position),
-                        Return(p.LastItem)));
+                        Return(p.Last.Value)));
             
             p.FinalAdd(Return(Default(p.ReturnType)));
             p.HasResultMethod = true;

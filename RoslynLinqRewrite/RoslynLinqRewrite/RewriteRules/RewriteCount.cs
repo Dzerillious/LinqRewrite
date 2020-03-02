@@ -16,7 +16,7 @@ namespace LinqRewrite.RewriteRules
             if (p.Chain[chainIndex].Arguments.Length != 0)
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                p.ForAdd(If(Not(method.Inline(p, p.LastItem)),
+                p.ForAdd(If(Not(method.Inline(p, p.Last.Value)),
                     Continue()));
                 
                 p.ModifiedEnumeration = true;

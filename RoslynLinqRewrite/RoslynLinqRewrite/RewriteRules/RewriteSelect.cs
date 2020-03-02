@@ -11,9 +11,9 @@ namespace LinqRewrite.RewriteRules
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             var method = p.Chain[chainIndex].Arguments[0];
 
-            p.LastItem = method is SimpleLambdaExpressionSyntax 
-                ? method.Inline(p, p.LastItem) 
-                : method.Inline(p, p.LastItem, p.Indexer);
+            p.Last = (method is SimpleLambdaExpressionSyntax 
+                ? method.Inline(p, p.Last.Value) 
+                : method.Inline(p, p.Last.Value, p.Indexer), VariableExtensions.IntType);
         }
     }
 }

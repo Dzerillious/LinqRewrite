@@ -22,7 +22,7 @@ namespace LinqRewrite.RewriteRules
                 p.ForAdd(If(p.Indexer.LThan(skipped), Continue()));
                 p.ModifiedEnumeration = true;
             }
-            p.Indexer = null;
+            p.CurrentIndexer = null;
         }
     }
 }

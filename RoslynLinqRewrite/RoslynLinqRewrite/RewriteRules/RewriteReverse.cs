@@ -14,7 +14,7 @@ namespace LinqRewrite.RewriteRules
             else
             {
             }
-            p.Indexer = null;
+            p.CurrentIndexer = null;
         }
     }
 }

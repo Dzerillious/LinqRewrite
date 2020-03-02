@@ -29,12 +29,12 @@ namespace LinqRewrite.DataStructures
         public ExpressionSyntax ResultSize { get; set; }
         public ExpressionSyntax SourceSize { get; set; }
 
-        public ValueBridge LastItem { get; set; }
+        public (ValueBridge Value, TypeBridge Type) Last { get; set; }
 
         
-        private List<EnumerationParameters> _enumerations;
+        private List<IteratorParameters> _enumerations;
         private List<StatementSyntax> _initial;
-        public EnumerationParameters Body;
+        public IteratorParameters Body;
         private List<StatementSyntax> _final;
 
         public List<LocalVariable> Variables = new List<LocalVariable>();
@@ -73,12 +73,11 @@ namespace LinqRewrite.DataStructures
             {
                 if (CurrentIndexer != null) return CurrentIndexer;
 
-                var indexerVariable = CreateLocalVariable("__indexer", IntType, -1);
+                var indexerVariable = CreateGlobalVariable("__indexer", IntType, -1);
                 ForAdd(indexerVariable.PreIncrement());
 
                 return CurrentIndexer = indexerVariable;
             }
-            set => CurrentIndexer = value;
         }
 
         public ValueBridge ForMin
@@ -117,10 +116,10 @@ namespace LinqRewrite.DataStructures
         public void SetData(ExpressionSyntax collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node)
         {
             _initial = new List<StatementSyntax>();
-            Body = new EnumerationParameters(this, collection);
+            Body = new IteratorParameters(this, collection);
             _final = new List<StatementSyntax>();
             
-            _enumerations = new List<EnumerationParameters>{Body};
+            _enumerations = new List<IteratorParameters>{Body};
             
             Collection = collection;
             ReturnType = returnType;
@@ -133,19 +132,20 @@ namespace LinqRewrite.DataStructures
         public void ForAdd(StatementBridge _)
         {
             _enumerations.Where(x => !x.Complete)
-                .ForEach(x => x.Body.Add((StatementSyntaxBridge) _));
+                .ForEach(x => x.Body.Add(_));
         }
+        public void LastForAdd(StatementBridge _) => Body.BodyAdd(_);
         public void FinalAdd(StatementBridge _) => _final.Add(_);
         
-        public EnumerationParameters AddFor(ExpressionSyntax collection)
+        public IteratorParameters AddIterator(ExpressionSyntax collection)
         {
             var oldBody = Body;
-            Body = new EnumerationParameters(this, collection);
+            Body = new IteratorParameters(this, collection);
             _enumerations.Add(Body);
             return oldBody;
         }
         
-        public EnumerationParameters CopyFor()
+        public IteratorParameters CopyIterator()
         {
             var oldBody = Body;
             Body = Body.Copy();
@@ -153,7 +153,7 @@ namespace LinqRewrite.DataStructures
             return oldBody;
         }
         
-        public EnumerationParameters CopyForReference()
+        public IteratorParameters CopyIteratorReference()
         {
             var oldBody = Body;
             Body = Body.CopyReference();

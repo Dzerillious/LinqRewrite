@@ -87,9 +87,9 @@ namespace LinqRewrite.Services
                 indexerVariable.SeparatedPostDecrement(),
                 GetBody(p, loopContent));
 
-        public StatementSyntax GetForEachStatement(RewriteParameters p, LocalVariable enumeratorVariable, LocalVariable indexerVariable, ExpressionSyntax collection, List<IStatementSyntax> loopContent)
+        public StatementSyntax GetForEachStatement(RewriteParameters p, LocalVariable enumeratorVariable, VariableBridge value, ExpressionSyntax collection, List<IStatementSyntax> loopContent)
         {
-            loopContent.Insert(0, new StatementSyntaxBridge((StatementBridge)indexerVariable.PreIncrement()));
+            loopContent.Insert(0, (StatementBridge)value.Assign(enumeratorVariable.Access("Current")));
             return TryF(Block(
                     (StatementBridge)enumeratorVariable.Assign(collection.Access("GetEnumerator").Invoke()),
                                       While(enumeratorVariable.Access("MoveNext").Invoke(),
@@ -100,19 +100,6 @@ namespace LinqRewrite.Services
                             (StatementBridge)enumeratorVariable.Access("Dispose").Invoke()
                         ));
         }
-
-        private IEnumerable<StatementSyntax> CreateSourceThrow(ITypeSymbol? collectionSemanticType) =>
-            collectionSemanticType.IsValueType
-                ? Enumerable.Empty<StatementSyntax>()
-                : new[]
-                {
-                    If(
-                        BinaryExpression(SyntaxKind.EqualsExpression,
-                            // TODO: Fix collection name
-                            IdentifierName(""/*Constants.GlobalItemsVariable*/),
-                            LiteralExpression(SyntaxKind.NullLiteralExpression)),
-                        CreateThrowException("System.ArgumentNullException"))
-                };
 
         public MethodDeclarationSyntax GetCoreMethod(TypeSyntax returnType, 
             string functionName, 

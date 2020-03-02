@@ -3,18 +3,16 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace LinqRewrite.DataStructures
 {
-    public class LocalVariable : ValueBridge
+    public class LocalVariable : VariableBridge
     {
-        public string Name { get; }
         public TypeSyntax Type { get; }
-        
-        public bool IsUsed { get; set; }
+
+        public bool IsUsed { get; set; } = true;
         public bool IsGlobal { get; set; }
 
         public LocalVariable(string name, TypeSyntax type)
-            : base(SyntaxFactory.IdentifierName(name))
+            : base(name)
         {
-            Name = name;
             Type = type;
         }
         

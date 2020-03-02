@@ -15,20 +15,20 @@ namespace LinqRewrite.RewriteRules
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Single should be last expression.");
             
-            var foundVariable = p.CreateLocalVariable("__found", NullableType(p.ReturnType), NullValue);
+            var foundVariable = p.CreateGlobalVariable("__found", NullableType(p.ReturnType), NullValue);
 
             if (p.Chain[chainIndex].Arguments.Length == 0)
             {
                 p.ForAdd(If(foundVariable.EqualsExpr(NullValue),
-                            foundVariable.Assign(p.LastItem), 
+                            foundVariable.Assign(p.Last.Value), 
                             CreateThrowException("System.InvalidOperationException", "The sequence contains more than single matching element.")));
             }
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                p.ForAdd(If(method.Inline(p, p.LastItem),
+                p.ForAdd(If(method.Inline(p, p.Last.Value),
                             If(foundVariable.EqualsExpr(NullValue),
-                                foundVariable.Assign(p.LastItem),
+                                foundVariable.Assign(p.Last.Value),
                                 CreateThrowException("System.InvalidOperationException", "The sequence contains more than single matching element."))));
             }
             

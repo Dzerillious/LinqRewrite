@@ -16,11 +16,11 @@ namespace LinqRewrite.RewriteRules
             var name = (GenericNameSyntax) access.Name;
             var type = name.TypeArgumentList.Arguments[0];
 
-            p.LastItem = p.LastItem.Reusable(p);
-            p.ForAdd(If(Not(SyntaxFactory.IsPatternExpression(p.LastItem, SyntaxFactory.ConstantPattern(type))),
+            p.Last = p.Last.Reusable(p);
+            p.ForAdd(If(Not(SyntaxFactory.IsPatternExpression(p.Last.Type, SyntaxFactory.ConstantPattern(type))),
                         Continue()));
 
-            p.LastItem = p.LastItem.Cast(type);
+            p.Last = (p.Last.Value.Cast(type), type);
 
             p.ResultSize = null;
             p.ModifiedEnumeration = true;

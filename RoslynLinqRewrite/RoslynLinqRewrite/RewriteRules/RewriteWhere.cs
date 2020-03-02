@@ -13,11 +13,11 @@ namespace LinqRewrite.RewriteRules
 
             var method = p.Chain[chainIndex].Arguments[0];
 
-            p.LastItem = p.LastItem.Reusable(p);
+            p.Last = p.Last.Reusable(p);
             if (method is SimpleLambdaExpressionSyntax)
-                p.ForAdd(If(Not(method.Inline(p, p.LastItem)),
+                p.ForAdd(If(Not(method.Inline(p, p.Last.Value)),
                             Continue()));
-            else p.ForAdd(If(Not(method.Inline(p, p.LastItem, p.Indexer)),
+            else p.ForAdd(If(Not(method.Inline(p, p.Last.Value, p.Indexer)),
                             Continue()));
 
             p.ModifiedEnumeration = true;

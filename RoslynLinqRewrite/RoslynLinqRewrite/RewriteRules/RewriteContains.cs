@@ -15,13 +15,13 @@ namespace LinqRewrite.RewriteRules
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Any should be last expression.");
             
             if (p.Chain[chainIndex].Arguments.Length == 1)
-                p.ForAdd(If(p.LastItem.EqualsExpr(element),
+                p.ForAdd(If(p.Last.Value.EqualsExpr(element),
                             Return(true)));
             
             else
             {
                 var comparer = p.Chain[chainIndex].Arguments[1].Reusable(p);
-                p.ForAdd(If(comparer.Access("Equals").Invoke(p.LastItem, element),
+                p.ForAdd(If(comparer.Item1.Access("Equals").Invoke(p.Last.Value, element),
                             Return(true)));
             }
             

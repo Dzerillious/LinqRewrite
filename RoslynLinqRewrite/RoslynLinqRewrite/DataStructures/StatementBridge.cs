@@ -3,7 +3,12 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace LinqRewrite.DataStructures
 {
-    public class StatementBridge
+    public interface IStatementSyntax
+    {
+        StatementSyntax GetStatementSyntax(RewriteParameters p);
+    }
+    
+    public class StatementBridge : IStatementSyntax
     {
         private readonly StatementSyntax _statement;
 
@@ -24,5 +29,11 @@ namespace LinqRewrite.DataStructures
         
         public static implicit operator StatementSyntax(StatementBridge statement)
             => statement._statement;
+        
+        public static implicit operator StatementBridge(VariableBridge value)
+            => new StatementBridge(SyntaxFactory.ExpressionStatement(value));
+        
+        public StatementSyntax GetStatementSyntax(RewriteParameters p)
+            => _statement;
     }
 }
