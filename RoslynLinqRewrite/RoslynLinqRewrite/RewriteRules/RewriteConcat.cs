@@ -1,7 +1,9 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Linq;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SimpleCollections;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -15,29 +17,35 @@ namespace LinqRewrite.RewriteRules
             
             var collection = p.Chain[chainIndex].Arguments[0];
             var indexer = p.CurrentIndexer;
-            if (indexer != null && (ExpressionSyntax) indexer is IdentifierNameSyntax identifier && identifier.Identifier.ToString() == p.ForBody.Indexer)
-                p.ForBody.GlobalIndexer = true;
+            if (indexer != null && (ExpressionSyntax) indexer is IdentifierNameSyntax identifier && identifier.Identifier.ToString() == p.Body.Indexer)
+                indexer.IsGlobal = true;
             
 
-            string itemName;
-            if (p.LastItem != null && (ExpressionSyntax) p.LastItem is IdentifierNameSyntax lastIdentifier)
+            LocalVariable itemVariable;
+            if (p.LastItem != null && p.LastItem is LocalVariable lastVariable)
             {
-                itemName = lastIdentifier.Identifier.ToString();
+                itemVariable = lastVariable;
             }
             else
             {
-                itemName = p.GetVariableName("__item");
-                p.ForBody.BodyAdd(VariableExtensions.LocalVariableCreation(itemName, p.LastItem));
-                p.LastItem = itemName;
+                itemVariable = p.CreateLocalVariable("__i", VariableExtensions.IntType);
+                p.ForAdd(itemVariable.Assign(p.LastItem));
+                p.LastItem = itemVariable;
             }
             
             p.AddFor(collection);
-            if (indexer != null) p.ForBody.BodyAdd(indexer.PreIncrement());
-            RewriteCollectionEnumeration.RewriteOther(p, collection, p.ForIndexerName, 0);
-            p.Indexer = itemName;
+            if (indexer != null)
+            {
+                p.PreForAdd(indexer.PreDecrement());
+                p.Body.BodyAdd(indexer.PreIncrement());
+            }
+            p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
+            RewriteCollectionEnumeration.RewriteOther(p, collection, 0);
+            p.Indexer = indexer;
             
-            p.ForBody.BodyAdd(VariableExtensions.LocalVariableCreation(itemName, p.LastItem));
-            p.LastItem = itemName;
+            var last = p.CreateLocalVariable(itemVariable, VariableExtensions.IntType);
+            p.Body.BodyAdd(last.Assign(p.LastItem));
+            p.LastItem = last;
 
             if (sourceSize != null && p.SourceSize != null) p.SourceSize = p.SourceSize.Add(sourceSize);
             else p.SourceSize = null;

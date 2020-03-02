@@ -12,11 +12,11 @@ namespace LinqRewrite.RewriteRules
         {
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Count should be last expression.");
 
-            var resultVariable = p.CreateLocalVariable("__result", p.Collection.ArrayAccess(0));
+            var resultVariable = p.CreateLocalVariable("__result",  p.ReturnType, p.Collection.ArrayAccess(0));
             var aggregation = p.Chain[chainIndex].Arguments[0];
             p.ForAdd(resultVariable.Assign(aggregation.Inline(p, resultVariable, p.LastItem)));
             
-            p.PostForAdd(Return(resultVariable));
+            p.FinalAdd(Return(resultVariable));
             p.HasResultMethod = true;
         }
     }

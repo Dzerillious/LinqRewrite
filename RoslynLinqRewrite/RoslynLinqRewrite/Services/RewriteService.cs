@@ -69,41 +69,38 @@ namespace LinqRewrite.Services
             return inv;
         }
 
-        public ForStatementSyntax GetNotInitializingForStatement(string name, ValueBridge max, StatementSyntax loopContent)
+
+        private StatementSyntax GetBody(RewriteParameters p, List<IStatementSyntax> body) => AggregateStatementSyntax(body.Select(x => x.GetStatementSyntax(p)).ToArray());
+        public ForStatementSyntax GetForStatement(RewriteParameters p, LocalVariable indexerVariable, ValueBridge max, List<IStatementSyntax> loopContent)
             => ForStatement(
                 null,
                 default,
-                IdentifierName(name).LThan(max),
-                name.SeparatedPostIncrement(),
-                loopContent);
+                IdentifierName(indexerVariable).LThan(max),
+                indexerVariable.SeparatedPostIncrement(),
+                GetBody(p, loopContent));
 
-        public ForStatementSyntax GetForStatement(string name, ValueBridge min, ValueBridge max, StatementSyntax loopContent)
-            => ForStatement(
-                VariableCreation(name, min),
-                default,
-                IdentifierName(name).LThan(max),
-                name.SeparatedPostIncrement(),
-                loopContent);
-
-        public ForStatementSyntax GetNotInitializingReverseForStatement(string name, ValueBridge min, StatementSyntax loopContent)
+        public ForStatementSyntax GetReverseForStatement(RewriteParameters p, LocalVariable indexerVariable, ValueBridge min, List<IStatementSyntax> loopContent)
             => ForStatement(
                 null,
                 default,
-                IdentifierName(name).GeThan(min),
-                name.SeparatedPostDecrement(),
-                loopContent);
+                indexerVariable.GeThan(min),
+                indexerVariable.SeparatedPostDecrement(),
+                GetBody(p, loopContent));
 
-        public ForStatementSyntax GetReverseForStatement(string name, ValueBridge min, ValueBridge max, StatementSyntax loopContent)
-            => ForStatement(
-                VariableCreation(name, max.Sub(1)),
-                default,
-                IdentifierName(name).GeThan(min),
-                name.SeparatedPostDecrement(),
-                loopContent);
-        
-        public StatementSyntax GetForEachStatement(string name, ExpressionSyntax collection, StatementSyntax loopContent)
-            => ForEachStatement(IdentifierName("var"), name, collection, loopContent);
-        
+        public StatementSyntax GetForEachStatement(RewriteParameters p, LocalVariable enumeratorVariable, LocalVariable indexerVariable, ExpressionSyntax collection, List<IStatementSyntax> loopContent)
+        {
+            loopContent.Insert(0, new StatementSyntaxBridge((StatementBridge)indexerVariable.PreIncrement()));
+            return TryF(Block(
+                    (StatementBridge)enumeratorVariable.Assign(collection.Access("GetEnumerator").Invoke()),
+                                      While(enumeratorVariable.Access("MoveNext").Invoke(),
+                                            GetBody(p, loopContent)
+                                      )
+                        ),
+                    Block(
+                            (StatementBridge)enumeratorVariable.Access("Dispose").Invoke()
+                        ));
+        }
+
         private IEnumerable<StatementSyntax> CreateSourceThrow(ITypeSymbol? collectionSemanticType) =>
             collectionSemanticType.IsValueType
                 ? Enumerable.Empty<StatementSyntax>()

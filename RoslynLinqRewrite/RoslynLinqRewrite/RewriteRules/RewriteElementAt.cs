@@ -17,7 +17,7 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(If(p.Indexer.EqualsExpr(position),
                         Return(p.LastItem)));
             
-            p.PostForAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not enough elements."));
+            p.FinalAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not enough elements."));
             p.HasResultMethod = true;
         }
 

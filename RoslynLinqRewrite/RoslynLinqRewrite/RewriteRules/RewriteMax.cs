@@ -18,9 +18,9 @@ namespace LinqRewrite.RewriteRules
             var isNullable = p.ReturnType is NullableTypeSyntax;
             var elementType = isNullable ? ((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
             
-            if (elementType.ToString() == "int") maxVariable = p.CreateLocalVariable("__max", int.MinValue.Cast(elementType));
-            else if (elementType.ToString() == "float") maxVariable = p.CreateLocalVariable("__max", float.MinValue.Cast(elementType));
-            else if (elementType.ToString() == "double") maxVariable = p.CreateLocalVariable("__max", double.MinValue.Cast(elementType));
+            if (elementType.ToString() == "int") maxVariable = p.CreateLocalVariable("__max", IntType, int.MinValue.Cast(elementType));
+            else if (elementType.ToString() == "float") maxVariable = p.CreateLocalVariable("__max", FloatType, float.MinValue.Cast(elementType));
+            else if (elementType.ToString() == "double") maxVariable = p.CreateLocalVariable("__max", DoubleType, double.MinValue.Cast(elementType));
             else maxVariable = null;
 
             if (p.Chain[chainIndex].Arguments.Length == 0)
@@ -45,7 +45,7 @@ namespace LinqRewrite.RewriteRules
                             maxVariable.Assign(reusable)));
             }
             
-            p.PostForAdd(Return(maxVariable));
+            p.FinalAdd(Return(maxVariable));
             p.HasResultMethod = true;
         }
     }

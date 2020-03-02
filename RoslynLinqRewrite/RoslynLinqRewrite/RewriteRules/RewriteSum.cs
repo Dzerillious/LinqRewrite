@@ -16,7 +16,7 @@ namespace LinqRewrite.RewriteRules
 
             var isNullable = p.ReturnType is NullableTypeSyntax;
             var elementType = isNullable ? ((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
-            var sumVariable = p.CreateLocalVariable("__sum", 0.Cast(elementType));
+            var sumVariable = p.CreateLocalVariable("__sum", elementType,0);
 
             if (p.Chain[chainIndex].Arguments.Length == 0)
                 p.ForAdd(sumVariable.AddAssign(p.LastItem));
@@ -33,7 +33,7 @@ namespace LinqRewrite.RewriteRules
                 p.ForAdd(sumVariable.AddAssign(method.Inline(p, p.LastItem)));
             }
             
-            p.PostForAdd(Return(sumVariable));
+            p.FinalAdd(Return(sumVariable));
             p.HasResultMethod = true;
         }
     }

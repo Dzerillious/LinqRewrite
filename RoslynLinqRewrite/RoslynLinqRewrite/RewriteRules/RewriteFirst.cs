@@ -23,7 +23,7 @@ namespace LinqRewrite.RewriteRules
                             Return(p.LastItem)));
             }
             
-            p.PostForAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."));
+            p.FinalAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."));
             p.HasResultMethod = true;
         }
 

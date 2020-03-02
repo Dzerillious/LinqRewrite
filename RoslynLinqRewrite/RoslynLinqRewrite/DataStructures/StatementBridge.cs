@@ -24,8 +24,5 @@ namespace LinqRewrite.DataStructures
         
         public static implicit operator StatementSyntax(StatementBridge statement)
             => statement._statement;
-        
-        public static implicit operator StatementSyntaxBridge(StatementBridge statement)
-            => new StatementSyntaxBridge(statement);
     }
 }

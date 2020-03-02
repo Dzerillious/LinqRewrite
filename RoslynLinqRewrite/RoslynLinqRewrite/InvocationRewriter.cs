@@ -54,7 +54,7 @@ namespace LinqRewrite
             if (!parameters.HasResultMethod)
             {
                 parameters.ForAdd(SyntaxFactory.YieldStatement(SyntaxKind.YieldReturnStatement, parameters.LastItem));
-                parameters.PostForAdd(SyntaxFactory.YieldStatement(SyntaxKind.YieldBreakStatement));
+                parameters.FinalAdd(SyntaxFactory.YieldStatement(SyntaxKind.YieldBreakStatement));
             }
             var body = parameters.GetMethodBody();
 

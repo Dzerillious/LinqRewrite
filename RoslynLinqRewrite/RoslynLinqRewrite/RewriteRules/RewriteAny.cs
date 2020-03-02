@@ -23,7 +23,7 @@ namespace LinqRewrite.RewriteRules
                             Return(true)));
             }
             
-            p.PostForAdd(Return(false));
+            p.FinalAdd(Return(false));
             p.HasResultMethod = true;
         }
 

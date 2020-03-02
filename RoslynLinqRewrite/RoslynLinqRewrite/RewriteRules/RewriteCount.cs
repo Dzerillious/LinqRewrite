@@ -22,7 +22,7 @@ namespace LinqRewrite.RewriteRules
                 p.ModifiedEnumeration = true;
             }
             p.ForAdd(p.Indexer);
-            p.PostForAdd(Return(p.Indexer.Add(1)));
+            p.FinalAdd(Return(p.Indexer.Add(1)));
             p.HasResultMethod = true;
         }
 

@@ -7,6 +7,7 @@ using LinqRewrite.Services;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SimpleCollections;
 using SyntaxExtensions = LinqRewrite.Extensions.SyntaxExtensions;
 
 namespace LinqRewrite
@@ -166,14 +167,17 @@ namespace LinqRewrite
                     node.ArgumentList.Arguments.Select(x => x.Expression).ToArray(), node)
             };
             lastNode = node;
-            while (node.Expression is MemberAccessExpressionSyntax syntax)
+            while (lastNode.Expression is MemberAccessExpressionSyntax syntax)
             {
-                node = syntax.Expression as InvocationExpressionSyntax;
-                if (node != null && IsSupportedMethod(node))
+                if (syntax.Expression is InvocationExpressionSyntax invocation && IsSupportedMethod(invocation))
                 {
-                    chain.Insert(0, new LinqStep(_code.GetMethodFullName(node),
-                        node.ArgumentList.Arguments.Select(x => x.Expression).ToArray(), node));
-                    lastNode = node;
+                    invocation.ArgumentList.Arguments.Select(x => x.Expression)
+                        .OfType<InvocationExpressionSyntax>().Where(IsSupportedMethod)
+                        .ForEach(x => chain.Insert(0, new LinqStep(_code.GetMethodFullName(x),
+                            invocation.ArgumentList.Arguments.Select(y => y.Expression).ToArray(), x, false)));
+                    chain.Insert(0, new LinqStep(_code.GetMethodFullName(invocation),
+                        invocation.ArgumentList.Arguments.Select(x => x.Expression).ToArray(), invocation));
+                    lastNode = invocation;
                 }
                 else break;
             }

@@ -18,9 +18,9 @@ namespace LinqRewrite.RewriteRules
             var isNullable = p.ReturnType is NullableTypeSyntax;
             var elementType = isNullable ? ((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
             
-            if (elementType.ToString() == "int") minVariable = p.CreateLocalVariable("__min", int.MaxValue.Cast(elementType));
-            else if (elementType.ToString() == "float") minVariable = p.CreateLocalVariable("__min", float.MaxValue.Cast(elementType));
-            else if (elementType.ToString() == "double") minVariable = p.CreateLocalVariable("__min", double.MaxValue.Cast(elementType));
+            if (elementType.ToString() == "int") minVariable = p.CreateLocalVariable("__min", IntType, int.MaxValue.Cast(elementType));
+            else if (elementType.ToString() == "float") minVariable = p.CreateLocalVariable("__min", FloatType, float.MaxValue.Cast(elementType));
+            else if (elementType.ToString() == "double") minVariable = p.CreateLocalVariable("__min", DoubleType, double.MaxValue.Cast(elementType));
             else minVariable = null;
 
             if (p.Chain[chainIndex].Arguments.Length == 0)
@@ -45,7 +45,7 @@ namespace LinqRewrite.RewriteRules
                             minVariable.Assign(reusable)));
             }
             
-            p.PostForAdd(Return(minVariable));
+            p.FinalAdd(Return(minVariable));
             p.HasResultMethod = true;
         }
     }

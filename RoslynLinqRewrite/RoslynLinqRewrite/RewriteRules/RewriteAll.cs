@@ -16,7 +16,7 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(If(Not(method.Inline(p, p.LastItem)),
                 Return(false)));
             
-            p.PostForAdd(Return(true));
+            p.FinalAdd(Return(true));
             p.HasResultMethod = true;
         }
     }

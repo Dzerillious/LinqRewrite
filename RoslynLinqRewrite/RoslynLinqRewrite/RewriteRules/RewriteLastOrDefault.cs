@@ -27,7 +27,7 @@ namespace LinqRewrite.RewriteRules
                             foundVariable.Assign(p.LastItem)));
             }
             
-            p.PostForAdd(If(foundVariable.EqualsExpr(NullValue),
+            p.FinalAdd(If(foundVariable.EqualsExpr(NullValue),
                             Return(Default(p.ReturnType)), 
                             Return(foundVariable.Cast(p.ReturnType))));
             p.HasResultMethod = true;

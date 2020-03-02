@@ -32,7 +32,7 @@ namespace LinqRewrite.RewriteRules
                                 CreateThrowException("System.InvalidOperationException", "The sequence contains more than single matching element."))));
             }
             
-            p.PostForAdd(If(foundVariable.EqualsExpr(NullValue),
+            p.FinalAdd(If(foundVariable.EqualsExpr(NullValue),
                             CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."), 
                             Return(foundVariable.Cast(p.ReturnType))));
             p.HasResultMethod = true;

@@ -17,11 +17,15 @@ namespace LinqRewrite.Extensions
         public static LiteralExpressionSyntax IntValue(int x)
             => SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(x));
         
+        public static TypeSyntax FloatType
+            => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.FloatKeyword));
+        public static TypeSyntax DoubleType
+            => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.DoubleKeyword));
         public static TypeSyntax BoolType
             => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.BoolKeyword));
 
-        public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, ValueBridge value)
-            =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, value));
+        public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, TypeSyntax type)
+            =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, type));
         
         public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, TypeBridge type, ValueBridge value)
             =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, type, value));
@@ -31,6 +35,11 @@ namespace LinqRewrite.Extensions
                 SyntaxFactory.IdentifierName("var"),
                 SyntaxFactory.SeparatedList(new []{SyntaxFactory.VariableDeclarator(name)
                     .WithInitializer(SyntaxFactory.EqualsValueClause(value))}));
+
+        public static VariableDeclarationSyntax VariableCreation(VariableBridge name, TypeSyntax type)
+            =>  SyntaxFactory.VariableDeclaration(
+                type,
+                SyntaxFactory.SeparatedList(new []{SyntaxFactory.VariableDeclarator(name)}));
 
         public static VariableDeclarationSyntax VariableCreation(string name, TypeBridge type, ValueBridge value)
             =>  SyntaxFactory.VariableDeclaration(

@@ -18,7 +18,7 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(If(p.Indexer.EqualsExpr(position),
                         Return(p.LastItem)));
             
-            p.PostForAdd(Return(Default(p.ReturnType)));
+            p.FinalAdd(Return(Default(p.ReturnType)));
             p.HasResultMethod = true;
         }
 

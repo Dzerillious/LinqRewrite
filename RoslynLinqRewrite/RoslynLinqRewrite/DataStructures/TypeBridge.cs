@@ -21,5 +21,7 @@ namespace LinqRewrite.DataStructures
         
         public static implicit operator TypeSyntax(TypeBridge type)
             => type._type;
+
+        public override string ToString() => _type.ToString();
     }
 }

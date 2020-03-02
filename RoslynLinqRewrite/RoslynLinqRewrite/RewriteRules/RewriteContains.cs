@@ -20,12 +20,12 @@ namespace LinqRewrite.RewriteRules
             
             else
             {
-                var comparer = p.Chain[chainIndex].Arguments[1].PreReusable(p);
+                var comparer = p.Chain[chainIndex].Arguments[1].Reusable(p);
                 p.ForAdd(If(comparer.Access("Equals").Invoke(p.LastItem, element),
                             Return(true)));
             }
             
-            p.PostForAdd(Return(false));
+            p.FinalAdd(Return(false));
             p.HasResultMethod = true;
         }
     }

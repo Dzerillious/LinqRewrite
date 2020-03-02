@@ -95,13 +95,14 @@ namespace LinqRewrite.Extensions
 
         public static ObjectCreationExpressionSyntax New(TypeBridge type, params ValueBridge[] args)
             => SyntaxFactory.ObjectCreationExpression(type, CreateArguments(args.Select(Argument)), null);
-
+        public static WhileStatementSyntax While(ValueBridge @while, StatementBridge @do)
+            => SyntaxFactory.WhileStatement(@while, @do);
         public static IfStatementSyntax If(ValueBridge @if, StatementBridge @do)
             => SyntaxFactory.IfStatement(@if, @do);
-
         public static IfStatementSyntax If(ValueBridge @if, StatementBridge @do, StatementBridge @else)
             => SyntaxFactory.IfStatement(@if, @do, SyntaxFactory.ElseClause(@else));
-
+        public static TryStatementSyntax TryF(BlockSyntax @try, BlockSyntax @finally)
+            => SyntaxFactory.TryStatement(@try, new SyntaxList<CatchClauseSyntax>(), SyntaxFactory.FinallyClause(@finally));
         
         public static ReturnStatementSyntax Return(ValueBridge _)
             => SyntaxFactory.ReturnStatement(_);
@@ -109,32 +110,11 @@ namespace LinqRewrite.Extensions
         public static DefaultExpressionSyntax Default(TypeBridge @type)
             => SyntaxFactory.DefaultExpression(@type);
 
-        private static int _tmpCounter;
-        
-        public static ExpressionSyntax PreReusable(this ExpressionSyntax e, RewriteParameters p)
-        {
-            if (IsExpressionReusable(e)) return e;
-            
-            var tmpVariable = "__tmp" + _tmpCounter++;
-            p.PreForAdd(VariableExtensions.LocalVariableCreation(tmpVariable, e));
-            return SyntaxFactory.IdentifierName(tmpVariable);
-        }
-        
-        public static ExpressionSyntax PreReusable(this ValueBridge e, RewriteParameters p)
-        {
-            if (IsExpressionReusable(e)) return e;
-            
-            var tmpVariable = "__tmp" + _tmpCounter++;
-            p.PreForAdd(VariableExtensions.LocalVariableCreation(tmpVariable, e));
-            return SyntaxFactory.IdentifierName(tmpVariable);
-        }
-        
         public static ExpressionSyntax Reusable(this ExpressionSyntax e, RewriteParameters p)
         {
             if (IsExpressionReusable(e)) return e;
-            
-            var tmpVariable = "__tmp" + _tmpCounter++;
-            p.ForAdd(VariableExtensions.LocalVariableCreation(tmpVariable, e));
+
+            var tmpVariable = p.CreateLocalVariable("__tmp", VariableExtensions.IntType, e);
             return SyntaxFactory.IdentifierName(tmpVariable);
         }
         
@@ -142,8 +122,7 @@ namespace LinqRewrite.Extensions
         {
             if (IsExpressionReusable(e)) return e;
             
-            var tmpVariable = "__tmp" + _tmpCounter++;
-            p.ForAdd(VariableExtensions.LocalVariableCreation(tmpVariable, e));
+            var tmpVariable = p.CreateLocalVariable("__tmp", VariableExtensions.IntType, e);
             return SyntaxFactory.IdentifierName(tmpVariable);
         }
 
@@ -152,8 +131,8 @@ namespace LinqRewrite.Extensions
             if (e.IsLambdaExpressionSimple() || IsExpressionReusable(p.LastItem))
                 return p.Code.InlineLambda(p.Semantic, e, a);
 
-            var inlineVariable = "__tmp" + _tmpCounter++;
-            p.ForAdd(VariableExtensions.LocalVariableCreation(inlineVariable, p.LastItem));
+            // TODO: Fix type
+            var inlineVariable = p.CreateLocalVariable("__tmp", VariableExtensions.IntType, e);
             return p.Code.InlineLambda(p.Semantic, e, SyntaxFactory.IdentifierName(inlineVariable));
         }
 
@@ -162,14 +141,12 @@ namespace LinqRewrite.Extensions
             if (e.IsLambdaExpressionSimple()) return p.Code.InlineLambda(p.Semantic, e, a, b);
             if (!IsExpressionReusable(a))
             {
-                var inlineVariable = "__tmp" + _tmpCounter++;
-                p.ForAdd(VariableExtensions.LocalVariableCreation(inlineVariable, a));
+                var inlineVariable = p.CreateLocalVariable("__tmp", VariableExtensions.IntType, a);
                 a = SyntaxFactory.IdentifierName(inlineVariable);
             }
             if (!IsExpressionReusable(b))
             {
-                var inlineVariable = "__tmp" + _tmpCounter++;
-                p.ForAdd(VariableExtensions.LocalVariableCreation(inlineVariable, b));
+                var inlineVariable = p.CreateLocalVariable("__tmp", VariableExtensions.IntType, b);
                 b = SyntaxFactory.IdentifierName(inlineVariable);
             }
             return p.Code.InlineLambda(p.Semantic, e, a, b);

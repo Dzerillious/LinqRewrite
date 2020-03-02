@@ -19,14 +19,14 @@ namespace LinqRewrite.RewriteRules
             var collectionName = collectionType.ToString();
             
             if (collectionType is ArrayTypeSyntax)
-                ArrayEnumeration(p, p.Collection, p.ForIndexerName);
+                ArrayEnumeration(p, p.Collection);
             else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
-                ListEnumeration(p, p.Collection, p.ForIndexerName, chainIndex);
+                ListEnumeration(p, p.Collection);
             else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
-                EnumerableEnumeration(p, p.Collection, p.ForIndexerName);
+                EnumerableEnumeration(p, p.Collection);
         }
         
-        public static void RewriteOther(RewriteParameters p, ExpressionSyntax collection, ValueBridge indexer, int chainIndex)
+        public static void RewriteOther(RewriteParameters p, ExpressionSyntax collection, int chainIndex)
         {
             if (chainIndex != 0) throw new InvalidOperationException("Collection enumeration should be first expression.");
 
@@ -34,56 +34,56 @@ namespace LinqRewrite.RewriteRules
             var collectionName = collectionType.ToString();
             
             if (collectionType is ArrayTypeSyntax)
-                ArrayEnumeration(p, collection, indexer);
+                ArrayEnumeration(p, collection);
             else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
-                ListEnumeration(p, collection, indexer, chainIndex);
+                ListEnumeration(p, collection);
             else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
-                EnumerableEnumeration(p, collection, indexer);
+                EnumerableEnumeration(p, collection);
         }
 
-        public static void ArrayEnumeration(RewriteParameters p, ExpressionSyntax collection, ValueBridge indexer)
+        public static void ArrayEnumeration(RewriteParameters p, ExpressionSyntax collection)
         {
             var count = p.Code.CreateCollectionCount(collection, false);
 
             p.ForMin = p.ForReMin = 0;
             p.ForMax = p.ForReMax = count;
 
-            p.LastItem = collection.ArrayAccess(indexer);
-            p.Indexer = indexer;
+            p.Indexer = p.CreateLocalVariable("__i", IntType);
+            p.Body.Indexer = p.Indexer;
+            p.LastItem = collection.ArrayAccess(p.Indexer);
             
             p.ResultSize = count;
             p.SourceSize = count;
         }
 
-        public static void ListEnumeration(RewriteParameters p, ExpressionSyntax collection, ValueBridge indexer, int chainIndex)
+        public static void ListEnumeration(RewriteParameters p, ExpressionSyntax collection)
         {
             
-            p.PreForAdd( If(collection.EqualsExpr(NullValue),
+            p.InitialAdd( If(collection.EqualsExpr(NullValue),
                             CreateThrowException("System.InvalidOperationException", "Collection was null.")));
                 
-            var sourceCount = p.CreateLocalVariable("__sourceCount", p.Code.CreateCollectionCount(collection, false));
+            var sourceCount = p.CreateLocalVariable("__sourceCount", IntType, p.Code.CreateCollectionCount(collection, false));
 
             p.ForMin = p.ForReMin = 0;
             p.ForMax = p.ForReMax = sourceCount;
             
-            p.LastItem = collection.ArrayAccess(indexer);
-            p.Indexer = indexer;
+            p.Indexer = p.CreateLocalVariable("__i", IntType);
+            p.Body.Indexer = p.Indexer;
+            p.LastItem = collection.ArrayAccess(p.Indexer);
             
             p.ResultSize = IdentifierName(sourceCount);
             p.SourceSize = IdentifierName(sourceCount);
         }
 
-        public static void EnumerableEnumeration(RewriteParameters p, ExpressionSyntax collection, ValueBridge itemName)
+        public static void EnumerableEnumeration(RewriteParameters p, ExpressionSyntax collection)
         {
-            p.PreForAdd(If(collection.EqualsExpr(NullValue),
-                            CreateThrowException("System.InvalidOperationException", "Collection was null.")));
-
             p.ForMin = p.ForReMin = null;
             p.ForMax = p.ForReMax = null;
 
             p.IsReversed = false;
-            p.LastItem = itemName;
             p.ListsEnumeration = false;
+            p.Indexer = p.CreateLocalVariable("__i", collection.ItemType(p));
+            p.LastItem = p.Body.Indexer = p.Indexer;
 
             p.SourceSize = null;
             p.ResultSize = null;

@@ -15,7 +15,7 @@ namespace LinqRewrite.RewriteRules
                 .GetTypeSyntaxFromExpression();
             
             var resultVariable = RewriteOther(p, chainIndex, "__result", itemType);
-            p.PostForAdd(Return(New(p.ReturnType, resultVariable)));
+            p.FinalAdd(Return(New(p.ReturnType, resultVariable)));
            
             p.HasResultMethod = true;
         }
