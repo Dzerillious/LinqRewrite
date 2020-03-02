@@ -60,10 +60,10 @@ namespace LinqRewrite.Services
                             .Select(x => ParseTypeName(x.Identifier.ValueText)))))
                 : (NameSyntax) IdentifierName(identifier);
 
-        public ExpressionSyntax InlineLambda(SemanticModel semantic, ExpressionSyntax expression, params ValueBridge[] p)
+        public TypedValueBridge InlineLambda(SemanticModel semantic, ExpressionSyntax expression, params ValueBridge[] p)
         {
             if (expression is IdentifierNameSyntax identifier)
-                return identifier.Invoke(p);
+                return new TypedValueBridge(Int, identifier.Invoke(p));
             
             var simpleLambda = (LambdaExpressionSyntax) expression;
             var lambda = new Lambda(simpleLambda);
@@ -82,7 +82,7 @@ namespace LinqRewrite.Services
                 .ToList();
 
             lambda = RenameSymbol(lambda, p);
-            return InlineOrCreateMethod(lambda.Body, returnType, currentCaptures, pS);
+            return new TypedValueBridge(returnType, InlineOrCreateMethod(lambda.Body, returnType, currentCaptures, pS));
         }
 
         public ExpressionSyntax InlineOrCreateMethod(CSharpSyntaxNode body, TypeSyntax returnType,

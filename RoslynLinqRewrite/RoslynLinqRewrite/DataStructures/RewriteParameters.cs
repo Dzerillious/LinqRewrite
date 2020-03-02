@@ -29,7 +29,7 @@ namespace LinqRewrite.DataStructures
         public ExpressionSyntax ResultSize { get; set; }
         public ExpressionSyntax SourceSize { get; set; }
 
-        public (ValueBridge Value, TypeBridge Type) Last { get; set; }
+        public TypedValueBridge Last { get; set; }
 
         
         private List<IteratorParameters> _enumerations;
@@ -73,7 +73,7 @@ namespace LinqRewrite.DataStructures
             {
                 if (CurrentIndexer != null) return CurrentIndexer;
 
-                var indexerVariable = CreateGlobalVariable("__indexer", IntType, -1);
+                var indexerVariable = CreateGlobalVariable("__indexer", Int, -1);
                 ForAdd(indexerVariable.PreIncrement());
 
                 return CurrentIndexer = indexerVariable;

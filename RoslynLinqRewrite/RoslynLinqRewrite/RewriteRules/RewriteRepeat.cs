@@ -22,8 +22,8 @@ namespace LinqRewrite.RewriteRules
             p.ResultSize = count;
             p.SourceSize = count;
             
-            p.Last = (item, VariableExtensions.IntType);
-            p.CurrentIndexer = p.CreateLocalVariable("__i", IntType);
+            p.Last = new TypedValueBridge(p.Collection.ItemType(p), item);
+            p.CurrentIndexer = p.CreateLocalVariable("__i", Int);
             p.Body.Indexer = p.Indexer;
         }
     }

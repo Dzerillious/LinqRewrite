@@ -7,6 +7,6 @@ static class Example2
     {
 		var arr = new int[10].AsEnumerable();
 		var arr2 = new int[10];
-		var test = arr.Concat(arr2).ToArray();
+		var test = arr.Select(x => x + 2).ToArray();
     }
 }

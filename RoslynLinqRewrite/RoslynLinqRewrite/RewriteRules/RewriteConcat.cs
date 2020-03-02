@@ -4,6 +4,7 @@ using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SimpleCollections;
+using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -27,9 +28,9 @@ namespace LinqRewrite.RewriteRules
             }
             else
             {
-                itemVariable = p.CreateLocalVariable("__i", VariableExtensions.IntType);
+                itemVariable = p.CreateLocalVariable("__i", Int);
                 p.ForAdd(itemVariable.Assign(p.Last.Value));
-                p.Last = (itemVariable, VariableExtensions.IntType);
+                p.Last = new TypedValueBridge(Int, itemVariable);
             }
             
             p.AddIterator(collection);
@@ -43,7 +44,7 @@ namespace LinqRewrite.RewriteRules
             p.CurrentIndexer = indexer;
             
             p.LastForAdd(itemVariable.Assign(p.Last.Value));
-            p.Last = (itemVariable, itemVariable.Type);
+            p.Last = new TypedValueBridge(itemVariable.Type, itemVariable);
 
             if (sourceSize != null && p.SourceSize != null) p.SourceSize = p.SourceSize.Add(sourceSize);
             else p.SourceSize = null;

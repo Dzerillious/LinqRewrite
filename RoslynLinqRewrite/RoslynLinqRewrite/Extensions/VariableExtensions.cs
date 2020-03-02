@@ -12,16 +12,16 @@ namespace LinqRewrite.Extensions
         public static LiteralExpressionSyntax NullValue
             => SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression);
         
-        public static TypeSyntax IntType
+        public static TypeSyntax Int
             => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword));
         public static LiteralExpressionSyntax IntValue(int x)
             => SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(x));
         
-        public static TypeSyntax FloatType
+        public static TypeSyntax Float
             => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.FloatKeyword));
-        public static TypeSyntax DoubleType
+        public static TypeSyntax Double
             => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.DoubleKeyword));
-        public static TypeSyntax BoolType
+        public static TypeSyntax Bool
             => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.BoolKeyword));
 
         public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, TypeSyntax type)

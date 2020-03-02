@@ -169,13 +169,13 @@ namespace LinqRewrite.Extensions
             return (MemberAccessExpressionSyntax)item;
         }
 
-        public static MemberAccessExpressionSyntax Access(this VariableBridge identifier, VariableBridge accessed)
+        public static MemberAccessExpressionSyntax Access(this ValueBridge identifier, VariableBridge accessed)
             => MemberAccessExpression(
                 SyntaxKind.SimpleMemberAccessExpression,
                 identifier,
                 accessed);
         
-        public static MemberAccessExpressionSyntax Access(this VariableBridge identifier, params VariableBridge[] accessed)
+        public static MemberAccessExpressionSyntax Access(this ValueBridge identifier, params VariableBridge[] accessed)
         {
             var item = (ExpressionSyntax)identifier;
             for (var i = 0; i < accessed.Length; i++)

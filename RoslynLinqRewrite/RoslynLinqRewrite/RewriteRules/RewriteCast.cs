@@ -14,7 +14,7 @@ namespace LinqRewrite.RewriteRules
             var name = (GenericNameSyntax) access.Name;
             var type = name.TypeArgumentList.Arguments[0];
 
-            p.Last = (p.Last.Value.Cast(type), type);
+            p.Last = new TypedValueBridge(type, p.Last.Cast(type));
         }
     }
 }

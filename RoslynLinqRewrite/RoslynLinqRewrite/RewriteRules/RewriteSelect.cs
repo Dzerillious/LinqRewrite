@@ -1,6 +1,7 @@
 ﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -11,9 +12,9 @@ namespace LinqRewrite.RewriteRules
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             var method = p.Chain[chainIndex].Arguments[0];
 
-            p.Last = (method is SimpleLambdaExpressionSyntax 
-                ? method.Inline(p, p.Last.Value) 
-                : method.Inline(p, p.Last.Value, p.Indexer), VariableExtensions.IntType);
+            p.Last = method is SimpleLambdaExpressionSyntax
+                ? method.Inline(p, p.Last.Value)
+                : method.Inline(p, p.Last.Value, p.Indexer);
         }
     }
 }

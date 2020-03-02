@@ -20,7 +20,7 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(If(Not(SyntaxFactory.IsPatternExpression(p.Last.Type, SyntaxFactory.ConstantPattern(type))),
                         Continue()));
 
-            p.Last = (p.Last.Value.Cast(type), type);
+            p.Last = new TypedValueBridge(type, p.Last.Value.Cast(type));
 
             p.ResultSize = null;
             p.ModifiedEnumeration = true;

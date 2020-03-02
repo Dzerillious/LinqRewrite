@@ -20,8 +20,8 @@ namespace LinqRewrite.RewriteRules
             
             else
             {
-                var comparer = p.Chain[chainIndex].Arguments[1].Reusable(p);
-                p.ForAdd(If(comparer.Item1.Access("Equals").Invoke(p.Last.Value, element),
+                var inlined = p.Chain[chainIndex].Arguments[1].Reusable(p);
+                p.ForAdd(If(inlined.Access("Equals").Invoke(p.Last.Value, element),
                             Return(true)));
             }
             

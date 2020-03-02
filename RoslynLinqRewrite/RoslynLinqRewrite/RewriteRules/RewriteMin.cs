@@ -18,31 +18,31 @@ namespace LinqRewrite.RewriteRules
             var isNullable = p.ReturnType is NullableTypeSyntax;
             var elementType = isNullable ? ((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
             
-            if (elementType.ToString() == "int") minVariable = p.CreateGlobalVariable("__min", IntType, int.MaxValue.Cast(elementType));
-            else if (elementType.ToString() == "float") minVariable = p.CreateGlobalVariable("__min", FloatType, float.MaxValue.Cast(elementType));
-            else if (elementType.ToString() == "double") minVariable = p.CreateGlobalVariable("__min", DoubleType, double.MaxValue.Cast(elementType));
+            if (elementType.ToString() == "int") minVariable = p.CreateGlobalVariable("__min", Int, int.MaxValue.Cast(elementType));
+            else if (elementType.ToString() == "float") minVariable = p.CreateGlobalVariable("__min", Float, float.MaxValue.Cast(elementType));
+            else if (elementType.ToString() == "double") minVariable = p.CreateGlobalVariable("__min", VariableExtensions.Double, double.MaxValue.Cast(elementType));
             else minVariable = null;
 
             if (p.Chain[chainIndex].Arguments.Length == 0)
             {
-                var reusable = p.Last.Reusable(p);
-                p.ForAdd(If(reusable.Item1.LThan(minVariable),
-                            minVariable.Assign(reusable.Item1)));
+                var inlined = p.Last.Reusable(p);
+                p.ForAdd(If(inlined.LThan(minVariable),
+                            minVariable.Assign(inlined)));
             }
             else if (isNullable)
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                var reusable = method.Inline(p, p.Last.Value).Reusable(p);
-                p.ForAdd(If(reusable.Item1.NotEqualsExpr(NullValue),
-                            If(reusable.Item1.LThan(minVariable),
-                                minVariable.Assign(reusable.Item1))));
+                var inlined = method.Inline(p, p.Last.Value).Reusable(p);
+                p.ForAdd(If(inlined.NotEqualsExpr(NullValue),
+                            If(inlined.LThan(minVariable),
+                                minVariable.Assign(inlined))));
             }
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                var reusable = method.Inline(p, p.Last.Value).Reusable(p);
-                p.ForAdd(If(reusable.Item1.LThan(minVariable),
-                            minVariable.Assign(reusable.Item1)));
+                var inlined = method.Inline(p, p.Last.Value).Reusable(p);
+                p.ForAdd(If(inlined.LThan(minVariable),
+                            minVariable.Assign(inlined)));
             }
             
             p.FinalAdd(Return(minVariable));

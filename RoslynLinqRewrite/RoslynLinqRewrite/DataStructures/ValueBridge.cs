@@ -6,27 +6,30 @@ namespace LinqRewrite.DataStructures
 {
     public class  ValueBridge
     {
-        private readonly ExpressionSyntax _value;
+        public ExpressionSyntax Value { get; }
 
         public ValueBridge(bool value)
         {
-            _value = value
+            Value = value
                 ? SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression)
                 : SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression);
         }
 
         public ValueBridge(int value)
-            => _value = SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(value));
+            => Value = SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(value));
 
         public ValueBridge(ExpressionSyntax value)
-            => _value = value;
+            => Value = value;
 
         public ValueBridge(IdentifierNameSyntax name)
-            => _value = name;
+            => Value = name;
 
         public ValueBridge(string name)
-            => _value = SyntaxFactory.IdentifierName(name);
-        
+            => Value = SyntaxFactory.IdentifierName(name);
+
+        protected ValueBridge(LocalVariable variable)
+            => Value = variable;
+
         public static implicit operator ValueBridge(int value)
             => new ValueBridge(value);
         
@@ -43,9 +46,9 @@ namespace LinqRewrite.DataStructures
             => new ValueBridge(name);
         
         public static implicit operator ExpressionSyntax(ValueBridge name)
-            => name._value;
+            => name.Value;
         
         public static implicit operator ArgumentSyntax(ValueBridge name)
-            => SyntaxFactoryHelper.Argument(name._value);
+            => SyntaxFactoryHelper.Argument(name.Value);
     }
 }

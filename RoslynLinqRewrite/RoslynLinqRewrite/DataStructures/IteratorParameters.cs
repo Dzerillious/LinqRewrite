@@ -19,7 +19,7 @@ namespace LinqRewrite.DataStructures
         public bool Complete { get; set; }
         
         public LocalVariable Indexer { get; set; }
-        public LocalVariable IndexerValue { get; set; }
+        public LocalVariable IndexedItem { get; set; }
 
         public void BodyAdd(StatementBridge _) => Body.Add(_);
         
@@ -44,7 +44,8 @@ namespace LinqRewrite.DataStructures
                 ForMax = ForMax,
                 ForReMin = ForReMin,
                 ForReMax = ForReMax,
-                Indexer = Indexer
+                Indexer = Indexer,
+                IndexedItem = IndexedItem
             };
 
         public IteratorParameters CopyReference() =>
@@ -54,7 +55,8 @@ namespace LinqRewrite.DataStructures
                 ForMax = ForMax,
                 ForReMin = ForReMin,
                 ForReMax = ForReMax,
-                Indexer = Indexer
+                Indexer = Indexer,
+                IndexedItem = IndexedItem
             };
 
         public StatementSyntax GetStatementSyntax(RewriteParameters p)
@@ -62,7 +64,7 @@ namespace LinqRewrite.DataStructures
             if (ForMin == null)
             {
                 var enumeratorVariable = p.CreateGlobalVariable("enumerable", p.WrappedItemType("IEnumerator<", Collection, ">"));
-                return p.Rewrite.GetForEachStatement(p, enumeratorVariable, IndexerValue, Collection, Body);
+                return p.Rewrite.GetForEachStatement(p, enumeratorVariable, IndexedItem, Collection, Body);
             }
             else if (p.IsReversed)
             {

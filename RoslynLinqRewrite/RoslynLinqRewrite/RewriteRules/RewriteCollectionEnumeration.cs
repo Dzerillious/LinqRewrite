@@ -48,9 +48,9 @@ namespace LinqRewrite.RewriteRules
             p.ForMin = p.ForReMin = 0;
             p.ForMax = p.ForReMax = count;
 
-            p.CurrentIndexer = p.CreateLocalVariable("__i", IntType);
+            p.CurrentIndexer = p.CreateLocalVariable("__i", Int);
             p.Body.Indexer = p.Indexer;
-            p.Last = (collection.ArrayAccess(p.Indexer), IntType);
+            p.Last = new TypedValueBridge(collection.ItemType(p), collection.ArrayAccess(p.Indexer));
             
             p.ResultSize = count;
             p.SourceSize = count;
@@ -62,14 +62,14 @@ namespace LinqRewrite.RewriteRules
             p.InitialAdd( If(collection.EqualsExpr(NullValue),
                             CreateThrowException("System.InvalidOperationException", "Collection was null.")));
                 
-            var sourceCount = p.CreateLocalVariable("__sourceCount", IntType, p.Code.CreateCollectionCount(collection, false));
+            var sourceCount = p.CreateLocalVariable("__sourceCount", Int, p.Code.CreateCollectionCount(collection, false));
 
             p.ForMin = p.ForReMin = 0;
             p.ForMax = p.ForReMax = sourceCount;
             
-            p.CurrentIndexer = p.CreateLocalVariable("__i", IntType);
+            p.CurrentIndexer = p.CreateLocalVariable("__i", Int);
             p.Body.Indexer = p.Indexer;
-            p.Last = (collection.ArrayAccess(p.Indexer), IntType);
+            p.Last = new TypedValueBridge(collection.ItemType(p), collection.ArrayAccess(p.Indexer));
             
             p.ResultSize = IdentifierName(sourceCount);
             p.SourceSize = IdentifierName(sourceCount);
@@ -82,8 +82,8 @@ namespace LinqRewrite.RewriteRules
 
             p.IsReversed = false;
             p.ListsEnumeration = false;
-            p.Body.IndexerValue = p.CreateLocalVariable("__i", collection.ItemType(p));
-            p.Last = (p.Body.IndexerValue, IntType);
+            p.Body.IndexedItem = p.CreateLocalVariable("__i", collection.ItemType(p));
+            p.Last = new TypedValueBridge(collection.ItemType(p), p.Body.IndexedItem);
 
             p.SourceSize = null;
             p.ResultSize = null;

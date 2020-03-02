@@ -5,39 +5,41 @@ using LinqRewrite.DataStructures;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Extensions.VariableExtensions;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LinqRewrite.Extensions
 {
     public static class SyntaxFactoryHelper
     {
         public static SeparatedSyntaxList<ExpressionSyntax> CreateSeparatedExpressionList<T>(params T[] items) where T : SyntaxNode
-            => SyntaxFactory.SeparatedList(items.Cast<ExpressionSyntax>());
+            => SeparatedList(items.Cast<ExpressionSyntax>());
         
         public static SeparatedSyntaxList<T> CreateSeparatedList<T>(params T[] items) where T : SyntaxNode
-            => SyntaxFactory.SeparatedList(items);
+            => SeparatedList(items);
 
         public static StatementSyntax AggregateStatementSyntax(IList<StatementSyntax> syntax) 
             => syntax.Count switch
             {
-                0 => SyntaxFactory.EmptyStatement(),
+                0 => EmptyStatement(),
                 1 => syntax[0],
-                _ => SyntaxFactory.Block(syntax)
+                _ => Block(syntax)
             };
 
         public static ThrowExpressionSyntax CreateThrowException(string type, string message = null)
-            => SyntaxFactory.ThrowExpression(
-                SyntaxFactory.ObjectCreationExpression(
-                    SyntaxFactory.ParseTypeName(type),
+            => ThrowExpression(
+                ObjectCreationExpression(
+                    ParseTypeName(type),
                     CreateArguments(message != null
                         ? new ExpressionSyntax[]
                         {
-                            SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression,
-                                SyntaxFactory.Literal(message))
+                            LiteralExpression(SyntaxKind.StringLiteralExpression,
+                                Literal(message))
                         }
                         : new ExpressionSyntax[] { }), null));
 
         public static SeparatedSyntaxList<T> CreateSeparatedList<T>(IEnumerable<T> items) where T : SyntaxNode
-            => SyntaxFactory.SeparatedList(items);
+            => SeparatedList(items);
 
         public static ArgumentListSyntax CreateArguments(IEnumerable<ExpressionSyntax> items)
             => CreateArguments(items.Select(SyntaxFactory.Argument));
@@ -49,108 +51,108 @@ namespace LinqRewrite.Extensions
             => SyntaxFactory.Argument(name);
         
         public static ArgumentSyntax RefArg(VariableBridge name)
-            => SyntaxFactory.Argument(null, SyntaxFactory.Token(SyntaxKind.RefKeyword), name);
+            => SyntaxFactory.Argument(null, Token(SyntaxKind.RefKeyword), name);
 
         public static ArgumentSyntax OutArg(VariableBridge name)
-            => SyntaxFactory.Argument(null, SyntaxFactory.Token(SyntaxKind.OutKeyword), name);
+            => SyntaxFactory.Argument(null, Token(SyntaxKind.OutKeyword), name);
 
         public static InvocationExpressionSyntax Invoke(this string identifier)
-            => SyntaxFactory.InvocationExpression(SyntaxFactory.IdentifierName(identifier));
+            => InvocationExpression(IdentifierName(identifier));
         public static InvocationExpressionSyntax Invoke(this ExpressionSyntax source)
-            => SyntaxFactory.InvocationExpression(source);
+            => InvocationExpression(source);
         public static InvocationExpressionSyntax Invoke(this ExpressionSyntax invoked, params ArgumentSyntax[] args)
-            => SyntaxFactory.InvocationExpression(invoked, SyntaxFactory.ArgumentList(CreateSeparatedList(args)));
+            => InvocationExpression(invoked, ArgumentList(CreateSeparatedList(args)));
         public static InvocationExpressionSyntax Invoke(this ExpressionSyntax invoked, params ValueBridge[] args)
-            => SyntaxFactory.InvocationExpression(invoked, SyntaxFactory.ArgumentList(CreateSeparatedList(args.Select(Argument))));
+            => InvocationExpression(invoked, ArgumentList(CreateSeparatedList(args.Select(Argument))));
 
         public static ArgumentListSyntax CreateArguments(params ArgumentSyntax[] items)
-            => SyntaxFactory.ArgumentList(CreateSeparatedList(items));
+            => ArgumentList(CreateSeparatedList(items));
         
         public static ArgumentListSyntax CreateArguments(params ValueBridge[] items)
-            => SyntaxFactory.ArgumentList(CreateSeparatedList(items.Select(Argument)));
+            => ArgumentList(CreateSeparatedList(items.Select(Argument)));
         
         public static ArgumentListSyntax CreateArguments(IEnumerable<ArgumentSyntax> items)
-            => SyntaxFactory.ArgumentList(CreateSeparatedList(items));
+            => ArgumentList(CreateSeparatedList(items));
 
         public static ParameterListSyntax CreateParameters(IEnumerable<ParameterSyntax> items)
-            => SyntaxFactory.ParameterList(CreateSeparatedList(items));
+            => ParameterList(CreateSeparatedList(items));
 
         public static ParameterSyntax CreateParameter(SyntaxToken name, ITypeSymbol type)
-            => SyntaxFactory.Parameter(name).WithType(SyntaxFactory.ParseTypeName(type.ToDisplayString()));
+            => Parameter(name).WithType(ParseTypeName(type.ToDisplayString()));
 
         public static ParameterSyntax CreateParameter(SyntaxToken name, TypeSyntax type)
-            => SyntaxFactory.Parameter(name).WithType(type);
+            => Parameter(name).WithType(type);
 
         public static ParameterSyntax CreateParameter(string name, ITypeSymbol type)
-            => CreateParameter(SyntaxFactory.Identifier(name), type);
+            => CreateParameter(Identifier(name), type);
 
         public static ParameterSyntax CreateParameter(string name, TypeSyntax type)
-            => CreateParameter(SyntaxFactory.Identifier(name), type);
+            => CreateParameter(Identifier(name), type);
 
         public static ContinueStatementSyntax Continue()
-            => SyntaxFactory.ContinueStatement();
+            => ContinueStatement();
 
         public static BreakStatementSyntax Break()
-            => SyntaxFactory.BreakStatement();
+            => BreakStatement();
 
         public static ObjectCreationExpressionSyntax New(TypeBridge type, params ValueBridge[] args)
-            => SyntaxFactory.ObjectCreationExpression(type, CreateArguments(args.Select(Argument)), null);
+            => ObjectCreationExpression(type, CreateArguments(args.Select(Argument)), null);
         public static WhileStatementSyntax While(ValueBridge @while, StatementBridge @do)
-            => SyntaxFactory.WhileStatement(@while, @do);
+            => WhileStatement(@while, @do);
         public static IfStatementSyntax If(ValueBridge @if, StatementBridge @do)
-            => SyntaxFactory.IfStatement(@if, @do);
+            => IfStatement(@if, @do);
         public static IfStatementSyntax If(ValueBridge @if, StatementBridge @do, StatementBridge @else)
-            => SyntaxFactory.IfStatement(@if, @do, SyntaxFactory.ElseClause(@else));
+            => IfStatement(@if, @do, ElseClause(@else));
         public static TryStatementSyntax TryF(BlockSyntax @try, BlockSyntax @finally)
-            => SyntaxFactory.TryStatement(@try, new SyntaxList<CatchClauseSyntax>(), SyntaxFactory.FinallyClause(@finally));
+            => TryStatement(@try, new SyntaxList<CatchClauseSyntax>(), FinallyClause(@finally));
         
         public static ReturnStatementSyntax Return(ValueBridge _)
-            => SyntaxFactory.ReturnStatement(_);
+            => ReturnStatement(_);
 
         public static DefaultExpressionSyntax Default(TypeBridge @type)
-            => SyntaxFactory.DefaultExpression(@type);
+            => DefaultExpression(@type);
 
-        public static (ExpressionSyntax, TypeSyntax) Reusable(this ExpressionSyntax e, RewriteParameters p)
+        public static TypedValueBridge Reusable(this ExpressionSyntax e, RewriteParameters p)
         {
             // TODO: Fix type
-            if (IsExpressionReusable(e)) return (e, VariableExtensions.IntType);
+            if (IsExpressionReusable(e)) return new TypedValueBridge(Int, e);
 
-            var tmpVariable = p.CreateLocalVariable("__tmp", VariableExtensions.IntType, e);
-            return (SyntaxFactory.IdentifierName(tmpVariable), VariableExtensions.IntType);
+            var tmpVariable = p.CreateLocalVariable("__tmp", Int, e);
+            return new TypedValueBridge(Int, IdentifierName(tmpVariable));
         }
         
-        public static (ValueBridge, TypeBridge) Reusable(this (ValueBridge, TypeBridge) e, RewriteParameters p)
+        public static TypedValueBridge Reusable(this TypedValueBridge e, RewriteParameters p)
         {
-            if (IsExpressionReusable(e.Item1)) return e;
+            if (IsExpressionReusable(e)) return e;
             
             // TODO: Fix type
-            var tmpVariable = p.CreateLocalVariable("__tmp", VariableExtensions.IntType, e.Item1);
-            return (SyntaxFactory.IdentifierName(tmpVariable), VariableExtensions.IntType);
+            var tmpVariable = p.CreateLocalVariable("__tmp", e.Type, e);
+            return new TypedValueBridge(e.Type, IdentifierName(tmpVariable));
         }
 
-        public static ExpressionSyntax Inline(this ExpressionSyntax e, RewriteParameters p, ValueBridge a)
+        public static TypedValueBridge Inline(this ExpressionSyntax e, RewriteParameters p, ValueBridge a)
         {
             if (e.IsLambdaExpressionSimple() || IsExpressionReusable(p.Last.Value))
                 return p.Code.InlineLambda(p.Semantic, e, a);
 
             // TODO: Fix type
-            var inlineVariable = p.CreateLocalVariable("__tmp", VariableExtensions.IntType);
+            var inlineVariable = p.CreateLocalVariable("__tmp", Int);
             p.ForAdd(inlineVariable.Assign(a));
-            return p.Code.InlineLambda(p.Semantic, e, SyntaxFactory.IdentifierName(inlineVariable));
+            return p.Code.InlineLambda(p.Semantic, e, IdentifierName(inlineVariable));
         }
 
-        public static ExpressionSyntax Inline(this ExpressionSyntax e, RewriteParameters p, ValueBridge a, ValueBridge b)
+        public static TypedValueBridge Inline(this ExpressionSyntax e, RewriteParameters p, ValueBridge a, ValueBridge b)
         {
             if (e.IsLambdaExpressionSimple()) return p.Code.InlineLambda(p.Semantic, e, a, b);
             if (!IsExpressionReusable(a))
             {
-                var inlineVariable = p.CreateLocalVariable("__tmp", VariableExtensions.IntType, a);
-                a = SyntaxFactory.IdentifierName(inlineVariable);
+                var inlineVariable = p.CreateLocalVariable("__tmp", Int, a);
+                a = IdentifierName(inlineVariable);
             }
             if (!IsExpressionReusable(b))
             {
-                var inlineVariable = p.CreateLocalVariable("__tmp", VariableExtensions.IntType, b);
-                b = SyntaxFactory.IdentifierName(inlineVariable);
+                var inlineVariable = p.CreateLocalVariable("__tmp", Int, b);
+                b = IdentifierName(inlineVariable);
             }
             return p.Code.InlineLambda(p.Semantic, e, a, b);
         }

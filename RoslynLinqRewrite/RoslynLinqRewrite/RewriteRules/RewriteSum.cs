@@ -23,9 +23,9 @@ namespace LinqRewrite.RewriteRules
             else if (isNullable)
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                var (value, _) = method.Inline(p, p.Last.Value).Reusable(p);
-                p.ForAdd(If(value.NotEqualsExpr(NullValue),
-                    sumVariable.AddAssign(value)));
+                var inlined = method.Inline(p, p.Last.Value).Reusable(p);
+                p.ForAdd(If(inlined.NotEqualsExpr(NullValue),
+                    sumVariable.AddAssign(inlined)));
             }
             else
             {

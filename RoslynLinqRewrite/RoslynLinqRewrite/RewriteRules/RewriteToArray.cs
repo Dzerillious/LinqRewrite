@@ -49,13 +49,13 @@ namespace LinqRewrite.RewriteRules
         {
             var indexer = p.Indexer;
                 
-            var logVariable = p.CreateGlobalVariable("__log", IntType,
+            var logVariable = p.CreateGlobalVariable("__log", Int,
                 "SimpleCollections".Access("IntExtensions", "Log2")
                     .Invoke(p.SourceSize.Cast(SyntaxKind.UIntKeyword))
                     .Sub(3));
                 
             p.InitialAdd(logVariable.SubAssign(logVariable.Mod(2)));
-            var currentLengthVariable = p.CreateGlobalVariable("__currentLength", IntType, 8);
+            var currentLengthVariable = p.CreateGlobalVariable("__currentLength", Int, 8);
 
             var resultType = (ArrayTypeSyntax) p.ReturnType;
             var resultVariable = p.CreateGlobalVariable(resultName, resultType, CreateArray(resultType, p.ResultSize));
@@ -76,9 +76,9 @@ namespace LinqRewrite.RewriteRules
         {
             var indexer = p.Indexer;
             
-            var currentLengthVariable = p.CreateGlobalVariable("__currentLength", IntType, 8);
+            var currentLengthVariable = p.CreateGlobalVariable("__currentLength", Int, 8);
             var resultType = (ArrayTypeSyntax) p.ReturnType;
-            var resultVariable = p.CreateGlobalVariable(resultName, IntType, CreateArray(resultType, 8));
+            var resultVariable = p.CreateGlobalVariable(resultName, Int, CreateArray(resultType, 8));
                 
             p.ForAdd(If(p.Indexer.GeThan(currentLengthVariable),
                             "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")

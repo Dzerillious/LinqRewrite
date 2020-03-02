@@ -18,31 +18,31 @@ namespace LinqRewrite.RewriteRules
             var isNullable = p.ReturnType is NullableTypeSyntax;
             var elementType = isNullable ? ((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
             
-            if (elementType.ToString() == "int") maxVariable = p.CreateGlobalVariable("__max", IntType, int.MinValue.Cast(elementType));
-            else if (elementType.ToString() == "float") maxVariable = p.CreateGlobalVariable("__max", FloatType, float.MinValue.Cast(elementType));
-            else if (elementType.ToString() == "double") maxVariable = p.CreateGlobalVariable("__max", DoubleType, double.MinValue.Cast(elementType));
+            if (elementType.ToString() == "int") maxVariable = p.CreateGlobalVariable("__max", Int, int.MinValue.Cast(elementType));
+            else if (elementType.ToString() == "float") maxVariable = p.CreateGlobalVariable("__max", Float, float.MinValue.Cast(elementType));
+            else if (elementType.ToString() == "double") maxVariable = p.CreateGlobalVariable("__max", VariableExtensions.Double, double.MinValue.Cast(elementType));
             else maxVariable = null;
 
             if (p.Chain[chainIndex].Arguments.Length == 0)
             {
-                var reusable = p.Last.Reusable(p);
-                p.ForAdd(If(reusable.Item1.GThan(maxVariable),
-                            maxVariable.Assign(reusable.Item1)));
+                var inlined = p.Last.Reusable(p);
+                p.ForAdd(If(inlined.GThan(maxVariable),
+                            maxVariable.Assign(inlined)));
             }
             else if (isNullable)
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                var reusable = method.Inline(p, p.Last.Value).Reusable(p);
-                p.ForAdd(If(reusable.Item1.NotEqualsExpr(NullValue),
-                            If(reusable.Item1.GThan(maxVariable),
-                                maxVariable.Assign(reusable.Item1))));
+                var inlined = method.Inline(p, p.Last.Value).Reusable(p);
+                p.ForAdd(If(inlined.NotEqualsExpr(NullValue),
+                            If(inlined.GThan(maxVariable),
+                                maxVariable.Assign(inlined))));
             }
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                var reusable = method.Inline(p, p.Last.Value).Reusable(p);
-                p.ForAdd(If(reusable.Item1.GThan(maxVariable),
-                            maxVariable.Assign(reusable.Item1)));
+                var inlined = method.Inline(p, p.Last.Value).Reusable(p);
+                p.ForAdd(If(inlined.GThan(maxVariable),
+                            maxVariable.Assign(inlined)));
             }
             
             p.FinalAdd(Return(maxVariable));
