@@ -10,7 +10,7 @@ namespace LinqRewrite.RewriteRules
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             var method = p.Chain[chainIndex].Arguments[0];
             
-            p.ForAdd(method.Inline(p, p.Last.Value));
+            p.ForAdd(method.Inline(p, p.Last));
             p.HasResultMethod = true;
         }
     }

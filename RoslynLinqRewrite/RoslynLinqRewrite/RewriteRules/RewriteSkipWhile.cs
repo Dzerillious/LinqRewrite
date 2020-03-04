@@ -14,7 +14,7 @@ namespace LinqRewrite.RewriteRules
             p.Last = p.Last.Reusable(p);
 
             var lastFor = p.CopyIterator();
-            lastFor.BodyAdd(If(Not(method.Inline(p, p.Last.Value)),
+            lastFor.BodyAdd(If(Not(method.Inline(p, p.Last)),
                             Break()));
 
             p.ResultSize = null;

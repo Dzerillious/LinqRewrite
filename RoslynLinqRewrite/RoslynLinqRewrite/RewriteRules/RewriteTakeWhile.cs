@@ -13,7 +13,7 @@ namespace LinqRewrite.RewriteRules
             var method = p.Chain[chainIndex].Arguments[0];
             p.Last = p.Last.Reusable(p);
             
-            p.ForAdd(If(Not(method.Inline(p, p.Last.Value)),
+            p.ForAdd(If(Not(method.Inline(p, p.Last)),
                         Break()));
 
             p.ResultSize = null;

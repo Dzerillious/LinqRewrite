@@ -26,7 +26,7 @@ namespace LinqRewrite.RewriteRules
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                p.ForAdd(If(method.Inline(p, p.Last.Value),
+                p.ForAdd(If(method.Inline(p, p.Last),
                             If(foundVariable.EqualsExpr(NullValue),
                                 foundVariable.Assign(p.Last.Value),
                                 CreateThrowException("System.InvalidOperationException", "The sequence contains more than single matching element."))));

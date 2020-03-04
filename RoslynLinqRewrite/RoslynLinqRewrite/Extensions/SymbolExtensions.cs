@@ -26,21 +26,30 @@ namespace LinqRewrite.Extensions
         public static TypeSyntax WrappedItemType(this RewriteParameters p, string pre, ExpressionSyntax collection,
             string post)
         {
-            var itemString = pre + p.GetItemType(collection).ToDisplayString() + post;
+            var itemString = pre + collection.GetItemTypeSymbol(p).ToDisplayString() + post;
             return SyntaxFactory.ParseTypeName(itemString);
         }
 
         public static TypeSyntax ItemType(this ExpressionSyntax collection, RewriteParameters p)
         {
-            var itemString = p.GetItemType(collection).ToDisplayString();
+            var itemString = collection.GetItemTypeSymbol(p).ToDisplayString();
             return SyntaxFactory.ParseTypeName(itemString);
         }
 
-        public static ITypeSymbol GetItemType(this RewriteParameters p, ExpressionSyntax collection)
+        public static ITypeSymbol GetItemTypeSymbol(this ExpressionSyntax collection, RewriteParameters p)
         {
             var collectionType = ModelExtensions.GetTypeInfo(p.Semantic, collection).Type;
             return GetItemType(collectionType);
         }
+
+        public static TypeSyntax GetType(this ExpressionSyntax item, RewriteParameters p)
+        {
+            var itemString = ModelExtensions.GetTypeInfo(p.Semantic, item).Type.ToDisplayString();
+            return SyntaxFactory.ParseTypeName(itemString);
+        }
+
+        public static ITypeSymbol GetTypeSymbol(this RewriteParameters p, ExpressionSyntax item)
+            => ModelExtensions.GetTypeInfo(p.Semantic, item).Type;
 
         public static ITypeSymbol GetItemType(ITypeSymbol collectionType)
             => collectionType is IArrayTypeSymbol symbol

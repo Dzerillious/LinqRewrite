@@ -13,8 +13,8 @@ namespace LinqRewrite.RewriteRules
             var method = p.Chain[chainIndex].Arguments[0];
 
             p.Last = method is SimpleLambdaExpressionSyntax
-                ? method.Inline(p, p.Last.Value)
-                : method.Inline(p, p.Last.Value, p.Indexer);
+                ? method.Inline(p, p.Last)
+                : method.Inline(p, p.Last, new TypedValueBridge(Int, p.Indexer));
         }
     }
 }

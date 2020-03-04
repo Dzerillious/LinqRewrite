@@ -14,7 +14,7 @@ namespace LinqRewrite.RewriteRules
 
             var resultVariable = p.CreateLocalVariable("__result",  p.ReturnType, p.Collection.ArrayAccess(0));
             var aggregation = p.Chain[chainIndex].Arguments[0];
-            p.ForAdd(resultVariable.Assign(aggregation.Inline(p, resultVariable, p.Last.Value)));
+            p.ForAdd(resultVariable.Assign(aggregation.Inline(p, new TypedValueBridge(p.ReturnType, resultVariable), p.Last)));
             
             p.FinalAdd(Return(resultVariable));
             p.HasResultMethod = true;

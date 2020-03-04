@@ -60,17 +60,13 @@ namespace LinqRewrite.Services
                             .Select(x => ParseTypeName(x.Identifier.ValueText)))))
                 : (NameSyntax) IdentifierName(identifier);
 
-        public TypedValueBridge InlineLambda(SemanticModel semantic, ExpressionSyntax expression, params ValueBridge[] p)
+        public TypedValueBridge InlineLambda(ExpressionSyntax expression, TypeSyntax returnType, params ValueBridge[] p)
         {
             if (expression is IdentifierNameSyntax identifier)
                 return new TypedValueBridge(Int, identifier.Invoke(p));
             
-            var simpleLambda = (LambdaExpressionSyntax) expression;
-            var lambda = new Lambda(simpleLambda);
-            
-            var returnType = simpleLambda.ExpressionBody == null 
-                ? semantic.GetTypeFromExpression(((ReturnStatementSyntax) simpleLambda.Block.Statements.Last()).Expression)
-                : semantic.GetTypeFromExpression(simpleLambda.ExpressionBody);
+            var lambdaExpression = (LambdaExpressionSyntax) expression;
+            var lambda = new Lambda(lambdaExpression);
 
             var pS = p.Select((x, i) => GetLambdaParameter(lambda, i)).ToArray();
             var currentFlow = _data.Semantic.AnalyzeDataFlow(lambda.Body);
@@ -83,6 +79,13 @@ namespace LinqRewrite.Services
 
             lambda = RenameSymbol(lambda, p);
             return new TypedValueBridge(returnType, InlineOrCreateMethod(lambda.Body, returnType, currentCaptures, pS));
+        }
+
+        public TypeSyntax GetLambdaReturnType(SemanticModel semantic, LambdaExpressionSyntax lambdaExpression)
+        {
+            return lambdaExpression.ExpressionBody == null 
+                ? semantic.GetTypeFromExpression(((ReturnStatementSyntax) lambdaExpression.Block.Statements.Last()).Expression)
+                : semantic.GetTypeFromExpression(lambdaExpression.ExpressionBody);
         }
 
         public ExpressionSyntax InlineOrCreateMethod(CSharpSyntaxNode body, TypeSyntax returnType,

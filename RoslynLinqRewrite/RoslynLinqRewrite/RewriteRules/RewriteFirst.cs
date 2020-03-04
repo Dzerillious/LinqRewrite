@@ -19,7 +19,7 @@ namespace LinqRewrite.RewriteRules
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                p.ForAdd(If(method.Inline(p, p.Last.Value),
+                p.ForAdd(If(method.Inline(p, p.Last),
                             Return(p.Last.Value)));
             }
             

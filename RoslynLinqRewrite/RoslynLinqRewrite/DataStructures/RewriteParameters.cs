@@ -224,8 +224,7 @@ namespace LinqRewrite.DataStructures
             var created = new LocalVariable(variable, type);
             Variables.Add(created);
             
-            InitialAdd(LocalVariableCreation(variable, type));
-            PreForAdd(((VariableBridge)variable).Assign(initial));
+            InitialAdd(LocalVariableCreation(variable, type, initial));
             return created;
         }
         

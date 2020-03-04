@@ -32,7 +32,7 @@ namespace LinqRewrite.RewriteRules
             else if (isNullable)
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                var inlined = method.Inline(p, p.Last.Value).Reusable(p);
+                var inlined = method.Inline(p, p.Last).Reusable(p);
                 p.ForAdd(If(inlined.NotEqualsExpr(NullValue),
                             If(inlined.LThan(minVariable),
                                 minVariable.Assign(inlined))));
@@ -40,7 +40,7 @@ namespace LinqRewrite.RewriteRules
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                var inlined = method.Inline(p, p.Last.Value).Reusable(p);
+                var inlined = method.Inline(p, p.Last).Reusable(p);
                 p.ForAdd(If(inlined.LThan(minVariable),
                             minVariable.Assign(inlined)));
             }
