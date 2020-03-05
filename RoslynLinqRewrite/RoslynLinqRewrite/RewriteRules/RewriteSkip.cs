@@ -1,5 +1,4 @@
 ﻿using LinqRewrite.DataStructures;
-using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace LinqRewrite.RewriteRules
@@ -13,13 +12,13 @@ namespace LinqRewrite.RewriteRules
             var skipped = p.Chain[chainIndex].Arguments[0];
             if (p.ListsEnumeration)
             {
-                p.ForMin = p.ForMin.Add(skipped);
-                p.ForReMax = p.ForReMin.Sub(skipped);
-                p.ResultSize = p.ResultSize.Sub(skipped);
+                p.ForMin += skipped;
+                p.ForReMax -= skipped;
+                p.ResultSize -= skipped;
             }
             else
             {
-                p.ForAdd(If(p.Indexer.LThan(skipped), Continue()));
+                p.ForAdd(If(p.Indexer < skipped, Continue()));
                 p.ModifiedEnumeration = true;
             }
             p.CurrentIndexer = null;

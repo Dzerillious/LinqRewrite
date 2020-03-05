@@ -1,7 +1,7 @@
 ﻿using System;
 using LinqRewrite.DataStructures;
+using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace LinqRewrite.RewriteRules
@@ -16,19 +16,19 @@ namespace LinqRewrite.RewriteRules
             if (p.Chain[chainIndex].Arguments.Length != 0)
             {
                 var method = p.Chain[chainIndex].Arguments[0];
-                p.ForAdd(If(Not(method.Inline(p, p.Last)),
-                    Continue()));
+                p.ForAdd(If(!method.Inline(p, p.Last),
+                        Continue()));
                 
                 p.ModifiedEnumeration = true;
             }
             p.ForAdd(p.Indexer);
-            p.FinalAdd(Return(p.Indexer.Add(1)));
+            p.FinalAdd(Return(p.Indexer + 1));
             p.HasResultMethod = true;
         }
 
         public static ExpressionSyntax RewriteSimple(RewriteParameters p) 
             => p.Chain[0].Arguments.Length == 0 
-                ? p.Code.CreateCollectionCount(p.Collection, false) 
+                ? p.Collection.Count(p) 
                 : null;
     }
 }

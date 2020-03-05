@@ -4,7 +4,6 @@ using System.Linq;
 using LinqRewrite.Extensions;
 using LinqRewrite.Services;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SimpleCollections;
 using static LinqRewrite.Extensions.VariableExtensions;
@@ -19,15 +18,15 @@ namespace LinqRewrite.DataStructures
 
         
         public InvocationExpressionSyntax Node { get; set; }
-        public ExpressionSyntax Collection { get; set; }
+        public ValueBridge Collection { get; set; }
         public List<LinqStep> Chain { get; set; }
 
         
         public TypeSyntax ReturnType { get; set; }
 
         
-        public ExpressionSyntax ResultSize { get; set; }
-        public ExpressionSyntax SourceSize { get; set; }
+        public ValueBridge ResultSize { get; set; }
+        public ValueBridge SourceSize { get; set; }
 
         public TypedValueBridge Last { get; set; }
 
@@ -58,11 +57,10 @@ namespace LinqRewrite.DataStructures
             set
             {
                 _modifiedEnumeration = value;
-                if (value && CurrentIndexer != null)
-                {
-                    ResultSize = null;
-                    CurrentIndexer = null;
-                }
+                
+                if (!value || CurrentIndexer == null) return;
+                ResultSize = null;
+                CurrentIndexer = null;
             }
         }
 
@@ -73,7 +71,7 @@ namespace LinqRewrite.DataStructures
             {
                 if (CurrentIndexer != null) return CurrentIndexer;
 
-                var indexerVariable = CreateGlobalVariable("__indexer", Int, -1);
+                var indexerVariable = GlobalVariable(Int, "__indexer", -1);
                 ForAdd(indexerVariable.PreIncrement());
 
                 return CurrentIndexer = indexerVariable;
@@ -192,7 +190,7 @@ namespace LinqRewrite.DataStructures
         private int _variableIndex;
         public string GetVariableName(string name) => name + _variableIndex++;
         
-        public LocalVariable CreateGlobalVariable(string name, TypeSyntax type)
+        public LocalVariable GlobalVariable(TypeSyntax type, string name)
         {
             var variable = name + _variableIndex++;
             var created = new LocalVariable(variable, type) {IsGlobal = true};
@@ -202,7 +200,7 @@ namespace LinqRewrite.DataStructures
             return created;
         }
         
-        public LocalVariable CreateGlobalVariable(string name, TypeSyntax type, ValueBridge initial)
+        public LocalVariable GlobalVariable(TypeSyntax type, string name, ValueBridge initial)
         {
             var variable = name + _variableIndex++;
             var created = new LocalVariable(variable, type) {IsGlobal = true};
@@ -212,7 +210,7 @@ namespace LinqRewrite.DataStructures
             return created;
         }
         
-        public LocalVariable CreateLocalVariable(string name, TypeBridge type, ValueBridge initial)
+        public LocalVariable LocalVariable(TypeBridge type, string name, ValueBridge initial)
         {
             var variable = name + _variableIndex++;
             var found = Variables.FirstOrDefault(x => x.Type.Equals(type) && !x.IsGlobal && !x.IsUsed);
@@ -228,7 +226,7 @@ namespace LinqRewrite.DataStructures
             return created;
         }
         
-        public LocalVariable CreateLocalVariable(string name, TypeBridge type)
+        public LocalVariable LocalVariable(TypeBridge type, string name)
         {
             var found = Variables.FirstOrDefault(x => type.ToString().Equals(x.Type.ToString()) && !x.IsGlobal && !x.IsUsed);
             if (found != null)

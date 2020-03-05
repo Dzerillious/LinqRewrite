@@ -16,7 +16,7 @@ namespace LinqRewrite.RewriteRules
 
             var isNullable = p.ReturnType is NullableTypeSyntax;
             var elementType = isNullable ? ((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
-            var sumVariable = p.CreateGlobalVariable("__sum", elementType, 0);
+            var sumVariable = p.GlobalVariable(elementType, "__sum", 0);
 
             if (p.Chain[chainIndex].Arguments.Length == 0)
             {
@@ -26,7 +26,7 @@ namespace LinqRewrite.RewriteRules
             {
                 var method = p.Chain[chainIndex].Arguments[0];
                 var inlined = method.Inline(p, p.Last).Reusable(p);
-                p.ForAdd(If(inlined.NotEqualsExpr(NullValue),
+                p.ForAdd(If(inlined.NotEqual(Null),
                             sumVariable.AddAssign(inlined)));
             }
             else
@@ -36,8 +36,8 @@ namespace LinqRewrite.RewriteRules
             }
 
             p.FinalAdd(Return(p.ResultSize == null
-                ? sumVariable.Div(p.Indexer.Add(1))
-                : sumVariable.Div(p.ResultSize)));
+                ? sumVariable / (p.Indexer + 1)
+                : sumVariable / p.ResultSize));
 
             p.HasResultMethod = true;
         }

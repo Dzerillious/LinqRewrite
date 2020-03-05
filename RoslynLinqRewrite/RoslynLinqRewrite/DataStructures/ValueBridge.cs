@@ -7,6 +7,8 @@ namespace LinqRewrite.DataStructures
     public class  ValueBridge
     {
         public ExpressionSyntax Value { get; }
+        
+        public ValueBridge this[ValueBridge i] => this.ArrayAccess(i);
 
         public ValueBridge(bool value)
         {
@@ -16,6 +18,12 @@ namespace LinqRewrite.DataStructures
         }
 
         public ValueBridge(int value)
+            => Value = SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(value));
+
+        public ValueBridge(double value)
+            => Value = SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(value));
+
+        public ValueBridge(float value)
             => Value = SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(value));
 
         public ValueBridge(ExpressionSyntax value)
@@ -32,6 +40,12 @@ namespace LinqRewrite.DataStructures
 
         public static implicit operator ValueBridge(int value)
             => new ValueBridge(value);
+
+        public static implicit operator ValueBridge(float value)
+            => new ValueBridge(value);
+
+        public static implicit operator ValueBridge(double value)
+            => new ValueBridge(value);
         
         public static implicit operator ValueBridge(bool value)
             => new ValueBridge(value);
@@ -47,8 +61,35 @@ namespace LinqRewrite.DataStructures
         
         public static implicit operator ExpressionSyntax(ValueBridge name)
             => name.Value;
+
+        public static ValueBridge operator +(ValueBridge a, ValueBridge b)
+            => SyntaxFactory.ParenthesizedExpression(a.Add(b));
+
+        public static ValueBridge operator -(ValueBridge a, ValueBridge b)
+            => SyntaxFactory.ParenthesizedExpression(a.Sub(b));
+
+        public static ValueBridge operator *(ValueBridge a, ValueBridge b)
+            => SyntaxFactory.ParenthesizedExpression(a.Mul(b));
+
+        public static ValueBridge operator /(ValueBridge a, ValueBridge b)
+            => SyntaxFactory.ParenthesizedExpression(a.Div(b));
+
+        public static ValueBridge operator %(ValueBridge a, ValueBridge b)
+            => SyntaxFactory.ParenthesizedExpression(a.Mod(b));
+
+        public static ValueBridge operator !(ValueBridge a)
+            => OperatorExpressionExtensions.Not(a);
         
-        public static implicit operator ArgumentSyntax(ValueBridge name)
-            => SyntaxFactoryHelper.Argument(name.Value);
+        public static BinaryExpressionSyntax operator >(ValueBridge a, ValueBridge b)
+            => a.GThan(b);
+
+        public static BinaryExpressionSyntax operator <(ValueBridge a, ValueBridge b)
+            => a.LThan(b);
+
+        public static BinaryExpressionSyntax operator >=(ValueBridge a, ValueBridge b)
+            => a.GeThan(b);
+
+        public static BinaryExpressionSyntax operator <=(ValueBridge a, ValueBridge b)
+            => a.LeThan(b);
     }
 }

@@ -37,9 +37,9 @@ namespace LinqRewrite.RewriteRules
         private static VariableBridge KnownSize(RewriteParameters p, string resultName, TypeSyntax itemType = null)
         {
             var arrayType = itemType == null ? (ArrayTypeSyntax) p.ReturnType : ArrayType(itemType);
-            var resultVariable = p.CreateGlobalVariable(resultName, arrayType, CreateArray(arrayType, p.ResultSize));
+            var resultVariable = p.GlobalVariable(arrayType, resultName, CreateArray(arrayType, p.ResultSize));
 
-            p.ForAdd(resultVariable.ArrayAccess(p.Indexer).Assign(p.Last.Value));
+            p.ForAdd(resultVariable[p.Indexer].Assign(p.Last.Value));
             
             p.FinalAdd(Return(resultVariable));
             return resultVariable;
@@ -49,26 +49,25 @@ namespace LinqRewrite.RewriteRules
         {
             var indexer = p.Indexer;
                 
-            var logVariable = p.CreateGlobalVariable("__log", Int,
+            var logVariable = p.GlobalVariable(Int, "__log", 
                 "SimpleCollections".Access("IntExtensions", "Log2")
-                    .Invoke(p.SourceSize.Cast(SyntaxKind.UIntKeyword))
-                    .Sub(3));
+                    .Invoke(p.SourceSize.Cast(SyntaxKind.UIntKeyword)) - 3);
                 
-            p.InitialAdd(logVariable.SubAssign(logVariable.Mod(2)));
-            var currentLengthVariable = p.CreateGlobalVariable("__currentLength", Int, 8);
+            p.InitialAdd(logVariable.Assign(logVariable - logVariable % 2));
+            var currentLengthVariable = p.GlobalVariable(Int, "__currentLength", 8);
 
             var resultType = (ArrayTypeSyntax) p.ReturnType;
-            var resultVariable = p.CreateGlobalVariable(resultName, resultType, CreateArray(resultType, p.ResultSize));
+            var resultVariable = p.GlobalVariable(resultType, resultName, CreateArray(resultType, p.ResultSize));
 
-            p.ForAdd(If(p.Indexer.GeThan(currentLengthVariable),
+            p.ForAdd(If(p.Indexer >= currentLengthVariable,
                         "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")
-                                .Invoke(Argument(2), 
-                                    Argument(p.SourceSize), 
+                                .Invoke(2, 
+                                    p.SourceSize, 
                                     RefArg(resultVariable), 
                                     RefArg(logVariable),
                                     OutArg(currentLengthVariable))));
                 
-            p.ForAdd(resultVariable.ArrayAccess(indexer).Assign(p.Last.Value));
+            p.ForAdd(resultVariable[indexer].Assign(p.Last.Value));
             return resultVariable;
         }
 
@@ -76,15 +75,15 @@ namespace LinqRewrite.RewriteRules
         {
             var indexer = p.Indexer;
             
-            var currentLengthVariable = p.CreateGlobalVariable("__currentLength", Int, 8);
+            var currentLengthVariable = p.GlobalVariable(Int, "__currentLength", 8);
             var resultType = (ArrayTypeSyntax) p.ReturnType;
-            var resultVariable = p.CreateGlobalVariable(resultName, Int, CreateArray(resultType, 8));
+            var resultVariable = p.GlobalVariable(Int, resultName, CreateArray(resultType, 8));
                 
-            p.ForAdd(If(p.Indexer.GeThan(currentLengthVariable),
+            p.ForAdd(If(p.Indexer >= currentLengthVariable,
                             "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")
-                                    .Invoke(Argument(2), RefArg(resultVariable), RefArg(currentLengthVariable))));
+                                    .Invoke(2, RefArg(resultVariable), RefArg(currentLengthVariable))));
                 
-            p.ForAdd(resultVariable.ArrayAccess(indexer).Assign(p.Last.Value));
+            p.ForAdd(resultVariable[indexer].Assign(p.Last.Value));
             p.HasResultMethod = true;
             return resultVariable;
         }
@@ -96,8 +95,8 @@ namespace LinqRewrite.RewriteRules
 
             if (collectionType is ArrayTypeSyntax)
             {
-                var count = p.Code.CreateCollectionCount(p.Collection, false);
-                var resultVariable = p.CreateGlobalVariable(resultName, p.ReturnType, CreateArray((ArrayTypeSyntax) p.ReturnType, count));
+                var count = p.Collection.Count(p);
+                var resultVariable = p.GlobalVariable(p.ReturnType, resultName, CreateArray((ArrayTypeSyntax) p.ReturnType, count));
                 p.InitialAdd("Array".Access("Copy")
                     .Invoke(p.Collection, 0, resultVariable, 0, count));
                 p.InitialAdd(Return(resultVariable));

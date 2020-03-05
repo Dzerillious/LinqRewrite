@@ -20,6 +20,10 @@ namespace LinqRewrite.Extensions
             => PrefixUnaryExpression(SyntaxKind.LogicalNotExpression, ParenthesizedExpression(a));
 
         
+        public static ValueBridge Is(this TypedValueBridge a, TypeBridge type)
+            => SyntaxFactory.IsPatternExpression(a.Type, ConstantPattern(type));
+
+        
         public static PostfixUnaryExpressionSyntax PostDecrement(this ValueBridge identifier)
             => PostfixUnaryExpression(SyntaxKind.PostIncrementExpression, identifier);
         public static PostfixUnaryExpressionSyntax PostDecrement(this string identifier)
@@ -74,6 +78,8 @@ namespace LinqRewrite.Extensions
             => AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, a, b);
         public static AssignmentExpressionSyntax Assign(this ExpressionSyntax a, ValueBridge b)
             => AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, a, b);
+        public static AssignmentExpressionSyntax Assign(this ValueBridge a, ValueBridge b)
+            => AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, a, b);
         
         
         public static AssignmentExpressionSyntax SubAssign(this VariableBridge a, ValueBridge b)
@@ -99,6 +105,12 @@ namespace LinqRewrite.Extensions
             => BinaryExpression(SyntaxKind.SubtractExpression, a, b);
         
         
+        public static BinaryExpressionSyntax Mul(this ValueBridge a, ValueBridge b)
+            => BinaryExpression(SyntaxKind.MultiplyExpression, a, b);
+        public static BinaryExpressionSyntax Mul(this ExpressionSyntax a, ValueBridge b)
+            => BinaryExpression(SyntaxKind.MultiplyExpression, a, b);
+        
+        
         public static BinaryExpressionSyntax Div(this ValueBridge a, ValueBridge b)
             => BinaryExpression(SyntaxKind.DivideExpression, a, b);
         public static BinaryExpressionSyntax Div(this ExpressionSyntax a, ValueBridge b)
@@ -111,9 +123,9 @@ namespace LinqRewrite.Extensions
             => BinaryExpression(SyntaxKind.ModuloExpression, a, b);
         
         
-        public static BinaryExpressionSyntax EqualsExpr(this ValueBridge a, ValueBridge b)
+        public static BinaryExpressionSyntax IsEqual(this ValueBridge a, ValueBridge b)
             => BinaryExpression(SyntaxKind.EqualsExpression, a, b);
-        public static BinaryExpressionSyntax EqualsExpr(this ExpressionSyntax a, ValueBridge b)
+        public static BinaryExpressionSyntax IsEqual(this ExpressionSyntax a, ValueBridge b)
             => BinaryExpression(SyntaxKind.EqualsExpression, a, b);
         
         
@@ -142,9 +154,9 @@ namespace LinqRewrite.Extensions
             => BinaryExpression(SyntaxKind.GreaterThanExpression, a, b);
         
         
-        public static BinaryExpressionSyntax NotEqualsExpr(this ValueBridge a, ExpressionSyntax b)
+        public static BinaryExpressionSyntax NotEqual(this ValueBridge a, ExpressionSyntax b)
             => BinaryExpression(SyntaxKind.NotEqualsExpression, a, b);
-        public static BinaryExpressionSyntax NotEqualsExpr(this ExpressionSyntax a, ExpressionSyntax b)
+        public static BinaryExpressionSyntax NotEqual(this ExpressionSyntax a, ExpressionSyntax b)
             => BinaryExpression(SyntaxKind.NotEqualsExpression, a, b);
 
         public static BinaryExpressionSyntax As(this ValueBridge identifier, ValueBridge b)

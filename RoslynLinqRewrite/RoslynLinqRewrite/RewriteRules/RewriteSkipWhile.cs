@@ -1,5 +1,4 @@
 ﻿using LinqRewrite.DataStructures;
-using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace LinqRewrite.RewriteRules
@@ -14,8 +13,8 @@ namespace LinqRewrite.RewriteRules
             p.Last = p.Last.Reusable(p);
 
             var lastFor = p.CopyIterator();
-            lastFor.BodyAdd(If(Not(method.Inline(p, p.Last)),
-                            Break()));
+            lastFor.BodyAdd(If(!method.Inline(p, p.Last),
+                                Break()));
 
             p.ResultSize = null;
             p.CurrentIndexer = null;

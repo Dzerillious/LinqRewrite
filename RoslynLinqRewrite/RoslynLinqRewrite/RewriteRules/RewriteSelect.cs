@@ -1,7 +1,6 @@
 ﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -14,7 +13,7 @@ namespace LinqRewrite.RewriteRules
 
             p.Last = method is SimpleLambdaExpressionSyntax
                 ? method.Inline(p, p.Last)
-                : method.Inline(p, p.Last, new TypedValueBridge(Int, p.Indexer));
+                : method.Inline(p, p.Last, p.Indexer);
         }
     }
 }

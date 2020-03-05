@@ -15,9 +15,10 @@ namespace LinqRewrite.RewriteRules
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Any should be last expression.");
             
             if (p.Chain[chainIndex].Arguments.Length == 1)
-                p.ForAdd(If(p.Last.Value.EqualsExpr(element),
+            {
+                p.ForAdd(If(p.Last.Value.IsEqual(element),
                             Return(true)));
-            
+            }
             else
             {
                 var inlined = p.Chain[chainIndex].Arguments[1].Reusable(p);

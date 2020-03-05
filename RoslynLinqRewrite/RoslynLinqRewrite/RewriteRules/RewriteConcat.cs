@@ -1,8 +1,6 @@
 ﻿using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SimpleCollections;
 using static LinqRewrite.Extensions.VariableExtensions;
 
@@ -28,7 +26,7 @@ namespace LinqRewrite.RewriteRules
             }
             else
             {
-                itemVariable = p.CreateLocalVariable("__i", Int);
+                itemVariable = p.LocalVariable(Int, "__i");
                 p.ForAdd(itemVariable.Assign(p.Last.Value));
                 p.Last = new TypedValueBridge(Int, itemVariable);
             }
@@ -46,10 +44,10 @@ namespace LinqRewrite.RewriteRules
             p.LastForAdd(itemVariable.Assign(p.Last.Value));
             p.Last = new TypedValueBridge(itemVariable.Type, itemVariable);
 
-            if (sourceSize != null && p.SourceSize != null) p.SourceSize = p.SourceSize.Add(sourceSize);
+            if (sourceSize != null && p.SourceSize != null) p.SourceSize += sourceSize;
             else p.SourceSize = null;
             
-            if (resultSize != null && p.ResultSize != null) p.ResultSize = p.ResultSize.Add(resultSize);
+            if (resultSize != null && p.ResultSize != null) p.ResultSize += resultSize;
             else p.ResultSize = null;
         }
     }

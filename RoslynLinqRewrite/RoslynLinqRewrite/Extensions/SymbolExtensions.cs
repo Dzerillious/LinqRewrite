@@ -23,22 +23,22 @@ namespace LinqRewrite.Extensions
         public static ParameterSyntax GetLambdaParameter(Lambda lambda, int index)
             => lambda.Parameters[index];
 
-        public static TypeSyntax WrappedItemType(this RewriteParameters p, string pre, ExpressionSyntax collection,
+        public static TypeSyntax WrappedItemType(this RewriteParameters p, string pre, ValueBridge collection,
             string post)
         {
             var itemString = pre + collection.GetItemTypeSymbol(p).ToDisplayString() + post;
             return SyntaxFactory.ParseTypeName(itemString);
         }
 
-        public static TypeSyntax ItemType(this ExpressionSyntax collection, RewriteParameters p)
+        public static TypeSyntax ItemType(this ValueBridge collection, RewriteParameters p)
         {
             var itemString = collection.GetItemTypeSymbol(p).ToDisplayString();
             return SyntaxFactory.ParseTypeName(itemString);
         }
 
-        public static ITypeSymbol GetItemTypeSymbol(this ExpressionSyntax collection, RewriteParameters p)
+        public static ITypeSymbol GetItemTypeSymbol(this ValueBridge collection, RewriteParameters p)
         {
-            var collectionType = ModelExtensions.GetTypeInfo(p.Semantic, collection).Type;
+            var collectionType = ModelExtensions.GetTypeInfo(p.Semantic, collection.Value).Type;
             return GetItemType(collectionType);
         }
 

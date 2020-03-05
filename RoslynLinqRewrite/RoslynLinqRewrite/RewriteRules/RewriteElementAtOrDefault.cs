@@ -15,7 +15,7 @@ namespace LinqRewrite.RewriteRules
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Count should be last expression.");
             
             var position = p.Chain[chainIndex].Arguments[0];
-            p.ForAdd(If(p.Indexer.EqualsExpr(position),
+            p.ForAdd(If(p.Indexer.IsEqual(position),
                         Return(p.Last.Value)));
             
             p.FinalAdd(Return(Default(p.ReturnType)));
@@ -29,8 +29,8 @@ namespace LinqRewrite.RewriteRules
 
             if (p.SourceSize == null) return null;
             return ConditionalExpression(
-                p.Code.CreateCollectionCount(p.Collection, false).LeThan(p.Chain[0].Arguments[0]),
-                p.Collection.ArrayAccess(p.Chain[0].Arguments[0]),
+                p.Collection.Count(p) <= p.Chain[0].Arguments[0],
+                p.Collection[p.Chain[0].Arguments[0]],
                 Default(p.ReturnType));
         }
     }

@@ -9,7 +9,7 @@ namespace LinqRewrite.Extensions
 {
     public static class VariableExtensions
     {
-        public static LiteralExpressionSyntax NullValue
+        public static LiteralExpressionSyntax Null
             => SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression);
         
         public static TypeSyntax Int
@@ -67,5 +67,8 @@ namespace LinqRewrite.Extensions
             if (size > Constants.MaximumSizeForByValStruct) changes = true;
             return new VariableCapture(symbol, changes);
         }
+
+        public static ValueBridge Count(this ValueBridge value, RewriteParameters p)
+            => p.Code.CreateCollectionCount(value, false);
     }
 }

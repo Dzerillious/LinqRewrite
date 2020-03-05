@@ -63,7 +63,7 @@ namespace LinqRewrite.DataStructures
         {
             if (ForMin == null)
             {
-                var enumeratorVariable = p.CreateGlobalVariable("enumerable", p.WrappedItemType("IEnumerator<", Collection, ">"));
+                var enumeratorVariable = p.GlobalVariable(p.WrappedItemType("IEnumerator<", Collection, ">"), "enumerable");
                 return p.Rewrite.GetForEachStatement(p, enumeratorVariable, IndexedItem, Collection, Body);
             }
             else if (p.IsReversed)

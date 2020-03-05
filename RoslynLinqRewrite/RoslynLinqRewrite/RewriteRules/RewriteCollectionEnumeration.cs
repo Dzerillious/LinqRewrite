@@ -15,7 +15,7 @@ namespace LinqRewrite.RewriteRules
         {
             if (chainIndex != 0) throw new InvalidOperationException("Collection enumeration should be first expression.");
 
-            var collectionType = p.Semantic.GetTypeFromExpression(p.Collection);
+            var collectionType = p.Collection.GetType(p);
             var collectionName = collectionType.ToString();
             
             if (collectionType is ArrayTypeSyntax)
@@ -26,11 +26,11 @@ namespace LinqRewrite.RewriteRules
                 EnumerableEnumeration(p, p.Collection);
         }
         
-        public static void RewriteOther(RewriteParameters p, ExpressionSyntax collection, int chainIndex)
+        public static void RewriteOther(RewriteParameters p, ValueBridge collection, int chainIndex)
         {
             if (chainIndex != 0) throw new InvalidOperationException("Collection enumeration should be first expression.");
-
-            var collectionType = p.Semantic.GetTypeFromExpression(collection);
+            
+            var collectionType = collection.GetType(p);
             var collectionName = collectionType.ToString();
             
             if (collectionType is ArrayTypeSyntax)
@@ -41,48 +41,47 @@ namespace LinqRewrite.RewriteRules
                 EnumerableEnumeration(p, collection);
         }
 
-        public static void ArrayEnumeration(RewriteParameters p, ExpressionSyntax collection)
+        public static void ArrayEnumeration(RewriteParameters p, ValueBridge collection)
         {
-            var count = p.Code.CreateCollectionCount(collection, false);
+            var count = collection.Count(p);
 
             p.ForMin = p.ForReMin = 0;
             p.ForMax = p.ForReMax = count;
 
-            p.CurrentIndexer = p.CreateLocalVariable("__i", Int);
+            p.CurrentIndexer = p.LocalVariable(Int, "__i");
             p.Body.Indexer = p.Indexer;
-            p.Last = new TypedValueBridge(collection.ItemType(p), collection.ArrayAccess(p.Indexer));
+            p.Last = new TypedValueBridge(collection.ItemType(p), collection[p.Indexer]);
             
             p.ResultSize = count;
             p.SourceSize = count;
         }
 
-        public static void ListEnumeration(RewriteParameters p, ExpressionSyntax collection)
+        public static void ListEnumeration(RewriteParameters p, ValueBridge collection)
         {
-            
-            p.InitialAdd( If(collection.EqualsExpr(NullValue),
+            p.InitialAdd( If(collection.IsEqual(Null),
                             CreateThrowException("System.InvalidOperationException", "Collection was null.")));
                 
-            var sourceCount = p.CreateLocalVariable("__sourceCount", Int, p.Code.CreateCollectionCount(collection, false));
+            var sourceCount = p.LocalVariable(Int, "__sourceCount", collection.Count(p));
 
             p.ForMin = p.ForReMin = 0;
             p.ForMax = p.ForReMax = sourceCount;
             
-            p.CurrentIndexer = p.CreateLocalVariable("__i", Int);
+            p.CurrentIndexer = p.LocalVariable(Int, "__i");
             p.Body.Indexer = p.Indexer;
-            p.Last = new TypedValueBridge(collection.ItemType(p), collection.ArrayAccess(p.Indexer));
+            p.Last = new TypedValueBridge(collection.ItemType(p), collection[p.Indexer]);
             
             p.ResultSize = IdentifierName(sourceCount);
             p.SourceSize = IdentifierName(sourceCount);
         }
 
-        public static void EnumerableEnumeration(RewriteParameters p, ExpressionSyntax collection)
+        public static void EnumerableEnumeration(RewriteParameters p, ValueBridge collection)
         {
             p.ForMin = p.ForReMin = null;
             p.ForMax = p.ForReMax = null;
 
             p.IsReversed = false;
             p.ListsEnumeration = false;
-            p.Body.IndexedItem = p.CreateLocalVariable("__i", collection.ItemType(p));
+            p.Body.IndexedItem = p.LocalVariable(collection.ItemType(p), "__i");
             p.Last = new TypedValueBridge(collection.ItemType(p), p.Body.IndexedItem);
 
             p.SourceSize = null;

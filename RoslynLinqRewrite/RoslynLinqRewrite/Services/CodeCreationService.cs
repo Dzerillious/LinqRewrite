@@ -26,7 +26,7 @@ namespace LinqRewrite.Services
             _data = RewriteDataService.Instance;
         }
 
-        public ExpressionSyntax CreateCollectionCount(ExpressionSyntax collection, bool allowUnknown)
+        public ValueBridge CreateCollectionCount(ValueBridge collection, bool allowUnknown)
         {
             var collectionType = _data.Semantic.GetTypeInfo(collection).Type;
             if (collectionType is IArrayTypeSymbol) return MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, collection, IdentifierName("Length"));

@@ -29,7 +29,7 @@ namespace LinqRewrite.RewriteRules
 
         public static ExpressionSyntax RewriteSimple(RewriteParameters p) 
             => p.Chain[0].Arguments.Length == 0 
-                ? p.Code.CreateCollectionCount(p.Collection, false).LThan(0) 
+                ? p.Collection.Count(p) >= 1 
                 : null;
     }
 }

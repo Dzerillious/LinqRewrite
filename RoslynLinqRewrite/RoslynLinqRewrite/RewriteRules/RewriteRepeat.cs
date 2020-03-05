@@ -1,7 +1,6 @@
 ﻿using System;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
-using static LinqRewrite.Constants;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
@@ -23,7 +22,7 @@ namespace LinqRewrite.RewriteRules
             p.SourceSize = count;
             
             p.Last = new TypedValueBridge(p.Collection.ItemType(p), item);
-            p.CurrentIndexer = p.CreateLocalVariable("__i", Int);
+            p.CurrentIndexer = p.LocalVariable(Int, "__i");
             p.Body.Indexer = p.Indexer;
         }
     }

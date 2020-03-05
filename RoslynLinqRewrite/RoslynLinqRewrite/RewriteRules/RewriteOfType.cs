@@ -1,5 +1,4 @@
 ﻿using LinqRewrite.DataStructures;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -17,7 +16,7 @@ namespace LinqRewrite.RewriteRules
             var type = name.TypeArgumentList.Arguments[0];
 
             p.Last = p.Last.Reusable(p);
-            p.ForAdd(If(Not(SyntaxFactory.IsPatternExpression(p.Last.Type, SyntaxFactory.ConstantPattern(type))),
+            p.ForAdd(If(!p.Last.Is(type),
                         Continue()));
 
             p.Last = new TypedValueBridge(type, p.Last.Value.Cast(type));

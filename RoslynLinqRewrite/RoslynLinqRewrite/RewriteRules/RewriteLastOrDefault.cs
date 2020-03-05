@@ -15,11 +15,10 @@ namespace LinqRewrite.RewriteRules
             if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
             if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("LastOrDefault should be last expression.");
             
-            var foundVariable = p.CreateGlobalVariable("__found", NullableType(p.ReturnType), NullValue);
+            var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), "__found", Null);
+            
             if (p.Chain[chainIndex].Arguments.Length == 0)
-            {
                 p.ForAdd(foundVariable.Assign(p.Last.Value));
-            }
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
@@ -27,7 +26,7 @@ namespace LinqRewrite.RewriteRules
                             foundVariable.Assign(p.Last.Value)));
             }
             
-            p.FinalAdd(If(foundVariable.EqualsExpr(NullValue),
+            p.FinalAdd(If(foundVariable.IsEqual(Null),
                             Return(Default(p.ReturnType)), 
                             Return(foundVariable.Cast(p.ReturnType))));
             p.HasResultMethod = true;
@@ -40,9 +39,8 @@ namespace LinqRewrite.RewriteRules
             if (p.SourceSize == null) return null;
             
             return ConditionalExpression(
-                p.Code.CreateCollectionCount(p.Collection, false)
-                    .EqualsExpr(0),
-                p.Collection.ArrayAccess(p.Code.CreateCollectionCount(p.Collection, false).Sub(1)),
+                p.Collection.Count(p).IsEqual(0),
+                p.Collection[p.Collection.Count(p) - 1],
                 Default(p.ReturnType));
         }
     }

@@ -9,7 +9,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static LinqRewrite.Extensions.SymbolExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
-using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.Services
 {

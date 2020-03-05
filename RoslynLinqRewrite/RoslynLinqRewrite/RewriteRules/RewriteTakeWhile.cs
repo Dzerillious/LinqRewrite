@@ -1,5 +1,4 @@
 ﻿using LinqRewrite.DataStructures;
-using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace LinqRewrite.RewriteRules
@@ -13,7 +12,7 @@ namespace LinqRewrite.RewriteRules
             var method = p.Chain[chainIndex].Arguments[0];
             p.Last = p.Last.Reusable(p);
             
-            p.ForAdd(If(Not(method.Inline(p, p.Last)),
+            p.ForAdd(If(!method.Inline(p, p.Last),
                         Break()));
 
             p.ResultSize = null;

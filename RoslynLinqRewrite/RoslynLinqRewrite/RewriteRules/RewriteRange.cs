@@ -1,9 +1,6 @@
 ﻿using System;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-using static LinqRewrite.Constants;
-using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
@@ -17,15 +14,15 @@ namespace LinqRewrite.RewriteRules
             var from = p.Chain[chainIndex].Arguments[0];
             var count = p.Chain[chainIndex].Arguments[1];
             
-            var sumVariable = p.CreateLocalVariable("__sum", Int, from.Add(count));
+            var sumVariable = p.LocalVariable(Int, "__sum", from.Add(count));
 
             p.Collection = null;
             p.ForMin = p.ForReMin = p.Chain[chainIndex].Arguments[0];
             p.ForMax = p.ForReMax = sumVariable;
             
-            p.CurrentIndexer = p.CreateLocalVariable("__i", Int);
+            p.CurrentIndexer = p.LocalVariable(Int, "__i");
             p.Body.Indexer = p.Indexer;
-            p.Last = new TypedValueBridge(Int, p.Indexer);
+            p.Last = p.Indexer;
             
             p.ResultSize = count;
             p.SourceSize = count;

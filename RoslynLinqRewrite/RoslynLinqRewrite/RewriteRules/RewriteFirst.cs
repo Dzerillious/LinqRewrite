@@ -15,7 +15,6 @@ namespace LinqRewrite.RewriteRules
             
             if (p.Chain[chainIndex].Arguments.Length == 0)
                 p.ForAdd(Return(p.Last.Value));
-            
             else
             {
                 var method = p.Chain[chainIndex].Arguments[0];
@@ -29,7 +28,7 @@ namespace LinqRewrite.RewriteRules
 
         public static ExpressionSyntax RewriteSimple(RewriteParameters p) 
             => p.Chain[0].Arguments.Length == 0 
-                ? p.Collection.ArrayAccess(0) 
+                ? p.Collection[0] 
                 : null;
     }
 }
