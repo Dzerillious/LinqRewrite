@@ -1,18 +1,17 @@
 ﻿using System;
 using LinqRewrite.DataStructures;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace LinqRewrite.RewriteRules
 {
     public static class RewriteAll
     {
-        public static void Rewrite(RewriteParameters p, int chainIndex)
+        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
-            if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("All should be last expression.");
+            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             
-            var method = p.Chain[chainIndex].Arguments[0];
-            p.ForAdd(If(!method.Inline(p, p.Last),
+            p.ForAdd(If(!args[0].Inline(p, p.Last),
                         Return(false)));
 
             p.FinalAdd(Return(true));

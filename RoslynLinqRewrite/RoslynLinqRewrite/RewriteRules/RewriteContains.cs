@@ -1,27 +1,26 @@
 ﻿using System;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace LinqRewrite.RewriteRules
 {
     public static class RewriteContains
     {
-        public static void Rewrite(RewriteParameters p, int chainIndex)
+        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            var element = p.Node.ArgumentList.Arguments.First().Expression;
-
-            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
-            if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Any should be last expression.");
+            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             
-            if (p.Chain[chainIndex].Arguments.Length == 1)
+            var element = p.Node.ArgumentList.Arguments.First().Expression;
+            if (args.Length == 1)
             {
                 p.ForAdd(If(p.Last.Value.IsEqual(element),
                             Return(true)));
             }
             else
             {
-                var inlined = p.Chain[chainIndex].Arguments[1].Reusable(p);
+                var inlined = args[1].Reusable(p);
                 p.ForAdd(If(inlined.Access("Equals").Invoke(p.Last.Value, element),
                             Return(true)));
             }

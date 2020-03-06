@@ -11,10 +11,8 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteCollectionEnumeration
     {
-        public static void Rewrite(RewriteParameters p, int chainIndex)
+        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (chainIndex != 0) throw new InvalidOperationException("Collection enumeration should be first expression.");
-
             var collectionType = p.Collection.GetType(p);
             var collectionName = collectionType.ToString();
             
@@ -24,12 +22,13 @@ namespace LinqRewrite.RewriteRules
                 ListEnumeration(p, p.Collection);
             else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
                 EnumerableEnumeration(p, p.Collection);
+            
+            p.Body = new IteratorParameters(p, p.Collection);
+            p.Enumerations.Add(p.Body);
         }
         
         public static void RewriteOther(RewriteParameters p, ValueBridge collection, int chainIndex)
         {
-            if (chainIndex != 0) throw new InvalidOperationException("Collection enumeration should be first expression.");
-            
             var collectionType = collection.GetType(p);
             var collectionName = collectionType.ToString();
             

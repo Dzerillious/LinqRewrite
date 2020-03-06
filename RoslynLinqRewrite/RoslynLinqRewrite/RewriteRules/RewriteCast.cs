@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -6,11 +7,11 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteCast
     {
-        public static void Rewrite(RewriteParameters p, int chainIndex)
+        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args, InvocationExpressionSyntax invocation)
         {
-            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
+            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
 
-            var access = (MemberAccessExpressionSyntax) p.Chain[chainIndex].Invocation.Expression;
+            var access = (MemberAccessExpressionSyntax) invocation.Expression;
             var name = (GenericNameSyntax) access.Name;
             var type = name.TypeArgumentList.Arguments[0];
 

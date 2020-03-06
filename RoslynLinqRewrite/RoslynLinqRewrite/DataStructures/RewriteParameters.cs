@@ -30,8 +30,8 @@ namespace LinqRewrite.DataStructures
 
         public TypedValueBridge Last { get; set; }
 
-        
-        private List<IteratorParameters> _enumerations;
+
+        public List<IteratorParameters> Enumerations;
         private List<StatementSyntax> _initial;
         public IteratorParameters Body;
         private List<StatementSyntax> _final;
@@ -40,6 +40,7 @@ namespace LinqRewrite.DataStructures
 
         public bool IsReversed;
         public bool HasResultMethod;
+        public bool NotRewrite;
 
         private bool _listsEnumeration = true;
 
@@ -114,10 +115,8 @@ namespace LinqRewrite.DataStructures
         public void SetData(ExpressionSyntax collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node)
         {
             _initial = new List<StatementSyntax>();
-            Body = new IteratorParameters(this, collection);
             _final = new List<StatementSyntax>();
-            
-            _enumerations = new List<IteratorParameters>{Body};
+            Enumerations = new List<IteratorParameters>();
             
             Collection = collection;
             ReturnType = returnType;
@@ -129,7 +128,7 @@ namespace LinqRewrite.DataStructures
         public void PreForAdd(StatementBridge _) => Body.Pre.Add(_);
         public void ForAdd(StatementBridge _)
         {
-            _enumerations.Where(x => !x.Complete)
+            Enumerations.Where(x => !x.Complete)
                 .ForEach(x => x.Body.Add(_));
         }
         public void LastForAdd(StatementBridge _) => Body.BodyAdd(_);
@@ -139,7 +138,7 @@ namespace LinqRewrite.DataStructures
         {
             var oldBody = Body;
             Body = new IteratorParameters(this, collection);
-            _enumerations.Add(Body);
+            Enumerations.Add(Body);
             return oldBody;
         }
         
@@ -147,7 +146,7 @@ namespace LinqRewrite.DataStructures
         {
             var oldBody = Body;
             Body = Body.Copy();
-            _enumerations.Add(Body);
+            Enumerations.Add(Body);
             return oldBody;
         }
         
@@ -155,29 +154,29 @@ namespace LinqRewrite.DataStructures
         {
             var oldBody = Body;
             Body = Body.CopyReference();
-            _enumerations.Add(Body);
+            Enumerations.Add(Body);
             return oldBody;
         }
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {
-            if (_enumerations.Count == 1 && Body.Body.Count == 0) return _initial.Concat(_final);
+            if (Enumerations.Count == 1 && Body.Body.Count == 0) return _initial.Concat(_final);
             var result = new List<StatementSyntax>();
             if (IsReversed)
             {
-                for (var i = _enumerations.Count - 1; i >= 0; i--)
+                for (var i = Enumerations.Count - 1; i >= 0; i--)
                 {
-                    var statement = _enumerations[i].GetStatementSyntax(this);
-                    result.AddRange(_enumerations[i].Pre);
+                    var statement = Enumerations[i].GetStatementSyntax(this);
+                    result.AddRange(Enumerations[i].Pre);
                     result.Add(statement);
                 }
             }
             else
             {
-                for (var i = 0; i < _enumerations.Count; i++)
+                for (var i = 0; i < Enumerations.Count; i++)
                 {
-                    var statement = _enumerations[i].GetStatementSyntax(this);
-                    result.AddRange(_enumerations[i].Pre);
+                    var statement = Enumerations[i].GetStatementSyntax(this);
+                    result.AddRange(Enumerations[i].Pre);
                     result.Add(statement);
                 }
             }

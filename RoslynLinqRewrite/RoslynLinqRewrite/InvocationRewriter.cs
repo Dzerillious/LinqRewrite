@@ -65,48 +65,49 @@ namespace LinqRewrite
 
         private static void RewritePart(string last, RewriteParameters parameters, int i)
         {
+            var args = parameters.Chain[i].Arguments;
             switch (last)
             {
-                case "All": RewriteAll.Rewrite(parameters, i); return;
-                case "Any": RewriteAny.Rewrite(parameters, i); return;
-                case "Contains": RewriteContains.Rewrite(parameters, i); return;
-                case "Count": RewriteCount.Rewrite(parameters, i); return;
+                case "All": RewriteAll.Rewrite(parameters, args); return;
+                case "Any": RewriteAny.Rewrite(parameters, args); return;
+                case "Contains": RewriteContains.Rewrite(parameters, args); return;
+                case "Count": RewriteCount.Rewrite(parameters, args); return;
 
-                case "Min": RewriteMin.Rewrite(parameters, i); return;
-                case "Max": RewriteMax.Rewrite(parameters, i); return;
-                case "Average": RewriteAverage.Rewrite(parameters, i); return;
-                case "Aggregate": RewriteAggregate.Rewrite(parameters, i); return;
-                case "Sum": RewriteSum.Rewrite(parameters, i); return;
+                case "Min": RewriteMin.Rewrite(parameters, args); return;
+                case "Max": RewriteMax.Rewrite(parameters, args); return;
+                case "Average": RewriteAverage.Rewrite(parameters, args); return;
+                case "Aggregate": RewriteAggregate.Rewrite(parameters, args); return;
+                case "Sum": RewriteSum.Rewrite(parameters, args); return;
                 
-                case "ForEach": RewriteForEach.Rewrite(parameters, i); return;
+                case "ForEach": RewriteForEach.Rewrite(parameters, args); return;
                 
-                case "First": RewriteFirst.Rewrite(parameters, i); return;
-                case "FirstOrDefault": RewriteFirstOrDefault.Rewrite(parameters, i); return;
-                case "Last": RewriteLast.Rewrite(parameters, i); return;
-                case "LastOrDefault": RewriteLastOrDefault.Rewrite(parameters, i); return;
-                case "Single": RewriteSingle.Rewrite(parameters, i); return;
-                case "SingleOrDefault": RewriteSingleOrDefault.Rewrite(parameters, i); return;
-                case "ElementAt": RewriteElementAt.Rewrite(parameters, i); return;
-                case "ElementAtOrDefault": RewriteElementAtOrDefault.Rewrite(parameters, i); return;
+                case "First": RewriteFirst.Rewrite(parameters, args); return;
+                case "FirstOrDefault": RewriteFirstOrDefault.Rewrite(parameters, args); return;
+                case "Last": RewriteLast.Rewrite(parameters, args); return;
+                case "LastOrDefault": RewriteLastOrDefault.Rewrite(parameters, args); return;
+                case "Single": RewriteSingle.Rewrite(parameters, args); return;
+                case "SingleOrDefault": RewriteSingleOrDefault.Rewrite(parameters, args); return;
+                case "ElementAt": RewriteElementAt.Rewrite(parameters, args); return;
+                case "ElementAtOrDefault": RewriteElementAtOrDefault.Rewrite(parameters, args); return;
                 
-                case "Range": RewriteRange.Rewrite(parameters, i); return;
-                case "Repeat": RewriteRepeat.Rewrite(parameters, i); return;
+                case "Range": RewriteRange.Rewrite(parameters, args); return;
+                case "Repeat": RewriteRepeat.Rewrite(parameters, args); return;
                 
-                case "Skip": RewriteSkip.Rewrite(parameters, i); return;
-                case "SkipWhile": RewriteSkipWhile.Rewrite(parameters, i); return;
-                case "Take": RewriteTake.Rewrite(parameters, i); return;
-                case "TakeWhile": RewriteTakeWhile.Rewrite(parameters, i); return;
+                case "Skip": RewriteSkip.Rewrite(parameters, args); return;
+                case "SkipWhile": RewriteSkipWhile.Rewrite(parameters, args); return;
+                case "Take": RewriteTake.Rewrite(parameters, args); return;
+                case "TakeWhile": RewriteTakeWhile.Rewrite(parameters, args); return;
                 
-                case "Reverse": RewriteReverse.Rewrite(parameters, i); return;
-                case "Select": RewriteSelect.Rewrite(parameters, i); return;
-                case "Where": RewriteWhere.Rewrite(parameters, i); return;
-                case "Cast": RewriteCast.Rewrite(parameters, i); return;
-                case "OfType": RewriteOfType.Rewrite(parameters, i); return;
+                case "Reverse": RewriteReverse.Rewrite(parameters, args); return;
+                case "Select": RewriteSelect.Rewrite(parameters, args); return;
+                case "Where": RewriteWhere.Rewrite(parameters, args); return;
+                case "Cast": RewriteCast.Rewrite(parameters, args, parameters.Chain[i].Invocation); return;
+                case "OfType": RewriteOfType.Rewrite(parameters, args, parameters.Chain[i].Invocation); return;
                 
-                case "Concat": RewriteConcat.Rewrite(parameters, i); return;
+                case "Concat": RewriteConcat.Rewrite(parameters, args); return;
                 
-                case "ToArray": RewriteToArray.Rewrite(parameters, i); return;
-                case "ToList": RewriteToList.Rewrite(parameters, i); return;
+                case "ToArray": RewriteToArray.Rewrite(parameters, args); return;
+                case "ToList": RewriteToList.Rewrite(parameters, args); return;
                 default: throw new NotImplementedException($"Rewrite of {last} not implemented");
             }
         }

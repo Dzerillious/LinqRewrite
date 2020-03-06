@@ -1,16 +1,17 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace LinqRewrite.RewriteRules
 {
     public static class RewriteForEach
     {
-        public static void Rewrite(RewriteParameters p, int chainIndex)
+        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
-            var method = p.Chain[chainIndex].Arguments[0];
-            
-            p.ForAdd(method.Inline(p, p.Last));
+            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+
+            p.ForAdd(args[0].Inline(p, p.Last));
             p.HasResultMethod = true;
         }
     }

@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System;
+using LinqRewrite.DataStructures;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -7,11 +8,11 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteOfType
     {
-        public static void Rewrite(RewriteParameters p, int chainIndex)
+        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args, InvocationExpressionSyntax invocation)
         {
-            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
+            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
 
-            var access = (MemberAccessExpressionSyntax) p.Chain[chainIndex].Invocation.Expression;
+            var access = (MemberAccessExpressionSyntax) invocation.Expression;
             var name = (GenericNameSyntax) access.Name;
             var type = name.TypeArgumentList.Arguments[0];
 

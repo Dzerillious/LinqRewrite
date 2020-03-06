@@ -8,17 +8,15 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteFirst
     {
-        public static void Rewrite(RewriteParameters p, int chainIndex)
+        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
-            if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("First should be last expression.");
+            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             
-            if (p.Chain[chainIndex].Arguments.Length == 0)
+            if (args.Length == 0)
                 p.ForAdd(Return(p.Last.Value));
             else
             {
-                var method = p.Chain[chainIndex].Arguments[0];
-                p.ForAdd(If(method.Inline(p, p.Last),
+                p.ForAdd(If(args[0].Inline(p, p.Last),
                             Return(p.Last.Value)));
             }
             

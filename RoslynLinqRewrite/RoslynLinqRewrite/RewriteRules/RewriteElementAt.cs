@@ -8,12 +8,11 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteElementAt
     {
-        public static void Rewrite(RewriteParameters p, int chainIndex)
+        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
-            if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Count should be last expression.");
+            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             
-            var position = p.Chain[chainIndex].Arguments[0];
+            var position = args[0].Reusable(p);
             p.ForAdd(If(p.Indexer.IsEqual(position),
                         Return(p.Last.Value)));
             
@@ -24,7 +23,7 @@ namespace LinqRewrite.RewriteRules
         public static ExpressionSyntax RewriteSimple(RewriteParameters p)
         {
             if (p.Chain[0].Arguments.Length == 0) return null;
-            RewriteCollectionEnumeration.Rewrite(p, 0);
+            RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             
             return p.SourceSize == null 
                 ? null 

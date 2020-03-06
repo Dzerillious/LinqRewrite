@@ -3,6 +3,7 @@ using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Constants;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
@@ -11,24 +12,22 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteToArray
     {
-        public static void Rewrite(RewriteParameters p, int chainIndex)
+        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (p.Chain.Count == 1)
+            if (p.Body == null)
             {
                 RewriteSimple(p, "__result");
                 return;
             }
-            var resultVariable = RewriteOther(p, chainIndex, "__result");
+            var resultVariable = RewriteOther(p, "__result");
             if (p.ResultSize == null) p.FinalAdd(Return("SimpleCollections".Access("SimpleArrayExtensions", "EnsureFullArray")
                 .Invoke(resultVariable, p.Indexer)));
 
             p.HasResultMethod = true;
         }
         
-        public static VariableBridge RewriteOther(RewriteParameters p, int chainIndex, string resultName, TypeSyntax itemType = null)
+        public static VariableBridge RewriteOther(RewriteParameters p, string resultName, TypeSyntax itemType = null)
         {
-            if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("ToArray should be last expression.");
-            
             if (p.ResultSize != null) return KnownSize(p, resultName, itemType);
             else if (p.SourceSize != null) return KnownSourceSize(p, resultName);
             else return UnknownSourceSize(p, resultName);
@@ -101,6 +100,15 @@ namespace LinqRewrite.RewriteRules
                     .Invoke(p.Collection, 0, resultVariable, 0, count));
                 p.InitialAdd(Return(resultVariable));
             }
+            else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                var count = p.Collection.Count(p);
+                var resultVariable = p.GlobalVariable(p.ReturnType, resultName,
+                    CreateArray((ArrayTypeSyntax) p.ReturnType, count));
+                p.InitialAdd(p.Collection.Access("CopyTo").Invoke(resultVariable));
+                p.InitialAdd(Return(resultVariable));
+            }
+            else p.NotRewrite = true;
 
             p.HasResultMethod = true;
         }

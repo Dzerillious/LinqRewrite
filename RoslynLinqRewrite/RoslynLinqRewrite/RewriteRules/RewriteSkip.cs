@@ -1,15 +1,17 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System;
+using LinqRewrite.DataStructures;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace LinqRewrite.RewriteRules
 {
     public static class RewriteSkip
     {
-        public static void Rewrite(RewriteParameters p, int chainIndex)
+        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
+            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             
-            var skipped = p.Chain[chainIndex].Arguments[0];
+            var skipped = args[0];
             if (p.ListsEnumeration)
             {
                 p.ForMin += skipped;

@@ -9,29 +9,23 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteSum
     {
-        public static void Rewrite(RewriteParameters p, int chainIndex)
+        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
-            if (chainIndex != p.Chain.Count - 1) throw new InvalidOperationException("Sum should be last expression.");
+            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
 
             var isNullable = p.ReturnType is NullableTypeSyntax;
             var elementType = isNullable ? ((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
             var sumVariable = p.GlobalVariable(elementType, "__sum", 0);
 
-            if (p.Chain[chainIndex].Arguments.Length == 0)
+            if (args.Length == 0)
                 p.ForAdd(sumVariable.AddAssign(p.Last.Value));
             else if (isNullable)
             {
-                var method = p.Chain[chainIndex].Arguments[0];
-                var inlined = method.Inline(p, p.Last).Reusable(p);
+                var inlined = args[0].Inline(p, p.Last).Reusable(p);
                 p.ForAdd(If(inlined.NotEqual(Null),
                     sumVariable.AddAssign(inlined)));
             }
-            else
-            {
-                var method = p.Chain[chainIndex].Arguments[0];
-                p.ForAdd(sumVariable.AddAssign(method.Inline(p, p.Last)));
-            }
+            else p.ForAdd(sumVariable.AddAssign(args[0].Inline(p, p.Last)));
             
             p.FinalAdd(Return(sumVariable));
             p.HasResultMethod = true;

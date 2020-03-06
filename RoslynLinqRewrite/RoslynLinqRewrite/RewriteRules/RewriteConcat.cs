@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SimpleCollections;
 using static LinqRewrite.Extensions.VariableExtensions;
 
@@ -8,13 +10,12 @@ namespace LinqRewrite.RewriteRules
 {
     public class RewriteConcat
     {
-        public static void Rewrite(RewriteParameters p, int chainIndex)
+        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (chainIndex == 0) RewriteCollectionEnumeration.Rewrite(p, chainIndex);
+            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             var sourceSize = p.SourceSize;
             var resultSize = p.ResultSize;
             
-            var collection = p.Chain[chainIndex].Arguments[0];
             var indexer = p.CurrentIndexer;
             if (indexer != null && indexer.Name == p.Body.Indexer)
                 indexer.IsGlobal = true;
@@ -31,14 +32,14 @@ namespace LinqRewrite.RewriteRules
                 p.Last = new TypedValueBridge(Int, itemVariable);
             }
             
-            p.AddIterator(collection);
+            p.AddIterator(args[0]);
             if (indexer != null)
             {
                 p.PreForAdd(indexer.PreDecrement());
                 p.LastForAdd(indexer.PreIncrement());
             }
             p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
-            RewriteCollectionEnumeration.RewriteOther(p, collection, 0);
+            RewriteCollectionEnumeration.RewriteOther(p, args[0], 0);
             p.CurrentIndexer = indexer;
             
             p.LastForAdd(itemVariable.Assign(p.Last.Value));
