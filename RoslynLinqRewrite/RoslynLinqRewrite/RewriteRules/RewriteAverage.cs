@@ -11,11 +11,11 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
 
             var isNullable = p.ReturnType is NullableTypeSyntax;
-            var elementType = isNullable ? ((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
-            var sumVariable = p.GlobalVariable(elementType, "__sum", 0);
+            var elementType = isNullable ? (TypeBridge)((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
+            var sumVariable = p.GlobalVariable(elementType, 0);
 
             if (args.Length == 0)
             {

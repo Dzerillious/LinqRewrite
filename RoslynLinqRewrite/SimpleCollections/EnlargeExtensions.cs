@@ -33,7 +33,7 @@ namespace SimpleCollections
             currentLength = length >> log;
             
             var newArray = new T[currentLength];
-            Array.Copy(result, currentLength - result.Length, newArray, 0, result.Length);
+            Array.Copy(result, 0, newArray, currentLength - result.Length, result.Length);
             result = newArray;
         }
 

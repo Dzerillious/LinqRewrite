@@ -10,16 +10,21 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
 
             var method = args[0];
 
             p.Last = p.Last.Reusable(p);
             if (method is SimpleLambdaExpressionSyntax)
+            {
                 p.ForAdd(If(!method.Inline(p, p.Last),
                             Continue()));
-            else p.ForAdd(If(!method.Inline(p, p.Last, p.Indexer),
+            }
+            else 
+            {
+                p.ForAdd(If(!method.Inline(p, p.Last, p.Indexer),
                             Continue()));
+            }
 
             p.ModifiedEnumeration = true;
         }

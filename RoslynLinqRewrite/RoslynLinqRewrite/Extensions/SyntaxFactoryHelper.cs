@@ -47,8 +47,11 @@ namespace LinqRewrite.Extensions
         public static ArgumentListSyntax CreateArguments(params ExpressionSyntax[] items)
             => CreateArguments((IEnumerable<ExpressionSyntax>) items);
 
-        public static ArgumentSyntax Argument(ValueBridge name)
-            => SyntaxFactory.Argument(name);
+        public static ArgumentSyntax Argument(ValueBridge value)
+            => SyntaxFactory.Argument(value);
+
+        public static ArgumentSyntax Argument(TypedValueBridge value)
+            => SyntaxFactory.Argument(value);
         
         public static ArgumentSyntax RefArg(VariableBridge name)
             => SyntaxFactory.Argument(null, Token(SyntaxKind.RefKeyword), name);
@@ -61,7 +64,7 @@ namespace LinqRewrite.Extensions
         public static InvocationExpressionSyntax Invoke(this ExpressionSyntax source)
             => InvocationExpression(source);
         public static ValueBridge Invoke(this ExpressionSyntax invoked, params ArgumentBridge[] args)
-            => InvocationExpression(invoked, ArgumentList(CreateSeparatedList(args.Cast<ArgumentSyntax>())));
+            => InvocationExpression(invoked, ArgumentList(CreateSeparatedList(args.Select(x => (ArgumentSyntax)x))));
         public static InvocationExpressionSyntax Invoke(this ExpressionSyntax invoked, ValueBridge[] args)
             => InvocationExpression(invoked, ArgumentList(CreateSeparatedList(args.Select(Argument))));
 
@@ -106,17 +109,25 @@ namespace LinqRewrite.Extensions
         public static TryStatementSyntax TryF(BlockSyntax @try, BlockSyntax @finally)
             => TryStatement(@try, new SyntaxList<CatchClauseSyntax>(), FinallyClause(@finally));
         
-        public static ReturnStatementSyntax Return(ValueBridge _)
+        public static StatementBridge Return(ValueBridge _)
             => ReturnStatement(_);
 
         public static DefaultExpressionSyntax Default(TypeBridge @type)
             => DefaultExpression(@type);
 
+        public static TypedValueBridge Reusable(this ValueBridge e, RewriteParameters p)
+        {
+            if (IsReusable(e)) return new TypedValueBridge(e.GetType(p), e);
+
+            var tmpVariable = p.LocalVariable(e.GetType(p), e);
+            return new TypedValueBridge(Int, IdentifierName(tmpVariable));
+        }
+
         public static TypedValueBridge Reusable(this ExpressionSyntax e, RewriteParameters p)
         {
             if (IsReusable(e)) return new TypedValueBridge(e.GetType(p), e);
 
-            var tmpVariable = p.LocalVariable(e.GetType(p), "__tmp", e);
+            var tmpVariable = p.LocalVariable(e.GetType(p), e);
             return new TypedValueBridge(Int, IdentifierName(tmpVariable));
         }
         
@@ -124,40 +135,25 @@ namespace LinqRewrite.Extensions
         {
             if (IsReusable(e)) return e;
             
-            var tmpVariable = p.LocalVariable(e.Type, "__tmp", e);
-            return new TypedValueBridge(e.Type, IdentifierName(tmpVariable));
+            var tmpVariable = p.LocalVariable(e.Type);
+            p.ForAdd(tmpVariable.Assign(e));
+            return new TypedValueBridge(e.Type, tmpVariable);
         }
 
-        public static TypedValueBridge Inline(this ExpressionSyntax e, RewriteParameters p, TypedValueBridge a)
-        {
-            var returnType = p.Code.GetLambdaReturnType(p.Semantic, (LambdaExpressionSyntax) e);
-            if (e.IsLambdaSimple() || IsReusable(p.Last.Value))
-                return p.Code.InlineLambda(e, returnType, a);
-
-            var inlineVariable = p.LocalVariable(a.Type, "__tmp");
-            p.ForAdd(inlineVariable.Assign(a));
-            return p.Code.InlineLambda(e, returnType, inlineVariable);
-        }
-
-        public static TypedValueBridge Inline(this ExpressionSyntax e, RewriteParameters p, TypedValueBridge a, TypedValueBridge b)
+        public static TypedValueBridge Inline(this ExpressionSyntax e, RewriteParameters p, params TypedValueBridge[] values)
         {
             var returnType = p.Code.GetLambdaReturnType(p.Semantic, (LambdaExpressionSyntax) e);
             if (e.IsLambdaSimple())
+                return p.Code.InlineLambda(e, returnType, values);
+
+            var vals = values.Select(x =>
             {
-                returnType = p.Code.GetLambdaReturnType(p.Semantic, (LambdaExpressionSyntax) e);
-                return p.Code.InlineLambda(e, returnType, a, b);
-            }
-            if (!IsReusable(a))
-            {
-                var inlineVariable = p.LocalVariable(a.Type, "__tmp", a);
-                a = new TypedValueBridge(a.Type, inlineVariable);
-            }
-            if (!IsReusable(b))
-            {
-                var inlineVariable = p.LocalVariable(b.Type, "__tmp", b);
-                b = new TypedValueBridge(b.Type, inlineVariable);
-            }
-            return p.Code.InlineLambda(e, returnType, a, b);
+                if (IsReusable(x)) return x;
+                var inlineVariable = p.LocalVariable(x.Type, x);
+                p.ForAdd(inlineVariable.Assign(x));
+                return new TypedValueBridge(x.Type, inlineVariable);
+            }).ToArray();
+            return p.Code.InlineLambda(e, returnType, vals);
         }
 
         public static bool IsLambdaSimple(this ExpressionSyntax e)
@@ -203,7 +199,16 @@ namespace LinqRewrite.Extensions
             || e is PostfixUnaryExpressionSyntax
             || e is PrefixUnaryExpressionSyntax;
 
-        public static TypeSyntax GetType(this ValueBridge expression, RewriteParameters p)
+        public static TypeBridge GetType(this ValueBridge expression, RewriteParameters p)
             => p.Semantic.GetTypeFromExpression(expression);
+
+        public static BlockSyntax Block(params StatementBridge[] statements)
+            => SyntaxFactory.Block(statements.Select(x => (StatementSyntax) x));
+
+        public static BlockSyntax Block(IList<StatementSyntax> statements)
+            => SyntaxFactory.Block(statements);
+
+        public static ArrayTypeSyntax ArrayType(this TypeSyntax type)
+            => SyntaxFactory.ArrayType(type, new SyntaxList<ArrayRankSpecifierSyntax>(ArrayRankSpecifier()));
     }
 }

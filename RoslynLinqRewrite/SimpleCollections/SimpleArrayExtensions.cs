@@ -88,5 +88,13 @@ namespace SimpleCollections
             Array.Copy(result, 0, ret, 0, current);
             return ret;
         }
+
+        public static T[] EnsureFullReversedArray<T>(T[] result, in int current)
+        {
+            if (result.Length == current) return result;
+            var ret = new T[current];
+            Array.Copy(result, result.Length - current, ret, 0, current);
+            return ret;
+        }
     }
 }

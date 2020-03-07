@@ -9,21 +9,18 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             
             var skipped = args[0];
-            if (p.ListsEnumeration)
+            if (p.ModifiedEnumeration)
             {
                 p.ForMin += skipped;
                 p.ForReMax -= skipped;
                 p.ResultSize -= skipped;
             }
-            else
-            {
-                p.ForAdd(If(p.Indexer < skipped, Continue()));
-                p.ModifiedEnumeration = true;
-            }
+            else p.ForAdd(If(p.Indexer < skipped, Continue()));
             p.CurrentIndexer = null;
+            p.ListEnumeration = false;
         }
     }
 }

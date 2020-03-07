@@ -13,16 +13,18 @@ namespace LinqRewrite.RewriteRules
             var item = args[0];
             var count = args[1];
             
-            p.Collection = null;
+            p.Enumerations.Add(p.Iterator = new IteratorParameters(p));
             p.ForMin = p.ForReMin = 0;
             p.ForMax = p.ForReMax = count;
             
             p.ResultSize = count;
             p.SourceSize = count;
+            p.ListEnumeration = false;
             
-            p.Last = new TypedValueBridge(p.Collection.ItemType(p), item);
-            p.CurrentIndexer = p.LocalVariable(Int, "__i");
-            p.Body.Indexer = p.Indexer;
+            p.Last = new TypedValueBridge(p.CurrentCollection.ItemType(p), item);
+            p.CurrentIndexer = p.LocalVariable(Int);
+            p.Iterator.Indexer = p.Indexer;
+            p.CurrentCollection = null;
         }
     }
 }

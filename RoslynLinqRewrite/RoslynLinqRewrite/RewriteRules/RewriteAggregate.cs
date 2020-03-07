@@ -10,9 +10,9 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
 
-            var resultVariable = p.LocalVariable(p.ReturnType, "__result",  p.Collection[0]);
+            var resultVariable = p.LocalVariable(p.ReturnType,  p.CurrentCollection[0]);
             p.ForAdd(resultVariable.Assign(args[0].Inline(p, resultVariable, p.Last)));
             
             p.FinalAdd(Return(resultVariable));

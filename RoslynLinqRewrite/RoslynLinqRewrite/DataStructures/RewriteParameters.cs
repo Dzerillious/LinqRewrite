@@ -18,40 +18,40 @@ namespace LinqRewrite.DataStructures
 
         
         public InvocationExpressionSyntax Node { get; set; }
-        public ValueBridge Collection { get; set; }
+        public CollectionValueBridge FirstCollection { get; set; }
+        public CollectionValueBridge CurrentCollection { get; set; }
         public List<LinqStep> Chain { get; set; }
 
         
-        public TypeSyntax ReturnType { get; set; }
-
-        
+        public TypeBridge ReturnType { get; set; }
         public ValueBridge ResultSize { get; set; }
         public ValueBridge SourceSize { get; set; }
-
         public TypedValueBridge Last { get; set; }
 
 
         public List<IteratorParameters> Enumerations;
-        private List<StatementSyntax> _initial;
-        public IteratorParameters Body;
+        public IteratorParameters Iterator;
         private List<StatementSyntax> _final;
-
-        public List<LocalVariable> Variables = new List<LocalVariable>();
+        public readonly List<LocalVariable> Variables = new List<LocalVariable>();
 
         public bool IsReversed;
         public bool HasResultMethod;
         public bool NotRewrite;
 
-        private bool _listsEnumeration = true;
-
-        public bool ListsEnumeration
+        private bool _listEnumeration;
+        public bool ListEnumeration
         {
-            get => _listsEnumeration;
-            set => _listsEnumeration = value;
+            get => _listEnumeration;
+            set
+            {
+                _listEnumeration = value;
+
+                if (!value) return;
+                ModifiedEnumeration = false;
+            }
         }
 
         private bool _modifiedEnumeration;
-
         public bool ModifiedEnumeration
         {
             get => _modifiedEnumeration;
@@ -59,7 +59,8 @@ namespace LinqRewrite.DataStructures
             {
                 _modifiedEnumeration = value;
                 
-                if (!value || CurrentIndexer == null) return;
+                if (!value) return;
+                ListEnumeration = false;
                 ResultSize = null;
                 CurrentIndexer = null;
             }
@@ -72,7 +73,7 @@ namespace LinqRewrite.DataStructures
             {
                 if (CurrentIndexer != null) return CurrentIndexer;
 
-                var indexerVariable = GlobalVariable(Int, "__indexer", -1);
+                var indexerVariable = GlobalVariable(Int, -1);
                 ForAdd(indexerVariable.PreIncrement());
 
                 return CurrentIndexer = indexerVariable;
@@ -81,26 +82,26 @@ namespace LinqRewrite.DataStructures
 
         public ValueBridge ForMin
         {
-            get => Body.ForMin;
-            set => Body.ForMin = value;
+            get => Iterator.ForMin;
+            set => Iterator.ForMin = value;
         }
         
         public ValueBridge ForMax
         {
-            get => Body.ForMax;
-            set => Body.ForMax = value;
+            get => Iterator.ForMax;
+            set => Iterator.ForMax = value;
         }
         
         public ValueBridge ForReMin
         {
-            get => Body.ForReMin;
-            set => Body.ForReMin = value;
+            get => Iterator.ForReMin;
+            set => Iterator.ForReMin = value;
         }
         
         public ValueBridge ForReMax
         {
-            get => Body.ForReMax;
-            set => Body.ForReMax = value;
+            get => Iterator.ForReMax;
+            set => Iterator.ForReMax = value;
         }
         
         public SemanticModel Semantic => Data.Semantic;
@@ -112,55 +113,51 @@ namespace LinqRewrite.DataStructures
             Data = RewriteDataService.Instance;
         }
         
-        public void SetData(ExpressionSyntax collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node)
+        public void SetData(ValueBridge collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node)
         {
-            _initial = new List<StatementSyntax>();
             _final = new List<StatementSyntax>();
             Enumerations = new List<IteratorParameters>();
             
-            Collection = collection;
+            FirstCollection = CurrentCollection = new CollectionValueBridge(collection.ItemType(this), collection.GetType(this), collection.Count(this), collection);
             ReturnType = returnType;
             Chain = chain;
             Node = node;
+
+            HasResultMethod = false;
+            NotRewrite = false;
+            IsReversed = false;
+            ListEnumeration = true;
         }
 
-        public void InitialAdd(StatementBridge _) => _initial.Add(_);
-        public void PreForAdd(StatementBridge _) => Body.Pre.Add(_);
+        public void InitialAdd(StatementBridge _) => Enumerations.First().Pre.Add(_);
+        public void PreForAdd(StatementBridge _) => Iterator.Pre.Add(_);
         public void ForAdd(StatementBridge _)
         {
             Enumerations.Where(x => !x.Complete)
                 .ForEach(x => x.Body.Add(_));
         }
-        public void LastForAdd(StatementBridge _) => Body.BodyAdd(_);
+        public void LastForAdd(StatementBridge _) => Iterator.BodyAdd(_);
         public void FinalAdd(StatementBridge _) => _final.Add(_);
         
         public IteratorParameters AddIterator(ExpressionSyntax collection)
         {
-            var oldBody = Body;
-            Body = new IteratorParameters(this, collection);
-            Enumerations.Add(Body);
+            var oldBody = Iterator;
+            Iterator = new IteratorParameters(this, collection);
+            Enumerations.Add(Iterator);
             return oldBody;
         }
         
         public IteratorParameters CopyIterator()
         {
-            var oldBody = Body;
-            Body = Body.Copy();
-            Enumerations.Add(Body);
-            return oldBody;
-        }
-        
-        public IteratorParameters CopyIteratorReference()
-        {
-            var oldBody = Body;
-            Body = Body.CopyReference();
-            Enumerations.Add(Body);
+            var oldBody = Iterator;
+            Iterator = Iterator.Copy();
+            Enumerations.Add(Iterator);
             return oldBody;
         }
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {
-            if (Enumerations.Count == 1 && Body.Body.Count == 0) return _initial.Concat(_final);
+            if (Enumerations.Count == 0) return _final;
             var result = new List<StatementSyntax>();
             if (IsReversed)
             {
@@ -181,17 +178,14 @@ namespace LinqRewrite.DataStructures
                 }
             }
             
-            _initial.AddRange(result);
-            _initial.AddRange(_final);
-            return _initial;
+            result.AddRange(_final);
+            return result;
         }
 
         private int _variableIndex;
-        public string GetVariableName(string name) => name + _variableIndex++;
-        
-        public LocalVariable GlobalVariable(TypeSyntax type, string name)
+        public LocalVariable GlobalVariable(TypeSyntax type)
         {
-            var variable = name + _variableIndex++;
+            var variable = "v" + _variableIndex++;
             var created = new LocalVariable(variable, type) {IsGlobal = true};
             Variables.Add(created);
             
@@ -199,9 +193,9 @@ namespace LinqRewrite.DataStructures
             return created;
         }
         
-        public LocalVariable GlobalVariable(TypeSyntax type, string name, ValueBridge initial)
+        public LocalVariable GlobalVariable(TypeSyntax type, ValueBridge initial)
         {
-            var variable = name + _variableIndex++;
+            var variable = "v" + _variableIndex++;
             var created = new LocalVariable(variable, type) {IsGlobal = true};
             Variables.Add(created);
             
@@ -209,9 +203,9 @@ namespace LinqRewrite.DataStructures
             return created;
         }
         
-        public LocalVariable LocalVariable(TypeBridge type, string name, ValueBridge initial)
+        public LocalVariable LocalVariable(TypeBridge type, ValueBridge initial)
         {
-            var variable = name + _variableIndex++;
+            var variable = "v" + _variableIndex++;
             var found = Variables.FirstOrDefault(x => x.Type.Equals(type) && !x.IsGlobal && !x.IsUsed);
             if (found != null)
             {
@@ -225,7 +219,7 @@ namespace LinqRewrite.DataStructures
             return created;
         }
         
-        public LocalVariable LocalVariable(TypeBridge type, string name)
+        public LocalVariable LocalVariable(TypeBridge type)
         {
             var found = Variables.FirstOrDefault(x => type.ToString().Equals(x.Type.ToString()) && !x.IsGlobal && !x.IsUsed);
             if (found != null)
@@ -233,7 +227,7 @@ namespace LinqRewrite.DataStructures
                 found.IsUsed = true;
                 return found;
             }
-            var variable = name + _variableIndex++;
+            var variable = "v" + _variableIndex++;
             var created = new LocalVariable(variable, type);
             Variables.Add(created);
 

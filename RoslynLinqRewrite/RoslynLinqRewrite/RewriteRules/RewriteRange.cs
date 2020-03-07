@@ -13,14 +13,16 @@ namespace LinqRewrite.RewriteRules
             var from = args[0];
             var count = args[1];
             
-            var sumVariable = p.LocalVariable(Int, "__sum", from.Add(count));
+            var sumVariable = p.LocalVariable(Int, from.Add(count));
 
-            p.Collection = null;
+            p.CurrentCollection = null;
+            p.Enumerations.Add(p.Iterator = new IteratorParameters(p));
             p.ForMin = p.ForReMin = from;
             p.ForMax = p.ForReMax = sumVariable;
+            p.ListEnumeration = false;
             
-            p.CurrentIndexer = p.LocalVariable(Int, "__i");
-            p.Body.Indexer = p.Indexer;
+            p.CurrentIndexer = p.LocalVariable(Int);
+            p.Iterator.Indexer = p.Indexer;
             p.Last = p.Indexer;
             
             p.ResultSize = count;

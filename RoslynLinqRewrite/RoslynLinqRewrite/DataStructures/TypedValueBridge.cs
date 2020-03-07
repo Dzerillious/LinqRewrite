@@ -24,6 +24,12 @@ namespace LinqRewrite.DataStructures
             Type = type;
             Value = variable;
         }
+
+        public TypedValueBridge(TypeBridge type, LocalVariable variable) : base(variable)
+        {
+            Type = type;
+            Value = variable;
+        }
         
         public static implicit operator TypedValueBridge(LocalVariable name)
             => new TypedValueBridge(name.Type, name.Value);

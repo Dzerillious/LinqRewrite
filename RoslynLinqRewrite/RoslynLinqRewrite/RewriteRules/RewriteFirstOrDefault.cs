@@ -11,7 +11,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             
             if (args.Length == 0)
                 p.ForAdd(Return(p.Last.Value));
@@ -25,12 +25,12 @@ namespace LinqRewrite.RewriteRules
             p.HasResultMethod = true;
         }
 
-        public static ExpressionSyntax RewriteSimple(RewriteParameters p)
+        public static ExpressionSyntax RewriteSimple(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (p.Chain[0].Arguments.Length != 0) return null;
+            if (args.Length != 0) return null;
             return ConditionalExpression(
-                p.Collection.Count(p).IsEqual(0),
-                p.Collection[0],
+                p.CurrentCollection.Count.IsEqual(0),
+                p.CurrentCollection[0],
                 Default(p.ReturnType));
         }
     }

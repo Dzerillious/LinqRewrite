@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SimpleCollections;
 using static LinqRewrite.Constants;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -15,63 +18,68 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             if (!p.ModifiedEnumeration)
             {
                 p.IsReversed = !p.IsReversed;
                 return;
             }
-            else if (p.ResultSize != null) KnownSize(p, "__reversed", p.Collection.ItemType(p));
-            else if (p.SourceSize != null) KnownSourceSize(p, "__reversed");
-            else UnknownSourceSize(p, "__reversed");
+            else if (p.SourceSize != null) KnownSourceSize(p);
+            else UnknownSourceSize(p);
             
             p.CurrentIndexer = null;
         }
 
-        private static void KnownSize(RewriteParameters p, string resultName, TypeSyntax itemType = null)
+        private static void KnownSourceSize(RewriteParameters p)
         {
-            var arrayType = itemType == null ? (ArrayTypeSyntax) p.ReturnType : ArrayType(itemType);
-            var resultVariable = p.GlobalVariable(arrayType, resultName, CreateArray(arrayType, p.ResultSize));
-
-            p.ForAdd(resultVariable[p.Indexer].Assign(p.Last.Value));
-            
-            p.FinalAdd(Return(resultVariable));
-            p.AddIterator(resultVariable);
-        }
-
-        private static VariableBridge KnownSourceSize(RewriteParameters p, string resultName)
-        {
-            var indexer = p.Indexer;
+            p.CurrentIndexer = null;
+            var reverseIndexer = p.LocalVariable(Int);
                 
-            var logVariable = p.GlobalVariable(Int, "__log", 
+            var logVariable = p.LocalVariable(Int,
                 "SimpleCollections".Access("IntExtensions", "Log2")
                     .Invoke(p.SourceSize.Cast(SyntaxKind.UIntKeyword)) - 3);
                 
-            p.InitialAdd(logVariable.Assign(logVariable - logVariable % 2));
-            var currentLengthVariable = p.GlobalVariable(Int, "__currentLength", 8);
+            p.InitialAdd(logVariable.SubAssign(logVariable % 2));
+            var currentLengthVariable = p.LocalVariable(Int, 8);
 
-            var resultType = (ArrayTypeSyntax) p.ReturnType;
-            var resultVariable = p.GlobalVariable(resultType, resultName, CreateArray(resultType, p.ResultSize));
+            var resultVariable = p.GlobalVariable(p.Last.Type.ArrayType(), CreateArray(p.Last.Type.ArrayType(), 8));
+            p.PreForAdd(reverseIndexer.Assign(8));
 
-            p.ForAdd(If(p.Indexer >= currentLengthVariable,
-                        "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")
-                                .Invoke(2, 
-                                    p.SourceSize, 
-                                    RefArg(resultVariable), 
-                                    RefArg(logVariable),
-                                    OutArg(currentLengthVariable))));
-                
-            p.ForAdd(resultVariable[indexer].Assign(p.Last.Value));
-            return resultVariable;
+            var tmpSize = p.LocalVariable(Int);
+            p.ForAdd(reverseIndexer.PreDecrement());
+
+            p.ForAdd(If(reverseIndexer < 0,
+                Block(
+                    tmpSize.Assign(currentLengthVariable),
+                                    "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeReverseArray")
+                                        .Invoke(2, 
+                                            p.SourceSize, 
+                                            RefArg(resultVariable), 
+                                            RefArg(logVariable),
+                                            OutArg(currentLengthVariable)),
+                    reverseIndexer.Assign(currentLengthVariable - tmpSize - 1 ))));
+            
+            p.CurrentIndexer = null;
+
+            p.ForAdd(resultVariable[reverseIndexer].Assign(p.Last.Value));
+            p.CurrentCollection = new CollectionValueBridge(p.Last.Type, ArrayType(p.Last.Type), currentLengthVariable - reverseIndexer, resultVariable);
+            
+            p.Iterator.Complete = true;
+            RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            
+            p.ForMin = p.ForReMin = currentLengthVariable - reverseIndexer;
+            p.ForMax = currentLengthVariable;
+            p.ForReMax = currentLengthVariable - 1;
+            p.ResultSize = p.SourceSize = currentLengthVariable - reverseIndexer;
         }
 
-        private static VariableBridge UnknownSourceSize(RewriteParameters p, string resultName)
+        private static void UnknownSourceSize(RewriteParameters p)
         {
             var indexer = p.Indexer;
             
-            var currentLengthVariable = p.GlobalVariable(Int, "__currentLength", 8);
+            var currentLengthVariable = p.GlobalVariable(Int, 8);
             var resultType = (ArrayTypeSyntax) p.ReturnType;
-            var resultVariable = p.GlobalVariable(Int, resultName, CreateArray(resultType, 8));
+            var resultVariable = p.GlobalVariable(Int, CreateArray(resultType, 8));
                 
             p.ForAdd(If(p.Indexer >= currentLengthVariable,
                             "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")
@@ -79,7 +87,6 @@ namespace LinqRewrite.RewriteRules
                 
             p.ForAdd(resultVariable[indexer].Assign(p.Last.Value));
             p.HasResultMethod = true;
-            return resultVariable;
         }
     }
 }

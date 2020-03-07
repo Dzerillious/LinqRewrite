@@ -10,7 +10,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             
             var position = args[0].Reusable(p);
             p.ForAdd(If(p.Indexer.IsEqual(position),
@@ -20,14 +20,12 @@ namespace LinqRewrite.RewriteRules
             p.HasResultMethod = true;
         }
 
-        public static ExpressionSyntax RewriteSimple(RewriteParameters p)
+        public static ExpressionSyntax RewriteSimple(RewriteParameters p, ExpressionSyntax[] args)
         {
             if (p.Chain[0].Arguments.Length == 0) return null;
             RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             
-            return p.SourceSize == null 
-                ? null 
-                : p.Collection[p.Chain[0].Arguments[0]];
+            return p.SourceSize == null ? null : p.CurrentCollection[args[0]];
         }
     }
 }

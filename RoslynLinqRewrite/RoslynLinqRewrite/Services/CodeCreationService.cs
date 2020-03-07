@@ -105,7 +105,7 @@ namespace LinqRewrite.Services
                 )))
                 .WithBody(body as BlockSyntax ?? (body is StatementSyntax statementSyntax
                               ? Block(statementSyntax)
-                              : Block(ReturnStatement((ExpressionSyntax) body))))
+                              : Block(Return((ExpressionSyntax) body))))
                 .WithStatic(_data.CurrentMethodIsStatic)
                 .WithTypeParameterList(_data.CurrentMethodTypeParameters)
                 .WithConstraintClauses(_data.CurrentMethodConstraintClauses)

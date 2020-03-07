@@ -9,13 +9,14 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args, InvocationExpressionSyntax invocation)
         {
-            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
 
             var access = (MemberAccessExpressionSyntax) invocation.Expression;
             var name = (GenericNameSyntax) access.Name;
             var type = name.TypeArgumentList.Arguments[0];
 
             p.Last = new TypedValueBridge(type, p.Last.Cast(type));
+            p.ListEnumeration = false;
         }
     }
 }

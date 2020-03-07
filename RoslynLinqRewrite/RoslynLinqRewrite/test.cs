@@ -7,6 +7,9 @@ static class Example2
     {
 		var arr = new int[10];
 		var arr2 = new int[10].AsEnumerable();
-		var test = arr.Where(x => x > 3).Reverse().ToArray();
+		var test = arr.Select(x => x + x)
+			.Where(x => x > x)
+			.Select(x => (int)x)
+			.ToArray();
     }
 }

@@ -10,7 +10,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args, InvocationExpressionSyntax invocation)
         {
-            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
 
             var access = (MemberAccessExpressionSyntax) invocation.Expression;
             var name = (GenericNameSyntax) access.Name;

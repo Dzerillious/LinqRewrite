@@ -22,18 +22,20 @@ namespace LinqRewrite
 
             var last = match.Groups[1].Value.EndsWith(".")
                 ? match.Groups[2].Value : match.Groups[1].Value;
+            
+            var args = parameters.Chain[0].Arguments;
             switch (last)
             {
-                case "Any": return RewriteAny.RewriteSimple(parameters);
-                case "Count": return RewriteCount.RewriteSimple(parameters);
-                case "First": return RewriteFirst.RewriteSimple(parameters);
-                case "FirstOrDefault": return RewriteFirstOrDefault.RewriteSimple(parameters);
-                case "Last": return RewriteLast.RewriteSimple(parameters);
-                case "LastOrDefault": return RewriteLastOrDefault.RewriteSimple(parameters);
-                case "Single": return RewriteSingle.RewriteSimple(parameters);
-                case "SingleOrDefault": return RewriteSingleOrDefault.RewriteSimple(parameters);
-                case "ElementAt": return RewriteElementAt.RewriteSimple(parameters);
-                case "ElementAtOrDefault": return RewriteElementAtOrDefault.RewriteSimple(parameters);
+                case "Any": return RewriteAny.RewriteSimple(parameters, args);
+                case "Count": return RewriteCount.RewriteSimple(parameters, args);
+                case "First": return RewriteFirst.RewriteSimple(parameters, args);
+                case "FirstOrDefault": return RewriteFirstOrDefault.RewriteSimple(parameters, args);
+                case "Last": return RewriteLast.RewriteSimple(parameters, args);
+                case "LastOrDefault": return RewriteLastOrDefault.RewriteSimple(parameters, args);
+                case "Single": return RewriteSingle.RewriteSimple(parameters, args);
+                case "SingleOrDefault": return RewriteSingleOrDefault.RewriteSimple(parameters, args);
+                case "ElementAt": return RewriteElementAt.RewriteSimple(parameters, args);
+                case "ElementAtOrDefault": return RewriteElementAtOrDefault.RewriteSimple(parameters, args);
                 default: return null;
             }
         }
@@ -58,7 +60,8 @@ namespace LinqRewrite
             }
             var body = parameters.GetMethodBody();
 
-            return parameters.Collection == null 
+            if (parameters.NotRewrite) throw new NotSupportedException("Not good for rewrite");
+            return parameters.FirstCollection == null 
                 ? parameters.Rewrite.GetInvocationExpression(parameters, body) 
                 : parameters.Rewrite.GetCollectionInvocationExpression(parameters, body);
         }

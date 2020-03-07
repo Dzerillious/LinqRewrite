@@ -29,19 +29,18 @@ namespace LinqRewrite.Services
         
         internal ExpressionSyntax GetCollectionInvocationExpression(RewriteParameters p, IEnumerable<StatementSyntax> body)
         {
-            var items = new[] {CreateParameter(p.Collection.ToString(), 
-                    _data.Semantic.GetTypeInfo(p.Collection).Type)};
+            var items = new[] {CreateParameter(p.FirstCollection.ToString(), p.FirstCollection.Type)};
             var parameters = items.Concat(
                 _data.CurrentFlow.Select(x => CreateParameter(x.Name, GetSymbolType(x.Symbol)).WithRef(x.Changes)));
            
             var functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
-            var arguments = CreateArguments(new[] {Argument(p.Collection)}
+            var arguments = CreateArguments(new[] {Argument(p.FirstCollection)}
                 .Concat( _data.CurrentFlow.Select(x => Argument(x.Name).WithRef(x.Changes))));
 
             var coreFunction = GetCoreMethod(p.ReturnType, functionName, parameters, body);
 
             _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, coreFunction));
-            var args = new[] {Argument(p.Collection)}.Concat(arguments.Arguments.Skip(1));
+            var args = new[] {Argument(p.FirstCollection)}.Concat(arguments.Arguments.Skip(1));
             
             var inv = InvocationExpression(
                 _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), CreateArguments(args));

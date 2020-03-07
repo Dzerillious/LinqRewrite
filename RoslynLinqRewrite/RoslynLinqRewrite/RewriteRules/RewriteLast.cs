@@ -12,9 +12,9 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             
-            var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), "__found", Null);
+            var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), Null);
             
             if (args.Length == 0)
                 p.ForAdd(foundVariable.Assign(p.Last.Value));
@@ -30,14 +30,13 @@ namespace LinqRewrite.RewriteRules
             p.HasResultMethod = true;
         }
 
-        public static ExpressionSyntax RewriteSimple(RewriteParameters p)
+        public static ExpressionSyntax RewriteSimple(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (p.Chain[0].Arguments.Length == 0) return null;
+            if (args.Length == 0) return null;
             RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             
             return p.SourceSize == null 
-                ? null 
-                : p.Collection[p.Collection.Count(p) - 1];
+                ? null : p.CurrentCollection[p.CurrentCollection.Count - 1];
         }
     }
 }

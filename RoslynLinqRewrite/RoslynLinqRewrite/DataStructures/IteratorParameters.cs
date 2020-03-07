@@ -23,6 +23,11 @@ namespace LinqRewrite.DataStructures
 
         public void BodyAdd(StatementBridge _) => Body.Add(_);
         
+        public IteratorParameters(RewriteParameters parameters)
+        {
+            _parameters = parameters;
+        }
+        
         public IteratorParameters(RewriteParameters parameters, ValueBridge collection)
         {
             _parameters = parameters;
@@ -48,22 +53,11 @@ namespace LinqRewrite.DataStructures
                 IndexedItem = IndexedItem
             };
 
-        public IteratorParameters CopyReference() =>
-            new IteratorParameters(_parameters, Body, Collection)
-            {
-                ForMin = ForMin,
-                ForMax = ForMax,
-                ForReMin = ForReMin,
-                ForReMax = ForReMax,
-                Indexer = Indexer,
-                IndexedItem = IndexedItem
-            };
-
         public StatementSyntax GetStatementSyntax(RewriteParameters p)
         {
             if (ForMin == null)
             {
-                var enumeratorVariable = p.GlobalVariable(p.WrappedItemType("IEnumerator<", Collection, ">"), "enumerable");
+                var enumeratorVariable = p.GlobalVariable(p.WrappedItemType("IEnumerator<", Collection, ">"));
                 return p.Rewrite.GetForEachStatement(p, enumeratorVariable, IndexedItem, Collection, Body);
             }
             else if (p.IsReversed)

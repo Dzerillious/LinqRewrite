@@ -12,12 +12,13 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             var sourceSize = p.SourceSize;
             var resultSize = p.ResultSize;
+            ValueBridge collection = args[0];
             
             var indexer = p.CurrentIndexer;
-            if (indexer != null && indexer.Name == p.Body.Indexer)
+            if (indexer != null && indexer.Name == p.Iterator.Indexer)
                 indexer.IsGlobal = true;
 
             LocalVariable itemVariable;
@@ -27,19 +28,18 @@ namespace LinqRewrite.RewriteRules
             }
             else
             {
-                itemVariable = p.LocalVariable(Int, "__i");
+                itemVariable = p.LocalVariable(Int);
                 p.ForAdd(itemVariable.Assign(p.Last.Value));
                 p.Last = new TypedValueBridge(Int, itemVariable);
             }
             
-            p.AddIterator(args[0]);
+            p.AddIterator(collection);
             if (indexer != null)
             {
                 p.PreForAdd(indexer.PreDecrement());
                 p.LastForAdd(indexer.PreIncrement());
             }
-            p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
-            RewriteCollectionEnumeration.RewriteOther(p, args[0], 0);
+            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(collection.ItemType(p), collection.GetType(p), collection.Count(p), collection));
             p.CurrentIndexer = indexer;
             
             p.LastForAdd(itemVariable.Assign(p.Last.Value));

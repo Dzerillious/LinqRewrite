@@ -11,15 +11,15 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
 
             var isNullable = p.ReturnType is NullableTypeSyntax;
-            var elementType = isNullable ? ((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
+            var elementType = isNullable ? (TypeBridge)((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
             
             VariableBridge maxVariable;
-            if (elementType.ToString() == "int") maxVariable = p.GlobalVariable(Int, "__max", int.MinValue);
-            else if (elementType.ToString() == "float") maxVariable = p.GlobalVariable(Float, "__max", float.MinValue);
-            else if (elementType.ToString() == "double") maxVariable = p.GlobalVariable(VariableExtensions.Double, "__max", double.MinValue);
+            if (elementType.ToString() == "int") maxVariable = p.GlobalVariable(Int, int.MinValue);
+            else if (elementType.ToString() == "float") maxVariable = p.GlobalVariable(Float, float.MinValue);
+            else if (elementType.ToString() == "double") maxVariable = p.GlobalVariable(VariableExtensions.Double, double.MinValue);
             else maxVariable = null;
 
             if (args.Length == 0)

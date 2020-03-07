@@ -11,15 +11,15 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
 
-            var isNullable = p.ReturnType is NullableTypeSyntax;
-            var elementType = isNullable ? ((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
+            var isNullable = ((TypeSyntax)p.ReturnType) is NullableTypeSyntax;
+            var elementType = isNullable ? (TypeBridge)((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
             
             VariableBridge minVariable;
-            if (elementType.ToString() == "int") minVariable = p.GlobalVariable(Int, "__min", int.MaxValue);
-            else if (elementType.ToString() == "float") minVariable = p.GlobalVariable(Float, "__min", float.MaxValue);
-            else if (elementType.ToString() == "double") minVariable = p.GlobalVariable(VariableExtensions.Double, "__min", double.MaxValue);
+            if (elementType.ToString() == "int") minVariable = p.GlobalVariable(Int, int.MaxValue);
+            else if (elementType.ToString() == "float") minVariable = p.GlobalVariable(Float, float.MaxValue);
+            else if (elementType.ToString() == "double") minVariable = p.GlobalVariable(VariableExtensions.Double, double.MaxValue);
             else minVariable = null;
 
             if (args.Length == 0)

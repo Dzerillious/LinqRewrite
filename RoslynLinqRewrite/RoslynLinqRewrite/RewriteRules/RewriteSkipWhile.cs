@@ -9,7 +9,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            if (p.Body == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             
             p.Last = p.Last.Reusable(p);
 
@@ -17,8 +17,7 @@ namespace LinqRewrite.RewriteRules
             lastFor.BodyAdd(If(!args[0].Inline(p, p.Last),
                                 Break()));
 
-            p.ResultSize = null;
-            p.CurrentIndexer = null;
+            p.ModifiedEnumeration = true;
         }
     }
 }

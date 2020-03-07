@@ -15,7 +15,7 @@ namespace LinqRewrite.RewriteRules
             var itemType = SymbolExtensions.GetItemType(collectionType)
                 .GetTypeSyntaxFromExpression();
             
-            var resultVariable = RewriteOther(p, "__result", itemType);
+            var resultVariable = RewriteOther(p, itemType);
             p.FinalAdd(Return(New(p.ReturnType, resultVariable)));
            
             p.HasResultMethod = true;
