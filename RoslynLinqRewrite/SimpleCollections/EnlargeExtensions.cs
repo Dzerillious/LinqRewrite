@@ -53,5 +53,15 @@ namespace SimpleCollections
             Array.Copy(result, 0, newArray, 0, result.Length);
             result = newArray;
         }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void LogEnlargeReverseArray<T>(int logConst, ref T[] result, ref int currentLength)
+        {
+            currentLength <<= logConst;
+            
+            var newArray = new T[currentLength];
+            Array.Copy(result, 0, newArray, currentLength - result.Length, result.Length);
+            result = newArray;
+        }
     }
 }

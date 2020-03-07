@@ -65,8 +65,7 @@ namespace LinqRewrite.Services
             if (expression is IdentifierNameSyntax identifier)
                 return new TypedValueBridge(Int, identifier.Invoke(p));
             
-            var lambdaExpression = (LambdaExpressionSyntax) expression;
-            var lambda = new Lambda(lambdaExpression);
+            var lambda = new Lambda((LambdaExpressionSyntax)expression);
 
             var pS = p.Select((x, i) => GetLambdaParameter(lambda, i)).ToArray();
             var currentFlow = _data.Semantic.AnalyzeDataFlow(lambda.Body);
@@ -81,12 +80,10 @@ namespace LinqRewrite.Services
             return new TypedValueBridge(returnType, InlineOrCreateMethod(lambda.Body, returnType, currentCaptures, pS));
         }
 
-        public TypeSyntax GetLambdaReturnType(SemanticModel semantic, LambdaExpressionSyntax lambdaExpression)
-        {
-            return lambdaExpression.ExpressionBody == null 
+        public TypeSyntax GetLambdaReturnType(SemanticModel semantic, LambdaExpressionSyntax lambdaExpression) 
+            => lambdaExpression.ExpressionBody == null 
                 ? semantic.GetTypeFromExpression(((ReturnStatementSyntax) lambdaExpression.Block.Statements.Last()).Expression)
                 : semantic.GetTypeFromExpression(lambdaExpression.ExpressionBody);
-        }
 
         public ExpressionSyntax InlineOrCreateMethod(CSharpSyntaxNode body, TypeSyntax returnType,
             IEnumerable<VariableCapture> captures, params ParameterSyntax[] param)
@@ -140,20 +137,6 @@ namespace LinqRewrite.Services
                     throw new NotImplementedException();
                 }));
             return new Lambda(syntax);
-            //var doc = project.GetDocument(docid);
-
-            //var annot = new SyntaxAnnotation("RenamedLambda");
-            //var annotated = container.WithAdditionalAnnotations(annot);
-            //var root = project.GetDocument(docid).GetSyntaxRootAsync().Result.ReplaceNode(container, annotated).SyntaxTree;
-            //var proj = project.GetDocument(docid).WithSyntaxRoot(root.GetRoot()).Project;
-            //doc = proj.GetDocument(docid);
-            //var syntaxTree = doc.GetSyntaxTreeAsync().Result;
-            //var modifiedSemantic = proj.GetCompilationAsync().Result.GetSemanticModel(syntaxTree);
-            //annotated = (AnonymousFunctionExpressionSyntax)doc.GetSyntaxRootAsync().Result.GetAnnotatedNodes(annot).First();
-            //var parameter = GetLambdaParameter(annotated, 0);
-            //var renamed = Renamer.RenameSymbolAsync(proj.Solution, modifiedSemantic.GetDeclaredSymbol(parameter), newname, null).Result;
-            //annotated = (AnonymousFunctionExpressionSyntax)renamed.GetDocument(doc.Id).GetSyntaxRootAsync().Result.GetAnnotatedNodes(annot).First();
-            //return annotated.WithoutAnnotations();
         }
 
         public string GetMethodFullName(InvocationExpressionSyntax invocation)
@@ -165,12 +148,6 @@ namespace LinqRewrite.Services
             return n?.Replace("System.Collections.Generic.List<TSource>", iEnumerableOfTSource)
                 .Replace("TSource[]", iEnumerableOfTSource);
         }
-        
-        public TypeSyntax GetLambdaType(SimpleLambdaExpressionSyntax lambda)
-            => _data.Semantic.GetTypeFromExpression(lambda.ExpressionBody);
-
-        public ITypeSymbol GetLambdaReturnType(AnonymousFunctionExpressionSyntax lambda)
-            => ((INamedTypeSymbol) _data.Semantic.GetTypeInfo(lambda).ConvertedType).TypeArguments.Last();
 
         public string GetUniqueName(string v)
         {

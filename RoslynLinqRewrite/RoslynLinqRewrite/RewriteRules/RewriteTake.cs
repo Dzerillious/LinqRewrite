@@ -12,7 +12,7 @@ namespace LinqRewrite.RewriteRules
             if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             
             var take = args[0];
-            if (p.ModifiedEnumeration)
+            if (!p.ModifiedEnumeration)
             {
                 p.ForMax += take;
                 p.ForReMin -= take;
@@ -20,7 +20,6 @@ namespace LinqRewrite.RewriteRules
             }
             else p.ForAdd(If(p.Indexer > take, Break()));
             p.CurrentIndexer = null;
-            p.ListEnumeration = false;
         }
     }
 }

@@ -5,13 +5,13 @@ namespace LinqRewrite.DataStructures
 {
     public class TypeBridge
     {
-        private readonly TypeSyntax _type;
+        public TypeSyntax Type { get; }
 
         private TypeBridge(TypeSyntax type)
-            => _type = type;
+            => Type = type;
 
         private TypeBridge(SyntaxKind type)
-            => _type = SyntaxFactory.PredefinedType(SyntaxFactory.Token(type));
+            => Type = SyntaxFactory.PredefinedType(SyntaxFactory.Token(type));
         
         public static implicit operator TypeBridge(SyntaxKind kind)
             => new TypeBridge(kind);
@@ -20,8 +20,8 @@ namespace LinqRewrite.DataStructures
             => new TypeBridge(type);
         
         public static implicit operator TypeSyntax(TypeBridge type)
-            => type._type;
+            => type.Type;
 
-        public override string ToString() => _type.ToString();
+        public override string ToString() => Type.ToString();
     }
 }

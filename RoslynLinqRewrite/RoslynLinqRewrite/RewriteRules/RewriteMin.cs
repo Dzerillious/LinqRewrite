@@ -13,8 +13,8 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
 
-            var isNullable = ((TypeSyntax)p.ReturnType) is NullableTypeSyntax;
-            var elementType = isNullable ? (TypeBridge)((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
+            var elementType = p.ReturnType.Type is NullableTypeSyntax nullable
+                ? (TypeBridge)nullable.ElementType : p.ReturnType;
             
             VariableBridge minVariable;
             if (elementType.ToString() == "int") minVariable = p.GlobalVariable(Int, int.MaxValue);
@@ -28,7 +28,7 @@ namespace LinqRewrite.RewriteRules
                 p.ForAdd(If(inlined < minVariable,
                             minVariable.Assign(inlined)));
             }
-            else if (isNullable)
+            else if (p.ReturnType.Type is NullableTypeSyntax)
             {
                 var inlined = args[0].Inline(p, p.Last).Reusable(p);
                 p.ForAdd(If(inlined.NotEqual(Null),

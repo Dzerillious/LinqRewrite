@@ -13,15 +13,15 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
 
-            var isNullable = p.ReturnType is NullableTypeSyntax;
-            var elementType = isNullable ? (TypeBridge)((NullableTypeSyntax)p.ReturnType).ElementType : p.ReturnType;
+            var elementType = p.ReturnType.Type is NullableTypeSyntax nullable
+                ? (TypeBridge)nullable.ElementType : p.ReturnType;
             var sumVariable = p.GlobalVariable(elementType, 0);
 
             if (args.Length == 0)
             {
                 p.ForAdd(sumVariable.AddAssign(p.Last.Value));
             }
-            else if (isNullable)
+            else if (p.ReturnType.Type is NullableTypeSyntax)
             {
                 var inlined = args[0].Inline(p, p.Last).Reusable(p);
                 p.ForAdd(If(inlined.NotEqual(Null),

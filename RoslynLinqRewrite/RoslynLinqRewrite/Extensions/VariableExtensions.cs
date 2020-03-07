@@ -30,20 +30,12 @@ namespace LinqRewrite.Extensions
         public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, TypeBridge type, ValueBridge value)
             =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, type, value));
 
-        public static VariableDeclarationSyntax VariableCreation(VariableBridge name, ValueBridge value)
-            =>  SyntaxFactory.VariableDeclaration(
-                SyntaxFactory.IdentifierName("var"),
-                SyntaxFactory.SeparatedList(new []{SyntaxFactory.VariableDeclarator(name)
-                    .WithInitializer(SyntaxFactory.EqualsValueClause(value))}));
-
         public static VariableDeclarationSyntax VariableCreation(VariableBridge name, TypeSyntax type)
-            =>  SyntaxFactory.VariableDeclaration(
-                type,
+            =>  SyntaxFactory.VariableDeclaration(type,
                 SyntaxFactory.SeparatedList(new []{SyntaxFactory.VariableDeclarator(name)}));
 
         public static VariableDeclarationSyntax VariableCreation(string name, TypeBridge type, ValueBridge value)
-            =>  SyntaxFactory.VariableDeclaration(
-                type,
+            =>  SyntaxFactory.VariableDeclaration(type,
                 SyntaxFactory.SeparatedList(new []{SyntaxFactory.VariableDeclarator(name)
                     .WithInitializer(SyntaxFactory.EqualsValueClause(value))}));
         

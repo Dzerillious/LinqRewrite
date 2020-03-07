@@ -12,7 +12,7 @@ namespace LinqRewrite.RewriteRules
             if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
             
             var skipped = args[0];
-            if (p.ModifiedEnumeration)
+            if (!p.ModifiedEnumeration)
             {
                 p.ForMin += skipped;
                 p.ForReMax -= skipped;
@@ -20,7 +20,6 @@ namespace LinqRewrite.RewriteRules
             }
             else p.ForAdd(If(p.Indexer < skipped, Continue()));
             p.CurrentIndexer = null;
-            p.ListEnumeration = false;
         }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SimpleCollections;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
@@ -23,9 +21,7 @@ namespace LinqRewrite.RewriteRules
 
             LocalVariable itemVariable;
             if (p.Last.Value != null && p.Last.Value is LocalVariable lastVariable)
-            {
                 itemVariable = lastVariable;
-            }
             else
             {
                 itemVariable = p.LocalVariable(Int);
@@ -39,7 +35,7 @@ namespace LinqRewrite.RewriteRules
                 p.PreForAdd(indexer.PreDecrement());
                 p.LastForAdd(indexer.PreIncrement());
             }
-            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(collection.ItemType(p), collection.GetType(p), collection.Count(p), collection));
+            RewriteCollectionEnumeration.RewriteOther(p, new ArrayValueBridge( collection.ItemType(p), collection.GetType(p), collection.Count(p), collection));
             p.CurrentIndexer = indexer;
             
             p.LastForAdd(itemVariable.Assign(p.Last.Value));

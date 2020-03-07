@@ -4,7 +4,6 @@ using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SimpleCollections;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static LinqRewrite.Constants;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
@@ -15,32 +14,17 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
-            p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
-            var collectionType = p.CurrentCollection.Type;
-            var collectionName = collectionType.ToString();
-
-            p.Enumerations.Add(p.Iterator = new IteratorParameters(p, p.CurrentCollection));
-            
-            if (collectionType is ArrayTypeSyntax)
-                ArrayEnumeration(p, p.CurrentCollection);
-            else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
-                ListEnumeration(p, p.CurrentCollection);
-            else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
-                EnumerableEnumeration(p, p.CurrentCollection);
+            p.Iterators.Add(p.Iterator = new IteratorParameters(p, p.CurrentCollection));
+            RewriteOther(p, p.CurrentCollection);
         }
         
         public static void RewriteOther(RewriteParameters p, CollectionValueBridge collection)
         {
             p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
-            var collectionType = collection.Type;
-            var collectionName = collectionType.ToString();
             
-            if (collectionType is ArrayTypeSyntax)
-                ArrayEnumeration(p, collection);
-            else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
-                ListEnumeration(p, collection);
-            else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
-                EnumerableEnumeration(p, collection);
+            if (p.CurrentCollection is ArrayValueBridge) ArrayEnumeration(p, collection);
+            else if (p.CurrentCollection is ListValueBridge) ListEnumeration(p, collection);
+            else if (p.CurrentCollection is EnumerableValueBridge) EnumerableEnumeration(p, collection);
         }
 
         public static void ArrayEnumeration(RewriteParameters p, CollectionValueBridge collection)

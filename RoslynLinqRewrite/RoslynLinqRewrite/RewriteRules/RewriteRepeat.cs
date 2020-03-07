@@ -1,7 +1,8 @@
-﻿using System;
+﻿using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SimpleCollections;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
@@ -10,10 +11,11 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
+            p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
             var item = args[0];
             var count = args[1];
             
-            p.Enumerations.Add(p.Iterator = new IteratorParameters(p));
+            p.Iterators.Add(p.Iterator = new IteratorParameters(p));
             p.ForMin = p.ForReMin = 0;
             p.ForMax = p.ForReMax = count;
             

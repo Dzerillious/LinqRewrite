@@ -6,6 +6,7 @@ using LinqRewrite.Services;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SimpleCollections;
+using static LinqRewrite.Constants;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.DataStructures
@@ -28,9 +29,9 @@ namespace LinqRewrite.DataStructures
         public ValueBridge SourceSize { get; set; }
         public TypedValueBridge Last { get; set; }
 
-
-        public List<IteratorParameters> Enumerations;
-        public IteratorParameters Iterator;
+        public List<StatementSyntax> Initial { get; set; }
+        public List<IteratorParameters> Iterators { get; set; }
+        public IteratorParameters Iterator { get; set; }
         private List<StatementSyntax> _final;
         public readonly List<LocalVariable> Variables = new List<LocalVariable>();
 
@@ -45,8 +46,11 @@ namespace LinqRewrite.DataStructures
             set
             {
                 _listEnumeration = value;
-
-                if (!value) return;
+                if (!value)
+                {
+                    CurrentIndexer = null;
+                    return;
+                }
                 ModifiedEnumeration = false;
             }
         }
@@ -62,7 +66,6 @@ namespace LinqRewrite.DataStructures
                 if (!value) return;
                 ListEnumeration = false;
                 ResultSize = null;
-                CurrentIndexer = null;
             }
         }
 
@@ -115,10 +118,21 @@ namespace LinqRewrite.DataStructures
         
         public void SetData(ValueBridge collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node)
         {
+            Initial = new List<StatementSyntax>();
             _final = new List<StatementSyntax>();
-            Enumerations = new List<IteratorParameters>();
+            Iterators = new List<IteratorParameters>();
             
-            FirstCollection = CurrentCollection = new CollectionValueBridge(collection.ItemType(this), collection.GetType(this), collection.Count(this), collection);
+            
+            var collectionType = collection.GetType(this);
+            var collectionName = collectionType.ToString();
+            
+            if (collectionType.Type is ArrayTypeSyntax)
+                FirstCollection = CurrentCollection = new ArrayValueBridge(collection.ItemType(this), collectionType, collection.Count(this), collection);
+            else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
+                FirstCollection = CurrentCollection = new ListValueBridge(collection.ItemType(this), collectionType, collection.Count(this), collection);
+            else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
+                FirstCollection = CurrentCollection = new EnumerableValueBridge(collection.ItemType(this), collectionType, collection.Count(this), collection);
+
             ReturnType = returnType;
             Chain = chain;
             Node = node;
@@ -129,11 +143,11 @@ namespace LinqRewrite.DataStructures
             ListEnumeration = true;
         }
 
-        public void InitialAdd(StatementBridge _) => Enumerations.First().Pre.Add(_);
+        public void InitialAdd(StatementBridge _) => Initial.Add(_);
         public void PreForAdd(StatementBridge _) => Iterator.Pre.Add(_);
         public void ForAdd(StatementBridge _)
         {
-            Enumerations.Where(x => !x.Complete)
+            Iterators.Where(x => !x.Complete)
                 .ForEach(x => x.Body.Add(_));
         }
         public void LastForAdd(StatementBridge _) => Iterator.BodyAdd(_);
@@ -143,7 +157,7 @@ namespace LinqRewrite.DataStructures
         {
             var oldBody = Iterator;
             Iterator = new IteratorParameters(this, collection);
-            Enumerations.Add(Iterator);
+            Iterators.Add(Iterator);
             return oldBody;
         }
         
@@ -151,29 +165,29 @@ namespace LinqRewrite.DataStructures
         {
             var oldBody = Iterator;
             Iterator = Iterator.Copy();
-            Enumerations.Add(Iterator);
+            Iterators.Add(Iterator);
             return oldBody;
         }
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {
-            if (Enumerations.Count == 0) return _final;
-            var result = new List<StatementSyntax>();
+            if (Iterators.Count == 0) return Initial.Concat(_final);
+            var result = new List<StatementSyntax>(Initial);
             if (IsReversed)
             {
-                for (var i = Enumerations.Count - 1; i >= 0; i--)
+                for (var i = Iterators.Count - 1; i >= 0; i--)
                 {
-                    var statement = Enumerations[i].GetStatementSyntax(this);
-                    result.AddRange(Enumerations[i].Pre);
+                    var statement = Iterators[i].GetStatementSyntax(this);
+                    result.AddRange(Iterators[i].Pre);
                     result.Add(statement);
                 }
             }
             else
             {
-                for (var i = 0; i < Enumerations.Count; i++)
+                for (var i = 0; i < Iterators.Count; i++)
                 {
-                    var statement = Enumerations[i].GetStatementSyntax(this);
-                    result.AddRange(Enumerations[i].Pre);
+                    var statement = Iterators[i].GetStatementSyntax(this);
+                    result.AddRange(Iterators[i].Pre);
                     result.Add(statement);
                 }
             }

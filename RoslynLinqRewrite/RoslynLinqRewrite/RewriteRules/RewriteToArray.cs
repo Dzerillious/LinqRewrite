@@ -1,11 +1,8 @@
 ﻿using System;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using static LinqRewrite.Constants;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
 
@@ -16,13 +13,12 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
         {
             p.HasResultMethod = true;
-            if (p.ListEnumeration)
-            {
-                RewriteSimple(p);
+            if (p.ListEnumeration && p.Iterators.Count <= 1 && RewriteSimple(p))
                 return;
-            }
+            
             if (p.Iterator ==  null)
                 RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            
             var resultVariable = RewriteOther(p);
             if (p.ResultSize == null) p.FinalAdd(Return("SimpleCollections".Access("SimpleArrayExtensions", "EnsureFullArray")
                 .Invoke(resultVariable, p.Indexer)));
@@ -89,32 +85,37 @@ namespace LinqRewrite.RewriteRules
             return resultVariable;
         }
 
-        private static void RewriteSimple(RewriteParameters p)
+        private static bool RewriteSimple(RewriteParameters p)
         {
-            var collectionName = p.CurrentCollection.Type.ToString();
-
-            if (p.CurrentCollection.Type is ArrayTypeSyntax)
+            p.HasResultMethod = true;
+            p.Initial.Clear();
+            p.Iterators.Clear();
+            
+            if (p.CurrentCollection is ArrayValueBridge)
             {
+                var min = p.Iterator == null ? 0 : p.Iterator.ForMin;
+                var size = p.Iterator == null ? p.ResultSize : p.Iterator.ForMax - p.Iterator.ForMin;
                 if (!p.CurrentCollection.Equals(p.FirstCollection))
                 {
                     p.FinalAdd(Return(p.CurrentCollection));
-                    return;
+                    return true;
                 }
                 var resultVariable = p.GlobalVariable(p.ReturnType, CreateArray((ArrayTypeSyntax) p.ReturnType, p.CurrentCollection.Count));
                 p.FinalAdd("Array".Access("Copy")
-                    .Invoke(p.CurrentCollection, 0, resultVariable, 0, p.CurrentCollection.Count));
+                    .Invoke(p.CurrentCollection, min, resultVariable, 0, size));
                 p.FinalAdd(Return(resultVariable));
+                return true;
             }
-            else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
+            else if (p.CurrentCollection is ListValueBridge)
             {
                 var resultVariable = p.GlobalVariable(p.ReturnType,
                     CreateArray((ArrayTypeSyntax) p.ReturnType, p.CurrentCollection.Count));
                 p.FinalAdd(p.CurrentCollection.Access("CopyTo").Invoke(resultVariable));
                 p.FinalAdd(Return(resultVariable));
+                return true;
             }
-            else p.NotRewrite = true;
-
-            p.HasResultMethod = true;
+            p.NotRewrite = true;
+            return true;
         }
     }
 }
