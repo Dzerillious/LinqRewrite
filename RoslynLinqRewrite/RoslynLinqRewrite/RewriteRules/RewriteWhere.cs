@@ -8,14 +8,14 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteWhere
     {
-        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
+        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
 
             var method = args[0];
 
             p.Last = p.Last.Reusable(p);
-            if (method is SimpleLambdaExpressionSyntax)
+            if (method.OldVal is SimpleLambdaExpressionSyntax)
             {
                 p.ForAdd(If(!method.Inline(p, p.Last),
                             Continue()));

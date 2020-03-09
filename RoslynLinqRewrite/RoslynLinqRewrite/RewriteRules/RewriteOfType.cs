@@ -8,9 +8,9 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteOfType
     {
-        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args, InvocationExpressionSyntax invocation)
+        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args, InvocationExpressionSyntax invocation)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
 
             var access = (MemberAccessExpressionSyntax) invocation.Expression;
             var name = (GenericNameSyntax) access.Name;

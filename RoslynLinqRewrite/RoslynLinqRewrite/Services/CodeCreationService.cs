@@ -29,12 +29,12 @@ namespace LinqRewrite.Services
         public ValueBridge CreateCollectionCount(ValueBridge collection, bool allowUnknown)
         {
             var collectionType = _data.Semantic.GetTypeInfo(collection).Type;
-            if (collectionType is IArrayTypeSymbol) return MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, collection, IdentifierName("Length"));
+            if (collectionType is IArrayTypeSymbol) return collection.Access("Length");
             if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<")))
-                return MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, collection, IdentifierName("Count"));
+                return collection.Access("Count");
                 
             if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.ICollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.ICollection<")))
-                return MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, collection, IdentifierName("Count"));
+                return collection.Access("Count");
 
             if (!allowUnknown) return null;
             if (collectionType.IsValueType) return null;

@@ -30,6 +30,12 @@ namespace LinqRewrite.Extensions
             return SyntaxFactory.ParseTypeName(itemString);
         }
 
+        public static TypeBridge ItemType(this RewrittenValueBridge collection, RewriteParameters p)
+        {
+            var itemString = collection.Old.GetItemTypeSymbol(p).ToDisplayString();
+            return SyntaxFactory.ParseTypeName(itemString);
+        }
+
         public static TypeBridge ItemType(this ValueBridge collection, RewriteParameters p)
         {
             var itemString = collection.GetItemTypeSymbol(p).ToDisplayString();

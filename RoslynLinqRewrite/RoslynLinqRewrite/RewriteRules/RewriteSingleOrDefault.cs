@@ -10,9 +10,9 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteSingleOrDefault
     {
-        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
+        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), Null);
 
@@ -36,7 +36,7 @@ namespace LinqRewrite.RewriteRules
             p.HasResultMethod = true;
         }
 
-        public static ExpressionSyntax RewriteSimple(RewriteParameters p, ExpressionSyntax[] args) 
+        public static ExpressionSyntax RewriteSimple(RewriteParameters p, RewrittenValueBridge[] args) 
             => args.Length == 0 
                 ? ConditionalExpression(p.CurrentCollection.Count.IsEqual(1),
                     p.CurrentCollection[0],

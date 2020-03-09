@@ -18,26 +18,26 @@ namespace LinqRewrite.DataStructures
         public RewriteDataService Data { get; }
 
         
-        public InvocationExpressionSyntax Node { get; set; }
-        public CollectionValueBridge FirstCollection { get; set; }
+        public InvocationExpressionSyntax Node { get; private set; }
+        public CollectionValueBridge FirstCollection { get; private set; }
         public CollectionValueBridge CurrentCollection { get; set; }
-        public List<LinqStep> Chain { get; set; }
+        public List<LinqStep> Chain { get; private set; }
 
         
-        public TypeBridge ReturnType { get; set; }
+        public TypeBridge ReturnType { get; private set; }
         public ValueBridge ResultSize { get; set; }
         public ValueBridge SourceSize { get; set; }
         public TypedValueBridge Last { get; set; }
 
-        public List<StatementSyntax> Initial { get; set; }
-        public List<IteratorParameters> Iterators { get; set; }
+        public List<StatementSyntax> Initial { get; } = new List<StatementSyntax>();
+        public List<IteratorParameters> Iterators { get; } = new List<IteratorParameters>();
         public IteratorParameters Iterator { get; set; }
-        private List<StatementSyntax> _final;
-        public readonly List<LocalVariable> Variables = new List<LocalVariable>();
+        public List<StatementSyntax> Final { get; } = new List<StatementSyntax>();
+        public List<LocalVariable> Variables { get; } = new List<LocalVariable>();
 
-        public bool IsReversed;
-        public bool HasResultMethod;
-        public bool NotRewrite;
+        public bool IsReversed { get; set; }
+        public bool HasResultMethod { get; set; }
+        public bool NotRewrite { get; set; }
 
         private bool _listEnumeration;
         public bool ListEnumeration
@@ -46,11 +46,7 @@ namespace LinqRewrite.DataStructures
             set
             {
                 _listEnumeration = value;
-                if (!value)
-                {
-                    CurrentIndexer = null;
-                    return;
-                }
+                if (!value) return;
                 ModifiedEnumeration = false;
             }
         }
@@ -66,6 +62,7 @@ namespace LinqRewrite.DataStructures
                 if (!value) return;
                 ListEnumeration = false;
                 ResultSize = null;
+                CurrentIndexer = null;
             }
         }
 
@@ -97,14 +94,14 @@ namespace LinqRewrite.DataStructures
         
         public ValueBridge ForReMin
         {
-            get => Iterator.ForReMin;
-            set => Iterator.ForReMin = value;
+            get => Iterator.ForReverseMin;
+            set => Iterator.ForReverseMin = value;
         }
         
         public ValueBridge ForReMax
         {
-            get => Iterator.ForReMax;
-            set => Iterator.ForReMax = value;
+            get => Iterator.ForReverseMax;
+            set => Iterator.ForReverseMax = value;
         }
         
         public SemanticModel Semantic => Data.Semantic;
@@ -118,20 +115,14 @@ namespace LinqRewrite.DataStructures
         
         public void SetData(ValueBridge collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node)
         {
-            Initial = new List<StatementSyntax>();
-            _final = new List<StatementSyntax>();
-            Iterators = new List<IteratorParameters>();
-            
+            Initial.Clear();
+            Final.Clear();
+            Iterators.Clear();
+            Variables.Clear();
+            Iterator = null;
             
             var collectionType = collection.GetType(this);
-            var collectionName = collectionType.ToString();
-            
-            if (collectionType.Type is ArrayTypeSyntax)
-                FirstCollection = CurrentCollection = new ArrayValueBridge(collection.ItemType(this), collectionType, collection.Count(this), collection);
-            else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
-                FirstCollection = CurrentCollection = new ListValueBridge(collection.ItemType(this), collectionType, collection.Count(this), collection);
-            else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
-                FirstCollection = CurrentCollection = new EnumerableValueBridge(collection.ItemType(this), collectionType, collection.Count(this), collection);
+            FirstCollection = CurrentCollection = new CollectionValueBridge(collection.ItemType(this), collectionType, collection.Count(this), collection);
 
             ReturnType = returnType;
             Chain = chain;
@@ -151,9 +142,9 @@ namespace LinqRewrite.DataStructures
                 .ForEach(x => x.Body.Add(_));
         }
         public void LastForAdd(StatementBridge _) => Iterator.BodyAdd(_);
-        public void FinalAdd(StatementBridge _) => _final.Add(_);
+        public void FinalAdd(StatementBridge _) => Final.Add(_);
         
-        public IteratorParameters AddIterator(ExpressionSyntax collection)
+        public IteratorParameters AddIterator(RewrittenValueBridge collection)
         {
             var oldBody = Iterator;
             Iterator = new IteratorParameters(this, collection);
@@ -171,7 +162,7 @@ namespace LinqRewrite.DataStructures
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {
-            if (Iterators.Count == 0) return Initial.Concat(_final);
+            if (Iterators.Count == 0) return Initial.Concat(Final);
             var result = new List<StatementSyntax>(Initial);
             if (IsReversed)
             {
@@ -192,7 +183,7 @@ namespace LinqRewrite.DataStructures
                 }
             }
             
-            result.AddRange(_final);
+            result.AddRange(Final);
             return result;
         }
 

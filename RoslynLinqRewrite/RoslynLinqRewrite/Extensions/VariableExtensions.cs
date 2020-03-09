@@ -60,6 +60,9 @@ namespace LinqRewrite.Extensions
             return new VariableCapture(symbol, changes);
         }
 
+        public static ValueBridge Count(this RewrittenValueBridge value, RewriteParameters p)
+            => p.Code.CreateCollectionCount(value.Old, false);
+
         public static ValueBridge Count(this ValueBridge value, RewriteParameters p)
             => p.Code.CreateCollectionCount(value, false);
     }

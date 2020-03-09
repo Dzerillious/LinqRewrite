@@ -8,9 +8,9 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteCount
     {
-        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
+        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
 
             if (args.Length != 0)
             {
@@ -21,7 +21,7 @@ namespace LinqRewrite.RewriteRules
             p.HasResultMethod = true;
         }
 
-        public static ExpressionSyntax RewriteSimple(RewriteParameters p, ExpressionSyntax[] args) 
+        public static ExpressionSyntax RewriteSimple(RewriteParameters p, RewrittenValueBridge[] args) 
             => args.Length == 0 ? p.CurrentCollection.Count : null;
     }
 }

@@ -9,7 +9,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteToList
     {
-        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
+        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             var collectionType = p.Semantic.GetTypeInfo(p.Node).Type;
             var itemType = SymbolExtensions.GetItemType(collectionType)

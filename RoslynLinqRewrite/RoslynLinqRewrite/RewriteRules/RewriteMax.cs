@@ -9,18 +9,20 @@ namespace LinqRewrite.RewriteRules
 {
     public class RewriteMax
     {
-        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
+        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
 
             var elementType = p.ReturnType.Type is NullableTypeSyntax nullable
                 ? (TypeBridge)nullable.ElementType : p.ReturnType;
-            
-            VariableBridge maxVariable;
-            if (elementType.ToString() == "int") maxVariable = p.GlobalVariable(Int, int.MinValue);
-            else if (elementType.ToString() == "float") maxVariable = p.GlobalVariable(Float, float.MinValue);
-            else if (elementType.ToString() == "double") maxVariable = p.GlobalVariable(VariableExtensions.Double, double.MinValue);
-            else maxVariable = null;
+
+            var maxVariable = elementType.ToString() switch
+            {
+                "int" => p.GlobalVariable(Int, int.MinValue),
+                "float" => p.GlobalVariable(Float, float.MinValue),
+                "double" => p.GlobalVariable(VariableExtensions.Double, double.MinValue),
+                _ => null
+            };
 
             if (args.Length == 0)
             {

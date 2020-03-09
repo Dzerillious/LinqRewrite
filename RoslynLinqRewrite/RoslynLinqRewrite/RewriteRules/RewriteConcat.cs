@@ -8,12 +8,12 @@ namespace LinqRewrite.RewriteRules
 {
     public class RewriteConcat
     {
-        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
+        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             var sourceSize = p.SourceSize;
             var resultSize = p.ResultSize;
-            ValueBridge collection = args[0];
+            var collection = args[0];
             
             var indexer = p.CurrentIndexer;
             if (indexer != null && indexer.Name == p.Iterator.Indexer)
@@ -35,11 +35,7 @@ namespace LinqRewrite.RewriteRules
                 p.PreForAdd(indexer.PreDecrement());
                 p.LastForAdd(indexer.PreIncrement());
             }
-            RewriteCollectionEnumeration.RewriteOther(p, new ArrayValueBridge( collection.ItemType(p), collection.GetType(p), collection.Count(p), collection));
-            p.CurrentIndexer = indexer;
-            
-            p.LastForAdd(itemVariable.Assign(p.Last.Value));
-            p.Last = new TypedValueBridge(itemVariable.Type, itemVariable);
+            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(collection.ItemType(p), collection.GetType(p), collection.Count(p), collection), itemVariable);
 
             if (sourceSize != null && p.SourceSize != null) p.SourceSize += sourceSize;
             else p.SourceSize = null;

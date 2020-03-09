@@ -22,9 +22,6 @@ namespace LinqRewrite.DataStructures
         public static implicit operator ExpressionSyntax(LocalVariable name)
             => SyntaxFactory.IdentifierName(name.Name);
         
-        public static implicit operator StatementBridge(LocalVariable name)
-            => SyntaxFactory.ExpressionStatement(SyntaxFactory.IdentifierName(name.Name));
-        
         public static implicit operator string(LocalVariable name)
             => name.Name;
     }

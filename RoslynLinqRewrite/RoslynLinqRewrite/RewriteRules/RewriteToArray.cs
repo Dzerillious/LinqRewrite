@@ -10,14 +10,14 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteToArray
     {
-        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
+        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             p.HasResultMethod = true;
             if (p.ListEnumeration && p.Iterators.Count <= 1 && RewriteSimple(p))
                 return;
             
             if (p.Iterator ==  null)
-                RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+                RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             var resultVariable = RewriteOther(p);
             if (p.ResultSize == null) p.FinalAdd(Return("SimpleCollections".Access("SimpleArrayExtensions", "EnsureFullArray")
@@ -91,7 +91,7 @@ namespace LinqRewrite.RewriteRules
             p.Initial.Clear();
             p.Iterators.Clear();
             
-            if (p.CurrentCollection is ArrayValueBridge)
+            if (p.CurrentCollection.CollectionType == CollectionType.Array)
             {
                 var min = p.Iterator == null ? 0 : p.Iterator.ForMin;
                 var size = p.Iterator == null ? p.ResultSize : p.Iterator.ForMax - p.Iterator.ForMin;
@@ -106,7 +106,7 @@ namespace LinqRewrite.RewriteRules
                 p.FinalAdd(Return(resultVariable));
                 return true;
             }
-            else if (p.CurrentCollection is ListValueBridge)
+            else if (p.CurrentCollection.CollectionType == CollectionType.List)
             {
                 var resultVariable = p.GlobalVariable(p.ReturnType,
                     CreateArray((ArrayTypeSyntax) p.ReturnType, p.CurrentCollection.Count));

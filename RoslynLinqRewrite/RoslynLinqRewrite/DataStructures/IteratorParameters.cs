@@ -10,12 +10,12 @@ namespace LinqRewrite.DataStructures
         
         public ValueBridge ForMin { get; set; }
         public ValueBridge ForMax { get; set; }
-        public ValueBridge ForReMin { get; set; }
-        public ValueBridge ForReMax { get; set; }
-        public ValueBridge Collection { get; }
+        public ValueBridge ForReverseMin { get; set; }
+        public ValueBridge ForReverseMax { get; set; }
+        public RewrittenValueBridge Collection { get; }
         
         public List<StatementSyntax> Pre { get; } = new List<StatementSyntax>();
-        public List<IStatementSyntax> Body { get; } = new List<IStatementSyntax>();
+        public List<IStatementSyntax> Body { get; private set; } = new List<IStatementSyntax>();
         public bool Complete { get; set; }
         
         public LocalVariable Indexer { get; set; }
@@ -28,42 +28,35 @@ namespace LinqRewrite.DataStructures
             _parameters = parameters;
         }
         
-        public IteratorParameters(RewriteParameters parameters, ValueBridge collection)
+        public IteratorParameters(RewriteParameters parameters, RewrittenValueBridge collection)
         {
             _parameters = parameters;
-            Collection = collection;
-        }
-
-        public IteratorParameters(RewriteParameters parameters, List<IStatementSyntax> items, ValueBridge collection)
-        {
-            _parameters = parameters;
-            
-            Body = items;
             Collection = collection;
         }
 
         public IteratorParameters Copy() =>
-            new IteratorParameters(_parameters, new List<IStatementSyntax>(Body), Collection)
+            new IteratorParameters(_parameters, Collection)
             {
                 ForMin = ForMin,
                 ForMax = ForMax,
-                ForReMin = ForReMin,
-                ForReMax = ForReMax,
+                ForReverseMin = ForReverseMin,
+                ForReverseMax = ForReverseMax,
                 Indexer = Indexer,
-                IndexedItem = IndexedItem
+                IndexedItem = IndexedItem,
+                Body = new List<IStatementSyntax>(Body),
             };
 
         public StatementSyntax GetStatementSyntax(RewriteParameters p)
         {
             if (ForMin == null)
             {
-                var enumeratorVariable = p.GlobalVariable(p.WrappedItemType("IEnumerator<", Collection, ">"));
+                var enumeratorVariable = p.GlobalVariable(p.WrappedItemType("IEnumerator<", Collection.Old, ">"));
                 return p.Rewrite.GetForEachStatement(p, enumeratorVariable, IndexedItem, Collection, Body);
             }
             else if (p.IsReversed)
             {
-                Pre.Add((StatementBridge)Indexer.Assign(ForReMax));
-                return p.Rewrite.GetReverseForStatement(p, Indexer, ForReMin, Body);
+                Pre.Add((StatementBridge)Indexer.Assign(ForReverseMax));
+                return p.Rewrite.GetReverseForStatement(p, Indexer, ForReverseMin, Body);
             }
             else
             {

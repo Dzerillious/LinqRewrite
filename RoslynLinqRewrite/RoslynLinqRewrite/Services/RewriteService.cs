@@ -25,16 +25,31 @@ namespace LinqRewrite.Services
             _data = RewriteDataService.Instance;
             _code = CodeCreationService.Instance;
         }
-        
+
+        public class ParameterComparer : IEqualityComparer<ParameterSyntax>
+        {
+            public bool Equals(ParameterSyntax x, ParameterSyntax y)
+            {
+                if (x is null || y is null) return false;
+                return x.Identifier.Value.Equals(y.Identifier.Value);
+            }
+
+            public int GetHashCode(ParameterSyntax param)
+            {
+                return param.Identifier.Value.GetHashCode();
+            }
+        }
+
         internal ExpressionSyntax GetCollectionInvocationExpression(RewriteParameters p, IEnumerable<StatementSyntax> body)
         {
-            var items = new[] {CreateParameter(p.FirstCollection.ToString(), p.FirstCollection.Type)};
-            var parameters = items.Concat(
-                _data.CurrentFlow.Select(x => CreateParameter(x.Name, GetSymbolType(x.Symbol)).WithRef(x.Changes)));
+            var parameters = _data.CurrentFlow
+                .Select(x => CreateParameter(x.Name, GetSymbolType(x.Symbol)).WithRef(x.Changes))
+                .Distinct(new ParameterComparer());
            
             var functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
-            var arguments = CreateArguments(new[] {Argument(p.FirstCollection)}
-                .Concat( _data.CurrentFlow.Select(x => Argument(x.Name).WithRef(x.Changes))));
+            var arguments = CreateArguments( _data.CurrentFlow
+                .GroupBy(x => x.Symbol, (x, y) => new VariableCapture(x, y.Any(z => z.Changes)))
+                .Select(x => Argument(x.Name).WithRef(x.Changes)));
 
             var coreFunction = GetCoreMethod(p.ReturnType, functionName, parameters, body);
 
@@ -49,7 +64,8 @@ namespace LinqRewrite.Services
         
         internal ExpressionSyntax GetInvocationExpression(RewriteParameters p, IEnumerable<StatementSyntax> body)
         {
-            var parameters = _data.CurrentFlow.Select(x => CreateParameter(x.Name, GetSymbolType(x.Symbol)).WithRef(x.Changes));
+            var parameters = _data.CurrentFlow.Select(x => CreateParameter(x.Name, GetSymbolType(x.Symbol)).WithRef(x.Changes))
+                .Distinct(new ParameterComparer());
            
             var functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
             var arguments = CreateArguments(

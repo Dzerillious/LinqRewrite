@@ -22,12 +22,6 @@ namespace LinqRewrite.Extensions
                 ? SyntaxFactory.Token(SyntaxKind.RefKeyword) 
                 : default);
 
-        public static StatementSyntax IfNullableIsNotNull(bool nullable, IdentifierNameSyntax currentValue, Func<ExpressionSyntax, StatementSyntax> p)
-        {
-            var k = nullable ? (ExpressionSyntax)SyntaxFactory.InvocationExpression(SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, currentValue, SyntaxFactory.IdentifierName("GetValueOrDefault"))) : currentValue;
-            return nullable ? SyntaxFactory.IfStatement(SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, currentValue, SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression)), p(k)) : p(k);
-        }
-
         public static bool IsAnonymousType(ITypeSymbol t) 
             => t.ToDisplayString().Contains("anonymous type:");
 

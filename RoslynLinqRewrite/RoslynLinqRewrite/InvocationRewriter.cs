@@ -54,10 +54,7 @@ namespace LinqRewrite
             }
 
             if (!parameters.HasResultMethod)
-            {
                 parameters.ForAdd(SyntaxFactory.YieldStatement(SyntaxKind.YieldReturnStatement, parameters.Last.Value));
-                parameters.FinalAdd(SyntaxFactory.YieldStatement(SyntaxKind.YieldBreakStatement));
-            }
             var body = parameters.GetMethodBody();
 
             if (parameters.NotRewrite) throw new NotSupportedException("Not good for rewrite");

@@ -91,5 +91,7 @@ namespace LinqRewrite.DataStructures
 
         public static BinaryExpressionSyntax operator <=(ValueBridge a, ValueBridge b)
             => a.LeThan(b);
+
+        public override string ToString() => Value.ToString();
     }
 }

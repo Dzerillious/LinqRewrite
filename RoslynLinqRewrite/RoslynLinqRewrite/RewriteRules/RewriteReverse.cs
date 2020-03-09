@@ -12,9 +12,9 @@ namespace LinqRewrite.RewriteRules
 {
     public class RewriteReverse
     {
-        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
+        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             if (!p.ModifiedEnumeration) p.IsReversed = !p.IsReversed;
             else if (p.SourceSize != null) KnownSourceSize(p);
             else UnknownSourceSize(p);
@@ -54,10 +54,10 @@ namespace LinqRewrite.RewriteRules
             p.CurrentIndexer = null;
 
             p.ForAdd(resultVariable[reverseIndexer].Assign(p.Last.Value));
-            p.CurrentCollection = new ArrayValueBridge(p.Last.Type, ArrayType(p.Last.Type), currentLengthVariable - reverseIndexer, resultVariable);
+            p.CurrentCollection = new CollectionValueBridge(p.Last.Type, ArrayType(p.Last.Type), currentLengthVariable - reverseIndexer, resultVariable);
             
             p.Iterator.Complete = true;
-            RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             p.ForMin = p.ForReMin = currentLengthVariable - reverseIndexer;
             p.ForMax = currentLengthVariable;
@@ -89,10 +89,10 @@ namespace LinqRewrite.RewriteRules
             p.CurrentIndexer = null;
 
             p.ForAdd(resultVariable[reverseIndexer].Assign(p.Last.Value));
-            p.CurrentCollection = new ArrayValueBridge(p.Last.Type, ArrayType(p.Last.Type), currentLengthVariable - reverseIndexer, resultVariable);
+            p.CurrentCollection = new CollectionValueBridge(p.Last.Type, ArrayType(p.Last.Type), currentLengthVariable - reverseIndexer, resultVariable);
             
             p.Iterator.Complete = true;
-            RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             p.ForMin = p.ForReMin = currentLengthVariable - reverseIndexer;
             p.ForMax = currentLengthVariable;

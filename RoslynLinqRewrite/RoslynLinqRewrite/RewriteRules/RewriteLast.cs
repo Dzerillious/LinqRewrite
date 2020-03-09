@@ -10,9 +10,9 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteLast
     {
-        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
+        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), Null);
             
@@ -30,10 +30,10 @@ namespace LinqRewrite.RewriteRules
             p.HasResultMethod = true;
         }
 
-        public static ExpressionSyntax RewriteSimple(RewriteParameters p, ExpressionSyntax[] args)
+        public static ExpressionSyntax RewriteSimple(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (args.Length == 0) return null;
-            RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             return p.SourceSize == null 
                 ? null : p.CurrentCollection[p.CurrentCollection.Count - 1];

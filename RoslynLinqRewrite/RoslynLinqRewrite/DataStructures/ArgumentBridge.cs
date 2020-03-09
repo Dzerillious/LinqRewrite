@@ -68,6 +68,7 @@ namespace LinqRewrite.DataStructures
         public static implicit operator ArgumentBridge(ArgumentSyntax name)
             => new ArgumentBridge(name);
         
+        
         public static implicit operator ArgumentSyntax(ArgumentBridge argument)
             => argument.Value;
     }

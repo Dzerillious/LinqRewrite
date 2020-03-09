@@ -1,9 +1,17 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using System;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Constants;
 
 namespace LinqRewrite.DataStructures
 {
-    public abstract class CollectionValueBridge : TypedValueBridge
+    public enum CollectionType
     {
+        Array, List, Enumerable
+    }
+    
+    public class CollectionValueBridge : TypedValueBridge
+    {
+        public CollectionType CollectionType { get; set; }
         public ValueBridge Count { get; set; }
         public TypeSyntax ItemType { get; set; }
         
@@ -11,83 +19,58 @@ namespace LinqRewrite.DataStructures
         {
             Count = count;
             ItemType = itemType;
+            
+            var collectionName = type.ToString();
+            if (type is ArrayTypeSyntax) 
+                CollectionType = CollectionType.Array;
+            else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
+                CollectionType = CollectionType.List;
+            else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
+                CollectionType = CollectionType.Enumerable;
         }
 
         public CollectionValueBridge(TypeBridge itemType, TypeBridge type, ValueBridge count, ValueBridge name) : base(type, name)
         {
             Count = count;
             ItemType = itemType;
+            
+            var collectionName = type.ToString();
+            if (type.Type is ArrayTypeSyntax) 
+                CollectionType = CollectionType.Array;
+            else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
+                CollectionType = CollectionType.List;
+            else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
+                CollectionType = CollectionType.Enumerable;
         }
 
         public CollectionValueBridge(TypeSyntax itemType, TypeSyntax type, ValueBridge count, LocalVariable variable) : base(type, variable)
         {
             Count = count;
             ItemType = itemType;
+            
+            var collectionName = type.ToString();
+            if (type is ArrayTypeSyntax) 
+                CollectionType = CollectionType.Array;
+            else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
+                CollectionType = CollectionType.List;
+            else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
+                CollectionType = CollectionType.Enumerable;
         }
 
         public CollectionValueBridge(TypeBridge itemType, TypeBridge type, ValueBridge count, LocalVariable variable) : base(type, variable)
         {
             Count = count;
             ItemType = itemType;
+            
+            var collectionName = type.ToString();
+            if (type.Type is ArrayTypeSyntax) 
+                CollectionType = CollectionType.Array;
+            else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
+                CollectionType = CollectionType.List;
+            else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
+                CollectionType = CollectionType.Enumerable;
         }
 
         public override string ToString() => Value.ToString();
-    }
-
-    public class ArrayValueBridge : CollectionValueBridge
-    {
-        public ArrayValueBridge(TypeSyntax itemType, TypeSyntax type, ValueBridge count, IdentifierNameSyntax name) : base(itemType, type, count, name)
-        {
-        }
-
-        public ArrayValueBridge(TypeBridge itemType, TypeBridge type, ValueBridge count, ValueBridge name) : base(itemType, type, count, name)
-        {
-        }
-
-        public ArrayValueBridge(TypeSyntax itemType, TypeSyntax type, ValueBridge count, LocalVariable variable) : base(itemType, type, count, variable)
-        {
-        }
-
-        public ArrayValueBridge(TypeBridge itemType, TypeBridge type, ValueBridge count, LocalVariable variable) : base(itemType, type, count, variable)
-        {
-        }
-    }
-    
-    public class ListValueBridge : CollectionValueBridge
-    {
-        public ListValueBridge(TypeSyntax itemType, TypeSyntax type, ValueBridge count, IdentifierNameSyntax name) : base(itemType, type, count, name)
-        {
-        }
-
-        public ListValueBridge(TypeBridge itemType, TypeBridge type, ValueBridge count, ValueBridge name) : base(itemType, type, count, name)
-        {
-        }
-
-        public ListValueBridge(TypeSyntax itemType, TypeSyntax type, ValueBridge count, LocalVariable variable) : base(itemType, type, count, variable)
-        {
-        }
-
-        public ListValueBridge(TypeBridge itemType, TypeBridge type, ValueBridge count, LocalVariable variable) : base(itemType, type, count, variable)
-        {
-        }
-    }
-    
-    public class EnumerableValueBridge : CollectionValueBridge
-    {
-        public EnumerableValueBridge(TypeSyntax itemType, TypeSyntax type, ValueBridge count, IdentifierNameSyntax name) : base(itemType, type, count, name)
-        {
-        }
-
-        public EnumerableValueBridge(TypeBridge itemType, TypeBridge type, ValueBridge count, ValueBridge name) : base(itemType, type, count, name)
-        {
-        }
-
-        public EnumerableValueBridge(TypeSyntax itemType, TypeSyntax type, ValueBridge count, LocalVariable variable) : base(itemType, type, count, variable)
-        {
-        }
-
-        public EnumerableValueBridge(TypeBridge itemType, TypeBridge type, ValueBridge count, LocalVariable variable) : base(itemType, type, count, variable)
-        {
-        }
     }
 }

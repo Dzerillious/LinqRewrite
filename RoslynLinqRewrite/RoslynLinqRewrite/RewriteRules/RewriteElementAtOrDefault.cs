@@ -9,9 +9,9 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteElementAtOrDefault
     {
-        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
+        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             var position = args[0].Reusable(p);
             p.ForAdd(If(p.Indexer.IsEqual(position),
@@ -21,10 +21,10 @@ namespace LinqRewrite.RewriteRules
             p.HasResultMethod = true;
         }
 
-        public static ExpressionSyntax RewriteSimple(RewriteParameters p, ExpressionSyntax[] args)
+        public static ExpressionSyntax RewriteSimple(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (args.Length == 0) return null;
-            RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
 
             if (p.SourceSize == null) return null;
             return ConditionalExpression(

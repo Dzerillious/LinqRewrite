@@ -149,7 +149,23 @@ namespace LinqRewrite.Extensions
             var vals = values.Select(x =>
             {
                 if (IsReusable(x)) return x;
-                var inlineVariable = p.LocalVariable(x.Type, x);
+                var inlineVariable = p.LocalVariable(x.Type);
+                p.ForAdd(inlineVariable.Assign(x));
+                return new TypedValueBridge(x.Type, inlineVariable);
+            }).ToArray();
+            return p.Code.InlineLambda(e, returnType, vals);
+        }
+
+        public static TypedValueBridge Inline(this RewrittenValueBridge e, RewriteParameters p, params TypedValueBridge[] values)
+        {
+            var returnType = p.Code.GetLambdaReturnType(p.Semantic, (LambdaExpressionSyntax) e);
+            if (IsLambdaSimple(e.Old))
+                return p.Code.InlineLambda(e, returnType, values);
+
+            var vals = values.Select(x =>
+            {
+                if (IsReusable(x)) return x;
+                var inlineVariable = p.LocalVariable(x.Type);
                 p.ForAdd(inlineVariable.Assign(x));
                 return new TypedValueBridge(x.Type, inlineVariable);
             }).ToArray();
@@ -198,6 +214,9 @@ namespace LinqRewrite.Extensions
             || e is ElementAccessExpressionSyntax
             || e is PostfixUnaryExpressionSyntax
             || e is PrefixUnaryExpressionSyntax;
+
+        public static TypeBridge GetType(this RewrittenValueBridge expression, RewriteParameters p)
+            => p.Semantic.GetTypeFromExpression(expression.Old);
 
         public static TypeBridge GetType(this ValueBridge expression, RewriteParameters p)
             => p.Semantic.GetTypeFromExpression(expression);

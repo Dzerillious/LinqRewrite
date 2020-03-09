@@ -7,9 +7,9 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteAll
     {
-        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
+        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             p.ForAdd(If(!args[0].Inline(p, p.Last),
                         Return(false)));

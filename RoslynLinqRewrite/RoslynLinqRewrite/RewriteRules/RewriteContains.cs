@@ -8,9 +8,9 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteContains
     {
-        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
+        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             var element = p.Node.ArgumentList.Arguments.First().Expression;
             if (args.Length == 1)

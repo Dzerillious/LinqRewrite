@@ -7,7 +7,7 @@ using LinqRewrite.Services;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SimpleCollections;
+using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using SyntaxExtensions = LinqRewrite.Extensions.SyntaxExtensions;
 
 namespace LinqRewrite
@@ -89,7 +89,6 @@ namespace LinqRewrite
         {
             if (!(node.Expression is MemberAccessExpressionSyntax)) return null;
 
-            //var symbol = _data.Semantic.GetSymbolInfo(memberAccess).Symbol as IMethodSymbol;
             var owner = node.AncestorsAndSelf().FirstOrDefault(x => x is MethodDeclarationSyntax);
             if (owner == null) return null;
             
@@ -161,25 +160,29 @@ namespace LinqRewrite
 
         private List<LinqStep> GetInvocationStepChain(InvocationExpressionSyntax node, out InvocationExpressionSyntax lastNode)
         {
-            var chain = new List<LinqStep>
-            {
-                new LinqStep(_code.GetMethodFullName(node),
-                    node.ArgumentList.Arguments.Select(x => x.Expression).ToArray(), node)
-            };
+            var chain = new List<LinqStep>();
             lastNode = node;
-            while (lastNode.Expression is MemberAccessExpressionSyntax syntax)
+            while (true)
             {
-                if (syntax.Expression is InvocationExpressionSyntax invocation && IsSupportedMethod(invocation))
+                var arguments = new List<RewrittenValueBridge>();
+                if (!IsSupportedMethod(lastNode)) break;
+                
+                foreach (var t in lastNode.ArgumentList.Arguments)
                 {
-                    invocation.ArgumentList.Arguments.Select(x => x.Expression)
-                        .OfType<InvocationExpressionSyntax>().Where(IsSupportedMethod)
-                        .ForEach(x => chain.Insert(0, new LinqStep(_code.GetMethodFullName(x),
-                            invocation.ArgumentList.Arguments.Select(y => y.Expression).ToArray(), x, false)));
-                    chain.Insert(0, new LinqStep(_code.GetMethodFullName(invocation),
-                        invocation.ArgumentList.Arguments.Select(x => x.Expression).ToArray(), invocation));
-                    lastNode = invocation;
+                    var expression = t.Expression;
+                    if (expression is InvocationExpressionSyntax newInvocation && IsSupportedMethod(newInvocation))
+                    {
+                        var visited = TryVisitInvocationExpression(newInvocation, null);
+                        arguments.Add(new RewrittenValueBridge(expression, visited));
+                    }
+                    else arguments.Add(new RewrittenValueBridge(expression));
                 }
-                else break;
+                chain.Insert(0, new LinqStep(_code.GetMethodFullName(lastNode), arguments.ToArray(), lastNode));
+                if (!(lastNode.Expression is MemberAccessExpressionSyntax access) ||
+                    !(access.Expression is InvocationExpressionSyntax invocation))
+                    break;
+                
+                lastNode = invocation;
             }
             return chain;
         }
@@ -204,18 +207,18 @@ namespace LinqRewrite
 
         private void InvocationChainInsertForEach(List<LinqStep> chain, ForEachStatementSyntax forEach)
         {
+            var identifiers = new[]
+            {
+                new RewrittenValueBridge(SyntaxFactory.SimpleLambdaExpression(
+                    SyntaxFactory.Parameter(forEach.Identifier), forEach.Statement)), 
+            };
             chain.Insert(0,
-                new LinqStep(Constants.EnumerableForEachMethod,
-                    new ExpressionSyntax[]
-                    {
-                        SyntaxFactory.SimpleLambdaExpression(
-                            SyntaxFactory.Parameter(forEach.Identifier), forEach.Statement)
-                    })
+                new LinqStep(Constants.EnumerableForEachMethod, identifiers)
                 {
                     Lambda = new Lambda(forEach.Statement,
                         new[]
                         {
-                            SyntaxFactoryHelper.CreateParameter(forEach.Identifier,
+                            CreateParameter(forEach.Identifier,
                                 _data.Semantic.GetTypeInfo(forEach.Type).ConvertedType)
                         })
                 });
@@ -227,24 +230,9 @@ namespace LinqRewrite
             var flowsOut = Array.Empty<ISymbol>();
             foreach (var item in chain)
             {
-                foreach (var syntax in item.Arguments)
-                {
-                    if (item.Lambda != null)
-                    {
-                        var dataFlow = _data.Semantic.AnalyzeDataFlow(item.Lambda.Body);
-                        var pName = item.Lambda.Parameters.Single().Identifier.ValueText;
-                        flowsIn = flowsIn.Union(
-                            dataFlow.DataFlowsIn.Where(x => x.Name == pName)).ToArray();
-                        flowsOut = flowsOut.Union(
-                            dataFlow.DataFlowsOut.Where(x => x.Name == pName)).ToArray();
-                    }
-                    else
-                    {
-                        var dataFlow = _data.Semantic.AnalyzeDataFlow(syntax);
-                        flowsIn = flowsIn.Union(dataFlow.DataFlowsIn).ToArray();
-                        flowsOut = flowsOut.Union(dataFlow.DataFlowsOut).ToArray();
-                    }
-                }
+                var dataFlow = _data.Semantic.AnalyzeDataFlow(item.Invocation);
+                flowsIn = flowsIn.Union(dataFlow.DataFlowsIn).ToArray();
+                flowsOut = flowsOut.Union(dataFlow.DataFlowsOut).ToArray();
             }
             return (flowsIn, flowsOut);
         }

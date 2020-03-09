@@ -9,7 +9,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteRepeat
     {
-        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
+        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
             var item = args[0];

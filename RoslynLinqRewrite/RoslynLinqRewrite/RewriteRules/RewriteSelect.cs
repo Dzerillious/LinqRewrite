@@ -7,12 +7,12 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteSelect
     {
-        public static void Rewrite(RewriteParameters p, ExpressionSyntax[] args)
+        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<ExpressionSyntax>());
+            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             var method = args[0];
 
-            p.Last = method is SimpleLambdaExpressionSyntax
+            p.Last = method.OldVal is SimpleLambdaExpressionSyntax
                 ? method.Inline(p, p.Last)
                 : method.Inline(p, p.Last, p.Indexer);
 
