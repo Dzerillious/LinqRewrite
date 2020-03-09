@@ -13,6 +13,9 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.ResultSize != null && args.Length == 0) p.SimpleRewrite = ConditionalExpression(p.CurrentCollection.Count.IsEqual(1),
+                p.CurrentCollection[0],
+                CreateThrowException("System.InvalidOperationException", "The sequence does not contain one element."));
             
             var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), Null);
 
@@ -35,12 +38,5 @@ namespace LinqRewrite.RewriteRules
                             Return(foundVariable.Cast(p.ReturnType))));
             p.HasResultMethod = true;
         }
-
-        public static ExpressionSyntax RewriteSimple(RewriteParameters p, RewrittenValueBridge[] args) 
-            => args.Length == 0 
-                ? ConditionalExpression(p.CurrentCollection.Count.IsEqual(1),
-                    p.CurrentCollection[0],
-                    CreateThrowException("System.InvalidOperationException", "The sequence does not contain one element.")) 
-                : null;
     }
 }

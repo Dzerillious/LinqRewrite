@@ -10,37 +10,6 @@ namespace LinqRewrite
     public static class InvocationRewriter
     {
         public static ExpressionSyntax TryRewrite(RewriteParameters parameters) 
-            => parameters.Chain.Count == 1 
-                ? SimpleRewrite(parameters) ?? CompositeRewrite(parameters)
-                : CompositeRewrite(parameters);
-
-        private static ExpressionSyntax SimpleRewrite(RewriteParameters parameters)
-        {
-            var regex = new Regex("(.*\\.)?(.*?)(\\<.*\\>)?\\(.*");
-            var step = parameters.Chain[0];
-            var match = regex.Match(step.MethodName);
-
-            var last = match.Groups[1].Value.EndsWith(".")
-                ? match.Groups[2].Value : match.Groups[1].Value;
-            
-            var args = parameters.Chain[0].Arguments;
-            switch (last)
-            {
-                case "Any": return RewriteAny.RewriteSimple(parameters, args);
-                case "Count": return RewriteCount.RewriteSimple(parameters, args);
-                case "First": return RewriteFirst.RewriteSimple(parameters, args);
-                case "FirstOrDefault": return RewriteFirstOrDefault.RewriteSimple(parameters, args);
-                case "Last": return RewriteLast.RewriteSimple(parameters, args);
-                case "LastOrDefault": return RewriteLastOrDefault.RewriteSimple(parameters, args);
-                case "Single": return RewriteSingle.RewriteSimple(parameters, args);
-                case "SingleOrDefault": return RewriteSingleOrDefault.RewriteSimple(parameters, args);
-                case "ElementAt": return RewriteElementAt.RewriteSimple(parameters, args);
-                case "ElementAtOrDefault": return RewriteElementAtOrDefault.RewriteSimple(parameters, args);
-                default: return null;
-            }
-        }
-
-        private static ExpressionSyntax CompositeRewrite(RewriteParameters parameters)
         {
             var regex = new Regex("(.*\\.)?(.*?)(\\<.*\\>)?\\(.*");
             for (var i = 0; i < parameters.Chain.Count; i++)
@@ -53,6 +22,7 @@ namespace LinqRewrite
                 RewritePart(last, parameters, i);
             }
 
+            if (parameters.SimpleRewrite != null) return parameters.SimpleRewrite;
             if (!parameters.HasResultMethod)
                 parameters.ForAdd(SyntaxFactory.YieldStatement(SyntaxKind.YieldReturnStatement, parameters.Last.Value));
             var body = parameters.GetMethodBody();

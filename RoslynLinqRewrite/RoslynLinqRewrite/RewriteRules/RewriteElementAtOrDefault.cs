@@ -12,6 +12,10 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.ResultSize != null && args.Length == 0) ConditionalExpression(
+                p.CurrentCollection.Count <= args[0],
+                p.CurrentCollection[args[0]],
+                Default(p.ReturnType));
             
             var position = args[0].Reusable(p);
             p.ForAdd(If(p.Indexer.IsEqual(position),
@@ -19,18 +23,6 @@ namespace LinqRewrite.RewriteRules
             
             p.FinalAdd(Return(Default(p.ReturnType)));
             p.HasResultMethod = true;
-        }
-
-        public static ExpressionSyntax RewriteSimple(RewriteParameters p, RewrittenValueBridge[] args)
-        {
-            if (args.Length == 0) return null;
-            RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-
-            if (p.SourceSize == null) return null;
-            return ConditionalExpression(
-                p.CurrentCollection.Count <= args[0],
-                p.CurrentCollection[args[0]],
-                Default(p.ReturnType));
         }
     }
 }

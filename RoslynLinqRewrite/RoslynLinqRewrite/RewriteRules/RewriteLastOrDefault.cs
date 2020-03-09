@@ -13,6 +13,10 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.ResultSize != null && args.Length == 0) p.SimpleRewrite = ConditionalExpression(
+                p.CurrentCollection.Count.IsEqual(0),
+                p.CurrentCollection[p.CurrentCollection.Count - 1],
+                Default(p.ReturnType));
             
             var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), Null);
             
@@ -28,18 +32,6 @@ namespace LinqRewrite.RewriteRules
                             Return(Default(p.ReturnType)), 
                             Return(foundVariable.Cast(p.ReturnType))));
             p.HasResultMethod = true;
-        }
-
-        public static ExpressionSyntax RewriteSimple(RewriteParameters p, RewrittenValueBridge[] args)
-        {
-            if (args.Length == 0) return null;
-            RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            if (p.SourceSize == null) return null;
-            
-            return ConditionalExpression(
-                p.CurrentCollection.Count.IsEqual(0),
-                p.CurrentCollection[p.CurrentCollection.Count - 1],
-                Default(p.ReturnType));
         }
     }
 }

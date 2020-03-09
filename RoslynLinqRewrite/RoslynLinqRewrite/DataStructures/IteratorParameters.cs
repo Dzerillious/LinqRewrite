@@ -16,6 +16,7 @@ namespace LinqRewrite.DataStructures
         
         public List<StatementSyntax> Pre { get; } = new List<StatementSyntax>();
         public List<IStatementSyntax> Body { get; private set; } = new List<IStatementSyntax>();
+        public List<StatementSyntax> Post { get; private set; } = new List<StatementSyntax>();
         public bool Complete { get; set; }
         
         public LocalVariable Indexer { get; set; }

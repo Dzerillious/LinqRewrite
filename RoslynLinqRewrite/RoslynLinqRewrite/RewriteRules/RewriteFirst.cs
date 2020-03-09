@@ -11,6 +11,7 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.ResultSize != null && args.Length == 0) p.SimpleRewrite = p.CurrentCollection[0];
             
             if (args.Length == 0)
                 p.ForAdd(Return(p.Last.Value));
@@ -23,8 +24,5 @@ namespace LinqRewrite.RewriteRules
             p.FinalAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."));
             p.HasResultMethod = true;
         }
-
-        public static ExpressionSyntax RewriteSimple(RewriteParameters p, RewrittenValueBridge[] args) 
-            => args.Length == 0 ? p.CurrentCollection[0] : null;
     }
 }

@@ -35,6 +35,7 @@ namespace LinqRewrite.DataStructures
         public List<StatementSyntax> Final { get; } = new List<StatementSyntax>();
         public List<LocalVariable> Variables { get; } = new List<LocalVariable>();
 
+        public ExpressionSyntax SimpleRewrite { get; set; }
         public bool IsReversed { get; set; }
         public bool HasResultMethod { get; set; }
         public bool NotRewrite { get; set; }
@@ -74,7 +75,7 @@ namespace LinqRewrite.DataStructures
                 if (CurrentIndexer != null) return CurrentIndexer;
 
                 var indexerVariable = GlobalVariable(Int, -1);
-                ForAdd(indexerVariable.PreIncrement());
+                PostForAdd(indexerVariable.PostIncrement());
 
                 return CurrentIndexer = indexerVariable;
             }
@@ -141,6 +142,11 @@ namespace LinqRewrite.DataStructures
             Iterators.Where(x => !x.Complete)
                 .ForEach(x => x.Body.Add(_));
         }
+        public void PostForAdd(StatementBridge _)
+        {
+            Iterators.Where(x => !x.Complete)
+                .ForEach(x => x.Post.Add(_));
+        }
         public void LastForAdd(StatementBridge _) => Iterator.BodyAdd(_);
         public void FinalAdd(StatementBridge _) => Final.Add(_);
         
@@ -171,6 +177,7 @@ namespace LinqRewrite.DataStructures
                     var statement = Iterators[i].GetStatementSyntax(this);
                     result.AddRange(Iterators[i].Pre);
                     result.Add(statement);
+                    result.AddRange(Iterators[i].Post);
                 }
             }
             else
@@ -180,6 +187,7 @@ namespace LinqRewrite.DataStructures
                     var statement = Iterators[i].GetStatementSyntax(this);
                     result.AddRange(Iterators[i].Pre);
                     result.Add(statement);
+                    result.AddRange(Iterators[i].Post);
                 }
             }
             

@@ -11,6 +11,7 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.ResultSize != null && args.Length == 0) p.SimpleRewrite = p.CurrentCollection[args[0]];
             
             var position = args[0].Reusable(p);
             p.ForAdd(If(p.Indexer.IsEqual(position),
@@ -18,14 +19,6 @@ namespace LinqRewrite.RewriteRules
             
             p.FinalAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not enough elements."));
             p.HasResultMethod = true;
-        }
-
-        public static ExpressionSyntax RewriteSimple(RewriteParameters p, RewrittenValueBridge[] args)
-        {
-            if (p.Chain[0].Arguments.Length == 0) return null;
-            RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            
-            return p.SourceSize == null ? null : p.CurrentCollection[args[0]];
         }
     }
 }
