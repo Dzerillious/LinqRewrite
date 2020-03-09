@@ -2,7 +2,6 @@
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
@@ -24,7 +23,7 @@ namespace LinqRewrite.RewriteRules
 
         private static void KnownSourceSize(RewriteParameters p)
         {
-            p.CurrentIndexer = null;
+            p.Indexer = null;
             var reverseIndexer = p.LocalVariable(Int);
                 
             var logVariable = p.LocalVariable(Int,
@@ -51,7 +50,7 @@ namespace LinqRewrite.RewriteRules
                                             OutArg(currentLengthVariable)),
                     reverseIndexer.Assign(currentLengthVariable - tmpSize - 1 ))));
             
-            p.CurrentIndexer = null;
+            p.Indexer = null;
 
             p.ForAdd(resultVariable[reverseIndexer].Assign(p.Last.Value));
             p.CurrentCollection = new CollectionValueBridge(p.Last.Type, ArrayType(p.Last.Type), currentLengthVariable - reverseIndexer, resultVariable);
@@ -67,7 +66,7 @@ namespace LinqRewrite.RewriteRules
 
         private static void UnknownSourceSize(RewriteParameters p)
         {
-            p.CurrentIndexer = null;
+            p.Indexer = null;
             var reverseIndexer = p.LocalVariable(Int);
                 
             var currentLengthVariable = p.LocalVariable(Int, 8);
@@ -86,7 +85,7 @@ namespace LinqRewrite.RewriteRules
                                             RefArg(currentLengthVariable)),
                                     reverseIndexer.Assign(currentLengthVariable - tmpSize - 1 ))));
             
-            p.CurrentIndexer = null;
+            p.Indexer = null;
 
             p.ForAdd(resultVariable[reverseIndexer].Assign(p.Last.Value));
             p.CurrentCollection = new CollectionValueBridge(p.Last.Type, ArrayType(p.Last.Type), currentLengthVariable - reverseIndexer, resultVariable);

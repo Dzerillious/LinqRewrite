@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SimpleCollections;
-using static LinqRewrite.Constants;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
 
@@ -33,10 +30,15 @@ namespace LinqRewrite.RewriteRules
             p.ForMax = collection.Count;
             p.ForReMax = collection.Count - 1;
 
-            p.CurrentIndexer = p.LocalVariable(Int);
+            p.Iterator.Indexer = p.LocalVariable(Int);
+            if (p.CurrentIndexer == null)
+            {
+                p.Iterator.CurrentIndexer = p.Iterator.Indexer;
+                p.Iterator.CurrentIndexer.IsGlobal = true;
+            }
+            
             if (variable == null)
             {
-                p.Iterator.Indexer = p.Indexer;
                 p.Last = new TypedValueBridge(collection.ItemType, collection[p.Indexer]);
             }
             else
@@ -60,10 +62,15 @@ namespace LinqRewrite.RewriteRules
             p.ForMin = p.ForReMin = 0;
             p.ForMax = p.ForReMax = sourceCount;
             
-            p.CurrentIndexer = p.LocalVariable(Int);
+            p.Iterator.Indexer = p.LocalVariable(Int);
+            if (p.CurrentIndexer == null)
+            {
+                p.Iterator.CurrentIndexer = p.Iterator.Indexer;
+                p.Iterator.CurrentIndexer.IsGlobal = true;
+            }
+            
             if (variable == null)
             {
-                p.Iterator.Indexer = p.Indexer;
                 p.Last = new TypedValueBridge(collection.ItemType, collection[p.Indexer]);
             }
             else
@@ -83,9 +90,13 @@ namespace LinqRewrite.RewriteRules
             p.ForMax = p.ForReMax = null;
 
             p.IsReversed = false;
-            if (variable == null) p.LocalVariable(collection.ItemType);
-            p.Iterator.IndexedItem = variable;
-            p.Last = new TypedValueBridge(collection.ItemType, p.Iterator.IndexedItem);
+            p.Iterator.Enumerator = p.GlobalVariable(p.WrappedItemType("IEnumerator<", collection, ">"));
+            if (variable != null)
+            {
+                p.LastForAdd(variable.Assign(p.Iterator.Enumerator.Access("Current")));
+                p.Last = new TypedValueBridge(collection.ItemType, variable);
+            }
+            else p.Last = new TypedValueBridge(collection.ItemType, p.Iterator.Enumerator.Access("Current"));
 
             p.SourceSize = null;
             p.ModifiedEnumeration = true;

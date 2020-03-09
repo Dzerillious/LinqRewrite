@@ -6,7 +6,6 @@ using LinqRewrite.Services;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SimpleCollections;
-using static LinqRewrite.Constants;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.DataStructures
@@ -17,13 +16,13 @@ namespace LinqRewrite.DataStructures
         public CodeCreationService Code { get; }
         public RewriteDataService Data { get; }
 
-        
+
         public InvocationExpressionSyntax Node { get; private set; }
         public CollectionValueBridge FirstCollection { get; private set; }
         public CollectionValueBridge CurrentCollection { get; set; }
         public List<LinqStep> Chain { get; private set; }
 
-        
+
         public TypeBridge ReturnType { get; private set; }
         public ValueBridge ResultSize { get; set; }
         public ValueBridge SourceSize { get; set; }
@@ -41,6 +40,7 @@ namespace LinqRewrite.DataStructures
         public bool NotRewrite { get; set; }
 
         private bool _listEnumeration;
+
         public bool ListEnumeration
         {
             get => _listEnumeration;
@@ -53,31 +53,53 @@ namespace LinqRewrite.DataStructures
         }
 
         private bool _modifiedEnumeration;
+
         public bool ModifiedEnumeration
         {
             get => _modifiedEnumeration;
             set
             {
                 _modifiedEnumeration = value;
-                
+
                 if (!value) return;
                 ListEnumeration = false;
                 ResultSize = null;
-                CurrentIndexer = null;
+                Indexer = null;
             }
         }
 
-        public LocalVariable CurrentIndexer { get; set; }
+        public LocalVariable CurrentIndexer { get; private set; }
         public LocalVariable Indexer
         {
             get
             {
-                if (CurrentIndexer != null) return CurrentIndexer;
+                if (CurrentIndexer != null || Iterators.FirstOrDefault()?.CurrentIndexer != null)
+                {
+                    var indexer = Iterators.FirstOrDefault()?.CurrentIndexer;
+                    if (indexer == null) return CurrentIndexer;
 
-                var indexerVariable = GlobalVariable(Int, -1);
-                PostForAdd(indexerVariable.PostIncrement());
+                    Iterators.Where(x => x.CurrentIndexer == null).ForEach(x =>
+                    {
+                        x.CurrentIndexer = indexer;
+                        x.EndFor.Add((StatementBridge) indexer.PostIncrement());
+                    });
+                    return CurrentIndexer = indexer;
+                }
+
+                var indexerVariable = GlobalVariable(Int, 0);
+                indexerVariable.IsGlobal = true;
+                    
+                Iterators.ForEach(x => x.CurrentIndexer = indexerVariable);
+                ForEndAdd(indexerVariable.PostIncrement());
 
                 return CurrentIndexer = indexerVariable;
+            }
+            set
+            {
+                if (value != null) throw new NotImplementedException("Implemented only for setting null");
+                if (Iterators.Count == 1) Iterators[0].CurrentIndexer.IsGlobal = false;
+                CurrentIndexer = null;
+                Iterators.ForEach(x => x.CurrentIndexer = null);
             }
         }
 
@@ -133,6 +155,11 @@ namespace LinqRewrite.DataStructures
             NotRewrite = false;
             IsReversed = false;
             ListEnumeration = true;
+            CurrentIndexer = null;
+            NotRewrite = false;
+
+            SimpleRewrite = null;
+            Last = null;
         }
 
         public void InitialAdd(StatementBridge _) => Initial.Add(_);
@@ -142,10 +169,10 @@ namespace LinqRewrite.DataStructures
             Iterators.Where(x => !x.Complete)
                 .ForEach(x => x.Body.Add(_));
         }
-        public void PostForAdd(StatementBridge _)
+        public void ForEndAdd(StatementBridge _)
         {
             Iterators.Where(x => !x.Complete)
-                .ForEach(x => x.Post.Add(_));
+                .ForEach(x => x.EndFor.Add(_));
         }
         public void LastForAdd(StatementBridge _) => Iterator.BodyAdd(_);
         public void FinalAdd(StatementBridge _) => Final.Add(_);
@@ -169,7 +196,7 @@ namespace LinqRewrite.DataStructures
         public IEnumerable<StatementSyntax> GetMethodBody()
         {
             if (Iterators.Count == 0) return Initial.Concat(Final);
-            var result = new List<StatementSyntax>(Initial);
+            var result = new List<StatementSyntax>();
             if (IsReversed)
             {
                 for (var i = Iterators.Count - 1; i >= 0; i--)
@@ -177,20 +204,16 @@ namespace LinqRewrite.DataStructures
                     var statement = Iterators[i].GetStatementSyntax(this);
                     result.AddRange(Iterators[i].Pre);
                     result.Add(statement);
-                    result.AddRange(Iterators[i].Post);
                 }
             }
-            else
+            else for (var i = 0; i < Iterators.Count; i++)
             {
-                for (var i = 0; i < Iterators.Count; i++)
-                {
-                    var statement = Iterators[i].GetStatementSyntax(this);
-                    result.AddRange(Iterators[i].Pre);
-                    result.Add(statement);
-                    result.AddRange(Iterators[i].Post);
-                }
+                var statement = Iterators[i].GetStatementSyntax(this);
+                result.AddRange(Iterators[i].Pre);
+                result.Add(statement);
             }
             
+            result.InsertRange(0, Initial);
             result.AddRange(Final);
             return result;
         }

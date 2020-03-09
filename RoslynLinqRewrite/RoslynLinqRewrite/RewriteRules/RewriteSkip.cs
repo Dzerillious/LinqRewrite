@@ -1,6 +1,5 @@
 ﻿using System;
 using LinqRewrite.DataStructures;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace LinqRewrite.RewriteRules
@@ -19,7 +18,7 @@ namespace LinqRewrite.RewriteRules
                 p.ResultSize -= skipped;
             }
             else p.ForAdd(If(p.Indexer < skipped, Continue()));
-            p.CurrentIndexer = null;
+            p.Indexer = null;
         }
     }
 }

@@ -17,11 +17,11 @@ namespace LinqRewrite.Extensions
 
         
         public static PrefixUnaryExpressionSyntax Not(ValueBridge a)
-            => PrefixUnaryExpression(SyntaxKind.LogicalNotExpression, ParenthesizedExpression(a));
+            => PrefixUnaryExpression(SyntaxKind.LogicalNotExpression, a);
 
         
         public static ValueBridge Is(this TypedValueBridge a, TypeBridge type)
-            => SyntaxFactory.IsPatternExpression(a.Type, ConstantPattern(type));
+            => IsPatternExpression(a, ConstantPattern(type));
 
         
         public static PostfixUnaryExpressionSyntax PostDecrement(this ValueBridge identifier)

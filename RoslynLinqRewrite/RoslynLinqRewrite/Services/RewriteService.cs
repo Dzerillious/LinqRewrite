@@ -100,19 +100,16 @@ namespace LinqRewrite.Services
                 indexerVariable.SeparatedPostDecrement(),
                 GetBody(p, loopContent));
 
-        public StatementSyntax GetForEachStatement(RewriteParameters p, LocalVariable enumeratorVariable, VariableBridge value, ExpressionSyntax collection, List<IStatementSyntax> loopContent)
-        {
-            loopContent.Insert(0, (StatementBridge)value.Assign(enumeratorVariable.Access("Current")));
-            return TryF(Block(
+        public StatementSyntax GetForEachStatement(RewriteParameters p, LocalVariable enumeratorVariable, ExpressionSyntax collection, List<IStatementSyntax> loopContent) 
+            => TryF(Block(
                     (StatementBridge)enumeratorVariable.Assign(collection.Access("GetEnumerator").Invoke()),
-                                      While(enumeratorVariable.Access("MoveNext").Invoke(),
-                                            GetBody(p, loopContent)
-                                      )
-                        ),
-                    Block(
-                            (StatementBridge)enumeratorVariable.Access("Dispose").Invoke()
-                        ));
-        }
+                    While(enumeratorVariable.Access("MoveNext").Invoke(),
+                        GetBody(p, loopContent)
+                    )
+                ),
+                Block(
+                    (StatementBridge)enumeratorVariable.Access("Dispose").Invoke()
+                ));
 
         public MethodDeclarationSyntax GetCoreMethod(TypeSyntax returnType, 
             string functionName, 

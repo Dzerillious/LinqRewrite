@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -16,11 +17,12 @@ namespace LinqRewrite.DataStructures
         
         public List<StatementSyntax> Pre { get; } = new List<StatementSyntax>();
         public List<IStatementSyntax> Body { get; private set; } = new List<IStatementSyntax>();
-        public List<StatementSyntax> Post { get; private set; } = new List<StatementSyntax>();
+        public List<IStatementSyntax> EndFor { get; private set; } = new List<IStatementSyntax>();
         public bool Complete { get; set; }
         
+        public LocalVariable CurrentIndexer { get; set; }
         public LocalVariable Indexer { get; set; }
-        public LocalVariable IndexedItem { get; set; }
+        public LocalVariable Enumerator { get; set; }
 
         public void BodyAdd(StatementBridge _) => Body.Add(_);
         
@@ -42,8 +44,7 @@ namespace LinqRewrite.DataStructures
                 ForMax = ForMax,
                 ForReverseMin = ForReverseMin,
                 ForReverseMax = ForReverseMax,
-                Indexer = Indexer,
-                IndexedItem = IndexedItem,
+                CurrentIndexer = Indexer = Indexer,
                 Body = new List<IStatementSyntax>(Body),
             };
 
@@ -51,18 +52,17 @@ namespace LinqRewrite.DataStructures
         {
             if (ForMin == null)
             {
-                var enumeratorVariable = p.GlobalVariable(p.WrappedItemType("IEnumerator<", Collection.Old, ">"));
-                return p.Rewrite.GetForEachStatement(p, enumeratorVariable, IndexedItem, Collection, Body);
+                return p.Rewrite.GetForEachStatement(p, Enumerator, Collection, Body.Concat(EndFor).ToList());
             }
             else if (p.IsReversed)
             {
                 Pre.Add((StatementBridge)Indexer.Assign(ForReverseMax));
-                return p.Rewrite.GetReverseForStatement(p, Indexer, ForReverseMin, Body);
+                return p.Rewrite.GetReverseForStatement(p, Indexer, ForReverseMin, Body.Concat(EndFor).ToList());
             }
             else
             {
                 Pre.Add((StatementBridge)Indexer.Assign(ForMin));
-                return p.Rewrite.GetForStatement(p, Indexer, ForMax, Body);
+                return p.Rewrite.GetForStatement(p, Indexer, ForMax, Body.Concat(EndFor).ToList());
             }
         }
     }

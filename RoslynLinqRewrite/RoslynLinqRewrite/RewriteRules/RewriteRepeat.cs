@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SimpleCollections;
 using static LinqRewrite.Extensions.VariableExtensions;
 
@@ -23,9 +22,14 @@ namespace LinqRewrite.RewriteRules
             p.SourceSize = count;
             p.ListEnumeration = false;
             
+            p.Iterator.Indexer = p.LocalVariable(Int);
+            if (p.CurrentIndexer == null)
+            {
+                p.Iterator.CurrentIndexer = p.Iterator.Indexer;
+                p.Iterator.CurrentIndexer.IsGlobal = true;
+            }
             p.Last = new TypedValueBridge(p.CurrentCollection.ItemType(p), item);
-            p.CurrentIndexer = p.LocalVariable(Int);
-            p.Iterator.Indexer = p.Indexer;
+            
             p.CurrentCollection = null;
         }
     }
