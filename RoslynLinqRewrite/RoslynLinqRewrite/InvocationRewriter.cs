@@ -62,6 +62,7 @@ namespace LinqRewrite
                 
                 case "Range": RewriteRange.Rewrite(parameters, args); return;
                 case "Repeat": RewriteRepeat.Rewrite(parameters, args); return;
+                case "Empty": RewriteEmpty.Rewrite(parameters, args,  parameters.Chain[i].Invocation); return;
                 
                 case "Skip": RewriteSkip.Rewrite(parameters, args); return;
                 case "SkipWhile": RewriteSkipWhile.Rewrite(parameters, args); return;

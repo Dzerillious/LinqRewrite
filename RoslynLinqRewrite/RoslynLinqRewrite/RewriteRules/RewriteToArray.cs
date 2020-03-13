@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
@@ -13,7 +14,7 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             p.HasResultMethod = true;
-            if (p.ListEnumeration && p.Iterators.Count <= 1 && RewriteSimple(p))
+            if (p.ListEnumeration && p.IncompleteIterators.Count() <= 1 && RewriteList(p))
                 return;
             
             if (p.Iterator ==  null)
@@ -85,21 +86,16 @@ namespace LinqRewrite.RewriteRules
             return resultVariable;
         }
 
-        private static bool RewriteSimple(RewriteParameters p)
+        private static bool RewriteList(RewriteParameters p)
         {
             p.HasResultMethod = true;
-            p.Initial.Clear();
-            p.Iterators.Clear();
+            if (p.Iterator != null) p.Iterator.Ignore = true;
             
             if (p.CurrentCollection.CollectionType == CollectionType.Array)
             {
                 var min = p.Iterator == null ? 0 : p.Iterator.ForMin;
                 var size = p.Iterator == null ? p.ResultSize : p.Iterator.ForMax - p.Iterator.ForMin;
-                if (!p.CurrentCollection.Equals(p.FirstCollection))
-                {
-                    p.FinalAdd(Return(p.CurrentCollection));
-                    return true;
-                }
+                
                 var resultVariable = p.GlobalVariable(p.ReturnType, CreateArray((ArrayTypeSyntax) p.ReturnType, p.CurrentCollection.Count));
                 p.FinalAdd("Array".Access("Copy")
                     .Invoke(p.CurrentCollection, min, resultVariable, 0, size));

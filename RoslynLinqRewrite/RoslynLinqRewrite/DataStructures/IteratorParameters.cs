@@ -8,7 +8,6 @@ namespace LinqRewrite.DataStructures
     public class IteratorParameters : IStatementSyntax
     {
         private readonly RewriteParameters _parameters;
-        
         public ValueBridge ForMin { get; set; }
         public ValueBridge ForMax { get; set; }
         public ValueBridge ForReverseMin { get; set; }
@@ -23,6 +22,7 @@ namespace LinqRewrite.DataStructures
         public LocalVariable CurrentIndexer { get; set; }
         public LocalVariable Indexer { get; set; }
         public LocalVariable Enumerator { get; set; }
+        public bool Ignore { get; set; }
 
         public void BodyAdd(StatementBridge _) => Body.Add(_);
         
@@ -50,6 +50,7 @@ namespace LinqRewrite.DataStructures
 
         public StatementSyntax GetStatementSyntax(RewriteParameters p)
         {
+            if (Ignore) return null;
             if (ForMin == null)
             {
                 return p.Rewrite.GetForEachStatement(p, Enumerator, Collection, Body.Concat(EndFor).ToList());

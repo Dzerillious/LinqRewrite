@@ -14,10 +14,11 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            
             if (!p.ModifiedEnumeration) p.IsReversed = !p.IsReversed;
             else if (p.SourceSize != null) KnownSourceSize(p);
             else UnknownSourceSize(p);
-
+            
             p.ListEnumeration = false;
         }
 
@@ -58,10 +59,11 @@ namespace LinqRewrite.RewriteRules
             p.Iterator.Complete = true;
             RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
-            p.ForMin = p.ForReMin = currentLengthVariable - reverseIndexer;
-            p.ForMax = currentLengthVariable;
-            p.ForReMax = currentLengthVariable - 1;
             p.ResultSize = p.SourceSize = currentLengthVariable - reverseIndexer;
+            p.ForMin = p.ForReMin = 0;
+            p.ForMax = currentLengthVariable - reverseIndexer;
+            p.ForReMax = currentLengthVariable - reverseIndexer - 1;
+            p.Last = new TypedValueBridge(p.CurrentCollection.ItemType, p.CurrentCollection[p.Indexer + reverseIndexer]);
         }
 
         private static void UnknownSourceSize(RewriteParameters p)
@@ -93,10 +95,11 @@ namespace LinqRewrite.RewriteRules
             p.Iterator.Complete = true;
             RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
-            p.ForMin = p.ForReMin = currentLengthVariable - reverseIndexer;
-            p.ForMax = currentLengthVariable;
-            p.ForReMax = currentLengthVariable - 1;
             p.ResultSize = p.SourceSize = currentLengthVariable - reverseIndexer;
+            p.ForMin = p.ForReMin = 0;
+            p.ForMax = currentLengthVariable - reverseIndexer;
+            p.ForReMax = currentLengthVariable - reverseIndexer - 1;
+            p.Last = new TypedValueBridge(p.CurrentCollection.ItemType, p.CurrentCollection[p.Indexer + reverseIndexer]);
         }
     }
 }

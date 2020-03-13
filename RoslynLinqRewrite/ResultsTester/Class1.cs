@@ -8,46 +8,57 @@ namespace ResultsTester
         static void Main()
         {
             var arr = Enumerable.Range(0, 50).ToArray();
-            var test = Main_ProceduralLinq1(arr);
+            var test = Main_ProceduralLinq1();
+            test = Main_ProceduralLinq2();
         }
 
-        static int[] Main_ProceduralLinq1(int[] arr)
+        static int[] Main_ProceduralLinq1()
         {
-            int __i0;
-            int __log2 = (SimpleCollections.IntExtensions.Log2((uint)arr.Length) - 3);
-            __log2 = (__log2 - (__log2 % 2));
-            int __currentLength3 = 8;
-            int __i1 = __currentLength3;
-            int[] __reversed4 = new int[8];
-            int __localSize5;
-            int __i6 = -1;
-            int __i7;
-            __i0 = 0;
-            for (; __i0 < arr.Length; __i0++)
+            int v0;
+            int v1;
+            int v2 = (SimpleCollections.IntExtensions.Log2((uint)100) - 3);
+            v2 -= (v2 % 2);
+            int v3 = 8;
+            int[] v4 = new int[8];
+            v1 = 8;
+            int v5;
+            v0 = 5;
+            for (; v0 < (5 + 100); v0++)
             {
-                if (!((arr[__i0] > 4)))
+                if (!(v0 >= 25))
                     continue;
-                --__i1;
-                if (__i1 < 0)
+                --v1;
+                if (v1 < 0)
                 {
-                    __localSize5 = __currentLength3;
-                    SimpleCollections.EnlargeExtensions.LogEnlargeReverseArray(2, arr.Length, ref __reversed4, ref __log2, out __currentLength3);
-                    __i1 = ((__currentLength3 - __localSize5) - 1);
+                    v5 = v3;
+                    SimpleCollections.EnlargeExtensions.LogEnlargeReverseArray(2, 100, ref v4, ref v2, out v3);
+                    v1 = ((v3 - v5) - 1);
                 }
 
-                __reversed4[__i1] = arr[__i0];
-                ++__i6;
+                v4[v1] = v0;
             }
 
-            var result = SimpleArrayExtensions.EnsureFullReversedArray(__reversed4, __i6 + 1);
-            int[] __result8 = new int[__i6];
-            __i7 = 0;
-            for (; __i7 < __i6; __i7++)
-                __result8[__i7] = (result[__i7] + 3);
-            return __result8;
+            int[] v6 = new int[(v3 - v1)];
+            v0 = 0;
+            for (; v0 < (v3 - v1); v0++)
+                v6[v0] = v4[(v0 + v1)];
+            return v6;
         }
 
 
-    }
+        static int[] Main_ProceduralLinq2()
+        {
+            int v0;
+            int[] v1 = new int[(100 - 20)];
+            int v2 = 0;
+            v0 = ((5 + 100) - 1);
+            for (; v0 >= (5 + 20); v0--)
+            {
+                v1[v2] = v0;
+                v2++;
+            }
 
+            return v1;
+        }
+    }
 }

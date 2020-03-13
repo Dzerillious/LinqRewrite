@@ -20,8 +20,8 @@ namespace LinqRewrite.DataStructures
             => new TypeBridge(type);
         
         public static implicit operator TypeSyntax(TypeBridge type)
-            => type.Type;
+            => type?.Type;
 
-        public override string ToString() => Type.ToString();
+        public override string ToString() => Type?.ToString();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Constants;
 
@@ -14,20 +15,7 @@ namespace LinqRewrite.DataStructures
         public CollectionType CollectionType { get; set; }
         public ValueBridge Count { get; set; }
         public TypeSyntax ItemType { get; set; }
-        
-        public CollectionValueBridge(TypeSyntax itemType, TypeSyntax type, ValueBridge count, IdentifierNameSyntax name) : base(type, name)
-        {
-            Count = count;
-            ItemType = itemType;
             
-            var collectionName = type.ToString();
-            if (type is ArrayTypeSyntax) 
-                CollectionType = CollectionType.Array;
-            else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
-                CollectionType = CollectionType.List;
-            else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
-                CollectionType = CollectionType.Enumerable;
-        }
 
         public CollectionValueBridge(TypeBridge itemType, TypeBridge type, ValueBridge count, ValueBridge name) : base(type, name)
         {
@@ -43,32 +31,19 @@ namespace LinqRewrite.DataStructures
                 CollectionType = CollectionType.Enumerable;
         }
 
-        public CollectionValueBridge(TypeSyntax itemType, TypeSyntax type, ValueBridge count, LocalVariable variable) : base(type, variable)
+        public CollectionValueBridge(TypeSyntax itemType, TypeSyntax type, ValueBridge count, IdentifierNameSyntax name)
+            : this(itemType, type, count, (ValueBridge)name)
         {
-            Count = count;
-            ItemType = itemType;
-            
-            var collectionName = type.ToString();
-            if (type is ArrayTypeSyntax) 
-                CollectionType = CollectionType.Array;
-            else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
-                CollectionType = CollectionType.List;
-            else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
-                CollectionType = CollectionType.Enumerable;
         }
 
-        public CollectionValueBridge(TypeBridge itemType, TypeBridge type, ValueBridge count, LocalVariable variable) : base(type, variable)
+        public CollectionValueBridge(TypeSyntax itemType, TypeSyntax type, ValueBridge count, LocalVariable variable)
+            : this(itemType, type, count, (ValueBridge)variable)
         {
-            Count = count;
-            ItemType = itemType;
-            
-            var collectionName = type.ToString();
-            if (type.Type is ArrayTypeSyntax) 
-                CollectionType = CollectionType.Array;
-            else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
-                CollectionType = CollectionType.List;
-            else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
-                CollectionType = CollectionType.Enumerable;
+        }
+
+        public CollectionValueBridge(TypeBridge itemType, TypeBridge type, ValueBridge count, LocalVariable variable)
+            : this(itemType, type, count, (ValueBridge)variable)
+        {
         }
 
         public override string ToString() => Value.ToString();

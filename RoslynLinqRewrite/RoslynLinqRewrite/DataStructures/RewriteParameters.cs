@@ -30,6 +30,7 @@ namespace LinqRewrite.DataStructures
 
         public List<StatementSyntax> Initial { get; } = new List<StatementSyntax>();
         public List<IteratorParameters> Iterators { get; } = new List<IteratorParameters>();
+        public IEnumerable<IteratorParameters> IncompleteIterators => Iterators.Where(x => !x.Complete);
         public IteratorParameters Iterator { get; set; }
         public List<StatementSyntax> Final { get; } = new List<StatementSyntax>();
         public List<LocalVariable> Variables { get; } = new List<LocalVariable>();
@@ -73,12 +74,13 @@ namespace LinqRewrite.DataStructures
         {
             get
             {
-                if (CurrentIndexer != null || Iterators.FirstOrDefault()?.CurrentIndexer != null)
+                var iterator = IncompleteIterators.FirstOrDefault();
+                if (CurrentIndexer != null || iterator?.CurrentIndexer != null)
                 {
-                    var indexer = Iterators.FirstOrDefault()?.CurrentIndexer;
+                    var indexer = iterator.CurrentIndexer;
                     if (indexer == null) return CurrentIndexer;
 
-                    Iterators.Where(x => x.CurrentIndexer == null).ForEach(x =>
+                    IncompleteIterators.Where(x => x.CurrentIndexer == null).ForEach(x =>
                     {
                         x.CurrentIndexer = indexer;
                         x.EndFor.Add((StatementBridge) indexer.PostIncrement());
@@ -89,7 +91,7 @@ namespace LinqRewrite.DataStructures
                 var indexerVariable = GlobalVariable(Int, 0);
                 indexerVariable.IsGlobal = true;
                     
-                Iterators.ForEach(x => x.CurrentIndexer = indexerVariable);
+                IncompleteIterators.ForEach(x => x.CurrentIndexer = indexerVariable);
                 ForEndAdd(indexerVariable.PostIncrement());
 
                 return CurrentIndexer = indexerVariable;
@@ -97,9 +99,11 @@ namespace LinqRewrite.DataStructures
             set
             {
                 if (value != null) throw new NotImplementedException("Implemented only for setting null");
-                if (Iterators.Count == 1) Iterators[0].CurrentIndexer.IsGlobal = false;
+                
+                var iterator = IncompleteIterators.FirstOrDefault();
+                if (iterator?.CurrentIndexer != null) iterator.CurrentIndexer.IsGlobal = false;
                 CurrentIndexer = null;
-                Iterators.ForEach(x => x.CurrentIndexer = null);
+                IncompleteIterators.ForEach(x => x.CurrentIndexer = null);
             }
         }
 
@@ -146,6 +150,7 @@ namespace LinqRewrite.DataStructures
             
             var collectionType = collection.GetType(this);
             FirstCollection = CurrentCollection = new CollectionValueBridge(collection.ItemType(this), collectionType, collection.Count(this), collection);
+            SourceSize = ResultSize = FirstCollection.Count;
 
             ReturnType = returnType;
             Chain = chain;
@@ -162,17 +167,20 @@ namespace LinqRewrite.DataStructures
             Last = null;
         }
 
-        public void InitialAdd(StatementBridge _) => Initial.Add(_);
+        public void InitialAdd(StatementBridge _)
+        {
+            if (Iterators.Count == 0) Initial.Add(_);
+            else IncompleteIterators.First().Pre.Add(_);
+        }
+
         public void PreForAdd(StatementBridge _) => Iterator.Pre.Add(_);
         public void ForAdd(StatementBridge _)
         {
-            Iterators.Where(x => !x.Complete)
-                .ForEach(x => x.Body.Add(_));
+            IncompleteIterators.ForEach(x => x.Body.Add(_));
         }
         public void ForEndAdd(StatementBridge _)
         {
-            Iterators.Where(x => !x.Complete)
-                .ForEach(x => x.EndFor.Add(_));
+            IncompleteIterators.ForEach(x => x.EndFor.Add(_));
         }
         public void LastForAdd(StatementBridge _) => Iterator.BodyAdd(_);
         public void FinalAdd(StatementBridge _) => Final.Add(_);
@@ -203,14 +211,14 @@ namespace LinqRewrite.DataStructures
                 {
                     var statement = Iterators[i].GetStatementSyntax(this);
                     result.AddRange(Iterators[i].Pre);
-                    result.Add(statement);
+                    if (statement != null) result.Add(statement);
                 }
             }
             else for (var i = 0; i < Iterators.Count; i++)
             {
                 var statement = Iterators[i].GetStatementSyntax(this);
                 result.AddRange(Iterators[i].Pre);
-                result.Add(statement);
+                if (statement != null) result.Add(statement);
             }
             
             result.InsertRange(0, Initial);

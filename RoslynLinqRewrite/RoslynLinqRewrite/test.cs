@@ -7,6 +7,6 @@ static class Example2
     {
 		var arr = new int[10];
 		var a = 4;
-		var test = arr.Where(x => x > 3).Concat(arr.Where(x => x > 3)).ToArray();
+		var test = Enumerable.Empty<int>().Select(x => x + 2);
     }
 }

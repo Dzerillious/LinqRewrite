@@ -33,7 +33,7 @@ namespace LinqRewrite.RewriteRules
             }
 
             p.FinalAdd(Return(p.ResultSize == null
-                ? sumVariable / (p.Indexer + 1)
+                ? sumVariable / p.Indexer
                 : sumVariable / p.ResultSize));
 
             p.HasResultMethod = true;

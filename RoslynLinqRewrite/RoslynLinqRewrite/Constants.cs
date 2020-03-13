@@ -45,6 +45,7 @@ namespace LinqRewrite
         
         public const string RangeMethod = "System.Linq.Enumerable.Range(int, int)";
         public const string RepeatMethod = "System.Linq.Enumerable.Repeat<TResult>(TResult, int)";
+        public const string EnumerableEmptyMethod = "System.Linq.Enumerable.Empty<TResult>()";
 
         public const string WhereMethod = "System.Collections.Generic.IEnumerable<TSource>.Where<TSource>(System.Func<TSource, bool>)";
         public const string WhereIMethod = "System.Collections.Generic.IEnumerable<TSource>.Where<TSource>(System.Func<TSource, int, bool>)";
@@ -89,7 +90,7 @@ namespace LinqRewrite
             
             SelectMethod, SelectIMethod, WhereMethod, WhereIMethod, CastMethod, OfTypeMethod,
             
-            RangeMethod, RepeatMethod,
+            RangeMethod, RepeatMethod, EnumerableEmptyMethod,
             
             SkipMethod, SkipWhileMethod, TakeMethod, TakeWhileMethod,
             

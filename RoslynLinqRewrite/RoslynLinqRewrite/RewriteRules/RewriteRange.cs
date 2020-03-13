@@ -13,15 +13,14 @@ namespace LinqRewrite.RewriteRules
             p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
             var from = args[0];
             var count = args[1];
-            
-            var sumVariable = p.LocalVariable(Int, from.Add(count));
 
             p.CurrentCollection = null;
             p.Iterators.Add(p.Iterator = new IteratorParameters(p));
             p.ForMin = p.ForReMin = from;
-            p.ForMax = p.ForReMax = sumVariable;
-            p.ListEnumeration = false;
+            p.ForMax = from + count;
+            p.ForReMax = from + count - 1;
             
+            p.ListEnumeration = false;
             p.Iterator.Indexer = p.LocalVariable(Int);
             if (p.CurrentIndexer == null)
             {

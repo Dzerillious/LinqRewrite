@@ -60,7 +60,8 @@ namespace LinqRewrite.RewriteRules
             var sourceCount = collection.Count.Reusable(p);
 
             p.ForMin = p.ForReMin = 0;
-            p.ForMax = p.ForReMax = sourceCount;
+            p.ForMax = sourceCount;
+            p.ForReMax = sourceCount - 1;
             
             p.Iterator.Indexer = p.LocalVariable(Int);
             if (p.CurrentIndexer == null)

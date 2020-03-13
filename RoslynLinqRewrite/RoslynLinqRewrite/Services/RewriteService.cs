@@ -83,7 +83,7 @@ namespace LinqRewrite.Services
         }
 
 
-        private StatementSyntax GetBody(RewriteParameters p, List<IStatementSyntax> body) => AggregateStatementSyntax(body.Select(x => x.GetStatementSyntax(p)).ToArray());
+        private StatementSyntax GetBody(RewriteParameters p, List<IStatementSyntax> body) => AggregateStatementSyntax(body.Select(x => x.GetStatementSyntax(p)).Where(x => x != null).ToArray());
         public ForStatementSyntax GetForStatement(RewriteParameters p, LocalVariable indexerVariable, ValueBridge max, List<IStatementSyntax> loopContent)
             => ForStatement(
                 null,

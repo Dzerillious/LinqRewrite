@@ -38,8 +38,15 @@ namespace LinqRewrite.Extensions
 
         public static TypeBridge ItemType(this ValueBridge collection, RewriteParameters p)
         {
-            var itemString = collection.GetItemTypeSymbol(p).ToDisplayString();
-            return SyntaxFactory.ParseTypeName(itemString);
+            try
+            {
+                var itemString = collection.GetItemTypeSymbol(p).ToDisplayString();
+                return SyntaxFactory.ParseTypeName(itemString);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public static ITypeSymbol GetItemTypeSymbol(this ValueBridge collection, RewriteParameters p)

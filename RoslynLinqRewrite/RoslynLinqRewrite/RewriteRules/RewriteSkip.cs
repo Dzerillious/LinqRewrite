@@ -13,8 +13,7 @@ namespace LinqRewrite.RewriteRules
             var skipped = args[0];
             if (!p.ModifiedEnumeration)
             {
-                p.ForMin += skipped;
-                p.ForReMax -= skipped;
+                p.ForMin = p.ForReMin += skipped;
                 p.ResultSize -= skipped;
             }
             else p.ForAdd(If(p.Indexer < skipped, Continue()));
