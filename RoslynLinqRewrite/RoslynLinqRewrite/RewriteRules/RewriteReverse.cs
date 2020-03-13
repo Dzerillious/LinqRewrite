@@ -31,7 +31,7 @@ namespace LinqRewrite.RewriteRules
                 "SimpleCollections".Access("IntExtensions", "Log2")
                     .Invoke(p.SourceSize.Cast(SyntaxKind.UIntKeyword)) - 3);
                 
-            p.InitialAdd(logVariable.SubAssign(logVariable % 2));
+            p.PreUseAdd(logVariable.SubAssign(logVariable % 2));
             var currentLengthVariable = p.LocalVariable(Int, 8);
 
             var resultVariable = p.GlobalVariable(p.Last.Type.ArrayType(), CreateArray(p.Last.Type.ArrayType(), 8));

@@ -26,9 +26,9 @@ namespace LinqRewrite.Services
             _data = RewriteDataService.Instance;
         }
 
-        public ValueBridge CreateCollectionCount(ValueBridge collection, bool allowUnknown)
+        public ValueBridge CreateCollectionCount(ValueBridge collection, ValueBridge fromType, bool allowUnknown = false)
         {
-            var collectionType = _data.Semantic.GetTypeInfo(collection).Type;
+            var collectionType = _data.Semantic.GetTypeInfo(fromType).Type;
             if (collectionType is IArrayTypeSymbol) return collection.Access("Length");
             if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<")))
                 return collection.Access("Count");

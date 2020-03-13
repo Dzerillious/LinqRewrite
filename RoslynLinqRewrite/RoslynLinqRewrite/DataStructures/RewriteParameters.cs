@@ -6,6 +6,7 @@ using LinqRewrite.Services;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SimpleCollections;
+using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.DataStructures
@@ -29,11 +30,14 @@ namespace LinqRewrite.DataStructures
         public TypedValueBridge Last { get; set; }
 
         public List<StatementSyntax> Initial { get; } = new List<StatementSyntax>();
+        public List<IteratorParameters> FinalIterators { get; } = new List<IteratorParameters>();
         public List<IteratorParameters> Iterators { get; } = new List<IteratorParameters>();
         public IEnumerable<IteratorParameters> IncompleteIterators => Iterators.Where(x => !x.Complete);
         public IteratorParameters Iterator { get; set; }
         public List<StatementSyntax> Final { get; } = new List<StatementSyntax>();
         public List<LocalVariable> Variables { get; } = new List<LocalVariable>();
+        
+        public bool WrapWithTry { get; set; }
 
         public ExpressionSyntax SimpleRewrite { get; set; }
         public bool IsReversed { get; set; }
@@ -107,6 +111,31 @@ namespace LinqRewrite.DataStructures
             }
         }
 
+        public LocalVariable GetIndexer(TypeBridge type)
+        {
+            var iterator = IncompleteIterators.FirstOrDefault();
+            if (CurrentIndexer != null || iterator?.CurrentIndexer != null)
+            {
+                var indexer = iterator.CurrentIndexer;
+                if (indexer == null) return CurrentIndexer;
+
+                IncompleteIterators.Where(x => x.CurrentIndexer == null).ForEach(x =>
+                {
+                    x.CurrentIndexer = indexer;
+                    x.EndFor.Add((StatementBridge) indexer.PostIncrement());
+                });
+                return CurrentIndexer = indexer;
+            }
+
+            var indexerVariable = GlobalVariable(type, 0);
+            indexerVariable.IsGlobal = true;
+                    
+            IncompleteIterators.ForEach(x => x.CurrentIndexer = indexerVariable);
+            ForEndAdd(indexerVariable.PostIncrement());
+
+            return CurrentIndexer = indexerVariable;
+        }
+
         public ValueBridge ForMin
         {
             get => Iterator.ForMin;
@@ -146,6 +175,7 @@ namespace LinqRewrite.DataStructures
             Final.Clear();
             Iterators.Clear();
             Variables.Clear();
+            FinalIterators.Clear();
             Iterator = null;
             
             var collectionType = collection.GetType(this);
@@ -169,6 +199,11 @@ namespace LinqRewrite.DataStructures
 
         public void InitialAdd(StatementBridge _)
         {
+            Initial.Add(_);
+        }
+
+        public void PreUseAdd(StatementBridge _)
+        {
             if (Iterators.Count == 0) Initial.Add(_);
             else IncompleteIterators.First().Pre.Add(_);
         }
@@ -190,6 +225,7 @@ namespace LinqRewrite.DataStructures
             var oldBody = Iterator;
             Iterator = new IteratorParameters(this, collection);
             Iterators.Add(Iterator);
+            FinalIterators.Add(Iterator);
             return oldBody;
         }
         
@@ -198,6 +234,7 @@ namespace LinqRewrite.DataStructures
             var oldBody = Iterator;
             Iterator = Iterator.Copy();
             Iterators.Add(Iterator);
+            FinalIterators.Add(Iterator);
             return oldBody;
         }
 
@@ -207,22 +244,29 @@ namespace LinqRewrite.DataStructures
             var result = new List<StatementSyntax>();
             if (IsReversed)
             {
-                for (var i = Iterators.Count - 1; i >= 0; i--)
+                for (var i = FinalIterators.Count - 1; i >= 0; i--)
                 {
-                    var statement = Iterators[i].GetStatementSyntax(this);
-                    result.AddRange(Iterators[i].Pre);
+                    var statement = FinalIterators[i].GetStatementSyntax(this);
+                    result.AddRange(FinalIterators[i].Pre);
                     if (statement != null) result.Add(statement);
                 }
             }
-            else for (var i = 0; i < Iterators.Count; i++)
+            else for (var i = 0; i < FinalIterators.Count; i++)
             {
-                var statement = Iterators[i].GetStatementSyntax(this);
-                result.AddRange(Iterators[i].Pre);
+                var statement = FinalIterators[i].GetStatementSyntax(this);
+                result.AddRange(FinalIterators[i].Pre);
                 if (statement != null) result.Add(statement);
             }
-            
-            result.InsertRange(0, Initial);
-            result.AddRange(Final);
+
+            if (WrapWithTry)
+            {
+                result = new List<StatementSyntax>(Initial) {TryF(Block(result), Block(Final))};
+            }
+            else
+            {
+                result.InsertRange(0, Initial);
+                result.AddRange(Final);
+            }
             return result;
         }
 
@@ -243,7 +287,8 @@ namespace LinqRewrite.DataStructures
             var created = new LocalVariable(variable, type) {IsGlobal = true};
             Variables.Add(created);
             
-            InitialAdd(LocalVariableCreation(variable, type, initial));
+            InitialAdd(LocalVariableCreation(variable, type));
+            PreUseAdd(((ValueBridge)variable).Assign(initial));
             return created;
         }
         
@@ -259,7 +304,8 @@ namespace LinqRewrite.DataStructures
             var created = new LocalVariable(variable, type);
             Variables.Add(created);
             
-            InitialAdd(LocalVariableCreation(variable, type, initial));
+            InitialAdd(LocalVariableCreation(variable, type));
+            PreUseAdd(((ValueBridge)variable).Assign(initial));
             return created;
         }
         

@@ -11,7 +11,8 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            p.Iterators.Add(p.Iterator = new IteratorParameters(p, new RewrittenValueBridge(p.CurrentCollection)));
+            p.FinalIterators.Add(p.Iterator = new IteratorParameters(p, new RewrittenValueBridge(p.CurrentCollection)));
+            p.Iterators.Add(p.Iterator);
             RewriteOther(p, p.CurrentCollection);
         }
         
@@ -39,11 +40,11 @@ namespace LinqRewrite.RewriteRules
             
             if (variable == null)
             {
-                p.Last = new TypedValueBridge(collection.ItemType, collection[p.Indexer]);
+                p.Last = new TypedValueBridge(collection.ItemType, collection[p.Iterator.Indexer]);
             }
             else
             {
-                p.Iterator.BodyAdd(variable.Assign(collection[p.Indexer]));
+                p.Iterator.BodyAdd(variable.Assign(collection[p.Iterator.Indexer]));
                 p.Last = new TypedValueBridge(collection.ItemType, variable);
             }
             
@@ -54,10 +55,10 @@ namespace LinqRewrite.RewriteRules
 
         public static void ListEnumeration(RewriteParameters p, CollectionValueBridge collection, LocalVariable variable = null)
         {
-            p.InitialAdd( If(collection.IsEqual(Null),
+            p.PreUseAdd( If(collection.IsEqual(Null),
                             CreateThrowException("System.InvalidOperationException", "Collection was null.")));
 
-            var sourceCount = collection.Count.Reusable(p);
+            var sourceCount = collection.Count.Reusable(p, Int);
 
             p.ForMin = p.ForReMin = 0;
             p.ForMax = sourceCount;
@@ -72,11 +73,11 @@ namespace LinqRewrite.RewriteRules
             
             if (variable == null)
             {
-                p.Last = new TypedValueBridge(collection.ItemType, collection[p.Indexer]);
+                p.Last = new TypedValueBridge(collection.ItemType, collection[p.Iterator.Indexer]);
             }
             else
             {
-                p.Iterator.BodyAdd(variable.Assign(collection[p.Indexer]));
+                p.Iterator.BodyAdd(variable.Assign(collection[p.Iterator.Indexer]));
                 p.Last = new TypedValueBridge(collection.ItemType, variable);
             }
             

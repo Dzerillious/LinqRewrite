@@ -1,22 +1,25 @@
 ﻿using System;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LinqRewrite.RewriteRules
 {
-    public static class RewriteToList
+    public static class RewriteToLookup
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            var method = (LambdaExpressionSyntax)args[0];
 
-            var listType = (TypeBridge)ParseTypeName($"List<{p.CurrentCollection.ItemType}>");
-            var list = p.GlobalVariable(listType, New(listType));
-            p.ForAdd(list.Access("Add").Invoke(p.Last));
+            var lookupType = (TypeBridge)ParseTypeName($"Lookup<{p.CurrentCollection.ItemType},{method.ReturnType(p)}>");
+            var lookup = p.GlobalVariable(lookupType, New(lookupType));
+            p.ForAdd(lookup.ArrayAccess(method.Inline(p, p.Last)).Assign(p.Last));
             
-            p.FinalAdd(Return(list));
+            p.FinalAdd(Return(lookup));
+
             p.HasResultMethod = true;
         }
     }

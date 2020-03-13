@@ -17,6 +17,8 @@ namespace LinqRewrite.Extensions
         public static LiteralExpressionSyntax IntValue(int x)
             => SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(x));
         
+        public static TypeSyntax Long
+            => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.LongKeyword));
         public static TypeSyntax Float
             => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.FloatKeyword));
         public static TypeSyntax Double
@@ -27,17 +29,12 @@ namespace LinqRewrite.Extensions
         public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, TypeSyntax type)
             =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, type));
         
-        public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, TypeBridge type, ValueBridge value)
-            =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, type, value));
+        public static LocalDeclarationStatementSyntax LocalVariableCreation(string name, TypeBridge type)
+            =>  SyntaxFactory.LocalDeclarationStatement(VariableCreation(name, type));
 
         public static VariableDeclarationSyntax VariableCreation(VariableBridge name, TypeSyntax type)
             =>  SyntaxFactory.VariableDeclaration(type,
                 SyntaxFactory.SeparatedList(new []{SyntaxFactory.VariableDeclarator(name)}));
-
-        public static VariableDeclarationSyntax VariableCreation(string name, TypeBridge type, ValueBridge value)
-            =>  SyntaxFactory.VariableDeclaration(type,
-                SyntaxFactory.SeparatedList(new []{SyntaxFactory.VariableDeclarator(name)
-                    .WithInitializer(SyntaxFactory.EqualsValueClause(value))}));
         
         public static ArrayCreationExpressionSyntax CreateArray(ArrayTypeSyntax arrayType, ValueBridge size)
             => SyntaxFactory.ArrayCreationExpression(
@@ -61,9 +58,9 @@ namespace LinqRewrite.Extensions
         }
 
         public static ValueBridge Count(this RewrittenValueBridge value, RewriteParameters p)
-            => p.Code.CreateCollectionCount(value.Old, false);
+            => p.Code.CreateCollectionCount(value.New, value.Old);
 
         public static ValueBridge Count(this ValueBridge value, RewriteParameters p)
-            => p.Code.CreateCollectionCount(value, false);
+            => p.Code.CreateCollectionCount(value, value);
     }
 }

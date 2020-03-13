@@ -11,10 +11,16 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
 
-            var resultVariable = p.LocalVariable(p.ReturnType,  p.CurrentCollection[0]);
-            p.ForAdd(resultVariable.Assign(args[0].Inline(p, resultVariable, p.Last)));
-            
-            p.FinalAdd(Return(resultVariable));
+            var resultVariable = args.Length == 1 
+                ? p.LocalVariable(p.ReturnType,  p.CurrentCollection[0])
+                : p.LocalVariable(args[0].GetType(p), args[0]);
+
+            var method = args.Length == 1 ? args[0] : args[1];
+            p.ForAdd(resultVariable.Assign(method.Inline(p, resultVariable, p.Last)));
+
+            p.FinalAdd(args.Length == 3 
+                ? Return(args[2].Inline(p, resultVariable)) 
+                : Return(resultVariable));
             p.HasResultMethod = true;
         }
     }

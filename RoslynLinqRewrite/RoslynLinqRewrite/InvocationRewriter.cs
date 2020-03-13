@@ -42,6 +42,7 @@ namespace LinqRewrite
                 case "Any": RewriteAny.Rewrite(parameters, args); return;
                 case "Contains": RewriteContains.Rewrite(parameters, args); return;
                 case "Count": RewriteCount.Rewrite(parameters, args); return;
+                case "LongCount": RewriteLongCount.Rewrite(parameters, args); return;
 
                 case "Min": RewriteMin.Rewrite(parameters, args); return;
                 case "Max": RewriteMax.Rewrite(parameters, args); return;
@@ -71,14 +72,24 @@ namespace LinqRewrite
                 
                 case "Reverse": RewriteReverse.Rewrite(parameters, args); return;
                 case "Select": RewriteSelect.Rewrite(parameters, args); return;
+                case "SelectMany": RewriteSelectMany.Rewrite(parameters, args); return;
                 case "Where": RewriteWhere.Rewrite(parameters, args); return;
                 case "Cast": RewriteCast.Rewrite(parameters, args, parameters.Chain[i].Invocation); return;
                 case "OfType": RewriteOfType.Rewrite(parameters, args, parameters.Chain[i].Invocation); return;
                 
                 case "Concat": RewriteConcat.Rewrite(parameters, args); return;
+                case "Union": RewriteUnion.Rewrite(parameters, args); return;
+                case "Intersect": RewriteIntersect.Rewrite(parameters, args); return;
+                case "Except": RewriteExcept.Rewrite(parameters, args); return;
+                case "Distinct": RewriteDistinct.Rewrite(parameters, args); return;
+                
+                case "SequenceEqual": RewriteSequenceEqual.Rewrite(parameters, args); return;
+                case "Zip": RewriteZip.Rewrite(parameters, args); return;
                 
                 case "ToArray": RewriteToArray.Rewrite(parameters, args); return;
                 case "ToList": RewriteToList.Rewrite(parameters, args); return;
+                case "ToDictionary": RewriteToDictionary.Rewrite(parameters, args); return;
+                case "ToLookup": RewriteToLookup.Rewrite(parameters, args); return;
                 default: throw new NotImplementedException($"Rewrite of {last} not implemented");
             }
         }

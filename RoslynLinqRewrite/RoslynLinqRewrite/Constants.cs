@@ -5,7 +5,8 @@ namespace LinqRewrite
     public static class Constants
     {
         //public const string ToDictionaryWithKeyMethod = "System.Collections.Generic.IEnumerable<TSource>.ToDictionary<TSource, TKey>(System.Func<TSource, TKey>)";
-        public const string ToDictionaryWithKeyValueMethod = "System.Collections.Generic.IEnumerable<TSource>.ToDictionary<TSource, TKey, TElement>(System.Func<TSource, TKey>, System.Func<TSource, TElement>)";
+        public const string ToDictionaryMethod = "System.Collections.Generic.IEnumerable<TSource>.ToDictionary<TSource, TKey>(System.Func<TSource, TKey>)";
+        public const string ToLookupMethod = "System.Collections.Generic.IEnumerable<TSource>.ToLookup<TSource, TKey>(System.Func<TSource, TKey>)";
         public const string ToArrayMethod = "System.Collections.Generic.IEnumerable<TSource>.ToArray<TSource>()";
         public const string ToListMethod = "System.Collections.Generic.IEnumerable<TSource>.ToList<TSource>()";
        
@@ -28,6 +29,8 @@ namespace LinqRewrite
         public const string LongCountMethod = "System.Collections.Generic.IEnumerable<TSource>.LongCount<TSource>()";
         public const string LongCountWithConditionMethod = "System.Collections.Generic.IEnumerable<TSource>.LongCount<TSource>(System.Func<TSource, bool>)";
         public const string AggregateMethod = "System.Collections.Generic.IEnumerable<TSource>.Aggregate<TSource>(System.Func<TSource, TSource, TSource>)";
+        public const string AggregateMethod1 = "System.Collections.Generic.IEnumerable<TSource>.Aggregate<TSource, TAccumulate>(TAccumulate, System.Func<TAccumulate, TSource, TAccumulate>)";
+        public const string AggregateMethod2 = "System.Collections.Generic.IEnumerable<TSource>.Aggregate<TSource, TAccumulate, TResult>(TAccumulate, System.Func<TAccumulate, TSource, TAccumulate>, System.Func<TAccumulate, TResult>)";
 
         public const string ElementAtMethod = "System.Collections.Generic.IEnumerable<TSource>.ElementAt<TSource>(int)";
         public const string ElementAtOrDefaultMethod = "System.Collections.Generic.IEnumerable<TSource>.ElementAtOrDefault<TSource>(int)";
@@ -51,6 +54,7 @@ namespace LinqRewrite
         public const string WhereIMethod = "System.Collections.Generic.IEnumerable<TSource>.Where<TSource>(System.Func<TSource, int, bool>)";
         public const string SelectMethod = "System.Collections.Generic.IEnumerable<TSource>.Select<TSource, TResult>(System.Func<TSource, TResult>)";
         public const string SelectIMethod = "System.Collections.Generic.IEnumerable<TSource>.Select<TSource, TResult>(System.Func<TSource, int, TResult>)";
+        public const string SelectMany = "System.Collections.Generic.IEnumerable<TSource>.SelectMany<TSource, TResult>(System.Func<TSource, System.Collections.Generic.IEnumerable<TResult>>)";
         
         public const string CastMethod = "System.Collections.IEnumerable.Cast<TResult>()";
         public const string OfTypeMethod = "System.Collections.IEnumerable.OfType<TResult>()";
@@ -60,17 +64,28 @@ namespace LinqRewrite
         public const string SkipWhileMethod = "System.Collections.Generic.IEnumerable<TSource>.SkipWhile<TSource>(System.Func<TSource, bool>)";
         public const string TakeWhileMethod = "System.Collections.Generic.IEnumerable<TSource>.TakeWhile<TSource>(System.Func<TSource, bool>)";
         
+        public const string ConcatMethod = "System.Collections.Generic.IEnumerable<TSource>.Concat<TSource>(System.Collections.Generic.IEnumerable<TSource>)";
+        public const string UnionMethod = "System.Collections.Generic.IEnumerable<TSource>.Union<TSource>(System.Collections.Generic.IEnumerable<TSource>)";
+        public const string UnionMethod2 = "System.Collections.Generic.IEnumerable<TSource>.Union<TSource>(System.Collections.Generic.IEnumerable<TSource>, System.Collections.Generic.IEqualityComparer<TSource>)";
+        public const string IntersectMethod = "System.Collections.Generic.IEnumerable<TSource>.Intersect<TSource>(System.Collections.Generic.IEnumerable<TSource>)";
+        public const string IntersectMethod2 = "System.Collections.Generic.IEnumerable<TSource>.Intersect<TSource>(System.Collections.Generic.IEnumerable<TSource>, System.Collections.Generic.IEqualityComparer<TSource>)";
+        public const string ExceptMethod = "System.Collections.Generic.IEnumerable<TSource>.Except<TSource>(System.Collections.Generic.IEnumerable<TSource>)";
+        public const string ExceptMethod2 = "System.Collections.Generic.IEnumerable<TSource>.Except<TSource>(System.Collections.Generic.IEnumerable<TSource>, System.Collections.Generic.IEqualityComparer<TSource>)";
+        public const string DistinctMethod = "System.Collections.Generic.IEnumerable<TSource>.Distinct<TSource>()";
+        public const string DistinctMethod2 = "System.Collections.Generic.IEnumerable<TSource>.Distinct<TSource>(System.Collections.Generic.IEqualityComparer<TSource>)";
+        
+        public const string SequenceEqualMethod = "System.Collections.Generic.IEnumerable<TSource>.SequenceEqual<TSource>(System.Collections.Generic.IEnumerable<TSource>)";
+        public const string SequenceEqualMethod2 = "System.Collections.Generic.IEnumerable<TSource>.SequenceEqual<TSource>(System.Collections.Generic.IEnumerable<TSource>, System.Collections.Generic.IEqualityComparer<TSource>)";
+        public const string ZipMethod = "System.Collections.Generic.IEnumerable<TFirst>.Zip<TFirst, TSecond, TResult>(System.Collections.Generic.IEnumerable<TSecond>, System.Func<TFirst, TSecond, TResult>)";
+        
         public const string SimpleListPrefix = "SimpleCollections.SimpleList.SimpleList";
         public const string ListPrefix = "System.Collections.Generic.List";
         public const string IEnumerablePrefix = "System.Collections.Generic.IEnumerable";
 
-        public const string ConcatMethod = "System.Collections.Generic.IEnumerable<TSource>.Concat<TSource>(System.Collections.Generic.IEnumerable<TSource>)";
-        
-        public const string GlobalIndexerVariable = "__i";
-
         public static readonly HashSet<string> KnownMethods = new HashSet<string>
         {
-            ToDictionaryWithKeyValueMethod, ToArrayMethod, ToListMethod, ReverseMethod, 
+            ToDictionaryMethod, ToArrayMethod, ToListMethod, ToLookupMethod,
+            ReverseMethod, 
             
             FirstMethod, SingleMethod, LastMethod,
             FirstOrDefaultMethod, SingleOrDefaultMethod, LastOrDefaultMethod,
@@ -78,7 +93,7 @@ namespace LinqRewrite
             FirstOrDefaultWithConditionMethod, SingleOrDefaultWithConditionMethod, LastOrDefaultWithConditionMethod,
             
             CountMethod, CountWithConditionMethod, LongCountMethod, LongCountWithConditionMethod,
-            AggregateMethod,
+            AggregateMethod, AggregateMethod1, AggregateMethod2,
             
             ElementAtMethod, ElementAtOrDefaultMethod,
             
@@ -89,14 +104,17 @@ namespace LinqRewrite
             ListForEachMethod,
             
             SelectMethod, SelectIMethod, WhereMethod, WhereIMethod, CastMethod, OfTypeMethod,
+            SelectMany,
             
             RangeMethod, RepeatMethod, EnumerableEmptyMethod,
             
             SkipMethod, SkipWhileMethod, TakeMethod, TakeWhileMethod,
             
-            ConcatMethod,
+            ConcatMethod, UnionMethod, UnionMethod2, ExceptMethod, ExceptMethod2, IntersectMethod, IntersectMethod2, DistinctMethod, DistinctMethod2,
             
-            EnumerableForEachMethod
+            EnumerableForEachMethod,
+            
+            SequenceEqualMethod, SequenceEqualMethod2, ZipMethod,
         };
 
         public const int MaximumSizeForByValStruct = 128 / 8; // eg. two longs, or two references

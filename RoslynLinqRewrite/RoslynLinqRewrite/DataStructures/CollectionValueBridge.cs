@@ -27,8 +27,7 @@ namespace LinqRewrite.DataStructures
                 CollectionType = CollectionType.Array;
             else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
                 CollectionType = CollectionType.List;
-            else if (collectionName.StartsWith(IEnumerablePrefix, StringComparison.OrdinalIgnoreCase))
-                CollectionType = CollectionType.Enumerable;
+            else CollectionType = CollectionType.Enumerable;
         }
 
         public CollectionValueBridge(TypeSyntax itemType, TypeSyntax type, ValueBridge count, IdentifierNameSyntax name)

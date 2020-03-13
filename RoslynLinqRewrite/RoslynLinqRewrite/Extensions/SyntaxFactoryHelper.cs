@@ -12,13 +12,14 @@ namespace LinqRewrite.Extensions
 {
     public static class SyntaxFactoryHelper
     {
-        public static SeparatedSyntaxList<ExpressionSyntax> CreateSeparatedExpressionList<T>(params T[] items) where T : SyntaxNode
+        public static SeparatedSyntaxList<ExpressionSyntax> CreateSeparatedExpressionList<T>(params T[] items)
+            where T : SyntaxNode
             => SeparatedList(items.Cast<ExpressionSyntax>());
-        
+
         public static SeparatedSyntaxList<T> CreateSeparatedList<T>(params T[] items) where T : SyntaxNode
             => SeparatedList(items);
 
-        public static StatementSyntax AggregateStatementSyntax(IList<StatementSyntax> syntax) 
+        public static StatementSyntax AggregateStatementSyntax(IList<StatementSyntax> syntax)
             => syntax.Count switch
             {
                 0 => EmptyStatement(),
@@ -52,7 +53,7 @@ namespace LinqRewrite.Extensions
 
         public static ArgumentSyntax Argument(TypedValueBridge value)
             => SyntaxFactory.Argument(value);
-        
+
         public static ArgumentSyntax RefArg(VariableBridge name)
             => SyntaxFactory.Argument(null, Token(SyntaxKind.RefKeyword), name);
 
@@ -61,19 +62,22 @@ namespace LinqRewrite.Extensions
 
         public static InvocationExpressionSyntax Invoke(this string identifier)
             => InvocationExpression(IdentifierName(identifier));
+
         public static InvocationExpressionSyntax Invoke(this ExpressionSyntax source)
             => InvocationExpression(source);
+
         public static ValueBridge Invoke(this ExpressionSyntax invoked, params ArgumentBridge[] args)
-            => InvocationExpression(invoked, ArgumentList(CreateSeparatedList(args.Select(x => (ArgumentSyntax)x))));
+            => InvocationExpression(invoked, ArgumentList(CreateSeparatedList(args.Select(x => (ArgumentSyntax) x))));
+
         public static InvocationExpressionSyntax Invoke(this ExpressionSyntax invoked, ValueBridge[] args)
             => InvocationExpression(invoked, ArgumentList(CreateSeparatedList(args.Select(Argument))));
 
         public static ArgumentListSyntax CreateArguments(params ArgumentSyntax[] items)
             => ArgumentList(CreateSeparatedList(items));
-        
+
         public static ArgumentListSyntax CreateArguments(params ValueBridge[] items)
             => ArgumentList(CreateSeparatedList(items.Select(Argument)));
-        
+
         public static ArgumentListSyntax CreateArguments(IEnumerable<ArgumentSyntax> items)
             => ArgumentList(CreateSeparatedList(items));
 
@@ -100,20 +104,40 @@ namespace LinqRewrite.Extensions
 
         public static ObjectCreationExpressionSyntax New(TypeBridge type, params ValueBridge[] args)
             => ObjectCreationExpression(type, CreateArguments(args.Select(Argument)), null);
+
         public static WhileStatementSyntax While(ValueBridge @while, StatementBridge @do)
             => WhileStatement(@while, @do);
+
         public static IfStatementSyntax If(ValueBridge @if, StatementBridge @do)
             => IfStatement(@if, @do);
+
         public static IfStatementSyntax If(ValueBridge @if, StatementBridge @do, StatementBridge @else)
             => IfStatement(@if, @do, ElseClause(@else));
+
         public static TryStatementSyntax TryF(BlockSyntax @try, BlockSyntax @finally)
             => TryStatement(@try, new SyntaxList<CatchClauseSyntax>(), FinallyClause(@finally));
-        
+
         public static StatementBridge Return(ValueBridge _)
             => ReturnStatement(_);
 
         public static DefaultExpressionSyntax Default(TypeBridge @type)
             => DefaultExpression(@type);
+
+        public static TypedValueBridge Reusable(this RewrittenValueBridge e, RewriteParameters p)
+        {
+            if (IsReusable(e)) return new TypedValueBridge(e.Old.GetType(p), e);
+
+            var tmpVariable = p.LocalVariable(e.Old.GetType(p), e);
+            return new TypedValueBridge(Int, IdentifierName(tmpVariable));
+        }
+
+        public static TypedValueBridge Reusable(this ValueBridge e, RewriteParameters p, TypeBridge type)
+        {
+            if (IsReusable(e)) return new TypedValueBridge(type, e);
+
+            var tmpVariable = p.LocalVariable(type, e);
+            return new TypedValueBridge(Int, IdentifierName(tmpVariable));
+        }
 
         public static TypedValueBridge Reusable(this ValueBridge e, RewriteParameters p)
         {
@@ -130,19 +154,20 @@ namespace LinqRewrite.Extensions
             var tmpVariable = p.LocalVariable(e.GetType(p), e);
             return new TypedValueBridge(Int, IdentifierName(tmpVariable));
         }
-        
+
         public static TypedValueBridge Reusable(this TypedValueBridge e, RewriteParameters p)
         {
             if (IsReusable(e)) return e;
-            
+
             var tmpVariable = p.LocalVariable(e.Type);
             p.ForAdd(tmpVariable.Assign(e));
             return new TypedValueBridge(e.Type, tmpVariable);
         }
 
-        public static TypedValueBridge Inline(this ExpressionSyntax e, RewriteParameters p, params TypedValueBridge[] values)
+        public static TypedValueBridge Inline(this ExpressionSyntax e, RewriteParameters p,
+            params TypedValueBridge[] values)
         {
-            var returnType = p.Code.GetLambdaReturnType(p.Semantic, (LambdaExpressionSyntax) e);
+            var returnType = ((LambdaExpressionSyntax) e).ReturnType(p);
             if (e.IsLambdaSimple())
                 return p.Code.InlineLambda(e, returnType, values);
 
@@ -156,9 +181,10 @@ namespace LinqRewrite.Extensions
             return p.Code.InlineLambda(e, returnType, vals);
         }
 
-        public static TypedValueBridge Inline(this RewrittenValueBridge e, RewriteParameters p, params TypedValueBridge[] values)
+        public static TypedValueBridge Inline(this RewrittenValueBridge e, RewriteParameters p,
+            params TypedValueBridge[] values)
         {
-            var returnType = p.Code.GetLambdaReturnType(p.Semantic, (LambdaExpressionSyntax) e);
+            var returnType =  ((LambdaExpressionSyntax) e).ReturnType(p);
             if (IsLambdaSimple(e.Old))
                 return p.Code.InlineLambda(e, returnType, values);
 
@@ -229,5 +255,8 @@ namespace LinqRewrite.Extensions
 
         public static ArrayTypeSyntax ArrayType(this TypeSyntax type)
             => SyntaxFactory.ArrayType(type, new SyntaxList<ArrayRankSpecifierSyntax>(ArrayRankSpecifier()));
-    }
+
+        public static TypeBridge ReturnType(this LambdaExpressionSyntax lambda, RewriteParameters p)
+            => p.Code.GetLambdaReturnType(p.Semantic, lambda);
+    };
 }

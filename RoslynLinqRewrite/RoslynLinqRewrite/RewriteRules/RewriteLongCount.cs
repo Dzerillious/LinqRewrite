@@ -2,21 +2,23 @@
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
-    public static class RewriteToList
+    public static class RewriteLongCount
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.ResultSize != null && args.Length == 0) p.SimpleRewrite = p.CurrentCollection.Count.Cast(Long);
 
-            var listType = (TypeBridge)ParseTypeName($"List<{p.CurrentCollection.ItemType}>");
-            var list = p.GlobalVariable(listType, New(listType));
-            p.ForAdd(list.Access("Add").Invoke(p.Last));
-            
-            p.FinalAdd(Return(list));
+            if (args.Length != 0)
+            {
+                p.ForAdd(If(!args[0].Inline(p, p.Last),
+                    Continue()));
+            }
+            p.FinalAdd(Return(p.GetIndexer(Long)));
             p.HasResultMethod = true;
         }
     }

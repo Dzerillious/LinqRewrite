@@ -23,6 +23,19 @@ namespace LinqRewrite.Extensions
         public static ParameterSyntax GetLambdaParameter(Lambda lambda, int index)
             => lambda.Parameters[index];
 
+        public static TypeSyntax WrappedItemType(this RewriteParameters p, string pre, CollectionValueBridge collection,
+            string post)
+        {
+            var itemString = pre + collection.ItemType + post;
+            return SyntaxFactory.ParseTypeName(itemString);
+        }
+
+        public static TypeSyntax WrappedType(this RewriteParameters p, string pre, TypeBridge type, string post)
+        {
+            var itemString = pre + type + post;
+            return SyntaxFactory.ParseTypeName(itemString);
+        }
+
         public static TypeSyntax WrappedItemType(this RewriteParameters p, string pre, ValueBridge collection,
             string post)
         {
