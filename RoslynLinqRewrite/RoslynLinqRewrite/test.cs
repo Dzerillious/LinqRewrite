@@ -1,12 +1,12 @@
 using System.Linq;
 using System.Collections.Generic;
 
-static class Example2
+class Example2
 {
-    static void Main()
-    {
-		var arr = new int[10];
-		var a = 4;
-		var test = arr.
-    }
+	public int Method1()
+	{
+		var arr = new[] { 1, 2, 3, 4 };
+		var q = 2;
+		return arr.Where(x => x > q).Select(x => x + 3).Sum();
+	}
 }

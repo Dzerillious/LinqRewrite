@@ -10,18 +10,18 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             if (p.ResultSize != null && args.Length == 0) p.SimpleRewrite = ConditionalExpression(
                 p.CurrentCollection.Count.IsEqual(0),
                 p.CurrentCollection[0],
                 Default(p.ReturnType));
             
             if (args.Length == 0)
-                p.ForAdd(Return(p.Last.Value));
+                p.ForAdd(Return(p.LastValue.Value));
             else
             {
-                p.ForAdd(If(args[0].Inline(p, p.Last),
-                            Return(p.Last.Value)));
+                p.ForAdd(If(args[0].Inline(p, p.LastValue),
+                            Return(p.LastValue.Value)));
             }
             
             p.FinalAdd(Return(Default(p.ReturnType)));

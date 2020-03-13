@@ -21,31 +21,30 @@ namespace LinqRewrite.DataStructures
         public InvocationExpressionSyntax Node { get; private set; }
         public CollectionValueBridge FirstCollection { get; private set; }
         public CollectionValueBridge CurrentCollection { get; set; }
-        public List<LinqStep> Chain { get; private set; }
+        public List<LinqStep> RewriteChain { get; private set; }
 
 
         public TypeBridge ReturnType { get; private set; }
         public ValueBridge ResultSize { get; set; }
         public ValueBridge SourceSize { get; set; }
-        public TypedValueBridge Last { get; set; }
+        public TypedValueBridge LastValue { get; set; }
 
-        public List<StatementSyntax> Initial { get; } = new List<StatementSyntax>();
-        public List<IteratorParameters> FinalIterators { get; } = new List<IteratorParameters>();
+        private readonly List<IteratorParameters> _resultIterators = new List<IteratorParameters>();
+        private readonly List<StatementSyntax> _initialStatements = new List<StatementSyntax>();
+        private readonly List<StatementSyntax> _finalStatements = new List<StatementSyntax>();
         public List<IteratorParameters> Iterators { get; } = new List<IteratorParameters>();
         public IEnumerable<IteratorParameters> IncompleteIterators => Iterators.Where(x => !x.Complete);
-        public IteratorParameters Iterator { get; set; }
-        public List<StatementSyntax> Final { get; } = new List<StatementSyntax>();
+        public IteratorParameters CurrentIterator { get; set; }
+        
         public List<LocalVariable> Variables { get; } = new List<LocalVariable>();
         
-        public bool WrapWithTry { get; set; }
-
         public ExpressionSyntax SimpleRewrite { get; set; }
+        public bool WrapWithTry { get; set; }
         public bool IsReversed { get; set; }
         public bool HasResultMethod { get; set; }
         public bool NotRewrite { get; set; }
 
         private bool _listEnumeration;
-
         public bool ListEnumeration
         {
             get => _listEnumeration;
@@ -58,7 +57,6 @@ namespace LinqRewrite.DataStructures
         }
 
         private bool _modifiedEnumeration;
-
         public bool ModifiedEnumeration
         {
             get => _modifiedEnumeration;
@@ -87,7 +85,7 @@ namespace LinqRewrite.DataStructures
                     IncompleteIterators.Where(x => x.CurrentIndexer == null).ForEach(x =>
                     {
                         x.CurrentIndexer = indexer;
-                        x.EndFor.Add((StatementBridge) indexer.PostIncrement());
+                        x.ForEnd.Add((StatementBridge) indexer.PostIncrement());
                     });
                     return CurrentIndexer = indexer;
                 }
@@ -122,7 +120,7 @@ namespace LinqRewrite.DataStructures
                 IncompleteIterators.Where(x => x.CurrentIndexer == null).ForEach(x =>
                 {
                     x.CurrentIndexer = indexer;
-                    x.EndFor.Add((StatementBridge) indexer.PostIncrement());
+                    x.ForEnd.Add((StatementBridge) indexer.PostIncrement());
                 });
                 return CurrentIndexer = indexer;
             }
@@ -138,26 +136,26 @@ namespace LinqRewrite.DataStructures
 
         public ValueBridge ForMin
         {
-            get => Iterator.ForMin;
-            set => Iterator.ForMin = value;
+            get => CurrentIterator.ForMin;
+            set => CurrentIterator.ForMin = value;
         }
         
         public ValueBridge ForMax
         {
-            get => Iterator.ForMax;
-            set => Iterator.ForMax = value;
+            get => CurrentIterator.ForMax;
+            set => CurrentIterator.ForMax = value;
         }
         
         public ValueBridge ForReMin
         {
-            get => Iterator.ForReverseMin;
-            set => Iterator.ForReverseMin = value;
+            get => CurrentIterator.ForReverseMin;
+            set => CurrentIterator.ForReverseMin = value;
         }
         
         public ValueBridge ForReMax
         {
-            get => Iterator.ForReverseMax;
-            set => Iterator.ForReverseMax = value;
+            get => CurrentIterator.ForReverseMax;
+            set => CurrentIterator.ForReverseMax = value;
         }
         
         public SemanticModel Semantic => Data.Semantic;
@@ -171,19 +169,19 @@ namespace LinqRewrite.DataStructures
         
         public void SetData(ValueBridge collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node)
         {
-            Initial.Clear();
-            Final.Clear();
+            _initialStatements.Clear();
+            _finalStatements.Clear();
             Iterators.Clear();
             Variables.Clear();
-            FinalIterators.Clear();
-            Iterator = null;
+            _resultIterators.Clear();
+            CurrentIterator = null;
             
             var collectionType = collection.GetType(this);
             FirstCollection = CurrentCollection = new CollectionValueBridge(collection.ItemType(this), collectionType, collection.Count(this), collection);
             SourceSize = ResultSize = FirstCollection.Count;
 
             ReturnType = returnType;
-            Chain = chain;
+            RewriteChain = chain;
             Node = node;
 
             HasResultMethod = false;
@@ -194,78 +192,78 @@ namespace LinqRewrite.DataStructures
             NotRewrite = false;
 
             SimpleRewrite = null;
-            Last = null;
+            LastValue = null;
         }
 
         public void InitialAdd(StatementBridge _)
         {
-            Initial.Add(_);
+            _initialStatements.Add(_);
         }
 
         public void PreUseAdd(StatementBridge _)
         {
-            if (Iterators.Count == 0) Initial.Add(_);
-            else IncompleteIterators.First().Pre.Add(_);
+            if (Iterators.Count == 0) _initialStatements.Add(_);
+            else IncompleteIterators.First().PreFor.Add(_);
         }
 
-        public void PreForAdd(StatementBridge _) => Iterator.Pre.Add(_);
+        public void PreForAdd(StatementBridge _) => CurrentIterator.PreFor.Add(_);
         public void ForAdd(StatementBridge _)
         {
-            IncompleteIterators.ForEach(x => x.Body.Add(_));
+            IncompleteIterators.ForEach(x => x.ForBody.Add(_));
         }
         public void ForEndAdd(StatementBridge _)
         {
-            IncompleteIterators.ForEach(x => x.EndFor.Add(_));
+            IncompleteIterators.ForEach(x => x.ForEnd.Add(_));
         }
-        public void LastForAdd(StatementBridge _) => Iterator.BodyAdd(_);
-        public void FinalAdd(StatementBridge _) => Final.Add(_);
+        public void LastForAdd(StatementBridge _) => CurrentIterator.BodyAdd(_);
+        public void FinalAdd(StatementBridge _) => _finalStatements.Add(_);
         
         public IteratorParameters AddIterator(RewrittenValueBridge collection)
         {
-            var oldBody = Iterator;
-            Iterator = new IteratorParameters(this, collection);
-            Iterators.Add(Iterator);
-            FinalIterators.Add(Iterator);
+            var oldBody = CurrentIterator;
+            CurrentIterator = new IteratorParameters(this, collection);
+            Iterators.Add(CurrentIterator);
+            _resultIterators.Add(CurrentIterator);
             return oldBody;
         }
         
         public IteratorParameters CopyIterator()
         {
-            var oldBody = Iterator;
-            Iterator = Iterator.Copy();
-            Iterators.Add(Iterator);
-            FinalIterators.Add(Iterator);
+            var oldBody = CurrentIterator;
+            CurrentIterator = CurrentIterator.Copy();
+            Iterators.Add(CurrentIterator);
+            _resultIterators.Add(CurrentIterator);
             return oldBody;
         }
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {
-            if (Iterators.Count == 0) return Initial.Concat(Final);
+            if (Iterators.Count == 0) return _initialStatements.Concat(_finalStatements);
             var result = new List<StatementSyntax>();
             if (IsReversed)
             {
-                for (var i = FinalIterators.Count - 1; i >= 0; i--)
+                for (var i = _resultIterators.Count - 1; i >= 0; i--)
                 {
-                    var statement = FinalIterators[i].GetStatementSyntax(this);
-                    result.AddRange(FinalIterators[i].Pre);
+                    var statement = _resultIterators[i].GetStatementSyntax(this);
+                    result.AddRange(_resultIterators[i].PreFor);
                     if (statement != null) result.Add(statement);
                 }
             }
-            else for (var i = 0; i < FinalIterators.Count; i++)
+            else for (var i = 0; i < _resultIterators.Count; i++)
             {
-                var statement = FinalIterators[i].GetStatementSyntax(this);
-                result.AddRange(FinalIterators[i].Pre);
+                var statement = _resultIterators[i].GetStatementSyntax(this);
+                result.AddRange(_resultIterators[i].PreFor);
                 if (statement != null) result.Add(statement);
             }
 
             if (WrapWithTry)
             {
-                result = new List<StatementSyntax>(Initial) {TryF(Block(result), Block(Final))};
+                result = new List<StatementSyntax>(_initialStatements) {TryF(Block(result), Block(_finalStatements))};
             }
             else
             {
-                result.InsertRange(0, Initial);
-                result.AddRange(Final);
+                result.InsertRange(0, _initialStatements);
+                result.AddRange(_finalStatements);
             }
             return result;
         }

@@ -68,15 +68,6 @@ namespace LinqRewrite.Extensions
             return GetItemType(collectionType);
         }
 
-        public static TypeSyntax GetType(this ExpressionSyntax item, RewriteParameters p)
-        {
-            var itemString = ModelExtensions.GetTypeInfo(p.Semantic, item).Type.ToDisplayString();
-            return SyntaxFactory.ParseTypeName(itemString);
-        }
-
-        public static ITypeSymbol GetTypeSymbol(this RewriteParameters p, ExpressionSyntax item)
-            => ModelExtensions.GetTypeInfo(p.Semantic, item).Type;
-
         public static ITypeSymbol GetItemType(ITypeSymbol collectionType)
             => collectionType is IArrayTypeSymbol symbol
                 ? symbol.ElementType

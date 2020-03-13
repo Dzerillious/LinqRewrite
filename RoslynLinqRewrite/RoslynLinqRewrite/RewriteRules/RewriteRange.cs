@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using LinqRewrite.DataStructures;
-using LinqRewrite.Extensions;
 using SimpleCollections;
 using static LinqRewrite.Extensions.VariableExtensions;
 
@@ -15,19 +14,19 @@ namespace LinqRewrite.RewriteRules
             var count = args[1];
 
             p.CurrentCollection = null;
-            p.Iterators.Add(p.Iterator = new IteratorParameters(p));
+            p.Iterators.Add(p.CurrentIterator = new IteratorParameters(p));
             p.ForMin = p.ForReMin = from;
             p.ForMax = from + count;
             p.ForReMax = from + count - 1;
             
             p.ListEnumeration = false;
-            p.Iterator.Indexer = p.LocalVariable(Int);
+            p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
             if (p.CurrentIndexer == null)
             {
-                p.Iterator.CurrentIndexer = p.Iterator.Indexer;
-                p.Iterator.CurrentIndexer.IsGlobal = true;
+                p.CurrentIterator.CurrentIndexer = p.CurrentIterator.ForIndexer;
+                p.CurrentIterator.CurrentIndexer.IsGlobal = true;
             }
-            p.Last = p.Indexer;
+            p.LastValue = p.Indexer;
                         
             p.ResultSize = count;
             p.SourceSize = count;

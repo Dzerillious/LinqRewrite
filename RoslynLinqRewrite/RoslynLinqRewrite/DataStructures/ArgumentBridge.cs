@@ -5,7 +5,7 @@ namespace LinqRewrite.DataStructures
 {
     public class ArgumentBridge
     {
-        public new ArgumentSyntax Value { get; }
+        public ArgumentSyntax Value { get; }
 
         public ArgumentBridge(bool value)
         {

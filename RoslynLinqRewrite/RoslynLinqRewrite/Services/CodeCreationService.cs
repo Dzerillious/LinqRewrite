@@ -41,7 +41,7 @@ namespace LinqRewrite.Services
             var itemType = GetItemType(collectionType);
             if (itemType == null) return null;
             
-            return ParenthesizedExpression(
+            return Parenthesize(
                 ConditionalAccessExpression(
                     ParenthesizedExpression(
                         ((VariableBridge)collection.ToString()).As(ParseTypeName($"System.Collections.Generic.ICollection<{itemType.ToDisplayString()}>"))
@@ -55,8 +55,7 @@ namespace LinqRewrite.Services
             => (_data.CurrentMethodTypeParameters?.Parameters.Count).GetValueOrDefault() != 0
                 ? GenericName(
                     Identifier(identifier),
-                    TypeArgumentList(
-                        CreateSeparatedList(_data.CurrentMethodTypeParameters.Parameters
+                    TypeArgumentList(CreateSeparatedList(_data.CurrentMethodTypeParameters.Parameters
                             .Select(x => ParseTypeName(x.Identifier.ValueText)))))
                 : (NameSyntax) IdentifierName(identifier);
 

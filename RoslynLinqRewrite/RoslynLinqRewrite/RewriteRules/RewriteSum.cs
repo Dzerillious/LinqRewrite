@@ -11,21 +11,21 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             var elementType = p.ReturnType.Type is NullableTypeSyntax nullable
                 ? (TypeBridge)nullable.ElementType : p.ReturnType;
             var sumVariable = p.GlobalVariable(elementType, 0);
 
             if (args.Length == 0)
-                p.ForAdd(sumVariable.AddAssign(p.Last.Value));
+                p.ForAdd(sumVariable.AddAssign(p.LastValue.Value));
             else if (p.ReturnType.Type is NullableTypeSyntax)
             {
-                var inlined = args[0].Inline(p, p.Last).Reusable(p);
+                var inlined = args[0].Inline(p, p.LastValue).Reusable(p);
                 p.ForAdd(If(inlined.NotEqual(Null),
-                    sumVariable.AddAssign(inlined)));
+                            sumVariable.AddAssign(inlined)));
             }
-            else p.ForAdd(sumVariable.AddAssign(args[0].Inline(p, p.Last)));
+            else p.ForAdd(sumVariable.AddAssign(args[0].Inline(p, p.LastValue)));
             
             p.FinalAdd(Return(sumVariable));
             p.HasResultMethod = true;

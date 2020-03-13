@@ -88,7 +88,7 @@ namespace LinqRewrite.Services
             => ForStatement(
                 null,
                 default,
-                IdentifierName(indexerVariable).LThan(max),
+                indexerVariable.LThan(max),
                 indexerVariable.SeparatedPostIncrement(),
                 GetBody(p, loopContent));
 
@@ -100,7 +100,7 @@ namespace LinqRewrite.Services
                 indexerVariable.SeparatedPostDecrement(),
                 GetBody(p, loopContent));
 
-        public StatementSyntax GetForEachStatement(RewriteParameters p, LocalVariable enumeratorVariable, ExpressionSyntax collection, List<IStatementSyntax> loopContent) 
+        public StatementSyntax GetForEachStatement(RewriteParameters p, LocalVariable enumeratorVariable, ValueBridge collection, List<IStatementSyntax> loopContent) 
             => TryF(Block(
                     (StatementBridge)enumeratorVariable.Assign(collection.Access("GetEnumerator").Invoke()),
                     While(enumeratorVariable.Access("MoveNext").Invoke(),

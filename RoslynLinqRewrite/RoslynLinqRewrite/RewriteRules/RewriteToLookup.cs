@@ -11,12 +11,12 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             var method = (LambdaExpressionSyntax)args[0];
 
             var lookupType = (TypeBridge)ParseTypeName($"Lookup<{p.CurrentCollection.ItemType},{method.ReturnType(p)}>");
             var lookup = p.GlobalVariable(lookupType, New(lookupType));
-            p.ForAdd(lookup.ArrayAccess(method.Inline(p, p.Last)).Assign(p.Last));
+            p.ForAdd(lookup.ArrayAccess(method.Inline(p, p.LastValue)).Assign(p.LastValue));
             
             p.FinalAdd(Return(lookup));
 

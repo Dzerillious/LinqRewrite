@@ -11,12 +11,12 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             var method = (LambdaExpressionSyntax)args[0];
 
             var dictType = (TypeBridge)ParseTypeName($"Dictionary<{p.CurrentCollection.ItemType},{method.ReturnType(p)}>");
             var dictionary = p.GlobalVariable(dictType, New(dictType));
-            p.ForAdd(dictionary.ArrayAccess(method.Inline(p, p.Last)).Assign(p.Last));
+            p.ForAdd(dictionary.ArrayAccess(method.Inline(p, p.LastValue)).Assign(p.LastValue));
             
             p.FinalAdd(Return(dictionary));
 

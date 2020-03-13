@@ -1,17 +1,16 @@
 ﻿using System;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
-using Microsoft.CodeAnalysis.CSharp;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace LinqRewrite.RewriteRules
 {
-    public class RewriteSequenceEqual
+    public static class RewriteSequenceEqual
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             var collection = args[0];
 
             p.WrapWithTry = true;
@@ -23,14 +22,14 @@ namespace LinqRewrite.RewriteRules
 
             if (args.Length == 1)
             {
-                p.ForAdd(If(Not(enumerator.Access("Current", "Equals").Invoke(p.Last)),
-                    Return(false)));
+                p.ForAdd(If(Not(enumerator.Access("Current", "Equals").Invoke(p.LastValue)),
+                          Return(false)));
             }
             else
             {
                 var inlined = args[1].Reusable(p);
-                p.ForAdd(If(inlined.Access("Equals").Invoke(p.Last, enumerator.Access("Current")),
-                    Return(false)));
+                p.ForAdd(If(inlined.Access("Equals").Invoke(p.LastValue, enumerator.Access("Current")),
+                            Return(false)));
             }
             
             p.FinalAdd(If(enumerator.Access("MoveNext").Invoke(),

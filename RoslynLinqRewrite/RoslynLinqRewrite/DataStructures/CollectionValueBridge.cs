@@ -1,5 +1,4 @@
 ﻿using System;
-using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Constants;
 
@@ -16,7 +15,6 @@ namespace LinqRewrite.DataStructures
         public ValueBridge Count { get; set; }
         public TypeSyntax ItemType { get; set; }
             
-
         public CollectionValueBridge(TypeBridge itemType, TypeBridge type, ValueBridge count, ValueBridge name) : base(type, name)
         {
             Count = count;

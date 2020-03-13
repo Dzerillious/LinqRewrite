@@ -5,23 +5,23 @@ using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
-    public class RewriteConcat
+    public static class RewriteConcat
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             var sourceSize = p.SourceSize;
             var resultSize = p.ResultSize;
             var collection = args[0];
 
             LocalVariable itemVariable;
-            if (p.Last.Value != null && p.Last.Value is LocalVariable lastVariable)
+            if (p.LastValue.Value != null && p.LastValue.Value is LocalVariable lastVariable)
                 itemVariable = lastVariable;
             else
             {
                 itemVariable = p.LocalVariable(Int);
-                p.LastForAdd(itemVariable.Assign(p.Last.Value));
-                p.Last = new TypedValueBridge(Int, itemVariable);
+                p.LastForAdd(itemVariable.Assign(p.LastValue.Value));
+                p.LastValue = new TypedValueBridge(Int, itemVariable);
             }
             
             p.AddIterator(collection);

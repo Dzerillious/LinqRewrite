@@ -12,9 +12,9 @@ namespace LinqRewrite
         public static ExpressionSyntax TryRewrite(RewriteParameters parameters) 
         {
             var regex = new Regex("(.*\\.)?(.*?)(\\<.*\\>)?\\(.*");
-            for (var i = 0; i < parameters.Chain.Count; i++)
+            for (var i = 0; i < parameters.RewriteChain.Count; i++)
             {
-                var step = parameters.Chain[i];
+                var step = parameters.RewriteChain[i];
                 var match = regex.Match(step.MethodName);
 
                 var last = match.Groups[1].Value.EndsWith(".")
@@ -24,7 +24,7 @@ namespace LinqRewrite
 
             if (parameters.SimpleRewrite != null) return parameters.SimpleRewrite;
             if (!parameters.HasResultMethod)
-                parameters.ForAdd(SyntaxFactory.YieldStatement(SyntaxKind.YieldReturnStatement, parameters.Last.Value));
+                parameters.ForAdd(SyntaxFactory.YieldStatement(SyntaxKind.YieldReturnStatement, parameters.LastValue.Value));
             var body = parameters.GetMethodBody();
 
             if (parameters.NotRewrite) throw new NotSupportedException("Not good for rewrite");
@@ -35,7 +35,7 @@ namespace LinqRewrite
 
         private static void RewritePart(string last, RewriteParameters parameters, int i)
         {
-            var args = parameters.Chain[i].Arguments;
+            var args = parameters.RewriteChain[i].Arguments;
             switch (last)
             {
                 case "All": RewriteAll.Rewrite(parameters, args); return;
@@ -63,7 +63,7 @@ namespace LinqRewrite
                 
                 case "Range": RewriteRange.Rewrite(parameters, args); return;
                 case "Repeat": RewriteRepeat.Rewrite(parameters, args); return;
-                case "Empty": RewriteEmpty.Rewrite(parameters, args,  parameters.Chain[i].Invocation); return;
+                case "Empty": RewriteEmpty.Rewrite(parameters, args,  parameters.RewriteChain[i].Invocation); return;
                 
                 case "Skip": RewriteSkip.Rewrite(parameters, args); return;
                 case "SkipWhile": RewriteSkipWhile.Rewrite(parameters, args); return;
@@ -74,8 +74,8 @@ namespace LinqRewrite
                 case "Select": RewriteSelect.Rewrite(parameters, args); return;
                 case "SelectMany": RewriteSelectMany.Rewrite(parameters, args); return;
                 case "Where": RewriteWhere.Rewrite(parameters, args); return;
-                case "Cast": RewriteCast.Rewrite(parameters, args, parameters.Chain[i].Invocation); return;
-                case "OfType": RewriteOfType.Rewrite(parameters, args, parameters.Chain[i].Invocation); return;
+                case "Cast": RewriteCast.Rewrite(parameters, args, parameters.RewriteChain[i].Invocation); return;
+                case "OfType": RewriteOfType.Rewrite(parameters, args, parameters.RewriteChain[i].Invocation); return;
                 
                 case "Concat": RewriteConcat.Rewrite(parameters, args); return;
                 case "Union": RewriteUnion.Rewrite(parameters, args); return;

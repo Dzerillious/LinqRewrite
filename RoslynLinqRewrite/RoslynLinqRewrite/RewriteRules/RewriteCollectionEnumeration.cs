@@ -11,8 +11,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            p.FinalIterators.Add(p.Iterator = new IteratorParameters(p, new RewrittenValueBridge(p.CurrentCollection)));
-            p.Iterators.Add(p.Iterator);
+            p.AddIterator(new RewrittenValueBridge(p.CurrentCollection));
             RewriteOther(p, p.CurrentCollection);
         }
         
@@ -31,21 +30,21 @@ namespace LinqRewrite.RewriteRules
             p.ForMax = collection.Count;
             p.ForReMax = collection.Count - 1;
 
-            p.Iterator.Indexer = p.LocalVariable(Int);
+            p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
             if (p.CurrentIndexer == null)
             {
-                p.Iterator.CurrentIndexer = p.Iterator.Indexer;
-                p.Iterator.CurrentIndexer.IsGlobal = true;
+                p.CurrentIterator.CurrentIndexer = p.CurrentIterator.ForIndexer;
+                p.CurrentIterator.CurrentIndexer.IsGlobal = true;
             }
             
             if (variable == null)
             {
-                p.Last = new TypedValueBridge(collection.ItemType, collection[p.Iterator.Indexer]);
+                p.LastValue = new TypedValueBridge(collection.ItemType, collection[p.CurrentIterator.ForIndexer]);
             }
             else
             {
-                p.Iterator.BodyAdd(variable.Assign(collection[p.Iterator.Indexer]));
-                p.Last = new TypedValueBridge(collection.ItemType, variable);
+                p.CurrentIterator.BodyAdd(variable.Assign(collection[p.CurrentIterator.ForIndexer]));
+                p.LastValue = new TypedValueBridge(collection.ItemType, variable);
             }
             
             p.ResultSize = collection.Count;
@@ -64,21 +63,21 @@ namespace LinqRewrite.RewriteRules
             p.ForMax = sourceCount;
             p.ForReMax = sourceCount - 1;
             
-            p.Iterator.Indexer = p.LocalVariable(Int);
+            p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
             if (p.CurrentIndexer == null)
             {
-                p.Iterator.CurrentIndexer = p.Iterator.Indexer;
-                p.Iterator.CurrentIndexer.IsGlobal = true;
+                p.CurrentIterator.CurrentIndexer = p.CurrentIterator.ForIndexer;
+                p.CurrentIterator.CurrentIndexer.IsGlobal = true;
             }
             
             if (variable == null)
             {
-                p.Last = new TypedValueBridge(collection.ItemType, collection[p.Iterator.Indexer]);
+                p.LastValue = new TypedValueBridge(collection.ItemType, collection[p.CurrentIterator.ForIndexer]);
             }
             else
             {
-                p.Iterator.BodyAdd(variable.Assign(collection[p.Iterator.Indexer]));
-                p.Last = new TypedValueBridge(collection.ItemType, variable);
+                p.CurrentIterator.BodyAdd(variable.Assign(collection[p.CurrentIterator.ForIndexer]));
+                p.LastValue = new TypedValueBridge(collection.ItemType, variable);
             }
             
             p.ResultSize = sourceCount;
@@ -92,13 +91,13 @@ namespace LinqRewrite.RewriteRules
             p.ForMax = p.ForReMax = null;
 
             p.IsReversed = false;
-            p.Iterator.Enumerator = p.GlobalVariable(p.WrappedItemType("IEnumerator<", collection, ">"));
+            p.CurrentIterator.EnumeratorVariable = p.GlobalVariable(p.WrappedItemType("IEnumerator<", collection, ">"));
             if (variable != null)
             {
-                p.LastForAdd(variable.Assign(p.Iterator.Enumerator.Access("Current")));
-                p.Last = new TypedValueBridge(collection.ItemType, variable);
+                p.LastForAdd(variable.Assign(p.CurrentIterator.EnumeratorVariable.Access("Current")));
+                p.LastValue = new TypedValueBridge(collection.ItemType, variable);
             }
-            else p.Last = new TypedValueBridge(collection.ItemType, p.Iterator.Enumerator.Access("Current"));
+            else p.LastValue = new TypedValueBridge(collection.ItemType, p.CurrentIterator.EnumeratorVariable.Access("Current"));
 
             p.SourceSize = null;
             p.ModifiedEnumeration = true;

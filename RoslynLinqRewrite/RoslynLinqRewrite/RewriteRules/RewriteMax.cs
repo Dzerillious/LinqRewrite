@@ -7,11 +7,11 @@ using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace LinqRewrite.RewriteRules
 {
-    public class RewriteMax
+    public static class RewriteMax
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
 
             var elementType = p.ReturnType.Type is NullableTypeSyntax nullable
                 ? (TypeBridge)nullable.ElementType : p.ReturnType;
@@ -26,20 +26,20 @@ namespace LinqRewrite.RewriteRules
 
             if (args.Length == 0)
             {
-                var inlined = p.Last.Reusable(p);
+                var inlined = p.LastValue.Reusable(p);
                 p.ForAdd(If(inlined > maxVariable,
                             maxVariable.Assign(inlined)));
             }
             else if (p.ReturnType.Type is NullableTypeSyntax)
             {
-                var inlined = args[0].Inline(p, p.Last).Reusable(p);
+                var inlined = args[0].Inline(p, p.LastValue).Reusable(p);
                 p.ForAdd(If(inlined.NotEqual(Null),
                             If(inlined > maxVariable,
                                 maxVariable.Assign(inlined))));
             }
             else
             {
-                var inlined = args[0].Inline(p, p.Last).Reusable(p);
+                var inlined = args[0].Inline(p, p.LastValue).Reusable(p);
                 p.ForAdd(If(inlined > maxVariable,
                             maxVariable.Assign(inlined)));
             }

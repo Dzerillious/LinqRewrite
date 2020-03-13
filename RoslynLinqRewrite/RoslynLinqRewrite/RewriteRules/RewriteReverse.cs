@@ -9,11 +9,11 @@ using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
-    public class RewriteReverse
+    public static class RewriteReverse
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             if (!p.ModifiedEnumeration) p.IsReversed = !p.IsReversed;
             else if (p.SourceSize != null) KnownSourceSize(p);
@@ -34,7 +34,7 @@ namespace LinqRewrite.RewriteRules
             p.PreUseAdd(logVariable.SubAssign(logVariable % 2));
             var currentLengthVariable = p.LocalVariable(Int, 8);
 
-            var resultVariable = p.GlobalVariable(p.Last.Type.ArrayType(), CreateArray(p.Last.Type.ArrayType(), 8));
+            var resultVariable = p.GlobalVariable(p.LastValue.Type.ArrayType(), CreateArray(p.LastValue.Type.ArrayType(), 8));
             p.PreForAdd(reverseIndexer.Assign(8));
 
             var tmpSize = p.LocalVariable(Int);
@@ -53,17 +53,17 @@ namespace LinqRewrite.RewriteRules
             
             p.Indexer = null;
 
-            p.ForAdd(resultVariable[reverseIndexer].Assign(p.Last.Value));
-            p.CurrentCollection = new CollectionValueBridge(p.Last.Type, ArrayType(p.Last.Type), currentLengthVariable - reverseIndexer, resultVariable);
+            p.ForAdd(resultVariable[reverseIndexer].Assign(p.LastValue.Value));
+            p.CurrentCollection = new CollectionValueBridge(p.LastValue.Type, ArrayType(p.LastValue.Type), currentLengthVariable - reverseIndexer, resultVariable);
             
-            p.Iterator.Complete = true;
+            p.CurrentIterator.Complete = true;
             RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             p.ResultSize = p.SourceSize = currentLengthVariable - reverseIndexer;
             p.ForMin = p.ForReMin = 0;
             p.ForMax = currentLengthVariable - reverseIndexer;
             p.ForReMax = currentLengthVariable - reverseIndexer - 1;
-            p.Last = new TypedValueBridge(p.CurrentCollection.ItemType, p.CurrentCollection[p.Indexer + reverseIndexer]);
+            p.LastValue = new TypedValueBridge(p.CurrentCollection.ItemType, p.CurrentCollection[p.Indexer + reverseIndexer]);
         }
 
         private static void UnknownSourceSize(RewriteParameters p)
@@ -72,7 +72,7 @@ namespace LinqRewrite.RewriteRules
             var reverseIndexer = p.LocalVariable(Int);
                 
             var currentLengthVariable = p.LocalVariable(Int, 8);
-            var resultVariable = p.GlobalVariable(p.Last.Type.ArrayType(), CreateArray(p.Last.Type.ArrayType(), 8));
+            var resultVariable = p.GlobalVariable(p.LastValue.Type.ArrayType(), CreateArray(p.LastValue.Type.ArrayType(), 8));
             p.PreForAdd(reverseIndexer.Assign(8));
 
             var tmpSize = p.LocalVariable(Int);
@@ -89,17 +89,17 @@ namespace LinqRewrite.RewriteRules
             
             p.Indexer = null;
 
-            p.ForAdd(resultVariable[reverseIndexer].Assign(p.Last.Value));
-            p.CurrentCollection = new CollectionValueBridge(p.Last.Type, ArrayType(p.Last.Type), currentLengthVariable - reverseIndexer, resultVariable);
+            p.ForAdd(resultVariable[reverseIndexer].Assign(p.LastValue.Value));
+            p.CurrentCollection = new CollectionValueBridge(p.LastValue.Type, ArrayType(p.LastValue.Type), currentLengthVariable - reverseIndexer, resultVariable);
             
-            p.Iterator.Complete = true;
+            p.CurrentIterator.Complete = true;
             RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             p.ResultSize = p.SourceSize = currentLengthVariable - reverseIndexer;
             p.ForMin = p.ForReMin = 0;
             p.ForMax = currentLengthVariable - reverseIndexer;
             p.ForReMax = currentLengthVariable - reverseIndexer - 1;
-            p.Last = new TypedValueBridge(p.CurrentCollection.ItemType, p.CurrentCollection[p.Indexer + reverseIndexer]);
+            p.LastValue = new TypedValueBridge(p.CurrentCollection.ItemType, p.CurrentCollection[p.Indexer + reverseIndexer]);
         }
     }
 }

@@ -8,9 +8,9 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
 
-            p.ForAdd(args[0].Inline(p, p.Last));
+            p.ForAdd(args[0].Inline(p, p.LastValue));
             p.HasResultMethod = true;
         }
     }

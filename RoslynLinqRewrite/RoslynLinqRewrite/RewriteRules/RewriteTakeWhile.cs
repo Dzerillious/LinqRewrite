@@ -11,14 +11,14 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             var method = args[0];
             
-            p.Last = p.Last.Reusable(p);
+            p.LastValue = p.LastValue.Reusable(p);
             
             p.ForAdd(If(Not(method.OldVal is SimpleLambdaExpressionSyntax
-                            ? method.Inline(p, p.Last)
-                            : method.Inline(p, p.Last, p.Indexer)),
+                            ? method.Inline(p, p.LastValue)
+                            : method.Inline(p, p.LastValue, p.Indexer)),
                         Break()));
 
             p.ModifiedEnumeration = true;

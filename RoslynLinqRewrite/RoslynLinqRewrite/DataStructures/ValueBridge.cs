@@ -76,9 +76,6 @@ namespace LinqRewrite.DataStructures
 
         public static ValueBridge operator %(ValueBridge a, ValueBridge b)
             => SyntaxFactory.ParenthesizedExpression(a.Mod(b));
-
-        public static ValueBridge operator !(ValueBridge a)
-            => OperatorExpressionExtensions.Not(a);
         
         public static BinaryExpressionSyntax operator >(ValueBridge a, ValueBridge b)
             => a.GThan(b);

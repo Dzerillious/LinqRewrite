@@ -11,7 +11,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.Iterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             if (p.ResultSize != null && args.Length == 0) ConditionalExpression(p.CurrentCollection.Count.IsEqual(1),
                 p.CurrentCollection[0],
                 Default(p.ReturnType));
@@ -21,14 +21,14 @@ namespace LinqRewrite.RewriteRules
             if (args.Length == 0)
             {
                 p.ForAdd(If(foundVariable.IsEqual(Null),
-                            foundVariable.Assign(p.Last.Value), 
+                            foundVariable.Assign(p.LastValue.Value), 
                             Return(Default(p.ReturnType))));
             }
             else
             {
-                p.ForAdd(If(args[0].Inline(p, p.Last),
+                p.ForAdd(If(args[0].Inline(p, p.LastValue),
                             If(foundVariable.IsEqual(Null),
-                                foundVariable.Assign(p.Last.Value),
+                                foundVariable.Assign(p.LastValue.Value),
                                 Return(Default(p.ReturnType)))));
             }
             

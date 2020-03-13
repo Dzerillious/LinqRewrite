@@ -32,21 +32,15 @@ namespace LinqRewrite.Extensions
                 ObjectCreationExpression(
                     ParseTypeName(type),
                     CreateArguments(message != null
-                        ? new ExpressionSyntax[]
+                        ? new ValueBridge[]
                         {
                             LiteralExpression(SyntaxKind.StringLiteralExpression,
                                 Literal(message))
                         }
-                        : new ExpressionSyntax[] { }), null));
+                        : new ValueBridge[] { }), null));
 
         public static SeparatedSyntaxList<T> CreateSeparatedList<T>(IEnumerable<T> items) where T : SyntaxNode
             => SeparatedList(items);
-
-        public static ArgumentListSyntax CreateArguments(IEnumerable<ExpressionSyntax> items)
-            => CreateArguments(items.Select(SyntaxFactory.Argument));
-
-        public static ArgumentListSyntax CreateArguments(params ExpressionSyntax[] items)
-            => CreateArguments((IEnumerable<ExpressionSyntax>) items);
 
         public static ArgumentSyntax Argument(ValueBridge value)
             => SyntaxFactory.Argument(value);
@@ -74,6 +68,9 @@ namespace LinqRewrite.Extensions
 
         public static ArgumentListSyntax CreateArguments(params ArgumentSyntax[] items)
             => ArgumentList(CreateSeparatedList(items));
+
+        public static ArgumentListSyntax CreateArguments(IEnumerable<ValueBridge> items)
+            => ArgumentList(CreateSeparatedList(items.Select(Argument)));
 
         public static ArgumentListSyntax CreateArguments(params ValueBridge[] items)
             => ArgumentList(CreateSeparatedList(items.Select(Argument)));
@@ -140,14 +137,6 @@ namespace LinqRewrite.Extensions
         }
 
         public static TypedValueBridge Reusable(this ValueBridge e, RewriteParameters p)
-        {
-            if (IsReusable(e)) return new TypedValueBridge(e.GetType(p), e);
-
-            var tmpVariable = p.LocalVariable(e.GetType(p), e);
-            return new TypedValueBridge(Int, IdentifierName(tmpVariable));
-        }
-
-        public static TypedValueBridge Reusable(this ExpressionSyntax e, RewriteParameters p)
         {
             if (IsReusable(e)) return new TypedValueBridge(e.GetType(p), e);
 
@@ -258,5 +247,8 @@ namespace LinqRewrite.Extensions
 
         public static TypeBridge ReturnType(this LambdaExpressionSyntax lambda, RewriteParameters p)
             => p.Code.GetLambdaReturnType(p.Semantic, lambda);
+
+        public static ValueBridge Parenthesize(ExpressionSyntax expression)
+            => ParenthesizedExpression(expression);
     };
 }

@@ -14,7 +14,7 @@ namespace LinqRewrite.RewriteRules
             var item = args[0];
             var count = args[1];
             
-            p.Iterators.Add(p.Iterator = new IteratorParameters(p));
+            p.Iterators.Add(p.CurrentIterator = new IteratorParameters(p));
             p.ForMin = p.ForReMin = 0;
             p.ForMax = count;
             p.ForReMax = count - 1;
@@ -23,13 +23,13 @@ namespace LinqRewrite.RewriteRules
             p.SourceSize = count;
             p.ListEnumeration = false;
             
-            p.Iterator.Indexer = p.LocalVariable(Int);
+            p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
             if (p.CurrentIndexer == null)
             {
-                p.Iterator.CurrentIndexer = p.Iterator.Indexer;
-                p.Iterator.CurrentIndexer.IsGlobal = true;
+                p.CurrentIterator.CurrentIndexer = p.CurrentIterator.ForIndexer;
+                p.CurrentIterator.CurrentIndexer.IsGlobal = true;
             }
-            p.Last = new TypedValueBridge(p.CurrentCollection.ItemType(p), item);
+            p.LastValue = new TypedValueBridge(p.CurrentCollection.ItemType(p), item);
             
             p.CurrentCollection = null;
         }
