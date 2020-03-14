@@ -11,22 +11,22 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            var collection = args[0];
-            var method = args[1];
+            var collectionValue = args[0];
+            var methodValue = args[1];
 
             p.WrapWithTry = true;
-            var enumerator = p.GlobalVariable(p.WrappedItemType("IEnumerator<", collection, ">"));
-            p.PreUseAdd(enumerator.Assign(collection.Access("GetEnumerator").Invoke()));
+            var enumeratorVariable = p.GlobalVariable(p.WrappedItemType("IEnumerator<", collectionValue, ">"));
+            p.PreUseAdd(enumeratorVariable.Assign(collectionValue.Access("GetEnumerator").Invoke()));
             
-            p.ForAdd(If(Not(enumerator.Access("MoveNext").Invoke()),
+            p.ForAdd(If(Not(enumeratorVariable.Access("MoveNext").Invoke()),
                 CreateThrowException("InvalidOperationException", "Invalid sizes of sources")));
 
-            p.LastValue = method.Inline(p, p.LastValue, new TypedValueBridge(collection.ItemType(p), enumerator.Access("Current")));
+            p.LastValue = methodValue.Inline(p, p.LastValue, new TypedValueBridge(collectionValue.ItemType(p), enumeratorVariable.Access("Current")));
             
-            p.FinalAdd(If(enumerator.Access("MoveNext").Invoke(),
+            p.FinalAdd(If(enumeratorVariable.Access("MoveNext").Invoke(),
                 CreateThrowException("InvalidOperationException", "Invalid sizes of sources")));
 
-            p.FinalAdd(enumerator.Access("Dispose").Invoke());
+            p.FinalAdd(enumeratorVariable.Access("Dispose").Invoke());
             p.ListEnumeration = false;
         }
     }

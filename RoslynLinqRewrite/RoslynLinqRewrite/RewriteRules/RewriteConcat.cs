@@ -10,9 +10,9 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            var sourceSize = p.SourceSize;
-            var resultSize = p.ResultSize;
-            var collection = args[0];
+            var sourceSizeValue = p.SourceSize;
+            var resultSizeValue = p.ResultSize;
+            var collectionValue = args[0];
 
             LocalVariable itemVariable;
             if (p.LastValue.Value != null && p.LastValue.Value is LocalVariable lastVariable)
@@ -24,13 +24,13 @@ namespace LinqRewrite.RewriteRules
                 p.LastValue = new TypedValueBridge(Int, itemVariable);
             }
             
-            p.AddIterator(collection);
-            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(collection.ItemType(p), collection.GetType(p), collection.Count(p), collection.Old), itemVariable);
+            p.AddIterator(collectionValue);
+            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(collectionValue.ItemType(p), collectionValue.GetType(p), collectionValue.Count(p), collectionValue.Old), itemVariable);
 
-            if (sourceSize != null && p.SourceSize != null) p.SourceSize += sourceSize;
+            if (sourceSizeValue != null && p.SourceSize != null) p.SourceSize += sourceSizeValue;
             else p.SourceSize = null;
             
-            if (resultSize != null && p.ResultSize != null) p.ResultSize += resultSize;
+            if (resultSizeValue != null && p.ResultSize != null) p.ResultSize += resultSizeValue;
             else p.ResultSize = null;
         }
     }

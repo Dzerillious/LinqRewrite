@@ -38,14 +38,13 @@ namespace LinqRewrite.RewriteRules
             var resultVariable = p.GlobalVariable(arrayType, CreateArray(arrayType, p.ResultSize));
 
             p.ForAdd(resultVariable[p.Indexer].Assign(p.LastValue.Value));
-            
             p.FinalAdd(Return(resultVariable));
             return resultVariable;
         }
 
         private static VariableBridge KnownSourceSize(RewriteParameters p)
         {
-            var indexer = p.Indexer;
+            var indexerVariable = p.Indexer;
                 
             var logVariable = p.GlobalVariable(Int, 
                 "SimpleCollections".Access("IntExtensions", "Log2")
@@ -65,13 +64,13 @@ namespace LinqRewrite.RewriteRules
                                     RefArg(logVariable),
                                     OutArg(currentLengthVariable))));
                 
-            p.ForAdd(resultVariable[indexer].Assign(p.LastValue.Value));
+            p.ForAdd(resultVariable[indexerVariable].Assign(p.LastValue.Value));
             return resultVariable;
         }
 
         private static VariableBridge UnknownSourceSize(RewriteParameters p)
         {
-            var indexer = p.Indexer;
+            var indexerVariable = p.Indexer;
             
             var currentLengthVariable = p.GlobalVariable(Int, 8);
             var resultType = (ArrayTypeSyntax) p.ReturnType;
@@ -81,7 +80,7 @@ namespace LinqRewrite.RewriteRules
                             "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")
                                     .Invoke(2, RefArg(resultVariable), RefArg(currentLengthVariable))));
                 
-            p.ForAdd(resultVariable[indexer].Assign(p.LastValue.Value));
+            p.ForAdd(resultVariable[indexerVariable].Assign(p.LastValue.Value));
             p.HasResultMethod = true;
             return resultVariable;
         }
@@ -93,12 +92,12 @@ namespace LinqRewrite.RewriteRules
             
             if (p.CurrentCollection.CollectionType == CollectionType.Array)
             {
-                var min = p.CurrentIterator == null ? 0 : p.CurrentIterator.ForMin;
-                var size = p.CurrentIterator == null ? p.ResultSize : p.CurrentIterator.ForMax - p.CurrentIterator.ForMin;
+                var minValue = p.CurrentIterator == null ? 0 : p.CurrentIterator.ForMin;
+                var sizeValue = p.CurrentIterator == null ? p.ResultSize : p.CurrentIterator.ForMax - p.CurrentIterator.ForMin;
                 
                 var resultVariable = p.GlobalVariable(p.ReturnType, CreateArray((ArrayTypeSyntax) p.ReturnType, p.CurrentCollection.Count));
                 p.FinalAdd("Array".Access("Copy")
-                    .Invoke(p.CurrentCollection, min, resultVariable, 0, size));
+                    .Invoke(p.CurrentCollection, minValue, resultVariable, 0, sizeValue));
                 p.FinalAdd(Return(resultVariable));
                 return true;
             }

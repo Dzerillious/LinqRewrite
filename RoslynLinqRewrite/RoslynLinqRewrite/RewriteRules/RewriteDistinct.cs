@@ -13,12 +13,13 @@ namespace LinqRewrite.RewriteRules
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
 
             var hashsetType = p.WrappedType("HashSet<", p.LastValue.Type, ">");
+            var hashsetVariable = p.GlobalVariable(hashsetType, args.Length switch
+            {
+                0 => New(hashsetType),
+                1 => New(hashsetType, args[0])
+            });
             
-            var hashset = args.Length == 0 
-                ? p.GlobalVariable(hashsetType, New(hashsetType))
-                : p.GlobalVariable(hashsetType, New(hashsetType, args[0]));
-
-            p.ForAdd(If(Not(hashset.Access("Add").Invoke(p.LastValue.Value)),
+            p.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue.Value)),
                         Continue()));
             
             p.ModifiedEnumeration = true;

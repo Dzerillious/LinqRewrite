@@ -11,16 +11,16 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
-            var item = args[0];
-            var count = args[1];
+            var itemValue = args[0];
+            var countValue = args[1];
             
             p.Iterators.Add(p.CurrentIterator = new IteratorParameters(p));
             p.ForMin = p.ForReMin = 0;
-            p.ForMax = count;
-            p.ForReMax = count - 1;
+            p.ForMax = countValue;
+            p.ForReMax = countValue - 1;
             
-            p.ResultSize = count;
-            p.SourceSize = count;
+            p.ResultSize = countValue;
+            p.SourceSize = countValue;
             p.ListEnumeration = false;
             
             p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
@@ -29,7 +29,7 @@ namespace LinqRewrite.RewriteRules
                 p.CurrentIterator.CurrentIndexer = p.CurrentIterator.ForIndexer;
                 p.CurrentIterator.CurrentIndexer.IsGlobal = true;
             }
-            p.LastValue = new TypedValueBridge(p.CurrentCollection.ItemType(p), item);
+            p.LastValue = new TypedValueBridge(p.CurrentCollection.ItemType(p), itemValue);
             
             p.CurrentCollection = null;
         }

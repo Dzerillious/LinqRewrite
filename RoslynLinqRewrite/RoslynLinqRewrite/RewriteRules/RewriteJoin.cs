@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,43 +10,24 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteJoin
     {
-        // private static IEnumerable<int> JoinIterator(
-        //     IEnumerable<int> outer,
-        //     IEnumerable<int> inner,
-        //     Func<int, int> outerKeySelector,
-        //     Func<int, int> innerKeySelector,
-        //     Func<int, int, int> resultSelector)
-        // {
-        //     InternalLookup<int, int> lookup = InternalLookup<int, int>.CreateForJoin(inner, innerKeySelector, EqualityComparer<int>.Default);
-        //     foreach (int outer1 in outer)
-        //     {
-        //         int item = outer1;
-        //         InternalLookup<int, int>.Grouping g = lookup.GetGrouping(outerKeySelector(item), false);
-        //         if (g == null) continue;
-        //         
-        //         for (int i = 0; i < g.count; ++i)
-        //             yield return resultSelector(item, g.elements[i]);
-        //     }
-        // }
-        
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            var inner = args[0];
+            var innerValue = args[0];
             var outerKeySelector = (LambdaExpressionSyntax)args[1];
             var innerKeySelector = (LambdaExpressionSyntax)args[2];
-            var resultSelector = args[3];
+            var resultSelectorValue = args[3];
+            var comparerValue = args.Length == 5 ? args[4] : null;
 
-            var lookupType = ParseTypeName($"InternalLookup<{inner.ItemType(p).Type},{innerKeySelector.ReturnType(p).Type}>");
+            var lookupType = ParseTypeName($"InternalLookup<{innerValue.ItemType(p).Type},{innerKeySelector.ReturnType(p).Type}>");
             var lookupVariable = p.GlobalVariable(lookupType, lookupType.Access("CreateForJoin")
-                .Invoke(inner, innerKeySelector,
-                    args.Length == 5 ? args[4] : null));
+                .Invoke(innerValue, innerKeySelector, comparerValue));
 
-            var itemVariable = p.LastValue;
-            var groupingType = ParseTypeName($"InternalLookup<{inner.ItemType(p).Type},{outerKeySelector.ReturnType(p).Type}>.Grouping");
+            var itemValue = p.LastValue;
+            var groupingType = ParseTypeName($"InternalLookup<{innerValue.ItemType(p).Type},{outerKeySelector.ReturnType(p).Type}>.Grouping");
             var groupingVariable = p.GlobalVariable(groupingType);
             p.ForAdd(groupingVariable.Assign(lookupVariable.Access("GetGrouping")
-                .Invoke(outerKeySelector.Inline(p, itemVariable), false)));
+                .Invoke(outerKeySelector.Inline(p, itemValue), false)));
             
             p.ForAdd(If(groupingVariable.IsEqual(null), Continue()));
             
@@ -60,9 +39,9 @@ namespace LinqRewrite.RewriteRules
             p.Iterators.Remove(p.CurrentIterator);
             p.CurrentIterator = newIterator;
                 
-            GroupingEnumeration(p, new CollectionValueBridge(inner.ItemType(p), groupingType, groupingVariable.Access("count"), rewritten));
+            GroupingEnumeration(p, new CollectionValueBridge(innerValue.ItemType(p), groupingType, groupingVariable.Access("count"), rewritten));
             
-            p.LastValue = resultSelector.Inline(p, itemVariable, p.LastValue);
+            p.LastValue = resultSelectorValue.Inline(p, itemValue, p.LastValue);
             p.ModifiedEnumeration = true;
         }
 

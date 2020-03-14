@@ -23,25 +23,21 @@ namespace LinqRewrite.RewriteRules
                 "double" => p.GlobalVariable(VariableExtensions.Double, double.MaxValue),
                 _ => null
             };
-
-            if (args.Length == 0)
+            var value = args.Length switch
             {
-                var inlined = p.LastValue.ReusableConst(p);
-                p.ForAdd(If(inlined < minVariable,
-                            minVariable.Assign(inlined)));
-            }
-            else if (p.ReturnType.Type is NullableTypeSyntax)
+                0 => p.LastValue.Reusable(p),
+                1 => args[0].Inline(p, p.LastValue).Reusable(p)
+            };
+            if (p.ReturnType.Type is NullableTypeSyntax)
             {
-                var inlined = args[0].Inline(p, p.LastValue).ReusableConst(p);
-                p.ForAdd(If(inlined.NotEqual(null),
-                            If(inlined < minVariable,
-                                minVariable.Assign(inlined))));
+                p.ForAdd(If(value.NotEqual(null),
+                            If(value < minVariable,
+                                minVariable.Assign(value))));
             }
             else
             {
-                var inlined = args[0].Inline(p, p.LastValue).ReusableConst(p);
-                p.ForAdd(If(inlined < minVariable,
-                            minVariable.Assign(inlined)));
+                p.ForAdd(If(value < minVariable,
+                            minVariable.Assign(value)));
             }
             
             p.FinalAdd(Return(minVariable));

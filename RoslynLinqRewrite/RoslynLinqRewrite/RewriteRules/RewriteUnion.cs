@@ -11,23 +11,26 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            var sourceSize = p.SourceSize;
-            var collection = args[0];
+            var sourceSizeValue = p.SourceSize;
+            var collectionValue = args[0];
 
             var hashsetType = p.WrappedType("HashSet<", p.LastValue.Type, ">");
-            var hashset = args.Length == 1
-                ? p.GlobalVariable(hashsetType, New(hashsetType))
-                : p.GlobalVariable(hashsetType, New(hashsetType, args[1]));
+            var hashsetCreation = args.Length switch
+            {
+                1 => New(hashsetType),
+                2 => New(hashsetType, args[1])
+            };
+            var hashsetVariable = p.GlobalVariable(hashsetType, hashsetCreation);
 
-            p.ForAdd(If(Not(hashset.Access("Add").Invoke(p.LastValue.Value)),
+            p.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue.Value)),
                             Continue()));
             
-            p.AddIterator(collection);
-            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(collection.ItemType(p), collection.GetType(p), collection.Count(p), collection.Old));
-            p.LastForAdd(If(Not(hashset.Access("Add").Invoke(p.LastValue.Value)),
+            p.AddIterator(collectionValue);
+            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(collectionValue.ItemType(p), collectionValue.GetType(p), collectionValue.Count(p), collectionValue.Old));
+            p.LastForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue.Value)),
                             Continue()));
 
-            if (sourceSize != null && p.SourceSize != null) p.SourceSize += sourceSize;
+            if (sourceSizeValue != null && p.SourceSize != null) p.SourceSize += sourceSizeValue;
             else p.SourceSize = null;
             
             p.ModifiedEnumeration = true;

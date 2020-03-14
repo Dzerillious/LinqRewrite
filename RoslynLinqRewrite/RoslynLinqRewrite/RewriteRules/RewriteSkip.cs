@@ -10,13 +10,13 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
-            var skipped = args[0];
+            var skippedValue = args[0];
             if (!p.ModifiedEnumeration)
             {
-                p.ForMin = p.ForReMin += skipped;
-                p.ResultSize -= skipped;
+                p.ForMin = p.ForReMin += skippedValue;
+                p.ResultSize -= skippedValue;
             }
-            else p.ForAdd(If(p.Indexer < skipped, Continue()));
+            else p.ForAdd(If(p.Indexer < skippedValue, Continue()));
             p.Indexer = null;
         }
     }

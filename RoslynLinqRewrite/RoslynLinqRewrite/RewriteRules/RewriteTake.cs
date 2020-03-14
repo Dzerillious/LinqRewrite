@@ -10,14 +10,14 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
-            var take = args[0];
+            var takeValue = args[0];
             if (!p.ModifiedEnumeration)
             {
-                p.ForMax += take;
-                p.ForReMin -= take;
-                p.ResultSize = take;
+                p.ForMax += takeValue;
+                p.ForReMin -= takeValue;
+                p.ResultSize = takeValue;
             }
-            else p.ForAdd(If(p.Indexer > take, Break()));
+            else p.ForAdd(If(p.Indexer > takeValue, Break()));
             p.Indexer = null;
         }
     }

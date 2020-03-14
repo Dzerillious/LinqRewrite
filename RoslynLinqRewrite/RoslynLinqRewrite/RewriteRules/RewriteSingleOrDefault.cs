@@ -2,7 +2,6 @@
 using LinqRewrite.DataStructures;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
-using static LinqRewrite.Extensions.VariableExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace LinqRewrite.RewriteRules
@@ -17,7 +16,6 @@ namespace LinqRewrite.RewriteRules
                 Default(p.ReturnType));
             
             var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
-
             if (args.Length == 0)
             {
                 p.ForAdd(If(foundVariable.IsEqual(null),

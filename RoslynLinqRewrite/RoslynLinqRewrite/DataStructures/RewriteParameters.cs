@@ -290,6 +290,23 @@ namespace LinqRewrite.DataStructures
             return created;
         }
         
+        public LocalVariable LocalVariable(TypedValueBridge value)
+        {
+            var variable = "v" + _variableIndex++;
+            var found = Variables.FirstOrDefault(x => x.Type.Equals(value.Type) && !x.IsGlobal && !x.IsUsed);
+            if (found != null)
+            {
+                found.IsUsed = true;
+                return found;
+            }
+            var created = new LocalVariable(variable, value.Type);
+            Variables.Add(created);
+            
+            InitialAdd(LocalVariableCreation(variable, value.Type));
+            PreUseAdd(((ValueBridge)variable).Assign(value));
+            return created;
+        }
+        
         public LocalVariable LocalVariable(TypeBridge type, ValueBridge initial)
         {
             var variable = "v" + _variableIndex++;

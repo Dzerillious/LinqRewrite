@@ -2,7 +2,6 @@
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using static LinqRewrite.Extensions.VariableExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace LinqRewrite.RewriteRules
@@ -16,20 +15,21 @@ namespace LinqRewrite.RewriteRules
             var elementType = p.ReturnType.Type is NullableTypeSyntax nullable
                 ? (TypeBridge)nullable.ElementType : p.ReturnType;
             var sumVariable = p.GlobalVariable(elementType, 0);
-
-            if (args.Length == 0)
+            
+            var selectionValue = args.Length switch
             {
-                p.ForAdd(sumVariable.AddAssign(p.LastValue.Value));
-            }
-            else if (p.ReturnType.Type is NullableTypeSyntax)
+                0 => p.LastValue,
+                1 => args[0].Inline(p, p.LastValue)
+            };
+            if (p.ReturnType.Type is NullableTypeSyntax)
             {
-                var inlined = args[0].Inline(p, p.LastValue).ReusableConst(p);
-                p.ForAdd(If(inlined.NotEqual(null),
-                            sumVariable.AddAssign(inlined)));
+                var inlinedValue = selectionValue.ReusableConst(p);
+                p.ForAdd(If(inlinedValue.NotEqual(null),
+                            sumVariable.AddAssign(inlinedValue)));
             }
             else
             {
-                p.ForAdd(sumVariable.AddAssign(args[0].Inline(p, p.LastValue)));
+                p.ForAdd(sumVariable.AddAssign(selectionValue));
             }
 
             p.FinalAdd(Return(p.ResultSize == null

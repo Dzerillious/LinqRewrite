@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace LinqRewrite.DataStructures
 {
@@ -6,6 +7,12 @@ namespace LinqRewrite.DataStructures
     {
         public new ValueBridge Value { get; }
         public TypeSyntax Type { get; }
+
+        public TypedValueBridge(RewriteParameters p, ValueBridge value) : base(value)
+        {
+            Type = value.GetType(p);
+            Value = value;
+        }
 
         public TypedValueBridge(TypeSyntax type, IdentifierNameSyntax name) : base(name)
         {

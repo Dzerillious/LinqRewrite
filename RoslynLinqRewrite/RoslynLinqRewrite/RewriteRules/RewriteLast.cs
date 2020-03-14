@@ -2,7 +2,6 @@
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-using static LinqRewrite.Extensions.VariableExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace LinqRewrite.RewriteRules

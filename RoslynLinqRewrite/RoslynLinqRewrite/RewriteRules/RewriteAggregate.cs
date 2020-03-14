@@ -10,17 +10,25 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            
+            var aggregationValue = args.Length switch
+            {
+                1 => args[0],
+                _ => args[1]
+            };
 
-            var resultVariable = args.Length == 1 
-                ? p.LocalVariable(p.CurrentCollection.ItemType,  p.CurrentCollection[0])
-                : p.LocalVariable(args[0].GetType(p), args[0]);
+            var resultValue = args.Length switch
+            {
+                1 => p.CurrentCollection[0],
+                _ => new TypedValueBridge(p, args[0])
+            };
 
-            var method = args.Length == 1 ? args[0] : args[1];
-            p.ForAdd(resultVariable.Assign(method.Inline(p, resultVariable, p.LastValue)));
-
-            p.FinalAdd(args.Length == 3 
-                ? Return(args[2].Inline(p, resultVariable)) 
-                : Return(resultVariable));
+            p.ForAdd(resultValue.Assign(aggregationValue.Inline(p, resultValue, p.LastValue)));
+            p.FinalAdd(Return(args.Length switch
+            {
+                3 => args[2].Inline(p, resultValue),
+                _ => resultValue
+            }));
             p.HasResultMethod = true;
         }
     }

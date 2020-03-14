@@ -10,11 +10,12 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            var method = args[0];
 
-            p.LastValue = method.OldVal is SimpleLambdaExpressionSyntax
-                ? method.Inline(p, p.LastValue)
-                : method.Inline(p, p.LastValue, p.Indexer);
+            p.LastValue = args.Length switch
+            {
+                1 when args[0].OldVal is SimpleLambdaExpressionSyntax => args[0].Inline(p, p.LastValue),
+                1 => args[0].Inline(p, p.LastValue, p.Indexer)
+            };
 
             p.ListEnumeration = false;
         }

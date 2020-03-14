@@ -11,31 +11,25 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            var collection = args[0];
 
             p.WrapWithTry = true;
-            var enumerator = p.GlobalVariable(p.WrappedItemType("IEnumerator<", collection, ">"));
-            p.PreUseAdd(enumerator.Assign(collection.Access("GetEnumerator").Invoke()));
+            var enumeratorVariable = p.GlobalVariable(p.WrappedItemType("IEnumerator<", args[0], ">"));
+            p.PreUseAdd(enumeratorVariable.Assign(args[0].Access("GetEnumerator").Invoke()));
             
-            p.ForAdd(If(Not(enumerator.Access("MoveNext").Invoke()),
+            p.ForAdd(If(Not(enumeratorVariable.Access("MoveNext").Invoke()),
+                        CreateThrowException("InvalidOperationException", "Invalid sizes of sources")));
+            
+            var equalityTestValue = args.Length switch
+            {
+                1 => enumeratorVariable.Access("Current", "Equals").Invoke(p.LastValue),
+                2 => args[1].ReusableConst(p).Access("Equals").Invoke(p.LastValue, enumeratorVariable.Access("Current"))
+            };
+            p.ForAdd(If(Not(equalityTestValue), Return(false)));
+            
+            p.FinalAdd(If(enumeratorVariable.Access("MoveNext").Invoke(),
                 CreateThrowException("InvalidOperationException", "Invalid sizes of sources")));
 
-            if (args.Length == 1)
-            {
-                p.ForAdd(If(Not(enumerator.Access("Current", "Equals").Invoke(p.LastValue)),
-                          Return(false)));
-            }
-            else
-            {
-                var inlined = args[1].ReusableConst(p);
-                p.ForAdd(If(inlined.Access("Equals").Invoke(p.LastValue, enumerator.Access("Current")),
-                            Return(false)));
-            }
-            
-            p.FinalAdd(If(enumerator.Access("MoveNext").Invoke(),
-                CreateThrowException("InvalidOperationException", "Invalid sizes of sources")));
-
-            p.FinalAdd(enumerator.Access("Dispose").Invoke());
+            p.FinalAdd(enumeratorVariable.Access("Dispose").Invoke());
             p.FinalAdd(Return(true));
 
             p.HasResultMethod = true;

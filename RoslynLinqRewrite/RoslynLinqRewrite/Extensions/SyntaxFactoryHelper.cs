@@ -163,6 +163,10 @@ namespace LinqRewrite.Extensions
             return new TypedValueBridge(Int, IdentifierName(tmpVariable));
         }
 
+        public static TypedValueBridge Inline(this TypedValueBridge e, RewriteParameters p,
+            params TypedValueBridge[] values)
+            => Inline(e.Value, p, values);
+
         public static TypedValueBridge Inline(this ExpressionSyntax e, RewriteParameters p,
             params TypedValueBridge[] values)
         {

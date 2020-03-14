@@ -53,11 +53,11 @@ namespace LinqRewrite.RewriteRules
 
         public static void ListEnumeration(RewriteParameters p, CollectionValueBridge collection, LocalVariable variable = null)
         {
-            var sourceCount = collection.Count.ReusableConst(p, Int);
+            var sourceCountValue = collection.Count.ReusableConst(p, Int);
 
             p.ForMin = p.ForReMin = 0;
-            p.ForMax = sourceCount;
-            p.ForReMax = sourceCount - 1;
+            p.ForMax = sourceCountValue;
+            p.ForReMax = sourceCountValue - 1;
             
             p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
             if (p.CurrentIndexer == null)
@@ -76,8 +76,8 @@ namespace LinqRewrite.RewriteRules
                 p.LastValue = new TypedValueBridge(collection.ItemType, variable);
             }
             
-            p.ResultSize = sourceCount;
-            p.SourceSize = sourceCount;
+            p.ResultSize = sourceCountValue;
+            p.SourceSize = sourceCountValue;
             p.ListEnumeration = true;
         }
 

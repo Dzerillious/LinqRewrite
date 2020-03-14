@@ -12,8 +12,8 @@ namespace LinqRewrite.RewriteRules
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             if (p.ResultSize != null && args.Length == 0) p.SimpleRewrite = p.CurrentCollection[args[0]];
             
-            var position = args[0].ReusableConst(p);
-            p.ForAdd(If(p.Indexer.IsEqual(position),
+            var positionValue = args[0].ReusableConst(p);
+            p.ForAdd(If(p.Indexer.IsEqual(positionValue),
                         Return(p.LastValue.Value)));
             
             p.FinalAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not enough elements."));

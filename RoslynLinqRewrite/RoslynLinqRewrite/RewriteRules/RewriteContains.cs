@@ -11,19 +11,15 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
-            var element = p.Node.ArgumentList.Arguments.First().Expression;
-            if (args.Length == 1)
-            {
-                p.ForAdd(If(p.LastValue.Value.IsEqual(element),
-                            Return(true)));
-            }
-            else
-            {
-                var inlined = args[1].ReusableConst(p);
-                p.ForAdd(If(inlined.Access("Equals").Invoke(p.LastValue.Value, element),
-                            Return(true)));
-            }
+            var elementSyntax = p.Node.ArgumentList.Arguments.First().Expression;
             
+            var elementEqualityValue = args.Length switch
+            {
+                0 => p.LastValue.Value.IsEqual(elementSyntax),
+                1 => args[1].ReusableConst(p).Access("Equals").Invoke(p.LastValue.Value, elementSyntax),
+            };
+            
+            p.ForAdd(If(elementEqualityValue, Return(true)));
             p.FinalAdd(Return(false));
             p.HasResultMethod = true;
         }

@@ -3,7 +3,6 @@ using LinqRewrite.DataStructures;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
-using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -17,7 +16,6 @@ namespace LinqRewrite.RewriteRules
                 CreateThrowException("System.InvalidOperationException", "The sequence does not contain one element."));
             
             var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
-
             if (args.Length == 0)
             {
                 p.ForAdd(If(foundVariable.IsEqual(null),

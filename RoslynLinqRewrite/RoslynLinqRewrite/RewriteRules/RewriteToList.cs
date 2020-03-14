@@ -12,11 +12,11 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
 
-            var listType = (TypeBridge)ParseTypeName($"List<{p.CurrentCollection.ItemType}>");
-            var list = p.GlobalVariable(listType, New(listType));
-            p.ForAdd(list.Access("Add").Invoke(p.LastValue));
+            TypeBridge listType = ParseTypeName($"List<{p.CurrentCollection.ItemType}>");
+            var listVariable = p.GlobalVariable(listType, New(listType));
+            p.ForAdd(listVariable.Access("Add").Invoke(p.LastValue));
             
-            p.FinalAdd(Return(list));
+            p.FinalAdd(Return(listVariable));
             p.HasResultMethod = true;
         }
     }

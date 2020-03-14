@@ -13,20 +13,14 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
 
-            var method = args[0];
-
             p.LastValue = p.LastValue.ReusableConst(p);
-            if (method.OldVal is SimpleLambdaExpressionSyntax)
+            var conditionValue = args.Length switch
             {
-                p.ForAdd(If(Not(method.Inline(p, p.LastValue)),
-                            Continue()));
-            }
-            else 
-            {
-                p.ForAdd(If(Not(method.Inline(p, p.LastValue, p.Indexer)),
-                            Continue()));
-            }
-
+                1 when args[0].OldVal is SimpleLambdaExpressionSyntax => args[0].Inline(p, p.LastValue),
+                1 => args[0].Inline(p, p.LastValue, p.Indexer)
+            };
+            
+            p.ForAdd(If(Not(conditionValue), Continue()));
             p.ModifiedEnumeration = true;
         }
     }
