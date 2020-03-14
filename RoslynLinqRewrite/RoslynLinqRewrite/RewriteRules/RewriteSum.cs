@@ -21,8 +21,8 @@ namespace LinqRewrite.RewriteRules
                 p.ForAdd(sumVariable.AddAssign(p.LastValue.Value));
             else if (p.ReturnType.Type is NullableTypeSyntax)
             {
-                var inlined = args[0].Inline(p, p.LastValue).Reusable(p);
-                p.ForAdd(If(inlined.NotEqual(Null),
+                var inlined = args[0].Inline(p, p.LastValue).ReusableConst(p);
+                p.ForAdd(If(inlined.NotEqual(null),
                             sumVariable.AddAssign(inlined)));
             }
             else p.ForAdd(sumVariable.AddAssign(args[0].Inline(p, p.LastValue)));

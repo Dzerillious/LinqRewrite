@@ -120,7 +120,7 @@ namespace LinqRewrite.Extensions
         public static DefaultExpressionSyntax Default(TypeBridge @type)
             => DefaultExpression(@type);
 
-        public static TypedValueBridge Reusable(this RewrittenValueBridge e, RewriteParameters p)
+        public static TypedValueBridge ReusableConst(this RewrittenValueBridge e, RewriteParameters p)
         {
             if (IsReusable(e)) return new TypedValueBridge(e.Old.GetType(p), e);
 
@@ -128,7 +128,7 @@ namespace LinqRewrite.Extensions
             return new TypedValueBridge(Int, IdentifierName(tmpVariable));
         }
 
-        public static TypedValueBridge Reusable(this ValueBridge e, RewriteParameters p, TypeBridge type)
+        public static TypedValueBridge ReusableConst(this ValueBridge e, RewriteParameters p, TypeBridge type)
         {
             if (IsReusable(e)) return new TypedValueBridge(type, e);
 
@@ -136,21 +136,31 @@ namespace LinqRewrite.Extensions
             return new TypedValueBridge(Int, IdentifierName(tmpVariable));
         }
 
-        public static TypedValueBridge Reusable(this ValueBridge e, RewriteParameters p)
-        {
-            if (IsReusable(e)) return new TypedValueBridge(e.GetType(p), e);
-
-            var tmpVariable = p.LocalVariable(e.GetType(p), e);
-            return new TypedValueBridge(Int, IdentifierName(tmpVariable));
-        }
-
-        public static TypedValueBridge Reusable(this TypedValueBridge e, RewriteParameters p)
+        public static TypedValueBridge ReusableConst(this TypedValueBridge e, RewriteParameters p)
         {
             if (IsReusable(e)) return e;
 
             var tmpVariable = p.LocalVariable(e.Type);
             p.ForAdd(tmpVariable.Assign(e));
             return new TypedValueBridge(e.Type, tmpVariable);
+        }
+
+        public static TypedValueBridge Reusable(this ValueBridge e, RewriteParameters p, TypeBridge type)
+        {
+            if (IsReusable(e)) return new TypedValueBridge(type, e);
+
+            var tmpVariable = p.LocalVariable(type);
+            p.ForAdd(tmpVariable.Assign(e));
+            return new TypedValueBridge(Int, IdentifierName(tmpVariable));
+        }
+
+        public static TypedValueBridge Reusable(this TypedValueBridge e, RewriteParameters p)
+        {
+            if (IsReusable(e)) return new TypedValueBridge(e.Type, e);
+
+            var tmpVariable = p.LocalVariable(e.Type);
+            p.ForAdd(tmpVariable.Assign(e));
+            return new TypedValueBridge(Int, IdentifierName(tmpVariable));
         }
 
         public static TypedValueBridge Inline(this ExpressionSyntax e, RewriteParameters p,

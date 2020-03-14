@@ -16,7 +16,7 @@ namespace LinqRewrite.RewriteRules
                 ? method.Inline(p, p.LastValue)
                 : method.Inline(p, p.LastValue, p.Indexer);
             
-            var rewritten = new RewrittenValueBridge(((LambdaExpressionSyntax)method).ExpressionBody, collection.Reusable(p));
+            var rewritten = new RewrittenValueBridge(((LambdaExpressionSyntax)method).ExpressionBody, collection.ReusableConst(p));
 
             var newIterator = new IteratorParameters(p, rewritten);
             p.CurrentIterator.ForBody.Add(newIterator);
@@ -27,6 +27,9 @@ namespace LinqRewrite.RewriteRules
             var itemType = ((ValueBridge)((LambdaExpressionSyntax)method).ExpressionBody).ItemType(p);
             var collectionType = ((LambdaExpressionSyntax) method).ReturnType(p);
             RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(itemType, collectionType, rewritten.Count(p), rewritten));
+            
+            if (args.Length == 2)
+                p.LastValue = args[1].Inline(p, p.LastValue, p.Indexer);
 
             p.ModifiedEnumeration = true;
         }

@@ -102,8 +102,7 @@ namespace LinqRewrite.Services
 
         public StatementSyntax GetForEachStatement(RewriteParameters p, LocalVariable enumeratorVariable, ValueBridge collection, List<IStatementSyntax> loopContent) 
             => TryF(Block(
-                    (StatementBridge)enumeratorVariable.Assign(collection.Access("GetEnumerator").Invoke()),
-                    While(enumeratorVariable.Access("MoveNext").Invoke(),
+                    (StatementBridge)While(enumeratorVariable.Access("MoveNext").Invoke(),
                         GetBody(p, loopContent)
                     )
                 ),

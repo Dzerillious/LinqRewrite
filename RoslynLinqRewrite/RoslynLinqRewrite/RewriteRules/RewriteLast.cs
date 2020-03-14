@@ -14,7 +14,7 @@ namespace LinqRewrite.RewriteRules
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             if (p.ResultSize != null && args.Length == 0) p.SimpleRewrite = p.CurrentCollection[p.CurrentCollection.Count - 1];
             
-            var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), Null);
+            var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
             
             if (args.Length == 0)
                 p.ForAdd(foundVariable.Assign(p.LastValue.Value));
@@ -24,7 +24,7 @@ namespace LinqRewrite.RewriteRules
                             foundVariable.Assign(p.LastValue.Value)));
             }
             
-            p.FinalAdd(If(foundVariable.IsEqual(Null),
+            p.FinalAdd(If(foundVariable.IsEqual(null),
                             CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."), 
                             Return(foundVariable.Cast(p.ReturnType))));
             p.HasResultMethod = true;

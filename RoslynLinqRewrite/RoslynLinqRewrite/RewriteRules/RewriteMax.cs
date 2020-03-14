@@ -32,14 +32,14 @@ namespace LinqRewrite.RewriteRules
             }
             else if (p.ReturnType.Type is NullableTypeSyntax)
             {
-                var inlined = args[0].Inline(p, p.LastValue).Reusable(p);
-                p.ForAdd(If(inlined.NotEqual(Null),
+                var inlined = args[0].Inline(p, p.LastValue).ReusableConst(p);
+                p.ForAdd(If(inlined.NotEqual(null),
                             If(inlined > maxVariable,
                                 maxVariable.Assign(inlined))));
             }
             else
             {
-                var inlined = args[0].Inline(p, p.LastValue).Reusable(p);
+                var inlined = args[0].Inline(p, p.LastValue).ReusableConst(p);
                 p.ForAdd(If(inlined > maxVariable,
                             maxVariable.Assign(inlined)));
             }

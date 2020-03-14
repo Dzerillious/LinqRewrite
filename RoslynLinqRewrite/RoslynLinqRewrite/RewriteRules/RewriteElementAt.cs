@@ -12,7 +12,7 @@ namespace LinqRewrite.RewriteRules
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             if (p.ResultSize != null && args.Length == 0) p.SimpleRewrite = p.CurrentCollection[args[0]];
             
-            var position = args[0].Reusable(p);
+            var position = args[0].ReusableConst(p);
             p.ForAdd(If(p.Indexer.IsEqual(position),
                         Return(p.LastValue.Value)));
             

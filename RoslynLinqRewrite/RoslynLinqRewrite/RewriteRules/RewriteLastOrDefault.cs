@@ -17,7 +17,7 @@ namespace LinqRewrite.RewriteRules
                 p.CurrentCollection[p.CurrentCollection.Count - 1],
                 Default(p.ReturnType));
             
-            var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), Null);
+            var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
             
             if (args.Length == 0)
                 p.ForAdd(foundVariable.Assign(p.LastValue.Value));
@@ -27,7 +27,7 @@ namespace LinqRewrite.RewriteRules
                             foundVariable.Assign(p.LastValue.Value)));
             }
             
-            p.FinalAdd(If(foundVariable.IsEqual(Null),
+            p.FinalAdd(If(foundVariable.IsEqual(null),
                             Return(Default(p.ReturnType)), 
                             Return(foundVariable.Cast(p.ReturnType))));
             p.HasResultMethod = true;

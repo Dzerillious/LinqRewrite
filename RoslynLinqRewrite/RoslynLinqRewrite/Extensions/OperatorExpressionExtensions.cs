@@ -82,7 +82,7 @@ namespace LinqRewrite.Extensions
             => BinaryExpression(SyntaxKind.GreaterThanOrEqualExpression, a, b);
         public static BinaryExpressionSyntax GThan(this ValueBridge a, ValueBridge b)
             => BinaryExpression(SyntaxKind.GreaterThanExpression, a, b);
-        public static BinaryExpressionSyntax NotEqual(this ValueBridge a, ExpressionSyntax b)
+        public static BinaryExpressionSyntax NotEqual(this ValueBridge a, ValueBridge b)
             => BinaryExpression(SyntaxKind.NotEqualsExpression, a, b);
 
         public static BinaryExpressionSyntax As(this ValueBridge identifier, ValueBridge b)

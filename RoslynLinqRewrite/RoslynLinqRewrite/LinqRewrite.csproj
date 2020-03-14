@@ -56,10 +56,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="test.cs" />
-    <Content Include="test.cs">
+    <Compile Update="test.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Compile>
   </ItemGroup>
 
 </Project>

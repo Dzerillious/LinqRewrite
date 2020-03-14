@@ -203,7 +203,7 @@ namespace LinqRewrite.DataStructures
         public void PreUseAdd(StatementBridge _)
         {
             if (Iterators.Count == 0) _initialStatements.Add(_);
-            else IncompleteIterators.First().PreFor.Add(_);
+            else _resultIterators.First(x => !x.Complete).PreFor.Add(_);
         }
 
         public void PreForAdd(StatementBridge _) => CurrentIterator.PreFor.Add(_);

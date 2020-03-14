@@ -16,23 +16,23 @@ namespace LinqRewrite.RewriteRules
                 p.CurrentCollection[0],
                 CreateThrowException("System.InvalidOperationException", "The sequence does not contain one element."));
             
-            var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), Null);
+            var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
 
             if (args.Length == 0)
             {
-                p.ForAdd(If(foundVariable.IsEqual(Null),
+                p.ForAdd(If(foundVariable.IsEqual(null),
                             foundVariable.Assign(p.LastValue.Value), 
                             CreateThrowException("System.InvalidOperationException", "The sequence contains more than single matching element.")));
             }
             else
             {
                 p.ForAdd(If(args[0].Inline(p, p.LastValue),
-                            If(foundVariable.IsEqual(Null),
+                            If(foundVariable.IsEqual(null),
                                 foundVariable.Assign(p.LastValue.Value),
                                 CreateThrowException("System.InvalidOperationException", "The sequence contains more than single matching element."))));
             }
             
-            p.FinalAdd(If(foundVariable.IsEqual(Null),
+            p.FinalAdd(If(foundVariable.IsEqual(null),
                             CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."), 
                             Return(foundVariable.Cast(p.ReturnType))));
             p.HasResultMethod = true;

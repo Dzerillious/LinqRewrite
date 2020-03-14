@@ -1,12 +1,13 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Security.Policy;
 
 class Example2
 {
-	public int Method1()
+	public void Method1()
 	{
-		var arr = new[] { 1, 2, 3, 4 };
-		var q = 2;
-		return arr.Where(x => x > q).Select(x => x + 3).Sum();
+		var arr = new[] { 1, 2, 3, 4 }.AsEnumerable();
+		arr.
 	}
 }

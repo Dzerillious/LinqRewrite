@@ -213,7 +213,7 @@ namespace LinqRewrite
                     SyntaxFactory.Parameter(forEach.Identifier), forEach.Statement)), 
             };
             chain.Insert(0,
-                new LinqStep(Constants.EnumerableForEachMethod, identifiers)
+                new LinqStep(Constants.ForEach2, identifiers)
                 {
                     Lambda = new Lambda(forEach.Statement,
                         new[]

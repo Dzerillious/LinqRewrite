@@ -75,7 +75,7 @@ namespace LinqRewrite.RewriteRules
             
             var currentLengthVariable = p.GlobalVariable(Int, 8);
             var resultType = (ArrayTypeSyntax) p.ReturnType;
-            var resultVariable = p.GlobalVariable(Int, CreateArray(resultType, 8));
+            var resultVariable = p.GlobalVariable(resultType, CreateArray(resultType, 8));
                 
             p.ForAdd(If(p.Indexer >= currentLengthVariable,
                             "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")

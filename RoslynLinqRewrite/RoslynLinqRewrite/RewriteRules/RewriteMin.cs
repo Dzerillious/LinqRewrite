@@ -26,20 +26,20 @@ namespace LinqRewrite.RewriteRules
 
             if (args.Length == 0)
             {
-                var inlined = p.LastValue.Reusable(p);
+                var inlined = p.LastValue.ReusableConst(p);
                 p.ForAdd(If(inlined < minVariable,
                             minVariable.Assign(inlined)));
             }
             else if (p.ReturnType.Type is NullableTypeSyntax)
             {
-                var inlined = args[0].Inline(p, p.LastValue).Reusable(p);
-                p.ForAdd(If(inlined.NotEqual(Null),
+                var inlined = args[0].Inline(p, p.LastValue).ReusableConst(p);
+                p.ForAdd(If(inlined.NotEqual(null),
                             If(inlined < minVariable,
                                 minVariable.Assign(inlined))));
             }
             else
             {
-                var inlined = args[0].Inline(p, p.LastValue).Reusable(p);
+                var inlined = args[0].Inline(p, p.LastValue).ReusableConst(p);
                 p.ForAdd(If(inlined < minVariable,
                             minVariable.Assign(inlined)));
             }

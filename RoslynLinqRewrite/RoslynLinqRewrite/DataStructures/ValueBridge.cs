@@ -1,6 +1,7 @@
 ﻿using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Operations;
 
 namespace LinqRewrite.DataStructures
 {
@@ -60,7 +61,7 @@ namespace LinqRewrite.DataStructures
             => new ValueBridge(name);
         
         public static implicit operator ExpressionSyntax(ValueBridge name)
-            => name.Value;
+            => name?.Value ?? VariableExtensions.Null;
 
         public static ValueBridge operator +(ValueBridge a, ValueBridge b)
             => SyntaxFactory.ParenthesizedExpression(a.Add(b));

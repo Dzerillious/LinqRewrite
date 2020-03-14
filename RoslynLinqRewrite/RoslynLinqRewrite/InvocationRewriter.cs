@@ -86,6 +86,10 @@ namespace LinqRewrite
                 case "SequenceEqual": RewriteSequenceEqual.Rewrite(parameters, args); return;
                 case "Zip": RewriteZip.Rewrite(parameters, args); return;
                 
+                case "Join": RewriteJoin.Rewrite(parameters, args); return;
+                case "GroupBy": RewriteGroupBy.Rewrite(parameters, args); return;
+                case "GroupJoin": RewriteGroupJoin.Rewrite(parameters, args); return;
+                
                 case "ToArray": RewriteToArray.Rewrite(parameters, args); return;
                 case "ToList": RewriteToList.Rewrite(parameters, args); return;
                 case "ToDictionary": RewriteToDictionary.Rewrite(parameters, args); return;

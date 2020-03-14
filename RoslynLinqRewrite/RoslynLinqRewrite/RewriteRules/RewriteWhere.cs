@@ -15,7 +15,7 @@ namespace LinqRewrite.RewriteRules
 
             var method = args[0];
 
-            p.LastValue = p.LastValue.Reusable(p);
+            p.LastValue = p.LastValue.ReusableConst(p);
             if (method.OldVal is SimpleLambdaExpressionSyntax)
             {
                 p.ForAdd(If(Not(method.Inline(p, p.LastValue)),

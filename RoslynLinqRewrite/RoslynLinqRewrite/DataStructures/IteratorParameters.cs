@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -49,23 +50,41 @@ namespace LinqRewrite.DataStructures
                 ForBody = new List<IStatementSyntax>(ForBody),
             };
 
-        public StatementSyntax GetStatementSyntax(RewriteParameters p)
+        public void CalculatePreAdd(RewriteParameters p)
         {
-            if (IgnoreIterator) return null;
+            ForBody.ForEach(x =>
+            {
+                if (x is IteratorParameters iteratorParameters)
+                    iteratorParameters.CalculatePreAdd(p);
+            });
             if (ForMin == null)
             {
-                return p.Rewrite.GetForEachStatement(p, EnumeratorVariable, Collection, ForBody.Concat(ForEnd).ToList());
+                PreFor.Add((StatementBridge)EnumeratorVariable.Assign(Collection.Access("GetEnumerator").Invoke()));
             }
             else if (p.IsReversed)
             {
                 PreFor.Add((StatementBridge)ForIndexer.Assign(ForReverseMax));
-                return p.Rewrite.GetReverseForStatement(p, ForIndexer, ForReverseMin, ForBody.Concat(ForEnd).ToList());
             }
             else
             {
                 PreFor.Add((StatementBridge)ForIndexer.Assign(ForMin));
-                return p.Rewrite.GetForStatement(p, ForIndexer, ForMax, ForBody.Concat(ForEnd).ToList());
             }
+        }
+
+        public StatementSyntax GetStatementSyntax(RewriteParameters p)
+        {
+            if (IgnoreIterator) return null;
+            CalculatePreAdd(p);
+            var content = ForBody.SelectMany(x => 
+                x is IteratorParameters parameters
+                    ? parameters.PreFor.Select(x => (StatementBridge)x).Concat(new[] {x})
+                    : new[] {x}).Concat(ForEnd).ToList();
+            
+            if (ForMin == null)
+                return p.Rewrite.GetForEachStatement(p, EnumeratorVariable, Collection, content);
+            else if (p.IsReversed)
+                return p.Rewrite.GetReverseForStatement(p, ForIndexer, ForReverseMin, content);
+            else return p.Rewrite.GetForStatement(p, ForIndexer, ForMax, content);
         }
     }
 }

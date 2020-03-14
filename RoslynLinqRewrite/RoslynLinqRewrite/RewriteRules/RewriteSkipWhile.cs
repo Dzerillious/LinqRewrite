@@ -14,7 +14,7 @@ namespace LinqRewrite.RewriteRules
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             var method = args[0];
             
-            p.LastValue = p.LastValue.Reusable(p);
+            p.LastValue = p.LastValue.ReusableConst(p);
 
             var lastFor = p.CopyIterator();
             lastFor.BodyAdd(If(Not(method.OldVal is SimpleLambdaExpressionSyntax

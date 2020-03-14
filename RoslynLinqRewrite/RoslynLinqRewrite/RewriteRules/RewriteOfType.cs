@@ -17,7 +17,7 @@ namespace LinqRewrite.RewriteRules
             var name = (GenericNameSyntax) access.Name;
             var type = name.TypeArgumentList.Arguments[0];
 
-            p.LastValue = p.LastValue.Reusable(p);
+            p.LastValue = p.LastValue.ReusableConst(p);
             p.ForAdd(If(Not(p.LastValue.Is(type)),
                         Continue()));
 

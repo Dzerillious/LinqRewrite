@@ -19,7 +19,7 @@ namespace LinqRewrite.RewriteRules
             }
             else
             {
-                var inlined = args[1].Reusable(p);
+                var inlined = args[1].ReusableConst(p);
                 p.ForAdd(If(inlined.Access("Equals").Invoke(p.LastValue.Value, element),
                             Return(true)));
             }

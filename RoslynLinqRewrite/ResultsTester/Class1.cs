@@ -1,63 +1,47 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LinqRewrite.DataStructures;
 
 namespace ResultsTester
 {
     static class Example2
     {
-        static void Main()
+        public static void Main()
         {
-            var arr = Enumerable.Range(0, 50).ToArray();
-            var test = Main_ProceduralLinq1();
-            test = Main_ProceduralLinq2();
+            var arr = new[] { 1, 2, 3, 4 };
+            var q = 2;
+
+            var res = arr.GroupJoin(arr, x => x, x => x, (x, y) => x + y.Sum()).ToArray();
+            var a = Method1_ProceduralLinq1(arr);
         }
 
-        static int[] Main_ProceduralLinq1()
+        static int[] Method1_ProceduralLinq1(int[] arr)
         {
             int v0;
-            int v1;
-            int v2 = (SimpleCollections.IntExtensions.Log2((uint)100) - 3);
-            v2 -= (v2 % 2);
-            int v3 = 8;
-            int[] v4 = new int[8];
-            v1 = 8;
-            int v5;
-            v0 = 5;
-            for (; v0 < (5 + 100); v0++)
-            {
-                if (!(v0 >= 25))
-                    continue;
-                --v1;
-                if (v1 < 0)
-                {
-                    v5 = v3;
-                    SimpleCollections.EnlargeExtensions.LogEnlargeReverseArray(2, 100, ref v4, ref v2, out v3);
-                    v1 = ((v3 - v5) - 1);
-                }
-
-                v4[v1] = v0;
-            }
-
-            int[] v6 = new int[(v3 - v1)];
+            InternalLookup<int, int> v1;
+            int v2;
+            int v3;
+            int v4;
+            int[] v5;
+            v1 = InternalLookup<int, int>.CreateForJoin(arr, x => x, null);
+            v2 = 0;
+            v3 = (SimpleCollections.IntExtensions.Log2((uint)arr.Length) - 3);
+            v3 -= (v3 % 2);
+            v4 = 8;
+            v5 = new int[8];
             v0 = 0;
-            for (; v0 < (v3 - v1); v0++)
-                v6[v0] = v4[(v0 + v1)];
-            return v6;
-        }
-
-
-        static int[] Main_ProceduralLinq2()
-        {
-            int v0;
-            int[] v1 = new int[(100 - 20)];
-            int v2 = 0;
-            v0 = ((5 + 100) - 1);
-            for (; v0 >= (5 + 20); v0--)
+            for (; v0 < arr.Length; v0++)
             {
-                v1[v2] = v0;
+                if (v2 >= v4)
+                    SimpleCollections.EnlargeExtensions.LogEnlargeArray(2, arr.Length, ref v5, ref v3, out v4);
+                v5[v2] = (arr[v0] + v1[(arr[v0])].Sum());
                 v2++;
             }
 
-            return v1;
+            return SimpleCollections.SimpleArrayExtensions.EnsureFullArray(v5, v2);
         }
+
+
     }
 }

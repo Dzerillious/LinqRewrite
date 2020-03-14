@@ -16,7 +16,7 @@ namespace LinqRewrite.RewriteRules
                 p.CurrentCollection[args[0]],
                 Default(p.ReturnType));
             
-            var position = args[0].Reusable(p);
+            var position = args[0].ReusableConst(p);
             p.ForAdd(If(p.Indexer.IsEqual(position),
                         Return(p.LastValue.Value)));
             

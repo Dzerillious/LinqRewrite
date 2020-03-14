@@ -2,7 +2,6 @@
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using SimpleCollections;
-using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
@@ -54,10 +53,7 @@ namespace LinqRewrite.RewriteRules
 
         public static void ListEnumeration(RewriteParameters p, CollectionValueBridge collection, LocalVariable variable = null)
         {
-            p.PreUseAdd( If(collection.IsEqual(Null),
-                            CreateThrowException("System.InvalidOperationException", "Collection was null.")));
-
-            var sourceCount = collection.Count.Reusable(p, Int);
+            var sourceCount = collection.Count.ReusableConst(p, Int);
 
             p.ForMin = p.ForReMin = 0;
             p.ForMax = sourceCount;

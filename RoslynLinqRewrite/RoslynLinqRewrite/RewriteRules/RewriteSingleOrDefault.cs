@@ -16,23 +16,23 @@ namespace LinqRewrite.RewriteRules
                 p.CurrentCollection[0],
                 Default(p.ReturnType));
             
-            var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), Null);
+            var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
 
             if (args.Length == 0)
             {
-                p.ForAdd(If(foundVariable.IsEqual(Null),
+                p.ForAdd(If(foundVariable.IsEqual(null),
                             foundVariable.Assign(p.LastValue.Value), 
                             Return(Default(p.ReturnType))));
             }
             else
             {
                 p.ForAdd(If(args[0].Inline(p, p.LastValue),
-                            If(foundVariable.IsEqual(Null),
+                            If(foundVariable.IsEqual(null),
                                 foundVariable.Assign(p.LastValue.Value),
                                 Return(Default(p.ReturnType)))));
             }
             
-            p.FinalAdd(If(foundVariable.IsEqual(Null),
+            p.FinalAdd(If(foundVariable.IsEqual(null),
                             Return(Default(p.ReturnType)), 
                             Return(foundVariable.Cast(p.ReturnType))));
             p.HasResultMethod = true;
