@@ -43,7 +43,7 @@ namespace LinqRewrite.Services
         internal ExpressionSyntax GetCollectionInvocationExpression(RewriteParameters p, IEnumerable<StatementSyntax> body)
         {
             var parameters = _data.CurrentFlow
-                .Select(x => CreateParameter(x.Name, GetSymbolType(x.Symbol)).WithRef(x.Changes))
+                .Select(x => CreateParameter(x.Name, SymbolExtensions.GetType(x.Symbol)).WithRef(x.Changes))
                 .Distinct(new ParameterComparer());
            
             var functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
@@ -54,34 +54,12 @@ namespace LinqRewrite.Services
             var coreFunction = GetCoreMethod(p.ReturnType, functionName, parameters, body);
 
             _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, coreFunction));
-            var args = new[] {Argument(p.FirstCollection)}.Concat(arguments.Arguments.Skip(1));
             
             var inv = InvocationExpression(
-                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), CreateArguments(args));
+                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), CreateArguments(arguments.Arguments));
 
             return inv;
         }
-        
-        internal ExpressionSyntax GetInvocationExpression(RewriteParameters p, IEnumerable<StatementSyntax> body)
-        {
-            var parameters = _data.CurrentFlow.Select(x => CreateParameter(x.Name, GetSymbolType(x.Symbol)).WithRef(x.Changes))
-                .Distinct(new ParameterComparer());
-           
-            var functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
-            var arguments = CreateArguments(
-                _data.CurrentFlow.Select(x => Argument(x.Name).WithRef(x.Changes)));
-
-            var coreFunction = GetCoreMethod(p.ReturnType, functionName, parameters, body);
-
-            _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, coreFunction));
-            var args = arguments.Arguments;
-            
-            var inv = InvocationExpression(
-                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), CreateArguments(args));
-
-            return inv;
-        }
-
 
         private StatementSyntax GetBody(RewriteParameters p, List<IStatementSyntax> body) => AggregateStatementSyntax(body.Select(x => x.GetStatementSyntax(p)).Where(x => x != null).ToArray());
         public ForStatementSyntax GetForStatement(RewriteParameters p, LocalVariable indexerVariable, ValueBridge max, List<IStatementSyntax> loopContent)

@@ -17,7 +17,7 @@ namespace LinqRewrite.RewriteRules
             var resultSelector = args[3];
             var comparer = args.Length == 5 ? args[4] : null;
 
-            var lookupType = ParseTypeName($"InternalLookup<{inner.ItemType(p).Type},{innerKeySelector.ReturnType(p).Type}>");
+            var lookupType = ParseTypeName($"SimpleLookup<{inner.ItemType(p).Type},{innerKeySelector.ReturnType(p).Type}>");
             var lookupVariable = p.GlobalVariable(lookupType, lookupType.Access("CreateForJoin")
                 .Invoke(inner, innerKeySelector, comparer));
 

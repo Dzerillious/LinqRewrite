@@ -14,7 +14,7 @@ namespace LinqRewrite.RewriteRules
             
             var positionValue = args[0].ReusableConst(p);
             p.ForAdd(If(p.Indexer.IsEqual(positionValue),
-                        Return(p.LastValue.Value)));
+                        Return(p.LastValue)));
             
             p.FinalAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not enough elements."));
             p.HasResultMethod = true;

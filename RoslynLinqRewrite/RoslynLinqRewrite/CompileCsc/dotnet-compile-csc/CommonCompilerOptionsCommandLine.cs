@@ -1,9 +1,7 @@
 // // Copyright (c) .NET Foundation and contributors. All rights reserved.
 // // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 //
-// using Microsoft.DotNet.Cli.CommandLine;
-// using Microsoft.DotNet.ProjectModel;
-// using static Microsoft.DotNet.Cli.Compiler.Common.CommonCompilerOptionsExtensions;
+// using LinqRewrite.CompileCsc.CommandLine;
 //
 // namespace Microsoft.DotNet.Tools.Compiler
 // {

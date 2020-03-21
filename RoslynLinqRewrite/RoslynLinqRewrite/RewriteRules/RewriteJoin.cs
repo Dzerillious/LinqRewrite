@@ -19,12 +19,12 @@ namespace LinqRewrite.RewriteRules
             var resultSelectorValue = args[3];
             var comparerValue = args.Length == 5 ? args[4] : null;
 
-            var lookupType = ParseTypeName($"InternalLookup<{innerValue.ItemType(p).Type},{innerKeySelector.ReturnType(p).Type}>");
+            var lookupType = ParseTypeName($"SimpleLookup<{innerValue.ItemType(p).Type},{innerKeySelector.ReturnType(p).Type}>");
             var lookupVariable = p.GlobalVariable(lookupType, lookupType.Access("CreateForJoin")
                 .Invoke(innerValue, innerKeySelector, comparerValue));
 
             var itemValue = p.LastValue;
-            var groupingType = ParseTypeName($"InternalLookup<{innerValue.ItemType(p).Type},{outerKeySelector.ReturnType(p).Type}>.Grouping");
+            var groupingType = ParseTypeName($"SimpleLookup<{innerValue.ItemType(p).Type},{outerKeySelector.ReturnType(p).Type}>.Grouping");
             var groupingVariable = p.GlobalVariable(groupingType);
             p.ForAdd(groupingVariable.Assign(lookupVariable.Access("GetGrouping")
                 .Invoke(outerKeySelector.Inline(p, itemValue), false)));

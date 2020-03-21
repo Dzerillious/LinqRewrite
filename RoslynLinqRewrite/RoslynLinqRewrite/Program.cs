@@ -73,7 +73,7 @@ namespace LinqRewrite
             if (!args.Contains("/p:Configuration=Release"))
                 Console.WriteLine("Note: for consistency with MSBuild, this tool compiles by default in debug mode. Consider specifying /p:Configuration=Release.");
             
-            return _compilationService.BuildSolution(args);
+            return _compilationService.BuildProject(args);
         }
 
         // This exe works in this way:

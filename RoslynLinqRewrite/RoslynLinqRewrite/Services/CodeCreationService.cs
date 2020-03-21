@@ -90,13 +90,13 @@ namespace LinqRewrite.Services
             var fn = GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinqHelper");
             if (body is ExpressionSyntax syntax) return ParenthesizedExpression(syntax);
 
-            if (captures.Any(x => IsAnonymousType(GetSymbolType(x.Symbol)))) 
+            if (captures.Any(x => IsAnonymousType(((VariableCapture) x.Symbol).GetSymbolType()))) 
                 throw new NotSupportedException();
             if (returnType == null) throw new NotSupportedException(); // Anonymous type
             
             var method = MethodDeclaration(returnType, fn)
                 .WithParameterList(ParameterList(SeparatedList(
-                    param.Union(captures.Select(x => CreateParameter(x.Name, GetSymbolType(x))
+                    param.Union(captures.Select(x => CreateParameter(x.Name, x.GetSymbolType())
                         .WithRef(x.Changes)))
                 )))
                 .WithBody(body as BlockSyntax ?? (body is StatementSyntax statementSyntax

@@ -9,16 +9,20 @@ namespace LinqRewrite.Extensions
 {
     public static class SymbolExtensions
     {
-        public static ITypeSymbol GetSymbolType(ISymbol x)
+        public static ITypeSymbol GetType(this ISymbol x)
             => x switch
             {
                 ILocalSymbol local => local.Type,
                 IParameterSymbol param => param.Type,
-                _ => throw new NotImplementedException()
+                IFieldSymbol field => field.Type,
+                IPropertySymbol property => property.Type,
+                IEventSymbol ev => ev.Type,
+                IDiscardSymbol di => di.Type,
+                _ => null
             };
 
-        public static ITypeSymbol GetSymbolType(VariableCapture x) 
-            => GetSymbolType(x.Symbol);
+        public static ITypeSymbol GetSymbolType(this VariableCapture x) 
+            => GetType(x.Symbol);
 
         public static ParameterSyntax GetLambdaParameter(Lambda lambda, int index)
             => lambda.Parameters[index];

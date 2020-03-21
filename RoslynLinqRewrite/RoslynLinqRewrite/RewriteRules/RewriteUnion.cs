@@ -22,12 +22,12 @@ namespace LinqRewrite.RewriteRules
             };
             var hashsetVariable = p.GlobalVariable(hashsetType, hashsetCreation);
 
-            p.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue.Value)),
+            p.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue)),
                             Continue()));
             
             p.AddIterator(collectionValue);
             RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(collectionValue.ItemType(p), collectionValue.GetType(p), collectionValue.Count(p), collectionValue.Old));
-            p.LastForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue.Value)),
+            p.LastForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue)),
                             Continue()));
 
             if (sourceSizeValue != null && p.SourceSize != null) p.SourceSize += sourceSizeValue;

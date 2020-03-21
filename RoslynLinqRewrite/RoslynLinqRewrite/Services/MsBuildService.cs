@@ -43,9 +43,9 @@ namespace LinqRewrite.Services
         private List<string> GetMsBuildCandidates(object[] argsArray)
         {
             var msbuildCandidates = new List<string> {
-                @"%ProgramFiles(x86)%\Microsoft Visual Studio\Preview\Enterprise\MSBuild\15.0\Bin\amd64\MSBuild.exe",
-                @"%ProgramFiles(x86)%\Microsoft Visual Studio\Preview\Professional\MSBuild\15.0\Bin\amd64\MSBuild.exe",
-                @"%ProgramFiles(x86)%\Microsoft Visual Studio\Preview\Community\MSBuild\15.0\Bin\amd64\MSBuild.exe",
+                @"%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64",
+                @"%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\amd64",
+                @"%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\amd64",
                 @"%ProgramFiles(x86)%\Microsoft Visual Studio\VS16\MSBuild\16.0\Bin\amd64\MSBuild.exe",
                 @"%ProgramFiles(x86)%\Microsoft Visual Studio\VS15\MSBuild\15.0\Bin\amd64\MSBuild.exe",
                 @"%ProgramFiles(x86)%\Microsoft Visual Studio\VS15Preview\MSBuild\15.0\Bin\amd64\MSBuild.exe",

@@ -19,14 +19,14 @@ namespace LinqRewrite.RewriteRules
             if (args.Length == 0)
             {
                 p.ForAdd(If(foundVariable.IsEqual(null),
-                            foundVariable.Assign(p.LastValue.Value), 
+                            foundVariable.Assign(p.LastValue), 
                             CreateThrowException("System.InvalidOperationException", "The sequence contains more than single matching element.")));
             }
             else
             {
                 p.ForAdd(If(args[0].Inline(p, p.LastValue),
                             If(foundVariable.IsEqual(null),
-                                foundVariable.Assign(p.LastValue.Value),
+                                foundVariable.Assign(p.LastValue),
                                 CreateThrowException("System.InvalidOperationException", "The sequence contains more than single matching element."))));
             }
             

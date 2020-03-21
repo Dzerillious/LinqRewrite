@@ -15,7 +15,7 @@ namespace LinqRewrite.RewriteRules
             
             var elementEqualityValue = args.Length switch
             {
-                0 => p.LastValue.Value.IsEqual(elementSyntax),
+                0 => p.LastValue.IsEqual(elementSyntax),
                 1 => args[1].ReusableConst(p).Access("Equals").Invoke(p.LastValue.Value, elementSyntax),
             };
             

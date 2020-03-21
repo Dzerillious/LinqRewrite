@@ -17,11 +17,11 @@ namespace LinqRewrite.RewriteRules
                 Default(p.ReturnType));
             
             if (args.Length == 0)
-                p.ForAdd(Return(p.LastValue.Value));
+                p.ForAdd(Return(p.LastValue));
             else
             {
                 p.ForAdd(If(args[0].Inline(p, p.LastValue),
-                            Return(p.LastValue.Value)));
+                            Return(p.LastValue)));
             }
             
             p.FinalAdd(Return(Default(p.ReturnType)));

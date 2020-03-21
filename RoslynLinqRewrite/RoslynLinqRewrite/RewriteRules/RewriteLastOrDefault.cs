@@ -19,11 +19,11 @@ namespace LinqRewrite.RewriteRules
             var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
             
             if (args.Length == 0)
-                p.ForAdd(foundVariable.Assign(p.LastValue.Value));
+                p.ForAdd(foundVariable.Assign(p.LastValue));
             else
             {
                 p.ForAdd(If(args[0].Inline(p, p.LastValue),
-                            foundVariable.Assign(p.LastValue.Value)));
+                            foundVariable.Assign(p.LastValue)));
             }
             
             p.FinalAdd(If(foundVariable.IsEqual(null),

@@ -89,10 +89,7 @@ namespace LinqRewrite.Extensions
             => BinaryExpression(SyntaxKind.AsExpression, identifier, b);
 
         public static MemberAccessExpressionSyntax Access(this string identifier, VariableBridge accessed)
-            => MemberAccessExpression(
-                SyntaxKind.SimpleMemberAccessExpression,
-                IdentifierName(identifier),
-                accessed);
+            => MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, IdentifierName(identifier), accessed);
         
         public static MemberAccessExpressionSyntax Access(this string identifier, params VariableBridge[] accessed)
         {
@@ -108,10 +105,7 @@ namespace LinqRewrite.Extensions
         }
 
         public static MemberAccessExpressionSyntax Access(this ValueBridge identifier, VariableBridge accessed)
-            => MemberAccessExpression(
-                SyntaxKind.SimpleMemberAccessExpression,
-                identifier,
-                accessed);
+            => MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, accessed);
         
         public static MemberAccessExpressionSyntax Access(this ValueBridge identifier, params VariableBridge[] accessed)
         {

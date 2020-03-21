@@ -19,7 +19,7 @@ namespace LinqRewrite.DataStructures
 
 
         public InvocationExpressionSyntax Node { get; private set; }
-        public CollectionValueBridge FirstCollection { get; private set; }
+        public CollectionValueBridge FirstCollection { get; set; }
         public CollectionValueBridge CurrentCollection { get; set; }
         public List<LinqStep> RewriteChain { get; private set; }
 
@@ -202,7 +202,7 @@ namespace LinqRewrite.DataStructures
 
         public void PreUseAdd(StatementBridge _)
         {
-            if (Iterators.Count == 0) _initialStatements.Add(_);
+            if (_resultIterators.Count == 0) _initialStatements.Add(_);
             else _resultIterators.First(x => !x.Complete).PreFor.Add(_);
         }
 
@@ -217,6 +217,15 @@ namespace LinqRewrite.DataStructures
         }
         public void LastForAdd(StatementBridge _) => CurrentIterator.BodyAdd(_);
         public void FinalAdd(StatementBridge _) => _finalStatements.Add(_);
+        
+        public IteratorParameters AddIterator()
+        {
+            var oldBody = CurrentIterator;
+            CurrentIterator = new IteratorParameters(this);
+            Iterators.Add(CurrentIterator);
+            _resultIterators.Add(CurrentIterator);
+            return oldBody;
+        }
         
         public IteratorParameters AddIterator(RewrittenValueBridge collection)
         {

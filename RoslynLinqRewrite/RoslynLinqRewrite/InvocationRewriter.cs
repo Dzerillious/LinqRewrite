@@ -24,13 +24,11 @@ namespace LinqRewrite
 
             if (parameters.SimpleRewrite != null) return parameters.SimpleRewrite;
             if (!parameters.HasResultMethod)
-                parameters.ForAdd(SyntaxFactory.YieldStatement(SyntaxKind.YieldReturnStatement, parameters.LastValue.Value));
+                parameters.ForAdd(SyntaxFactory.YieldStatement(SyntaxKind.YieldReturnStatement, parameters.LastValue));
             var body = parameters.GetMethodBody();
 
             if (parameters.NotRewrite) throw new NotSupportedException("Not good for rewrite");
-            return parameters.FirstCollection == null 
-                ? parameters.Rewrite.GetInvocationExpression(parameters, body) 
-                : parameters.Rewrite.GetCollectionInvocationExpression(parameters, body);
+            return parameters.Rewrite.GetCollectionInvocationExpression(parameters, body);
         }
 
         private static void RewritePart(string last, RewriteParameters parameters, int i)

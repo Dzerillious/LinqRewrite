@@ -21,7 +21,7 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(If(Not(p.LastValue.Is(type)),
                         Continue()));
 
-            p.LastValue = new TypedValueBridge(type, p.LastValue.Value.Cast(type));
+            p.LastValue = new TypedValueBridge(type, p.LastValue.Cast(type));
 
             p.ResultSize = null;
             p.ModifiedEnumeration = true;

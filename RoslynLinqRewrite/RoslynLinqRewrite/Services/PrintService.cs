@@ -10,10 +10,15 @@ namespace LinqRewrite.Services
         private static PrintService _instance;
         public static PrintService Instance => _instance ??= new PrintService();
 
+        public PrintService()
+        {
+            File.CreateText("logs.txt").Close();
+        }
+
         public int PrintHelp()
         {
-            Console.WriteLine($"roslyn-linq-rewrite {typeof(Program).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion}");
-            Console.WriteLine(
+            PrintLine($"roslyn-linq-rewrite {typeof(Program).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion}");
+            PrintLine(
                 $@"github.com/antiufo/roslyn-linq-rewrite
 
 Usage:
@@ -40,8 +45,8 @@ However, you won't see statistics about the rewritten methods.
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     break;
             }
-            Console.WriteLine(item);
-            Console.ResetColor();
+            PrintLine(item.ToString());
+            // Console.ResetColor();
         }
 
         public bool PrintFile(string path)
@@ -53,6 +58,9 @@ However, you won't see statistics about the rewritten methods.
             return true;
         }
 
-        public void PrintLine(string line = "") => Console.WriteLine(line);
+        public void PrintLine(string line = "")
+        {
+            File.AppendAllLines("logs.txt", new []{line});
+        }
     }
 }

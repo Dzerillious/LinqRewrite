@@ -18,7 +18,7 @@ namespace LinqRewrite.RewriteRules
             
             var value = args.Length switch
             {
-                0 => p.LastValue.Value,
+                0 => p.LastValue,
                 1 => args[0].Inline(p, p.LastValue).ReusableConst(p)
             };
             if (p.ReturnType.Type is NullableTypeSyntax)

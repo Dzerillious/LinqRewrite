@@ -13,11 +13,11 @@ namespace LinqRewrite.RewriteRules
             if (p.ResultSize != null && args.Length == 0) p.SimpleRewrite = p.CurrentCollection[0];
             
             if (args.Length == 0)
-                p.ForAdd(Return(p.LastValue.Value));
+                p.ForAdd(Return(p.LastValue));
             else
             {
                 p.ForAdd(If(args[0].Inline(p, p.LastValue),
-                            Return(p.LastValue.Value)));
+                            Return(p.LastValue)));
             }
             
             p.FinalAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."));

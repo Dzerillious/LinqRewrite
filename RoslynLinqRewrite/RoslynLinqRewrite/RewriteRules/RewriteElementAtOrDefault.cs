@@ -18,7 +18,7 @@ namespace LinqRewrite.RewriteRules
             
             var positionValue = args[0].ReusableConst(p);
             p.ForAdd(If(p.Indexer.IsEqual(positionValue),
-                        Return(p.LastValue.Value)));
+                        Return(p.LastValue)));
             
             p.FinalAdd(Return(Default(p.ReturnType)));
             p.HasResultMethod = true;

@@ -20,7 +20,7 @@ namespace LinqRewrite.RewriteRules
             else
             {
                 itemVariable = p.LocalVariable(Int);
-                p.LastForAdd(itemVariable.Assign(p.LastValue.Value));
+                p.LastForAdd(itemVariable.Assign(p.LastValue));
                 p.LastValue = new TypedValueBridge(Int, itemVariable);
             }
             

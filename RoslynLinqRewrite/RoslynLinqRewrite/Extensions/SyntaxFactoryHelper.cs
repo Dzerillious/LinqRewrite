@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using LinqRewrite.DataStructures;
@@ -187,7 +188,9 @@ namespace LinqRewrite.Extensions
         public static TypedValueBridge Inline(this RewrittenValueBridge e, RewriteParameters p,
             params TypedValueBridge[] values)
         {
-            var returnType =  ((LambdaExpressionSyntax) e).ReturnType(p);
+            var returnType =  e.OldVal is LambdaExpressionSyntax lambda
+                    ? lambda.ReturnType(p)
+                    : (TypeBridge)ParseTypeName(((INamedTypeSymbol)p.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.ReturnType.ToDisplayString());
             if (IsLambdaSimple(e.Old))
                 return p.Code.InlineLambda(e, returnType, values);
 
@@ -264,5 +267,45 @@ namespace LinqRewrite.Extensions
 
         public static ValueBridge Parenthesize(ExpressionSyntax expression)
             => ParenthesizedExpression(expression);
+
+        public static bool InvokableWith1Param(this ExpressionSyntax e, RewriteParameters p)
+        {
+            switch (e)
+            {
+                case SimpleLambdaExpressionSyntax _:
+                    return true;
+                case LambdaExpressionSyntax _:
+                    return false;
+                default:
+                    try
+                    {
+                        return (((INamedTypeSymbol) p.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.Parameters.Length < 2);
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    };
+            }
+        }
+
+        public static bool IsInvokable(this ExpressionSyntax e, RewriteParameters p)
+        {
+            switch (e)
+            {
+                case SimpleLambdaExpressionSyntax _:
+                case LambdaExpressionSyntax _:
+                    return true;
+                default:
+                    try
+                    {
+                        var _ = ((INamedTypeSymbol) p.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.Parameters;
+                        return true;
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    };
+            }
+        }
     };
 }

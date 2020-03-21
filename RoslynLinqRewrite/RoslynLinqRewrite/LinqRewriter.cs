@@ -190,16 +190,20 @@ namespace LinqRewrite
         private (bool, ExpressionSyntax, ITypeSymbol) CheckIfRewriteInvocation(List<LinqStep> chain, InvocationExpressionSyntax node, InvocationExpressionSyntax lastNode)
         {
             var (flowsIn, flowsOut) = GetFlows(chain);
+            
+            var collection = ((MemberAccessExpressionSyntax) lastNode.Expression).Expression;
+            var collectionSymbol = _data.Semantic.GetSymbolInfo(collection).Symbol;
+            if (SymbolExtensions.GetType(collectionSymbol) != null) flowsIn = flowsIn.Concat(new[] {collectionSymbol}).ToArray();
+            
             _data.CurrentFlow = flowsIn.Union(flowsOut)
                 .Where(x => (x as IParameterSymbol)?.IsThis != true)
                 .Select(x => VariableExtensions.CreateVariableCapture(x, flowsOut));
 
-            var collection = ((MemberAccessExpressionSyntax) lastNode.Expression).Expression;
             if (SyntaxExtensions.IsAnonymousType(_data.Semantic.GetTypeInfo(collection).Type)) return (false, null, null);
 
             var semanticReturnType = _data.Semantic.GetTypeInfo(node).Type;
             if (SyntaxExtensions.IsAnonymousType(semanticReturnType) ||
-                _data.CurrentFlow.Any(x => SyntaxExtensions.IsAnonymousType(SymbolExtensions.GetSymbolType(x.Symbol)))) 
+                _data.CurrentFlow.Any(x => SyntaxExtensions.IsAnonymousType(SymbolExtensions.GetType(x.Symbol)))) 
                 return (false, null, null);
 
             return (true, collection, semanticReturnType);
@@ -260,7 +264,7 @@ namespace LinqRewrite
                 x.Attributes.Any(y =>
             {
                 var symbol = ((IMethodSymbol) _data.Semantic.GetSymbolInfo(y).Symbol).ContainingType;
-                return symbol.ToDisplayString() == "Shaman.Runtime.NoLinqRewriteAttribute";
+                return symbol.ToDisplayString() == "LinqRewrite.DataStructures.NoRewriteAttribute";
             }));
 
         public Diagnostic CreateDiagnosticForException(Exception ex, string path)

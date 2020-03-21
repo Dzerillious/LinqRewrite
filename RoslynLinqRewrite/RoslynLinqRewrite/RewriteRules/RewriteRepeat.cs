@@ -14,7 +14,7 @@ namespace LinqRewrite.RewriteRules
             var itemValue = args[0];
             var countValue = args[1];
             
-            p.Iterators.Add(p.CurrentIterator = new IteratorParameters(p));
+            p.AddIterator();
             p.ForMin = p.ForReMin = 0;
             p.ForMax = countValue;
             p.ForReMax = countValue - 1;
@@ -31,7 +31,7 @@ namespace LinqRewrite.RewriteRules
             }
             p.LastValue = new TypedValueBridge(p.CurrentCollection.ItemType(p), itemValue);
             
-            p.CurrentCollection = null;
+            p.FirstCollection = p.CurrentCollection = null;
         }
     }
 }

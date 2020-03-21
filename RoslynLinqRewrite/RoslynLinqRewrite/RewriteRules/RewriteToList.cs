@@ -12,8 +12,7 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
 
-            TypeBridge listType = ParseTypeName($"List<{p.CurrentCollection.ItemType}>");
-            var listVariable = p.GlobalVariable(listType, New(listType));
+            var listVariable = p.GlobalVariable(p.ReturnType, New(p.ReturnType));
             p.ForAdd(listVariable.Access("Add").Invoke(p.LastValue));
             
             p.FinalAdd(Return(listVariable));

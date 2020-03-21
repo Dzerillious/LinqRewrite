@@ -19,14 +19,14 @@ namespace LinqRewrite.RewriteRules
             if (args.Length == 0)
             {
                 p.ForAdd(If(foundVariable.IsEqual(null),
-                            foundVariable.Assign(p.LastValue.Value), 
+                            foundVariable.Assign(p.LastValue), 
                             Return(Default(p.ReturnType))));
             }
             else
             {
                 p.ForAdd(If(args[0].Inline(p, p.LastValue),
                             If(foundVariable.IsEqual(null),
-                                foundVariable.Assign(p.LastValue.Value),
+                                foundVariable.Assign(p.LastValue),
                                 Return(Default(p.ReturnType)))));
             }
             

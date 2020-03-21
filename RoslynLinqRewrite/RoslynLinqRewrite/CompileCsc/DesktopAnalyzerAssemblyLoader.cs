@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis
     /// csc.exe and vbc.exe. In scenarios where support for updating or deleting
     /// the analyzer on disk is required a different loader should be used.
     /// </remarks>
-    internal class DesktopAnalyzerAssemblyLoader : AnalyzerAssemblyLoader
+    internal class esktopAnalyzerAssemblyLoader : AnalyzerAssemblyLoader
     {
         private int _hookedAssemblyResolve;
 

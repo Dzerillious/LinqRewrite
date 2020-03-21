@@ -17,16 +17,16 @@ namespace LinqRewrite.RewriteRules
             var elementSelectorValue = args.Length switch
             {
                 1 => p.LastValue,
-                _ when args[1].OldVal is SimpleLambdaExpressionSyntax => args[1].Inline(p, p.LastValue),
+                _ when args[1].OldVal.InvokableWith1Param(p) => args[1].Inline(p, p.LastValue),
                 _ => p.LastValue
             };
 
-            var lookupType = ParseTypeName($"InternalLookup<{keySelector.ReturnType(p).Type},{elementSelectorValue.Type}>");
+            var lookupType = ParseTypeName($"SimpleLookup<{keySelector.ReturnType(p).Type},{elementSelectorValue.Type}>");
             var lookupVariable = p.GlobalVariable(lookupType, args.Length switch
             {
-                2 when !(args[1].OldVal is LambdaExpressionSyntax) => New(lookupType, args[1]),
-                3 when !(args[2].OldVal is LambdaExpressionSyntax) => New(lookupType, args[2]),
-                4 when !(args[3].OldVal is LambdaExpressionSyntax) => New(lookupType, args[3]),
+                2 when !(args[1].OldVal.IsInvokable(p)) => New(lookupType, args[1]),
+                3 when !(args[2].OldVal.IsInvokable(p)) => New(lookupType, args[2]),
+                4 when !(args[3].OldVal.IsInvokable(p)) => New(lookupType, args[3]),
                 _ => New(lookupType)
             });
 
@@ -41,7 +41,7 @@ namespace LinqRewrite.RewriteRules
             RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(iGroupingType, lookupType, null, lookupVariable));
             var elementsType = ParseTypeName($"IEnumerable<{elementSelectorValue.Type}>");
             
-            var groupingType = ParseTypeName($"InternalLookup<{keySelector.ReturnType(p).Type},{elementSelectorValue.Type}>.Grouping");
+            var groupingType = ParseTypeName($"SimpleLookup<{keySelector.ReturnType(p).Type},{elementSelectorValue.Type}>.Grouping");
             p.LastValue = new TypedValueBridge(groupingType, p.LastValue.Cast(groupingType)).Reusable(p);
             
             var key = new TypedValueBridge(keySelector.ReturnType(p), p.LastValue.Access("key"));
@@ -49,7 +49,7 @@ namespace LinqRewrite.RewriteRules
             p.LastValue = p.GlobalVariable(lookupType, args.Length switch
             {
                 1 => p.LastValue,
-                _ when !(args[1].OldVal is SimpleLambdaExpressionSyntax) => args[1].Inline(p, key, elements),
+                _ when !(args[1].OldVal.InvokableWith1Param(p)) => args[1].Inline(p, key, elements),
                 2 => p.LastValue,
                 _ => args[1].Inline(p, key, elements)
             });

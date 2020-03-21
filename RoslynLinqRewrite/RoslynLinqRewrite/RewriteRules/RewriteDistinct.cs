@@ -19,7 +19,7 @@ namespace LinqRewrite.RewriteRules
                 1 => New(hashsetType, args[0])
             });
             
-            p.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue.Value)),
+            p.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue)),
                         Continue()));
             
             p.ModifiedEnumeration = true;

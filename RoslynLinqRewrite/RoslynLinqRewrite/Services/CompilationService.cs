@@ -3,9 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using Microsoft.Build.Evaluation;
+using Microsoft.Build.Execution;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Logging;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.MSBuild;
 using Shaman.Runtime;
+using Project = Microsoft.CodeAnalysis.Project;
 
 namespace LinqRewrite.Services
 {
@@ -31,26 +38,20 @@ namespace LinqRewrite.Services
             return 0;
         }
 
-        public int BuildSolution(string[] args)
+        public int BuildProject(string[] args)
         {
             // MSBuild doesn't take CscToolPath into account when deciding whether to recompile. Rebuild always.
             var buildArgs = GetBuildArgs(args);
             var exitCode = 0;
             
-            var infoFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.txt");
-            Environment.SetEnvironmentVariable("ROSLYN_LINQ_REWRITE_OUT_STATISTICS_TO", infoFile);
-            
             try
             {
-                _msBuildService.RunMsbuild(buildArgs);
+                CompileProject(buildArgs[1].ToString());
             }
             catch (ProcessException ex)
             {
                 exitCode = ex.ExitCode;
             }
-
-            if (_printService.PrintFile(infoFile))
-                File.Delete(infoFile);
 
             return exitCode;
         }
@@ -58,14 +59,61 @@ namespace LinqRewrite.Services
         private List<object> GetBuildArgs(string[] args)
         {
             var buildArgs = new List<object>();
-            if(!args.Any(x => x.StartsWith("/t:") || x.StartsWith("/target:")))
-                buildArgs.Add(new ProcessUtils.RawCommandLineArgument("/t:Rebuild"));
+            // if(!args.Any(x => x.StartsWith("/t:") || x.StartsWith("/target:")))
+            //     buildArgs.Add(new ProcessUtils.RawCommandLineArgument("/t:Rebuild"));
 
             buildArgs.Add(new ProcessUtils.RawCommandLineArgument(
                 $"/p:CscToolPath=\"{Path.GetDirectoryName(typeof(Program).GetTypeInfo().Assembly.Location)}\""));
             buildArgs.AddRange(args);
 
             return buildArgs;
+        }
+
+        public void CompileProject(string path)
+        {
+            var msWorkspace = MSBuildWorkspace.Create();
+            var p = msWorkspace.OpenProjectAsync(path);
+            var project = p.Result;
+
+            var syntaxTrees = new List<SyntaxTree>();
+            var references = project.MetadataReferences;
+            foreach (var document in project.Documents)
+                syntaxTrees.Add(CSharpSyntaxTree.ParseText(File.ReadAllText(document.FilePath)));
+
+            var compilationOptions = project.CompilationOptions.WithOptimizationLevel(OptimizationLevel.Release);
+            var compilation = CSharpCompilation.Create(project.AssemblyName, syntaxTrees, references,
+                (CSharpCompilationOptions)compilationOptions);
+            
+            if(PrintDiagnostics(compilation)) return;
+
+            var rewrittenTrees = new List<SyntaxTree>();
+            foreach (var syntaxTree in syntaxTrees)
+            {
+                var rewriter = new LinqRewriter(compilation.GetSemanticModel(syntaxTree));
+                var rewritten = rewriter.Visit(syntaxTree.GetRoot());
+                rewrittenTrees.Add(CSharpSyntaxTree.Create((CSharpSyntaxNode) rewritten));
+            }
+
+            compilation = CSharpCompilation.Create(project.AssemblyName, rewrittenTrees, references,
+                (CSharpCompilationOptions)compilationOptions);
+
+            if(PrintDiagnostics(compilation)) return;
+
+            var outputDirectory = Path.GetDirectoryName(project.OutputFilePath);
+            Directory.CreateDirectory(outputDirectory);
+            foreach (var reference in references)
+                File.Copy(reference.Display, Path.Combine(outputDirectory, Path.GetFileName(reference.Display)), true);
+            compilation.Emit(project.OutputFilePath);
+        }
+
+        private bool PrintDiagnostics(CSharpCompilation compilation)
+        {
+            foreach (var item in compilation.GetDiagnostics())
+            {
+                _printService.PrintDiagnostic(item);
+                if (item.Severity == DiagnosticSeverity.Error) return true;
+            }
+            return false;
         }
 
         public void CompileExample(string path, bool devPath = true)
@@ -84,24 +132,10 @@ namespace LinqRewrite.Services
                 ? CSharpCompilation.CreateScriptCompilation("LinqRewriteExample", syntaxTree, references)
                 : CSharpCompilation.Create("LinqRewriteExample", new[] { syntaxTree }, references, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
-            var hasErrs = false;
-            foreach (var item in compilation.GetDiagnostics())
-            {
-                if (item.Severity == DiagnosticSeverity.Error) hasErrs = true;
-                _printService.PrintDiagnostic(item);
-            }
-
-            if (hasErrs) return;
+            if(PrintDiagnostics(compilation)) return;
             var rewriter = new LinqRewriter(compilation.GetSemanticModel(syntaxTree));
             var rewritten = rewriter.Visit(syntaxTree.GetRoot());
 
-            foreach (var item in compilation.GetDiagnostics())
-            {
-                if (item.Severity == DiagnosticSeverity.Error) hasErrs = true;
-                if (item.Severity == DiagnosticSeverity.Warning) continue;
-                _printService.PrintDiagnostic(item);
-            }
-            if (hasErrs) return;
             Console.WriteLine(rewritten.ToString());
         }
     }

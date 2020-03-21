@@ -53,7 +53,7 @@ namespace LinqRewrite.RewriteRules
             
             p.Indexer = null;
 
-            p.ForAdd(resultVariable[reverseIndexerVariable].Assign(p.LastValue.Value));
+            p.ForAdd(resultVariable[reverseIndexerVariable].Assign(p.LastValue));
             p.CurrentCollection = new CollectionValueBridge(p.LastValue.Type, ArrayType(p.LastValue.Type), currentLengthVariable - reverseIndexerVariable, resultVariable);
             
             p.CurrentIterator.Complete = true;
@@ -89,7 +89,7 @@ namespace LinqRewrite.RewriteRules
             
             p.Indexer = null;
 
-            p.ForAdd(resultVariable[reverseIndexerVariable].Assign(p.LastValue.Value));
+            p.ForAdd(resultVariable[reverseIndexerVariable].Assign(p.LastValue));
             p.CurrentCollection = new CollectionValueBridge(p.LastValue.Type, ArrayType(p.LastValue.Type), currentLengthVariable - reverseIndexerVariable, resultVariable);
             
             p.CurrentIterator.Complete = true;
