@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27110.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqRewrite", "RoslynLinqRewrite\LinqRewrite.csproj", "{F051CAA8-3008-42C6-AC6E-B78AA68DFF7B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqRewrite", "LinqRewrite\LinqRewrite.csproj", "{F051CAA8-3008-42C6-AC6E-B78AA68DFF7B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqRewrite.Core", "LinqRewrite.Core\LinqRewrite.Core.csproj", "{C380C509-4B18-4DCD-95FF-7AAEBFBDD847}"
 EndProject
