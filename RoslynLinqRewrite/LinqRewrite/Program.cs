@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using LinqRewrite.CompileCsc;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Services;
 
@@ -61,9 +60,6 @@ namespace LinqRewrite
 
         private int ArgsProcessing(string[] args)
         {
-            if (Path.GetFileName(Assembly.GetEntryAssembly().Location).Equals("csc.exe", StringComparison.OrdinalIgnoreCase) || args.Contains("--csc"))
-                return UseCsc(args);
-            
             if (args.Contains("-h") || args.Contains("--help") || args.Contains("/?"))
                 return _printService.PrintHelp();
 
@@ -74,32 +70,6 @@ namespace LinqRewrite
                 Console.WriteLine("Note: for consistency with MSBuild, this tool compiles by default in debug mode. Consider specifying /p:Configuration=Release.");
             
             return _compilationService.BuildProject(args);
-        }
-
-        // This exe works in this way:
-        // 1. It launches msbuild with a custom CscToolPath
-        // 2. Is launched again by msbuild and acts as a csc.exe compiler
-        // In order to more easily debug the "inner" execution, you can set the above variable to 1 and then launch
-        // roslyn-linq-rewrite <path-to-csproj>. Then, set the command line options in Visual Studio to
-        // @C:\Path\To\roslyn-linq-rewrite-csc-command-line.rsp
-        // Don't forget to also set the working directory to be the folder with the .csproj.
-        // That file will be located in the project folder (not in the initial working directory)
-        // You can now debug what happens when the program is being called by msbuild for the actual compilation.
-        private static int UseCsc(string[] args)
-        {
-            var saveCmdline = Environment.GetEnvironmentVariable("ROSLYN_LINQ_REWRITE_DUMP_CSC_CMDLINE");
-            if (!string.IsNullOrEmpty(saveCmdline) && saveCmdline != "0")
-            {
-                File.WriteAllText("roslyn-linq-rewrite-csc-command-line.txt", Environment.CommandLine);
-                var at = args.FirstOrDefault(x => x.StartsWith("@"));
-                if (at != null)
-                {
-                    var atFile = File.ReadAllText(at.Substring(1));
-                    File.WriteAllText("roslyn-linq-rewrite-csc-command-line.rsp", atFile);
-                }
-            }
-            args = args.Where(x => x != "--csc").ToArray();
-            return ProgramLinqRewrite.MainInternal(args);
         }
         
         private static bool FilesLookEqual(string a, string b)
