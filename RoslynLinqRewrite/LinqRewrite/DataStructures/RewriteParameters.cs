@@ -1,10 +1,11 @@
 ﻿using System;
+using LinqRewrite.Core;
 using System.Collections.Generic;
 using System.Linq;
 using LinqRewrite.Extensions;
 using LinqRewrite.Services;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.CSharp.Syntax; 
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
 

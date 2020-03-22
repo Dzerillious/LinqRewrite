@@ -4,7 +4,6 @@ namespace LinqRewrite
 {
     public static class Constants
     {
-        //public const string ToDictionaryWithKeyMethod = "System.Collections.Generic.IEnumerable<TSource>.ToDictionary<TSource, TKey>(System.Func<TSource, TKey>)";
         private const string ToDictionary1 = "System.Collections.Generic.IEnumerable<TSource>.ToDictionary<TSource, TKey>(System.Func<TSource, TKey>)";
         private const string ToDictionary2 = "System.Collections.Generic.IEnumerable<TSource>.ToDictionary<TSource, TKey, TElement>(System.Func<TSource, TKey>, System.Func<TSource, TElement>, System.Collections.Generic.IEqualityComparer<TKey>)";
         private const string ToDictionary3 = "System.Collections.Generic.IEnumerable<TSource>.ToDictionary<TSource, TKey, TElement>(System.Func<TSource, TKey>, System.Func<TSource, TElement>)";
@@ -17,6 +16,7 @@ namespace LinqRewrite
         
         private const string ToArray1 = "System.Collections.Generic.IEnumerable<TSource>.ToArray<TSource>()";
         private const string ToList1 = "System.Collections.Generic.IEnumerable<TSource>.ToList<TSource>()";
+        private const string ToSimpleList1 = "System.Collections.Generic.IEnumerable<T>.ToSimpleList<T>()";
 
         private const string Reverse1 = "System.Collections.Generic.IEnumerable<TSource>.Reverse<TSource>()";
         private const string First1 = "System.Collections.Generic.IEnumerable<TSource>.First<TSource>()";
@@ -101,8 +101,7 @@ namespace LinqRewrite
         private const string GroupBy8 = "System.Collections.Generic.IEnumerable<TSource>.GroupBy<TSource, TKey>(System.Func<TSource, TKey>)";
         
         private const string GroupJoin1 = "System.Collections.Generic.IEnumerable<TOuter>.GroupJoin<TOuter, TInner, TKey, TResult>(System.Collections.Generic.IEnumerable<TInner>, System.Func<TOuter, TKey>, System.Func<TInner, TKey>, System.Func<TOuter, System.Collections.Generic.IEnumerable<TInner>, TResult>)";
-        
-        public const string SimpleListPrefix = "SimpleCollections.SimpleList.SimpleList";
+
         public const string ListPrefix = "System.Collections.Generic.List";
         public const string IEnumerablePrefix = "System.Collections.Generic.IEnumerable";
 
@@ -110,7 +109,7 @@ namespace LinqRewrite
         {
             ToDictionary1, ToDictionary2, ToDictionary3, ToDictionary4,
             ToLookup1, ToLookup2, ToLookup3, ToLookup4,
-            ToArray1, ToList1, 
+            ToArray1, ToList1, ToSimpleList1,
             Reverse1, 
             
             First1, First2, FirstOrDefault1, FirstOrDefault2, 

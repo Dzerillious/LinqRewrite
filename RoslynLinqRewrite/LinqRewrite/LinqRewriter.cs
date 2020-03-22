@@ -264,7 +264,7 @@ namespace LinqRewrite
                 x.Attributes.Any(y =>
             {
                 var symbol = ((IMethodSymbol) _data.Semantic.GetSymbolInfo(y).Symbol).ContainingType;
-                return symbol.ToDisplayString() == "LinqRewrite.DataStructures.NoRewriteAttribute";
+                return symbol.ToDisplayString() == "LinqRewrite.Core.NoRewriteAttribute";
             }));
 
         public Diagnostic CreateDiagnosticForException(Exception ex, string path)

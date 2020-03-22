@@ -260,7 +260,7 @@ namespace LinqRewrite.Extensions
             => SyntaxFactory.Block(statements);
 
         public static ArrayTypeSyntax ArrayType(this TypeSyntax type)
-            => SyntaxFactory.ArrayType(type, new SyntaxList<ArrayRankSpecifierSyntax>(ArrayRankSpecifier()));
+            => SyntaxFactory.ArrayType(type, new SyntaxList<ArrayRankSpecifierSyntax>(ArrayRankSpecifier(CreateSeparatedExpressionList(SyntaxFactory.OmittedArraySizeExpression(Token(SyntaxKind.OmittedArraySizeExpressionToken))))));
 
         public static TypeBridge ReturnType(this LambdaExpressionSyntax lambda, RewriteParameters p)
             => p.Code.GetLambdaReturnType(p.Semantic, lambda);

@@ -48,6 +48,8 @@ namespace LinqRewrite.Extensions
             => CastExpression(type, a);
         
         
+        public static AssignmentExpressionSyntax Assign(this ExpressionSyntax a, ValueBridge b)
+            => AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, a, b);
         public static AssignmentExpressionSyntax Assign(this VariableBridge a, ValueBridge b)
             => AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, a, b);
         public static AssignmentExpressionSyntax Assign(this ValueBridge a, ValueBridge b)

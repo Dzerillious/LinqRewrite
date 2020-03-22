@@ -7,24 +7,21 @@
     <FileVersion>0.5.0</FileVersion>
     <LangVersion>latest</LangVersion>
     <PackageReleaseNotes>Testing nuget</PackageReleaseNotes>
-    <PackageIconUrl></PackageIconUrl>
     <Authors>Daniel Šerý</Authors>
-    <Copyright></Copyright>
     <Product>Turing ecosystem</Product>
     <Description>Optimized Linq queries by rewriting to procedural code</Description>
-    <PackageProjectUrl></PackageProjectUrl>
-    <RepositoryUrl></RepositoryUrl>
     <PackageTags>collection;utils;fast</PackageTags>
     <PackageVersion>0.5.0</PackageVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
     <Title>LinqRewrite</Title>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="LinqRewrite.Core">
-      <Version>0.5.2</Version>
+      <Version>0.5.5-preview</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Build">
       <Version>16.5.0</Version>

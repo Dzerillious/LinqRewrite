@@ -46,6 +46,17 @@ namespace LinqRewrite.Extensions
             return SyntaxFactory.ArrayCreationExpression(
                 arrayType.WithRankSpecifiers(new SyntaxList<ArrayRankSpecifierSyntax>(newRankSpecifiers)));
         }
+        
+        public static ArrayCreationExpressionSyntax CreateArray2(ArrayTypeSyntax arrayType, ValueBridge size)
+        {
+            var rankSpecifiers = arrayType.RankSpecifiers;
+            var newRankSpecifiers = rankSpecifiers.Select((x, i) 
+                => i == 0
+                    ? SyntaxFactory.ArrayRankSpecifier(SyntaxFactoryHelper.CreateSeparatedList((ExpressionSyntax) size))
+                    : x);
+            return SyntaxFactory.ArrayCreationExpression(
+                arrayType.WithRankSpecifiers(new SyntaxList<ArrayRankSpecifierSyntax>(newRankSpecifiers)));
+        }
 
         public static VariableCapture CreateVariableCapture(ISymbol symbol, IReadOnlyList<ISymbol> flowsOut)
         {

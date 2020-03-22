@@ -21,8 +21,9 @@ namespace LinqRewrite.RewriteRules
                 RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             var resultVariable = RewriteOther(p);
-            if (p.ResultSize == null) p.FinalAdd(Return("SimpleCollections".Access("SimpleArrayExtensions", "EnsureFullArray")
+            if (p.ResultSize == null) p.FinalAdd(Return("LinqRewrite".Access("Core", "SimpleArrayExtensions", "EnsureFullArray")
                 .Invoke(resultVariable, p.Indexer)));
+            else p.FinalAdd(Return(resultVariable));
         }
         
         public static VariableBridge RewriteOther(RewriteParameters p, TypeSyntax itemType = null)
@@ -38,7 +39,6 @@ namespace LinqRewrite.RewriteRules
             var resultVariable = p.GlobalVariable(arrayType, CreateArray(arrayType, p.ResultSize));
 
             p.ForAdd(resultVariable[p.Indexer].Assign(p.LastValue));
-            p.FinalAdd(Return(resultVariable));
             return resultVariable;
         }
 
@@ -47,7 +47,7 @@ namespace LinqRewrite.RewriteRules
             var indexerVariable = p.Indexer;
                 
             var logVariable = p.GlobalVariable(Int, 
-                "SimpleCollections".Access("IntExtensions", "Log2")
+                "LinqRewrite".Access("Core", "IntExtensions", "Log2")
                     .Invoke(p.SourceSize.Cast(SyntaxKind.UIntKeyword)) - 3);
                 
             p.PreUseAdd(logVariable.SubAssign(logVariable % 2));
@@ -57,7 +57,7 @@ namespace LinqRewrite.RewriteRules
             var resultVariable = p.GlobalVariable(resultType, CreateArray(resultType, 8));
 
             p.ForAdd(If(p.Indexer >= currentLengthVariable,
-                        "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")
+                        "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeArray")
                                 .Invoke(2, 
                                     p.SourceSize, 
                                     RefArg(resultVariable), 
@@ -77,7 +77,7 @@ namespace LinqRewrite.RewriteRules
             var resultVariable = p.GlobalVariable(resultType, CreateArray(resultType, 8));
                 
             p.ForAdd(If(p.Indexer >= currentLengthVariable,
-                            "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeArray")
+                            "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeArray")
                                     .Invoke(2, RefArg(resultVariable), RefArg(currentLengthVariable))));
                 
             p.ForAdd(resultVariable[indexerVariable].Assign(p.LastValue));

@@ -66,6 +66,9 @@ namespace LinqRewrite
             if (args.Contains("--show"))
                 return _compilationService.FileRewrite(args);
 
+            if (args.Any(x => x.StartsWith("--reProj")))
+                return _compilationService.RewriteProject(args);
+
             if (!args.Contains("/p:Configuration=Release"))
                 Console.WriteLine("Note: for consistency with MSBuild, this tool compiles by default in debug mode. Consider specifying /p:Configuration=Release.");
             

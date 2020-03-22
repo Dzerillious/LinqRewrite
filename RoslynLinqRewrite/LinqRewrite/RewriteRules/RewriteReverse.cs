@@ -28,7 +28,7 @@ namespace LinqRewrite.RewriteRules
             var reverseIndexerVariable = p.LocalVariable(Int);
                 
             var logVariable = p.LocalVariable(Int,
-                "SimpleCollections".Access("IntExtensions", "Log2")
+                "LinqRewrite".Access("Core", "IntExtensions", "Log2")
                     .Invoke(p.SourceSize.Cast(SyntaxKind.UIntKeyword)) - 3);
                 
             p.PreUseAdd(logVariable.SubAssign(logVariable % 2));
@@ -43,7 +43,7 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(If(reverseIndexerVariable < 0,
                 Block(
                     tmpSize.Assign(currentLengthVariable),
-                                    "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeReverseArray")
+                                    "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeReverseArray")
                                         .Invoke(2, 
                                             p.SourceSize, 
                                             RefArg(resultVariable), 
@@ -81,7 +81,7 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(If(reverseIndexerVariable < 0,
                         Block(
                     tmpSize.Assign(currentLengthVariable),
-                                    "SimpleCollections".Access("EnlargeExtensions", "LogEnlargeReverseArray")
+                                    "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeReverseArray")
                                         .Invoke(2, 
                                             RefArg(resultVariable), 
                                             RefArg(currentLengthVariable)),

@@ -34,6 +34,12 @@ namespace LinqRewrite.Extensions
             return SyntaxFactory.ParseTypeName(itemString);
         }
 
+        public static TypeSyntax WrappedType(this RewriteParameters p, string pre, TypeSyntax type, string post)
+        {
+            var itemString = pre + type + post;
+            return SyntaxFactory.ParseTypeName(itemString);
+        }
+
         public static TypeSyntax WrappedType(this RewriteParameters p, string pre, TypeBridge type, string post)
         {
             var itemString = pre + type + post;
@@ -53,6 +59,12 @@ namespace LinqRewrite.Extensions
             return SyntaxFactory.ParseTypeName(itemString);
         }
 
+        public static TypeBridge ItemType(this TypeBridge collection, RewriteParameters p)
+        {
+            var itemString = collection.GetItemTypeSymbol(p).ToDisplayString();
+            return SyntaxFactory.ParseTypeName(itemString);
+        }
+
         public static TypeBridge ItemType(this ValueBridge collection, RewriteParameters p)
         {
             try
@@ -64,6 +76,12 @@ namespace LinqRewrite.Extensions
             {
                 return null;
             }
+        }
+
+        public static ITypeSymbol GetItemTypeSymbol(this TypeBridge collection, RewriteParameters p)
+        {
+            var collectionType = ModelExtensions.GetTypeInfo(p.Semantic, collection).Type;
+            return GetItemType(collectionType);
         }
 
         public static ITypeSymbol GetItemTypeSymbol(this ValueBridge collection, RewriteParameters p)

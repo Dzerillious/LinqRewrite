@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using LinqRewrite.Core.SimpleList;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.MSBuild;
@@ -34,20 +35,31 @@ namespace LinqRewrite.Services
 
         public int BuildProject(string[] args)
         {
-            // MSBuild doesn't take CscToolPath into account when deciding whether to recompile. Rebuild always.
             var buildArgs = GetBuildArgs(args);
-            var exitCode = 0;
-            
             try
             {
                 CompileProject(buildArgs[1].ToString());
             }
             catch (ProcessException ex)
             {
-                exitCode = ex.ExitCode;
+                return ex.ExitCode;
             }
+            return 0;
+        }
 
-            return exitCode;
+        public int RewriteProject(string[] args)
+        {
+            var buildArgs = GetBuildArgs(args);
+            try
+            {
+                var dstDir = args.FirstOrDefault(x => x.StartsWith("--"))?.Replace("--reProj=", "");
+                RewriteProject(buildArgs[1].ToString(), dstDir);
+            }
+            catch (ProcessException ex)
+            {
+                return ex.ExitCode;
+            }
+            return 0;
         }
 
         private List<object> GetBuildArgs(string[] args)
@@ -61,6 +73,52 @@ namespace LinqRewrite.Services
             buildArgs.AddRange(args);
 
             return buildArgs;
+        }
+
+        public void RewriteProject(string path, string dstDir)
+        {
+            var msWorkspace = MSBuildWorkspace.Create();
+            var p = msWorkspace.OpenProjectAsync(path);
+            var project = p.Result;
+
+            var syntaxTrees = new List<(Document document, SyntaxTree tree)>();
+            var references = project.MetadataReferences;
+            foreach (var document in project.Documents)
+                syntaxTrees.Add((document, CSharpSyntaxTree.ParseText(File.ReadAllText(document.FilePath))));
+
+            var compilationOptions = project.CompilationOptions.WithOptimizationLevel(OptimizationLevel.Release);
+            var compilation = CSharpCompilation.Create(project.AssemblyName, syntaxTrees.Select(x => x.tree), references,
+                (CSharpCompilationOptions)compilationOptions);
+            
+            if(PrintDiagnostics(compilation)) return;
+
+            var projectDir =  Path.GetDirectoryName(project.FilePath);
+            CopyFile(project.FilePath, projectDir, dstDir);
+
+            foreach (var (document, tree) in syntaxTrees)
+            {
+                var rewriter = new LinqRewriter(compilation.GetSemanticModel(tree));
+                var rewritten = rewriter.Visit(tree.GetRoot());
+                WriteFile(document.FilePath, CSharpSyntaxTree.Create((CSharpSyntaxNode) rewritten).ToString(), projectDir, dstDir);
+            }
+            
+            Directory.CreateDirectory(dstDir);
+            foreach (var document in project.AdditionalDocuments)
+                CopyFile(document.FilePath, projectDir, dstDir);
+        }
+
+        private static void WriteFile(string fileName, string content, string projectDir, string dstDir)
+        {
+            var writePath = fileName.Replace(projectDir, dstDir);
+            Directory.CreateDirectory(Path.GetDirectoryName(writePath));
+            File.WriteAllText(writePath, content);
+        }
+
+        private static void CopyFile(string fileName, string projectDir, string dstDir)
+        {
+            var copiedPath = fileName.Replace(projectDir, dstDir);
+            Directory.CreateDirectory(Path.GetDirectoryName(copiedPath));
+            File.Copy(fileName, copiedPath, true);
         }
 
         public void CompileProject(string path)

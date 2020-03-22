@@ -90,6 +90,7 @@ namespace LinqRewrite
                 
                 case "ToArray": RewriteToArray.Rewrite(parameters, args); return;
                 case "ToList": RewriteToList.Rewrite(parameters, args); return;
+                case "ToSimpleList": RewriteToSimpleList.Rewrite(parameters, args); return;
                 case "ToDictionary": RewriteToDictionary.Rewrite(parameters, args); return;
                 case "ToLookup": RewriteToLookup.Rewrite(parameters, args); return;
                 default: throw new NotImplementedException($"Rewrite of {last} not implemented");

@@ -34,7 +34,7 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="LinqRewrite.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\packages\LinqRewrite.Core.0.5.2\lib\net472\LinqRewrite.Core.dll</HintPath>
+          <HintPath>..\packages\LinqRewrite.Core.0.5.5-preview\lib\net472\LinqRewrite.Core.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
@@ -51,6 +51,7 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="SelectTests.cs" />
         <Compile Include="TestExtensions.cs" />
+        <Compile Include="WhereTests.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />

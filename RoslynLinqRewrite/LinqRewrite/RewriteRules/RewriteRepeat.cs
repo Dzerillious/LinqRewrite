@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.VariableExtensions;

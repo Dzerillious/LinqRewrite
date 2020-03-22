@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-// using SimpleCollections.SimpleList;
-
 namespace LinqRewrite
 {
     public class SelectTests
