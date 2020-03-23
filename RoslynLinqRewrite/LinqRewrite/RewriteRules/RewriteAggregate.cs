@@ -29,7 +29,6 @@ namespace LinqRewrite.RewriteRules
                 3 => args[2].Inline(p, resultValue),
                 _ => resultValue
             }));
-            p.HasResultMethod = true;
         }
     }
 }

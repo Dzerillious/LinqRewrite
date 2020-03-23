@@ -30,7 +30,6 @@ namespace LinqRewrite.RewriteRules
             
             p.ForAdd(lookupVariable.ArrayAccess(keySelector.Inline(p, p.LastValue)).Assign(elementSelectorValue));
             p.FinalAdd(Return(lookupVariable));
-            p.HasResultMethod = true;
         }
     }
 }

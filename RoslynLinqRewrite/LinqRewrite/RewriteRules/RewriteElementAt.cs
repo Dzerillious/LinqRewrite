@@ -17,7 +17,6 @@ namespace LinqRewrite.RewriteRules
                         Return(p.LastValue)));
             
             p.FinalAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not enough elements."));
-            p.HasResultMethod = true;
         }
     }
 }

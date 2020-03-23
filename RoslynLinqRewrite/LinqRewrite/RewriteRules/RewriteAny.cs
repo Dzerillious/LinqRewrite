@@ -21,7 +21,6 @@ namespace LinqRewrite.RewriteRules
             }
             
             p.FinalAdd(Return(false));
-            p.HasResultMethod = true;
         }
     }
 }

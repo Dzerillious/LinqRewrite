@@ -29,7 +29,6 @@ namespace LinqRewrite.RewriteRules
             else p.ForAdd(sumVariable.AddAssign(value));
             
             p.FinalAdd(Return(sumVariable));
-            p.HasResultMethod = true;
         }
     }
 }

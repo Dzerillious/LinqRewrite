@@ -59,23 +59,30 @@ namespace LinqRewrite.Services
                             .Select(x => ParseTypeName(x.Identifier.ValueText)))))
                 : (NameSyntax) IdentifierName(identifier);
 
-        public TypedValueBridge InlineLambda(ExpressionSyntax expression, TypeSyntax returnType, params ValueBridge[] p)
+        public TypedValueBridge InlineLambda(RewriteParameters p, ExpressionSyntax expression, TypeSyntax returnType, params TypedValueBridge[] parameters)
         {
             if (expression is IdentifierNameSyntax identifier)
-                return new TypedValueBridge(Int, identifier.Invoke(p));
+                return new TypedValueBridge(returnType, identifier.Invoke(parameters));
             
             var lambda = new Lambda((LambdaExpressionSyntax)expression);
 
-            var pS = p.Select((x, i) => GetLambdaParameter(lambda, i)).ToArray();
+            var pS = parameters.Select((x, i) => GetLambdaParameter(lambda, i)).ToArray();
             var currentFlow = _data.Semantic.AnalyzeDataFlow(lambda.Body);
             var currentCaptures = currentFlow
                 .DataFlowsOut
                 .Union(currentFlow.DataFlowsIn)
                 .Where(x => pS.All(y => x.Name != y.Identifier.ValueText) &&(x as IParameterSymbol)?.IsThis != true)
-                .Select(x => CreateVariableCapture(x, currentFlow.DataFlowsOut))
+                .Select(x => CreateVariableCapture(x, currentFlow.DataFlowsOut, currentFlow.WrittenInside))
                 .ToList();
 
-            lambda = RenameSymbol(lambda, p);
+            if (!p.HasResultMethod && currentCaptures.Any(x => x.Changes))
+            {
+                var parameterTypes = parameters.Select(x => x.Type.ToString()).Concat(new[] {returnType.ToString()});
+                var funcType = ParseTypeName($"Func<{string.Join(",", parameterTypes)}>");
+                var lambdaVariable = p.AddParameter(funcType, expression);
+                return new TypedValueBridge(returnType, lambdaVariable.Invoke(parameters));
+            }
+            lambda = RenameSymbol(lambda, parameters);
             return new TypedValueBridge(returnType, InlineOrCreateMethod(lambda.Body, returnType, currentCaptures, pS));
         }
 

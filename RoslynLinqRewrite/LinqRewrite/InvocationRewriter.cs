@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using LinqRewrite.DataStructures;
 using LinqRewrite.RewriteRules;
+using LinqRewrite.SimpleRewriteRules;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -12,24 +16,72 @@ namespace LinqRewrite
         public static ExpressionSyntax TryRewrite(RewriteParameters parameters) 
         {
             var regex = new Regex("(.*\\.)?(.*?)(\\<.*\\>)?\\(.*");
-            for (var i = 0; i < parameters.RewriteChain.Count; i++)
+            var names = parameters.RewriteChain.Select(x =>
             {
-                var step = parameters.RewriteChain[i];
-                var match = regex.Match(step.MethodName);
-
-                var last = match.Groups[1].Value.EndsWith(".")
+                var match = regex.Match(x.MethodName);
+                return match.Groups[1].Value.EndsWith(".")
                     ? match.Groups[2].Value : match.Groups[1].Value;
-                RewritePart(last, parameters, i);
-            }
+            }).ToArray();
+
+            parameters.HasResultMethod = GetHasResultMethod(names);
+            if (!TryRewriteSimple(parameters, names)) RewriteComposite(parameters, names);
 
             if (parameters.SimpleRewrite != null) return parameters.SimpleRewrite;
+            // if (parameters.Data.CurrentMethodVariableCaptures.Any(x => x.Changes))
+            //     throw new NotSupportedException("Not good for rewrite");
             if (!parameters.HasResultMethod)
                 parameters.ForAdd(SyntaxFactory.YieldStatement(SyntaxKind.YieldReturnStatement, parameters.LastValue));
             var body = parameters.GetMethodBody();
 
             if (parameters.NotRewrite) throw new NotSupportedException("Not good for rewrite");
-            return parameters.Rewrite.GetCollectionInvocationExpression(parameters, body);
+            return parameters.Rewrite.GetMethodInvocationExpression(parameters, body);
         }
+
+        private static bool GetHasResultMethod(string[] names)
+            => names.Last() switch
+            {
+                "Aggregate" => true,
+                "All" => true,
+                "Any" => true,
+                "Average" => true,
+                "Contains" => true,
+                "Count" => true,
+                "ElementAt" => true,
+                "ElementAtOrDefault" => true,
+                "First" => true,
+                "FirstOrDefault" => true,
+                "ForEach" => true,
+                "Last" => true,
+                "LastOrDefault" => true,
+                "LongCount" => true,
+                "Max" => true,
+                "Min" => true,
+                "SequenceEqual" => true,
+                "Single" => true,
+                "SingleOrDefault" => true,
+                "Sum" => true,
+                "ToArray" => true,
+                "ToDictionary" => true,
+                "ToList" => true,
+                "ToLookup" => true,
+                "ToSimpleList" => true,
+                _ => false
+            };
+
+        private static void RewriteComposite(RewriteParameters parameters, string[] names)
+        {
+            for (var i = 0; i < names.Length; i++)
+                RewritePart(names[i], parameters, i);
+        }
+
+        private static bool TryRewriteSimple(RewriteParameters parameters, string[] names)
+        {
+            if (MatchNames(names, "Range", "Sum")) return RangeSumRewrite.Rewrite(parameters);
+            return false;
+        }
+
+        private static bool MatchNames(IEnumerable<string> names, params string[] paramNames)
+            => names.SequenceEqual(paramNames);
 
         private static void RewritePart(string last, RewriteParameters parameters, int i)
         {

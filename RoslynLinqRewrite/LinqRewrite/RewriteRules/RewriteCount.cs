@@ -19,7 +19,6 @@ namespace LinqRewrite.RewriteRules
                         Continue()));
             }
             p.FinalAdd(Return(p.Indexer));
-            p.HasResultMethod = true;
         }
     }
 }

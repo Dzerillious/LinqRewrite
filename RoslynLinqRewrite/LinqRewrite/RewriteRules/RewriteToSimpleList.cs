@@ -20,7 +20,6 @@ namespace LinqRewrite.RewriteRules
             p.FinalAdd(finalResult.Access("Items").Assign(result));
             p.FinalAdd(finalResult.Access("Count").Assign(p.ResultSize ?? p.Indexer));
             p.FinalAdd(Return(finalResult));
-            p.HasResultMethod = true;
         }
     }
 }

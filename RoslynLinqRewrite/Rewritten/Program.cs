@@ -1,12 +1,12 @@
-using BenchmarkDotNet.Running;
+using TestsLibrary.Tests;
 
-namespace BenchmarkLibrary
+namespace TestsLibrary
 {
     internal class Program
     {
         public static void Main(string[] args)
         {
-            var summary = BenchmarkRunner.Run<SelectBenchmarks>();
+            new SelectTests().RunTests();
         }
     }
 }

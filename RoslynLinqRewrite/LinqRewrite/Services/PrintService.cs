@@ -12,7 +12,7 @@ namespace LinqRewrite.Services
 
         public PrintService()
         {
-            File.CreateText("logs.txt").Close();
+            //File.CreateText("logs.txt").Close();
         }
 
         public int PrintHelp()
@@ -46,7 +46,7 @@ However, you won't see statistics about the rewritten methods.
                     break;
             }
             PrintLine(item.ToString());
-            // Console.ResetColor();
+            Console.ResetColor();
         }
 
         public bool PrintFile(string path)
@@ -60,7 +60,8 @@ However, you won't see statistics about the rewritten methods.
 
         public void PrintLine(string line = "")
         {
-            File.AppendAllLines("logs.txt", new []{line});
+            Console.WriteLine(line);
+            //File.AppendAllLines("logs.txt", new []{line});
         }
     }
 }

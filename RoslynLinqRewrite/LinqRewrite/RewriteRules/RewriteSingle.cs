@@ -33,7 +33,6 @@ namespace LinqRewrite.RewriteRules
             p.FinalAdd(If(foundVariable.IsEqual(null),
                             CreateThrowException("System.InvalidOperationException", "The sequence did not contain any elements."), 
                             Return(foundVariable.Cast(p.ReturnType))));
-            p.HasResultMethod = true;
         }
     }
 }

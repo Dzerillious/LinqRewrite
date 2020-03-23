@@ -45,7 +45,7 @@
           <Private>True</Private>
         </Reference>
         <Reference Include="LinqRewrite.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\packages\LinqRewrite.Core.0.5.5-preview\lib\net472\LinqRewrite.Core.dll</HintPath>
+          <HintPath>..\packages\LinqRewrite.Core.0.5.6-preview\lib\net472\LinqRewrite.Core.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="Microsoft.CodeAnalysis, Version=2.10.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
@@ -206,6 +206,7 @@
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="SelectBenchmarks.cs" />
+        <Compile Include="WhereBenchmarks.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />

@@ -189,24 +189,31 @@ namespace LinqRewrite
 
         private (bool, ExpressionSyntax, ITypeSymbol) CheckIfRewriteInvocation(List<LinqStep> chain, InvocationExpressionSyntax node, InvocationExpressionSyntax lastNode)
         {
-            var (flowsIn, flowsOut) = GetFlows(chain);
+            var (flowsIn, flowsOut, writtenInside) = GetFlows(chain);
             
             var collection = ((MemberAccessExpressionSyntax) lastNode.Expression).Expression;
             var collectionSymbol = _data.Semantic.GetSymbolInfo(collection).Symbol;
             if (SymbolExtensions.GetType(collectionSymbol) != null) flowsIn = flowsIn.Concat(new[] {collectionSymbol}).ToArray();
             
-            _data.CurrentFlow = flowsIn.Union(flowsOut)
+            var currentFlow = flowsIn.Union(flowsOut)
                 .Where(x => (x as IParameterSymbol)?.IsThis != true)
-                .Select(x => VariableExtensions.CreateVariableCapture(x, flowsOut));
+                .Select(x => VariableExtensions.CreateVariableCapture(x, flowsOut, writtenInside));
+            
+            _data.CurrentMethodParams = currentFlow
+                .Select(x => CreateParameter(x.Name, SymbolExtensions.GetType(x.Symbol)).WithRef(x.Changes))
+                .Distinct(new RewriteService.ParameterComparer()).ToList();
+            _data.CurrentMethodArguments = currentFlow
+                .GroupBy(x => x.Symbol, (x, y) => new VariableCapture(x, y.Any(z => z.Changes)))
+                .Select(x => Argument(x.Name).WithRef(x.Changes)).ToList();
 
             if (SyntaxExtensions.IsAnonymousType(_data.Semantic.GetTypeInfo(collection).Type)) return (false, null, null);
 
-            var semanticReturnType = _data.Semantic.GetTypeInfo(node).Type;
-            if (SyntaxExtensions.IsAnonymousType(semanticReturnType) ||
-                _data.CurrentFlow.Any(x => SyntaxExtensions.IsAnonymousType(SymbolExtensions.GetType(x.Symbol)))) 
+            var returnType = _data.Semantic.GetTypeInfo(node).Type;
+            if (SyntaxExtensions.IsAnonymousType(returnType) ||
+                currentFlow.Any(x => SyntaxExtensions.IsAnonymousType(SymbolExtensions.GetType(x.Symbol)))) 
                 return (false, null, null);
 
-            return (true, collection, semanticReturnType);
+            return (true, collection, returnType);
         }
 
         private void InvocationChainInsertForEach(List<LinqStep> chain, ForEachStatementSyntax forEach)
@@ -228,17 +235,19 @@ namespace LinqRewrite
                 });
         }
 
-        private (ISymbol[], ISymbol[]) GetFlows(List<LinqStep> chain)
+        private (ISymbol[], ISymbol[], ISymbol[]) GetFlows(List<LinqStep> chain)
         {
             var flowsIn = Array.Empty<ISymbol>();
             var flowsOut = Array.Empty<ISymbol>();
+            var writtenInside = Array.Empty<ISymbol>();
             foreach (var item in chain)
             {
                 var dataFlow = _data.Semantic.AnalyzeDataFlow(item.Invocation);
                 flowsIn = flowsIn.Union(dataFlow.DataFlowsIn).ToArray();
                 flowsOut = flowsOut.Union(dataFlow.DataFlowsOut).ToArray();
+                writtenInside = writtenInside.Union(dataFlow.WrittenInside).ToArray();
             }
-            return (flowsIn, flowsOut);
+            return (flowsIn, flowsOut, writtenInside);
         }
 
         private bool IsSupportedMethod(InvocationExpressionSyntax invocation)

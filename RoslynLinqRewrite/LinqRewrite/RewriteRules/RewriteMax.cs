@@ -41,7 +41,6 @@ namespace LinqRewrite.RewriteRules
             }
             
             p.FinalAdd(Return(maxVariable));
-            p.HasResultMethod = true;
         }
     }
 }

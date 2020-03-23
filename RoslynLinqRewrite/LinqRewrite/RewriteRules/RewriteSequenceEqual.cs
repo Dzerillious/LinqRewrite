@@ -31,8 +31,6 @@ namespace LinqRewrite.RewriteRules
 
             p.FinalAdd(enumeratorVariable.Access("Dispose").Invoke());
             p.FinalAdd(Return(true));
-
-            p.HasResultMethod = true;
         }
     }
 }

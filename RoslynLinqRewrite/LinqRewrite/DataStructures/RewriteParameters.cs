@@ -190,6 +190,7 @@ namespace LinqRewrite.DataStructures
             ListEnumeration = true;
             CurrentIndexer = null;
             NotRewrite = false;
+            WrapWithTry = false;
 
             SimpleRewrite = null;
             LastValue = null;
@@ -346,6 +347,18 @@ namespace LinqRewrite.DataStructures
             Variables.Add(created);
 
             InitialAdd(LocalVariableCreation(variable, type));
+            return created;
+        }
+
+        public LocalVariable AddParameter(TypeBridge type, ExpressionSyntax value)
+        {
+            var variable = "v" + _variableIndex++;
+            var created = new LocalVariable(variable, type);
+            Variables.Add(created);
+            
+            Data.CurrentMethodParams.Add(CreateParameter(variable, type));
+            Data.CurrentMethodArguments.Add(Argument(value));
+
             return created;
         }
 

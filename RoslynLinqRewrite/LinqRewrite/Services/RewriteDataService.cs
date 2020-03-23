@@ -10,16 +10,16 @@ namespace LinqRewrite.Services
     {
         private static RewriteDataService _instance;
         public static RewriteDataService Instance => _instance ??= new RewriteDataService();
-        
-        public SemanticModel Semantic;
-        
-        public IEnumerable<VariableCapture> CurrentFlow;
-        public TypeDeclarationSyntax CurrentType;
-        public string CurrentMethodName;
-        public bool CurrentMethodIsStatic;
-        public TypeParameterListSyntax CurrentMethodTypeParameters;
-        public SyntaxList<TypeParameterConstraintClauseSyntax> CurrentMethodConstraintClauses;
-        
+        public List<ParameterSyntax> CurrentMethodParams { get; set; }
+        public List<ArgumentSyntax> CurrentMethodArguments { get; set; }
+
+        public SemanticModel Semantic { get; set; }
+        public TypeDeclarationSyntax CurrentType { get; set; }
+        public string CurrentMethodName { get; set; }
+        public bool CurrentMethodIsStatic { get; set; }
+        public TypeParameterListSyntax CurrentMethodTypeParameters { get; set; }
+        public SyntaxList<TypeParameterConstraintClauseSyntax> CurrentMethodConstraintClauses { get; set; }
+
         public readonly List<Tuple<TypeDeclarationSyntax, MethodDeclarationSyntax>> MethodsToAddToCurrentType =
             new List<Tuple<TypeDeclarationSyntax, MethodDeclarationSyntax>>();
     }

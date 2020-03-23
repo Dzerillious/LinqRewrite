@@ -58,9 +58,9 @@ namespace LinqRewrite.Extensions
                 arrayType.WithRankSpecifiers(new SyntaxList<ArrayRankSpecifierSyntax>(newRankSpecifiers)));
         }
 
-        public static VariableCapture CreateVariableCapture(ISymbol symbol, IReadOnlyList<ISymbol> flowsOut)
+        public static VariableCapture CreateVariableCapture(ISymbol symbol, IReadOnlyList<ISymbol> flowsOut, IReadOnlyList<ISymbol> writtenInside)
         {
-            var changes = flowsOut.Contains(symbol);
+            var changes = flowsOut.Contains(symbol) || writtenInside.Contains(symbol);
             if (changes) return new VariableCapture(symbol, changes);
 
             if (!(symbol is ILocalSymbol local)) return new VariableCapture(symbol, changes);

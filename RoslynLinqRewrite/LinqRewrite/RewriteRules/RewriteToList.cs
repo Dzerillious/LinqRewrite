@@ -15,7 +15,6 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(listVariable.Access("Add").Invoke(p.LastValue));
             
             p.FinalAdd(Return(listVariable));
-            p.HasResultMethod = true;
         }
     }
 }

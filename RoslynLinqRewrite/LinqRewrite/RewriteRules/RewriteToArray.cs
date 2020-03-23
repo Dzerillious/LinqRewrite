@@ -13,7 +13,6 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            p.HasResultMethod = true;
             if (p.ListEnumeration && p.IncompleteIterators.Count() <= 1 && RewriteList(p))
                 return;
             
@@ -29,8 +28,8 @@ namespace LinqRewrite.RewriteRules
         public static VariableBridge RewriteOther(RewriteParameters p, TypeSyntax itemType = null)
         {
             if (p.ResultSize != null) return KnownSize(p, itemType);
-            else if (p.SourceSize != null) return KnownSourceSize(p);
-            else return UnknownSourceSize(p);
+            else if (p.SourceSize != null) return KnownSourceSize(p, itemType);
+            else return UnknownSourceSize(p, itemType);
         }
 
         private static VariableBridge KnownSize(RewriteParameters p, TypeSyntax itemType = null)
@@ -42,7 +41,7 @@ namespace LinqRewrite.RewriteRules
             return resultVariable;
         }
 
-        private static VariableBridge KnownSourceSize(RewriteParameters p)
+        private static VariableBridge KnownSourceSize(RewriteParameters p, TypeSyntax itemType = null)
         {
             var indexerVariable = p.Indexer;
                 
@@ -53,7 +52,7 @@ namespace LinqRewrite.RewriteRules
             p.PreUseAdd(logVariable.SubAssign(logVariable % 2));
             var currentLengthVariable = p.GlobalVariable(Int, 8);
 
-            var resultType = (ArrayTypeSyntax) p.ReturnType;
+            var resultType = itemType == null ? (ArrayTypeSyntax) p.ReturnType : itemType.ArrayType();
             var resultVariable = p.GlobalVariable(resultType, CreateArray(resultType, 8));
 
             p.ForAdd(If(p.Indexer >= currentLengthVariable,
@@ -68,12 +67,12 @@ namespace LinqRewrite.RewriteRules
             return resultVariable;
         }
 
-        private static VariableBridge UnknownSourceSize(RewriteParameters p)
+        private static VariableBridge UnknownSourceSize(RewriteParameters p, TypeSyntax itemType = null)
         {
             var indexerVariable = p.Indexer;
             
             var currentLengthVariable = p.GlobalVariable(Int, 8);
-            var resultType = (ArrayTypeSyntax) p.ReturnType;
+            var resultType = itemType == null ? (ArrayTypeSyntax) p.ReturnType : itemType.ArrayType();
             var resultVariable = p.GlobalVariable(resultType, CreateArray(resultType, 8));
                 
             p.ForAdd(If(p.Indexer >= currentLengthVariable,

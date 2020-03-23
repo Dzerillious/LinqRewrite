@@ -11,7 +11,6 @@ namespace LinqRewrite.RewriteRules
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
 
             p.ForAdd(args[0].Inline(p, p.LastValue));
-            p.HasResultMethod = true;
         }
     }
 }

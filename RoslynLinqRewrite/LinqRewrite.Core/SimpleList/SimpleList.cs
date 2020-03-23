@@ -76,107 +76,57 @@ namespace LinqRewrite.Core.SimpleList
 #endif
       
       public IEnumerator<T> GetEnumerator()
-        => new ArrayEnumerator(Items, 0, Count);
+        => new SimpleListEnumerator(Items, Count);
 
       IEnumerator IEnumerable.GetEnumerator()
-        => new ArrayEnumerator(Items, 0, Count);
+        => new SimpleListEnumerator(Items, Count);
 
       [Serializable]
-      private sealed class ArrayEnumerator : IEnumerator<T>, ICloneable
+      private sealed class SimpleListEnumerator : IEnumerator<T>, ICloneable
       {
-        private Array _array;
-        private int _index;
-        private int _endIndex;
-        private int _startIndex;
-        private int[] _indices;
-        private bool _complete;
-        private T _current;
+          private T[] _array;
+          private int _index;
+          private int _endIndex;
+          private T _current;
 
-        internal ArrayEnumerator(Array array, int index, int count)
-        {
-          _array = array;
-          _index = index - 1;
-          _startIndex = index;
-          _endIndex = index + count;
-          _indices = new int[array.Rank];
-          var num = 1;
-          for (var dimension = 0; dimension < array.Rank; ++dimension)
+          internal SimpleListEnumerator(T[] array, int count)
           {
-            _indices[dimension] = array.GetLowerBound(dimension);
-            num *= array.GetLength(dimension);
+              _array = array;
+              _index = -1;
+              _endIndex = count - 1;
           }
-          --_indices[_indices.Length - 1];
-          _complete = num == 0;
-        }
 
-        private void IncArray()
-        {
-          var rank = _array.Rank;
-          ++_indices[rank - 1];
-          for (var dimension1 = rank - 1; dimension1 >= 0; --dimension1)
+          [MethodImpl(MethodImplOptions.AggressiveInlining)]
+          public object Clone() => MemberwiseClone();
+
+          public bool MoveNext()
           {
-            if (_indices[dimension1] > _array.GetUpperBound(dimension1))
-            {
-              if (dimension1 == 0)
-              {
-                _complete = true;
-                break;
-              }
-              for (var dimension2 = dimension1; dimension2 < rank; ++dimension2)
-                _indices[dimension2] = _array.GetLowerBound(dimension2);
-              ++_indices[dimension1 - 1];
-            }
+              if (_index == _endIndex) return false; 
+              _current = _array[++_index];
+              return true;
           }
-        }
 
-        public object Clone()
-        {
-          return MemberwiseClone();
-        }
-
-        public bool MoveNext()
-        {
-          if (_complete)
+          public object Current
           {
-            _index = _endIndex;
-            return false;
+              [MethodImpl(MethodImplOptions.AggressiveInlining)]
+              get => _current;
           }
-          ++_index;
-          IncArray();
-          return !_complete;
-        }
 
-        public object Current
-        {
-          get
+          [MethodImpl(MethodImplOptions.AggressiveInlining)]
+          public void Reset()
           {
-            if (_index < _startIndex)
-              throw new InvalidOperationException("Enum not started");
-            if (_complete)
-              throw new InvalidOperationException("Enum ended");
-            return _array.GetValue(_indices);
+              _index = -1;
+              _current = default;
           }
-        }
 
-        public void Reset()
-        {
-          _index = _startIndex - 1;
-          var num = 1;
-          for (var dimension = 0; dimension < _array.Rank; ++dimension)
+          T IEnumerator<T>.Current
           {
-            _indices[dimension] = _array.GetLowerBound(dimension);
-            num *= _array.GetLength(dimension);
+              [MethodImpl(MethodImplOptions.AggressiveInlining)]
+              get => _current;
           }
-          _complete = num == 0;
-          --_indices[_indices.Length - 1];
-        }
 
-        T IEnumerator<T>.Current => _current;
-
-        public void Dispose()
-        {
-          _array = null;
-        }
+          [MethodImpl(MethodImplOptions.AggressiveInlining)]
+          public void Dispose() => _array = null;
       }
     }
 }

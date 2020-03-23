@@ -57,7 +57,8 @@ namespace LinqRewrite.Extensions
 
         public static InvocationExpressionSyntax Invoke(this string identifier)
             => InvocationExpression(IdentifierName(identifier));
-
+        public static InvocationExpressionSyntax Invoke(this VariableBridge source)
+            => InvocationExpression(source);
         public static InvocationExpressionSyntax Invoke(this ExpressionSyntax source)
             => InvocationExpression(source);
 
@@ -66,6 +67,8 @@ namespace LinqRewrite.Extensions
 
         public static InvocationExpressionSyntax Invoke(this ExpressionSyntax invoked, ValueBridge[] args)
             => InvocationExpression(invoked, ArgumentList(CreateSeparatedList(args.Select(Argument))));
+        public static InvocationExpressionSyntax Invoke(this VariableBridge source, ValueBridge[] args)
+            => InvocationExpression(source, ArgumentList(CreateSeparatedList(args.Select(Argument))));
 
         public static ArgumentListSyntax CreateArguments(params ArgumentSyntax[] items)
             => ArgumentList(CreateSeparatedList(items));
@@ -173,7 +176,7 @@ namespace LinqRewrite.Extensions
         {
             var returnType = ((LambdaExpressionSyntax) e).ReturnType(p);
             if (e.IsLambdaSimple())
-                return p.Code.InlineLambda(e, returnType, values);
+                return p.Code.InlineLambda(p, e, returnType, values);
 
             var vals = values.Select(x =>
             {
@@ -182,7 +185,7 @@ namespace LinqRewrite.Extensions
                 p.ForAdd(inlineVariable.Assign(x));
                 return new TypedValueBridge(x.Type, inlineVariable);
             }).ToArray();
-            return p.Code.InlineLambda(e, returnType, vals);
+            return p.Code.InlineLambda(p, e, returnType, vals);
         }
 
         public static TypedValueBridge Inline(this RewrittenValueBridge e, RewriteParameters p,
@@ -192,7 +195,7 @@ namespace LinqRewrite.Extensions
                     ? lambda.ReturnType(p)
                     : (TypeBridge)ParseTypeName(((INamedTypeSymbol)p.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.ReturnType.ToDisplayString());
             if (IsLambdaSimple(e.Old))
-                return p.Code.InlineLambda(e, returnType, values);
+                return p.Code.InlineLambda(p, e, returnType, values);
 
             var vals = values.Select(x =>
             {
@@ -201,7 +204,7 @@ namespace LinqRewrite.Extensions
                 p.ForAdd(inlineVariable.Assign(x));
                 return new TypedValueBridge(x.Type, inlineVariable);
             }).ToArray();
-            return p.Code.InlineLambda(e, returnType, vals);
+            return p.Code.InlineLambda(p, e, returnType, vals);
         }
 
         public static bool IsLambdaSimple(this ExpressionSyntax e)

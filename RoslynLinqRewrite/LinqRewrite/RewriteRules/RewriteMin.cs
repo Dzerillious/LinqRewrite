@@ -41,7 +41,6 @@ namespace LinqRewrite.RewriteRules
             }
             
             p.FinalAdd(Return(minVariable));
-            p.HasResultMethod = true;
         }
     }
 }

@@ -33,7 +33,6 @@ namespace LinqRewrite.RewriteRules
             p.FinalAdd(If(foundVariable.IsEqual(null),
                             Return(Default(p.ReturnType)), 
                             Return(foundVariable.Cast(p.ReturnType))));
-            p.HasResultMethod = true;
         }
     }
 }

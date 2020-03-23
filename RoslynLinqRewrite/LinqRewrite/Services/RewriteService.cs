@@ -4,6 +4,7 @@ using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -39,23 +40,18 @@ namespace LinqRewrite.Services
             }
         }
 
-        internal ExpressionSyntax GetCollectionInvocationExpression(RewriteParameters p, IEnumerable<StatementSyntax> body)
+        internal ExpressionSyntax GetMethodInvocationExpression(RewriteParameters p, IEnumerable<StatementSyntax> body)
         {
-            var parameters = _data.CurrentFlow
-                .Select(x => CreateParameter(x.Name, SymbolExtensions.GetType(x.Symbol)).WithRef(x.Changes))
-                .Distinct(new ParameterComparer());
-           
             var functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
-            var arguments = CreateArguments( _data.CurrentFlow
-                .GroupBy(x => x.Symbol, (x, y) => new VariableCapture(x, y.Any(z => z.Changes)))
-                .Select(x => Argument(x.Name).WithRef(x.Changes)));
-
+            var parameters = p.Data.CurrentMethodParams
+                .Where(x => p.HasResultMethod || !x.Modifiers.Any()).ToArray();
             var coreFunction = GetCoreMethod(p.ReturnType, functionName, parameters, body);
 
             _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, coreFunction));
-            
+
+            var args = _data.CurrentMethodArguments.Where(x => p.HasResultMethod || x.RefKindKeyword.Text != "ref");
             var inv = InvocationExpression(
-                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), CreateArguments(arguments.Arguments));
+                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), CreateArguments(args));
 
             return inv;
         }
