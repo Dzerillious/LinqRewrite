@@ -28,6 +28,18 @@ namespace LinqRewrite.Extensions
                 _ => Block(syntax)
             };
 
+        public static ThrowStatementSyntax Throw(string type, string message = null) 
+            => ThrowStatement(
+                ObjectCreationExpression(
+                    ParseTypeName(type),
+                    CreateArguments(message != null
+                        ? new ValueBridge[]
+                        {
+                            LiteralExpression(SyntaxKind.StringLiteralExpression,
+                                Literal(message))
+                        }
+                        : new ValueBridge[] { }), null));
+
         public static ThrowExpressionSyntax CreateThrowException(string type, string message = null)
             => ThrowExpression(
                 ObjectCreationExpression(
@@ -197,14 +209,14 @@ namespace LinqRewrite.Extensions
             if (IsLambdaSimple(e.Old))
                 return p.Code.InlineLambda(p, e, returnType, values);
 
-            var vals = values.Select(x =>
+            var val = values.Select(x =>
             {
                 if (IsReusable(x)) return x;
                 var inlineVariable = p.LocalVariable(x.Type);
                 p.ForAdd(inlineVariable.Assign(x));
                 return new TypedValueBridge(x.Type, inlineVariable);
             }).ToArray();
-            return p.Code.InlineLambda(p, e, returnType, vals);
+            return p.Code.InlineLambda(p, e, returnType, val);
         }
 
         public static bool IsLambdaSimple(this ExpressionSyntax e)

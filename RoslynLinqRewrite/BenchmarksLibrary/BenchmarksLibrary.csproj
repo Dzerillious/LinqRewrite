@@ -206,6 +206,7 @@
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="SelectBenchmarks.cs" />
+        <Compile Include="SumBenchmarks.cs" />
         <Compile Include="WhereBenchmarks.cs" />
     </ItemGroup>
     <ItemGroup>

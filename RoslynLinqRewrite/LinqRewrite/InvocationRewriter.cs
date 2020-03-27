@@ -27,8 +27,6 @@ namespace LinqRewrite
             if (!TryRewriteSimple(parameters, names)) RewriteComposite(parameters, names);
 
             if (parameters.SimpleRewrite != null) return parameters.SimpleRewrite;
-            // if (parameters.Data.CurrentMethodVariableCaptures.Any(x => x.Changes))
-            //     throw new NotSupportedException("Not good for rewrite");
             if (!parameters.HasResultMethod)
                 parameters.ForAdd(SyntaxFactory.YieldStatement(SyntaxKind.YieldReturnStatement, parameters.LastValue));
             var body = parameters.GetMethodBody();

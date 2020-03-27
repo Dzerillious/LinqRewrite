@@ -75,15 +75,17 @@ namespace LinqRewrite.Services
                 .Select(x => CreateVariableCapture(x, currentFlow.DataFlowsOut, currentFlow.WrittenInside))
                 .ToList();
 
-            if (!p.HasResultMethod && currentCaptures.Any(x => x.Changes))
+            if (!p.HasResultMethod && p.Data.CurrentMethodParams.Any(x => !x.Modifiers.Any()))
             {
                 var parameterTypes = parameters.Select(x => x.Type.ToString()).Concat(new[] {returnType.ToString()});
-                var funcType = ParseTypeName($"Func<{string.Join(",", parameterTypes)}>");
+                var funcType = ParseTypeName($"System.Func<{string.Join(",", parameterTypes)}>");
                 var lambdaVariable = p.AddParameter(funcType, expression);
                 return new TypedValueBridge(returnType, lambdaVariable.Invoke(parameters));
             }
             lambda = RenameSymbol(lambda, parameters);
-            return new TypedValueBridge(returnType, InlineOrCreateMethod(lambda.Body, returnType, currentCaptures, pS));
+            var inlinedValue = new TypedValueBridge(returnType, InlineOrCreateMethod(lambda.Body, returnType, currentCaptures, pS));
+
+            return inlinedValue;
         }
 
         public TypeSyntax GetLambdaReturnType(SemanticModel semantic, LambdaExpressionSyntax lambdaExpression) 

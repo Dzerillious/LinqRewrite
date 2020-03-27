@@ -26,6 +26,8 @@ namespace LinqRewrite.RewriteRules
             
             p.AddIterator(collectionValue);
             RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(collectionValue.ItemType(p), collectionValue.GetType(p), collectionValue.Count(p), collectionValue.Old));
+
+            p.LastValue = p.LastValue.Reusable(p);
             p.LastForAdd(If(Not(hashsetVariable.Access("Remove").Invoke(p.LastValue)),
                             Continue()));
 

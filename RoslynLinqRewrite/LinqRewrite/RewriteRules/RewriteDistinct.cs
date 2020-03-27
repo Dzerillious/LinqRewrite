@@ -18,7 +18,8 @@ namespace LinqRewrite.RewriteRules
                 0 => New(hashsetType),
                 1 => New(hashsetType, args[0])
             });
-            
+
+            p.LastValue = p.LastValue.Reusable(p);
             p.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue)),
                         Continue()));
             

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using LinqRewrite.Core;
 using LinqRewrite.Core.SimpleList;
@@ -20,6 +19,7 @@ public class SelectTests
     [Datapoints]
     private IEnumerable<int> EnumerableItems = Enumerable.Range(0, 100);
     public double Selector(int x) => x + 3;
+    public double SelectorIndex(int x, int i) => x + i;
     public void RunTests()
     {
         SelectArray().TestEquals(nameof(SelectArray), SelectArrayRewritten());
@@ -53,6 +53,10 @@ public class SelectTests
         SelectChangingParam3().TestEquals(nameof(SelectChangingParam3), SelectChangingParam3Rewritten());
         SelectChangingParam4().TestEquals(nameof(SelectChangingParam4), SelectChangingParam4Rewritten());
         StaticSelect().TestEquals(nameof(StaticSelect), StaticSelectRewritten());
+        ArraySelectIndex().TestEquals(nameof(ArraySelectIndex), ArraySelectIndexRewritten());
+        ArraySelectIndexToArray().TestEquals(nameof(ArraySelectIndexToArray), ArraySelectIndexToArrayRewritten());
+        ArraySelectIndexMethodToArray().TestEquals(nameof(ArraySelectIndexMethodToArray), ArraySelectIndexMethodToArrayRewritten());
+        ArraySelectIndexMethod().TestEquals(nameof(ArraySelectIndexMethod), ArraySelectIndexMethodRewritten());
     }
 
     [NoRewrite]
@@ -411,6 +415,50 @@ public class SelectTests
     {
         var a = 0;
         return ArrayItems.Select(x => x + a++).Select(x => x + a++).Select(x => x + a++).Select(x => x + a++).Select(x => x + a++).ToArray();
+    } //EndMethod
+
+    [NoRewrite]
+    public IEnumerable<int> ArraySelectIndex()
+    {
+        return ArrayItems.Select((x, i) => x + i);
+    } //EndMethod
+
+    public IEnumerable<int> ArraySelectIndexRewritten()
+    {
+        return ArrayItems.Select((x, i) => x + i);
+    } //EndMethod
+
+    [NoRewrite]
+    public IEnumerable<int> ArraySelectIndexToArray()
+    {
+        return ArrayItems.Select((x, i) => x + i).ToArray();
+    } //EndMethod
+
+    public IEnumerable<int> ArraySelectIndexToArrayRewritten()
+    {
+        return ArrayItems.Select((x, i) => x + i).ToArray();
+    } //EndMethod
+
+    [NoRewrite]
+    public IEnumerable<double> ArraySelectIndexMethod()
+    {
+        return ArrayItems.Select(SelectorIndex);
+    } //EndMethod
+
+    public IEnumerable<double> ArraySelectIndexMethodRewritten()
+    {
+        return ArrayItems.Select(SelectorIndex);
+    } //EndMethod
+
+    [NoRewrite]
+    public IEnumerable<double> ArraySelectIndexMethodToArray()
+    {
+        return ArrayItems.Select(SelectorIndex).ToArray();
+    } //EndMethod
+
+    public IEnumerable<double> ArraySelectIndexMethodToArrayRewritten()
+    {
+        return ArrayItems.Select(SelectorIndex).ToArray();
     } //EndMethod
 }
 

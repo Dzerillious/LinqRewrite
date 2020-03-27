@@ -1,6 +1,7 @@
 ﻿using System;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis.CSharp;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace LinqRewrite.RewriteRules
@@ -16,7 +17,7 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(If(p.Indexer.IsEqual(positionValue),
                         Return(p.LastValue)));
             
-            p.FinalAdd(CreateThrowException("System.InvalidOperationException", "The sequence did not enough elements."));
+            p.FinalAdd(Throw("System.InvalidOperationException", "The sequence did not enough elements."));
         }
     }
 }
