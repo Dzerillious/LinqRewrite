@@ -16,21 +16,21 @@ namespace TestsLibrary.Tests
 
         public void RunTests()
         {
-            ArrayAny().TestEquals(nameof(ArrayAny), ArrayAnyRewritten());        
-            ArraySelectAny().TestEquals(nameof(ArraySelectAny), ArraySelectAnyRewritten());        
-            ArrayWhereAny().TestEquals(nameof(ArrayWhereAny), ArrayWhereAnyRewritten());        
-            ArrayEmptyAny().TestEquals(nameof(ArrayEmptyAny), ArrayEmptyAnyRewritten());        
-            ArraySelectEmptyAny().TestEquals(nameof(ArraySelectEmptyAny), ArraySelectEmptyAnyRewritten());        
-            ArrayWhereEmptyAny().TestEquals(nameof(ArrayWhereEmptyAny), ArrayWhereEmptyAnyRewritten());        
-            ArrayAnyFalse().TestEquals(nameof(ArrayAnyFalse), ArrayAnyFalseRewritten());        
-            ArrayAnyPredicate().TestEquals(nameof(ArrayAnyPredicate), ArrayAnyPredicateRewritten());        
-            ArrayAnyParameter().TestEquals(nameof(ArrayAnyParameter), ArrayAnyParameterRewritten());        
-            ArrayAnyChangingParameter().TestEquals(nameof(ArrayAnyChangingParameter), ArrayAnyChangingParameterRewritten());        
-            EnumerableAnyChangingParameter().TestEquals(nameof(EnumerableAnyChangingParameter), EnumerableAnyChangingParameterRewritten());        
-            EnumerableAny().TestEquals(nameof(EnumerableAny), EnumerableAnyRewritten()); 
-            RepeatAny().TestEquals(nameof(RepeatAny), RepeatAnyRewritten());
-            RangeAny().TestEquals(nameof(RangeAny), RangeAnyRewritten());
-            RepeatAnyTrue().TestEquals(nameof(RepeatAnyTrue), RepeatAnyTrueRewritten());
+            TestsExtensions.TestEquals(nameof(ArrayAny), ArrayAny, ArrayAnyRewritten);
+            TestsExtensions.TestEquals(nameof(ArraySelectAny), ArraySelectAny, ArraySelectAnyRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayWhereAny), ArrayWhereAny, ArrayWhereAnyRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayEmptyAny), ArrayEmptyAny, ArrayEmptyAnyRewritten);
+            TestsExtensions.TestEquals(nameof(ArraySelectEmptyAny), ArraySelectEmptyAny, ArraySelectEmptyAnyRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayWhereEmptyAny), ArrayWhereEmptyAny, ArrayWhereEmptyAnyRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayAnyFalse), ArrayAnyFalse, ArrayAnyFalseRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayAnyPredicate), ArrayAnyPredicate, ArrayAnyPredicateRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayAnyParameter), ArrayAnyParameter, ArrayAnyParameterRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayAnyChangingParameter), ArrayAnyChangingParameter, ArrayAnyChangingParameterRewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableAnyChangingParameter), EnumerableAnyChangingParameter, EnumerableAnyChangingParameterRewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableAny), EnumerableAny, EnumerableAnyRewritten);
+            TestsExtensions.TestEquals(nameof(RepeatAny), RepeatAny, RepeatAnyRewritten);
+            TestsExtensions.TestEquals(nameof(RangeAny), RangeAny, RangeAnyRewritten);
+            TestsExtensions.TestEquals(nameof(RepeatAnyTrue), RepeatAnyTrue, RepeatAnyTrueRewritten);
         }
         
         [NoRewrite]

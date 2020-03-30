@@ -9,75 +9,119 @@ namespace TestsLibrary
     {
         private static int _tests;
         private static int _valid;
+
+        private static (bool ex1, T val1, bool ex2, T val2) GetValues<T>(Func<T> first, Func<T> second)
+        {
+            var firstExcept = false;
+            var secondExcept = false;
+            
+            T firstVal = default;
+            T secondVal = default;
+            try
+            {
+                firstVal = first();
+            }
+            catch (Exception)
+            {
+                firstExcept = true;
+            }
+            try
+            {
+                secondVal = second();
+            }
+            catch (Exception)
+            {
+                secondExcept = true;
+            }
+            return (firstExcept, firstVal, secondExcept, secondVal);
+        }
         
         [NoRewrite]
-        public static void TestEquals<T>(this IEnumerable<T> first, string name, IEnumerable<T> second)
+        public static void TestEquals<T>(string name, Func<IEnumerable<T>> first, Func<IEnumerable<T>> second)
         {
-            var firstArray = first.ToArray();
-            var secondArray = second.ToArray();
-            
-            if (firstArray.SequenceEqual(secondArray)) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            var (ex1, val1, ex2, val2) = GetValues(first, second);
+            if (ex1 && ex2 || !ex1 && !ex2 && val1.SequenceEqual(val2)) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
             else
             {
                 Console.WriteLine("\n-------------------------------------------------------------\n");
                 Console.Write($"[{_valid}/{++_tests}] {name} is invalid\n\nCollection 1: ");
-                foreach (var x1 in firstArray)
+                foreach (var x1 in val1)
                     Console.Write(x1 + " ");
                 
                 Console.Write("\n\nCollection 2: ");
-                foreach (var x1 in secondArray)
+                foreach (var x1 in val2)
                     Console.Write(x1 + " ");
                 
                 Console.WriteLine("\n\n-------------------------------------------------------------\n");
             }
         }
         
-        public static void TestEquals(this int first, string name, int second)
+        public static void TestEquals(string name, Func<int> first, Func<int> second)
         {
-            if (first.Equals(second)) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
-            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {first}. Value 2: {second}");
+            var (ex1, val1, ex2, val2) = GetValues(first, second);
+            
+            if (ex1 && ex2 || !ex1 && !ex2 && val1.Equals(val2)) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {val1}. Value 2: {val2}");
         }
         
-        public static void TestEquals(this int? first, string name, int? second)
+        public static void TestEquals(string name, Func<int?> first, Func<int?> second)
         {
-            if (first.Equals(second)) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
-            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {first}. Value 2: {second}");
+            var (ex1, val1, ex2, val2) = GetValues(first, second);
+            
+            if (ex1 && ex2 || !ex1 && !ex2 && val1.Equals(val2)) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {val1}. Value 2: {val2}");
         }
         
-        public static void TestEquals(this bool first, string name, bool second)
+        public static void TestEquals(string name, Func<bool> first, Func<bool> second)
         {
-            if (first.Equals(second)) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
-            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {first}. Value 2: {second}");
+            var (ex1, val1, ex2, val2) = GetValues(first, second);
+            
+            if (ex1 && ex2 || !ex1 && !ex2 && val1.Equals(val2)) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {val1}. Value 2: {val2}");
         }
         
-        public static void TestEquals(this bool? first, string name, bool? second)
+        public static void TestEquals(string name, Func<bool?> first, Func<bool?> second)
         {
-            if (first.Equals(second)) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
-            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {first}. Value 2: {second}");
+            var (ex1, val1, ex2, val2) = GetValues(first, second);
+            
+            if (ex1 && ex2 || !ex1 && !ex2 && val1.Equals(val2)) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {val1}. Value 2: {val2}");
         }
         
-        public static void TestEquals(this double first, string name, double second)
+        public static void TestEquals(string name, Func<double> first, Func<double> second)
         {
-            if (Math.Abs(first - second) < double.Epsilon) Console.WriteLine($"[{++_tests}/{++_valid}] {name} is valid");
-            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {first}. Value 2: {second}");
+            var (ex1, val1, ex2, val2) = GetValues(first, second);
+            
+            if (ex1 && ex2 || !ex1 && !ex2 && Math.Abs(val1 - val2) < double.Epsilon) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {val1}. Value 2: {val2}");
         }
         
-        public static void TestEquals(this double? first, string name, double? second)
+        public static void TestEquals(string name, Func<double?> first, Func<double?> second)
         {
-            if (first == null && second == null || first != null && second != null && Math.Abs((double)first - (double)second) < double.Epsilon) Console.WriteLine($"[{++_tests}/{++_valid}] {name} is valid");
-            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {first}. Value 2: {second}");
+            var (ex1, val1, ex2, val2) = GetValues(first, second);
+            
+            if (ex1 && ex2 || !ex1 && !ex2 && 
+                val1 == null && val2 == null || val1 != null && val2 != null && 
+                Math.Abs((double)val1 - (double)val2) < double.Epsilon) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {val1}. Value 2: {val2}");
         }
         
-        public static void TestEquals(this decimal first, string name, decimal second)
+        public static void TestEquals(string name, Func<decimal> first, Func<decimal> second)
         {
-            if (Math.Abs(first - second) <= decimal.Zero) Console.WriteLine($"[{++_tests}/{++_valid}] {name} is valid");
-            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {first}. Value 2: {second}");
+            var (ex1, val1, ex2, val2) = GetValues(first, second);
+            
+            if (ex1 && ex2 || !ex1 && !ex2 && Math.Abs(val1 - val2) <= decimal.Zero) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {val1}. Value 2: {val2}");
         }
         
-        public static void TestEquals(this decimal? first, string name, decimal? second)
+        public static void TestEquals(string name, Func<decimal?> first, Func<decimal?> second)
         {
-            if (first == null && second == null || first != null && second != null && Math.Abs((decimal)first - (decimal)second) <= decimal.Zero) Console.WriteLine($"[{++_tests}/{++_valid}] {name} is valid");
-            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {first}. Value 2: {second}");
+            var (ex1, val1, ex2, val2) = GetValues(first, second);
+            
+            if (ex1 && ex2 || !ex1 && !ex2 && 
+                val1 == null && val2 == null || val1 != null && val2 != null && 
+                Math.Abs((decimal)val1 - (decimal)val2) <= decimal.Zero) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {val1}. Value 2: {val2}");
         }
     }
 }

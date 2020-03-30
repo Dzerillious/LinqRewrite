@@ -19,28 +19,19 @@ namespace TestsLibrary.Tests
         
         public void RunTests()
         {
-            ArrayWhereToSimpleList().TestEquals(nameof(ArrayWhereToSimpleList), ArrayWhereToSimpleListRewritten());
-            SelectWhereToSimpleList().TestEquals(nameof(SelectWhereToSimpleList), SelectWhereToSimpleListRewritten());
-            MultipleSelectWhereToSimpleList().TestEquals(nameof(MultipleSelectWhereToSimpleList), MultipleSelectWhereToSimpleListRewritten());
-            SelectWhereToArray().TestEquals(nameof(SelectWhereToArray), SelectWhereToArrayRewritten());
-            MultipleSelectWhereToArray().TestEquals(nameof(MultipleSelectWhereToArray), MultipleSelectWhereToArrayRewritten());
+            TestsExtensions.TestEquals(nameof(ArrayWhereToSimpleList), ArrayWhereToSimpleList, ArrayWhereToSimpleListRewritten);
+            TestsExtensions.TestEquals(nameof(SelectWhereToSimpleList), SelectWhereToSimpleList, SelectWhereToSimpleListRewritten);
+            TestsExtensions.TestEquals(nameof(MultipleSelectWhereToSimpleList), MultipleSelectWhereToSimpleList, MultipleSelectWhereToSimpleListRewritten);
+            TestsExtensions.TestEquals(nameof(SelectWhereToArray), SelectWhereToArray, SelectWhereToArrayRewritten);
+            TestsExtensions.TestEquals(nameof(MultipleSelectWhereToArray), MultipleSelectWhereToArray, MultipleSelectWhereToArrayRewritten);
             
             for (int i = -2; i < 1002; i++)
-                ParametrizedWhere(i).TestEquals(nameof(ParametrizedWhere) + i, ParametrizedWhereRewritten(i));
+                TestsExtensions.TestEquals(nameof(ParametrizedWhere) + i, () => ParametrizedWhere(i), () => ParametrizedWhereRewritten(i));
             
-            for (int i = -2; i < 1002; i++)
-                ParametrizedWhereToArray(i).TestEquals(nameof(ParametrizedWhereToArray) + i, ParametrizedWhereToArrayRewritten(i));
-            
-            for (int i = -2; i < 1002; i++)
-                ParametrizedEnumerableWhereToArray(i).TestEquals(nameof(ParametrizedEnumerableWhereToArray) + i, ParametrizedEnumerableWhereToArrayRewritten(i));
-
-            for (int i = -2; i < 1002; i++)
-                ParametrizedWhereToSimpleList(i).TestEquals(nameof(ParametrizedWhereToSimpleList) + i, ParametrizedWhereToSimpleListRewritten(i));
-            
-            WhereChangingParam().TestEquals(nameof(WhereChangingParam), WhereChangingParamRewritten());
-            WhereChangingParamToArray().TestEquals(nameof(WhereChangingParamToArray), WhereChangingParamToArrayRewritten());
-            WhereChangingParamToSimpleList().TestEquals(nameof(WhereChangingParamToSimpleList), WhereChangingParamToSimpleListRewritten());
-            WhereIndexToArray().TestEquals(nameof(WhereIndexToArray), WhereIndexToArrayRewritten());
+            TestsExtensions.TestEquals(nameof(WhereChangingParam), WhereChangingParam, WhereChangingParamRewritten);
+            TestsExtensions.TestEquals(nameof(WhereChangingParamToArray), WhereChangingParamToArray, WhereChangingParamToArrayRewritten);
+            TestsExtensions.TestEquals(nameof(WhereChangingParamToSimpleList), WhereChangingParamToSimpleList, WhereChangingParamToSimpleListRewritten);
+            TestsExtensions.TestEquals(nameof(WhereIndexToArray), WhereIndexToArray, WhereIndexToArrayRewritten);
         }
         
         [NoRewrite]
@@ -198,25 +189,6 @@ namespace TestsLibrary.Tests
         {
             return ArrayItems.Where(x => x > offset)
                 .ToSimpleList();
-        } //EndMethod
-
-        public IEnumerable<int> ParametrizedWhereToSimpleListRewritten(int offset)
-        {
-            return ArrayItems.Where(x => x > offset)
-                .ToSimpleList();
-        } //EndMethod
-        
-        [NoRewrite]
-        public IEnumerable<int> ParametrizedEnumerableWhereToArray(int offset)
-        {
-            return EnumerableItems.Where(x => x > offset)
-                .ToSimpleList();
-        } //EndMethod
-
-        public IEnumerable<int> ParametrizedEnumerableWhereToArrayRewritten(int offset)
-        {
-            return EnumerableItems.Where(x => x > offset)
-                .ToArray();
         } //EndMethod
         
         [NoRewrite]

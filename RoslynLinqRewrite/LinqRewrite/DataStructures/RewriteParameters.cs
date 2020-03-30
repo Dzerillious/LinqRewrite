@@ -362,6 +362,8 @@ namespace LinqRewrite.DataStructures
             return created;
         }
 
+        public bool CanSimpleRewrite() => !ModifiedEnumeration && ResultSize != null;
+
         public void Dispose() => RewriteParametersFactory.ReturnParameters(this);
     }
 }

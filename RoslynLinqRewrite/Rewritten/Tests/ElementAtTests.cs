@@ -13,12 +13,12 @@ public class ElementAtTests
     private IEnumerable<int> EnumerableItems = Enumerable.Range(0, 100);
     public void RunTests()
     {
-        ArrayElementAt().TestEquals(nameof(ArrayElementAt), ArrayElementAtRewritten());
-        ArraySelectElementAt().TestEquals(nameof(ArraySelectElementAt), ArraySelectElementAtRewritten());
-        ArrayWhereElementAt().TestEquals(nameof(ArrayWhereElementAt), ArrayWhereElementAtRewritten());
-        ArraySelectWhereElementAt().TestEquals(nameof(ArraySelectWhereElementAt), ArraySelectWhereElementAtRewritten());
-        ArrayElementAtParam().TestEquals(nameof(ArrayElementAtParam), ArrayElementAtParamRewritten());
-        EnumerableElementAt().TestEquals(nameof(EnumerableElementAt), EnumerableElementAtRewritten());
+        TestsExtensions.TestEquals(nameof(ArrayElementAt), ArrayElementAt, ArrayElementAtRewritten);
+        TestsExtensions.TestEquals(nameof(ArraySelectElementAt), ArraySelectElementAt, ArraySelectElementAtRewritten);
+        TestsExtensions.TestEquals(nameof(ArrayWhereElementAt), ArrayWhereElementAt, ArrayWhereElementAtRewritten);
+        TestsExtensions.TestEquals(nameof(ArraySelectWhereElementAt), ArraySelectWhereElementAt, ArraySelectWhereElementAtRewritten);
+        TestsExtensions.TestEquals(nameof(ArrayElementAtParam), ArrayElementAtParam, ArrayElementAtParamRewritten);
+        TestsExtensions.TestEquals(nameof(EnumerableElementAt), EnumerableElementAt, EnumerableElementAtRewritten);
     }
 
     [NoRewrite]
@@ -91,92 +91,92 @@ public class ElementAtTests
 
     int ArrayElementAtRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v185;
-        v185 = 0;
-        for (; v185 < ArrayItems.Length; v185++)
-            if (v185 == 23)
-                return ArrayItems[v185];
-        throw new System.InvalidOperationException("The sequence did not enough elements.");
+        int v221;
+        v221 = 0;
+        for (; v221 < ArrayItems.Length; v221++)
+            if (v221 == 23)
+                return ArrayItems[v221];
+        throw new System.InvalidOperationException("The sequence did not contain enough elements.");
     }
 
     int ArraySelectElementAtRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v186;
-        v186 = 0;
-        for (; v186 < ArrayItems.Length; v186++)
-            if (v186 == 23)
-                return (ArrayItems[v186] + 20);
-        throw new System.InvalidOperationException("The sequence did not enough elements.");
+        int v222;
+        v222 = 0;
+        for (; v222 < ArrayItems.Length; v222++)
+            if (v222 == 23)
+                return (ArrayItems[v222] + 20);
+        throw new System.InvalidOperationException("The sequence did not contain enough elements.");
     }
 
     int ArrayWhereElementAtRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v187;
-        int v188;
-        v188 = 0;
-        v187 = 0;
-        for (; v187 < ArrayItems.Length; v187++)
+        int v223;
+        int v224;
+        v224 = 0;
+        v223 = 0;
+        for (; v223 < ArrayItems.Length; v223++)
         {
-            if (!(ArrayItems[v187] > 30))
+            if (!(ArrayItems[v223] > 30))
                 continue;
-            if (v188 == 23)
-                return ArrayItems[v187];
-            v188++;
+            if (v224 == 23)
+                return ArrayItems[v223];
+            v224++;
         }
 
-        throw new System.InvalidOperationException("The sequence did not enough elements.");
+        throw new System.InvalidOperationException("The sequence did not contain enough elements.");
     }
 
     int ArraySelectWhereElementAtRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v189;
-        int v190;
-        int v191;
-        v191 = 0;
-        v189 = 0;
-        for (; v189 < ArrayItems.Length; v189++)
+        int v225;
+        int v226;
+        int v227;
+        v227 = 0;
+        v225 = 0;
+        for (; v225 < ArrayItems.Length; v225++)
         {
-            v190 = (ArrayItems[v189] + 30);
-            if (!(v190 > 30))
+            v226 = (ArrayItems[v225] + 30);
+            if (!(v226 > 30))
                 continue;
-            if (v191 == 23)
-                return v190;
-            v191++;
+            if (v227 == 23)
+                return v226;
+            v227++;
         }
 
-        throw new System.InvalidOperationException("The sequence did not enough elements.");
+        throw new System.InvalidOperationException("The sequence did not contain enough elements.");
     }
 
     int ArrayElementAtParamRewritten_ProceduralLinq1(int a, int[] ArrayItems)
     {
-        int v192;
-        v192 = 0;
-        for (; v192 < ArrayItems.Length; v192++)
-            if (v192 == a)
-                return ArrayItems[v192];
-        throw new System.InvalidOperationException("The sequence did not enough elements.");
+        int v228;
+        v228 = 0;
+        for (; v228 < ArrayItems.Length; v228++)
+            if (v228 == a)
+                return ArrayItems[v228];
+        throw new System.InvalidOperationException("The sequence did not contain enough elements.");
     }
 
     int EnumerableElementAtRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v193;
-        int v194;
-        v194 = 0;
-        v193 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v229;
+        int v230;
+        v230 = 0;
+        v229 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v193.MoveNext())
+            while (v229.MoveNext())
             {
-                if (v194 == 23)
-                    return v193.Current;
-                v194++;
+                if (v230 == 23)
+                    return v229.Current;
+                v230++;
             }
         }
         finally
         {
-            v193.Dispose();
+            v229.Dispose();
         }
 
-        throw new System.InvalidOperationException("The sequence did not enough elements.");
+        throw new System.InvalidOperationException("The sequence did not contain enough elements.");
     }
 }}

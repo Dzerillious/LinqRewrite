@@ -40,8 +40,8 @@ namespace LinqRewrite.Extensions
                         }
                         : new ValueBridge[] { }), null));
 
-        public static ThrowExpressionSyntax CreateThrowException(string type, string message = null)
-            => ThrowExpression(
+        public static ThrowExpressionSyntax ThrowExpression(string type, string message = null)
+            => SyntaxFactory.ThrowExpression(
                 ObjectCreationExpression(
                     ParseTypeName(type),
                     CreateArguments(message != null

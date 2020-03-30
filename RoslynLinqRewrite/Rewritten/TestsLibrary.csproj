@@ -59,6 +59,8 @@
         <Compile Include="Tests\DistinctTests.cs" />
         <Compile Include="Tests\ElementAtOrDefaultTests.cs" />
         <Compile Include="Tests\ElementAtTests.cs" />
+        <Compile Include="Tests\EmptyTests.cs" />
+        <Compile Include="Tests\FirstTests.cs" />
         <Compile Include="Tests\SelectTests.cs" />
         <Compile Include="Tests\WhereTests.cs" />
     </ItemGroup>

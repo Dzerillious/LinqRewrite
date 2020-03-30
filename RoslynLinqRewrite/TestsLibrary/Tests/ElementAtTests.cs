@@ -14,12 +14,14 @@ namespace TestsLibrary.Tests
         
         public void RunTests()
         {
-            ArrayElementAt().TestEquals(nameof(ArrayElementAt), ArrayElementAtRewritten());
-            ArraySelectElementAt().TestEquals(nameof(ArraySelectElementAt), ArraySelectElementAtRewritten());
-            ArrayWhereElementAt().TestEquals(nameof(ArrayWhereElementAt), ArrayWhereElementAtRewritten());
-            ArraySelectWhereElementAt().TestEquals(nameof(ArraySelectWhereElementAt), ArraySelectWhereElementAtRewritten());
-            ArrayElementAtParam().TestEquals(nameof(ArrayElementAtParam), ArrayElementAtParamRewritten());
-            EnumerableElementAt().TestEquals(nameof(EnumerableElementAt), EnumerableElementAtRewritten());
+            TestsExtensions.TestEquals(nameof(ArrayElementAt), ArrayElementAt, ArrayElementAtRewritten);
+            TestsExtensions.TestEquals(nameof(ArraySelectElementAt), ArraySelectElementAt, ArraySelectElementAtRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayWhereElementAt), ArrayWhereElementAt, ArrayWhereElementAtRewritten);
+            TestsExtensions.TestEquals(nameof(ArraySelectWhereElementAt), ArraySelectWhereElementAt, ArraySelectWhereElementAtRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayElementAtParam), ArrayElementAtParam, ArrayElementAtParamRewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableElementAt), EnumerableElementAt, EnumerableElementAtRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayElementAtOut), ArrayElementAtOut, ArrayElementAtOutRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayElementAtWhereOut), ArrayElementAtWhereOut, ArrayElementAtWhereOutRewritten);
         }
 
         [NoRewrite]
@@ -93,6 +95,30 @@ namespace TestsLibrary.Tests
         public int EnumerableElementAtRewritten()
         {
             return EnumerableItems.ElementAt(23);
+        } //EndMethod
+
+
+        [NoRewrite]
+        public int ArrayElementAtOut()
+        {
+            return ArrayItems.ElementAt(20000);
+        } //EndMethod
+
+        public int ArrayElementAtOutRewritten()
+        {
+            return ArrayItems.ElementAt(20000);
+        } //EndMethod
+
+
+        [NoRewrite]
+        public int ArrayElementAtWhereOut()
+        {
+            return ArrayItems.Where(x => x > 10).ElementAt(20000);
+        } //EndMethod
+
+        public int ArrayElementAtWhereOutRewritten()
+        {
+            return ArrayItems.Where(x => x > 10).ElementAt(20000);
         } //EndMethod
 
     }

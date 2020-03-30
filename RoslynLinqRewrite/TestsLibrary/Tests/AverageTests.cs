@@ -16,22 +16,24 @@ namespace TestsLibrary.Tests
 
         public void RunTests()
         {
-            ArrayAverage().TestEquals(nameof(ArrayAverage), ArrayAverageRewritten());        
-            ArrayAverage1().TestEquals(nameof(ArrayAverage1), ArrayAverage1Rewritten());        
-            ArrayAverage2().TestEquals(nameof(ArrayAverage2), ArrayAverage2Rewritten());        
-            ArrayAverage3().TestEquals(nameof(ArrayAverage3), ArrayAverage3Rewritten());        
-            ArrayAverage4().TestEquals(nameof(ArrayAverage4), ArrayAverage4Rewritten());        
-            ArrayAverage5().TestEquals(nameof(ArrayAverage5), ArrayAverage5Rewritten());        
-            ArrayAverage6().TestEquals(nameof(ArrayAverage6), ArrayAverage6Rewritten());        
-            ArrayAverage7().TestEquals(nameof(ArrayAverage7), ArrayAverage7Rewritten());        
-            ArrayAverage8().TestEquals(nameof(ArrayAverage8), ArrayAverage8Rewritten());        
-            ArrayAverage9().TestEquals(nameof(ArrayAverage9), ArrayAverage9Rewritten());        
-            ArrayAverage10().TestEquals(nameof(ArrayAverage10), ArrayAverage10Rewritten());        
-            ArraySelectAverage().TestEquals(nameof(ArraySelectAverage), ArraySelectAverageRewritten());        
-            ArrayWhereAverage().TestEquals(nameof(ArrayWhereAverage), ArrayWhereAverageRewritten());        
-            ArrayMethodAverage().TestEquals(nameof(ArrayMethodAverage), ArrayMethodAverageRewritten());        
-            EnumerableAverage().TestEquals(nameof(EnumerableAverage), EnumerableAverageRewritten());        
-            ArrayMethodAverageChangingParam().TestEquals(nameof(ArrayMethodAverageChangingParam), ArrayMethodAverageChangingParamRewritten());
+            TestsExtensions.TestEquals(nameof(ArrayAverage), ArrayAverage, ArrayAverageRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayAverage1), ArrayAverage1, ArrayAverage1Rewritten);
+            TestsExtensions.TestEquals(nameof(ArrayAverage2), ArrayAverage2, ArrayAverage2Rewritten);
+            TestsExtensions.TestEquals(nameof(ArrayAverage3), ArrayAverage3, ArrayAverage3Rewritten);
+            TestsExtensions.TestEquals(nameof(ArrayAverage4), ArrayAverage4, ArrayAverage4Rewritten);
+            TestsExtensions.TestEquals(nameof(ArrayAverage5), ArrayAverage5, ArrayAverage5Rewritten);
+            TestsExtensions.TestEquals(nameof(ArrayAverage6), ArrayAverage6, ArrayAverage6Rewritten);
+            TestsExtensions.TestEquals(nameof(ArrayAverage7), ArrayAverage7, ArrayAverage7Rewritten);
+            TestsExtensions.TestEquals(nameof(ArrayAverage8), ArrayAverage8, ArrayAverage8Rewritten);
+            TestsExtensions.TestEquals(nameof(ArrayAverage9), ArrayAverage9, ArrayAverage9Rewritten);
+            TestsExtensions.TestEquals(nameof(ArrayAverage10), ArrayAverage10, ArrayAverage10Rewritten);
+            TestsExtensions.TestEquals(nameof(ArraySelectAverage), ArraySelectAverage, ArraySelectAverageRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayWhereAverage), ArrayWhereAverage, ArrayWhereAverageRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayMethodAverage), ArrayMethodAverage, ArrayMethodAverageRewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableAverage), EnumerableAverage, EnumerableAverageRewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableEmptyAverage), EnumerableEmptyAverage, EnumerableEmptyAverageRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayMethodAverageChangingParam), ArrayMethodAverageChangingParam, ArrayMethodAverageChangingParamRewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableRangeAverage), EnumerableRangeAverage, EnumerableRangeAverageRewritten);
         }
         
         [NoRewrite]
@@ -225,6 +227,42 @@ namespace TestsLibrary.Tests
         {
             var a = 5;
             return ArrayItems.Average(x => x + a++);
+        } //EndMethod
+        
+        
+        [NoRewrite]
+        public double? EnumerableNullAverage()
+        {
+            return EnumerableItems.Average(x => (int?)null);
+        } //EndMethod
+        
+        public double? EnumerableNullAverageRewritten()
+        {
+            return EnumerableItems.Average(x => (int?)null);
+        } //EndMethod
+        
+        
+        [NoRewrite]
+        public double EnumerableEmptyAverage()
+        {
+            return EnumerableItems.Where(x => false).Average();
+        } //EndMethod
+        
+        public double EnumerableEmptyAverageRewritten()
+        {
+            return EnumerableItems.Where(x => false).Average();
+        } //EndMethod
+        
+        
+        [NoRewrite]
+        public double EnumerableRangeAverage()
+        {
+            return Enumerable.Range(5, 100).Average();
+        } //EndMethod
+        
+        public double EnumerableRangeAverageRewritten()
+        {
+            return Enumerable.Range(5, 100).Average();
         } //EndMethod
 
     }

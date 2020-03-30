@@ -13,15 +13,15 @@ public class CountTests
     private IEnumerable<int> EnumerableItems = Enumerable.Range(0, 100);
     public void RunTests()
     {
-        ArrayCount().TestEquals(nameof(ArrayCount), ArrayCountRewritten());
-        ArrayCount2().TestEquals(nameof(ArrayCount2), ArrayCount2Rewritten());
-        ArrayCount3().TestEquals(nameof(ArrayCount3), ArrayCount3Rewritten());
-        ArrayCount4().TestEquals(nameof(ArrayCount4), ArrayCount4Rewritten());
-        ArrayCount5().TestEquals(nameof(ArrayCount5), ArrayCount5Rewritten());
-        EnumerableCount2().TestEquals(nameof(EnumerableCount2), EnumerableCount2Rewritten());
-        EnumerableCount3().TestEquals(nameof(EnumerableCount3), EnumerableCount3Rewritten());
-        EnumerableCount4().TestEquals(nameof(EnumerableCount4), EnumerableCount4Rewritten());
-        EnumerableCount5().TestEquals(nameof(EnumerableCount5), EnumerableCount5Rewritten());
+        TestsExtensions.TestEquals(nameof(ArrayCount), ArrayCount, ArrayCountRewritten);
+        TestsExtensions.TestEquals(nameof(ArrayCount2), ArrayCount2, ArrayCount2Rewritten);
+        TestsExtensions.TestEquals(nameof(ArrayCount3), ArrayCount3, ArrayCount3Rewritten);
+        TestsExtensions.TestEquals(nameof(ArrayCount4), ArrayCount4, ArrayCount4Rewritten);
+        TestsExtensions.TestEquals(nameof(ArrayCount5), ArrayCount5, ArrayCount5Rewritten);
+        TestsExtensions.TestEquals(nameof(EnumerableCount2), EnumerableCount2, EnumerableCount2Rewritten);
+        TestsExtensions.TestEquals(nameof(EnumerableCount3), EnumerableCount3, EnumerableCount3Rewritten);
+        TestsExtensions.TestEquals(nameof(EnumerableCount4), EnumerableCount4, EnumerableCount4Rewritten);
+        TestsExtensions.TestEquals(nameof(EnumerableCount5), EnumerableCount5, EnumerableCount5Rewritten);
     }
 
     [NoRewrite]
@@ -125,95 +125,95 @@ public class CountTests
 
     int ArrayCount3Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v118;
-        int v119;
-        v119 = 0;
-        v118 = 0;
-        for (; v118 < ArrayItems.Length; v118++)
+        int v154;
+        int v155;
+        v155 = 0;
+        v154 = 0;
+        for (; v154 < ArrayItems.Length; v154++)
         {
-            if (!(ArrayItems[v118] > 3))
+            if (!(ArrayItems[v154] > 3))
                 continue;
-            v119++;
+            v155++;
         }
 
-        return v119;
+        return v155;
     }
 
     int ArrayCount5Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v121;
-        int v122;
-        v122 = 0;
-        v121 = 0;
-        for (; v121 < ArrayItems.Length; v121++)
+        int v157;
+        int v158;
+        v158 = 0;
+        v157 = 0;
+        for (; v157 < ArrayItems.Length; v157++)
         {
-            if (!(ArrayItems[v121] > 4))
+            if (!(ArrayItems[v157] > 4))
                 continue;
-            if (!(ArrayItems[v121] % 2 == 0))
+            if (!(ArrayItems[v157] % 2 == 0))
                 continue;
-            v122++;
+            v158++;
         }
 
-        return v122;
+        return v158;
     }
 
     int EnumerableCount2Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v123;
-        int v124;
-        v124 = 0;
-        v123 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v159;
+        int v160;
+        v160 = 0;
+        v159 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v123.MoveNext())
-                v124++;
+            while (v159.MoveNext())
+                v160++;
         }
         finally
         {
-            v123.Dispose();
+            v159.Dispose();
         }
 
-        return v124;
+        return v160;
     }
 
     int EnumerableCount3Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v125;
-        int v126;
-        v126 = 0;
-        v125 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v161;
+        int v162;
+        v162 = 0;
+        v161 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v125.MoveNext())
+            while (v161.MoveNext())
             {
-                if (!(v125.Current > 3))
+                if (!(v161.Current > 3))
                     continue;
-                v126++;
+                v162++;
             }
         }
         finally
         {
-            v125.Dispose();
+            v161.Dispose();
         }
 
-        return v126;
+        return v162;
     }
 
     int EnumerableCount5Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v128;
-        int v129;
-        v129 = 0;
-        v128 = 0;
-        for (; v128 < ArrayItems.Length; v128++)
+        int v164;
+        int v165;
+        v165 = 0;
+        v164 = 0;
+        for (; v164 < ArrayItems.Length; v164++)
         {
-            if (!(ArrayItems[v128] > 4))
+            if (!(ArrayItems[v164] > 4))
                 continue;
-            if (!(ArrayItems[v128] % 2 == 0))
+            if (!(ArrayItems[v164] % 2 == 0))
                 continue;
-            v129++;
+            v165++;
         }
 
-        return v129;
+        return v165;
     }
 }}

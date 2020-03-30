@@ -13,12 +13,12 @@ public class ElementAtOrDefaultOrDefaultTests
     private IEnumerable<int> EnumerableItems = Enumerable.Range(0, 100);
     public void RunTests()
     {
-        ArrayElementAtOrDefault().TestEquals(nameof(ArrayElementAtOrDefault), ArrayElementAtOrDefaultRewritten());
-        ArraySelectElementAtOrDefault().TestEquals(nameof(ArraySelectElementAtOrDefault), ArraySelectElementAtOrDefaultRewritten());
-        ArrayWhereElementAtOrDefault().TestEquals(nameof(ArrayWhereElementAtOrDefault), ArrayWhereElementAtOrDefaultRewritten());
-        ArraySelectWhereElementAtOrDefault().TestEquals(nameof(ArraySelectWhereElementAtOrDefault), ArraySelectWhereElementAtOrDefaultRewritten());
-        ArrayElementAtOrDefaultParam().TestEquals(nameof(ArrayElementAtOrDefaultParam), ArrayElementAtOrDefaultParamRewritten());
-        EnumerableElementAtOrDefault().TestEquals(nameof(EnumerableElementAtOrDefault), EnumerableElementAtOrDefaultRewritten());
+        TestsExtensions.TestEquals(nameof(ArrayElementAtOrDefault), ArrayElementAtOrDefault, ArrayElementAtOrDefaultRewritten);
+        TestsExtensions.TestEquals(nameof(ArraySelectElementAtOrDefault), ArraySelectElementAtOrDefault, ArraySelectElementAtOrDefaultRewritten);
+        TestsExtensions.TestEquals(nameof(ArrayWhereElementAtOrDefault), ArrayWhereElementAtOrDefault, ArrayWhereElementAtOrDefaultRewritten);
+        TestsExtensions.TestEquals(nameof(ArraySelectWhereElementAtOrDefault), ArraySelectWhereElementAtOrDefault, ArraySelectWhereElementAtOrDefaultRewritten);
+        TestsExtensions.TestEquals(nameof(ArrayElementAtOrDefaultParam), ArrayElementAtOrDefaultParam, ArrayElementAtOrDefaultParamRewritten);
+        TestsExtensions.TestEquals(nameof(EnumerableElementAtOrDefault), EnumerableElementAtOrDefault, EnumerableElementAtOrDefaultRewritten);
     }
 
     [NoRewrite]
@@ -91,37 +91,37 @@ public class ElementAtOrDefaultOrDefaultTests
 
     int ArrayElementAtOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v175;
-        v175 = 0;
-        for (; v175 < ArrayItems.Length; v175++)
-            if (v175 == 23)
-                return ArrayItems[v175];
+        int v211;
+        v211 = 0;
+        for (; v211 < ArrayItems.Length; v211++)
+            if (v211 == 23)
+                return ArrayItems[v211];
         return default(int);
     }
 
     int ArraySelectElementAtOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v176;
-        v176 = 0;
-        for (; v176 < ArrayItems.Length; v176++)
-            if (v176 == 23)
-                return (ArrayItems[v176] + 20);
+        int v212;
+        v212 = 0;
+        for (; v212 < ArrayItems.Length; v212++)
+            if (v212 == 23)
+                return (ArrayItems[v212] + 20);
         return default(int);
     }
 
     int ArrayWhereElementAtOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v177;
-        int v178;
-        v178 = 0;
-        v177 = 0;
-        for (; v177 < ArrayItems.Length; v177++)
+        int v213;
+        int v214;
+        v214 = 0;
+        v213 = 0;
+        for (; v213 < ArrayItems.Length; v213++)
         {
-            if (!(ArrayItems[v177] > 30))
+            if (!(ArrayItems[v213] > 30))
                 continue;
-            if (v178 == 23)
-                return ArrayItems[v177];
-            v178++;
+            if (v214 == 23)
+                return ArrayItems[v213];
+            v214++;
         }
 
         return default(int);
@@ -129,19 +129,19 @@ public class ElementAtOrDefaultOrDefaultTests
 
     int ArraySelectWhereElementAtOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v179;
-        int v180;
-        int v181;
-        v181 = 0;
-        v179 = 0;
-        for (; v179 < ArrayItems.Length; v179++)
+        int v215;
+        int v216;
+        int v217;
+        v217 = 0;
+        v215 = 0;
+        for (; v215 < ArrayItems.Length; v215++)
         {
-            v180 = (ArrayItems[v179] + 30);
-            if (!(v180 > 30))
+            v216 = (ArrayItems[v215] + 30);
+            if (!(v216 > 30))
                 continue;
-            if (v181 == 23)
-                return v180;
-            v181++;
+            if (v217 == 23)
+                return v216;
+            v217++;
         }
 
         return default(int);
@@ -149,32 +149,32 @@ public class ElementAtOrDefaultOrDefaultTests
 
     int ArrayElementAtOrDefaultParamRewritten_ProceduralLinq1(int a, int[] ArrayItems)
     {
-        int v182;
-        v182 = 0;
-        for (; v182 < ArrayItems.Length; v182++)
-            if (v182 == a)
-                return ArrayItems[v182];
+        int v218;
+        v218 = 0;
+        for (; v218 < ArrayItems.Length; v218++)
+            if (v218 == a)
+                return ArrayItems[v218];
         return default(int);
     }
 
     int EnumerableElementAtOrDefaultRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v183;
-        int v184;
-        v184 = 0;
-        v183 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v219;
+        int v220;
+        v220 = 0;
+        v219 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v183.MoveNext())
+            while (v219.MoveNext())
             {
-                if (v184 == 23)
-                    return v183.Current;
-                v184++;
+                if (v220 == 23)
+                    return v219.Current;
+                v220++;
             }
         }
         finally
         {
-            v183.Dispose();
+            v219.Dispose();
         }
 
         return default(int);

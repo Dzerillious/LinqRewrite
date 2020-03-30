@@ -15,12 +15,14 @@ namespace TestsLibrary.Tests
         
         public void RunTests()
         {
-            ArrayElementAtOrDefault().TestEquals(nameof(ArrayElementAtOrDefault), ArrayElementAtOrDefaultRewritten());
-            ArraySelectElementAtOrDefault().TestEquals(nameof(ArraySelectElementAtOrDefault), ArraySelectElementAtOrDefaultRewritten());
-            ArrayWhereElementAtOrDefault().TestEquals(nameof(ArrayWhereElementAtOrDefault), ArrayWhereElementAtOrDefaultRewritten());
-            ArraySelectWhereElementAtOrDefault().TestEquals(nameof(ArraySelectWhereElementAtOrDefault), ArraySelectWhereElementAtOrDefaultRewritten());
-            ArrayElementAtOrDefaultParam().TestEquals(nameof(ArrayElementAtOrDefaultParam), ArrayElementAtOrDefaultParamRewritten());
-            EnumerableElementAtOrDefault().TestEquals(nameof(EnumerableElementAtOrDefault), EnumerableElementAtOrDefaultRewritten());
+            TestsExtensions.TestEquals(nameof(ArrayElementAtOrDefault), ArrayElementAtOrDefault, ArrayElementAtOrDefaultRewritten);
+            TestsExtensions.TestEquals(nameof(ArraySelectElementAtOrDefault), ArraySelectElementAtOrDefault, ArraySelectElementAtOrDefaultRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayWhereElementAtOrDefault), ArrayWhereElementAtOrDefault, ArrayWhereElementAtOrDefaultRewritten);
+            TestsExtensions.TestEquals(nameof(ArraySelectWhereElementAtOrDefault), ArraySelectWhereElementAtOrDefault, ArraySelectWhereElementAtOrDefaultRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayElementAtOrDefaultParam), ArrayElementAtOrDefaultParam, ArrayElementAtOrDefaultParamRewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableElementAtOrDefault), EnumerableElementAtOrDefault, EnumerableElementAtOrDefaultRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayElementAtOrDefaultOut), ArrayElementAtOrDefaultOut, ArrayElementAtOrDefaultOutRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayElementAtOrDefaultWhereOut), ArrayElementAtOrDefaultWhereOut, ArrayElementAtOrDefaultWhereOutRewritten);
         }
 
         [NoRewrite]
@@ -94,6 +96,30 @@ namespace TestsLibrary.Tests
         public int EnumerableElementAtOrDefaultRewritten()
         {
             return EnumerableItems.ElementAtOrDefault(23);
+        } //EndMethod
+
+
+        [NoRewrite]
+        public int ArrayElementAtOrDefaultOut()
+        {
+            return ArrayItems.ElementAt(20000);
+        } //EndMethod
+
+        public int ArrayElementAtOrDefaultOutRewritten()
+        {
+            return ArrayItems.ElementAt(20000);
+        } //EndMethod
+
+
+        [NoRewrite]
+        public int ArrayElementAtOrDefaultWhereOut()
+        {
+            return ArrayItems.Where(x => x > 10).ElementAt(20000);
+        } //EndMethod
+
+        public int ArrayElementAtOrDefaultWhereOutRewritten()
+        {
+            return ArrayItems.Where(x => x > 10).ElementAt(20000);
         } //EndMethod
 
     }

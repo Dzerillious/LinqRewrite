@@ -14,20 +14,22 @@ namespace TestsLibrary.Tests
         
         public void RunTests()
         {
-            AggregateSum().TestEquals(nameof(AggregateSum), AggregateSumRewritten());        
-            EnumerableAggregateSum().TestEquals(nameof(EnumerableAggregateSum), EnumerableAggregateSumRewritten());        
-            AggregateCount().TestEquals(nameof(AggregateCount), AggregateCountRewritten());        
-            AggregateEma().TestEquals(nameof(AggregateEma), AggregateEmaRewritten());        
-            AggregateDoubleSum().TestEquals(nameof(AggregateDoubleSum), AggregateDoubleSumRewritten());        
-            AggregateDoubleEma().TestEquals(nameof(AggregateDoubleEma), AggregateDoubleEmaRewritten());        
-            AggregateDoubleFactorial().TestEquals(nameof(AggregateDoubleFactorial), AggregateDoubleFactorialRewritten());        
-            AggregateDoubleAverage().TestEquals(nameof(AggregateDoubleAverage), AggregateDoubleAverageRewritten());        
-            AggregateDoubleAverageSelected().TestEquals(nameof(AggregateDoubleAverageSelected), AggregateDoubleAverageSelectedRewritten());        
-            AggregateDoubleAverageWhere().TestEquals(nameof(AggregateDoubleAverageWhere), AggregateDoubleAverageWhereRewritten());        
-            AggregateRangeSum().TestEquals(nameof(AggregateRangeSum), AggregateRangeSumRewritten());        
-            AggregateRangeFactorial0().TestEquals(nameof(AggregateRangeFactorial0), AggregateRangeFactorial0Rewritten());
-            AggregateRangeFactorial20().TestEquals(nameof(AggregateRangeFactorial20), AggregateRangeFactorial20Rewritten());
-            AggregateRangeFactorial100().TestEquals(nameof(AggregateRangeFactorial100), AggregateRangeFactorial100Rewritten());
+            TestsExtensions.TestEquals(nameof(AggregateSum), AggregateSum, AggregateSumRewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableAggregateSum), EnumerableAggregateSum, EnumerableAggregateSumRewritten);
+            TestsExtensions.TestEquals(nameof(AggregateCount), AggregateCount, AggregateCountRewritten);
+            TestsExtensions.TestEquals(nameof(AggregateEma), AggregateEma, AggregateEmaRewritten);
+            TestsExtensions.TestEquals(nameof(AggregateDoubleSum), AggregateDoubleSum, AggregateDoubleSumRewritten);
+            TestsExtensions.TestEquals(nameof(AggregateDoubleEma), AggregateDoubleEma, AggregateDoubleEmaRewritten);
+            TestsExtensions.TestEquals(nameof(AggregateDoubleFactorial), AggregateDoubleFactorial, AggregateDoubleFactorialRewritten);
+            TestsExtensions.TestEquals(nameof(AggregateDoubleAverage), AggregateDoubleAverage, AggregateDoubleAverageRewritten);
+            TestsExtensions.TestEquals(nameof(AggregateDoubleAverageSelected), AggregateDoubleAverageSelected, AggregateDoubleAverageSelectedRewritten);
+            TestsExtensions.TestEquals(nameof(AggregateDoubleAverageWhere), AggregateDoubleAverageWhere, AggregateDoubleAverageWhereRewritten);
+            TestsExtensions.TestEquals(nameof(AggregateRangeSum), AggregateRangeSum, AggregateRangeSumRewritten);
+            TestsExtensions.TestEquals(nameof(AggregateRangeFactorial0), AggregateRangeFactorial0, AggregateRangeFactorial0Rewritten);
+            TestsExtensions.TestEquals(nameof(AggregateRangeFactorial20), AggregateRangeFactorial20, AggregateRangeFactorial20Rewritten);
+            TestsExtensions.TestEquals(nameof(AggregateRangeFactorial100), AggregateRangeFactorial100, AggregateRangeFactorial100Rewritten);
+            TestsExtensions.TestEquals(nameof(AggregateEmpty), AggregateEmpty, AggregateEmptyRewritten);
+            TestsExtensions.TestEquals(nameof(AggregateEmptyDefault), AggregateEmptyDefault, AggregateEmptyDefaultRewritten);
         }
         
         [NoRewrite]
@@ -195,6 +197,30 @@ namespace TestsLibrary.Tests
         public double AggregateRangeFactorial100Rewritten()
         {
             return Enumerable.Range(1, 100).Aggregate(1.0, (x, y) => x * y);
+        } //EndMethod
+        
+        
+        [NoRewrite]
+        public double AggregateEmptyDefault()
+        {
+            return ArrayItems.Where(x => false).Aggregate(1.0, (x, y) => x + y);
+        } //EndMethod
+        
+        public double AggregateEmptyDefaultRewritten()
+        {
+            return ArrayItems.Where(x => false).Aggregate(1.0, (x, y) => x + y);
+        } //EndMethod
+        
+        
+        [NoRewrite]
+        public double AggregateEmpty()
+        {
+            return ArrayItems.Where(x => false).Aggregate((x, y) => x + y);
+        } //EndMethod
+        
+        public double AggregateEmptyRewritten()
+        {
+            return ArrayItems.Where(x => false).Aggregate((x, y) => x + y);
         } //EndMethod
     }
 }

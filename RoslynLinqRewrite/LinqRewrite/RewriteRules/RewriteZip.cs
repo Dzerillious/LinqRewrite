@@ -19,12 +19,12 @@ namespace LinqRewrite.RewriteRules
             p.PreUseAdd(enumeratorVariable.Assign(collectionValue.Access("GetEnumerator").Invoke()));
             
             p.ForAdd(If(Not(enumeratorVariable.Access("MoveNext").Invoke()),
-                CreateThrowException("InvalidOperationException", "Invalid sizes of sources")));
+                ThrowExpression("InvalidOperationException", "Invalid sizes of sources")));
 
             p.LastValue = methodValue.Inline(p, p.LastValue, new TypedValueBridge(collectionValue.ItemType(p), enumeratorVariable.Access("Current")));
             
             p.FinalAdd(If(enumeratorVariable.Access("MoveNext").Invoke(),
-                CreateThrowException("InvalidOperationException", "Invalid sizes of sources")));
+                ThrowExpression("InvalidOperationException", "Invalid sizes of sources")));
 
             p.FinalAdd(enumeratorVariable.Access("Dispose").Invoke());
             p.ListEnumeration = false;

@@ -1,7 +1,7 @@
 ﻿
 # Create method calls
 Find regex: \[NoRewrite\]\n.*?(\w+)(\(.*)((\n.*?)*)//EndMethod\n
-Replace with: $1().TestEquals(nameof($1), $1Rewritten());
+Replace with: TestsExtensions.TestEquals(nameof($1), $1, $1Rewritten);
 
 # Created rewritten methods
 Find regex: \[NoRewrite\]\n(.*\w+)(\(.*)((\n.*?)*)//EndMethod

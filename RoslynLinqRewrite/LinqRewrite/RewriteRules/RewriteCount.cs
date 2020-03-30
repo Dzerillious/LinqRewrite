@@ -11,7 +11,11 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            if (p.ResultSize != null && args.Length == 0) p.SimpleRewrite = p.CurrentCollection.Count;
+            if (p.CanSimpleRewrite() && args.Length == 0)
+            {
+                p.SimpleRewrite = p.ResultSize;
+                return;
+            }
 
             if (args.Length != 0)
             {

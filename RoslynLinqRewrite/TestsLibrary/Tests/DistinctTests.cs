@@ -17,17 +17,17 @@ namespace TestsLibrary.Tests
         
         public void RunTests()
         {
-            ArrayDistinct().TestEquals(nameof(ArrayDistinct), ArrayDistinctRewritten());
-            ArrayDefaultComparerDistinct().TestEquals(nameof(ArrayDefaultComparerDistinct), ArrayDefaultComparerDistinctRewritten());
-            ArrayStrangeComparerDistinct().TestEquals(nameof(ArrayStrangeComparerDistinct), ArrayStrangeComparerDistinctRewritten());
-            ArrayRepeatDistinct().TestEquals(nameof(ArrayRepeatDistinct), ArrayRepeatDistinctRewritten());
-            EnumerableDistinct().TestEquals(nameof(EnumerableDistinct), EnumerableDistinctRewritten());
-            ArraySelectDistinct().TestEquals(nameof(ArraySelectDistinct), ArraySelectDistinctRewritten());
-            RepeatArraySelectDistinct().TestEquals(nameof(RepeatArraySelectDistinct), RepeatArraySelectDistinctRewritten());
-            ArrayWhereSelectDistinct().TestEquals(nameof(ArrayWhereSelectDistinct), ArrayWhereSelectDistinctRewritten());
-            EnumerableDistinctToArray().TestEquals(nameof(EnumerableDistinctToArray), EnumerableDistinctToArrayRewritten());
-            ArrayDistinctToArray().TestEquals(nameof(ArrayDistinctToArray), ArrayDistinctToArrayRewritten());
-            ArrayDistinctToSimpleList().TestEquals(nameof(ArrayDistinctToSimpleList), ArrayDistinctToSimpleListRewritten());
+            TestsExtensions.TestEquals(nameof(ArrayDistinct), ArrayDistinct, ArrayDistinctRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayDefaultComparerDistinct), ArrayDefaultComparerDistinct, ArrayDefaultComparerDistinctRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayStrangeComparerDistinct), ArrayStrangeComparerDistinct, ArrayStrangeComparerDistinctRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayRepeatDistinct), ArrayRepeatDistinct, ArrayRepeatDistinctRewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableDistinct), EnumerableDistinct, EnumerableDistinctRewritten);
+            TestsExtensions.TestEquals(nameof(ArraySelectDistinct), ArraySelectDistinct, ArraySelectDistinctRewritten);
+            TestsExtensions.TestEquals(nameof(RepeatArraySelectDistinct), RepeatArraySelectDistinct, RepeatArraySelectDistinctRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayWhereSelectDistinct), ArrayWhereSelectDistinct, ArrayWhereSelectDistinctRewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableDistinctToArray), EnumerableDistinctToArray, EnumerableDistinctToArrayRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayDistinctToArray), ArrayDistinctToArray, ArrayDistinctToArrayRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayDistinctToSimpleList), ArrayDistinctToSimpleList, ArrayDistinctToSimpleListRewritten);
         }
 
         [NoRewrite]

@@ -38,10 +38,16 @@ namespace LinqRewrite.RewriteRules
             else
             {
                 p.ForAdd(sumVariable.AddAssign(selectionValue));
-                
-                p.FinalAdd(Return(p.ResultSize == null
-                    ? sumVariable / p.Indexer
-                    : sumVariable / p.ResultSize));
+                if (p.ResultSize == null)
+                {
+                    p.FinalAdd(If(p.Indexer.IsEqual(0), Throw("System.InvalidOperationException", "The sequence did not contain any elements.")));
+                    p.FinalAdd(Return(sumVariable / p.Indexer));
+                }
+                else
+                {
+                    p.FinalAdd(If(p.ResultSize.IsEqual(0), Throw("System.InvalidOperationException", "The sequence did not contain any elements.")));
+                    p.FinalAdd(Return(sumVariable / p.ResultSize));
+                }
             }
         }
     }

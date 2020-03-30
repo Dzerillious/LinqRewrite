@@ -63,6 +63,8 @@ namespace LinqRewrite.RewriteRules
                                     Continue()),
                 resultVariable.Assign(aggregationValue.Inline(p, resultVariable, p.LastValue))));
 
+            if (args.Length == 1)
+                p.FinalAdd(If(firstVariable, Throw("System.InvalidOperationException", "The sequence did not contain valid elements.")));
             return resultVariable;
         }
     }

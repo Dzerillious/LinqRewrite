@@ -11,10 +11,13 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            if (p.ResultSize != null && args.Length == 0) ConditionalExpression(
+            if (p.CanSimpleRewrite() && p.CurrentCollection?.Count == p.ResultSize  && args.Length == 0) 
+            {
+                ConditionalExpression(
                 p.CurrentCollection.Count <= args[0],
                 p.CurrentCollection[args[0]],
                 Default(p.ReturnType));
+            }
             
             var positionValue = args[0].ReusableConst(p);
             p.ForAdd(If(p.Indexer.IsEqual(positionValue),

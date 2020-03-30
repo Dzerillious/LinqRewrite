@@ -27,18 +27,19 @@ namespace TestsLibrary.Tests
         
         public void RunTests()
         {
-            ArrayContains().TestEquals(nameof(ArrayContains), ArrayContainsRewritten());
-            ArrayContains2().TestEquals(nameof(ArrayContains2), ArrayContains2Rewritten());
-            ArrayContains3().TestEquals(nameof(ArrayContains3), ArrayContains3Rewritten());
-            ArraySelectContains().TestEquals(nameof(ArraySelectContains), ArraySelectContainsRewritten());
-            ArraySelectContains2().TestEquals(nameof(ArraySelectContains2), ArraySelectContains2Rewritten());
-            ArraySelectContains3().TestEquals(nameof(ArraySelectContains3), ArraySelectContains3Rewritten());
-            ArrayWhereContains().TestEquals(nameof(ArrayWhereContains), ArrayWhereContainsRewritten());
-            ArrayWhereContains2().TestEquals(nameof(ArrayWhereContains2), ArrayWhereContains2Rewritten());
-            ArrayWhereContains3().TestEquals(nameof(ArrayWhereContains3), ArrayWhereContains3Rewritten());
-            EnumerableContains().TestEquals(nameof(EnumerableContains), EnumerableContainsRewritten());
-            EnumerableContains2().TestEquals(nameof(EnumerableContains2), EnumerableContains2Rewritten());
-            EnumerableContains3().TestEquals(nameof(EnumerableContains3), EnumerableContains3Rewritten());
+            TestsExtensions.TestEquals(nameof(ArrayContains), ArrayContains, ArrayContainsRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayContains2), ArrayContains2, ArrayContains2Rewritten);
+            TestsExtensions.TestEquals(nameof(ArrayContains3), ArrayContains3, ArrayContains3Rewritten);
+            TestsExtensions.TestEquals(nameof(ArraySelectContains), ArraySelectContains, ArraySelectContainsRewritten);
+            TestsExtensions.TestEquals(nameof(ArraySelectContains2), ArraySelectContains2, ArraySelectContains2Rewritten);
+            TestsExtensions.TestEquals(nameof(ArraySelectContains3), ArraySelectContains3, ArraySelectContains3Rewritten);
+            TestsExtensions.TestEquals(nameof(ArrayWhereContains), ArrayWhereContains, ArrayWhereContainsRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayWhereContains2), ArrayWhereContains2, ArrayWhereContains2Rewritten);
+            TestsExtensions.TestEquals(nameof(ArrayWhereContains3), ArrayWhereContains3, ArrayWhereContains3Rewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableContains), EnumerableContains, EnumerableContainsRewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableContains2), EnumerableContains2, EnumerableContains2Rewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableContains3), EnumerableContains3, EnumerableContains3Rewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableContainsNot), EnumerableContainsNot, EnumerableContainsNotRewritten);
         }
 
         [NoRewrite]
@@ -182,6 +183,18 @@ namespace TestsLibrary.Tests
         public bool EnumerableContains3Rewritten()
         {
             return EnumerableItems.Contains(23, new IntStrangeComparer());
+        } //EndMethod
+        
+        
+        [NoRewrite]
+        public bool EnumerableContainsNot()
+        {
+            return EnumerableItems.Contains(20000);
+        } //EndMethod
+        
+        public bool EnumerableContainsNotRewritten()
+        {
+            return EnumerableItems.Contains(20000);
         } //EndMethod
 
     }

@@ -13,20 +13,22 @@ public class AggregateTests
     private IEnumerable<int> EnumerableItems = Enumerable.Range(0, 1000);
     public void RunTests()
     {
-        AggregateSum().TestEquals(nameof(AggregateSum), AggregateSumRewritten());
-        EnumerableAggregateSum().TestEquals(nameof(EnumerableAggregateSum), EnumerableAggregateSumRewritten());
-        AggregateCount().TestEquals(nameof(AggregateCount), AggregateCountRewritten());
-        AggregateEma().TestEquals(nameof(AggregateEma), AggregateEmaRewritten());
-        AggregateDoubleSum().TestEquals(nameof(AggregateDoubleSum), AggregateDoubleSumRewritten());
-        AggregateDoubleEma().TestEquals(nameof(AggregateDoubleEma), AggregateDoubleEmaRewritten());
-        AggregateDoubleFactorial().TestEquals(nameof(AggregateDoubleFactorial), AggregateDoubleFactorialRewritten());
-        AggregateDoubleAverage().TestEquals(nameof(AggregateDoubleAverage), AggregateDoubleAverageRewritten());
-        AggregateDoubleAverageSelected().TestEquals(nameof(AggregateDoubleAverageSelected), AggregateDoubleAverageSelectedRewritten());
-        AggregateDoubleAverageWhere().TestEquals(nameof(AggregateDoubleAverageWhere), AggregateDoubleAverageWhereRewritten());
-        AggregateRangeSum().TestEquals(nameof(AggregateRangeSum), AggregateRangeSumRewritten());
-        AggregateRangeFactorial0().TestEquals(nameof(AggregateRangeFactorial0), AggregateRangeFactorial0Rewritten());
-        AggregateRangeFactorial20().TestEquals(nameof(AggregateRangeFactorial20), AggregateRangeFactorial20Rewritten());
-        AggregateRangeFactorial100().TestEquals(nameof(AggregateRangeFactorial100), AggregateRangeFactorial100Rewritten());
+        TestsExtensions.TestEquals(nameof(AggregateSum), AggregateSum, AggregateSumRewritten);
+        TestsExtensions.TestEquals(nameof(EnumerableAggregateSum), EnumerableAggregateSum, EnumerableAggregateSumRewritten);
+        TestsExtensions.TestEquals(nameof(AggregateCount), AggregateCount, AggregateCountRewritten);
+        TestsExtensions.TestEquals(nameof(AggregateEma), AggregateEma, AggregateEmaRewritten);
+        TestsExtensions.TestEquals(nameof(AggregateDoubleSum), AggregateDoubleSum, AggregateDoubleSumRewritten);
+        TestsExtensions.TestEquals(nameof(AggregateDoubleEma), AggregateDoubleEma, AggregateDoubleEmaRewritten);
+        TestsExtensions.TestEquals(nameof(AggregateDoubleFactorial), AggregateDoubleFactorial, AggregateDoubleFactorialRewritten);
+        TestsExtensions.TestEquals(nameof(AggregateDoubleAverage), AggregateDoubleAverage, AggregateDoubleAverageRewritten);
+        TestsExtensions.TestEquals(nameof(AggregateDoubleAverageSelected), AggregateDoubleAverageSelected, AggregateDoubleAverageSelectedRewritten);
+        TestsExtensions.TestEquals(nameof(AggregateDoubleAverageWhere), AggregateDoubleAverageWhere, AggregateDoubleAverageWhereRewritten);
+        TestsExtensions.TestEquals(nameof(AggregateRangeSum), AggregateRangeSum, AggregateRangeSumRewritten);
+        TestsExtensions.TestEquals(nameof(AggregateRangeFactorial0), AggregateRangeFactorial0, AggregateRangeFactorial0Rewritten);
+        TestsExtensions.TestEquals(nameof(AggregateRangeFactorial20), AggregateRangeFactorial20, AggregateRangeFactorial20Rewritten);
+        TestsExtensions.TestEquals(nameof(AggregateRangeFactorial100), AggregateRangeFactorial100, AggregateRangeFactorial100Rewritten);
+        TestsExtensions.TestEquals(nameof(AggregateEmpty), AggregateEmpty, AggregateEmptyRewritten);
+        TestsExtensions.TestEquals(nameof(AggregateEmptyDefault), AggregateEmptyDefault, AggregateEmptyDefaultRewritten);
     }
 
     [NoRewrite]
@@ -183,6 +185,28 @@ public class AggregateTests
         return AggregateRangeFactorial100Rewritten_ProceduralLinq1();
     } //EndMethod
 
+    [NoRewrite]
+    public double AggregateEmptyDefault()
+    {
+        return ArrayItems.Where(x => false).Aggregate(1.0, (x, y) => x + y);
+    } //EndMethod
+
+    public double AggregateEmptyDefaultRewritten()
+    {
+        return AggregateEmptyDefaultRewritten_ProceduralLinq1(ArrayItems);
+    } //EndMethod
+
+    [NoRewrite]
+    public double AggregateEmpty()
+    {
+        return ArrayItems.Where(x => false).Aggregate((x, y) => x + y);
+    } //EndMethod
+
+    public double AggregateEmptyRewritten()
+    {
+        return AggregateEmptyRewritten_ProceduralLinq1(ArrayItems);
+    } //EndMethod
+
     int AggregateSumRewritten_ProceduralLinq1(int[] ArrayItems)
     {
         int v0;
@@ -219,6 +243,8 @@ public class AggregateTests
             v2.Dispose();
         }
 
+        if (v4)
+            throw new System.InvalidOperationException("The sequence did not contain valid elements.");
         return v3;
     }
 
@@ -350,6 +376,8 @@ public class AggregateTests
             }
             else
                 v24 = (v24 + (v23 + 0));
+        if (v25)
+            throw new System.InvalidOperationException("The sequence did not contain valid elements.");
         return v24;
     }
 
@@ -411,5 +439,57 @@ public class AggregateTests
             else
                 v33 = (v33 * (v32 + 1));
         return v33;
+    }
+
+    double AggregateEmptyDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v35;
+        double v36;
+        bool v37;
+        v36 = 1.0;
+        v37 = true;
+        v35 = 0;
+        for (; v35 < ArrayItems.Length; v35++)
+        {
+            if (!(false))
+                continue;
+            if (v37)
+            {
+                v36 = ArrayItems[v35];
+                v37 = false;
+                continue;
+            }
+            else
+                v36 = (v36 + ArrayItems[v35]);
+        }
+
+        return v36;
+    }
+
+    int AggregateEmptyRewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v38;
+        int v39;
+        bool v40;
+        v39 = default(int);
+        v40 = true;
+        v38 = 0;
+        for (; v38 < ArrayItems.Length; v38++)
+        {
+            if (!(false))
+                continue;
+            if (v40)
+            {
+                v39 = ArrayItems[v38];
+                v40 = false;
+                continue;
+            }
+            else
+                v39 = (v39 + ArrayItems[v38]);
+        }
+
+        if (v40)
+            throw new System.InvalidOperationException("The sequence did not contain valid elements.");
+        return v39;
     }
 }}

@@ -17,7 +17,7 @@ namespace LinqRewrite.RewriteRules
             p.PreUseAdd(enumeratorVariable.Assign(args[0].Access("GetEnumerator").Invoke()));
             
             p.ForAdd(If(Not(enumeratorVariable.Access("MoveNext").Invoke()),
-                        CreateThrowException("InvalidOperationException", "Invalid sizes of sources")));
+                        ThrowExpression("InvalidOperationException", "Invalid sizes of sources")));
             
             var equalityTestValue = args.Length switch
             {
@@ -27,7 +27,7 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(If(Not(equalityTestValue), Return(false)));
             
             p.FinalAdd(If(enumeratorVariable.Access("MoveNext").Invoke(),
-                CreateThrowException("InvalidOperationException", "Invalid sizes of sources")));
+                ThrowExpression("InvalidOperationException", "Invalid sizes of sources")));
 
             p.FinalAdd(enumeratorVariable.Access("Dispose").Invoke());
             p.FinalAdd(Return(true));
