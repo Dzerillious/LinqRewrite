@@ -16,6 +16,8 @@ namespace LinqRewrite.RewriteRules
                 p.SimpleRewrite = p.FirstCollection[args[0]];
                 return;
             }
+
+            if (!p.AssertGreaterEqual(args[0], 0)) return;
             
             var positionValue = args[0].ReusableConst(p);
             p.ForAdd(If(p.Indexer.IsEqual(positionValue),

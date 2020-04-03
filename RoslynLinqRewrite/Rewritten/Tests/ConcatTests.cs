@@ -392,7 +392,7 @@ public class ConcatTests
 
     public IEnumerable<int> ArraySelectConcatArrayRewritten()
     {
-        return ArraySelectConcatArrayRewritten_ProceduralLinq1(ArrayItems, x => x + 50);
+        return ArraySelectConcatArrayRewritten_ProceduralLinq1(ArrayItems);
     } //EndMethod
 
     [NoRewrite]
@@ -403,7 +403,7 @@ public class ConcatTests
 
     public IEnumerable<int> ArraySelectConcatArraySelectRewritten()
     {
-        return ArraySelectConcatArraySelectRewritten_ProceduralLinq2(ArrayItems, x => x + 50);
+        return ArraySelectConcatArraySelectRewritten_ProceduralLinq2(ArrayItems);
     } //EndMethod
 
     [NoRewrite]
@@ -414,7 +414,7 @@ public class ConcatTests
 
     public IEnumerable<int> ArrayWhereConcatArrayWhereRewritten()
     {
-        return ArrayWhereConcatArrayWhereRewritten_ProceduralLinq2(ArrayItems, x => x > 50);
+        return ArrayWhereConcatArrayWhereRewritten_ProceduralLinq2(ArrayItems);
     } //EndMethod
 
     [NoRewrite]
@@ -744,7 +744,7 @@ public class ConcatTests
 
     public IEnumerable<int> RangeEmpty2ArrayRewritten()
     {
-        return RangeEmpty2ArrayRewritten_ProceduralLinq1(ArrayItems, x => false);
+        return RangeEmpty2ArrayRewritten_ProceduralLinq1(ArrayItems);
     } //EndMethod
 
     [NoRewrite]
@@ -870,533 +870,583 @@ public class ConcatTests
 
     System.Collections.Generic.IEnumerable<int> ArrayConcatArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
+        int v135;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v136;
         int v137;
-        int v138;
-        int v139;
-        v137 = 0;
-        for (; v137 < ArrayItems.Length; v137++)
+        v135 = 0;
+        for (; v135 < ArrayItems.Length; v135++)
         {
-            v138 = ArrayItems[v137];
-            yield return v138;
+            v136 = ArrayItems[v135];
+            yield return v136;
         }
 
-        v139 = 0;
-        for (; v139 < ArrayItems2.Length; v139++)
+        v137 = 0;
+        for (; v137 < ArrayItems2.Length; v137++)
         {
-            v138 = ArrayItems2[v139];
-            yield return v138;
+            v136 = ArrayItems2[v137];
+            yield return v136;
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayConcatSimpleListRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v140;
-        int v141;
-        IEnumerator<int> v142;
-        v142 = SimpleListItems2.GetEnumerator();
-        v140 = 0;
-        for (; v140 < ArrayItems.Length; v140++)
+        int v138;
+        if (SimpleListItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v139;
+        IEnumerator<int> v140;
+        v140 = SimpleListItems2.GetEnumerator();
+        v138 = 0;
+        for (; v138 < ArrayItems.Length; v138++)
         {
-            v141 = ArrayItems[v140];
-            yield return v141;
+            v139 = ArrayItems[v138];
+            yield return v139;
         }
 
         try
         {
-            while (v142.MoveNext())
+            while (v140.MoveNext())
             {
-                v141 = v142.Current;
-                yield return v141;
+                v139 = v140.Current;
+                yield return v139;
             }
         }
         finally
         {
-            v142.Dispose();
+            v140.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayConcatEnumerableRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v143;
-        int v144;
-        IEnumerator<int> v145;
-        v145 = EnumerableItems2.GetEnumerator();
-        v143 = 0;
-        for (; v143 < ArrayItems.Length; v143++)
+        int v141;
+        if (EnumerableItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v142;
+        IEnumerator<int> v143;
+        v143 = EnumerableItems2.GetEnumerator();
+        v141 = 0;
+        for (; v141 < ArrayItems.Length; v141++)
         {
-            v144 = ArrayItems[v143];
-            yield return v144;
+            v142 = ArrayItems[v141];
+            yield return v142;
         }
 
         try
         {
-            while (v145.MoveNext())
+            while (v143.MoveNext())
             {
-                v144 = v145.Current;
-                yield return v144;
+                v142 = v143.Current;
+                yield return v142;
             }
         }
         finally
         {
-            v145.Dispose();
+            v143.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayConcatMethodRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v146;
-        int v147;
-        IEnumerator<int> v148;
-        v148 = MethodEnumerable2().GetEnumerator();
-        v146 = 0;
-        for (; v146 < ArrayItems.Length; v146++)
+        int v144;
+        if (MethodEnumerable2() == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v145;
+        IEnumerator<int> v146;
+        v146 = MethodEnumerable2().GetEnumerator();
+        v144 = 0;
+        for (; v144 < ArrayItems.Length; v144++)
         {
-            v147 = ArrayItems[v146];
-            yield return v147;
+            v145 = ArrayItems[v144];
+            yield return v145;
         }
 
         try
         {
-            while (v148.MoveNext())
+            while (v146.MoveNext())
             {
-                v147 = v148.Current;
-                yield return v147;
+                v145 = v146.Current;
+                yield return v145;
             }
         }
         finally
         {
-            v148.Dispose();
+            v146.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> SimpleListConcatArrayRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        IEnumerator<int> v149;
-        int v150;
-        int v151;
-        v149 = SimpleListItems.GetEnumerator();
+        IEnumerator<int> v147;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v148;
+        int v149;
+        v147 = SimpleListItems.GetEnumerator();
         try
         {
-            while (v149.MoveNext())
+            while (v147.MoveNext())
             {
-                v150 = v149.Current;
-                yield return v150;
+                v148 = v147.Current;
+                yield return v148;
             }
         }
         finally
         {
-            v149.Dispose();
+            v147.Dispose();
         }
 
-        v151 = 0;
-        for (; v151 < ArrayItems2.Length; v151++)
+        v149 = 0;
+        for (; v149 < ArrayItems2.Length; v149++)
         {
-            v150 = ArrayItems2[v151];
-            yield return v150;
+            v148 = ArrayItems2[v149];
+            yield return v148;
         }
     }
 
     System.Collections.Generic.IEnumerable<int> SimpleListConcatSimpleListRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
+        IEnumerator<int> v150;
+        if (SimpleListItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v151;
         IEnumerator<int> v152;
-        int v153;
-        IEnumerator<int> v154;
-        v152 = SimpleListItems.GetEnumerator();
-        v154 = SimpleListItems2.GetEnumerator();
+        v150 = SimpleListItems.GetEnumerator();
+        v152 = SimpleListItems2.GetEnumerator();
+        try
+        {
+            while (v150.MoveNext())
+            {
+                v151 = v150.Current;
+                yield return v151;
+            }
+        }
+        finally
+        {
+            v150.Dispose();
+        }
+
         try
         {
             while (v152.MoveNext())
             {
-                v153 = v152.Current;
-                yield return v153;
+                v151 = v152.Current;
+                yield return v151;
             }
         }
         finally
         {
             v152.Dispose();
         }
-
-        try
-        {
-            while (v154.MoveNext())
-            {
-                v153 = v154.Current;
-                yield return v153;
-            }
-        }
-        finally
-        {
-            v154.Dispose();
-        }
     }
 
     System.Collections.Generic.IEnumerable<int> SimpleListConcatEnumerableRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
+        IEnumerator<int> v153;
+        if (EnumerableItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v154;
         IEnumerator<int> v155;
-        int v156;
-        IEnumerator<int> v157;
-        v155 = SimpleListItems.GetEnumerator();
-        v157 = EnumerableItems2.GetEnumerator();
+        v153 = SimpleListItems.GetEnumerator();
+        v155 = EnumerableItems2.GetEnumerator();
+        try
+        {
+            while (v153.MoveNext())
+            {
+                v154 = v153.Current;
+                yield return v154;
+            }
+        }
+        finally
+        {
+            v153.Dispose();
+        }
+
         try
         {
             while (v155.MoveNext())
             {
-                v156 = v155.Current;
-                yield return v156;
+                v154 = v155.Current;
+                yield return v154;
             }
         }
         finally
         {
             v155.Dispose();
         }
-
-        try
-        {
-            while (v157.MoveNext())
-            {
-                v156 = v157.Current;
-                yield return v156;
-            }
-        }
-        finally
-        {
-            v157.Dispose();
-        }
     }
 
     System.Collections.Generic.IEnumerable<int> SimpleListConcatMethodRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
+        IEnumerator<int> v156;
+        if (MethodEnumerable2() == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v157;
         IEnumerator<int> v158;
-        int v159;
-        IEnumerator<int> v160;
-        v158 = SimpleListItems.GetEnumerator();
-        v160 = MethodEnumerable2().GetEnumerator();
+        v156 = SimpleListItems.GetEnumerator();
+        v158 = MethodEnumerable2().GetEnumerator();
+        try
+        {
+            while (v156.MoveNext())
+            {
+                v157 = v156.Current;
+                yield return v157;
+            }
+        }
+        finally
+        {
+            v156.Dispose();
+        }
+
         try
         {
             while (v158.MoveNext())
             {
-                v159 = v158.Current;
-                yield return v159;
+                v157 = v158.Current;
+                yield return v157;
             }
         }
         finally
         {
             v158.Dispose();
         }
-
-        try
-        {
-            while (v160.MoveNext())
-            {
-                v159 = v160.Current;
-                yield return v159;
-            }
-        }
-        finally
-        {
-            v160.Dispose();
-        }
     }
 
     System.Collections.Generic.IEnumerable<int> EnumerableConcatArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v161;
-        int v162;
-        int v163;
-        v161 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v159;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v160;
+        int v161;
+        v159 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v161.MoveNext())
+            while (v159.MoveNext())
             {
-                v162 = v161.Current;
-                yield return v162;
+                v160 = v159.Current;
+                yield return v160;
             }
         }
         finally
         {
-            v161.Dispose();
+            v159.Dispose();
         }
 
-        v163 = 0;
-        for (; v163 < ArrayItems2.Length; v163++)
+        v161 = 0;
+        for (; v161 < ArrayItems2.Length; v161++)
         {
-            v162 = ArrayItems2[v163];
-            yield return v162;
+            v160 = ArrayItems2[v161];
+            yield return v160;
         }
     }
 
     System.Collections.Generic.IEnumerable<int> EnumerableConcatSimpleListRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
+        IEnumerator<int> v162;
+        if (SimpleListItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v163;
         IEnumerator<int> v164;
-        int v165;
-        IEnumerator<int> v166;
-        v164 = EnumerableItems.GetEnumerator();
-        v166 = SimpleListItems2.GetEnumerator();
+        v162 = EnumerableItems.GetEnumerator();
+        v164 = SimpleListItems2.GetEnumerator();
+        try
+        {
+            while (v162.MoveNext())
+            {
+                v163 = v162.Current;
+                yield return v163;
+            }
+        }
+        finally
+        {
+            v162.Dispose();
+        }
+
         try
         {
             while (v164.MoveNext())
             {
-                v165 = v164.Current;
-                yield return v165;
+                v163 = v164.Current;
+                yield return v163;
             }
         }
         finally
         {
             v164.Dispose();
         }
-
-        try
-        {
-            while (v166.MoveNext())
-            {
-                v165 = v166.Current;
-                yield return v165;
-            }
-        }
-        finally
-        {
-            v166.Dispose();
-        }
     }
 
     System.Collections.Generic.IEnumerable<int> EnumerableConcatEnumerableRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
+        IEnumerator<int> v165;
+        if (EnumerableItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v166;
         IEnumerator<int> v167;
-        int v168;
-        IEnumerator<int> v169;
-        v167 = EnumerableItems.GetEnumerator();
-        v169 = EnumerableItems2.GetEnumerator();
+        v165 = EnumerableItems.GetEnumerator();
+        v167 = EnumerableItems2.GetEnumerator();
+        try
+        {
+            while (v165.MoveNext())
+            {
+                v166 = v165.Current;
+                yield return v166;
+            }
+        }
+        finally
+        {
+            v165.Dispose();
+        }
+
         try
         {
             while (v167.MoveNext())
             {
-                v168 = v167.Current;
-                yield return v168;
+                v166 = v167.Current;
+                yield return v166;
             }
         }
         finally
         {
             v167.Dispose();
         }
-
-        try
-        {
-            while (v169.MoveNext())
-            {
-                v168 = v169.Current;
-                yield return v168;
-            }
-        }
-        finally
-        {
-            v169.Dispose();
-        }
     }
 
     System.Collections.Generic.IEnumerable<int> EnumerableConcatMethodRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
+        IEnumerator<int> v168;
+        if (MethodEnumerable2() == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v169;
         IEnumerator<int> v170;
-        int v171;
-        IEnumerator<int> v172;
-        v170 = EnumerableItems.GetEnumerator();
-        v172 = MethodEnumerable2().GetEnumerator();
+        v168 = EnumerableItems.GetEnumerator();
+        v170 = MethodEnumerable2().GetEnumerator();
+        try
+        {
+            while (v168.MoveNext())
+            {
+                v169 = v168.Current;
+                yield return v169;
+            }
+        }
+        finally
+        {
+            v168.Dispose();
+        }
+
         try
         {
             while (v170.MoveNext())
             {
-                v171 = v170.Current;
-                yield return v171;
+                v169 = v170.Current;
+                yield return v169;
             }
         }
         finally
         {
             v170.Dispose();
         }
-
-        try
-        {
-            while (v172.MoveNext())
-            {
-                v171 = v172.Current;
-                yield return v171;
-            }
-        }
-        finally
-        {
-            v172.Dispose();
-        }
     }
 
     int[] ArrayConcatArrayToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
+        int v171;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v172;
         int v173;
-        int v174;
-        int v175;
-        int[] v176;
-        v176 = new int[(ArrayItems2.Length + ArrayItems.Length)];
+        int[] v174;
+        v174 = new int[(ArrayItems2.Length + ArrayItems.Length)];
+        v171 = 0;
+        for (; v171 < ArrayItems.Length; v171++)
+        {
+            v172 = ArrayItems[v171];
+            v174[v171] = v172;
+        }
+
         v173 = 0;
-        for (; v173 < ArrayItems.Length; v173++)
+        for (; v173 < ArrayItems2.Length; v173++)
         {
-            v174 = ArrayItems[v173];
-            v176[v173] = v174;
+            v172 = ArrayItems2[v173];
+            v174[v171] = v172;
+            v171++;
         }
 
-        v175 = 0;
-        for (; v175 < ArrayItems2.Length; v175++)
-        {
-            v174 = ArrayItems2[v175];
-            v176[v173] = v174;
-            v173++;
-        }
-
-        return v176;
+        return v174;
     }
 
     int[] ArrayConcatSimpleListToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v177;
+        int v175;
+        if (SimpleListItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v176;
+        IEnumerator<int> v177;
         int v178;
-        IEnumerator<int> v179;
-        int v180;
-        int v181;
-        int[] v182;
-        v179 = SimpleListItems2.GetEnumerator();
-        v180 = 0;
-        v181 = 8;
-        v182 = new int[8];
-        v177 = 0;
-        for (; v177 < ArrayItems.Length; v177++)
+        int v179;
+        int[] v180;
+        v177 = SimpleListItems2.GetEnumerator();
+        v178 = 0;
+        v179 = 8;
+        v180 = new int[8];
+        v175 = 0;
+        for (; v175 < ArrayItems.Length; v175++)
         {
-            v178 = ArrayItems[v177];
-            if (v180 >= v181)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v182, ref v181);
-            v182[v180] = v178;
-            v180++;
+            v176 = ArrayItems[v175];
+            if (v178 >= v179)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v180, ref v179);
+            v180[v178] = v176;
+            v178++;
         }
 
         try
         {
-            while (v179.MoveNext())
+            while (v177.MoveNext())
             {
-                v178 = v179.Current;
-                if (v180 >= v181)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v182, ref v181);
-                v182[v180] = v178;
-                v180++;
+                v176 = v177.Current;
+                if (v178 >= v179)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v180, ref v179);
+                v180[v178] = v176;
+                v178++;
             }
         }
         finally
         {
-            v179.Dispose();
+            v177.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v182, v180);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v180, v178);
     }
 
     int[] ArrayConcatEnumerableToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v183;
+        int v181;
+        if (EnumerableItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v182;
+        IEnumerator<int> v183;
         int v184;
-        IEnumerator<int> v185;
-        int v186;
-        int v187;
-        int[] v188;
-        v185 = EnumerableItems2.GetEnumerator();
-        v186 = 0;
-        v187 = 8;
-        v188 = new int[8];
-        v183 = 0;
-        for (; v183 < ArrayItems.Length; v183++)
+        int v185;
+        int[] v186;
+        v183 = EnumerableItems2.GetEnumerator();
+        v184 = 0;
+        v185 = 8;
+        v186 = new int[8];
+        v181 = 0;
+        for (; v181 < ArrayItems.Length; v181++)
         {
-            v184 = ArrayItems[v183];
-            if (v186 >= v187)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v188, ref v187);
-            v188[v186] = v184;
-            v186++;
+            v182 = ArrayItems[v181];
+            if (v184 >= v185)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v186, ref v185);
+            v186[v184] = v182;
+            v184++;
         }
 
         try
         {
-            while (v185.MoveNext())
+            while (v183.MoveNext())
             {
-                v184 = v185.Current;
-                if (v186 >= v187)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v188, ref v187);
-                v188[v186] = v184;
-                v186++;
+                v182 = v183.Current;
+                if (v184 >= v185)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v186, ref v185);
+                v186[v184] = v182;
+                v184++;
             }
         }
         finally
         {
-            v185.Dispose();
+            v183.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v188, v186);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v186, v184);
     }
 
     int[] SimpleListConcatArrayToArrayRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        IEnumerator<int> v189;
+        IEnumerator<int> v187;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v188;
+        int v189;
         int v190;
         int v191;
-        int v192;
-        int v193;
-        int[] v194;
-        v189 = SimpleListItems.GetEnumerator();
-        v192 = 0;
-        v193 = 8;
-        v194 = new int[8];
+        int[] v192;
+        v187 = SimpleListItems.GetEnumerator();
+        v190 = 0;
+        v191 = 8;
+        v192 = new int[8];
         try
         {
-            while (v189.MoveNext())
+            while (v187.MoveNext())
             {
-                v190 = v189.Current;
-                if (v192 >= v193)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v194, ref v193);
-                v194[v192] = v190;
-                v192++;
+                v188 = v187.Current;
+                if (v190 >= v191)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v192, ref v191);
+                v192[v190] = v188;
+                v190++;
             }
         }
         finally
         {
-            v189.Dispose();
+            v187.Dispose();
         }
 
-        v191 = 0;
-        for (; v191 < ArrayItems2.Length; v191++)
+        v189 = 0;
+        for (; v189 < ArrayItems2.Length; v189++)
         {
-            v190 = ArrayItems2[v191];
-            if (v192 >= v193)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v194, ref v193);
-            v194[v192] = v190;
-            v192++;
+            v188 = ArrayItems2[v189];
+            if (v190 >= v191)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v192, ref v191);
+            v192[v190] = v188;
+            v190++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v194, v192);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v192, v190);
     }
 
     int[] SimpleListConcatSimpleListToArrayRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
+        IEnumerator<int> v193;
+        if (SimpleListItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v194;
         IEnumerator<int> v195;
         int v196;
-        IEnumerator<int> v197;
-        int v198;
-        int v199;
-        int[] v200;
-        v195 = SimpleListItems.GetEnumerator();
-        v197 = SimpleListItems2.GetEnumerator();
-        v198 = 0;
-        v199 = 8;
-        v200 = new int[8];
+        int v197;
+        int[] v198;
+        v193 = SimpleListItems.GetEnumerator();
+        v195 = SimpleListItems2.GetEnumerator();
+        v196 = 0;
+        v197 = 8;
+        v198 = new int[8];
+        try
+        {
+            while (v193.MoveNext())
+            {
+                v194 = v193.Current;
+                if (v196 >= v197)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v198, ref v197);
+                v198[v196] = v194;
+                v196++;
+            }
+        }
+        finally
+        {
+            v193.Dispose();
+        }
+
         try
         {
             while (v195.MoveNext())
             {
-                v196 = v195.Current;
-                if (v198 >= v199)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v200, ref v199);
-                v200[v198] = v196;
-                v198++;
+                v194 = v195.Current;
+                if (v196 >= v197)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v198, ref v197);
+                v198[v196] = v194;
+                v196++;
             }
         }
         finally
@@ -1404,47 +1454,49 @@ public class ConcatTests
             v195.Dispose();
         }
 
-        try
-        {
-            while (v197.MoveNext())
-            {
-                v196 = v197.Current;
-                if (v198 >= v199)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v200, ref v199);
-                v200[v198] = v196;
-                v198++;
-            }
-        }
-        finally
-        {
-            v197.Dispose();
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v200, v198);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v198, v196);
     }
 
     int[] SimpleListConcatEnumerableToArrayRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
+        IEnumerator<int> v199;
+        if (EnumerableItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v200;
         IEnumerator<int> v201;
         int v202;
-        IEnumerator<int> v203;
-        int v204;
-        int v205;
-        int[] v206;
-        v201 = SimpleListItems.GetEnumerator();
-        v203 = EnumerableItems2.GetEnumerator();
-        v204 = 0;
-        v205 = 8;
-        v206 = new int[8];
+        int v203;
+        int[] v204;
+        v199 = SimpleListItems.GetEnumerator();
+        v201 = EnumerableItems2.GetEnumerator();
+        v202 = 0;
+        v203 = 8;
+        v204 = new int[8];
+        try
+        {
+            while (v199.MoveNext())
+            {
+                v200 = v199.Current;
+                if (v202 >= v203)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v204, ref v203);
+                v204[v202] = v200;
+                v202++;
+            }
+        }
+        finally
+        {
+            v199.Dispose();
+        }
+
         try
         {
             while (v201.MoveNext())
             {
-                v202 = v201.Current;
-                if (v204 >= v205)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v206, ref v205);
-                v206[v204] = v202;
-                v204++;
+                v200 = v201.Current;
+                if (v202 >= v203)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v204, ref v203);
+                v204[v202] = v200;
+                v202++;
             }
         }
         finally
@@ -1452,88 +1504,92 @@ public class ConcatTests
             v201.Dispose();
         }
 
-        try
-        {
-            while (v203.MoveNext())
-            {
-                v202 = v203.Current;
-                if (v204 >= v205)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v206, ref v205);
-                v206[v204] = v202;
-                v204++;
-            }
-        }
-        finally
-        {
-            v203.Dispose();
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v206, v204);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v204, v202);
     }
 
     int[] EnumerableConcatArrayToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v207;
+        IEnumerator<int> v205;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v206;
+        int v207;
         int v208;
         int v209;
-        int v210;
-        int v211;
-        int[] v212;
-        v207 = EnumerableItems.GetEnumerator();
-        v210 = 0;
-        v211 = 8;
-        v212 = new int[8];
+        int[] v210;
+        v205 = EnumerableItems.GetEnumerator();
+        v208 = 0;
+        v209 = 8;
+        v210 = new int[8];
         try
         {
-            while (v207.MoveNext())
+            while (v205.MoveNext())
             {
-                v208 = v207.Current;
-                if (v210 >= v211)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v212, ref v211);
-                v212[v210] = v208;
-                v210++;
+                v206 = v205.Current;
+                if (v208 >= v209)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v210, ref v209);
+                v210[v208] = v206;
+                v208++;
             }
         }
         finally
         {
-            v207.Dispose();
+            v205.Dispose();
         }
 
-        v209 = 0;
-        for (; v209 < ArrayItems2.Length; v209++)
+        v207 = 0;
+        for (; v207 < ArrayItems2.Length; v207++)
         {
-            v208 = ArrayItems2[v209];
-            if (v210 >= v211)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v212, ref v211);
-            v212[v210] = v208;
-            v210++;
+            v206 = ArrayItems2[v207];
+            if (v208 >= v209)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v210, ref v209);
+            v210[v208] = v206;
+            v208++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v212, v210);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v210, v208);
     }
 
     int[] EnumerableConcatSimpleListToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
+        IEnumerator<int> v211;
+        if (SimpleListItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v212;
         IEnumerator<int> v213;
         int v214;
-        IEnumerator<int> v215;
-        int v216;
-        int v217;
-        int[] v218;
-        v213 = EnumerableItems.GetEnumerator();
-        v215 = SimpleListItems2.GetEnumerator();
-        v216 = 0;
-        v217 = 8;
-        v218 = new int[8];
+        int v215;
+        int[] v216;
+        v211 = EnumerableItems.GetEnumerator();
+        v213 = SimpleListItems2.GetEnumerator();
+        v214 = 0;
+        v215 = 8;
+        v216 = new int[8];
+        try
+        {
+            while (v211.MoveNext())
+            {
+                v212 = v211.Current;
+                if (v214 >= v215)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v216, ref v215);
+                v216[v214] = v212;
+                v214++;
+            }
+        }
+        finally
+        {
+            v211.Dispose();
+        }
+
         try
         {
             while (v213.MoveNext())
             {
-                v214 = v213.Current;
-                if (v216 >= v217)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v218, ref v217);
-                v218[v216] = v214;
-                v216++;
+                v212 = v213.Current;
+                if (v214 >= v215)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v216, ref v215);
+                v216[v214] = v212;
+                v214++;
             }
         }
         finally
@@ -1541,47 +1597,49 @@ public class ConcatTests
             v213.Dispose();
         }
 
-        try
-        {
-            while (v215.MoveNext())
-            {
-                v214 = v215.Current;
-                if (v216 >= v217)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v218, ref v217);
-                v218[v216] = v214;
-                v216++;
-            }
-        }
-        finally
-        {
-            v215.Dispose();
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v218, v216);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v216, v214);
     }
 
     int[] EnumerableConcatEnumerableToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
+        IEnumerator<int> v217;
+        if (EnumerableItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v218;
         IEnumerator<int> v219;
         int v220;
-        IEnumerator<int> v221;
-        int v222;
-        int v223;
-        int[] v224;
-        v219 = EnumerableItems.GetEnumerator();
-        v221 = EnumerableItems2.GetEnumerator();
-        v222 = 0;
-        v223 = 8;
-        v224 = new int[8];
+        int v221;
+        int[] v222;
+        v217 = EnumerableItems.GetEnumerator();
+        v219 = EnumerableItems2.GetEnumerator();
+        v220 = 0;
+        v221 = 8;
+        v222 = new int[8];
+        try
+        {
+            while (v217.MoveNext())
+            {
+                v218 = v217.Current;
+                if (v220 >= v221)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v222, ref v221);
+                v222[v220] = v218;
+                v220++;
+            }
+        }
+        finally
+        {
+            v217.Dispose();
+        }
+
         try
         {
             while (v219.MoveNext())
             {
-                v220 = v219.Current;
-                if (v222 >= v223)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v224, ref v223);
-                v224[v222] = v220;
-                v222++;
+                v218 = v219.Current;
+                if (v220 >= v221)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v222, ref v221);
+                v222[v220] = v218;
+                v220++;
             }
         }
         finally
@@ -1589,272 +1647,274 @@ public class ConcatTests
             v219.Dispose();
         }
 
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v222, v220);
+    }
+
+    System.Collections.Generic.IEnumerable<int> ArraySelectConcatArrayRewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v223;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v224;
+        int v225;
+        v223 = 0;
+        for (; v223 < ArrayItems.Length; v223++)
+        {
+            v224 = (ArrayItems[v223] + 50);
+            yield return v224;
+        }
+
+        v225 = 0;
+        for (; v225 < ArrayItems2.Length; v225++)
+        {
+            v224 = ArrayItems2[v225];
+            yield return v224;
+        }
+    }
+
+    System.Collections.Generic.IEnumerable<int> ArraySelectConcatArraySelectRewritten_ProceduralLinq1(int[] ArrayItems2)
+    {
+        int v226;
+        v226 = 0;
+        for (; v226 < ArrayItems2.Length; v226++)
+            yield return (ArrayItems2[v226] + 50);
+    }
+
+    System.Collections.Generic.IEnumerable<int> ArraySelectConcatArraySelectRewritten_ProceduralLinq2(int[] ArrayItems)
+    {
+        int v227;
+        if (ArraySelectConcatArraySelectRewritten_ProceduralLinq1(ArrayItems2) == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v228;
+        IEnumerator<int> v229;
+        v229 = ArraySelectConcatArraySelectRewritten_ProceduralLinq1(ArrayItems2).GetEnumerator();
+        v227 = 0;
+        for (; v227 < ArrayItems.Length; v227++)
+        {
+            v228 = (ArrayItems[v227] + 50);
+            yield return v228;
+        }
+
         try
         {
-            while (v221.MoveNext())
+            while (v229.MoveNext())
             {
-                v220 = v221.Current;
-                if (v222 >= v223)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v224, ref v223);
-                v224[v222] = v220;
-                v222++;
+                v228 = v229.Current;
+                yield return v228;
             }
         }
         finally
         {
-            v221.Dispose();
+            v229.Dispose();
         }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v224, v222);
     }
 
-    System.Collections.Generic.IEnumerable<int> ArraySelectConcatArrayRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int> v226)
+    System.Collections.Generic.IEnumerable<int> ArrayWhereConcatArrayWhereRewritten_ProceduralLinq1(int[] ArrayItems2)
     {
-        int v225;
-        int v227;
-        int v228;
-        v225 = 0;
-        for (; v225 < ArrayItems.Length; v225++)
+        int v230;
+        v230 = 0;
+        for (; v230 < ArrayItems2.Length; v230++)
         {
-            v227 = v226(ArrayItems[v225]);
-            yield return v227;
-        }
-
-        v228 = 0;
-        for (; v228 < ArrayItems2.Length; v228++)
-        {
-            v227 = ArrayItems2[v228];
-            yield return v227;
+            if (!((ArrayItems2[v230] > 50)))
+                continue;
+            yield return ArrayItems2[v230];
         }
     }
 
-    System.Collections.Generic.IEnumerable<int> ArraySelectConcatArraySelectRewritten_ProceduralLinq1(int[] ArrayItems2, System.Func<int, int> v230)
-    {
-        int v229;
-        v229 = 0;
-        for (; v229 < ArrayItems2.Length; v229++)
-            yield return v230(ArrayItems2[v229]);
-    }
-
-    System.Collections.Generic.IEnumerable<int> ArraySelectConcatArraySelectRewritten_ProceduralLinq2(int[] ArrayItems, System.Func<int, int> v232)
+    System.Collections.Generic.IEnumerable<int> ArrayWhereConcatArrayWhereRewritten_ProceduralLinq2(int[] ArrayItems)
     {
         int v231;
-        int v233;
-        IEnumerator<int> v234;
-        v234 = ArraySelectConcatArraySelectRewritten_ProceduralLinq1(ArrayItems2, x => x + 50).GetEnumerator();
+        if (ArrayWhereConcatArrayWhereRewritten_ProceduralLinq1(ArrayItems2) == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v232;
+        IEnumerator<int> v233;
+        v233 = ArrayWhereConcatArrayWhereRewritten_ProceduralLinq1(ArrayItems2).GetEnumerator();
         v231 = 0;
         for (; v231 < ArrayItems.Length; v231++)
         {
-            v233 = v232(ArrayItems[v231]);
-            yield return v233;
+            if (!((ArrayItems[v231] > 50)))
+                continue;
+            v232 = ArrayItems[v231];
+            yield return v232;
         }
 
         try
         {
-            while (v234.MoveNext())
+            while (v233.MoveNext())
             {
-                v233 = v234.Current;
-                yield return v233;
+                v232 = v233.Current;
+                yield return v232;
             }
         }
         finally
         {
-            v234.Dispose();
-        }
-    }
-
-    System.Collections.Generic.IEnumerable<int> ArrayWhereConcatArrayWhereRewritten_ProceduralLinq1(int[] ArrayItems2, System.Func<int, bool> v236)
-    {
-        int v235;
-        v235 = 0;
-        for (; v235 < ArrayItems2.Length; v235++)
-        {
-            if (!(v236(ArrayItems2[v235])))
-                continue;
-            yield return ArrayItems2[v235];
-        }
-    }
-
-    System.Collections.Generic.IEnumerable<int> ArrayWhereConcatArrayWhereRewritten_ProceduralLinq2(int[] ArrayItems, System.Func<int, bool> v238)
-    {
-        int v237;
-        int v239;
-        IEnumerator<int> v240;
-        v240 = ArrayWhereConcatArrayWhereRewritten_ProceduralLinq1(ArrayItems2, x => x > 50).GetEnumerator();
-        v237 = 0;
-        for (; v237 < ArrayItems.Length; v237++)
-        {
-            if (!(v238(ArrayItems[v237])))
-                continue;
-            v239 = ArrayItems[v237];
-            yield return v239;
-        }
-
-        try
-        {
-            while (v240.MoveNext())
-            {
-                v239 = v240.Current;
-                yield return v239;
-            }
-        }
-        finally
-        {
-            v240.Dispose();
+            v233.Dispose();
         }
     }
 
     int ArrayConcatArrayCount2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v244;
-        int v245;
-        int v246;
-        int v247;
-        v247 = 0;
-        v244 = 0;
-        for (; v244 < ArrayItems.Length; v244++)
+        int v237;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v238;
+        int v239;
+        int v240;
+        v240 = 0;
+        v237 = 0;
+        for (; v237 < ArrayItems.Length; v237++)
         {
-            v245 = ArrayItems[v244];
-            if (!((v245 > 70)))
+            v238 = ArrayItems[v237];
+            if (!((v238 > 70)))
                 continue;
-            v247++;
+            v240++;
         }
 
-        v246 = 0;
-        for (; v246 < ArrayItems2.Length; v246++)
+        v239 = 0;
+        for (; v239 < ArrayItems2.Length; v239++)
         {
-            v245 = ArrayItems2[v246];
-            if (!((v245 > 70)))
+            v238 = ArrayItems2[v239];
+            if (!((v238 > 70)))
                 continue;
-            v247++;
+            v240++;
         }
 
-        return v247;
+        return v240;
     }
 
     int ArrayConcatArraySumRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v248;
-        int v249;
-        int v250;
-        int v251;
-        v251 = 0;
-        v248 = 0;
-        for (; v248 < ArrayItems.Length; v248++)
+        int v241;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v242;
+        int v243;
+        int v244;
+        v244 = 0;
+        v241 = 0;
+        for (; v241 < ArrayItems.Length; v241++)
         {
-            v249 = ArrayItems[v248];
-            v251 += v249;
+            v242 = ArrayItems[v241];
+            v244 += v242;
         }
 
-        v250 = 0;
-        for (; v250 < ArrayItems2.Length; v250++)
+        v243 = 0;
+        for (; v243 < ArrayItems2.Length; v243++)
         {
-            v249 = ArrayItems2[v250];
-            v251 += v249;
+            v242 = ArrayItems2[v243];
+            v244 += v242;
         }
 
-        return v251;
+        return v244;
     }
 
     int ArrayConcatArraySum2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v252;
-        int v253;
-        int v254;
-        int v255;
-        int v256;
-        v255 = 0;
-        v252 = 0;
-        for (; v252 < ArrayItems.Length; v252++)
+        int v245;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v246;
+        int v247;
+        int v248;
+        int v249;
+        v248 = 0;
+        v245 = 0;
+        for (; v245 < ArrayItems.Length; v245++)
         {
-            v253 = ArrayItems[v252];
-            v256 = (v253 + 10);
-            v255 += v256;
+            v246 = ArrayItems[v245];
+            v249 = (v246 + 10);
+            v248 += v249;
         }
 
-        v254 = 0;
-        for (; v254 < ArrayItems2.Length; v254++)
+        v247 = 0;
+        for (; v247 < ArrayItems2.Length; v247++)
         {
-            v253 = ArrayItems2[v254];
-            v256 = (v253 + 10);
-            v255 += v256;
+            v246 = ArrayItems2[v247];
+            v249 = (v246 + 10);
+            v248 += v249;
         }
 
-        return v255;
+        return v248;
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayConcatArrayDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v257;
-        int v258;
-        int v259;
-        HashSet<int> v260;
-        v260 = new HashSet<int>();
-        v257 = 0;
-        for (; v257 < ArrayItems.Length; v257++)
+        int v250;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v251;
+        int v252;
+        HashSet<int> v253;
+        v253 = new HashSet<int>();
+        v250 = 0;
+        for (; v250 < ArrayItems.Length; v250++)
         {
-            v258 = ArrayItems[v257];
-            if (!(v260.Add(v258)))
+            v251 = ArrayItems[v250];
+            if (!(v253.Add(v251)))
                 continue;
-            yield return v258;
+            yield return v251;
         }
 
-        v259 = 0;
-        for (; v259 < ArrayItems2.Length; v259++)
+        v252 = 0;
+        for (; v252 < ArrayItems2.Length; v252++)
         {
-            v258 = ArrayItems2[v259];
-            if (!(v260.Add(v258)))
+            v251 = ArrayItems2[v252];
+            if (!(v253.Add(v251)))
                 continue;
-            yield return v258;
+            yield return v251;
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayConcatArrayDistinct2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v261;
-        int v262;
-        int v263;
-        HashSet<int> v264;
-        v264 = new HashSet<int>(EqualityComparer<int>.Default);
-        v261 = 0;
-        for (; v261 < ArrayItems.Length; v261++)
+        int v254;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v255;
+        int v256;
+        HashSet<int> v257;
+        v257 = new HashSet<int>(EqualityComparer<int>.Default);
+        v254 = 0;
+        for (; v254 < ArrayItems.Length; v254++)
         {
-            v262 = ArrayItems[v261];
-            if (!(v264.Add(v262)))
+            v255 = ArrayItems[v254];
+            if (!(v257.Add(v255)))
                 continue;
-            yield return v262;
+            yield return v255;
         }
 
-        v263 = 0;
-        for (; v263 < ArrayItems2.Length; v263++)
+        v256 = 0;
+        for (; v256 < ArrayItems2.Length; v256++)
         {
-            v262 = ArrayItems2[v263];
-            if (!(v264.Add(v262)))
+            v255 = ArrayItems2[v256];
+            if (!(v257.Add(v255)))
                 continue;
-            yield return v262;
+            yield return v255;
         }
     }
 
     int ArrayConcatArrayElementAtRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v265;
-        int v266;
-        int v267;
-        v265 = 0;
-        for (; v265 < ArrayItems.Length; v265++)
+        int v258;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v259;
+        int v260;
+        v258 = 0;
+        for (; v258 < ArrayItems.Length; v258++)
         {
-            v266 = ArrayItems[v265];
-            if (v265 == 45)
-                return v266;
+            v259 = ArrayItems[v258];
+            if (v258 == 45)
+                return v259;
         }
 
-        v267 = 0;
-        for (; v267 < ArrayItems2.Length; v267++)
+        v260 = 0;
+        for (; v260 < ArrayItems2.Length; v260++)
         {
-            v266 = ArrayItems2[v267];
-            if (v265 == 45)
-                return v266;
-            v265++;
+            v259 = ArrayItems2[v260];
+            if (v258 == 45)
+                return v259;
+            v258++;
         }
 
         throw new System.InvalidOperationException("The sequence did not contain enough elements.");
@@ -1862,24 +1922,26 @@ public class ConcatTests
 
     int ArrayConcatArrayElementAtOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v268;
-        int v269;
-        int v270;
-        v268 = 0;
-        for (; v268 < ArrayItems.Length; v268++)
+        int v261;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v262;
+        int v263;
+        v261 = 0;
+        for (; v261 < ArrayItems.Length; v261++)
         {
-            v269 = ArrayItems[v268];
-            if (v268 == 45)
-                return v269;
+            v262 = ArrayItems[v261];
+            if (v261 == 45)
+                return v262;
         }
 
-        v270 = 0;
-        for (; v270 < ArrayItems2.Length; v270++)
+        v263 = 0;
+        for (; v263 < ArrayItems2.Length; v263++)
         {
-            v269 = ArrayItems2[v270];
-            if (v268 == 45)
-                return v269;
-            v268++;
+            v262 = ArrayItems2[v263];
+            if (v261 == 45)
+                return v262;
+            v261++;
         }
 
         return default(int);
@@ -1887,347 +1949,369 @@ public class ConcatTests
 
     int ArrayConcatArrayLastRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v277;
-        int v278;
-        int v279;
-        int? v280;
-        v280 = null;
-        v277 = 0;
-        for (; v277 < ArrayItems.Length; v277++)
+        int v270;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v271;
+        int v272;
+        int? v273;
+        v273 = null;
+        v270 = 0;
+        for (; v270 < ArrayItems.Length; v270++)
         {
-            v278 = ArrayItems[v277];
-            v280 = v278;
+            v271 = ArrayItems[v270];
+            v273 = v271;
         }
 
-        v279 = 0;
-        for (; v279 < ArrayItems2.Length; v279++)
+        v272 = 0;
+        for (; v272 < ArrayItems2.Length; v272++)
         {
-            v278 = ArrayItems2[v279];
-            v280 = v278;
+            v271 = ArrayItems2[v272];
+            v273 = v271;
         }
 
-        if (v280 == null)
+        if (v273 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v280;
+            return (int)v273;
     }
 
     int ArrayConcatArrayLastOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v281;
-        int v282;
-        int v283;
-        int? v284;
-        v284 = null;
-        v281 = 0;
-        for (; v281 < ArrayItems.Length; v281++)
+        int v274;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v275;
+        int v276;
+        int? v277;
+        v277 = null;
+        v274 = 0;
+        for (; v274 < ArrayItems.Length; v274++)
         {
-            v282 = ArrayItems[v281];
-            v284 = v282;
+            v275 = ArrayItems[v274];
+            v277 = v275;
         }
 
-        v283 = 0;
-        for (; v283 < ArrayItems2.Length; v283++)
+        v276 = 0;
+        for (; v276 < ArrayItems2.Length; v276++)
         {
-            v282 = ArrayItems2[v283];
-            v284 = v282;
+            v275 = ArrayItems2[v276];
+            v277 = v275;
         }
 
-        if (v284 == null)
+        if (v277 == null)
             return default(int);
         else
-            return (int)v284;
+            return (int)v277;
     }
 
     int ArrayConcatArraySingleRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v285;
-        int v286;
-        int v287;
-        int? v288;
-        v288 = null;
-        v285 = 0;
-        for (; v285 < ArrayItems.Length; v285++)
+        int v278;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v279;
+        int v280;
+        int? v281;
+        v281 = null;
+        v278 = 0;
+        for (; v278 < ArrayItems.Length; v278++)
         {
-            v286 = ArrayItems[v285];
-            if (v288 == null)
-                v288 = v286;
+            v279 = ArrayItems[v278];
+            if (v281 == null)
+                v281 = v279;
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        v287 = 0;
-        for (; v287 < ArrayItems2.Length; v287++)
+        v280 = 0;
+        for (; v280 < ArrayItems2.Length; v280++)
         {
-            v286 = ArrayItems2[v287];
-            if (v288 == null)
-                v288 = v286;
+            v279 = ArrayItems2[v280];
+            if (v281 == null)
+                v281 = v279;
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        if (v288 == null)
+        if (v281 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v288;
+            return (int)v281;
     }
 
     int ArrayConcatArraySingle2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v289;
-        int v290;
-        int v291;
-        int? v292;
-        v292 = null;
-        v289 = 0;
-        for (; v289 < ArrayItems.Length; v289++)
+        int v282;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v283;
+        int v284;
+        int? v285;
+        v285 = null;
+        v282 = 0;
+        for (; v282 < ArrayItems.Length; v282++)
         {
-            v290 = ArrayItems[v289];
-            if ((v290 == 76))
-                if (v292 == null)
-                    v292 = v290;
+            v283 = ArrayItems[v282];
+            if ((v283 == 76))
+                if (v285 == null)
+                    v285 = v283;
                 else
                     throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        v291 = 0;
-        for (; v291 < ArrayItems2.Length; v291++)
+        v284 = 0;
+        for (; v284 < ArrayItems2.Length; v284++)
         {
-            v290 = ArrayItems2[v291];
-            if ((v290 == 76))
-                if (v292 == null)
-                    v292 = v290;
+            v283 = ArrayItems2[v284];
+            if ((v283 == 76))
+                if (v285 == null)
+                    v285 = v283;
                 else
                     throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        if (v292 == null)
+        if (v285 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v292;
+            return (int)v285;
     }
 
     int ArrayConcatArraySingleOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v293;
-        int v294;
-        int v295;
-        int? v296;
-        v296 = null;
-        v293 = 0;
-        for (; v293 < ArrayItems.Length; v293++)
+        int v286;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v287;
+        int v288;
+        int? v289;
+        v289 = null;
+        v286 = 0;
+        for (; v286 < ArrayItems.Length; v286++)
         {
-            v294 = ArrayItems[v293];
-            if (v296 == null)
-                v296 = v294;
+            v287 = ArrayItems[v286];
+            if (v289 == null)
+                v289 = v287;
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        v295 = 0;
-        for (; v295 < ArrayItems2.Length; v295++)
+        v288 = 0;
+        for (; v288 < ArrayItems2.Length; v288++)
         {
-            v294 = ArrayItems2[v295];
-            if (v296 == null)
-                v296 = v294;
+            v287 = ArrayItems2[v288];
+            if (v289 == null)
+                v289 = v287;
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        if (v296 == null)
+        if (v289 == null)
             return default(int);
         else
-            return (int)v296;
+            return (int)v289;
     }
 
     int ArrayConcatArrayMinRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v297;
-        int v298;
-        int v299;
-        int v300;
-        bool v301;
-        v300 = 2147483647;
-        v301 = false;
-        v297 = 0;
-        for (; v297 < ArrayItems.Length; v297++)
+        int v290;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v291;
+        int v292;
+        int v293;
+        bool v294;
+        v293 = 2147483647;
+        v294 = false;
+        v290 = 0;
+        for (; v290 < ArrayItems.Length; v290++)
         {
-            v298 = ArrayItems[v297];
-            if (v298 >= v300)
+            v291 = ArrayItems[v290];
+            if (v291 >= v293)
                 continue;
-            v300 = v298;
-            v301 = true;
+            v293 = v291;
+            v294 = true;
         }
 
-        v299 = 0;
-        for (; v299 < ArrayItems2.Length; v299++)
+        v292 = 0;
+        for (; v292 < ArrayItems2.Length; v292++)
         {
-            v298 = ArrayItems2[v299];
-            if (v298 >= v300)
+            v291 = ArrayItems2[v292];
+            if (v291 >= v293)
                 continue;
-            v300 = v298;
-            v301 = true;
+            v293 = v291;
+            v294 = true;
         }
 
-        if (!(v301))
+        if (!(v294))
             throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v300;
+        return v293;
     }
 
     decimal ArrayConcatArrayMin2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v302;
-        int v303;
-        int v304;
-        decimal v305;
-        bool v306;
-        decimal v307;
-        v305 = 79228162514264337593543950335M;
-        v306 = false;
-        v302 = 0;
-        for (; v302 < ArrayItems.Length; v302++)
+        int v295;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v296;
+        int v297;
+        decimal v298;
+        bool v299;
+        decimal v300;
+        v298 = 79228162514264337593543950335M;
+        v299 = false;
+        v295 = 0;
+        for (; v295 < ArrayItems.Length; v295++)
         {
-            v303 = ArrayItems[v302];
-            v307 = (v303 + 2m);
-            if (v307 >= v305)
+            v296 = ArrayItems[v295];
+            v300 = (v296 + 2m);
+            if (v300 >= v298)
                 continue;
-            v305 = v307;
-            v306 = true;
+            v298 = v300;
+            v299 = true;
         }
 
-        v304 = 0;
-        for (; v304 < ArrayItems2.Length; v304++)
+        v297 = 0;
+        for (; v297 < ArrayItems2.Length; v297++)
         {
-            v303 = ArrayItems2[v304];
-            v307 = (v303 + 2m);
-            if (v307 >= v305)
+            v296 = ArrayItems2[v297];
+            v300 = (v296 + 2m);
+            if (v300 >= v298)
                 continue;
-            v305 = v307;
-            v306 = true;
+            v298 = v300;
+            v299 = true;
         }
 
-        if (!(v306))
+        if (!(v299))
             throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v305;
+        return v298;
     }
 
     int ArrayConcatArrayMaxRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v308;
-        int v309;
-        int v310;
-        int v311;
-        bool v312;
-        v311 = -2147483648;
-        v312 = false;
-        v308 = 0;
-        for (; v308 < ArrayItems.Length; v308++)
+        int v301;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v302;
+        int v303;
+        int v304;
+        bool v305;
+        v304 = -2147483648;
+        v305 = false;
+        v301 = 0;
+        for (; v301 < ArrayItems.Length; v301++)
         {
-            v309 = ArrayItems[v308];
-            if (v309 <= v311)
+            v302 = ArrayItems[v301];
+            if (v302 <= v304)
                 continue;
-            v311 = v309;
-            v312 = true;
+            v304 = v302;
+            v305 = true;
         }
 
-        v310 = 0;
-        for (; v310 < ArrayItems2.Length; v310++)
+        v303 = 0;
+        for (; v303 < ArrayItems2.Length; v303++)
         {
-            v309 = ArrayItems2[v310];
-            if (v309 <= v311)
+            v302 = ArrayItems2[v303];
+            if (v302 <= v304)
                 continue;
-            v311 = v309;
-            v312 = true;
+            v304 = v302;
+            v305 = true;
         }
 
-        if (!(v312))
+        if (!(v305))
             throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v311;
+        return v304;
     }
 
     decimal ArrayConcatArrayMax2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v313;
-        int v314;
-        int v315;
-        decimal v316;
-        bool v317;
-        decimal v318;
-        v316 = -79228162514264337593543950335M;
-        v317 = false;
-        v313 = 0;
-        for (; v313 < ArrayItems.Length; v313++)
+        int v306;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v307;
+        int v308;
+        decimal v309;
+        bool v310;
+        decimal v311;
+        v309 = -79228162514264337593543950335M;
+        v310 = false;
+        v306 = 0;
+        for (; v306 < ArrayItems.Length; v306++)
         {
-            v314 = ArrayItems[v313];
-            v318 = (v314 + 2m);
-            if (v318 <= v316)
+            v307 = ArrayItems[v306];
+            v311 = (v307 + 2m);
+            if (v311 <= v309)
                 continue;
-            v316 = v318;
-            v317 = true;
+            v309 = v311;
+            v310 = true;
         }
 
-        v315 = 0;
-        for (; v315 < ArrayItems2.Length; v315++)
+        v308 = 0;
+        for (; v308 < ArrayItems2.Length; v308++)
         {
-            v314 = ArrayItems2[v315];
-            v318 = (v314 + 2m);
-            if (v318 <= v316)
+            v307 = ArrayItems2[v308];
+            v311 = (v307 + 2m);
+            if (v311 <= v309)
                 continue;
-            v316 = v318;
-            v317 = true;
+            v309 = v311;
+            v310 = true;
         }
 
-        if (!(v317))
+        if (!(v310))
             throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v316;
+        return v309;
     }
 
     long ArrayConcatArrayLongCount2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v322;
-        int v323;
-        int v324;
-        long v325;
-        v325 = 0;
-        v322 = 0;
-        for (; v322 < ArrayItems.Length; v322++)
+        int v315;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v316;
+        int v317;
+        long v318;
+        v318 = 0;
+        v315 = 0;
+        for (; v315 < ArrayItems.Length; v315++)
         {
-            v323 = ArrayItems[v322];
-            if (!((v323 > 50)))
+            v316 = ArrayItems[v315];
+            if (!((v316 > 50)))
                 continue;
-            v325++;
+            v318++;
         }
 
-        v324 = 0;
-        for (; v324 < ArrayItems2.Length; v324++)
+        v317 = 0;
+        for (; v317 < ArrayItems2.Length; v317++)
         {
-            v323 = ArrayItems2[v324];
-            if (!((v323 > 50)))
+            v316 = ArrayItems2[v317];
+            if (!((v316 > 50)))
                 continue;
-            v325++;
+            v318++;
         }
 
-        return v325;
+        return v318;
     }
 
     bool ArrayConcatArrayContainsRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v326;
-        int v327;
-        int v328;
-        v326 = 0;
-        for (; v326 < ArrayItems.Length; v326++)
+        int v319;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v320;
+        int v321;
+        v319 = 0;
+        for (; v319 < ArrayItems.Length; v319++)
         {
-            v327 = ArrayItems[v326];
-            if (v327 == 56)
+            v320 = ArrayItems[v319];
+            if (v320 == 56)
                 return true;
         }
 
-        v328 = 0;
-        for (; v328 < ArrayItems2.Length; v328++)
+        v321 = 0;
+        for (; v321 < ArrayItems2.Length; v321++)
         {
-            v327 = ArrayItems2[v328];
-            if (v327 == 56)
+            v320 = ArrayItems2[v321];
+            if (v320 == 56)
                 return true;
         }
 
@@ -2236,124 +2320,132 @@ public class ConcatTests
 
     double ArrayConcatArrayAverageRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v329;
-        int v330;
-        int v331;
-        double v332;
-        v332 = 0;
-        v329 = 0;
-        for (; v329 < ArrayItems.Length; v329++)
+        int v322;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v323;
+        int v324;
+        double v325;
+        v325 = 0;
+        v322 = 0;
+        for (; v322 < ArrayItems.Length; v322++)
         {
-            v330 = ArrayItems[v329];
-            v332 += v330;
+            v323 = ArrayItems[v322];
+            v325 += v323;
         }
 
-        v331 = 0;
-        for (; v331 < ArrayItems2.Length; v331++)
+        v324 = 0;
+        for (; v324 < ArrayItems2.Length; v324++)
         {
-            v330 = ArrayItems2[v331];
-            v332 += v330;
+            v323 = ArrayItems2[v324];
+            v325 += v323;
         }
 
         if ((ArrayItems2.Length + ArrayItems.Length) == 0)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
-        return (v332 / (ArrayItems2.Length + ArrayItems.Length));
+        return (v325 / (ArrayItems2.Length + ArrayItems.Length));
     }
 
     double ArrayConcatArrayAverage2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v333;
-        int v334;
-        int v335;
-        double v336;
-        v336 = 0;
-        v333 = 0;
-        for (; v333 < ArrayItems.Length; v333++)
+        int v326;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v327;
+        int v328;
+        double v329;
+        v329 = 0;
+        v326 = 0;
+        for (; v326 < ArrayItems.Length; v326++)
         {
-            v334 = ArrayItems[v333];
-            v336 += (v334 + 10);
+            v327 = ArrayItems[v326];
+            v329 += (v327 + 10);
         }
 
-        v335 = 0;
-        for (; v335 < ArrayItems2.Length; v335++)
+        v328 = 0;
+        for (; v328 < ArrayItems2.Length; v328++)
         {
-            v334 = ArrayItems2[v335];
-            v336 += (v334 + 10);
+            v327 = ArrayItems2[v328];
+            v329 += (v327 + 10);
         }
 
         if ((ArrayItems2.Length + ArrayItems.Length) == 0)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
-        return (v336 / (ArrayItems2.Length + ArrayItems.Length));
+        return (v329 / (ArrayItems2.Length + ArrayItems.Length));
     }
 
     bool ArrayConcatArrayContains2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v337;
-        int v338;
-        int v339;
-        System.Collections.Generic.EqualityComparer<int> v340;
-        v340 = EqualityComparer<int>.Default;
-        v337 = 0;
-        for (; v337 < ArrayItems.Length; v337++)
+        int v330;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v331;
+        int v332;
+        System.Collections.Generic.EqualityComparer<int> v333;
+        v333 = EqualityComparer<int>.Default;
+        v330 = 0;
+        for (; v330 < ArrayItems.Length; v330++)
         {
-            v338 = ArrayItems[v337];
-            if (v340.Equals(v338, 56))
+            v331 = ArrayItems[v330];
+            if (v333.Equals(v331, 56))
                 return true;
         }
 
-        v339 = 0;
-        for (; v339 < ArrayItems2.Length; v339++)
+        v332 = 0;
+        for (; v332 < ArrayItems2.Length; v332++)
         {
-            v338 = ArrayItems2[v339];
-            if (v340.Equals(v338, 56))
+            v331 = ArrayItems2[v332];
+            if (v333.Equals(v331, 56))
                 return true;
         }
 
         return false;
     }
 
-    System.Collections.Generic.IEnumerable<int> SelectWhereArrayConcatSelectWhereArrayContainsRewritten_ProceduralLinq1(int[] ArrayItems2, System.Func<int, int> v342, System.Func<int, bool> v344)
+    System.Collections.Generic.IEnumerable<int> SelectWhereArrayConcatSelectWhereArrayContainsRewritten_ProceduralLinq1(int[] ArrayItems2)
     {
-        int v341;
-        int v343;
-        v341 = 0;
-        for (; v341 < ArrayItems2.Length; v341++)
+        int v334;
+        int v335;
+        v334 = 0;
+        for (; v334 < ArrayItems2.Length; v334++)
         {
-            v343 = v342(ArrayItems2[v341]);
-            if (!(v344(v343)))
+            v335 = (ArrayItems2[v334] + 10);
+            if (!((v335 > 80)))
                 continue;
-            yield return v343;
+            yield return v335;
         }
     }
 
     bool SelectWhereArrayConcatSelectWhereArrayContainsRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v345;
-        int v346;
-        IEnumerator<int> v347;
-        v347 = SelectWhereArrayConcatSelectWhereArrayContainsRewritten_ProceduralLinq1(ArrayItems2, x => x + 10, x => x > 80).GetEnumerator();
-        v345 = 0;
-        for (; v345 < ArrayItems.Length; v345++)
+        int v336;
+        int v337;
+        if (SelectWhereArrayConcatSelectWhereArrayContainsRewritten_ProceduralLinq1(ArrayItems2) == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        IEnumerator<int> v338;
+        v338 = SelectWhereArrayConcatSelectWhereArrayContainsRewritten_ProceduralLinq1(ArrayItems2).GetEnumerator();
+        v336 = 0;
+        for (; v336 < ArrayItems.Length; v336++)
         {
-            v346 = (ArrayItems[v345] + 10);
-            if (!((v346 > 80)))
+            v337 = (ArrayItems[v336] + 10);
+            if (!((v337 > 80)))
                 continue;
-            if (v346 == 112)
+            if (v337 == 112)
                 return true;
         }
 
         try
         {
-            while (v347.MoveNext())
+            while (v338.MoveNext())
             {
-                v346 = v347.Current;
-                if (v346 == 112)
+                v337 = v338.Current;
+                if (v337 == 112)
                     return true;
             }
         }
         finally
         {
-            v347.Dispose();
+            v338.Dispose();
         }
 
         return false;
@@ -2361,245 +2453,359 @@ public class ConcatTests
 
     System.Collections.Generic.IEnumerable<int> RangeConcatArrayRewritten_ProceduralLinq1()
     {
-        int v348;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        int v349;
-        int v350;
-        v348 = 0;
-        for (; v348 < 100; v348++)
+        int v339;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v340;
+        int v341;
+        v339 = 0;
+        for (; v339 < 100; v339++)
         {
-            v349 = (v348 + 20);
-            yield return v349;
+            v340 = (v339 + 20);
+            yield return v340;
         }
 
-        v350 = 0;
-        for (; v350 < ArrayItems2.Length; v350++)
+        v341 = 0;
+        for (; v341 < ArrayItems2.Length; v341++)
         {
-            v349 = ArrayItems2[v350];
-            yield return v349;
+            v340 = ArrayItems2[v341];
+            yield return v340;
         }
     }
 
     System.Collections.Generic.IEnumerable<int> RepeatConcatArrayRewritten_ProceduralLinq1()
     {
-        int v351;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        int v352;
-        int v353;
-        v351 = 0;
-        for (; v351 < 100; v351++)
+        int v342;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v343;
+        int v344;
+        v342 = 0;
+        for (; v342 < 100; v342++)
         {
-            v352 = 20;
-            yield return v352;
+            v343 = 20;
+            yield return v343;
         }
 
-        v353 = 0;
-        for (; v353 < ArrayItems2.Length; v353++)
+        v344 = 0;
+        for (; v344 < ArrayItems2.Length; v344++)
         {
-            v352 = ArrayItems2[v353];
-            yield return v352;
+            v343 = ArrayItems2[v344];
+            yield return v343;
         }
     }
 
     System.Collections.Generic.IEnumerable<int> EmptyConcatArrayRewritten_ProceduralLinq1()
     {
-        int v354;
-        int v355;
-        int v356;
-        v354 = 0;
-        for (; v354 < 0; v354++)
+        int v345;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v346;
+        int v347;
+        v345 = 0;
+        for (; v345 < 0; v345++)
         {
-            v355 = default(int);
-            yield return v355;
+            v346 = default(int);
+            yield return v346;
         }
 
-        v356 = 0;
-        for (; v356 < ArrayItems2.Length; v356++)
+        v347 = 0;
+        for (; v347 < ArrayItems2.Length; v347++)
         {
-            v355 = ArrayItems2[v356];
-            yield return v355;
+            v346 = ArrayItems2[v347];
+            yield return v346;
         }
     }
 
-    System.Collections.Generic.IEnumerable<int> RangeEmpty2ArrayRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, bool> v358)
+    System.Collections.Generic.IEnumerable<int> RangeEmpty2ArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v357;
-        int v359;
-        v357 = 0;
-        for (; v357 < ArrayItems.Length; v357++)
+        int v348;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v349;
+        v348 = 0;
+        for (; v348 < ArrayItems.Length; v348++)
         {
-            if (!(v358(ArrayItems[v357])))
+            if (!((false)))
                 continue;
-            v359 = ArrayItems[v357];
-            yield return v359;
+            v349 = ArrayItems[v348];
+            yield return v349;
         }
 
-        v357 = 0;
-        for (; v357 < ArrayItems2.Length; v357++)
+        v348 = 0;
+        for (; v348 < ArrayItems2.Length; v348++)
         {
-            v359 = ArrayItems2[v357];
-            yield return v359;
+            v349 = ArrayItems2[v348];
+            yield return v349;
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayConcatRangeRewritten_ProceduralLinq1()
     {
-        int v360;
-        if (260 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        v360 = 0;
-        for (; v360 < 260; v360++)
-            yield return (v360 + 70);
+        int v350;
+        v350 = 0;
+        for (; v350 < 260; v350++)
+            yield return (v350 + 70);
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayConcatRangeRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v361;
-        int v362;
-        IEnumerator<int> v363;
-        v363 = ArrayConcatRangeRewritten_ProceduralLinq1().GetEnumerator();
-        v361 = 0;
-        for (; v361 < ArrayItems.Length; v361++)
+        int v351;
+        if (ArrayConcatRangeRewritten_ProceduralLinq1() == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v352;
+        IEnumerator<int> v353;
+        v353 = ArrayConcatRangeRewritten_ProceduralLinq1().GetEnumerator();
+        v351 = 0;
+        for (; v351 < ArrayItems.Length; v351++)
         {
-            v362 = ArrayItems[v361];
-            yield return v362;
+            v352 = ArrayItems[v351];
+            yield return v352;
         }
 
         try
         {
-            while (v363.MoveNext())
+            while (v353.MoveNext())
             {
-                v362 = v363.Current;
-                yield return v362;
+                v352 = v353.Current;
+                yield return v352;
             }
         }
         finally
         {
-            v363.Dispose();
+            v353.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayConcatRepeatRewritten_ProceduralLinq1()
     {
-        int v364;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        v364 = 0;
-        for (; v364 < 100; v364++)
+        int v354;
+        v354 = 0;
+        for (; v354 < 100; v354++)
             yield return 70;
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayConcatRepeatRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v365;
-        int v366;
-        IEnumerator<int> v367;
-        v367 = ArrayConcatRepeatRewritten_ProceduralLinq1().GetEnumerator();
-        v365 = 0;
-        for (; v365 < ArrayItems.Length; v365++)
+        int v355;
+        if (ArrayConcatRepeatRewritten_ProceduralLinq1() == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v356;
+        IEnumerator<int> v357;
+        v357 = ArrayConcatRepeatRewritten_ProceduralLinq1().GetEnumerator();
+        v355 = 0;
+        for (; v355 < ArrayItems.Length; v355++)
         {
-            v366 = ArrayItems[v365];
-            yield return v366;
+            v356 = ArrayItems[v355];
+            yield return v356;
         }
 
         try
         {
-            while (v367.MoveNext())
+            while (v357.MoveNext())
             {
-                v366 = v367.Current;
-                yield return v366;
+                v356 = v357.Current;
+                yield return v356;
             }
         }
         finally
         {
-            v367.Dispose();
+            v357.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayConcatEmptyRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v368;
-        int v369;
-        IEnumerator<int> v370;
-        v370 = Enumerable.Empty<int>().GetEnumerator();
-        v368 = 0;
-        for (; v368 < ArrayItems.Length; v368++)
+        int v358;
+        if (Enumerable.Empty<int>() == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v359;
+        IEnumerator<int> v360;
+        v360 = Enumerable.Empty<int>().GetEnumerator();
+        v358 = 0;
+        for (; v358 < ArrayItems.Length; v358++)
         {
-            v369 = ArrayItems[v368];
-            yield return v369;
+            v359 = ArrayItems[v358];
+            yield return v359;
         }
 
         try
         {
-            while (v370.MoveNext())
+            while (v360.MoveNext())
             {
-                v369 = v370.Current;
-                yield return v369;
+                v359 = v360.Current;
+                yield return v359;
             }
         }
         finally
         {
-            v370.Dispose();
+            v360.Dispose();
         }
     }
 
-    System.Collections.Generic.IEnumerable<int> ArrayConcatEmpty2Rewritten_ProceduralLinq1(int[] ArrayItems2, System.Func<int, bool> v372)
+    System.Collections.Generic.IEnumerable<int> ArrayConcatEmpty2Rewritten_ProceduralLinq1(int[] ArrayItems2)
     {
-        int v371;
-        v371 = 0;
-        for (; v371 < ArrayItems2.Length; v371++)
+        int v361;
+        v361 = 0;
+        for (; v361 < ArrayItems2.Length; v361++)
         {
-            if (!(v372(ArrayItems2[v371])))
+            if (!((false)))
                 continue;
-            yield return ArrayItems2[v371];
+            yield return ArrayItems2[v361];
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayConcatEmpty2Rewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v373;
-        int v374;
-        IEnumerator<int> v375;
-        v375 = ArrayConcatEmpty2Rewritten_ProceduralLinq1(ArrayItems2, x => false).GetEnumerator();
-        v373 = 0;
-        for (; v373 < ArrayItems.Length; v373++)
+        int v362;
+        if (ArrayConcatEmpty2Rewritten_ProceduralLinq1(ArrayItems2) == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v363;
+        IEnumerator<int> v364;
+        v364 = ArrayConcatEmpty2Rewritten_ProceduralLinq1(ArrayItems2).GetEnumerator();
+        v362 = 0;
+        for (; v362 < ArrayItems.Length; v362++)
         {
-            v374 = ArrayItems[v373];
-            yield return v374;
+            v363 = ArrayItems[v362];
+            yield return v363;
         }
 
         try
         {
-            while (v375.MoveNext())
+            while (v364.MoveNext())
             {
-                v374 = v375.Current;
-                yield return v374;
+                v363 = v364.Current;
+                yield return v363;
             }
         }
         finally
         {
-            v375.Dispose();
+            v364.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayConcatAllRewritten_ProceduralLinq1()
     {
-        int v376;
-        if (1000 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        v376 = 0;
-        for (; v376 < 1000; v376++)
-            yield return (v376 + 0);
+        int v365;
+        v365 = 0;
+        for (; v365 < 1000; v365++)
+            yield return (v365 + 0);
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayConcatAllRewritten_ProceduralLinq2(int[] ArrayItems)
     {
+        int v366;
+        if (ArrayConcatAllRewritten_ProceduralLinq1() == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v367;
+        IEnumerator<int> v368;
+        v368 = ArrayConcatAllRewritten_ProceduralLinq1().GetEnumerator();
+        v366 = 0;
+        for (; v366 < ArrayItems.Length; v366++)
+        {
+            v367 = ArrayItems[v366];
+            yield return v367;
+        }
+
+        try
+        {
+            while (v368.MoveNext())
+            {
+                v367 = v368.Current;
+                yield return v367;
+            }
+        }
+        finally
+        {
+            v368.Dispose();
+        }
+    }
+
+    System.Collections.Generic.IEnumerable<int> ArrayConcatNullRewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v369;
+        throw new System.InvalidOperationException("Invalid null object");
+        v369 = 0;
+        for (; v369 < ArrayItems.Length; v369++)
+            yield return ArrayItems[v369];
+    }
+
+    System.Collections.Generic.IEnumerable<int> ArrayConcatArrayConcatEnumerableRewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v370;
+        if (ArrayItems == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v371;
+        int v372;
+        if (EnumerableItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        IEnumerator<int> v373;
+        v373 = EnumerableItems2.GetEnumerator();
+        v370 = 0;
+        for (; v370 < ArrayItems.Length; v370++)
+        {
+            v371 = ArrayItems[v370];
+            yield return v371;
+        }
+
+        v372 = 0;
+        for (; v372 < ArrayItems.Length; v372++)
+        {
+            v371 = ArrayItems[v372];
+            yield return v371;
+        }
+
+        try
+        {
+            while (v373.MoveNext())
+            {
+                v371 = v373.Current;
+                yield return v371;
+            }
+        }
+        finally
+        {
+            v373.Dispose();
+        }
+    }
+
+    System.Collections.Generic.IEnumerable<int> ArrayConcatArrayConcatEnumerable2Rewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v374;
+        if (EnumerableItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v375;
+        IEnumerator<int> v376;
+        v376 = EnumerableItems2.GetEnumerator();
+        v374 = 0;
+        for (; v374 < ArrayItems.Length; v374++)
+        {
+            v375 = ArrayItems[v374];
+            yield return v375;
+        }
+
+        try
+        {
+            while (v376.MoveNext())
+            {
+                v375 = v376.Current;
+                yield return v375;
+            }
+        }
+        finally
+        {
+            v376.Dispose();
+        }
+    }
+
+    System.Collections.Generic.IEnumerable<int> ArrayConcatArrayConcatEnumerable2Rewritten_ProceduralLinq2(int[] ArrayItems)
+    {
         int v377;
+        if (ArrayConcatArrayConcatEnumerable2Rewritten_ProceduralLinq1(ArrayItems) == null)
+            throw new System.InvalidOperationException("Invalid null object");
         int v378;
         IEnumerator<int> v379;
-        v379 = ArrayConcatAllRewritten_ProceduralLinq1().GetEnumerator();
+        v379 = ArrayConcatArrayConcatEnumerable2Rewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
         v377 = 0;
         for (; v377 < ArrayItems.Length; v377++)
         {
@@ -2621,248 +2827,156 @@ public class ConcatTests
         }
     }
 
-    System.Collections.Generic.IEnumerable<int> ArrayConcatNullRewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v380;
-        throw new System.InvalidOperationException("Collection was null");
-        v380 = 0;
-        for (; v380 < ArrayItems.Length; v380++)
-            yield return ArrayItems[v380];
-    }
-
-    System.Collections.Generic.IEnumerable<int> ArrayConcatArrayConcatEnumerableRewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v381;
-        int v382;
-        int v383;
-        IEnumerator<int> v384;
-        v384 = EnumerableItems2.GetEnumerator();
-        v381 = 0;
-        for (; v381 < ArrayItems.Length; v381++)
-        {
-            v382 = ArrayItems[v381];
-            yield return v382;
-        }
-
-        v383 = 0;
-        for (; v383 < ArrayItems.Length; v383++)
-        {
-            v382 = ArrayItems[v383];
-            yield return v382;
-        }
-
-        try
-        {
-            while (v384.MoveNext())
-            {
-                v382 = v384.Current;
-                yield return v382;
-            }
-        }
-        finally
-        {
-            v384.Dispose();
-        }
-    }
-
-    System.Collections.Generic.IEnumerable<int> ArrayConcatArrayConcatEnumerable2Rewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v385;
-        int v386;
-        IEnumerator<int> v387;
-        v387 = EnumerableItems2.GetEnumerator();
-        v385 = 0;
-        for (; v385 < ArrayItems.Length; v385++)
-        {
-            v386 = ArrayItems[v385];
-            yield return v386;
-        }
-
-        try
-        {
-            while (v387.MoveNext())
-            {
-                v386 = v387.Current;
-                yield return v386;
-            }
-        }
-        finally
-        {
-            v387.Dispose();
-        }
-    }
-
-    System.Collections.Generic.IEnumerable<int> ArrayConcatArrayConcatEnumerable2Rewritten_ProceduralLinq2(int[] ArrayItems)
-    {
-        int v388;
-        int v389;
-        IEnumerator<int> v390;
-        v390 = ArrayConcatArrayConcatEnumerable2Rewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
-        v388 = 0;
-        for (; v388 < ArrayItems.Length; v388++)
-        {
-            v389 = ArrayItems[v388];
-            yield return v389;
-        }
-
-        try
-        {
-            while (v390.MoveNext())
-            {
-                v389 = v390.Current;
-                yield return v389;
-            }
-        }
-        finally
-        {
-            v390.Dispose();
-        }
-    }
-
     System.Collections.Generic.IEnumerable<int> ArrayDistinctConcatArrayDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v391;
-        HashSet<int> v392;
-        v392 = new HashSet<int>();
-        v391 = 0;
-        for (; v391 < ArrayItems.Length; v391++)
+        int v380;
+        HashSet<int> v381;
+        v381 = new HashSet<int>();
+        v380 = 0;
+        for (; v380 < ArrayItems.Length; v380++)
         {
-            if (!(v392.Add(ArrayItems[v391])))
+            if (!(v381.Add(ArrayItems[v380])))
                 continue;
-            yield return ArrayItems[v391];
+            yield return ArrayItems[v380];
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctConcatArrayDistinctRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v393;
-        HashSet<int> v394;
-        int v395;
-        IEnumerator<int> v396;
-        v396 = ArrayDistinctConcatArrayDistinctRewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
-        v394 = new HashSet<int>();
-        v393 = 0;
-        for (; v393 < ArrayItems.Length; v393++)
+        int v382;
+        HashSet<int> v383;
+        if (ArrayDistinctConcatArrayDistinctRewritten_ProceduralLinq1(ArrayItems) == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v384;
+        IEnumerator<int> v385;
+        v385 = ArrayDistinctConcatArrayDistinctRewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
+        v383 = new HashSet<int>();
+        v382 = 0;
+        for (; v382 < ArrayItems.Length; v382++)
         {
-            if (!(v394.Add(ArrayItems[v393])))
+            if (!(v383.Add(ArrayItems[v382])))
                 continue;
-            v395 = ArrayItems[v393];
-            yield return v395;
+            v384 = ArrayItems[v382];
+            yield return v384;
         }
 
         try
         {
-            while (v396.MoveNext())
+            while (v385.MoveNext())
             {
-                v395 = v396.Current;
-                yield return v395;
+                v384 = v385.Current;
+                yield return v384;
             }
         }
         finally
         {
-            v396.Dispose();
+            v385.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctConcatArrayDistinctDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v397;
-        HashSet<int> v398;
-        v398 = new HashSet<int>();
-        v397 = 0;
-        for (; v397 < ArrayItems.Length; v397++)
+        int v386;
+        HashSet<int> v387;
+        v387 = new HashSet<int>();
+        v386 = 0;
+        for (; v386 < ArrayItems.Length; v386++)
         {
-            if (!(v398.Add(ArrayItems[v397])))
+            if (!(v387.Add(ArrayItems[v386])))
                 continue;
-            yield return ArrayItems[v397];
+            yield return ArrayItems[v386];
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctConcatArrayDistinctDistinctRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v399;
-        HashSet<int> v400;
-        int v401;
-        IEnumerator<int> v402;
-        HashSet<int> v403;
-        v402 = ArrayDistinctConcatArrayDistinctDistinctRewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
-        v400 = new HashSet<int>();
-        v403 = new HashSet<int>();
-        v399 = 0;
-        for (; v399 < ArrayItems.Length; v399++)
+        int v388;
+        HashSet<int> v389;
+        if (ArrayDistinctConcatArrayDistinctDistinctRewritten_ProceduralLinq1(ArrayItems) == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v390;
+        IEnumerator<int> v391;
+        HashSet<int> v392;
+        v391 = ArrayDistinctConcatArrayDistinctDistinctRewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
+        v389 = new HashSet<int>();
+        v392 = new HashSet<int>();
+        v388 = 0;
+        for (; v388 < ArrayItems.Length; v388++)
         {
-            if (!(v400.Add(ArrayItems[v399])))
+            if (!(v389.Add(ArrayItems[v388])))
                 continue;
-            v401 = ArrayItems[v399];
-            if (!(v403.Add(v401)))
+            v390 = ArrayItems[v388];
+            if (!(v392.Add(v390)))
                 continue;
-            yield return v401;
+            yield return v390;
         }
 
         try
         {
-            while (v402.MoveNext())
+            while (v391.MoveNext())
             {
-                v401 = v402.Current;
-                if (!(v403.Add(v401)))
+                v390 = v391.Current;
+                if (!(v392.Add(v390)))
                     continue;
-                yield return v401;
+                yield return v390;
             }
         }
         finally
         {
-            v402.Dispose();
+            v391.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctConcatArrayDistinctDistinct2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v404;
-        HashSet<int> v405;
-        v405 = new HashSet<int>(EqualityComparer<int>.Default);
-        v404 = 0;
-        for (; v404 < ArrayItems.Length; v404++)
+        int v393;
+        HashSet<int> v394;
+        v394 = new HashSet<int>(EqualityComparer<int>.Default);
+        v393 = 0;
+        for (; v393 < ArrayItems.Length; v393++)
         {
-            if (!(v405.Add(ArrayItems[v404])))
+            if (!(v394.Add(ArrayItems[v393])))
                 continue;
-            yield return ArrayItems[v404];
+            yield return ArrayItems[v393];
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctConcatArrayDistinctDistinct2Rewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v406;
-        HashSet<int> v407;
-        int v408;
-        IEnumerator<int> v409;
-        HashSet<int> v410;
-        v409 = ArrayDistinctConcatArrayDistinctDistinct2Rewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
-        v407 = new HashSet<int>(EqualityComparer<int>.Default);
-        v410 = new HashSet<int>(EqualityComparer<int>.Default);
-        v406 = 0;
-        for (; v406 < ArrayItems.Length; v406++)
+        int v395;
+        HashSet<int> v396;
+        if (ArrayDistinctConcatArrayDistinctDistinct2Rewritten_ProceduralLinq1(ArrayItems) == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        int v397;
+        IEnumerator<int> v398;
+        HashSet<int> v399;
+        v398 = ArrayDistinctConcatArrayDistinctDistinct2Rewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
+        v396 = new HashSet<int>(EqualityComparer<int>.Default);
+        v399 = new HashSet<int>(EqualityComparer<int>.Default);
+        v395 = 0;
+        for (; v395 < ArrayItems.Length; v395++)
         {
-            if (!(v407.Add(ArrayItems[v406])))
+            if (!(v396.Add(ArrayItems[v395])))
                 continue;
-            v408 = ArrayItems[v406];
-            if (!(v410.Add(v408)))
+            v397 = ArrayItems[v395];
+            if (!(v399.Add(v397)))
                 continue;
-            yield return v408;
+            yield return v397;
         }
 
         try
         {
-            while (v409.MoveNext())
+            while (v398.MoveNext())
             {
-                v408 = v409.Current;
-                if (!(v410.Add(v408)))
+                v397 = v398.Current;
+                if (!(v399.Add(v397)))
                     continue;
-                yield return v408;
+                yield return v397;
             }
         }
         finally
         {
-            v409.Dispose();
+            v398.Dispose();
         }
     }
 }}

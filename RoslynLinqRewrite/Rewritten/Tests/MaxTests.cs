@@ -254,17 +254,178 @@ public class MaxTests
 
     int Max1Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
+        int v1260;
+        int v1261;
+        bool v1262;
+        v1261 = -2147483648;
+        v1262 = false;
+        v1260 = 0;
+        for (; v1260 < ArrayItems.Length; v1260++)
+        {
+            if (ArrayItems[v1260] <= v1261)
+                continue;
+            v1261 = ArrayItems[v1260];
+            v1262 = true;
+        }
+
+        if (!(v1262))
+            throw new System.InvalidOperationException("Sequence does not contains any elements");
+        return v1261;
+    }
+
+    int Max2Rewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1263;
+        int v1264;
+        bool v1265;
+        int v1266;
+        v1264 = -2147483648;
+        v1265 = false;
+        v1263 = 0;
+        for (; v1263 < ArrayItems.Length; v1263++)
+        {
+            v1266 = (ArrayItems[v1263] + 2);
+            if (v1266 <= v1264)
+                continue;
+            v1264 = v1266;
+            v1265 = true;
+        }
+
+        if (!(v1265))
+            throw new System.InvalidOperationException("Sequence does not contains any elements");
+        return v1264;
+    }
+
+    float Max3Rewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1267;
+        float v1268;
+        bool v1269;
+        float v1270;
+        v1268 = -3.4028235E+38F;
+        v1269 = false;
+        v1267 = 0;
+        for (; v1267 < ArrayItems.Length; v1267++)
+        {
+            v1270 = (ArrayItems[v1267] + 2f);
+            if (v1270 <= v1268)
+                continue;
+            v1268 = v1270;
+            v1269 = true;
+        }
+
+        if (!(v1269))
+            throw new System.InvalidOperationException("Sequence does not contains any elements");
+        return v1268;
+    }
+
+    double Max4Rewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1271;
+        double v1272;
+        bool v1273;
+        double v1274;
+        v1272 = -1.7976931348623157E+308;
+        v1273 = false;
+        v1271 = 0;
+        for (; v1271 < ArrayItems.Length; v1271++)
+        {
+            v1274 = (ArrayItems[v1271] + 2d);
+            if (v1274 <= v1272)
+                continue;
+            v1272 = v1274;
+            v1273 = true;
+        }
+
+        if (!(v1273))
+            throw new System.InvalidOperationException("Sequence does not contains any elements");
+        return v1272;
+    }
+
+    decimal Max5Rewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1275;
+        decimal v1276;
+        bool v1277;
+        decimal v1278;
+        v1276 = -79228162514264337593543950335M;
+        v1277 = false;
+        v1275 = 0;
+        for (; v1275 < ArrayItems.Length; v1275++)
+        {
+            v1278 = (ArrayItems[v1275] + 2m);
+            if (v1278 <= v1276)
+                continue;
+            v1276 = v1278;
+            v1277 = true;
+        }
+
+        if (!(v1277))
+            throw new System.InvalidOperationException("Sequence does not contains any elements");
+        return v1276;
+    }
+
+    int? Max6Rewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1279;
+        int v1280;
+        bool v1281;
+        int? v1282;
+        v1280 = -2147483648;
+        v1281 = false;
+        v1279 = 0;
+        for (; v1279 < ArrayItems.Length; v1279++)
+        {
+            v1282 = (ArrayItems[v1279] > 10 ? (int? )null : ArrayItems[v1279] + 2);
+            if ((v1282 == null) || v1282 <= v1280)
+                continue;
+            v1280 = (int)v1282;
+            v1281 = true;
+        }
+
+        if (!(v1281))
+            throw new System.InvalidOperationException("Sequence does not contains any elements");
+        return v1280;
+    }
+
+    float? Max7Rewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1283;
+        float v1284;
+        bool v1285;
+        float? v1286;
+        v1284 = -3.4028235E+38F;
+        v1285 = false;
+        v1283 = 0;
+        for (; v1283 < ArrayItems.Length; v1283++)
+        {
+            v1286 = (ArrayItems[v1283] > 10 ? (float? )null : ArrayItems[v1283] + 2);
+            if ((v1286 == null) || v1286 <= v1284)
+                continue;
+            v1284 = (float)v1286;
+            v1285 = true;
+        }
+
+        if (!(v1285))
+            throw new System.InvalidOperationException("Sequence does not contains any elements");
+        return v1284;
+    }
+
+    double? Max8Rewritten_ProceduralLinq1(int[] ArrayItems)
+    {
         int v1287;
-        int v1288;
+        double v1288;
         bool v1289;
-        v1288 = -2147483648;
+        double? v1290;
+        v1288 = -1.7976931348623157E+308;
         v1289 = false;
         v1287 = 0;
         for (; v1287 < ArrayItems.Length; v1287++)
         {
-            if (ArrayItems[v1287] <= v1288)
+            v1290 = (ArrayItems[v1287] > 10 ? (double? )null : ArrayItems[v1287] + 2);
+            if ((v1290 == null) || v1290 <= v1288)
                 continue;
-            v1288 = ArrayItems[v1287];
+            v1288 = (double)v1290;
             v1289 = true;
         }
 
@@ -273,228 +434,226 @@ public class MaxTests
         return v1288;
     }
 
-    int Max2Rewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v1290;
-        int v1291;
-        bool v1292;
-        int v1293;
-        v1291 = -2147483648;
-        v1292 = false;
-        v1290 = 0;
-        for (; v1290 < ArrayItems.Length; v1290++)
-        {
-            v1293 = (ArrayItems[v1290] + 2);
-            if (v1293 <= v1291)
-                continue;
-            v1291 = v1293;
-            v1292 = true;
-        }
-
-        if (!(v1292))
-            throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1291;
-    }
-
-    float Max3Rewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v1294;
-        float v1295;
-        bool v1296;
-        float v1297;
-        v1295 = -3.4028235E+38F;
-        v1296 = false;
-        v1294 = 0;
-        for (; v1294 < ArrayItems.Length; v1294++)
-        {
-            v1297 = (ArrayItems[v1294] + 2f);
-            if (v1297 <= v1295)
-                continue;
-            v1295 = v1297;
-            v1296 = true;
-        }
-
-        if (!(v1296))
-            throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1295;
-    }
-
-    double Max4Rewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v1298;
-        double v1299;
-        bool v1300;
-        double v1301;
-        v1299 = -1.7976931348623157E+308;
-        v1300 = false;
-        v1298 = 0;
-        for (; v1298 < ArrayItems.Length; v1298++)
-        {
-            v1301 = (ArrayItems[v1298] + 2d);
-            if (v1301 <= v1299)
-                continue;
-            v1299 = v1301;
-            v1300 = true;
-        }
-
-        if (!(v1300))
-            throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1299;
-    }
-
-    decimal Max5Rewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v1302;
-        decimal v1303;
-        bool v1304;
-        decimal v1305;
-        v1303 = -79228162514264337593543950335M;
-        v1304 = false;
-        v1302 = 0;
-        for (; v1302 < ArrayItems.Length; v1302++)
-        {
-            v1305 = (ArrayItems[v1302] + 2m);
-            if (v1305 <= v1303)
-                continue;
-            v1303 = v1305;
-            v1304 = true;
-        }
-
-        if (!(v1304))
-            throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1303;
-    }
-
-    int? Max6Rewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v1306;
-        int v1307;
-        bool v1308;
-        int? v1309;
-        v1307 = -2147483648;
-        v1308 = false;
-        v1306 = 0;
-        for (; v1306 < ArrayItems.Length; v1306++)
-        {
-            v1309 = (ArrayItems[v1306] > 10 ? (int? )null : ArrayItems[v1306] + 2);
-            if ((v1309 == null) || v1309 <= v1307)
-                continue;
-            v1307 = (int)v1309;
-            v1308 = true;
-        }
-
-        if (!(v1308))
-            throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1307;
-    }
-
-    float? Max7Rewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v1310;
-        float v1311;
-        bool v1312;
-        float? v1313;
-        v1311 = -3.4028235E+38F;
-        v1312 = false;
-        v1310 = 0;
-        for (; v1310 < ArrayItems.Length; v1310++)
-        {
-            v1313 = (ArrayItems[v1310] > 10 ? (float? )null : ArrayItems[v1310] + 2);
-            if ((v1313 == null) || v1313 <= v1311)
-                continue;
-            v1311 = (float)v1313;
-            v1312 = true;
-        }
-
-        if (!(v1312))
-            throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1311;
-    }
-
-    double? Max8Rewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v1314;
-        double v1315;
-        bool v1316;
-        double? v1317;
-        v1315 = -1.7976931348623157E+308;
-        v1316 = false;
-        v1314 = 0;
-        for (; v1314 < ArrayItems.Length; v1314++)
-        {
-            v1317 = (ArrayItems[v1314] > 10 ? (double? )null : ArrayItems[v1314] + 2);
-            if ((v1317 == null) || v1317 <= v1315)
-                continue;
-            v1315 = (double)v1317;
-            v1316 = true;
-        }
-
-        if (!(v1316))
-            throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1315;
-    }
-
     decimal? Max9Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1318;
-        decimal v1319;
-        bool v1320;
-        decimal? v1321;
-        v1319 = -79228162514264337593543950335M;
-        v1320 = false;
-        v1318 = 0;
-        for (; v1318 < ArrayItems.Length; v1318++)
+        int v1291;
+        decimal v1292;
+        bool v1293;
+        decimal? v1294;
+        v1292 = -79228162514264337593543950335M;
+        v1293 = false;
+        v1291 = 0;
+        for (; v1291 < ArrayItems.Length; v1291++)
         {
-            v1321 = (ArrayItems[v1318] > 10 ? (decimal? )null : ArrayItems[v1318] + 2);
-            if ((v1321 == null) || v1321 <= v1319)
+            v1294 = (ArrayItems[v1291] > 10 ? (decimal? )null : ArrayItems[v1291] + 2);
+            if ((v1294 == null) || v1294 <= v1292)
                 continue;
-            v1319 = (decimal)v1321;
-            v1320 = true;
+            v1292 = (decimal)v1294;
+            v1293 = true;
         }
 
-        if (!(v1320))
+        if (!(v1293))
             throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1319;
+        return v1292;
     }
 
     long Max10Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1322;
-        long v1323;
-        bool v1324;
-        long v1325;
-        v1323 = -9223372036854775808L;
-        v1324 = false;
-        v1322 = 0;
-        for (; v1322 < ArrayItems.Length; v1322++)
+        int v1295;
+        long v1296;
+        bool v1297;
+        long v1298;
+        v1296 = -9223372036854775808L;
+        v1297 = false;
+        v1295 = 0;
+        for (; v1295 < ArrayItems.Length; v1295++)
         {
-            v1325 = (ArrayItems[v1322] + 2L);
-            if (v1325 <= v1323)
+            v1298 = (ArrayItems[v1295] + 2L);
+            if (v1298 <= v1296)
                 continue;
-            v1323 = v1325;
-            v1324 = true;
+            v1296 = v1298;
+            v1297 = true;
         }
 
-        if (!(v1324))
+        if (!(v1297))
             throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1323;
+        return v1296;
     }
 
     long? Max11Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
+        int v1299;
+        long v1300;
+        bool v1301;
+        long? v1302;
+        v1300 = -9223372036854775808L;
+        v1301 = false;
+        v1299 = 0;
+        for (; v1299 < ArrayItems.Length; v1299++)
+        {
+            v1302 = (ArrayItems[v1299] > 10 ? (long? )null : ArrayItems[v1299] + 2);
+            if ((v1302 == null) || v1302 <= v1300)
+                continue;
+            v1300 = (long)v1302;
+            v1301 = true;
+        }
+
+        if (!(v1301))
+            throw new System.InvalidOperationException("Sequence does not contains any elements");
+        return v1300;
+    }
+
+    int Max12Rewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1303;
+        int v1304;
+        bool v1305;
+        int v1306;
+        v1304 = -2147483648;
+        v1305 = false;
+        v1303 = 0;
+        for (; v1303 < ArrayItems.Length; v1303++)
+        {
+            v1306 = Selector(ArrayItems[v1303]);
+            if (v1306 <= v1304)
+                continue;
+            v1304 = v1306;
+            v1305 = true;
+        }
+
+        if (!(v1305))
+            throw new System.InvalidOperationException("Sequence does not contains any elements");
+        return v1304;
+    }
+
+    int MaxParamRewritten_ProceduralLinq1(int a, int[] ArrayItems)
+    {
+        int v1307;
+        int v1308;
+        bool v1309;
+        int v1310;
+        v1308 = -2147483648;
+        v1309 = false;
+        v1307 = 0;
+        for (; v1307 < ArrayItems.Length; v1307++)
+        {
+            v1310 = (ArrayItems[v1307] + a);
+            if (v1310 <= v1308)
+                continue;
+            v1308 = v1310;
+            v1309 = true;
+        }
+
+        if (!(v1309))
+            throw new System.InvalidOperationException("Sequence does not contains any elements");
+        return v1308;
+    }
+
+    int MaxChangingParamRewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
+    {
+        int v1311;
+        int v1312;
+        bool v1313;
+        int v1314;
+        v1312 = -2147483648;
+        v1313 = false;
+        v1311 = 0;
+        for (; v1311 < ArrayItems.Length; v1311++)
+        {
+            v1314 = (ArrayItems[v1311] + a++);
+            if (v1314 <= v1312)
+                continue;
+            v1312 = v1314;
+            v1313 = true;
+        }
+
+        if (!(v1313))
+            throw new System.InvalidOperationException("Sequence does not contains any elements");
+        return v1312;
+    }
+
+    int MaxChangingParam2Rewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
+    {
+        int v1315;
+        int v1316;
+        bool v1317;
+        int v1318;
+        v1316 = -2147483648;
+        v1317 = false;
+        v1315 = 0;
+        for (; v1315 < ArrayItems.Length; v1315++)
+        {
+            v1318 = (ArrayItems[v1315] + a--);
+            if (v1318 <= v1316)
+                continue;
+            v1316 = v1318;
+            v1317 = true;
+        }
+
+        if (!(v1317))
+            throw new System.InvalidOperationException("Sequence does not contains any elements");
+        return v1316;
+    }
+
+    int SelectMaxRewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1319;
+        int v1320;
+        bool v1321;
+        int v1322;
+        v1320 = -2147483648;
+        v1321 = false;
+        v1319 = 0;
+        for (; v1319 < ArrayItems.Length; v1319++)
+        {
+            v1322 = (ArrayItems[v1319] + 3);
+            if (v1322 <= v1320)
+                continue;
+            v1320 = v1322;
+            v1321 = true;
+        }
+
+        if (!(v1321))
+            throw new System.InvalidOperationException("Sequence does not contains any elements");
+        return v1320;
+    }
+
+    int EmptyMaxRewritten_ProceduralLinq1()
+    {
+        int v1323;
+        int v1324;
+        bool v1325;
+        v1324 = -2147483648;
+        v1325 = false;
+        v1323 = 0;
+        for (; v1323 < 0; v1323++)
+        {
+            if (default(int) <= v1324)
+                continue;
+            v1324 = default(int);
+            v1325 = true;
+        }
+
+        if (!(v1325))
+            throw new System.InvalidOperationException("Sequence does not contains any elements");
+        return v1324;
+    }
+
+    int EmptyMax2Rewritten_ProceduralLinq1(int[] ArrayItems)
+    {
         int v1326;
-        long v1327;
+        int v1327;
         bool v1328;
-        long? v1329;
-        v1327 = -9223372036854775808L;
+        v1327 = -2147483648;
         v1328 = false;
         v1326 = 0;
         for (; v1326 < ArrayItems.Length; v1326++)
         {
-            v1329 = (ArrayItems[v1326] > 10 ? (long? )null : ArrayItems[v1326] + 2);
-            if ((v1329 == null) || v1329 <= v1327)
+            if (!((false)))
                 continue;
-            v1327 = (long)v1329;
+            if (ArrayItems[v1326] <= v1327)
+                continue;
+            v1327 = ArrayItems[v1326];
             v1328 = true;
         }
 
@@ -503,192 +662,33 @@ public class MaxTests
         return v1327;
     }
 
-    int Max12Rewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v1330;
-        int v1331;
-        bool v1332;
-        int v1333;
-        v1331 = -2147483648;
-        v1332 = false;
-        v1330 = 0;
-        for (; v1330 < ArrayItems.Length; v1330++)
-        {
-            v1333 = Selector(ArrayItems[v1330]);
-            if (v1333 <= v1331)
-                continue;
-            v1331 = v1333;
-            v1332 = true;
-        }
-
-        if (!(v1332))
-            throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1331;
-    }
-
-    int MaxParamRewritten_ProceduralLinq1(int a, int[] ArrayItems)
-    {
-        int v1334;
-        int v1335;
-        bool v1336;
-        int v1337;
-        v1335 = -2147483648;
-        v1336 = false;
-        v1334 = 0;
-        for (; v1334 < ArrayItems.Length; v1334++)
-        {
-            v1337 = (ArrayItems[v1334] + a);
-            if (v1337 <= v1335)
-                continue;
-            v1335 = v1337;
-            v1336 = true;
-        }
-
-        if (!(v1336))
-            throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1335;
-    }
-
-    int MaxChangingParamRewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
-    {
-        int v1338;
-        int v1339;
-        bool v1340;
-        int v1341;
-        v1339 = -2147483648;
-        v1340 = false;
-        v1338 = 0;
-        for (; v1338 < ArrayItems.Length; v1338++)
-        {
-            v1341 = (ArrayItems[v1338] + a++);
-            if (v1341 <= v1339)
-                continue;
-            v1339 = v1341;
-            v1340 = true;
-        }
-
-        if (!(v1340))
-            throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1339;
-    }
-
-    int MaxChangingParam2Rewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
-    {
-        int v1342;
-        int v1343;
-        bool v1344;
-        int v1345;
-        v1343 = -2147483648;
-        v1344 = false;
-        v1342 = 0;
-        for (; v1342 < ArrayItems.Length; v1342++)
-        {
-            v1345 = (ArrayItems[v1342] + a--);
-            if (v1345 <= v1343)
-                continue;
-            v1343 = v1345;
-            v1344 = true;
-        }
-
-        if (!(v1344))
-            throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1343;
-    }
-
-    int SelectMaxRewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v1346;
-        int v1347;
-        bool v1348;
-        int v1349;
-        v1347 = -2147483648;
-        v1348 = false;
-        v1346 = 0;
-        for (; v1346 < ArrayItems.Length; v1346++)
-        {
-            v1349 = (ArrayItems[v1346] + 3);
-            if (v1349 <= v1347)
-                continue;
-            v1347 = v1349;
-            v1348 = true;
-        }
-
-        if (!(v1348))
-            throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1347;
-    }
-
-    int EmptyMaxRewritten_ProceduralLinq1()
-    {
-        int v1350;
-        int v1351;
-        bool v1352;
-        v1351 = -2147483648;
-        v1352 = false;
-        v1350 = 0;
-        for (; v1350 < 0; v1350++)
-        {
-            if (default(int) <= v1351)
-                continue;
-            v1351 = default(int);
-            v1352 = true;
-        }
-
-        if (!(v1352))
-            throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1351;
-    }
-
-    int EmptyMax2Rewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v1353;
-        int v1354;
-        bool v1355;
-        v1354 = -2147483648;
-        v1355 = false;
-        v1353 = 0;
-        for (; v1353 < ArrayItems.Length; v1353++)
-        {
-            if (!((false)))
-                continue;
-            if (ArrayItems[v1353] <= v1354)
-                continue;
-            v1354 = ArrayItems[v1353];
-            v1355 = true;
-        }
-
-        if (!(v1355))
-            throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1354;
-    }
-
     int EnumerableMaxRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1356;
-        int v1357;
-        bool v1358;
-        int v1359;
-        v1356 = EnumerableItems.GetEnumerator();
-        v1357 = -2147483648;
-        v1358 = false;
+        IEnumerator<int> v1329;
+        int v1330;
+        bool v1331;
+        int v1332;
+        v1329 = EnumerableItems.GetEnumerator();
+        v1330 = -2147483648;
+        v1331 = false;
         try
         {
-            while (v1356.MoveNext())
+            while (v1329.MoveNext())
             {
-                v1359 = v1356.Current;
-                if (v1359 <= v1357)
+                v1332 = v1329.Current;
+                if (v1332 <= v1330)
                     continue;
-                v1357 = v1359;
-                v1358 = true;
+                v1330 = v1332;
+                v1331 = true;
             }
         }
         finally
         {
-            v1356.Dispose();
+            v1329.Dispose();
         }
 
-        if (!(v1358))
+        if (!(v1331))
             throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1357;
+        return v1330;
     }
 }}

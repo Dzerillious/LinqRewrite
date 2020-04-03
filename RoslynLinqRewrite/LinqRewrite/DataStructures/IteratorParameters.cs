@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using LinqRewrite.Extensions;
+using LinqRewrite.Services;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace LinqRewrite.DataStructures
@@ -81,10 +82,10 @@ namespace LinqRewrite.DataStructures
                     : new[] {x}).Concat(ForEnd).ToList();
             
             if (ForMin == null)
-                return p.Rewrite.GetForEachStatement(p, EnumeratorVariable, Collection, content);
+                return RewriteService.GetForEachStatement(p, EnumeratorVariable, Collection, content);
             else if (p.IsReversed)
-                return p.Rewrite.GetReverseForStatement(p, ForIndexer, ForReverseMin, content);
-            else return p.Rewrite.GetForStatement(p, ForIndexer, ForMax, content);
+                return RewriteService.GetReverseForStatement(p, ForIndexer, ForReverseMin, content);
+            else return RewriteService.GetForStatement(p, ForIndexer, ForMax, content);
         }
     }
 }

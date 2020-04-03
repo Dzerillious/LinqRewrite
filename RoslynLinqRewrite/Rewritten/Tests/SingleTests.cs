@@ -204,271 +204,265 @@ public class SingleTests
 
     int EnumerableSingleRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1708;
-        int? v1709;
-        v1708 = EnumerableItems.GetEnumerator();
-        v1709 = null;
+        IEnumerator<int> v1642;
+        int? v1643;
+        v1642 = EnumerableItems.GetEnumerator();
+        v1643 = null;
         try
         {
-            while (v1708.MoveNext())
-                if (v1709 == null)
-                    v1709 = v1708.Current;
+            while (v1642.MoveNext())
+                if (v1643 == null)
+                    v1643 = v1642.Current;
                 else
                     throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
         finally
         {
-            v1708.Dispose();
+            v1642.Dispose();
         }
 
-        if (v1709 == null)
+        if (v1643 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1709;
+            return (int)v1643;
     }
 
     int SingleConditionRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1710;
-        int? v1711;
-        v1711 = null;
-        v1710 = 0;
-        for (; v1710 < ArrayItems.Length; v1710++)
-            if ((ArrayItems[v1710] > 30))
-                if (v1711 == null)
-                    v1711 = ArrayItems[v1710];
+        int v1644;
+        int? v1645;
+        v1645 = null;
+        v1644 = 0;
+        for (; v1644 < ArrayItems.Length; v1644++)
+            if ((ArrayItems[v1644] > 30))
+                if (v1645 == null)
+                    v1645 = ArrayItems[v1644];
                 else
                     throw new System.InvalidOperationException("The sequence contains more than single matching element.");
-        if (v1711 == null)
+        if (v1645 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1711;
+            return (int)v1645;
     }
 
     int SingleFalseConditionRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1712;
-        int? v1713;
-        v1713 = null;
-        v1712 = 0;
-        for (; v1712 < ArrayItems.Length; v1712++)
-            if ((ArrayItems[v1712] > 105))
-                if (v1713 == null)
-                    v1713 = ArrayItems[v1712];
+        int v1646;
+        int? v1647;
+        v1647 = null;
+        v1646 = 0;
+        for (; v1646 < ArrayItems.Length; v1646++)
+            if ((ArrayItems[v1646] > 105))
+                if (v1647 == null)
+                    v1647 = ArrayItems[v1646];
                 else
                     throw new System.InvalidOperationException("The sequence contains more than single matching element.");
-        if (v1713 == null)
+        if (v1647 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1713;
+            return (int)v1647;
     }
 
     int SingleMethodRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1714;
-        int? v1715;
-        v1715 = null;
-        v1714 = 0;
-        for (; v1714 < ArrayItems.Length; v1714++)
-            if (Predicate(ArrayItems[v1714]))
-                if (v1715 == null)
-                    v1715 = ArrayItems[v1714];
+        int v1648;
+        int? v1649;
+        v1649 = null;
+        v1648 = 0;
+        for (; v1648 < ArrayItems.Length; v1648++)
+            if (Predicate(ArrayItems[v1648]))
+                if (v1649 == null)
+                    v1649 = ArrayItems[v1648];
                 else
                     throw new System.InvalidOperationException("The sequence contains more than single matching element.");
-        if (v1715 == null)
+        if (v1649 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1715;
+            return (int)v1649;
     }
 
     int SingleWhereMethodRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1716;
-        int? v1717;
-        v1717 = null;
-        v1716 = 0;
-        for (; v1716 < ArrayItems.Length; v1716++)
+        int v1650;
+        int? v1651;
+        v1651 = null;
+        v1650 = 0;
+        for (; v1650 < ArrayItems.Length; v1650++)
         {
-            if (!((ArrayItems[v1716] > 10)))
+            if (!((ArrayItems[v1650] > 10)))
                 continue;
-            if (v1717 == null)
-                v1717 = ArrayItems[v1716];
+            if (v1651 == null)
+                v1651 = ArrayItems[v1650];
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        if (v1717 == null)
+        if (v1651 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1717;
+            return (int)v1651;
     }
 
     int SelectSingleMethodRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1718;
-        int? v1719;
-        v1719 = null;
-        v1718 = 0;
-        for (; v1718 < ArrayItems.Length; v1718++)
-            if (v1719 == null)
-                v1719 = (ArrayItems[v1718] + 10);
+        int v1652;
+        int? v1653;
+        v1653 = null;
+        v1652 = 0;
+        for (; v1652 < ArrayItems.Length; v1652++)
+            if (v1653 == null)
+                v1653 = (ArrayItems[v1652] + 10);
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
-        if (v1719 == null)
+        if (v1653 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1719;
+            return (int)v1653;
     }
 
     int RangeSingleRewritten_ProceduralLinq1()
     {
-        int v1720;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        int? v1721;
-        v1721 = null;
-        v1720 = 0;
-        for (; v1720 < 100; v1720++)
-            if (v1721 == null)
-                v1721 = (v1720 + 0);
+        int v1654;
+        int? v1655;
+        v1655 = null;
+        v1654 = 0;
+        for (; v1654 < 100; v1654++)
+            if (v1655 == null)
+                v1655 = (v1654 + 0);
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
-        if (v1721 == null)
+        if (v1655 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1721;
+            return (int)v1655;
     }
 
     int Range1SingleRewritten_ProceduralLinq1()
     {
-        int v1722;
-        if (1 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        int? v1723;
-        v1723 = null;
-        v1722 = 0;
-        for (; v1722 < 1; v1722++)
-            if (v1723 == null)
-                v1723 = (v1722 + 0);
+        int v1656;
+        int? v1657;
+        v1657 = null;
+        v1656 = 0;
+        for (; v1656 < 1; v1656++)
+            if (v1657 == null)
+                v1657 = (v1656 + 0);
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
-        if (v1723 == null)
+        if (v1657 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1723;
+            return (int)v1657;
     }
 
     int RangeRepeatRewritten_ProceduralLinq1()
     {
-        int v1724;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        int? v1725;
-        v1725 = null;
-        v1724 = 0;
-        for (; v1724 < 100; v1724++)
-            if (v1725 == null)
-                v1725 = 0;
+        int v1658;
+        int? v1659;
+        v1659 = null;
+        v1658 = 0;
+        for (; v1658 < 100; v1658++)
+            if (v1659 == null)
+                v1659 = 0;
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
-        if (v1725 == null)
+        if (v1659 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1725;
+            return (int)v1659;
     }
 
     int EmptySingleRewritten_ProceduralLinq1()
     {
-        int v1726;
-        int? v1727;
-        v1727 = null;
-        v1726 = 0;
-        for (; v1726 < 0; v1726++)
-            if (v1727 == null)
-                v1727 = default(int);
+        int v1660;
+        int? v1661;
+        v1661 = null;
+        v1660 = 0;
+        for (; v1660 < 0; v1660++)
+            if (v1661 == null)
+                v1661 = default(int);
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
-        if (v1727 == null)
+        if (v1661 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1727;
+            return (int)v1661;
     }
 
     int ArrayDistinctSingleRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1728;
-        HashSet<int> v1729;
-        int? v1730;
-        v1729 = new HashSet<int>();
-        v1730 = null;
-        v1728 = 0;
-        for (; v1728 < ArrayItems.Length; v1728++)
+        int v1662;
+        HashSet<int> v1663;
+        int? v1664;
+        v1663 = new HashSet<int>();
+        v1664 = null;
+        v1662 = 0;
+        for (; v1662 < ArrayItems.Length; v1662++)
         {
-            if (!(v1729.Add(ArrayItems[v1728])))
+            if (!(v1663.Add(ArrayItems[v1662])))
                 continue;
-            if (v1730 == null)
-                v1730 = ArrayItems[v1728];
+            if (v1664 == null)
+                v1664 = ArrayItems[v1662];
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        if (v1730 == null)
+        if (v1664 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1730;
+            return (int)v1664;
     }
 
     int ArraySingleParamRewritten_ProceduralLinq1(int a, int[] ArrayItems)
     {
-        int v1731;
-        int? v1732;
-        v1732 = null;
-        v1731 = 0;
-        for (; v1731 < ArrayItems.Length; v1731++)
-            if ((ArrayItems[v1731] > a))
-                if (v1732 == null)
-                    v1732 = ArrayItems[v1731];
+        int v1665;
+        int? v1666;
+        v1666 = null;
+        v1665 = 0;
+        for (; v1665 < ArrayItems.Length; v1665++)
+            if ((ArrayItems[v1665] > a))
+                if (v1666 == null)
+                    v1666 = ArrayItems[v1665];
                 else
                     throw new System.InvalidOperationException("The sequence contains more than single matching element.");
-        if (v1732 == null)
+        if (v1666 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1732;
+            return (int)v1666;
     }
 
     int ArraySingleChangingParamRewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
     {
-        int v1733;
-        int? v1734;
-        v1734 = null;
-        v1733 = 0;
-        for (; v1733 < ArrayItems.Length; v1733++)
-            if ((ArrayItems[v1733] > a--))
-                if (v1734 == null)
-                    v1734 = ArrayItems[v1733];
+        int v1667;
+        int? v1668;
+        v1668 = null;
+        v1667 = 0;
+        for (; v1667 < ArrayItems.Length; v1667++)
+            if ((ArrayItems[v1667] > a--))
+                if (v1668 == null)
+                    v1668 = ArrayItems[v1667];
                 else
                     throw new System.InvalidOperationException("The sequence contains more than single matching element.");
-        if (v1734 == null)
+        if (v1668 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1734;
+            return (int)v1668;
     }
 
     int ArraySingleUsingSingleRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1735;
-        int? v1736;
-        v1736 = null;
-        v1735 = 0;
-        for (; v1735 < ArrayItems.Length; v1735++)
-            if ((ArrayItems[v1735] > ArrayItems.Single(y => y > ArrayItems[v1735])))
-                if (v1736 == null)
-                    v1736 = ArrayItems[v1735];
+        int v1669;
+        int? v1670;
+        v1670 = null;
+        v1669 = 0;
+        for (; v1669 < ArrayItems.Length; v1669++)
+            if ((ArrayItems[v1669] > ArrayItems.Single(y => y > ArrayItems[v1669])))
+                if (v1670 == null)
+                    v1670 = ArrayItems[v1669];
                 else
                     throw new System.InvalidOperationException("The sequence contains more than single matching element.");
-        if (v1736 == null)
+        if (v1670 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1736;
+            return (int)v1670;
     }
 }}

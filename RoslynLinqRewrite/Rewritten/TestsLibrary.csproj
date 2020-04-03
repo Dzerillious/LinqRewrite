@@ -64,6 +64,7 @@
         <Compile Include="Tests\ExceptTests.cs" />
         <Compile Include="Tests\FirstOrDefaultTests.cs" />
         <Compile Include="Tests\FirstTests.cs" />
+        <Compile Include="Tests\ForEachTests.cs" />
         <Compile Include="Tests\IntersectTests.cs" />
         <Compile Include="Tests\LastOrDefaultTests.cs" />
         <Compile Include="Tests\LastTests.cs" />
@@ -77,6 +78,15 @@
         <Compile Include="Tests\SequenceEqualsTests.cs" />
         <Compile Include="Tests\SingleOrDefaultTests.cs" />
         <Compile Include="Tests\SingleTests.cs" />
+        <Compile Include="Tests\SkipTests.cs" />
+        <Compile Include="Tests\SkipWhile.cs" />
+        <Compile Include="Tests\TakeTests.cs" />
+        <Compile Include="Tests\TakeWhile.cs" />
+        <Compile Include="Tests\ToArrayTests.cs" />
+        <Compile Include="Tests\ToDictionaryTests.cs" />
+        <Compile Include="Tests\ToListTests.cs" />
+        <Compile Include="Tests\ToLookupTests.cs" />
+        <Compile Include="Tests\ToSimpleListTests.cs" />
         <Compile Include="Tests\UnionTests.cs" />
         <Compile Include="Tests\WhereTests.cs" />
         <Compile Include="Tests\ZipTests.cs" />

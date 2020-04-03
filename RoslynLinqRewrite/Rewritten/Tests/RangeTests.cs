@@ -109,102 +109,83 @@ public class RangeTests
 
     System.Collections.Generic.IEnumerable<int> Range1Rewritten_ProceduralLinq1()
     {
-        int v1462;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        v1462 = 0;
-        for (; v1462 < 100; v1462++)
-            yield return (v1462 + 0);
+        int v1433;
+        v1433 = 0;
+        for (; v1433 < 100; v1433++)
+            yield return (v1433 + 0);
     }
 
     System.Collections.Generic.IEnumerable<int> Range2Rewritten_ProceduralLinq1()
     {
-        int v1463;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        v1463 = 0;
-        for (; v1463 < 100; v1463++)
-            yield return (v1463 + -100);
+        int v1434;
+        v1434 = 0;
+        for (; v1434 < 100; v1434++)
+            yield return (v1434 + -100);
     }
 
     System.Collections.Generic.IEnumerable<int> Range3Rewritten_ProceduralLinq1()
     {
-        int v1464;
-        if (-100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        v1464 = 0;
-        for (; v1464 < -100; v1464++)
-            yield return (v1464 + 0);
+        throw new System.InvalidOperationException("Index out of range");
     }
 
     System.Collections.Generic.IEnumerable<int> Range4Rewritten_ProceduralLinq1()
     {
-        int v1465;
-        if (23 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        v1465 = 0;
-        for (; v1465 < 23; v1465++)
-            yield return (v1465 + 123);
+        int v1435;
+        v1435 = 0;
+        for (; v1435 < 23; v1435++)
+            yield return (v1435 + 123);
     }
 
     int[] RangeToArrayRewritten_ProceduralLinq1()
     {
-        int v1466;
-        if (23 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        int[] v1467;
-        v1467 = new int[23];
-        v1466 = 0;
-        for (; v1466 < 23; v1466++)
-            v1467[v1466] = (v1466 + 123);
-        return v1467;
+        int v1436;
+        int[] v1437;
+        v1437 = new int[23];
+        v1436 = 0;
+        for (; v1436 < 23; v1436++)
+            v1437[v1436] = (v1436 + 123);
+        return v1437;
     }
 
     System.Collections.Generic.List<int> RangeToListRewritten_ProceduralLinq1()
     {
-        int v1468;
-        if (23 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        System.Collections.Generic.List<int> v1469;
-        v1469 = new System.Collections.Generic.List<int>();
-        v1468 = 0;
-        for (; v1468 < 23; v1468++)
-            v1469.Add((v1468 + 123));
-        return v1469;
+        int v1438;
+        System.Collections.Generic.List<int> v1439;
+        v1439 = new System.Collections.Generic.List<int>();
+        v1438 = 0;
+        for (; v1438 < 23; v1438++)
+            v1439.Add((v1438 + 123));
+        return v1439;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> RangeToSimpleListRewritten_ProceduralLinq1()
     {
-        int v1470;
-        if (23 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        int[] v1471;
-        SimpleList<int> v1472;
-        v1471 = new int[23];
-        v1470 = 0;
-        for (; v1470 < 23; v1470++)
-            v1471[v1470] = (v1470 + 123);
-        v1472 = new SimpleList<int>();
-        v1472.Items = v1471;
-        v1472.Count = 23;
-        return v1472;
+        int v1440;
+        int[] v1441;
+        SimpleList<int> v1442;
+        v1441 = new int[23];
+        v1440 = 0;
+        for (; v1440 < 23; v1440++)
+            v1441[v1440] = (v1440 + 123);
+        v1442 = new SimpleList<int>();
+        v1442.Items = v1441;
+        v1442.Count = 23;
+        return v1442;
     }
 
     System.Collections.Generic.IEnumerable<int> RangeDistinctRewritten_ProceduralLinq1()
     {
-        int v1473;
-        if (23 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        HashSet<int> v1474;
-        int v1475;
-        v1474 = new HashSet<int>();
-        v1473 = 0;
-        for (; v1473 < 23; v1473++)
+        int v1443;
+        HashSet<int> v1444;
+        int v1445;
+        v1444 = new HashSet<int>();
+        v1443 = 0;
+        for (; v1443 < 23; v1443++)
         {
-            v1475 = (v1473 + 123);
-            if (!(v1474.Add(v1475)))
+            v1445 = (v1443 + 123);
+            if (!(v1444.Add(v1445)))
                 continue;
-            yield return v1475;
+            yield return v1445;
         }
     }
 }}

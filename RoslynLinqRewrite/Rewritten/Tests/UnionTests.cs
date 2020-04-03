@@ -392,7 +392,7 @@ public class UnionTests
 
     public IEnumerable<int> ArraySelectUnionArrayRewritten()
     {
-        return ArraySelectUnionArrayRewritten_ProceduralLinq1(ArrayItems, x => x + 50);
+        return ArraySelectUnionArrayRewritten_ProceduralLinq1(ArrayItems);
     } //EndMethod
 
     [NoRewrite]
@@ -403,7 +403,7 @@ public class UnionTests
 
     public IEnumerable<int> ArraySelectUnionArraySelectRewritten()
     {
-        return ArraySelectUnionArraySelectRewritten_ProceduralLinq2(ArrayItems, x => x + 50);
+        return ArraySelectUnionArraySelectRewritten_ProceduralLinq2(ArrayItems);
     } //EndMethod
 
     [NoRewrite]
@@ -414,7 +414,7 @@ public class UnionTests
 
     public IEnumerable<int> ArrayWhereUnionArrayWhereRewritten()
     {
-        return ArrayWhereUnionArrayWhereRewritten_ProceduralLinq2(ArrayItems, x => x > 50);
+        return ArrayWhereUnionArrayWhereRewritten_ProceduralLinq2(ArrayItems);
     } //EndMethod
 
     [NoRewrite]
@@ -744,7 +744,7 @@ public class UnionTests
 
     public IEnumerable<int> RangeEmpty2ArrayRewritten()
     {
-        return RangeEmpty2ArrayRewritten_ProceduralLinq1(ArrayItems, x => false);
+        return RangeEmpty2ArrayRewritten_ProceduralLinq1(ArrayItems);
     } //EndMethod
 
     [NoRewrite]
@@ -870,1216 +870,1278 @@ public class UnionTests
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1737;
-        HashSet<int> v1738;
-        int v1739;
-        int v1740;
-        v1738 = new HashSet<int>();
-        v1737 = 0;
-        for (; v1737 < ArrayItems.Length; v1737++)
+        int v2490;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2491;
+        int v2492;
+        int v2493;
+        v2491 = new HashSet<int>();
+        v2490 = 0;
+        for (; v2490 < ArrayItems.Length; v2490++)
         {
-            v1739 = ArrayItems[v1737];
-            if (!(v1738.Add(v1739)))
+            v2492 = ArrayItems[v2490];
+            if (!(v2491.Add(v2492)))
                 continue;
-            yield return v1739;
+            yield return v2492;
         }
 
-        v1740 = 0;
-        for (; v1740 < ArrayItems2.Length; v1740++)
+        v2493 = 0;
+        for (; v2493 < ArrayItems2.Length; v2493++)
         {
-            v1739 = ArrayItems2[v1740];
-            if (!(v1738.Add(v1739)))
+            v2492 = ArrayItems2[v2493];
+            if (!(v2491.Add(v2492)))
                 continue;
-            yield return v1739;
+            yield return v2492;
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionSimpleListRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1741;
-        HashSet<int> v1742;
-        int v1743;
-        IEnumerator<int> v1744;
-        v1744 = SimpleListItems2.GetEnumerator();
-        v1742 = new HashSet<int>();
-        v1741 = 0;
-        for (; v1741 < ArrayItems.Length; v1741++)
+        int v2494;
+        if (SimpleListItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2495;
+        int v2496;
+        IEnumerator<int> v2497;
+        v2497 = SimpleListItems2.GetEnumerator();
+        v2495 = new HashSet<int>();
+        v2494 = 0;
+        for (; v2494 < ArrayItems.Length; v2494++)
         {
-            v1743 = ArrayItems[v1741];
-            if (!(v1742.Add(v1743)))
+            v2496 = ArrayItems[v2494];
+            if (!(v2495.Add(v2496)))
                 continue;
-            yield return v1743;
+            yield return v2496;
         }
 
         try
         {
-            while (v1744.MoveNext())
+            while (v2497.MoveNext())
             {
-                v1743 = v1744.Current;
-                if (!(v1742.Add(v1743)))
+                v2496 = v2497.Current;
+                if (!(v2495.Add(v2496)))
                     continue;
-                yield return v1743;
+                yield return v2496;
             }
         }
         finally
         {
-            v1744.Dispose();
+            v2497.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionEnumerableRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1745;
-        HashSet<int> v1746;
-        int v1747;
-        IEnumerator<int> v1748;
-        v1748 = EnumerableItems2.GetEnumerator();
-        v1746 = new HashSet<int>();
-        v1745 = 0;
-        for (; v1745 < ArrayItems.Length; v1745++)
+        int v2498;
+        if (EnumerableItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2499;
+        int v2500;
+        IEnumerator<int> v2501;
+        v2501 = EnumerableItems2.GetEnumerator();
+        v2499 = new HashSet<int>();
+        v2498 = 0;
+        for (; v2498 < ArrayItems.Length; v2498++)
         {
-            v1747 = ArrayItems[v1745];
-            if (!(v1746.Add(v1747)))
+            v2500 = ArrayItems[v2498];
+            if (!(v2499.Add(v2500)))
                 continue;
-            yield return v1747;
+            yield return v2500;
         }
 
         try
         {
-            while (v1748.MoveNext())
+            while (v2501.MoveNext())
             {
-                v1747 = v1748.Current;
-                if (!(v1746.Add(v1747)))
+                v2500 = v2501.Current;
+                if (!(v2499.Add(v2500)))
                     continue;
-                yield return v1747;
+                yield return v2500;
             }
         }
         finally
         {
-            v1748.Dispose();
+            v2501.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionMethodRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1749;
-        HashSet<int> v1750;
-        int v1751;
-        IEnumerator<int> v1752;
-        v1752 = MethodEnumerable2().GetEnumerator();
-        v1750 = new HashSet<int>();
-        v1749 = 0;
-        for (; v1749 < ArrayItems.Length; v1749++)
+        int v2502;
+        if (MethodEnumerable2() == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2503;
+        int v2504;
+        IEnumerator<int> v2505;
+        v2505 = MethodEnumerable2().GetEnumerator();
+        v2503 = new HashSet<int>();
+        v2502 = 0;
+        for (; v2502 < ArrayItems.Length; v2502++)
         {
-            v1751 = ArrayItems[v1749];
-            if (!(v1750.Add(v1751)))
+            v2504 = ArrayItems[v2502];
+            if (!(v2503.Add(v2504)))
                 continue;
-            yield return v1751;
+            yield return v2504;
         }
 
         try
         {
-            while (v1752.MoveNext())
+            while (v2505.MoveNext())
             {
-                v1751 = v1752.Current;
-                if (!(v1750.Add(v1751)))
+                v2504 = v2505.Current;
+                if (!(v2503.Add(v2504)))
                     continue;
-                yield return v1751;
+                yield return v2504;
             }
         }
         finally
         {
-            v1752.Dispose();
+            v2505.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> SimpleListUnionArrayRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        IEnumerator<int> v1753;
-        HashSet<int> v1754;
-        int v1755;
-        int v1756;
-        v1753 = SimpleListItems.GetEnumerator();
-        v1754 = new HashSet<int>();
+        IEnumerator<int> v2506;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2507;
+        int v2508;
+        int v2509;
+        v2506 = SimpleListItems.GetEnumerator();
+        v2507 = new HashSet<int>();
         try
         {
-            while (v1753.MoveNext())
+            while (v2506.MoveNext())
             {
-                v1755 = v1753.Current;
-                if (!(v1754.Add(v1755)))
+                v2508 = v2506.Current;
+                if (!(v2507.Add(v2508)))
                     continue;
-                yield return v1755;
+                yield return v2508;
             }
         }
         finally
         {
-            v1753.Dispose();
+            v2506.Dispose();
         }
 
-        v1756 = 0;
-        for (; v1756 < ArrayItems2.Length; v1756++)
+        v2509 = 0;
+        for (; v2509 < ArrayItems2.Length; v2509++)
         {
-            v1755 = ArrayItems2[v1756];
-            if (!(v1754.Add(v1755)))
+            v2508 = ArrayItems2[v2509];
+            if (!(v2507.Add(v2508)))
                 continue;
-            yield return v1755;
+            yield return v2508;
         }
     }
 
     System.Collections.Generic.IEnumerable<int> SimpleListUnionSimpleListRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        IEnumerator<int> v1757;
-        HashSet<int> v1758;
-        int v1759;
-        IEnumerator<int> v1760;
-        v1757 = SimpleListItems.GetEnumerator();
-        v1760 = SimpleListItems2.GetEnumerator();
-        v1758 = new HashSet<int>();
+        IEnumerator<int> v2510;
+        if (SimpleListItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2511;
+        int v2512;
+        IEnumerator<int> v2513;
+        v2510 = SimpleListItems.GetEnumerator();
+        v2513 = SimpleListItems2.GetEnumerator();
+        v2511 = new HashSet<int>();
         try
         {
-            while (v1757.MoveNext())
+            while (v2510.MoveNext())
             {
-                v1759 = v1757.Current;
-                if (!(v1758.Add(v1759)))
+                v2512 = v2510.Current;
+                if (!(v2511.Add(v2512)))
                     continue;
-                yield return v1759;
+                yield return v2512;
             }
         }
         finally
         {
-            v1757.Dispose();
+            v2510.Dispose();
         }
 
         try
         {
-            while (v1760.MoveNext())
+            while (v2513.MoveNext())
             {
-                v1759 = v1760.Current;
-                if (!(v1758.Add(v1759)))
+                v2512 = v2513.Current;
+                if (!(v2511.Add(v2512)))
                     continue;
-                yield return v1759;
+                yield return v2512;
             }
         }
         finally
         {
-            v1760.Dispose();
+            v2513.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> SimpleListUnionEnumerableRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        IEnumerator<int> v1761;
-        HashSet<int> v1762;
-        int v1763;
-        IEnumerator<int> v1764;
-        v1761 = SimpleListItems.GetEnumerator();
-        v1764 = EnumerableItems2.GetEnumerator();
-        v1762 = new HashSet<int>();
+        IEnumerator<int> v2514;
+        if (EnumerableItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2515;
+        int v2516;
+        IEnumerator<int> v2517;
+        v2514 = SimpleListItems.GetEnumerator();
+        v2517 = EnumerableItems2.GetEnumerator();
+        v2515 = new HashSet<int>();
         try
         {
-            while (v1761.MoveNext())
+            while (v2514.MoveNext())
             {
-                v1763 = v1761.Current;
-                if (!(v1762.Add(v1763)))
+                v2516 = v2514.Current;
+                if (!(v2515.Add(v2516)))
                     continue;
-                yield return v1763;
+                yield return v2516;
             }
         }
         finally
         {
-            v1761.Dispose();
+            v2514.Dispose();
         }
 
         try
         {
-            while (v1764.MoveNext())
+            while (v2517.MoveNext())
             {
-                v1763 = v1764.Current;
-                if (!(v1762.Add(v1763)))
+                v2516 = v2517.Current;
+                if (!(v2515.Add(v2516)))
                     continue;
-                yield return v1763;
+                yield return v2516;
             }
         }
         finally
         {
-            v1764.Dispose();
+            v2517.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> SimpleListUnionMethodRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        IEnumerator<int> v1765;
-        HashSet<int> v1766;
-        int v1767;
-        IEnumerator<int> v1768;
-        v1765 = SimpleListItems.GetEnumerator();
-        v1768 = MethodEnumerable2().GetEnumerator();
-        v1766 = new HashSet<int>();
+        IEnumerator<int> v2518;
+        if (MethodEnumerable2() == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2519;
+        int v2520;
+        IEnumerator<int> v2521;
+        v2518 = SimpleListItems.GetEnumerator();
+        v2521 = MethodEnumerable2().GetEnumerator();
+        v2519 = new HashSet<int>();
         try
         {
-            while (v1765.MoveNext())
+            while (v2518.MoveNext())
             {
-                v1767 = v1765.Current;
-                if (!(v1766.Add(v1767)))
+                v2520 = v2518.Current;
+                if (!(v2519.Add(v2520)))
                     continue;
-                yield return v1767;
+                yield return v2520;
             }
         }
         finally
         {
-            v1765.Dispose();
+            v2518.Dispose();
         }
 
         try
         {
-            while (v1768.MoveNext())
+            while (v2521.MoveNext())
             {
-                v1767 = v1768.Current;
-                if (!(v1766.Add(v1767)))
+                v2520 = v2521.Current;
+                if (!(v2519.Add(v2520)))
                     continue;
-                yield return v1767;
+                yield return v2520;
             }
         }
         finally
         {
-            v1768.Dispose();
+            v2521.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> EnumerableUnionArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1769;
-        HashSet<int> v1770;
-        int v1771;
-        int v1772;
-        v1769 = EnumerableItems.GetEnumerator();
-        v1770 = new HashSet<int>();
+        IEnumerator<int> v2522;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2523;
+        int v2524;
+        int v2525;
+        v2522 = EnumerableItems.GetEnumerator();
+        v2523 = new HashSet<int>();
         try
         {
-            while (v1769.MoveNext())
+            while (v2522.MoveNext())
             {
-                v1771 = v1769.Current;
-                if (!(v1770.Add(v1771)))
+                v2524 = v2522.Current;
+                if (!(v2523.Add(v2524)))
                     continue;
-                yield return v1771;
+                yield return v2524;
             }
         }
         finally
         {
-            v1769.Dispose();
+            v2522.Dispose();
         }
 
-        v1772 = 0;
-        for (; v1772 < ArrayItems2.Length; v1772++)
+        v2525 = 0;
+        for (; v2525 < ArrayItems2.Length; v2525++)
         {
-            v1771 = ArrayItems2[v1772];
-            if (!(v1770.Add(v1771)))
+            v2524 = ArrayItems2[v2525];
+            if (!(v2523.Add(v2524)))
                 continue;
-            yield return v1771;
+            yield return v2524;
         }
     }
 
     System.Collections.Generic.IEnumerable<int> EnumerableUnionSimpleListRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1773;
-        HashSet<int> v1774;
-        int v1775;
-        IEnumerator<int> v1776;
-        v1773 = EnumerableItems.GetEnumerator();
-        v1776 = SimpleListItems2.GetEnumerator();
-        v1774 = new HashSet<int>();
+        IEnumerator<int> v2526;
+        if (SimpleListItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2527;
+        int v2528;
+        IEnumerator<int> v2529;
+        v2526 = EnumerableItems.GetEnumerator();
+        v2529 = SimpleListItems2.GetEnumerator();
+        v2527 = new HashSet<int>();
         try
         {
-            while (v1773.MoveNext())
+            while (v2526.MoveNext())
             {
-                v1775 = v1773.Current;
-                if (!(v1774.Add(v1775)))
+                v2528 = v2526.Current;
+                if (!(v2527.Add(v2528)))
                     continue;
-                yield return v1775;
+                yield return v2528;
             }
         }
         finally
         {
-            v1773.Dispose();
+            v2526.Dispose();
         }
 
         try
         {
-            while (v1776.MoveNext())
+            while (v2529.MoveNext())
             {
-                v1775 = v1776.Current;
-                if (!(v1774.Add(v1775)))
+                v2528 = v2529.Current;
+                if (!(v2527.Add(v2528)))
                     continue;
-                yield return v1775;
+                yield return v2528;
             }
         }
         finally
         {
-            v1776.Dispose();
+            v2529.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> EnumerableUnionEnumerableRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1777;
-        HashSet<int> v1778;
-        int v1779;
-        IEnumerator<int> v1780;
-        v1777 = EnumerableItems.GetEnumerator();
-        v1780 = EnumerableItems2.GetEnumerator();
-        v1778 = new HashSet<int>();
+        IEnumerator<int> v2530;
+        if (EnumerableItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2531;
+        int v2532;
+        IEnumerator<int> v2533;
+        v2530 = EnumerableItems.GetEnumerator();
+        v2533 = EnumerableItems2.GetEnumerator();
+        v2531 = new HashSet<int>();
         try
         {
-            while (v1777.MoveNext())
+            while (v2530.MoveNext())
             {
-                v1779 = v1777.Current;
-                if (!(v1778.Add(v1779)))
+                v2532 = v2530.Current;
+                if (!(v2531.Add(v2532)))
                     continue;
-                yield return v1779;
+                yield return v2532;
             }
         }
         finally
         {
-            v1777.Dispose();
+            v2530.Dispose();
         }
 
         try
         {
-            while (v1780.MoveNext())
+            while (v2533.MoveNext())
             {
-                v1779 = v1780.Current;
-                if (!(v1778.Add(v1779)))
+                v2532 = v2533.Current;
+                if (!(v2531.Add(v2532)))
                     continue;
-                yield return v1779;
+                yield return v2532;
             }
         }
         finally
         {
-            v1780.Dispose();
+            v2533.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> EnumerableUnionMethodRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1781;
-        HashSet<int> v1782;
-        int v1783;
-        IEnumerator<int> v1784;
-        v1781 = EnumerableItems.GetEnumerator();
-        v1784 = MethodEnumerable2().GetEnumerator();
-        v1782 = new HashSet<int>();
+        IEnumerator<int> v2534;
+        if (MethodEnumerable2() == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2535;
+        int v2536;
+        IEnumerator<int> v2537;
+        v2534 = EnumerableItems.GetEnumerator();
+        v2537 = MethodEnumerable2().GetEnumerator();
+        v2535 = new HashSet<int>();
         try
         {
-            while (v1781.MoveNext())
+            while (v2534.MoveNext())
             {
-                v1783 = v1781.Current;
-                if (!(v1782.Add(v1783)))
+                v2536 = v2534.Current;
+                if (!(v2535.Add(v2536)))
                     continue;
-                yield return v1783;
+                yield return v2536;
             }
         }
         finally
         {
-            v1781.Dispose();
+            v2534.Dispose();
         }
 
         try
         {
-            while (v1784.MoveNext())
+            while (v2537.MoveNext())
             {
-                v1783 = v1784.Current;
-                if (!(v1782.Add(v1783)))
+                v2536 = v2537.Current;
+                if (!(v2535.Add(v2536)))
                     continue;
-                yield return v1783;
+                yield return v2536;
             }
         }
         finally
         {
-            v1784.Dispose();
+            v2537.Dispose();
         }
     }
 
     int[] ArrayUnionArrayToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1785;
-        HashSet<int> v1786;
-        int v1787;
-        int v1788;
-        int v1789;
-        int v1790;
-        int v1791;
-        int[] v1792;
-        v1786 = new HashSet<int>();
-        v1789 = 0;
-        v1790 = (LinqRewrite.Core.IntExtensions.Log2((uint)(ArrayItems2.Length + ArrayItems.Length)) - 3);
-        v1790 -= (v1790 % 2);
-        v1791 = 8;
-        v1792 = new int[8];
-        v1785 = 0;
-        for (; v1785 < ArrayItems.Length; v1785++)
+        int v2538;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2539;
+        int v2540;
+        int v2541;
+        int v2542;
+        int v2543;
+        int v2544;
+        int[] v2545;
+        v2539 = new HashSet<int>();
+        v2542 = 0;
+        v2543 = (LinqRewrite.Core.IntExtensions.Log2((uint)(ArrayItems2.Length + ArrayItems.Length)) - 3);
+        v2543 -= (v2543 % 2);
+        v2544 = 8;
+        v2545 = new int[8];
+        v2538 = 0;
+        for (; v2538 < ArrayItems.Length; v2538++)
         {
-            v1787 = ArrayItems[v1785];
-            if (!(v1786.Add(v1787)))
+            v2540 = ArrayItems[v2538];
+            if (!(v2539.Add(v2540)))
                 continue;
-            if (v1789 >= v1791)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems2.Length + ArrayItems.Length), ref v1792, ref v1790, out v1791);
-            v1792[v1789] = v1787;
-            v1789++;
+            if (v2542 >= v2544)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems2.Length + ArrayItems.Length), ref v2545, ref v2543, out v2544);
+            v2545[v2542] = v2540;
+            v2542++;
         }
 
-        v1788 = 0;
-        for (; v1788 < ArrayItems2.Length; v1788++)
+        v2541 = 0;
+        for (; v2541 < ArrayItems2.Length; v2541++)
         {
-            v1787 = ArrayItems2[v1788];
-            if (!(v1786.Add(v1787)))
+            v2540 = ArrayItems2[v2541];
+            if (!(v2539.Add(v2540)))
                 continue;
-            if (v1789 >= v1791)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems2.Length + ArrayItems.Length), ref v1792, ref v1790, out v1791);
-            v1792[v1789] = v1787;
-            v1789++;
+            if (v2542 >= v2544)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems2.Length + ArrayItems.Length), ref v2545, ref v2543, out v2544);
+            v2545[v2542] = v2540;
+            v2542++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1792, v1789);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2545, v2542);
     }
 
     int[] ArrayUnionSimpleListToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1793;
-        HashSet<int> v1794;
-        int v1795;
-        IEnumerator<int> v1796;
-        int v1797;
-        int v1798;
-        int[] v1799;
-        v1796 = SimpleListItems2.GetEnumerator();
-        v1794 = new HashSet<int>();
-        v1797 = 0;
-        v1798 = 8;
-        v1799 = new int[8];
-        v1793 = 0;
-        for (; v1793 < ArrayItems.Length; v1793++)
+        int v2546;
+        if (SimpleListItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2547;
+        int v2548;
+        IEnumerator<int> v2549;
+        int v2550;
+        int v2551;
+        int[] v2552;
+        v2549 = SimpleListItems2.GetEnumerator();
+        v2547 = new HashSet<int>();
+        v2550 = 0;
+        v2551 = 8;
+        v2552 = new int[8];
+        v2546 = 0;
+        for (; v2546 < ArrayItems.Length; v2546++)
         {
-            v1795 = ArrayItems[v1793];
-            if (!(v1794.Add(v1795)))
+            v2548 = ArrayItems[v2546];
+            if (!(v2547.Add(v2548)))
                 continue;
-            if (v1797 >= v1798)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1799, ref v1798);
-            v1799[v1797] = v1795;
-            v1797++;
+            if (v2550 >= v2551)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2552, ref v2551);
+            v2552[v2550] = v2548;
+            v2550++;
         }
 
         try
         {
-            while (v1796.MoveNext())
+            while (v2549.MoveNext())
             {
-                v1795 = v1796.Current;
-                if (!(v1794.Add(v1795)))
+                v2548 = v2549.Current;
+                if (!(v2547.Add(v2548)))
                     continue;
-                if (v1797 >= v1798)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1799, ref v1798);
-                v1799[v1797] = v1795;
-                v1797++;
+                if (v2550 >= v2551)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2552, ref v2551);
+                v2552[v2550] = v2548;
+                v2550++;
             }
         }
         finally
         {
-            v1796.Dispose();
+            v2549.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1799, v1797);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2552, v2550);
     }
 
     int[] ArrayUnionEnumerableToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1800;
-        HashSet<int> v1801;
-        int v1802;
-        IEnumerator<int> v1803;
-        int v1804;
-        int v1805;
-        int[] v1806;
-        v1803 = EnumerableItems2.GetEnumerator();
-        v1801 = new HashSet<int>();
-        v1804 = 0;
-        v1805 = 8;
-        v1806 = new int[8];
-        v1800 = 0;
-        for (; v1800 < ArrayItems.Length; v1800++)
+        int v2553;
+        if (EnumerableItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2554;
+        int v2555;
+        IEnumerator<int> v2556;
+        int v2557;
+        int v2558;
+        int[] v2559;
+        v2556 = EnumerableItems2.GetEnumerator();
+        v2554 = new HashSet<int>();
+        v2557 = 0;
+        v2558 = 8;
+        v2559 = new int[8];
+        v2553 = 0;
+        for (; v2553 < ArrayItems.Length; v2553++)
         {
-            v1802 = ArrayItems[v1800];
-            if (!(v1801.Add(v1802)))
+            v2555 = ArrayItems[v2553];
+            if (!(v2554.Add(v2555)))
                 continue;
-            if (v1804 >= v1805)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1806, ref v1805);
-            v1806[v1804] = v1802;
-            v1804++;
+            if (v2557 >= v2558)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2559, ref v2558);
+            v2559[v2557] = v2555;
+            v2557++;
         }
 
         try
         {
-            while (v1803.MoveNext())
+            while (v2556.MoveNext())
             {
-                v1802 = v1803.Current;
-                if (!(v1801.Add(v1802)))
+                v2555 = v2556.Current;
+                if (!(v2554.Add(v2555)))
                     continue;
-                if (v1804 >= v1805)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1806, ref v1805);
-                v1806[v1804] = v1802;
-                v1804++;
+                if (v2557 >= v2558)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2559, ref v2558);
+                v2559[v2557] = v2555;
+                v2557++;
             }
         }
         finally
         {
-            v1803.Dispose();
+            v2556.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1806, v1804);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2559, v2557);
     }
 
     int[] SimpleListUnionArrayToArrayRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        IEnumerator<int> v1807;
-        HashSet<int> v1808;
-        int v1809;
-        int v1810;
-        int v1811;
-        int v1812;
-        int[] v1813;
-        v1807 = SimpleListItems.GetEnumerator();
-        v1808 = new HashSet<int>();
-        v1811 = 0;
-        v1812 = 8;
-        v1813 = new int[8];
+        IEnumerator<int> v2560;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2561;
+        int v2562;
+        int v2563;
+        int v2564;
+        int v2565;
+        int[] v2566;
+        v2560 = SimpleListItems.GetEnumerator();
+        v2561 = new HashSet<int>();
+        v2564 = 0;
+        v2565 = 8;
+        v2566 = new int[8];
         try
         {
-            while (v1807.MoveNext())
+            while (v2560.MoveNext())
             {
-                v1809 = v1807.Current;
-                if (!(v1808.Add(v1809)))
+                v2562 = v2560.Current;
+                if (!(v2561.Add(v2562)))
                     continue;
-                if (v1811 >= v1812)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1813, ref v1812);
-                v1813[v1811] = v1809;
-                v1811++;
+                if (v2564 >= v2565)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2566, ref v2565);
+                v2566[v2564] = v2562;
+                v2564++;
             }
         }
         finally
         {
-            v1807.Dispose();
+            v2560.Dispose();
         }
 
-        v1810 = 0;
-        for (; v1810 < ArrayItems2.Length; v1810++)
+        v2563 = 0;
+        for (; v2563 < ArrayItems2.Length; v2563++)
         {
-            v1809 = ArrayItems2[v1810];
-            if (!(v1808.Add(v1809)))
+            v2562 = ArrayItems2[v2563];
+            if (!(v2561.Add(v2562)))
                 continue;
-            if (v1811 >= v1812)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1813, ref v1812);
-            v1813[v1811] = v1809;
-            v1811++;
+            if (v2564 >= v2565)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2566, ref v2565);
+            v2566[v2564] = v2562;
+            v2564++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1813, v1811);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2566, v2564);
     }
 
     int[] SimpleListUnionSimpleListToArrayRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        IEnumerator<int> v1814;
-        HashSet<int> v1815;
-        int v1816;
-        IEnumerator<int> v1817;
-        int v1818;
-        int v1819;
-        int[] v1820;
-        v1814 = SimpleListItems.GetEnumerator();
-        v1817 = SimpleListItems2.GetEnumerator();
-        v1815 = new HashSet<int>();
-        v1818 = 0;
-        v1819 = 8;
-        v1820 = new int[8];
+        IEnumerator<int> v2567;
+        if (SimpleListItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2568;
+        int v2569;
+        IEnumerator<int> v2570;
+        int v2571;
+        int v2572;
+        int[] v2573;
+        v2567 = SimpleListItems.GetEnumerator();
+        v2570 = SimpleListItems2.GetEnumerator();
+        v2568 = new HashSet<int>();
+        v2571 = 0;
+        v2572 = 8;
+        v2573 = new int[8];
         try
         {
-            while (v1814.MoveNext())
+            while (v2567.MoveNext())
             {
-                v1816 = v1814.Current;
-                if (!(v1815.Add(v1816)))
+                v2569 = v2567.Current;
+                if (!(v2568.Add(v2569)))
                     continue;
-                if (v1818 >= v1819)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1820, ref v1819);
-                v1820[v1818] = v1816;
-                v1818++;
+                if (v2571 >= v2572)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2573, ref v2572);
+                v2573[v2571] = v2569;
+                v2571++;
             }
         }
         finally
         {
-            v1814.Dispose();
+            v2567.Dispose();
         }
 
         try
         {
-            while (v1817.MoveNext())
+            while (v2570.MoveNext())
             {
-                v1816 = v1817.Current;
-                if (!(v1815.Add(v1816)))
+                v2569 = v2570.Current;
+                if (!(v2568.Add(v2569)))
                     continue;
-                if (v1818 >= v1819)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1820, ref v1819);
-                v1820[v1818] = v1816;
-                v1818++;
+                if (v2571 >= v2572)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2573, ref v2572);
+                v2573[v2571] = v2569;
+                v2571++;
             }
         }
         finally
         {
-            v1817.Dispose();
+            v2570.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1820, v1818);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2573, v2571);
     }
 
     int[] SimpleListUnionEnumerableToArrayRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        IEnumerator<int> v1821;
-        HashSet<int> v1822;
-        int v1823;
-        IEnumerator<int> v1824;
-        int v1825;
-        int v1826;
-        int[] v1827;
-        v1821 = SimpleListItems.GetEnumerator();
-        v1824 = EnumerableItems2.GetEnumerator();
-        v1822 = new HashSet<int>();
-        v1825 = 0;
-        v1826 = 8;
-        v1827 = new int[8];
+        IEnumerator<int> v2574;
+        if (EnumerableItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2575;
+        int v2576;
+        IEnumerator<int> v2577;
+        int v2578;
+        int v2579;
+        int[] v2580;
+        v2574 = SimpleListItems.GetEnumerator();
+        v2577 = EnumerableItems2.GetEnumerator();
+        v2575 = new HashSet<int>();
+        v2578 = 0;
+        v2579 = 8;
+        v2580 = new int[8];
         try
         {
-            while (v1821.MoveNext())
+            while (v2574.MoveNext())
             {
-                v1823 = v1821.Current;
-                if (!(v1822.Add(v1823)))
+                v2576 = v2574.Current;
+                if (!(v2575.Add(v2576)))
                     continue;
-                if (v1825 >= v1826)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1827, ref v1826);
-                v1827[v1825] = v1823;
-                v1825++;
+                if (v2578 >= v2579)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2580, ref v2579);
+                v2580[v2578] = v2576;
+                v2578++;
             }
         }
         finally
         {
-            v1821.Dispose();
+            v2574.Dispose();
         }
 
         try
         {
-            while (v1824.MoveNext())
+            while (v2577.MoveNext())
             {
-                v1823 = v1824.Current;
-                if (!(v1822.Add(v1823)))
+                v2576 = v2577.Current;
+                if (!(v2575.Add(v2576)))
                     continue;
-                if (v1825 >= v1826)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1827, ref v1826);
-                v1827[v1825] = v1823;
-                v1825++;
+                if (v2578 >= v2579)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2580, ref v2579);
+                v2580[v2578] = v2576;
+                v2578++;
             }
         }
         finally
         {
-            v1824.Dispose();
+            v2577.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1827, v1825);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2580, v2578);
     }
 
     int[] EnumerableUnionArrayToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1828;
-        HashSet<int> v1829;
-        int v1830;
-        int v1831;
-        int v1832;
-        int v1833;
-        int[] v1834;
-        v1828 = EnumerableItems.GetEnumerator();
-        v1829 = new HashSet<int>();
-        v1832 = 0;
-        v1833 = 8;
-        v1834 = new int[8];
+        IEnumerator<int> v2581;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2582;
+        int v2583;
+        int v2584;
+        int v2585;
+        int v2586;
+        int[] v2587;
+        v2581 = EnumerableItems.GetEnumerator();
+        v2582 = new HashSet<int>();
+        v2585 = 0;
+        v2586 = 8;
+        v2587 = new int[8];
         try
         {
-            while (v1828.MoveNext())
+            while (v2581.MoveNext())
             {
-                v1830 = v1828.Current;
-                if (!(v1829.Add(v1830)))
+                v2583 = v2581.Current;
+                if (!(v2582.Add(v2583)))
                     continue;
-                if (v1832 >= v1833)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1834, ref v1833);
-                v1834[v1832] = v1830;
-                v1832++;
+                if (v2585 >= v2586)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2587, ref v2586);
+                v2587[v2585] = v2583;
+                v2585++;
             }
         }
         finally
         {
-            v1828.Dispose();
+            v2581.Dispose();
         }
 
-        v1831 = 0;
-        for (; v1831 < ArrayItems2.Length; v1831++)
+        v2584 = 0;
+        for (; v2584 < ArrayItems2.Length; v2584++)
         {
-            v1830 = ArrayItems2[v1831];
-            if (!(v1829.Add(v1830)))
+            v2583 = ArrayItems2[v2584];
+            if (!(v2582.Add(v2583)))
                 continue;
-            if (v1832 >= v1833)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1834, ref v1833);
-            v1834[v1832] = v1830;
-            v1832++;
+            if (v2585 >= v2586)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2587, ref v2586);
+            v2587[v2585] = v2583;
+            v2585++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1834, v1832);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2587, v2585);
     }
 
     int[] EnumerableUnionSimpleListToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1835;
-        HashSet<int> v1836;
-        int v1837;
-        IEnumerator<int> v1838;
-        int v1839;
-        int v1840;
-        int[] v1841;
-        v1835 = EnumerableItems.GetEnumerator();
-        v1838 = SimpleListItems2.GetEnumerator();
-        v1836 = new HashSet<int>();
-        v1839 = 0;
-        v1840 = 8;
-        v1841 = new int[8];
+        IEnumerator<int> v2588;
+        if (SimpleListItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2589;
+        int v2590;
+        IEnumerator<int> v2591;
+        int v2592;
+        int v2593;
+        int[] v2594;
+        v2588 = EnumerableItems.GetEnumerator();
+        v2591 = SimpleListItems2.GetEnumerator();
+        v2589 = new HashSet<int>();
+        v2592 = 0;
+        v2593 = 8;
+        v2594 = new int[8];
         try
         {
-            while (v1835.MoveNext())
+            while (v2588.MoveNext())
             {
-                v1837 = v1835.Current;
-                if (!(v1836.Add(v1837)))
+                v2590 = v2588.Current;
+                if (!(v2589.Add(v2590)))
                     continue;
-                if (v1839 >= v1840)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1841, ref v1840);
-                v1841[v1839] = v1837;
-                v1839++;
+                if (v2592 >= v2593)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2594, ref v2593);
+                v2594[v2592] = v2590;
+                v2592++;
             }
         }
         finally
         {
-            v1835.Dispose();
+            v2588.Dispose();
         }
 
         try
         {
-            while (v1838.MoveNext())
+            while (v2591.MoveNext())
             {
-                v1837 = v1838.Current;
-                if (!(v1836.Add(v1837)))
+                v2590 = v2591.Current;
+                if (!(v2589.Add(v2590)))
                     continue;
-                if (v1839 >= v1840)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1841, ref v1840);
-                v1841[v1839] = v1837;
-                v1839++;
+                if (v2592 >= v2593)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2594, ref v2593);
+                v2594[v2592] = v2590;
+                v2592++;
             }
         }
         finally
         {
-            v1838.Dispose();
+            v2591.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1841, v1839);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2594, v2592);
     }
 
     int[] EnumerableUnionEnumerableToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1842;
-        HashSet<int> v1843;
-        int v1844;
-        IEnumerator<int> v1845;
-        int v1846;
-        int v1847;
-        int[] v1848;
-        v1842 = EnumerableItems.GetEnumerator();
-        v1845 = EnumerableItems2.GetEnumerator();
-        v1843 = new HashSet<int>();
-        v1846 = 0;
-        v1847 = 8;
-        v1848 = new int[8];
+        IEnumerator<int> v2595;
+        if (EnumerableItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2596;
+        int v2597;
+        IEnumerator<int> v2598;
+        int v2599;
+        int v2600;
+        int[] v2601;
+        v2595 = EnumerableItems.GetEnumerator();
+        v2598 = EnumerableItems2.GetEnumerator();
+        v2596 = new HashSet<int>();
+        v2599 = 0;
+        v2600 = 8;
+        v2601 = new int[8];
         try
         {
-            while (v1842.MoveNext())
+            while (v2595.MoveNext())
             {
-                v1844 = v1842.Current;
-                if (!(v1843.Add(v1844)))
+                v2597 = v2595.Current;
+                if (!(v2596.Add(v2597)))
                     continue;
-                if (v1846 >= v1847)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1848, ref v1847);
-                v1848[v1846] = v1844;
-                v1846++;
+                if (v2599 >= v2600)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2601, ref v2600);
+                v2601[v2599] = v2597;
+                v2599++;
             }
         }
         finally
         {
-            v1842.Dispose();
+            v2595.Dispose();
         }
 
         try
         {
-            while (v1845.MoveNext())
+            while (v2598.MoveNext())
             {
-                v1844 = v1845.Current;
-                if (!(v1843.Add(v1844)))
+                v2597 = v2598.Current;
+                if (!(v2596.Add(v2597)))
                     continue;
-                if (v1846 >= v1847)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1848, ref v1847);
-                v1848[v1846] = v1844;
-                v1846++;
+                if (v2599 >= v2600)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2601, ref v2600);
+                v2601[v2599] = v2597;
+                v2599++;
             }
         }
         finally
         {
-            v1845.Dispose();
+            v2598.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1848, v1846);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2601, v2599);
     }
 
-    System.Collections.Generic.IEnumerable<int> ArraySelectUnionArrayRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int> v1850)
+    System.Collections.Generic.IEnumerable<int> ArraySelectUnionArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1849;
-        HashSet<int> v1851;
-        int v1852;
-        int v1853;
-        v1851 = new HashSet<int>();
-        v1849 = 0;
-        for (; v1849 < ArrayItems.Length; v1849++)
+        int v2602;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2603;
+        int v2604;
+        int v2605;
+        v2603 = new HashSet<int>();
+        v2602 = 0;
+        for (; v2602 < ArrayItems.Length; v2602++)
         {
-            v1852 = v1850(ArrayItems[v1849]);
-            if (!(v1851.Add(v1852)))
+            v2604 = (ArrayItems[v2602] + 50);
+            if (!(v2603.Add(v2604)))
                 continue;
-            yield return v1852;
+            yield return v2604;
         }
 
-        v1853 = 0;
-        for (; v1853 < ArrayItems2.Length; v1853++)
+        v2605 = 0;
+        for (; v2605 < ArrayItems2.Length; v2605++)
         {
-            v1852 = ArrayItems2[v1853];
-            if (!(v1851.Add(v1852)))
+            v2604 = ArrayItems2[v2605];
+            if (!(v2603.Add(v2604)))
                 continue;
-            yield return v1852;
+            yield return v2604;
         }
     }
 
-    System.Collections.Generic.IEnumerable<int> ArraySelectUnionArraySelectRewritten_ProceduralLinq1(int[] ArrayItems2, System.Func<int, int> v1855)
+    System.Collections.Generic.IEnumerable<int> ArraySelectUnionArraySelectRewritten_ProceduralLinq1(int[] ArrayItems2)
     {
-        int v1854;
-        v1854 = 0;
-        for (; v1854 < ArrayItems2.Length; v1854++)
-            yield return v1855(ArrayItems2[v1854]);
+        int v2606;
+        v2606 = 0;
+        for (; v2606 < ArrayItems2.Length; v2606++)
+            yield return (ArrayItems2[v2606] + 50);
     }
 
-    System.Collections.Generic.IEnumerable<int> ArraySelectUnionArraySelectRewritten_ProceduralLinq2(int[] ArrayItems, System.Func<int, int> v1857)
+    System.Collections.Generic.IEnumerable<int> ArraySelectUnionArraySelectRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1856;
-        HashSet<int> v1858;
-        int v1859;
-        IEnumerator<int> v1860;
-        v1860 = ArraySelectUnionArraySelectRewritten_ProceduralLinq1(ArrayItems2, x => x + 50).GetEnumerator();
-        v1858 = new HashSet<int>();
-        v1856 = 0;
-        for (; v1856 < ArrayItems.Length; v1856++)
+        int v2607;
+        if (ArraySelectUnionArraySelectRewritten_ProceduralLinq1(ArrayItems2) == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2608;
+        int v2609;
+        IEnumerator<int> v2610;
+        v2610 = ArraySelectUnionArraySelectRewritten_ProceduralLinq1(ArrayItems2).GetEnumerator();
+        v2608 = new HashSet<int>();
+        v2607 = 0;
+        for (; v2607 < ArrayItems.Length; v2607++)
         {
-            v1859 = v1857(ArrayItems[v1856]);
-            if (!(v1858.Add(v1859)))
+            v2609 = (ArrayItems[v2607] + 50);
+            if (!(v2608.Add(v2609)))
                 continue;
-            yield return v1859;
+            yield return v2609;
         }
 
         try
         {
-            while (v1860.MoveNext())
+            while (v2610.MoveNext())
             {
-                v1859 = v1860.Current;
-                if (!(v1858.Add(v1859)))
+                v2609 = v2610.Current;
+                if (!(v2608.Add(v2609)))
                     continue;
-                yield return v1859;
+                yield return v2609;
             }
         }
         finally
         {
-            v1860.Dispose();
+            v2610.Dispose();
         }
     }
 
-    System.Collections.Generic.IEnumerable<int> ArrayWhereUnionArrayWhereRewritten_ProceduralLinq1(int[] ArrayItems2, System.Func<int, bool> v1862)
+    System.Collections.Generic.IEnumerable<int> ArrayWhereUnionArrayWhereRewritten_ProceduralLinq1(int[] ArrayItems2)
     {
-        int v1861;
-        v1861 = 0;
-        for (; v1861 < ArrayItems2.Length; v1861++)
+        int v2611;
+        v2611 = 0;
+        for (; v2611 < ArrayItems2.Length; v2611++)
         {
-            if (!(v1862(ArrayItems2[v1861])))
+            if (!((ArrayItems2[v2611] > 50)))
                 continue;
-            yield return ArrayItems2[v1861];
+            yield return ArrayItems2[v2611];
         }
     }
 
-    System.Collections.Generic.IEnumerable<int> ArrayWhereUnionArrayWhereRewritten_ProceduralLinq2(int[] ArrayItems, System.Func<int, bool> v1864)
+    System.Collections.Generic.IEnumerable<int> ArrayWhereUnionArrayWhereRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1863;
-        HashSet<int> v1865;
-        int v1866;
-        IEnumerator<int> v1867;
-        v1867 = ArrayWhereUnionArrayWhereRewritten_ProceduralLinq1(ArrayItems2, x => x > 50).GetEnumerator();
-        v1865 = new HashSet<int>();
-        v1863 = 0;
-        for (; v1863 < ArrayItems.Length; v1863++)
+        int v2612;
+        if (ArrayWhereUnionArrayWhereRewritten_ProceduralLinq1(ArrayItems2) == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2613;
+        int v2614;
+        IEnumerator<int> v2615;
+        v2615 = ArrayWhereUnionArrayWhereRewritten_ProceduralLinq1(ArrayItems2).GetEnumerator();
+        v2613 = new HashSet<int>();
+        v2612 = 0;
+        for (; v2612 < ArrayItems.Length; v2612++)
         {
-            if (!(v1864(ArrayItems[v1863])))
+            if (!((ArrayItems[v2612] > 50)))
                 continue;
-            v1866 = ArrayItems[v1863];
-            if (!(v1865.Add(v1866)))
+            v2614 = ArrayItems[v2612];
+            if (!(v2613.Add(v2614)))
                 continue;
-            yield return v1866;
+            yield return v2614;
         }
 
         try
         {
-            while (v1867.MoveNext())
+            while (v2615.MoveNext())
             {
-                v1866 = v1867.Current;
-                if (!(v1865.Add(v1866)))
+                v2614 = v2615.Current;
+                if (!(v2613.Add(v2614)))
                     continue;
-                yield return v1866;
+                yield return v2614;
             }
         }
         finally
         {
-            v1867.Dispose();
+            v2615.Dispose();
         }
     }
 
     int ArrayUnionArrayCountRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1868;
-        HashSet<int> v1869;
-        int v1870;
-        int v1871;
-        int v1872;
-        v1869 = new HashSet<int>();
-        v1872 = 0;
-        v1868 = 0;
-        for (; v1868 < ArrayItems.Length; v1868++)
+        int v2616;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2617;
+        int v2618;
+        int v2619;
+        int v2620;
+        v2617 = new HashSet<int>();
+        v2620 = 0;
+        v2616 = 0;
+        for (; v2616 < ArrayItems.Length; v2616++)
         {
-            v1870 = ArrayItems[v1868];
-            if (!(v1869.Add(v1870)))
+            v2618 = ArrayItems[v2616];
+            if (!(v2617.Add(v2618)))
                 continue;
-            v1872++;
+            v2620++;
         }
 
-        v1871 = 0;
-        for (; v1871 < ArrayItems2.Length; v1871++)
+        v2619 = 0;
+        for (; v2619 < ArrayItems2.Length; v2619++)
         {
-            v1870 = ArrayItems2[v1871];
-            if (!(v1869.Add(v1870)))
+            v2618 = ArrayItems2[v2619];
+            if (!(v2617.Add(v2618)))
                 continue;
-            v1872++;
+            v2620++;
         }
 
-        return v1872;
+        return v2620;
     }
 
     int ArrayUnionArrayCount2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1873;
-        HashSet<int> v1874;
-        int v1875;
-        int v1876;
-        int v1877;
-        v1874 = new HashSet<int>();
-        v1877 = 0;
-        v1873 = 0;
-        for (; v1873 < ArrayItems.Length; v1873++)
+        int v2621;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2622;
+        int v2623;
+        int v2624;
+        int v2625;
+        v2622 = new HashSet<int>();
+        v2625 = 0;
+        v2621 = 0;
+        for (; v2621 < ArrayItems.Length; v2621++)
         {
-            v1875 = ArrayItems[v1873];
-            if (!(v1874.Add(v1875)))
+            v2623 = ArrayItems[v2621];
+            if (!(v2622.Add(v2623)))
                 continue;
-            if (!((v1875 > 70)))
+            if (!((v2623 > 70)))
                 continue;
-            v1877++;
+            v2625++;
         }
 
-        v1876 = 0;
-        for (; v1876 < ArrayItems2.Length; v1876++)
+        v2624 = 0;
+        for (; v2624 < ArrayItems2.Length; v2624++)
         {
-            v1875 = ArrayItems2[v1876];
-            if (!(v1874.Add(v1875)))
+            v2623 = ArrayItems2[v2624];
+            if (!(v2622.Add(v2623)))
                 continue;
-            if (!((v1875 > 70)))
+            if (!((v2623 > 70)))
                 continue;
-            v1877++;
+            v2625++;
         }
 
-        return v1877;
+        return v2625;
     }
 
     int ArrayUnionArraySumRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1878;
-        HashSet<int> v1879;
-        int v1880;
-        int v1881;
-        int v1882;
-        v1879 = new HashSet<int>();
-        v1882 = 0;
-        v1878 = 0;
-        for (; v1878 < ArrayItems.Length; v1878++)
+        int v2626;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2627;
+        int v2628;
+        int v2629;
+        int v2630;
+        v2627 = new HashSet<int>();
+        v2630 = 0;
+        v2626 = 0;
+        for (; v2626 < ArrayItems.Length; v2626++)
         {
-            v1880 = ArrayItems[v1878];
-            if (!(v1879.Add(v1880)))
+            v2628 = ArrayItems[v2626];
+            if (!(v2627.Add(v2628)))
                 continue;
-            v1882 += v1880;
+            v2630 += v2628;
         }
 
-        v1881 = 0;
-        for (; v1881 < ArrayItems2.Length; v1881++)
+        v2629 = 0;
+        for (; v2629 < ArrayItems2.Length; v2629++)
         {
-            v1880 = ArrayItems2[v1881];
-            if (!(v1879.Add(v1880)))
+            v2628 = ArrayItems2[v2629];
+            if (!(v2627.Add(v2628)))
                 continue;
-            v1882 += v1880;
+            v2630 += v2628;
         }
 
-        return v1882;
+        return v2630;
     }
 
     int ArrayUnionArraySum2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1883;
-        HashSet<int> v1884;
-        int v1885;
-        int v1886;
-        int v1887;
-        int v1888;
-        v1884 = new HashSet<int>();
-        v1887 = 0;
-        v1883 = 0;
-        for (; v1883 < ArrayItems.Length; v1883++)
+        int v2631;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2632;
+        int v2633;
+        int v2634;
+        int v2635;
+        int v2636;
+        v2632 = new HashSet<int>();
+        v2635 = 0;
+        v2631 = 0;
+        for (; v2631 < ArrayItems.Length; v2631++)
         {
-            v1885 = ArrayItems[v1883];
-            if (!(v1884.Add(v1885)))
+            v2633 = ArrayItems[v2631];
+            if (!(v2632.Add(v2633)))
                 continue;
-            v1888 = (v1885 + 10);
-            v1887 += v1888;
+            v2636 = (v2633 + 10);
+            v2635 += v2636;
         }
 
-        v1886 = 0;
-        for (; v1886 < ArrayItems2.Length; v1886++)
+        v2634 = 0;
+        for (; v2634 < ArrayItems2.Length; v2634++)
         {
-            v1885 = ArrayItems2[v1886];
-            if (!(v1884.Add(v1885)))
+            v2633 = ArrayItems2[v2634];
+            if (!(v2632.Add(v2633)))
                 continue;
-            v1888 = (v1885 + 10);
-            v1887 += v1888;
+            v2636 = (v2633 + 10);
+            v2635 += v2636;
         }
 
-        return v1887;
+        return v2635;
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionArrayDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1889;
-        HashSet<int> v1890;
-        int v1891;
-        int v1892;
-        HashSet<int> v1893;
-        v1890 = new HashSet<int>();
-        v1893 = new HashSet<int>();
-        v1889 = 0;
-        for (; v1889 < ArrayItems.Length; v1889++)
+        int v2637;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2638;
+        int v2639;
+        int v2640;
+        HashSet<int> v2641;
+        v2638 = new HashSet<int>();
+        v2641 = new HashSet<int>();
+        v2637 = 0;
+        for (; v2637 < ArrayItems.Length; v2637++)
         {
-            v1891 = ArrayItems[v1889];
-            if (!(v1890.Add(v1891)))
+            v2639 = ArrayItems[v2637];
+            if (!(v2638.Add(v2639)))
                 continue;
-            if (!(v1893.Add(v1891)))
+            if (!(v2641.Add(v2639)))
                 continue;
-            yield return v1891;
+            yield return v2639;
         }
 
-        v1892 = 0;
-        for (; v1892 < ArrayItems2.Length; v1892++)
+        v2640 = 0;
+        for (; v2640 < ArrayItems2.Length; v2640++)
         {
-            v1891 = ArrayItems2[v1892];
-            if (!(v1890.Add(v1891)))
+            v2639 = ArrayItems2[v2640];
+            if (!(v2638.Add(v2639)))
                 continue;
-            if (!(v1893.Add(v1891)))
+            if (!(v2641.Add(v2639)))
                 continue;
-            yield return v1891;
+            yield return v2639;
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionArrayDistinct2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1894;
-        HashSet<int> v1895;
-        int v1896;
-        int v1897;
-        HashSet<int> v1898;
-        v1895 = new HashSet<int>();
-        v1898 = new HashSet<int>(EqualityComparer<int>.Default);
-        v1894 = 0;
-        for (; v1894 < ArrayItems.Length; v1894++)
+        int v2642;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2643;
+        int v2644;
+        int v2645;
+        HashSet<int> v2646;
+        v2643 = new HashSet<int>();
+        v2646 = new HashSet<int>(EqualityComparer<int>.Default);
+        v2642 = 0;
+        for (; v2642 < ArrayItems.Length; v2642++)
         {
-            v1896 = ArrayItems[v1894];
-            if (!(v1895.Add(v1896)))
+            v2644 = ArrayItems[v2642];
+            if (!(v2643.Add(v2644)))
                 continue;
-            if (!(v1898.Add(v1896)))
+            if (!(v2646.Add(v2644)))
                 continue;
-            yield return v1896;
+            yield return v2644;
         }
 
-        v1897 = 0;
-        for (; v1897 < ArrayItems2.Length; v1897++)
+        v2645 = 0;
+        for (; v2645 < ArrayItems2.Length; v2645++)
         {
-            v1896 = ArrayItems2[v1897];
-            if (!(v1895.Add(v1896)))
+            v2644 = ArrayItems2[v2645];
+            if (!(v2643.Add(v2644)))
                 continue;
-            if (!(v1898.Add(v1896)))
+            if (!(v2646.Add(v2644)))
                 continue;
-            yield return v1896;
+            yield return v2644;
         }
     }
 
     int ArrayUnionArrayElementAtRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1899;
-        HashSet<int> v1900;
-        int v1901;
-        int v1902;
-        int v1903;
-        v1900 = new HashSet<int>();
-        v1903 = 0;
-        v1899 = 0;
-        for (; v1899 < ArrayItems.Length; v1899++)
+        int v2647;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2648;
+        int v2649;
+        int v2650;
+        int v2651;
+        v2648 = new HashSet<int>();
+        v2651 = 0;
+        v2647 = 0;
+        for (; v2647 < ArrayItems.Length; v2647++)
         {
-            v1901 = ArrayItems[v1899];
-            if (!(v1900.Add(v1901)))
+            v2649 = ArrayItems[v2647];
+            if (!(v2648.Add(v2649)))
                 continue;
-            if (v1903 == 45)
-                return v1901;
-            v1903++;
+            if (v2651 == 45)
+                return v2649;
+            v2651++;
         }
 
-        v1902 = 0;
-        for (; v1902 < ArrayItems2.Length; v1902++)
+        v2650 = 0;
+        for (; v2650 < ArrayItems2.Length; v2650++)
         {
-            v1901 = ArrayItems2[v1902];
-            if (!(v1900.Add(v1901)))
+            v2649 = ArrayItems2[v2650];
+            if (!(v2648.Add(v2649)))
                 continue;
-            if (v1903 == 45)
-                return v1901;
-            v1903++;
+            if (v2651 == 45)
+                return v2649;
+            v2651++;
         }
 
         throw new System.InvalidOperationException("The sequence did not contain enough elements.");
@@ -2087,33 +2149,35 @@ public class UnionTests
 
     int ArrayUnionArrayElementAtOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1904;
-        HashSet<int> v1905;
-        int v1906;
-        int v1907;
-        int v1908;
-        v1905 = new HashSet<int>();
-        v1908 = 0;
-        v1904 = 0;
-        for (; v1904 < ArrayItems.Length; v1904++)
+        int v2652;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2653;
+        int v2654;
+        int v2655;
+        int v2656;
+        v2653 = new HashSet<int>();
+        v2656 = 0;
+        v2652 = 0;
+        for (; v2652 < ArrayItems.Length; v2652++)
         {
-            v1906 = ArrayItems[v1904];
-            if (!(v1905.Add(v1906)))
+            v2654 = ArrayItems[v2652];
+            if (!(v2653.Add(v2654)))
                 continue;
-            if (v1908 == 45)
-                return v1906;
-            v1908++;
+            if (v2656 == 45)
+                return v2654;
+            v2656++;
         }
 
-        v1907 = 0;
-        for (; v1907 < ArrayItems2.Length; v1907++)
+        v2655 = 0;
+        for (; v2655 < ArrayItems2.Length; v2655++)
         {
-            v1906 = ArrayItems2[v1907];
-            if (!(v1905.Add(v1906)))
+            v2654 = ArrayItems2[v2655];
+            if (!(v2653.Add(v2654)))
                 continue;
-            if (v1908 == 45)
-                return v1906;
-            v1908++;
+            if (v2656 == 45)
+                return v2654;
+            v2656++;
         }
 
         return default(int);
@@ -2121,27 +2185,29 @@ public class UnionTests
 
     int ArrayUnionArrayFirstRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1909;
-        HashSet<int> v1910;
-        int v1911;
-        int v1912;
-        v1910 = new HashSet<int>();
-        v1909 = 0;
-        for (; v1909 < ArrayItems.Length; v1909++)
+        int v2657;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2658;
+        int v2659;
+        int v2660;
+        v2658 = new HashSet<int>();
+        v2657 = 0;
+        for (; v2657 < ArrayItems.Length; v2657++)
         {
-            v1911 = ArrayItems[v1909];
-            if (!(v1910.Add(v1911)))
+            v2659 = ArrayItems[v2657];
+            if (!(v2658.Add(v2659)))
                 continue;
-            return v1911;
+            return v2659;
         }
 
-        v1912 = 0;
-        for (; v1912 < ArrayItems2.Length; v1912++)
+        v2660 = 0;
+        for (; v2660 < ArrayItems2.Length; v2660++)
         {
-            v1911 = ArrayItems2[v1912];
-            if (!(v1910.Add(v1911)))
+            v2659 = ArrayItems2[v2660];
+            if (!(v2658.Add(v2659)))
                 continue;
-            return v1911;
+            return v2659;
         }
 
         throw new System.InvalidOperationException("The sequence did not contain any elements.");
@@ -2149,27 +2215,29 @@ public class UnionTests
 
     int ArrayUnionArrayFirstOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1913;
-        HashSet<int> v1914;
-        int v1915;
-        int v1916;
-        v1914 = new HashSet<int>();
-        v1913 = 0;
-        for (; v1913 < ArrayItems.Length; v1913++)
+        int v2661;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2662;
+        int v2663;
+        int v2664;
+        v2662 = new HashSet<int>();
+        v2661 = 0;
+        for (; v2661 < ArrayItems.Length; v2661++)
         {
-            v1915 = ArrayItems[v1913];
-            if (!(v1914.Add(v1915)))
+            v2663 = ArrayItems[v2661];
+            if (!(v2662.Add(v2663)))
                 continue;
-            return v1915;
+            return v2663;
         }
 
-        v1916 = 0;
-        for (; v1916 < ArrayItems2.Length; v1916++)
+        v2664 = 0;
+        for (; v2664 < ArrayItems2.Length; v2664++)
         {
-            v1915 = ArrayItems2[v1916];
-            if (!(v1914.Add(v1915)))
+            v2663 = ArrayItems2[v2664];
+            if (!(v2662.Add(v2663)))
                 continue;
-            return v1915;
+            return v2663;
         }
 
         return default(int);
@@ -2177,443 +2245,467 @@ public class UnionTests
 
     int ArrayUnionArrayLastRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1917;
-        HashSet<int> v1918;
-        int v1919;
-        int v1920;
-        int? v1921;
-        v1918 = new HashSet<int>();
-        v1921 = null;
-        v1917 = 0;
-        for (; v1917 < ArrayItems.Length; v1917++)
+        int v2665;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2666;
+        int v2667;
+        int v2668;
+        int? v2669;
+        v2666 = new HashSet<int>();
+        v2669 = null;
+        v2665 = 0;
+        for (; v2665 < ArrayItems.Length; v2665++)
         {
-            v1919 = ArrayItems[v1917];
-            if (!(v1918.Add(v1919)))
+            v2667 = ArrayItems[v2665];
+            if (!(v2666.Add(v2667)))
                 continue;
-            v1921 = v1919;
+            v2669 = v2667;
         }
 
-        v1920 = 0;
-        for (; v1920 < ArrayItems2.Length; v1920++)
+        v2668 = 0;
+        for (; v2668 < ArrayItems2.Length; v2668++)
         {
-            v1919 = ArrayItems2[v1920];
-            if (!(v1918.Add(v1919)))
+            v2667 = ArrayItems2[v2668];
+            if (!(v2666.Add(v2667)))
                 continue;
-            v1921 = v1919;
+            v2669 = v2667;
         }
 
-        if (v1921 == null)
+        if (v2669 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1921;
+            return (int)v2669;
     }
 
     int ArrayUnionArrayLastOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1922;
-        HashSet<int> v1923;
-        int v1924;
-        int v1925;
-        int? v1926;
-        v1923 = new HashSet<int>();
-        v1926 = null;
-        v1922 = 0;
-        for (; v1922 < ArrayItems.Length; v1922++)
+        int v2670;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2671;
+        int v2672;
+        int v2673;
+        int? v2674;
+        v2671 = new HashSet<int>();
+        v2674 = null;
+        v2670 = 0;
+        for (; v2670 < ArrayItems.Length; v2670++)
         {
-            v1924 = ArrayItems[v1922];
-            if (!(v1923.Add(v1924)))
+            v2672 = ArrayItems[v2670];
+            if (!(v2671.Add(v2672)))
                 continue;
-            v1926 = v1924;
+            v2674 = v2672;
         }
 
-        v1925 = 0;
-        for (; v1925 < ArrayItems2.Length; v1925++)
+        v2673 = 0;
+        for (; v2673 < ArrayItems2.Length; v2673++)
         {
-            v1924 = ArrayItems2[v1925];
-            if (!(v1923.Add(v1924)))
+            v2672 = ArrayItems2[v2673];
+            if (!(v2671.Add(v2672)))
                 continue;
-            v1926 = v1924;
+            v2674 = v2672;
         }
 
-        if (v1926 == null)
+        if (v2674 == null)
             return default(int);
         else
-            return (int)v1926;
+            return (int)v2674;
     }
 
     int ArrayUnionArraySingleRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1927;
-        HashSet<int> v1928;
-        int v1929;
-        int v1930;
-        int? v1931;
-        v1928 = new HashSet<int>();
-        v1931 = null;
-        v1927 = 0;
-        for (; v1927 < ArrayItems.Length; v1927++)
+        int v2675;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2676;
+        int v2677;
+        int v2678;
+        int? v2679;
+        v2676 = new HashSet<int>();
+        v2679 = null;
+        v2675 = 0;
+        for (; v2675 < ArrayItems.Length; v2675++)
         {
-            v1929 = ArrayItems[v1927];
-            if (!(v1928.Add(v1929)))
+            v2677 = ArrayItems[v2675];
+            if (!(v2676.Add(v2677)))
                 continue;
-            if (v1931 == null)
-                v1931 = v1929;
+            if (v2679 == null)
+                v2679 = v2677;
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        v1930 = 0;
-        for (; v1930 < ArrayItems2.Length; v1930++)
+        v2678 = 0;
+        for (; v2678 < ArrayItems2.Length; v2678++)
         {
-            v1929 = ArrayItems2[v1930];
-            if (!(v1928.Add(v1929)))
+            v2677 = ArrayItems2[v2678];
+            if (!(v2676.Add(v2677)))
                 continue;
-            if (v1931 == null)
-                v1931 = v1929;
+            if (v2679 == null)
+                v2679 = v2677;
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        if (v1931 == null)
+        if (v2679 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1931;
+            return (int)v2679;
     }
 
     int ArrayUnionArraySingle2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1932;
-        HashSet<int> v1933;
-        int v1934;
-        int v1935;
-        int? v1936;
-        v1933 = new HashSet<int>();
-        v1936 = null;
-        v1932 = 0;
-        for (; v1932 < ArrayItems.Length; v1932++)
+        int v2680;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2681;
+        int v2682;
+        int v2683;
+        int? v2684;
+        v2681 = new HashSet<int>();
+        v2684 = null;
+        v2680 = 0;
+        for (; v2680 < ArrayItems.Length; v2680++)
         {
-            v1934 = ArrayItems[v1932];
-            if (!(v1933.Add(v1934)))
+            v2682 = ArrayItems[v2680];
+            if (!(v2681.Add(v2682)))
                 continue;
-            if ((v1934 == 76))
-                if (v1936 == null)
-                    v1936 = v1934;
+            if ((v2682 == 76))
+                if (v2684 == null)
+                    v2684 = v2682;
                 else
                     throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        v1935 = 0;
-        for (; v1935 < ArrayItems2.Length; v1935++)
+        v2683 = 0;
+        for (; v2683 < ArrayItems2.Length; v2683++)
         {
-            v1934 = ArrayItems2[v1935];
-            if (!(v1933.Add(v1934)))
+            v2682 = ArrayItems2[v2683];
+            if (!(v2681.Add(v2682)))
                 continue;
-            if ((v1934 == 76))
-                if (v1936 == null)
-                    v1936 = v1934;
+            if ((v2682 == 76))
+                if (v2684 == null)
+                    v2684 = v2682;
                 else
                     throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        if (v1936 == null)
+        if (v2684 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1936;
+            return (int)v2684;
     }
 
     int ArrayUnionArraySingleOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1937;
-        HashSet<int> v1938;
-        int v1939;
-        int v1940;
-        int? v1941;
-        v1938 = new HashSet<int>();
-        v1941 = null;
-        v1937 = 0;
-        for (; v1937 < ArrayItems.Length; v1937++)
+        int v2685;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2686;
+        int v2687;
+        int v2688;
+        int? v2689;
+        v2686 = new HashSet<int>();
+        v2689 = null;
+        v2685 = 0;
+        for (; v2685 < ArrayItems.Length; v2685++)
         {
-            v1939 = ArrayItems[v1937];
-            if (!(v1938.Add(v1939)))
+            v2687 = ArrayItems[v2685];
+            if (!(v2686.Add(v2687)))
                 continue;
-            if (v1941 == null)
-                v1941 = v1939;
+            if (v2689 == null)
+                v2689 = v2687;
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        v1940 = 0;
-        for (; v1940 < ArrayItems2.Length; v1940++)
+        v2688 = 0;
+        for (; v2688 < ArrayItems2.Length; v2688++)
         {
-            v1939 = ArrayItems2[v1940];
-            if (!(v1938.Add(v1939)))
+            v2687 = ArrayItems2[v2688];
+            if (!(v2686.Add(v2687)))
                 continue;
-            if (v1941 == null)
-                v1941 = v1939;
+            if (v2689 == null)
+                v2689 = v2687;
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        if (v1941 == null)
+        if (v2689 == null)
             return default(int);
         else
-            return (int)v1941;
+            return (int)v2689;
     }
 
     int ArrayUnionArrayMinRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1942;
-        HashSet<int> v1943;
-        int v1944;
-        int v1945;
-        int v1946;
-        bool v1947;
-        v1943 = new HashSet<int>();
-        v1946 = 2147483647;
-        v1947 = false;
-        v1942 = 0;
-        for (; v1942 < ArrayItems.Length; v1942++)
+        int v2690;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2691;
+        int v2692;
+        int v2693;
+        int v2694;
+        bool v2695;
+        v2691 = new HashSet<int>();
+        v2694 = 2147483647;
+        v2695 = false;
+        v2690 = 0;
+        for (; v2690 < ArrayItems.Length; v2690++)
         {
-            v1944 = ArrayItems[v1942];
-            if (!(v1943.Add(v1944)))
+            v2692 = ArrayItems[v2690];
+            if (!(v2691.Add(v2692)))
                 continue;
-            if (v1944 >= v1946)
+            if (v2692 >= v2694)
                 continue;
-            v1946 = v1944;
-            v1947 = true;
+            v2694 = v2692;
+            v2695 = true;
         }
 
-        v1945 = 0;
-        for (; v1945 < ArrayItems2.Length; v1945++)
+        v2693 = 0;
+        for (; v2693 < ArrayItems2.Length; v2693++)
         {
-            v1944 = ArrayItems2[v1945];
-            if (!(v1943.Add(v1944)))
+            v2692 = ArrayItems2[v2693];
+            if (!(v2691.Add(v2692)))
                 continue;
-            if (v1944 >= v1946)
+            if (v2692 >= v2694)
                 continue;
-            v1946 = v1944;
-            v1947 = true;
+            v2694 = v2692;
+            v2695 = true;
         }
 
-        if (!(v1947))
+        if (!(v2695))
             throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1946;
+        return v2694;
     }
 
     decimal ArrayUnionArrayMin2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1948;
-        HashSet<int> v1949;
-        int v1950;
-        int v1951;
-        decimal v1952;
-        bool v1953;
-        decimal v1954;
-        v1949 = new HashSet<int>();
-        v1952 = 79228162514264337593543950335M;
-        v1953 = false;
-        v1948 = 0;
-        for (; v1948 < ArrayItems.Length; v1948++)
+        int v2696;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2697;
+        int v2698;
+        int v2699;
+        decimal v2700;
+        bool v2701;
+        decimal v2702;
+        v2697 = new HashSet<int>();
+        v2700 = 79228162514264337593543950335M;
+        v2701 = false;
+        v2696 = 0;
+        for (; v2696 < ArrayItems.Length; v2696++)
         {
-            v1950 = ArrayItems[v1948];
-            if (!(v1949.Add(v1950)))
+            v2698 = ArrayItems[v2696];
+            if (!(v2697.Add(v2698)))
                 continue;
-            v1954 = (v1950 + 2m);
-            if (v1954 >= v1952)
+            v2702 = (v2698 + 2m);
+            if (v2702 >= v2700)
                 continue;
-            v1952 = v1954;
-            v1953 = true;
+            v2700 = v2702;
+            v2701 = true;
         }
 
-        v1951 = 0;
-        for (; v1951 < ArrayItems2.Length; v1951++)
+        v2699 = 0;
+        for (; v2699 < ArrayItems2.Length; v2699++)
         {
-            v1950 = ArrayItems2[v1951];
-            if (!(v1949.Add(v1950)))
+            v2698 = ArrayItems2[v2699];
+            if (!(v2697.Add(v2698)))
                 continue;
-            v1954 = (v1950 + 2m);
-            if (v1954 >= v1952)
+            v2702 = (v2698 + 2m);
+            if (v2702 >= v2700)
                 continue;
-            v1952 = v1954;
-            v1953 = true;
+            v2700 = v2702;
+            v2701 = true;
         }
 
-        if (!(v1953))
+        if (!(v2701))
             throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1952;
+        return v2700;
     }
 
     int ArrayUnionArrayMaxRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1955;
-        HashSet<int> v1956;
-        int v1957;
-        int v1958;
-        int v1959;
-        bool v1960;
-        v1956 = new HashSet<int>();
-        v1959 = -2147483648;
-        v1960 = false;
-        v1955 = 0;
-        for (; v1955 < ArrayItems.Length; v1955++)
+        int v2703;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2704;
+        int v2705;
+        int v2706;
+        int v2707;
+        bool v2708;
+        v2704 = new HashSet<int>();
+        v2707 = -2147483648;
+        v2708 = false;
+        v2703 = 0;
+        for (; v2703 < ArrayItems.Length; v2703++)
         {
-            v1957 = ArrayItems[v1955];
-            if (!(v1956.Add(v1957)))
+            v2705 = ArrayItems[v2703];
+            if (!(v2704.Add(v2705)))
                 continue;
-            if (v1957 <= v1959)
+            if (v2705 <= v2707)
                 continue;
-            v1959 = v1957;
-            v1960 = true;
+            v2707 = v2705;
+            v2708 = true;
         }
 
-        v1958 = 0;
-        for (; v1958 < ArrayItems2.Length; v1958++)
+        v2706 = 0;
+        for (; v2706 < ArrayItems2.Length; v2706++)
         {
-            v1957 = ArrayItems2[v1958];
-            if (!(v1956.Add(v1957)))
+            v2705 = ArrayItems2[v2706];
+            if (!(v2704.Add(v2705)))
                 continue;
-            if (v1957 <= v1959)
+            if (v2705 <= v2707)
                 continue;
-            v1959 = v1957;
-            v1960 = true;
+            v2707 = v2705;
+            v2708 = true;
         }
 
-        if (!(v1960))
+        if (!(v2708))
             throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1959;
+        return v2707;
     }
 
     decimal ArrayUnionArrayMax2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1961;
-        HashSet<int> v1962;
-        int v1963;
-        int v1964;
-        decimal v1965;
-        bool v1966;
-        decimal v1967;
-        v1962 = new HashSet<int>();
-        v1965 = -79228162514264337593543950335M;
-        v1966 = false;
-        v1961 = 0;
-        for (; v1961 < ArrayItems.Length; v1961++)
+        int v2709;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2710;
+        int v2711;
+        int v2712;
+        decimal v2713;
+        bool v2714;
+        decimal v2715;
+        v2710 = new HashSet<int>();
+        v2713 = -79228162514264337593543950335M;
+        v2714 = false;
+        v2709 = 0;
+        for (; v2709 < ArrayItems.Length; v2709++)
         {
-            v1963 = ArrayItems[v1961];
-            if (!(v1962.Add(v1963)))
+            v2711 = ArrayItems[v2709];
+            if (!(v2710.Add(v2711)))
                 continue;
-            v1967 = (v1963 + 2m);
-            if (v1967 <= v1965)
+            v2715 = (v2711 + 2m);
+            if (v2715 <= v2713)
                 continue;
-            v1965 = v1967;
-            v1966 = true;
+            v2713 = v2715;
+            v2714 = true;
         }
 
-        v1964 = 0;
-        for (; v1964 < ArrayItems2.Length; v1964++)
+        v2712 = 0;
+        for (; v2712 < ArrayItems2.Length; v2712++)
         {
-            v1963 = ArrayItems2[v1964];
-            if (!(v1962.Add(v1963)))
+            v2711 = ArrayItems2[v2712];
+            if (!(v2710.Add(v2711)))
                 continue;
-            v1967 = (v1963 + 2m);
-            if (v1967 <= v1965)
+            v2715 = (v2711 + 2m);
+            if (v2715 <= v2713)
                 continue;
-            v1965 = v1967;
-            v1966 = true;
+            v2713 = v2715;
+            v2714 = true;
         }
 
-        if (!(v1966))
+        if (!(v2714))
             throw new System.InvalidOperationException("Sequence does not contains any elements");
-        return v1965;
+        return v2713;
     }
 
     long ArrayUnionArrayLongCountRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1968;
-        HashSet<int> v1969;
-        int v1970;
-        int v1971;
-        long v1972;
-        v1969 = new HashSet<int>();
-        v1972 = 0;
-        v1968 = 0;
-        for (; v1968 < ArrayItems.Length; v1968++)
+        int v2716;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2717;
+        int v2718;
+        int v2719;
+        long v2720;
+        v2717 = new HashSet<int>();
+        v2720 = 0;
+        v2716 = 0;
+        for (; v2716 < ArrayItems.Length; v2716++)
         {
-            v1970 = ArrayItems[v1968];
-            if (!(v1969.Add(v1970)))
+            v2718 = ArrayItems[v2716];
+            if (!(v2717.Add(v2718)))
                 continue;
-            v1972++;
+            v2720++;
         }
 
-        v1971 = 0;
-        for (; v1971 < ArrayItems2.Length; v1971++)
+        v2719 = 0;
+        for (; v2719 < ArrayItems2.Length; v2719++)
         {
-            v1970 = ArrayItems2[v1971];
-            if (!(v1969.Add(v1970)))
+            v2718 = ArrayItems2[v2719];
+            if (!(v2717.Add(v2718)))
                 continue;
-            v1972++;
+            v2720++;
         }
 
-        return v1972;
+        return v2720;
     }
 
     long ArrayUnionArrayLongCount2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1973;
-        HashSet<int> v1974;
-        int v1975;
-        int v1976;
-        long v1977;
-        v1974 = new HashSet<int>();
-        v1977 = 0;
-        v1973 = 0;
-        for (; v1973 < ArrayItems.Length; v1973++)
+        int v2721;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2722;
+        int v2723;
+        int v2724;
+        long v2725;
+        v2722 = new HashSet<int>();
+        v2725 = 0;
+        v2721 = 0;
+        for (; v2721 < ArrayItems.Length; v2721++)
         {
-            v1975 = ArrayItems[v1973];
-            if (!(v1974.Add(v1975)))
+            v2723 = ArrayItems[v2721];
+            if (!(v2722.Add(v2723)))
                 continue;
-            if (!((v1975 > 50)))
+            if (!((v2723 > 50)))
                 continue;
-            v1977++;
+            v2725++;
         }
 
-        v1976 = 0;
-        for (; v1976 < ArrayItems2.Length; v1976++)
+        v2724 = 0;
+        for (; v2724 < ArrayItems2.Length; v2724++)
         {
-            v1975 = ArrayItems2[v1976];
-            if (!(v1974.Add(v1975)))
+            v2723 = ArrayItems2[v2724];
+            if (!(v2722.Add(v2723)))
                 continue;
-            if (!((v1975 > 50)))
+            if (!((v2723 > 50)))
                 continue;
-            v1977++;
+            v2725++;
         }
 
-        return v1977;
+        return v2725;
     }
 
     bool ArrayUnionArrayContainsRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1978;
-        HashSet<int> v1979;
-        int v1980;
-        int v1981;
-        v1979 = new HashSet<int>();
-        v1978 = 0;
-        for (; v1978 < ArrayItems.Length; v1978++)
+        int v2726;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2727;
+        int v2728;
+        int v2729;
+        v2727 = new HashSet<int>();
+        v2726 = 0;
+        for (; v2726 < ArrayItems.Length; v2726++)
         {
-            v1980 = ArrayItems[v1978];
-            if (!(v1979.Add(v1980)))
+            v2728 = ArrayItems[v2726];
+            if (!(v2727.Add(v2728)))
                 continue;
-            if (v1980 == 56)
+            if (v2728 == 56)
                 return true;
         }
 
-        v1981 = 0;
-        for (; v1981 < ArrayItems2.Length; v1981++)
+        v2729 = 0;
+        for (; v2729 < ArrayItems2.Length; v2729++)
         {
-            v1980 = ArrayItems2[v1981];
-            if (!(v1979.Add(v1980)))
+            v2728 = ArrayItems2[v2729];
+            if (!(v2727.Add(v2728)))
                 continue;
-            if (v1980 == 56)
+            if (v2728 == 56)
                 return true;
         }
 
@@ -2622,156 +2714,164 @@ public class UnionTests
 
     double ArrayUnionArrayAverageRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1982;
-        HashSet<int> v1983;
-        int v1984;
-        int v1985;
-        double v1986;
-        int v1987;
-        v1983 = new HashSet<int>();
-        v1986 = 0;
-        v1987 = 0;
-        v1982 = 0;
-        for (; v1982 < ArrayItems.Length; v1982++)
+        int v2730;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2731;
+        int v2732;
+        int v2733;
+        double v2734;
+        int v2735;
+        v2731 = new HashSet<int>();
+        v2734 = 0;
+        v2735 = 0;
+        v2730 = 0;
+        for (; v2730 < ArrayItems.Length; v2730++)
         {
-            v1984 = ArrayItems[v1982];
-            if (!(v1983.Add(v1984)))
+            v2732 = ArrayItems[v2730];
+            if (!(v2731.Add(v2732)))
                 continue;
-            v1986 += v1984;
-            v1987++;
+            v2734 += v2732;
+            v2735++;
         }
 
-        v1985 = 0;
-        for (; v1985 < ArrayItems2.Length; v1985++)
+        v2733 = 0;
+        for (; v2733 < ArrayItems2.Length; v2733++)
         {
-            v1984 = ArrayItems2[v1985];
-            if (!(v1983.Add(v1984)))
+            v2732 = ArrayItems2[v2733];
+            if (!(v2731.Add(v2732)))
                 continue;
-            v1986 += v1984;
-            v1987++;
+            v2734 += v2732;
+            v2735++;
         }
 
-        if (v1987 == 0)
+        if (v2735 == 0)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
-        return (v1986 / v1987);
+        return (v2734 / v2735);
     }
 
     double ArrayUnionArrayAverage2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1988;
-        HashSet<int> v1989;
-        int v1990;
-        int v1991;
-        double v1992;
-        int v1993;
-        v1989 = new HashSet<int>();
-        v1992 = 0;
-        v1993 = 0;
-        v1988 = 0;
-        for (; v1988 < ArrayItems.Length; v1988++)
+        int v2736;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2737;
+        int v2738;
+        int v2739;
+        double v2740;
+        int v2741;
+        v2737 = new HashSet<int>();
+        v2740 = 0;
+        v2741 = 0;
+        v2736 = 0;
+        for (; v2736 < ArrayItems.Length; v2736++)
         {
-            v1990 = ArrayItems[v1988];
-            if (!(v1989.Add(v1990)))
+            v2738 = ArrayItems[v2736];
+            if (!(v2737.Add(v2738)))
                 continue;
-            v1992 += (v1990 + 10);
-            v1993++;
+            v2740 += (v2738 + 10);
+            v2741++;
         }
 
-        v1991 = 0;
-        for (; v1991 < ArrayItems2.Length; v1991++)
+        v2739 = 0;
+        for (; v2739 < ArrayItems2.Length; v2739++)
         {
-            v1990 = ArrayItems2[v1991];
-            if (!(v1989.Add(v1990)))
+            v2738 = ArrayItems2[v2739];
+            if (!(v2737.Add(v2738)))
                 continue;
-            v1992 += (v1990 + 10);
-            v1993++;
+            v2740 += (v2738 + 10);
+            v2741++;
         }
 
-        if (v1993 == 0)
+        if (v2741 == 0)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
-        return (v1992 / v1993);
+        return (v2740 / v2741);
     }
 
     bool ArrayUnionArrayContains2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1994;
-        HashSet<int> v1995;
-        int v1996;
-        int v1997;
-        System.Collections.Generic.EqualityComparer<int> v1998;
-        v1995 = new HashSet<int>();
-        v1998 = EqualityComparer<int>.Default;
-        v1994 = 0;
-        for (; v1994 < ArrayItems.Length; v1994++)
+        int v2742;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2743;
+        int v2744;
+        int v2745;
+        System.Collections.Generic.EqualityComparer<int> v2746;
+        v2743 = new HashSet<int>();
+        v2746 = EqualityComparer<int>.Default;
+        v2742 = 0;
+        for (; v2742 < ArrayItems.Length; v2742++)
         {
-            v1996 = ArrayItems[v1994];
-            if (!(v1995.Add(v1996)))
+            v2744 = ArrayItems[v2742];
+            if (!(v2743.Add(v2744)))
                 continue;
-            if (v1998.Equals(v1996, 56))
+            if (v2746.Equals(v2744, 56))
                 return true;
         }
 
-        v1997 = 0;
-        for (; v1997 < ArrayItems2.Length; v1997++)
+        v2745 = 0;
+        for (; v2745 < ArrayItems2.Length; v2745++)
         {
-            v1996 = ArrayItems2[v1997];
-            if (!(v1995.Add(v1996)))
+            v2744 = ArrayItems2[v2745];
+            if (!(v2743.Add(v2744)))
                 continue;
-            if (v1998.Equals(v1996, 56))
+            if (v2746.Equals(v2744, 56))
                 return true;
         }
 
         return false;
     }
 
-    System.Collections.Generic.IEnumerable<int> SelectWhereArrayUnionSelectWhereArrayContainsRewritten_ProceduralLinq1(int[] ArrayItems2, System.Func<int, int> v2000, System.Func<int, bool> v2002)
+    System.Collections.Generic.IEnumerable<int> SelectWhereArrayUnionSelectWhereArrayContainsRewritten_ProceduralLinq1(int[] ArrayItems2)
     {
-        int v1999;
-        int v2001;
-        v1999 = 0;
-        for (; v1999 < ArrayItems2.Length; v1999++)
+        int v2747;
+        int v2748;
+        v2747 = 0;
+        for (; v2747 < ArrayItems2.Length; v2747++)
         {
-            v2001 = v2000(ArrayItems2[v1999]);
-            if (!(v2002(v2001)))
+            v2748 = (ArrayItems2[v2747] + 10);
+            if (!((v2748 > 80)))
                 continue;
-            yield return v2001;
+            yield return v2748;
         }
     }
 
     bool SelectWhereArrayUnionSelectWhereArrayContainsRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v2003;
-        int v2004;
-        HashSet<int> v2005;
-        IEnumerator<int> v2006;
-        v2006 = SelectWhereArrayUnionSelectWhereArrayContainsRewritten_ProceduralLinq1(ArrayItems2, x => x + 10, x => x > 80).GetEnumerator();
-        v2005 = new HashSet<int>();
-        v2003 = 0;
-        for (; v2003 < ArrayItems.Length; v2003++)
+        int v2749;
+        int v2750;
+        if (SelectWhereArrayUnionSelectWhereArrayContainsRewritten_ProceduralLinq1(ArrayItems2) == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2751;
+        IEnumerator<int> v2752;
+        v2752 = SelectWhereArrayUnionSelectWhereArrayContainsRewritten_ProceduralLinq1(ArrayItems2).GetEnumerator();
+        v2751 = new HashSet<int>();
+        v2749 = 0;
+        for (; v2749 < ArrayItems.Length; v2749++)
         {
-            v2004 = (ArrayItems[v2003] + 10);
-            if (!((v2004 > 80)))
+            v2750 = (ArrayItems[v2749] + 10);
+            if (!((v2750 > 80)))
                 continue;
-            if (!(v2005.Add(v2004)))
+            if (!(v2751.Add(v2750)))
                 continue;
-            if (v2004 == 112)
+            if (v2750 == 112)
                 return true;
         }
 
         try
         {
-            while (v2006.MoveNext())
+            while (v2752.MoveNext())
             {
-                v2004 = v2006.Current;
-                if (!(v2005.Add(v2004)))
+                v2750 = v2752.Current;
+                if (!(v2751.Add(v2750)))
                     continue;
-                if (v2004 == 112)
+                if (v2750 == 112)
                     return true;
             }
         }
         finally
         {
-            v2006.Dispose();
+            v2752.Dispose();
         }
 
         return false;
@@ -2779,606 +2879,628 @@ public class UnionTests
 
     System.Collections.Generic.IEnumerable<int> RangeUnionArrayRewritten_ProceduralLinq1()
     {
-        int v2007;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        HashSet<int> v2008;
-        int v2009;
-        int v2010;
-        v2008 = new HashSet<int>();
-        v2007 = 0;
-        for (; v2007 < 100; v2007++)
+        int v2753;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2754;
+        int v2755;
+        int v2756;
+        v2754 = new HashSet<int>();
+        v2753 = 0;
+        for (; v2753 < 100; v2753++)
         {
-            v2009 = (v2007 + 20);
-            if (!(v2008.Add(v2009)))
+            v2755 = (v2753 + 20);
+            if (!(v2754.Add(v2755)))
                 continue;
-            yield return v2009;
+            yield return v2755;
         }
 
-        v2010 = 0;
-        for (; v2010 < ArrayItems2.Length; v2010++)
+        v2756 = 0;
+        for (; v2756 < ArrayItems2.Length; v2756++)
         {
-            v2009 = ArrayItems2[v2010];
-            if (!(v2008.Add(v2009)))
+            v2755 = ArrayItems2[v2756];
+            if (!(v2754.Add(v2755)))
                 continue;
-            yield return v2009;
+            yield return v2755;
         }
     }
 
     System.Collections.Generic.IEnumerable<int> RepeatUnionArrayRewritten_ProceduralLinq1()
     {
-        int v2011;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        HashSet<int> v2012;
-        int v2013;
-        int v2014;
-        v2012 = new HashSet<int>();
-        v2011 = 0;
-        for (; v2011 < 100; v2011++)
+        int v2757;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2758;
+        int v2759;
+        int v2760;
+        v2758 = new HashSet<int>();
+        v2757 = 0;
+        for (; v2757 < 100; v2757++)
         {
-            v2013 = 20;
-            if (!(v2012.Add(v2013)))
+            v2759 = 20;
+            if (!(v2758.Add(v2759)))
                 continue;
-            yield return v2013;
+            yield return v2759;
         }
 
-        v2014 = 0;
-        for (; v2014 < ArrayItems2.Length; v2014++)
+        v2760 = 0;
+        for (; v2760 < ArrayItems2.Length; v2760++)
         {
-            v2013 = ArrayItems2[v2014];
-            if (!(v2012.Add(v2013)))
+            v2759 = ArrayItems2[v2760];
+            if (!(v2758.Add(v2759)))
                 continue;
-            yield return v2013;
+            yield return v2759;
         }
     }
 
     System.Collections.Generic.IEnumerable<int> EmptyUnionArrayRewritten_ProceduralLinq1()
     {
-        int v2015;
-        HashSet<int> v2016;
-        int v2017;
-        int v2018;
-        v2016 = new HashSet<int>();
-        v2015 = 0;
-        for (; v2015 < 0; v2015++)
+        int v2761;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2762;
+        int v2763;
+        int v2764;
+        v2762 = new HashSet<int>();
+        v2761 = 0;
+        for (; v2761 < 0; v2761++)
         {
-            v2017 = default(int);
-            if (!(v2016.Add(v2017)))
+            v2763 = default(int);
+            if (!(v2762.Add(v2763)))
                 continue;
-            yield return v2017;
+            yield return v2763;
         }
 
-        v2018 = 0;
-        for (; v2018 < ArrayItems2.Length; v2018++)
+        v2764 = 0;
+        for (; v2764 < ArrayItems2.Length; v2764++)
         {
-            v2017 = ArrayItems2[v2018];
-            if (!(v2016.Add(v2017)))
+            v2763 = ArrayItems2[v2764];
+            if (!(v2762.Add(v2763)))
                 continue;
-            yield return v2017;
+            yield return v2763;
         }
     }
 
-    System.Collections.Generic.IEnumerable<int> RangeEmpty2ArrayRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, bool> v2020)
+    System.Collections.Generic.IEnumerable<int> RangeEmpty2ArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2019;
-        HashSet<int> v2021;
-        int v2022;
-        v2021 = new HashSet<int>();
-        v2019 = 0;
-        for (; v2019 < ArrayItems.Length; v2019++)
+        int v2765;
+        if (ArrayItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2766;
+        int v2767;
+        v2766 = new HashSet<int>();
+        v2765 = 0;
+        for (; v2765 < ArrayItems.Length; v2765++)
         {
-            if (!(v2020(ArrayItems[v2019])))
+            if (!((false)))
                 continue;
-            v2022 = ArrayItems[v2019];
-            if (!(v2021.Add(v2022)))
+            v2767 = ArrayItems[v2765];
+            if (!(v2766.Add(v2767)))
                 continue;
-            yield return v2022;
+            yield return v2767;
         }
 
-        v2019 = 0;
-        for (; v2019 < ArrayItems2.Length; v2019++)
+        v2765 = 0;
+        for (; v2765 < ArrayItems2.Length; v2765++)
         {
-            v2022 = ArrayItems2[v2019];
-            if (!(v2021.Add(v2022)))
+            v2767 = ArrayItems2[v2765];
+            if (!(v2766.Add(v2767)))
                 continue;
-            yield return v2022;
+            yield return v2767;
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionRangeRewritten_ProceduralLinq1()
     {
-        int v2023;
-        if (260 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        v2023 = 0;
-        for (; v2023 < 260; v2023++)
-            yield return (v2023 + 70);
+        int v2768;
+        v2768 = 0;
+        for (; v2768 < 260; v2768++)
+            yield return (v2768 + 70);
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionRangeRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v2024;
-        HashSet<int> v2025;
-        int v2026;
-        IEnumerator<int> v2027;
-        v2027 = ArrayUnionRangeRewritten_ProceduralLinq1().GetEnumerator();
-        v2025 = new HashSet<int>();
-        v2024 = 0;
-        for (; v2024 < ArrayItems.Length; v2024++)
+        int v2769;
+        if (ArrayUnionRangeRewritten_ProceduralLinq1() == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2770;
+        int v2771;
+        IEnumerator<int> v2772;
+        v2772 = ArrayUnionRangeRewritten_ProceduralLinq1().GetEnumerator();
+        v2770 = new HashSet<int>();
+        v2769 = 0;
+        for (; v2769 < ArrayItems.Length; v2769++)
         {
-            v2026 = ArrayItems[v2024];
-            if (!(v2025.Add(v2026)))
+            v2771 = ArrayItems[v2769];
+            if (!(v2770.Add(v2771)))
                 continue;
-            yield return v2026;
+            yield return v2771;
         }
 
         try
         {
-            while (v2027.MoveNext())
+            while (v2772.MoveNext())
             {
-                v2026 = v2027.Current;
-                if (!(v2025.Add(v2026)))
+                v2771 = v2772.Current;
+                if (!(v2770.Add(v2771)))
                     continue;
-                yield return v2026;
+                yield return v2771;
             }
         }
         finally
         {
-            v2027.Dispose();
+            v2772.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionRepeatRewritten_ProceduralLinq1()
     {
-        int v2028;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        v2028 = 0;
-        for (; v2028 < 100; v2028++)
+        int v2773;
+        v2773 = 0;
+        for (; v2773 < 100; v2773++)
             yield return 70;
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionRepeatRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v2029;
-        HashSet<int> v2030;
-        int v2031;
-        IEnumerator<int> v2032;
-        v2032 = ArrayUnionRepeatRewritten_ProceduralLinq1().GetEnumerator();
-        v2030 = new HashSet<int>();
-        v2029 = 0;
-        for (; v2029 < ArrayItems.Length; v2029++)
+        int v2774;
+        if (ArrayUnionRepeatRewritten_ProceduralLinq1() == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2775;
+        int v2776;
+        IEnumerator<int> v2777;
+        v2777 = ArrayUnionRepeatRewritten_ProceduralLinq1().GetEnumerator();
+        v2775 = new HashSet<int>();
+        v2774 = 0;
+        for (; v2774 < ArrayItems.Length; v2774++)
         {
-            v2031 = ArrayItems[v2029];
-            if (!(v2030.Add(v2031)))
+            v2776 = ArrayItems[v2774];
+            if (!(v2775.Add(v2776)))
                 continue;
-            yield return v2031;
+            yield return v2776;
         }
 
         try
         {
-            while (v2032.MoveNext())
+            while (v2777.MoveNext())
             {
-                v2031 = v2032.Current;
-                if (!(v2030.Add(v2031)))
+                v2776 = v2777.Current;
+                if (!(v2775.Add(v2776)))
                     continue;
-                yield return v2031;
+                yield return v2776;
             }
         }
         finally
         {
-            v2032.Dispose();
+            v2777.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionEmptyRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2033;
-        HashSet<int> v2034;
-        int v2035;
-        IEnumerator<int> v2036;
-        v2036 = Enumerable.Empty<int>().GetEnumerator();
-        v2034 = new HashSet<int>();
-        v2033 = 0;
-        for (; v2033 < ArrayItems.Length; v2033++)
+        int v2778;
+        if (Enumerable.Empty<int>() == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2779;
+        int v2780;
+        IEnumerator<int> v2781;
+        v2781 = Enumerable.Empty<int>().GetEnumerator();
+        v2779 = new HashSet<int>();
+        v2778 = 0;
+        for (; v2778 < ArrayItems.Length; v2778++)
         {
-            v2035 = ArrayItems[v2033];
-            if (!(v2034.Add(v2035)))
+            v2780 = ArrayItems[v2778];
+            if (!(v2779.Add(v2780)))
                 continue;
-            yield return v2035;
+            yield return v2780;
         }
 
         try
         {
-            while (v2036.MoveNext())
+            while (v2781.MoveNext())
             {
-                v2035 = v2036.Current;
-                if (!(v2034.Add(v2035)))
+                v2780 = v2781.Current;
+                if (!(v2779.Add(v2780)))
                     continue;
-                yield return v2035;
+                yield return v2780;
             }
         }
         finally
         {
-            v2036.Dispose();
+            v2781.Dispose();
         }
     }
 
-    System.Collections.Generic.IEnumerable<int> ArrayUnionEmpty2Rewritten_ProceduralLinq1(int[] ArrayItems2, System.Func<int, bool> v2038)
+    System.Collections.Generic.IEnumerable<int> ArrayUnionEmpty2Rewritten_ProceduralLinq1(int[] ArrayItems2)
     {
-        int v2037;
-        v2037 = 0;
-        for (; v2037 < ArrayItems2.Length; v2037++)
+        int v2782;
+        v2782 = 0;
+        for (; v2782 < ArrayItems2.Length; v2782++)
         {
-            if (!(v2038(ArrayItems2[v2037])))
+            if (!((false)))
                 continue;
-            yield return ArrayItems2[v2037];
+            yield return ArrayItems2[v2782];
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionEmpty2Rewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v2039;
-        HashSet<int> v2040;
-        int v2041;
-        IEnumerator<int> v2042;
-        v2042 = ArrayUnionEmpty2Rewritten_ProceduralLinq1(ArrayItems2, x => false).GetEnumerator();
-        v2040 = new HashSet<int>();
-        v2039 = 0;
-        for (; v2039 < ArrayItems.Length; v2039++)
+        int v2783;
+        if (ArrayUnionEmpty2Rewritten_ProceduralLinq1(ArrayItems2) == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2784;
+        int v2785;
+        IEnumerator<int> v2786;
+        v2786 = ArrayUnionEmpty2Rewritten_ProceduralLinq1(ArrayItems2).GetEnumerator();
+        v2784 = new HashSet<int>();
+        v2783 = 0;
+        for (; v2783 < ArrayItems.Length; v2783++)
         {
-            v2041 = ArrayItems[v2039];
-            if (!(v2040.Add(v2041)))
+            v2785 = ArrayItems[v2783];
+            if (!(v2784.Add(v2785)))
                 continue;
-            yield return v2041;
+            yield return v2785;
         }
 
         try
         {
-            while (v2042.MoveNext())
+            while (v2786.MoveNext())
             {
-                v2041 = v2042.Current;
-                if (!(v2040.Add(v2041)))
+                v2785 = v2786.Current;
+                if (!(v2784.Add(v2785)))
                     continue;
-                yield return v2041;
+                yield return v2785;
             }
         }
         finally
         {
-            v2042.Dispose();
+            v2786.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionAllRewritten_ProceduralLinq1()
     {
-        int v2043;
-        if (1000 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        v2043 = 0;
-        for (; v2043 < 1000; v2043++)
-            yield return (v2043 + 0);
+        int v2787;
+        v2787 = 0;
+        for (; v2787 < 1000; v2787++)
+            yield return (v2787 + 0);
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionAllRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v2044;
-        HashSet<int> v2045;
-        int v2046;
-        IEnumerator<int> v2047;
-        v2047 = ArrayUnionAllRewritten_ProceduralLinq1().GetEnumerator();
-        v2045 = new HashSet<int>();
-        v2044 = 0;
-        for (; v2044 < ArrayItems.Length; v2044++)
+        int v2788;
+        if (ArrayUnionAllRewritten_ProceduralLinq1() == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2789;
+        int v2790;
+        IEnumerator<int> v2791;
+        v2791 = ArrayUnionAllRewritten_ProceduralLinq1().GetEnumerator();
+        v2789 = new HashSet<int>();
+        v2788 = 0;
+        for (; v2788 < ArrayItems.Length; v2788++)
         {
-            v2046 = ArrayItems[v2044];
-            if (!(v2045.Add(v2046)))
+            v2790 = ArrayItems[v2788];
+            if (!(v2789.Add(v2790)))
                 continue;
-            yield return v2046;
+            yield return v2790;
         }
 
         try
         {
-            while (v2047.MoveNext())
+            while (v2791.MoveNext())
             {
-                v2046 = v2047.Current;
-                if (!(v2045.Add(v2046)))
+                v2790 = v2791.Current;
+                if (!(v2789.Add(v2790)))
                     continue;
-                yield return v2046;
+                yield return v2790;
             }
         }
         finally
         {
-            v2047.Dispose();
+            v2791.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionNullRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2048;
-        throw new System.InvalidOperationException("Collection was null");
-        v2048 = 0;
-        for (; v2048 < ArrayItems.Length; v2048++)
-            yield return ArrayItems[v2048];
+        int v2792;
+        throw new System.InvalidOperationException("Invalid null object");
+        v2792 = 0;
+        for (; v2792 < ArrayItems.Length; v2792++)
+            yield return ArrayItems[v2792];
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionArrayUnionEnumerableRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2049;
-        HashSet<int> v2050;
-        int v2051;
-        int v2052;
-        HashSet<int> v2053;
-        IEnumerator<int> v2054;
-        v2054 = EnumerableItems2.GetEnumerator();
-        v2050 = new HashSet<int>();
-        v2053 = new HashSet<int>();
-        v2049 = 0;
-        for (; v2049 < ArrayItems.Length; v2049++)
+        int v2793;
+        if (ArrayItems == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2794;
+        int v2795;
+        int v2796;
+        if (EnumerableItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2797;
+        IEnumerator<int> v2798;
+        v2798 = EnumerableItems2.GetEnumerator();
+        v2794 = new HashSet<int>();
+        v2797 = new HashSet<int>();
+        v2793 = 0;
+        for (; v2793 < ArrayItems.Length; v2793++)
         {
-            v2051 = ArrayItems[v2049];
-            if (!(v2050.Add(v2051)))
+            v2795 = ArrayItems[v2793];
+            if (!(v2794.Add(v2795)))
                 continue;
-            if (!(v2053.Add(v2051)))
+            if (!(v2797.Add(v2795)))
                 continue;
-            yield return v2051;
+            yield return v2795;
         }
 
-        v2052 = 0;
-        for (; v2052 < ArrayItems.Length; v2052++)
+        v2796 = 0;
+        for (; v2796 < ArrayItems.Length; v2796++)
         {
-            v2051 = ArrayItems[v2052];
-            if (!(v2050.Add(v2051)))
+            v2795 = ArrayItems[v2796];
+            if (!(v2794.Add(v2795)))
                 continue;
-            if (!(v2053.Add(v2051)))
+            if (!(v2797.Add(v2795)))
                 continue;
-            yield return v2051;
+            yield return v2795;
         }
 
         try
         {
-            while (v2054.MoveNext())
+            while (v2798.MoveNext())
             {
-                v2051 = v2054.Current;
-                if (!(v2053.Add(v2051)))
+                v2795 = v2798.Current;
+                if (!(v2797.Add(v2795)))
                     continue;
-                yield return v2051;
+                yield return v2795;
             }
         }
         finally
         {
-            v2054.Dispose();
+            v2798.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionArrayUnionEnumerable2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2055;
-        HashSet<int> v2056;
-        int v2057;
-        IEnumerator<int> v2058;
-        v2058 = EnumerableItems2.GetEnumerator();
-        v2056 = new HashSet<int>();
-        v2055 = 0;
-        for (; v2055 < ArrayItems.Length; v2055++)
+        int v2799;
+        if (EnumerableItems2 == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2800;
+        int v2801;
+        IEnumerator<int> v2802;
+        v2802 = EnumerableItems2.GetEnumerator();
+        v2800 = new HashSet<int>();
+        v2799 = 0;
+        for (; v2799 < ArrayItems.Length; v2799++)
         {
-            v2057 = ArrayItems[v2055];
-            if (!(v2056.Add(v2057)))
+            v2801 = ArrayItems[v2799];
+            if (!(v2800.Add(v2801)))
                 continue;
-            yield return v2057;
+            yield return v2801;
         }
 
         try
         {
-            while (v2058.MoveNext())
+            while (v2802.MoveNext())
             {
-                v2057 = v2058.Current;
-                if (!(v2056.Add(v2057)))
+                v2801 = v2802.Current;
+                if (!(v2800.Add(v2801)))
                     continue;
-                yield return v2057;
+                yield return v2801;
             }
         }
         finally
         {
-            v2058.Dispose();
+            v2802.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayUnionArrayUnionEnumerable2Rewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v2059;
-        HashSet<int> v2060;
-        int v2061;
-        IEnumerator<int> v2062;
-        v2062 = ArrayUnionArrayUnionEnumerable2Rewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
-        v2060 = new HashSet<int>();
-        v2059 = 0;
-        for (; v2059 < ArrayItems.Length; v2059++)
+        int v2803;
+        if (ArrayUnionArrayUnionEnumerable2Rewritten_ProceduralLinq1(ArrayItems) == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2804;
+        int v2805;
+        IEnumerator<int> v2806;
+        v2806 = ArrayUnionArrayUnionEnumerable2Rewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
+        v2804 = new HashSet<int>();
+        v2803 = 0;
+        for (; v2803 < ArrayItems.Length; v2803++)
         {
-            v2061 = ArrayItems[v2059];
-            if (!(v2060.Add(v2061)))
+            v2805 = ArrayItems[v2803];
+            if (!(v2804.Add(v2805)))
                 continue;
-            yield return v2061;
+            yield return v2805;
         }
 
         try
         {
-            while (v2062.MoveNext())
+            while (v2806.MoveNext())
             {
-                v2061 = v2062.Current;
-                if (!(v2060.Add(v2061)))
+                v2805 = v2806.Current;
+                if (!(v2804.Add(v2805)))
                     continue;
-                yield return v2061;
+                yield return v2805;
             }
         }
         finally
         {
-            v2062.Dispose();
+            v2806.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctUnionArrayDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2063;
-        HashSet<int> v2064;
-        v2064 = new HashSet<int>();
-        v2063 = 0;
-        for (; v2063 < ArrayItems.Length; v2063++)
+        int v2807;
+        HashSet<int> v2808;
+        v2808 = new HashSet<int>();
+        v2807 = 0;
+        for (; v2807 < ArrayItems.Length; v2807++)
         {
-            if (!(v2064.Add(ArrayItems[v2063])))
+            if (!(v2808.Add(ArrayItems[v2807])))
                 continue;
-            yield return ArrayItems[v2063];
+            yield return ArrayItems[v2807];
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctUnionArrayDistinctRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v2065;
-        HashSet<int> v2066;
-        HashSet<int> v2067;
-        int v2068;
-        IEnumerator<int> v2069;
-        v2069 = ArrayDistinctUnionArrayDistinctRewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
-        v2066 = new HashSet<int>();
-        v2067 = new HashSet<int>();
-        v2065 = 0;
-        for (; v2065 < ArrayItems.Length; v2065++)
+        int v2809;
+        HashSet<int> v2810;
+        if (ArrayDistinctUnionArrayDistinctRewritten_ProceduralLinq1(ArrayItems) == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2811;
+        int v2812;
+        IEnumerator<int> v2813;
+        v2813 = ArrayDistinctUnionArrayDistinctRewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
+        v2810 = new HashSet<int>();
+        v2811 = new HashSet<int>();
+        v2809 = 0;
+        for (; v2809 < ArrayItems.Length; v2809++)
         {
-            if (!(v2066.Add(ArrayItems[v2065])))
+            if (!(v2810.Add(ArrayItems[v2809])))
                 continue;
-            v2068 = ArrayItems[v2065];
-            if (!(v2067.Add(v2068)))
+            v2812 = ArrayItems[v2809];
+            if (!(v2811.Add(v2812)))
                 continue;
-            yield return v2068;
+            yield return v2812;
         }
 
         try
         {
-            while (v2069.MoveNext())
+            while (v2813.MoveNext())
             {
-                v2068 = v2069.Current;
-                if (!(v2067.Add(v2068)))
+                v2812 = v2813.Current;
+                if (!(v2811.Add(v2812)))
                     continue;
-                yield return v2068;
+                yield return v2812;
             }
         }
         finally
         {
-            v2069.Dispose();
+            v2813.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctUnionArrayDistinctDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2070;
-        HashSet<int> v2071;
-        v2071 = new HashSet<int>();
-        v2070 = 0;
-        for (; v2070 < ArrayItems.Length; v2070++)
+        int v2814;
+        HashSet<int> v2815;
+        v2815 = new HashSet<int>();
+        v2814 = 0;
+        for (; v2814 < ArrayItems.Length; v2814++)
         {
-            if (!(v2071.Add(ArrayItems[v2070])))
+            if (!(v2815.Add(ArrayItems[v2814])))
                 continue;
-            yield return ArrayItems[v2070];
+            yield return ArrayItems[v2814];
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctUnionArrayDistinctDistinctRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v2072;
-        HashSet<int> v2073;
-        HashSet<int> v2074;
-        int v2075;
-        IEnumerator<int> v2076;
-        HashSet<int> v2077;
-        v2076 = ArrayDistinctUnionArrayDistinctDistinctRewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
-        v2073 = new HashSet<int>();
-        v2074 = new HashSet<int>();
-        v2077 = new HashSet<int>();
-        v2072 = 0;
-        for (; v2072 < ArrayItems.Length; v2072++)
+        int v2816;
+        HashSet<int> v2817;
+        if (ArrayDistinctUnionArrayDistinctDistinctRewritten_ProceduralLinq1(ArrayItems) == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2818;
+        int v2819;
+        IEnumerator<int> v2820;
+        HashSet<int> v2821;
+        v2820 = ArrayDistinctUnionArrayDistinctDistinctRewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
+        v2817 = new HashSet<int>();
+        v2818 = new HashSet<int>();
+        v2821 = new HashSet<int>();
+        v2816 = 0;
+        for (; v2816 < ArrayItems.Length; v2816++)
         {
-            if (!(v2073.Add(ArrayItems[v2072])))
+            if (!(v2817.Add(ArrayItems[v2816])))
                 continue;
-            v2075 = ArrayItems[v2072];
-            if (!(v2074.Add(v2075)))
+            v2819 = ArrayItems[v2816];
+            if (!(v2818.Add(v2819)))
                 continue;
-            if (!(v2077.Add(v2075)))
+            if (!(v2821.Add(v2819)))
                 continue;
-            yield return v2075;
+            yield return v2819;
         }
 
         try
         {
-            while (v2076.MoveNext())
+            while (v2820.MoveNext())
             {
-                v2075 = v2076.Current;
-                if (!(v2074.Add(v2075)))
+                v2819 = v2820.Current;
+                if (!(v2818.Add(v2819)))
                     continue;
-                if (!(v2077.Add(v2075)))
+                if (!(v2821.Add(v2819)))
                     continue;
-                yield return v2075;
+                yield return v2819;
             }
         }
         finally
         {
-            v2076.Dispose();
+            v2820.Dispose();
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctUnionArrayDistinctDistinct2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2078;
-        HashSet<int> v2079;
-        v2079 = new HashSet<int>(EqualityComparer<int>.Default);
-        v2078 = 0;
-        for (; v2078 < ArrayItems.Length; v2078++)
+        int v2822;
+        HashSet<int> v2823;
+        v2823 = new HashSet<int>(EqualityComparer<int>.Default);
+        v2822 = 0;
+        for (; v2822 < ArrayItems.Length; v2822++)
         {
-            if (!(v2079.Add(ArrayItems[v2078])))
+            if (!(v2823.Add(ArrayItems[v2822])))
                 continue;
-            yield return ArrayItems[v2078];
+            yield return ArrayItems[v2822];
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctUnionArrayDistinctDistinct2Rewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v2080;
-        HashSet<int> v2081;
-        HashSet<int> v2082;
-        int v2083;
-        IEnumerator<int> v2084;
-        HashSet<int> v2085;
-        v2084 = ArrayDistinctUnionArrayDistinctDistinct2Rewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
-        v2081 = new HashSet<int>(EqualityComparer<int>.Default);
-        v2082 = new HashSet<int>();
-        v2085 = new HashSet<int>(EqualityComparer<int>.Default);
-        v2080 = 0;
-        for (; v2080 < ArrayItems.Length; v2080++)
+        int v2824;
+        HashSet<int> v2825;
+        if (ArrayDistinctUnionArrayDistinctDistinct2Rewritten_ProceduralLinq1(ArrayItems) == null)
+            throw new System.InvalidOperationException("Invalid null object");
+        HashSet<int> v2826;
+        int v2827;
+        IEnumerator<int> v2828;
+        HashSet<int> v2829;
+        v2828 = ArrayDistinctUnionArrayDistinctDistinct2Rewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
+        v2825 = new HashSet<int>(EqualityComparer<int>.Default);
+        v2826 = new HashSet<int>();
+        v2829 = new HashSet<int>(EqualityComparer<int>.Default);
+        v2824 = 0;
+        for (; v2824 < ArrayItems.Length; v2824++)
         {
-            if (!(v2081.Add(ArrayItems[v2080])))
+            if (!(v2825.Add(ArrayItems[v2824])))
                 continue;
-            v2083 = ArrayItems[v2080];
-            if (!(v2082.Add(v2083)))
+            v2827 = ArrayItems[v2824];
+            if (!(v2826.Add(v2827)))
                 continue;
-            if (!(v2085.Add(v2083)))
+            if (!(v2829.Add(v2827)))
                 continue;
-            yield return v2083;
+            yield return v2827;
         }
 
         try
         {
-            while (v2084.MoveNext())
+            while (v2828.MoveNext())
             {
-                v2083 = v2084.Current;
-                if (!(v2082.Add(v2083)))
+                v2827 = v2828.Current;
+                if (!(v2826.Add(v2827)))
                     continue;
-                if (!(v2085.Add(v2083)))
+                if (!(v2829.Add(v2827)))
                     continue;
-                yield return v2083;
+                yield return v2827;
             }
         }
         finally
         {
-            v2084.Dispose();
+            v2828.Dispose();
         }
     }
 }}

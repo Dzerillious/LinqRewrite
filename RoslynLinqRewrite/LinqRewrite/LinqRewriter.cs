@@ -38,6 +38,8 @@ namespace LinqRewrite
             _insideConditionalExpression = true;
             try
             {
+                if (node.WhenNotNull is InvocationExpressionSyntax invocation)
+                    return TryVisitInvocationExpression(invocation, null);
                 return base.VisitConditionalAccessExpression(node);
             }
             finally
@@ -66,7 +68,6 @@ namespace LinqRewrite
 
         private ExpressionSyntax TryVisitInvocationExpression(InvocationExpressionSyntax node, ForEachStatementSyntax containingForEach)
         {
-            if (_insideConditionalExpression) return null;
             var methodIdx = _data.MethodsToAddToCurrentType.Count;
             try
             {
@@ -87,7 +88,7 @@ namespace LinqRewrite
         private ExpressionSyntax VisitInvocationExpression(InvocationExpressionSyntax node,
             ForEachStatementSyntax containingForEach)
         {
-            if (!(node.Expression is MemberAccessExpressionSyntax)) return null;
+            if (!(node.Expression is MemberAccessExpressionSyntax) && !(node.Expression is MemberBindingExpressionSyntax)) return null;
 
             var owner = node.AncestorsAndSelf().FirstOrDefault(x => x is MethodDeclarationSyntax);
             if (owner == null) return null;
@@ -96,16 +97,17 @@ namespace LinqRewrite
             _data.CurrentMethodName = ((MethodDeclarationSyntax) owner).Identifier.ValueText;
             _data.CurrentMethodTypeParameters = ((MethodDeclarationSyntax) owner).TypeParameterList;
             _data.CurrentMethodConstraintClauses = ((MethodDeclarationSyntax) owner).ConstraintClauses;
+            _data.CurrentMethodIsConditional = node.Expression is MemberBindingExpressionSyntax;
 
             if (!IsSupportedMethod(node)) return null;
             var chain = GetInvocationStepChain(node, out var lastNode);
             if (containingForEach != null) InvocationChainInsertForEach(chain, containingForEach);
             
-            var (rewrite, collection, semanticReturnType) = CheckIfRewriteInvocation(chain, node, lastNode);
+            var (rewrite, collection) = CheckIfRewriteInvocation(chain, node, lastNode);
             if (!rewrite) return null;
             
-            var returnType = SyntaxFactory.ParseTypeName(semanticReturnType.ToDisplayString());
-
+            var returnType = _data.Semantic.GetTypeFromExpression(node);
+            
             using var parameters = RewriteParametersFactory.BorrowParameters();
             parameters.SetData(collection, returnType, chain, node);
 
@@ -187,11 +189,13 @@ namespace LinqRewrite
             return chain;
         }
 
-        private (bool, ExpressionSyntax, ITypeSymbol) CheckIfRewriteInvocation(List<LinqStep> chain, InvocationExpressionSyntax node, InvocationExpressionSyntax lastNode)
+        private (bool, ExpressionSyntax) CheckIfRewriteInvocation(List<LinqStep> chain, InvocationExpressionSyntax node, InvocationExpressionSyntax lastNode)
         {
             var (flowsIn, flowsOut, writtenInside) = GetFlows(chain);
             
-            var collection = ((MemberAccessExpressionSyntax) lastNode.Expression).Expression;
+            var collection = _data.CurrentMethodIsConditional 
+                ? ((ConditionalAccessExpressionSyntax)lastNode.Parent).Expression
+                : ((MemberAccessExpressionSyntax) lastNode.Expression).Expression;
             var collectionSymbol = _data.Semantic.GetSymbolInfo(collection).Symbol;
             if (SymbolExtensions.GetType(collectionSymbol) != null) flowsIn = flowsIn.Concat(new[] {collectionSymbol}).ToArray();
             
@@ -206,14 +210,14 @@ namespace LinqRewrite
                 .GroupBy(x => x.Symbol, (x, y) => new VariableCapture(x, y.Any(z => z.Changes)))
                 .Select(x => Argument(x.Name).WithRef(x.Changes)).ToList();
 
-            if (SyntaxExtensions.IsAnonymousType(_data.Semantic.GetTypeInfo(collection).Type)) return (false, null, null);
+            if (SyntaxExtensions.IsAnonymousType(_data.Semantic.GetTypeInfo(collection).Type)) return (false, null);
 
             var returnType = _data.Semantic.GetTypeInfo(node).Type;
             if (SyntaxExtensions.IsAnonymousType(returnType) ||
                 currentFlow.Any(x => SyntaxExtensions.IsAnonymousType(SymbolExtensions.GetType(x.Symbol)))) 
-                return (false, null, null);
+                return (false, null);
 
-            return (true, collection, returnType);
+            return (true, collection);
         }
 
         private void InvocationChainInsertForEach(List<LinqStep> chain, ForEachStatementSyntax forEach)

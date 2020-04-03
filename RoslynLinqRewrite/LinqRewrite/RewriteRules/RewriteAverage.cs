@@ -24,30 +24,37 @@ namespace LinqRewrite.RewriteRules
             var elementType = selectionValue.Type is NullableTypeSyntax nullable2
                 ? (TypeBridge)nullable2.ElementType : p.ReturnType;;
             var sumVariable = p.GlobalVariable(elementType, 0);
+
+            if (p.ReturnType.Type is NullableTypeSyntax) CalculateNullableAverage(p, elementType, selectionValue, sumVariable);
+            else CalculateSimpleAverage(p, selectionValue, sumVariable);
             
-            if (p.ReturnType.Type is NullableTypeSyntax)
+        }
+
+        private static void CalculateNullableAverage(RewriteParameters p, TypeBridge elementType, TypedValueBridge selectionValue, LocalVariable sumVariable)
+        {
+            var inlinedValue = selectionValue.ReusableConst(p);
+            p.ForAdd(If(inlinedValue.IsEqual(null), Continue()));
+            p.ForAdd(sumVariable.AddAssign(inlinedValue.Cast(elementType)));
+            p.Indexer = null;
+            
+            p.ResultAdd(Return(SyntaxFactory.ConditionalExpression(p.Indexer.IsEqual(0),
+                Null, sumVariable.Cast(p.ReturnType.Type) / p.Indexer)));
+        }
+
+        private static void CalculateSimpleAverage(RewriteParameters p, TypedValueBridge selectionValue, LocalVariable sumVariable)
+        {
+            p.ForAdd(sumVariable.AddAssign(selectionValue));
+            if (p.ResultSize == null)
             {
-                var inlinedValue = selectionValue.ReusableConst(p);
-                p.ForAdd(If(inlinedValue.IsEqual(null), Continue()));
-                p.ForAdd(sumVariable.AddAssign(inlinedValue.Cast(elementType)));
-                p.Indexer = null;
-                
-                p.ResultAdd(Return(SyntaxFactory.ConditionalExpression(p.Indexer.IsEqual(0),
-                    Null, sumVariable.Cast(p.ReturnType.Type) / p.Indexer)));
+                p.ResultAdd(If(p.Indexer.IsEqual(0),
+                    Throw("System.InvalidOperationException", "The sequence did not contain any elements.")));
+                p.ResultAdd(Return(sumVariable / p.Indexer));
             }
             else
             {
-                p.ForAdd(sumVariable.AddAssign(selectionValue));
-                if (p.ResultSize == null)
-                {
-                    p.ResultAdd(If(p.Indexer.IsEqual(0), Throw("System.InvalidOperationException", "The sequence did not contain any elements.")));
-                    p.ResultAdd(Return(sumVariable / p.Indexer));
-                }
-                else
-                {
-                    p.ResultAdd(If(p.ResultSize.IsEqual(0), Throw("System.InvalidOperationException", "The sequence did not contain any elements.")));
-                    p.ResultAdd(Return(sumVariable / p.ResultSize));
-                }
+                p.ResultAdd(If(p.ResultSize.IsEqual(0),
+                    Throw("System.InvalidOperationException", "The sequence did not contain any elements.")));
+                p.ResultAdd(Return(sumVariable / p.ResultSize));
             }
         }
     }

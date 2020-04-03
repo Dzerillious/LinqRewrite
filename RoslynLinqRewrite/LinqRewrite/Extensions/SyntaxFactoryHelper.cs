@@ -203,9 +203,11 @@ namespace LinqRewrite.Extensions
         public static TypedValueBridge Inline(this RewrittenValueBridge e, RewriteParameters p,
             params TypedValueBridge[] values)
         {
-            var returnType =  e.OldVal is LambdaExpressionSyntax lambda
-                    ? lambda.ReturnType(p)
-                    : (TypeBridge)ParseTypeName(((INamedTypeSymbol)p.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.ReturnType.ToDisplayString());
+            TypeBridge returnType;
+            if (e.OldVal is LambdaExpressionSyntax lambda)
+                returnType = lambda.ReturnType(p);
+            else returnType = ParseTypeName(((INamedTypeSymbol)p.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.ReturnType.ToDisplayString());
+            
             if (IsLambdaSimple(e.Old))
                 return p.Code.InlineLambda(p, e, returnType, values);
 

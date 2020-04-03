@@ -4,10 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using LinqRewrite.DataStructures;
+using LinqRewrite.Extensions;
 using LinqRewrite.RewriteRules;
 using LinqRewrite.SimpleRewriteRules;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.Extensions.VariableExtensions;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LinqRewrite
 {
@@ -22,17 +26,23 @@ namespace LinqRewrite
                 return match.Groups[1].Value.EndsWith(".")
                     ? match.Groups[2].Value : match.Groups[1].Value;
             }).ToArray();
-
+            
             parameters.HasResultMethod = GetHasResultMethod(names);
             if (!TryRewriteSimple(parameters, names)) RewriteComposite(parameters, names);
+            
+            if (parameters.Data.CurrentMethodIsConditional && parameters.ReturnType.Type.ToString() == "void")
+                parameters.InitialAdd(If(parameters.CurrentCollection.IsEqual(null), ReturnStatement()));
 
             if (parameters.SimpleRewrite != null) return parameters.SimpleRewrite;
-            if (!parameters.HasResultMethod)
-                parameters.ForAdd(SyntaxFactory.YieldStatement(SyntaxKind.YieldReturnStatement, parameters.LastValue));
+            if (!parameters.HasResultMethod) parameters.ForAdd(YieldStatement(SyntaxKind.YieldReturnStatement, parameters.LastValue));
             var body = parameters.GetMethodBody();
 
             if (parameters.NotRewrite) throw new NotSupportedException("Not good for rewrite");
-            return parameters.Rewrite.GetMethodInvocationExpression(parameters, body);
+
+            if (parameters.Data.CurrentMethodIsConditional && parameters.ReturnType.Type.ToString() != "void")
+                return ConditionalExpression(parameters.CurrentCollection.IsEqual(null),
+                Default(parameters.ReturnType), parameters.Rewrite.GetMethodInvocationExpression(parameters, body));
+            else return parameters.Rewrite.GetMethodInvocationExpression(parameters, body);
         }
 
         private static bool GetHasResultMethod(string[] names)

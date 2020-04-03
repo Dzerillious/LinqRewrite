@@ -143,7 +143,7 @@ namespace LinqRewrite.Services
             {
                 var rewriter = new LinqRewriter(compilation.GetSemanticModel(syntaxTree));
                 var rewritten = rewriter.Visit(syntaxTree.GetRoot());
-                rewrittenTrees.Add(CSharpSyntaxTree.Create((CSharpSyntaxNode) rewritten));
+                rewrittenTrees.Add(CSharpSyntaxTree.ParseText(rewritten.ToString()));
             }
 
             compilation = CSharpCompilation.Create(project.AssemblyName, rewrittenTrees, references,

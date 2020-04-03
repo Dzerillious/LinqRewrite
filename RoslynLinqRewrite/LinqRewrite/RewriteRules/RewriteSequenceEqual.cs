@@ -13,11 +13,7 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             var collectionValue = args[0];
-            if (IsNull(collectionValue, p))
-            {
-                p.PreForAdd(Throw("System.InvalidOperationException", "Collection was null"));
-                return;
-            }
+            if (!p.AssertNotNull(collectionValue)) return;
 
             p.WrapWithTry = true;
             var itemType = collectionValue.ItemType(p);

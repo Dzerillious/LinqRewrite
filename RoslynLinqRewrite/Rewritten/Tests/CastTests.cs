@@ -79,7 +79,7 @@ public class CastTests
 
     public IEnumerable<int> ArraySelectCastRewritten()
     {
-        return ArraySelectCastRewritten_ProceduralLinq1(ArrayItems, x => x + 0.2);
+        return ArraySelectCastRewritten_ProceduralLinq1(ArrayItems);
     } //EndMethod
 
     [NoRewrite]
@@ -90,7 +90,7 @@ public class CastTests
 
     public IEnumerable<double> ArrayWhereCastRewritten()
     {
-        return ArrayWhereCastRewritten_ProceduralLinq1(ArrayItems, x => x % 2 == 1);
+        return ArrayWhereCastRewritten_ProceduralLinq1(ArrayItems);
     } //EndMethod
 
     [NoRewrite]
@@ -191,130 +191,130 @@ public class CastTests
             yield return (double? )(object)ArrayItems[v117];
     }
 
-    System.Collections.Generic.IEnumerable<int> ArraySelectCastRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, double> v119)
+    System.Collections.Generic.IEnumerable<int> ArraySelectCastRewritten_ProceduralLinq1(int[] ArrayItems)
     {
         int v118;
         v118 = 0;
         for (; v118 < ArrayItems.Length; v118++)
-            yield return (int)(object)v119(ArrayItems[v118]);
+            yield return (int)(object)(ArrayItems[v118] + 0.2);
     }
 
-    System.Collections.Generic.IEnumerable<double> ArrayWhereCastRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, bool> v121)
+    System.Collections.Generic.IEnumerable<double> ArrayWhereCastRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v120;
-        v120 = 0;
-        for (; v120 < ArrayItems.Length; v120++)
+        int v119;
+        v119 = 0;
+        for (; v119 < ArrayItems.Length; v119++)
         {
-            if (!(v121(ArrayItems[v120])))
+            if (!((ArrayItems[v119] % 2 == 1)))
                 continue;
-            yield return (double)(object)ArrayItems[v120];
+            yield return (double)(object)ArrayItems[v119];
         }
     }
 
     double? ArrayCastAverageRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v122;
-        double v123;
-        double? v124;
-        int v125;
+        int v120;
+        double v121;
+        double? v122;
+        int v123;
+        v121 = 0;
         v123 = 0;
-        v125 = 0;
-        v122 = 0;
-        for (; v122 < ArrayItems.Length; v122++)
+        v120 = 0;
+        for (; v120 < ArrayItems.Length; v120++)
         {
-            v124 = (double? )(object)ArrayItems[v122];
-            if (v124 == null)
+            v122 = (double? )(object)ArrayItems[v120];
+            if (v122 == null)
                 continue;
-            v123 += (double)v124;
-            v125++;
+            v121 += (double)v122;
+            v123++;
         }
 
-        return v125 == 0 ? null : ((double? )v123 / v125);
+        return v123 == 0 ? null : ((double? )v121 / v123);
     }
 
     bool ArrayCastAnyRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v126;
-        v126 = 0;
-        for (; v126 < ArrayItems.Length; v126++)
-            if (((double? )(object)ArrayItems[v126] == null))
+        int v124;
+        v124 = 0;
+        for (; v124 < ArrayItems.Length; v124++)
+            if (((double? )(object)ArrayItems[v124] == null))
                 return true;
         return false;
     }
 
     double ArrayCastAggregateRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v127;
-        double v128;
-        bool v129;
-        v128 = default(double);
-        v129 = true;
-        v127 = 0;
-        for (; v127 < ArrayItems.Length; v127++)
-            if (v129)
+        int v125;
+        double v126;
+        bool v127;
+        v126 = default(double);
+        v127 = true;
+        v125 = 0;
+        for (; v125 < ArrayItems.Length; v125++)
+            if (v127)
             {
-                v128 = (double)(object)ArrayItems[v127];
-                v129 = false;
+                v126 = (double)(object)ArrayItems[v125];
+                v127 = false;
                 continue;
             }
             else
-                v128 = (v128 * (double)(object)ArrayItems[v127]);
-        if (v129)
+                v126 = (v126 * (double)(object)ArrayItems[v125]);
+        if (v127)
             throw new System.InvalidOperationException("The sequence did not contain valid elements.");
-        return v128;
+        return v126;
     }
 
     System.Collections.Generic.IEnumerable<double> EnumerableCastRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v130;
-        v130 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v128;
+        v128 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v130.MoveNext())
-                yield return (double)(object)v130.Current;
+            while (v128.MoveNext())
+                yield return (double)(object)v128.Current;
         }
         finally
         {
-            v130.Dispose();
+            v128.Dispose();
         }
     }
 
     double[] EnumerableCastToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v131;
-        int v132;
-        int v133;
-        double[] v134;
-        v131 = EnumerableItems.GetEnumerator();
-        v132 = 0;
-        v133 = 8;
-        v134 = new double[8];
+        IEnumerator<int> v129;
+        int v130;
+        int v131;
+        double[] v132;
+        v129 = EnumerableItems.GetEnumerator();
+        v130 = 0;
+        v131 = 8;
+        v132 = new double[8];
         try
         {
-            while (v131.MoveNext())
+            while (v129.MoveNext())
             {
-                if (v132 >= v133)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v134, ref v133);
-                v134[v132] = (double)(object)v131.Current;
-                v132++;
+                if (v130 >= v131)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v132, ref v131);
+                v132[v130] = (double)(object)v129.Current;
+                v130++;
             }
         }
         finally
         {
-            v131.Dispose();
+            v129.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v134, v132);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v132, v130);
     }
 
     double[] ArrayCastToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v135;
-        double[] v136;
-        v136 = new double[ArrayItems.Length];
-        v135 = 0;
-        for (; v135 < ArrayItems.Length; v135++)
-            v136[v135] = (double)(object)ArrayItems[v135];
-        return v136;
+        int v133;
+        double[] v134;
+        v134 = new double[ArrayItems.Length];
+        v133 = 0;
+        for (; v133 < ArrayItems.Length; v133++)
+            v134[v133] = (double)(object)ArrayItems[v133];
+        return v134;
     }
 }}

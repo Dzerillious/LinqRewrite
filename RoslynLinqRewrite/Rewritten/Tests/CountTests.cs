@@ -222,185 +222,181 @@ public class CountTests
 
     int ArrayCount2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v433;
-        int v434;
-        v434 = 0;
-        v433 = 0;
-        for (; v433 < ArrayItems.Length; v433++)
+        int v422;
+        int v423;
+        v423 = 0;
+        v422 = 0;
+        for (; v422 < ArrayItems.Length; v422++)
         {
-            if (!((ArrayItems[v433] > 3)))
+            if (!((ArrayItems[v422] > 3)))
                 continue;
-            v434++;
+            v423++;
         }
 
-        return v434;
+        return v423;
     }
 
     int ArrayCount5Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v436;
-        int v437;
-        v437 = 0;
-        v436 = 0;
-        for (; v436 < ArrayItems.Length; v436++)
+        int v425;
+        int v426;
+        v426 = 0;
+        v425 = 0;
+        for (; v425 < ArrayItems.Length; v425++)
         {
-            if (!((ArrayItems[v436] > 4)))
+            if (!((ArrayItems[v425] > 4)))
                 continue;
-            if (!((ArrayItems[v436] % 2 == 0)))
+            if (!((ArrayItems[v425] % 2 == 0)))
                 continue;
-            v437++;
+            v426++;
         }
 
-        return v437;
+        return v426;
     }
 
     int EnumerableCount2Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v438;
-        int v439;
-        v438 = EnumerableItems.GetEnumerator();
-        v439 = 0;
+        IEnumerator<int> v427;
+        int v428;
+        v427 = EnumerableItems.GetEnumerator();
+        v428 = 0;
         try
         {
-            while (v438.MoveNext())
-                v439++;
+            while (v427.MoveNext())
+                v428++;
         }
         finally
         {
-            v438.Dispose();
+            v427.Dispose();
         }
 
-        return v439;
+        return v428;
     }
 
     int EnumerableCount3Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v440;
-        int v441;
-        v440 = EnumerableItems.GetEnumerator();
-        v441 = 0;
+        IEnumerator<int> v429;
+        int v430;
+        v429 = EnumerableItems.GetEnumerator();
+        v430 = 0;
         try
         {
-            while (v440.MoveNext())
+            while (v429.MoveNext())
             {
-                if (!((v440.Current > 3)))
+                if (!((v429.Current > 3)))
                     continue;
-                v441++;
+                v430++;
             }
         }
         finally
         {
-            v440.Dispose();
+            v429.Dispose();
         }
 
-        return v441;
+        return v430;
     }
 
     int EnumerableCount5Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v443;
-        int v444;
-        v444 = 0;
-        v443 = 0;
-        for (; v443 < ArrayItems.Length; v443++)
+        int v432;
+        int v433;
+        v433 = 0;
+        v432 = 0;
+        for (; v432 < ArrayItems.Length; v432++)
         {
-            if (!((ArrayItems[v443] > 4)))
+            if (!((ArrayItems[v432] > 4)))
                 continue;
-            if (!((ArrayItems[v443] % 2 == 0)))
+            if (!((ArrayItems[v432] % 2 == 0)))
                 continue;
-            v444++;
+            v433++;
         }
 
-        return v444;
+        return v433;
     }
 
     int RangeWhereCountRewritten_ProceduralLinq1()
     {
-        int v447;
-        if (256 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        int v448;
-        int v449;
-        v449 = 0;
-        v447 = 0;
-        for (; v447 < 256; v447++)
+        int v436;
+        int v437;
+        int v438;
+        v438 = 0;
+        v436 = 0;
+        for (; v436 < 256; v436++)
         {
-            v448 = (v447 + 5);
-            if (!((v448 > 100)))
+            v437 = (v436 + 5);
+            if (!((v437 > 100)))
                 continue;
-            v449++;
+            v438++;
         }
 
-        return v449;
+        return v438;
     }
 
     int RangeCount2Rewritten_ProceduralLinq1()
     {
-        int v450;
-        if (256 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        int v451;
-        v451 = 0;
-        v450 = 0;
-        for (; v450 < 256; v450++)
+        int v439;
+        int v440;
+        v440 = 0;
+        v439 = 0;
+        for (; v439 < 256; v439++)
         {
-            if (!(((v450 + 5) > 100)))
+            if (!(((v439 + 5) > 100)))
                 continue;
-            v451++;
+            v440++;
         }
 
-        return v451;
+        return v440;
     }
 
     int ArrayMethodCountRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v453;
-        int v454;
-        v454 = 0;
-        v453 = 0;
-        for (; v453 < ArrayItems.Length; v453++)
+        int v442;
+        int v443;
+        v443 = 0;
+        v442 = 0;
+        for (; v442 < ArrayItems.Length; v442++)
         {
-            if (!(Predicate(ArrayItems[v453])))
+            if (!(Predicate(ArrayItems[v442])))
                 continue;
-            v454++;
+            v443++;
         }
 
-        return v454;
+        return v443;
     }
 
     int ArrayDistinctCountRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v455;
-        HashSet<int> v456;
-        int v457;
-        v456 = new HashSet<int>();
-        v457 = 0;
-        v455 = 0;
-        for (; v455 < ArrayItems.Length; v455++)
+        int v444;
+        HashSet<int> v445;
+        int v446;
+        v445 = new HashSet<int>();
+        v446 = 0;
+        v444 = 0;
+        for (; v444 < ArrayItems.Length; v444++)
         {
-            if (!(v456.Add(ArrayItems[v455])))
+            if (!(v445.Add(ArrayItems[v444])))
                 continue;
-            v457++;
+            v446++;
         }
 
-        return v457;
+        return v446;
     }
 
     int EmptyDistinctCountRewritten_ProceduralLinq1()
     {
-        int v459;
-        HashSet<int> v460;
-        int v461;
-        v460 = new HashSet<int>();
-        v461 = 0;
-        v459 = 0;
-        for (; v459 < 0; v459++)
+        int v448;
+        HashSet<int> v449;
+        int v450;
+        v449 = new HashSet<int>();
+        v450 = 0;
+        v448 = 0;
+        for (; v448 < 0; v448++)
         {
-            if (!(v460.Add(default(int))))
+            if (!(v449.Add(default(int))))
                 continue;
-            v461++;
+            v450++;
         }
 
-        return v461;
+        return v450;
     }
 }}

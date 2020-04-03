@@ -13,8 +13,7 @@ namespace LinqRewrite.RewriteRules
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             if (p.CanSimpleRewrite() && p.CurrentCollection?.Count == p.ResultSize  && args.Length == 0) 
             {
-                ConditionalExpression(
-                p.CurrentCollection.Count <= args[0],
+                ConditionalExpression(p.CurrentCollection.Count <= args[0],
                 p.CurrentCollection[args[0]],
                 Default(p.ReturnType));
             }

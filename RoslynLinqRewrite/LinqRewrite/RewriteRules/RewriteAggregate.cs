@@ -39,7 +39,6 @@ namespace LinqRewrite.RewriteRules
             };
             
             if (args.Length == 1) p.ForMin = p.ForReMin += 1;
-            
             var resultVariable = p.GlobalVariable(p.ReturnType, resultValue);
             p.ForAdd(resultVariable.Assign(aggregationValue.Inline(p, resultVariable, p.LastValue)));
 
@@ -57,11 +56,12 @@ namespace LinqRewrite.RewriteRules
             var firstVariable = p.GlobalVariable(Bool, true);
             
             p.ForAdd(If(firstVariable,
-                Block(
+                        Block(
                     resultVariable.Assign(p.LastValue),
                                     firstVariable.Assign(false),
-                                    Continue()),
-                resultVariable.Assign(aggregationValue.Inline(p, resultVariable, p.LastValue))));
+                                    Continue()
+                            ),
+                       resultVariable.Assign(aggregationValue.Inline(p, resultVariable, p.LastValue))));
 
             if (args.Length == 1)
                 p.ResultAdd(If(firstVariable, Throw("System.InvalidOperationException", "The sequence did not contain valid elements.")));

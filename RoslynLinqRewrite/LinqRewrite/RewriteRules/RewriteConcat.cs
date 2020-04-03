@@ -14,11 +14,7 @@ namespace LinqRewrite.RewriteRules
             var sourceSizeValue = p.SourceSize;
             var resultSizeValue = p.ResultSize;
             var collectionValue = args[0];
-            if (IsNull(collectionValue, p))
-            {
-                p.PreForAdd(Throw("System.InvalidOperationException", "Collection was null"));
-                return;
-            }
+            if (!p.AssertNotNull(collectionValue)) return;
 
             LocalVariable itemVariable;
             if (p.LastValue.Value != null && p.LastValue.Value is LocalVariable lastVariable)

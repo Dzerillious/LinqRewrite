@@ -222,185 +222,181 @@ public class LongCountTests
 
     long ArrayLongCount2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1258;
-        long v1259;
-        v1259 = 0;
-        v1258 = 0;
-        for (; v1258 < ArrayItems.Length; v1258++)
+        int v1231;
+        long v1232;
+        v1232 = 0;
+        v1231 = 0;
+        for (; v1231 < ArrayItems.Length; v1231++)
         {
-            if (!((ArrayItems[v1258] > 3)))
+            if (!((ArrayItems[v1231] > 3)))
+                continue;
+            v1232++;
+        }
+
+        return v1232;
+    }
+
+    long ArrayLongCount5Rewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1234;
+        long v1235;
+        v1235 = 0;
+        v1234 = 0;
+        for (; v1234 < ArrayItems.Length; v1234++)
+        {
+            if (!((ArrayItems[v1234] > 4)))
+                continue;
+            if (!((ArrayItems[v1234] % 2 == 0)))
+                continue;
+            v1235++;
+        }
+
+        return v1235;
+    }
+
+    long EnumerableLongCount2Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v1236;
+        long v1237;
+        v1236 = EnumerableItems.GetEnumerator();
+        v1237 = 0;
+        try
+        {
+            while (v1236.MoveNext())
+                v1237++;
+        }
+        finally
+        {
+            v1236.Dispose();
+        }
+
+        return v1237;
+    }
+
+    long EnumerableLongCount3Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v1238;
+        long v1239;
+        v1238 = EnumerableItems.GetEnumerator();
+        v1239 = 0;
+        try
+        {
+            while (v1238.MoveNext())
+            {
+                if (!((v1238.Current > 3)))
+                    continue;
+                v1239++;
+            }
+        }
+        finally
+        {
+            v1238.Dispose();
+        }
+
+        return v1239;
+    }
+
+    long EnumerableLongCount5Rewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1241;
+        long v1242;
+        v1242 = 0;
+        v1241 = 0;
+        for (; v1241 < ArrayItems.Length; v1241++)
+        {
+            if (!((ArrayItems[v1241] > 4)))
+                continue;
+            if (!((ArrayItems[v1241] % 2 == 0)))
+                continue;
+            v1242++;
+        }
+
+        return v1242;
+    }
+
+    long RangeWhereLongCountRewritten_ProceduralLinq1()
+    {
+        int v1245;
+        int v1246;
+        long v1247;
+        v1247 = 0;
+        v1245 = 0;
+        for (; v1245 < 256; v1245++)
+        {
+            v1246 = (v1245 + 5);
+            if (!((v1246 > 100)))
+                continue;
+            v1247++;
+        }
+
+        return v1247;
+    }
+
+    long RangeLongCount2Rewritten_ProceduralLinq1()
+    {
+        int v1248;
+        long v1249;
+        v1249 = 0;
+        v1248 = 0;
+        for (; v1248 < 256; v1248++)
+        {
+            if (!(((v1248 + 5) > 100)))
+                continue;
+            v1249++;
+        }
+
+        return v1249;
+    }
+
+    long ArrayMethodLongCountRewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1251;
+        long v1252;
+        v1252 = 0;
+        v1251 = 0;
+        for (; v1251 < ArrayItems.Length; v1251++)
+        {
+            if (!(Predicate(ArrayItems[v1251])))
+                continue;
+            v1252++;
+        }
+
+        return v1252;
+    }
+
+    long ArrayDistinctLongCountRewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1253;
+        HashSet<int> v1254;
+        long v1255;
+        v1254 = new HashSet<int>();
+        v1255 = 0;
+        v1253 = 0;
+        for (; v1253 < ArrayItems.Length; v1253++)
+        {
+            if (!(v1254.Add(ArrayItems[v1253])))
+                continue;
+            v1255++;
+        }
+
+        return v1255;
+    }
+
+    long EmptyDistinctLongCountRewritten_ProceduralLinq1()
+    {
+        int v1257;
+        HashSet<int> v1258;
+        long v1259;
+        v1258 = new HashSet<int>();
+        v1259 = 0;
+        v1257 = 0;
+        for (; v1257 < 0; v1257++)
+        {
+            if (!(v1258.Add(default(int))))
                 continue;
             v1259++;
         }
 
         return v1259;
-    }
-
-    long ArrayLongCount5Rewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v1261;
-        long v1262;
-        v1262 = 0;
-        v1261 = 0;
-        for (; v1261 < ArrayItems.Length; v1261++)
-        {
-            if (!((ArrayItems[v1261] > 4)))
-                continue;
-            if (!((ArrayItems[v1261] % 2 == 0)))
-                continue;
-            v1262++;
-        }
-
-        return v1262;
-    }
-
-    long EnumerableLongCount2Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v1263;
-        long v1264;
-        v1263 = EnumerableItems.GetEnumerator();
-        v1264 = 0;
-        try
-        {
-            while (v1263.MoveNext())
-                v1264++;
-        }
-        finally
-        {
-            v1263.Dispose();
-        }
-
-        return v1264;
-    }
-
-    long EnumerableLongCount3Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v1265;
-        long v1266;
-        v1265 = EnumerableItems.GetEnumerator();
-        v1266 = 0;
-        try
-        {
-            while (v1265.MoveNext())
-            {
-                if (!((v1265.Current > 3)))
-                    continue;
-                v1266++;
-            }
-        }
-        finally
-        {
-            v1265.Dispose();
-        }
-
-        return v1266;
-    }
-
-    long EnumerableLongCount5Rewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v1268;
-        long v1269;
-        v1269 = 0;
-        v1268 = 0;
-        for (; v1268 < ArrayItems.Length; v1268++)
-        {
-            if (!((ArrayItems[v1268] > 4)))
-                continue;
-            if (!((ArrayItems[v1268] % 2 == 0)))
-                continue;
-            v1269++;
-        }
-
-        return v1269;
-    }
-
-    long RangeWhereLongCountRewritten_ProceduralLinq1()
-    {
-        int v1272;
-        if (256 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        int v1273;
-        long v1274;
-        v1274 = 0;
-        v1272 = 0;
-        for (; v1272 < 256; v1272++)
-        {
-            v1273 = (v1272 + 5);
-            if (!((v1273 > 100)))
-                continue;
-            v1274++;
-        }
-
-        return v1274;
-    }
-
-    long RangeLongCount2Rewritten_ProceduralLinq1()
-    {
-        int v1275;
-        if (256 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        long v1276;
-        v1276 = 0;
-        v1275 = 0;
-        for (; v1275 < 256; v1275++)
-        {
-            if (!(((v1275 + 5) > 100)))
-                continue;
-            v1276++;
-        }
-
-        return v1276;
-    }
-
-    long ArrayMethodLongCountRewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v1278;
-        long v1279;
-        v1279 = 0;
-        v1278 = 0;
-        for (; v1278 < ArrayItems.Length; v1278++)
-        {
-            if (!(Predicate(ArrayItems[v1278])))
-                continue;
-            v1279++;
-        }
-
-        return v1279;
-    }
-
-    long ArrayDistinctLongCountRewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v1280;
-        HashSet<int> v1281;
-        long v1282;
-        v1281 = new HashSet<int>();
-        v1282 = 0;
-        v1280 = 0;
-        for (; v1280 < ArrayItems.Length; v1280++)
-        {
-            if (!(v1281.Add(ArrayItems[v1280])))
-                continue;
-            v1282++;
-        }
-
-        return v1282;
-    }
-
-    long EmptyDistinctLongCountRewritten_ProceduralLinq1()
-    {
-        int v1284;
-        HashSet<int> v1285;
-        long v1286;
-        v1285 = new HashSet<int>();
-        v1286 = 0;
-        v1284 = 0;
-        for (; v1284 < 0; v1284++)
-        {
-            if (!(v1285.Add(default(int))))
-                continue;
-            v1286++;
-        }
-
-        return v1286;
     }
 }}

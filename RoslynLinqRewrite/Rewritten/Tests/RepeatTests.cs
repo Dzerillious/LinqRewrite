@@ -109,98 +109,79 @@ public class RepeatTests
 
     System.Collections.Generic.IEnumerable<int> Repeat1Rewritten_ProceduralLinq1()
     {
-        int v1476;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        v1476 = 0;
-        for (; v1476 < 100; v1476++)
+        int v1446;
+        v1446 = 0;
+        for (; v1446 < 100; v1446++)
             yield return 0;
     }
 
     System.Collections.Generic.IEnumerable<int> Repeat2Rewritten_ProceduralLinq1()
     {
-        int v1477;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        v1477 = 0;
-        for (; v1477 < 100; v1477++)
+        int v1447;
+        v1447 = 0;
+        for (; v1447 < 100; v1447++)
             yield return -100;
     }
 
     System.Collections.Generic.IEnumerable<int> Repeat3Rewritten_ProceduralLinq1()
     {
-        int v1478;
-        if (-100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        v1478 = 0;
-        for (; v1478 < -100; v1478++)
-            yield return 0;
+        throw new System.InvalidOperationException("Index out of range");
     }
 
     System.Collections.Generic.IEnumerable<int> Repeat4Rewritten_ProceduralLinq1()
     {
-        int v1479;
-        if (23 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        v1479 = 0;
-        for (; v1479 < 23; v1479++)
+        int v1448;
+        v1448 = 0;
+        for (; v1448 < 23; v1448++)
             yield return 123;
     }
 
     int[] RepeatToArrayRewritten_ProceduralLinq1()
     {
-        int v1480;
-        if (23 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        int[] v1481;
-        v1481 = new int[23];
-        v1480 = 0;
-        for (; v1480 < 23; v1480++)
-            v1481[v1480] = 123;
-        return v1481;
+        int v1449;
+        int[] v1450;
+        v1450 = new int[23];
+        v1449 = 0;
+        for (; v1449 < 23; v1449++)
+            v1450[v1449] = 123;
+        return v1450;
     }
 
     System.Collections.Generic.List<int> RepeatToListRewritten_ProceduralLinq1()
     {
-        int v1482;
-        if (23 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        System.Collections.Generic.List<int> v1483;
-        v1483 = new System.Collections.Generic.List<int>();
-        v1482 = 0;
-        for (; v1482 < 23; v1482++)
-            v1483.Add(123);
-        return v1483;
+        int v1451;
+        System.Collections.Generic.List<int> v1452;
+        v1452 = new System.Collections.Generic.List<int>();
+        v1451 = 0;
+        for (; v1451 < 23; v1451++)
+            v1452.Add(123);
+        return v1452;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> RepeatToSimpleListRewritten_ProceduralLinq1()
     {
-        int v1484;
-        if (23 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        int[] v1485;
-        SimpleList<int> v1486;
-        v1485 = new int[23];
-        v1484 = 0;
-        for (; v1484 < 23; v1484++)
-            v1485[v1484] = 123;
-        v1486 = new SimpleList<int>();
-        v1486.Items = v1485;
-        v1486.Count = 23;
-        return v1486;
+        int v1453;
+        int[] v1454;
+        SimpleList<int> v1455;
+        v1454 = new int[23];
+        v1453 = 0;
+        for (; v1453 < 23; v1453++)
+            v1454[v1453] = 123;
+        v1455 = new SimpleList<int>();
+        v1455.Items = v1454;
+        v1455.Count = 23;
+        return v1455;
     }
 
     System.Collections.Generic.IEnumerable<int> RepeatDistinctRewritten_ProceduralLinq1()
     {
-        int v1487;
-        if (23 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
-        HashSet<int> v1488;
-        v1488 = new HashSet<int>();
-        v1487 = 0;
-        for (; v1487 < 23; v1487++)
+        int v1456;
+        HashSet<int> v1457;
+        v1457 = new HashSet<int>();
+        v1456 = 0;
+        for (; v1456 < 23; v1456++)
         {
-            if (!(v1488.Add(123)))
+            if (!(v1457.Add(123)))
                 continue;
             yield return 123;
         }

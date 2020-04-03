@@ -1,7 +1,9 @@
 ﻿using System;
 using LinqRewrite.Core;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using LinqRewrite.Extensions;
 using LinqRewrite.Services;
 using Microsoft.CodeAnalysis;
@@ -387,5 +389,76 @@ namespace LinqRewrite.DataStructures
         public bool CanSimpleRewrite() => !ModifiedEnumeration && ResultSize != null;
 
         public void Dispose() => RewriteParametersFactory.ReturnParameters(this);
+
+        public bool AssertGreaterEqual(ValueBridge bigger, ValueBridge smaller)
+        {
+            var biggerPass = double.TryParse(bigger.ToString(), out var biggerD);
+            var smallerPass = double.TryParse(smaller.ToString(), out var smallerD);
+            
+            if (biggerPass && smallerPass)
+            {
+                if (biggerD >= smallerD) return true;
+                InitialAdd(Throw("System.InvalidOperationException", "Index out of range"));
+                return false;
+            }
+            InitialAdd(If(bigger < smaller, Throw("System.InvalidOperationException", "Index out of range")));
+            return true;
+        }
+
+        public bool AssertLesserEqual(ValueBridge smaller, ValueBridge bigger)
+        {
+            var biggerPass = double.TryParse(bigger.ToString(), out var biggerD);
+            var smallerPass = double.TryParse(smaller.ToString(), out var smallerD);
+            
+            if (biggerPass && smallerPass)
+            {
+                if (biggerD >= smallerD) return true;
+                InitialAdd(Throw("System.InvalidOperationException", "Index out of range"));
+                return false;
+            }
+            InitialAdd(If(bigger < smaller, Throw("System.InvalidOperationException", "Index out of range")));
+            return true;
+        }
+
+        public bool AssertGreaterEqual(ValueBridge bigger, ValueBridge smaller, Action onFalse, StatementSyntax onFalseStatement)
+        {
+            var biggerPass = double.TryParse(bigger.ToString(), out var biggerD);
+            var smallerPass = double.TryParse(smaller.ToString(), out var smallerD);
+            
+            if (biggerPass && smallerPass)
+            {
+                if (biggerD >= smallerD) return true;
+                onFalse();
+                return false;
+            }
+            InitialAdd(If(bigger < smaller, onFalseStatement));
+            return true;
+        }
+
+        public bool AssertLesserEqual(ValueBridge smaller, ValueBridge bigger, Action onFalse, StatementSyntax onFalseStatement)
+        {
+            var biggerPass = double.TryParse(bigger.ToString(), out var biggerD);
+            var smallerPass = double.TryParse(smaller.ToString(), out var smallerD);
+            
+            if (biggerPass && smallerPass)
+            {
+                if (biggerD >= smallerD) return true;
+                onFalse();
+                return false;
+            }
+            InitialAdd(If(bigger < smaller, onFalseStatement));
+            return true;
+        }
+
+        public bool AssertNotNull(ValueBridge notNull)
+        {
+            if (notNull.ToString() == "null")
+            {
+                InitialAdd(Throw("System.InvalidOperationException", "Invalid null object"));
+                return false;
+            }
+            InitialAdd(If(notNull.IsEqual(null), Throw("System.InvalidOperationException", "Invalid null object")));
+            return true;
+        }
     }
 }

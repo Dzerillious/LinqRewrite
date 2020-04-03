@@ -181,54 +181,54 @@ public class EmptyTests
 
     int[] EmptyToArrayRewritten_ProceduralLinq1()
     {
-        int v533;
-        int[] v534;
-        v534 = new int[0];
-        v533 = 0;
-        for (; v533 < 0; v533++)
-            v534[v533] = default(int);
-        return v534;
+        int v519;
+        int[] v520;
+        v520 = new int[0];
+        v519 = 0;
+        for (; v519 < 0; v519++)
+            v520[v519] = default(int);
+        return v520;
     }
 
     System.Collections.Generic.List<int> EmptyToListRewritten_ProceduralLinq1()
     {
-        int v535;
-        System.Collections.Generic.List<int> v536;
-        v536 = new System.Collections.Generic.List<int>();
-        v535 = 0;
-        for (; v535 < 0; v535++)
-            v536.Add(default(int));
-        return v536;
+        int v521;
+        System.Collections.Generic.List<int> v522;
+        v522 = new System.Collections.Generic.List<int>();
+        v521 = 0;
+        for (; v521 < 0; v521++)
+            v522.Add(default(int));
+        return v522;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> EmptyToSimpleListRewritten_ProceduralLinq1()
     {
-        int v537;
-        int[] v538;
-        SimpleList<int> v539;
-        v538 = new int[0];
-        v537 = 0;
-        for (; v537 < 0; v537++)
-            v538[v537] = default(int);
-        v539 = new SimpleList<int>();
-        v539.Items = v538;
-        v539.Count = 0;
-        return v539;
+        int v523;
+        int[] v524;
+        SimpleList<int> v525;
+        v524 = new int[0];
+        v523 = 0;
+        for (; v523 < 0; v523++)
+            v524[v523] = default(int);
+        v525 = new SimpleList<int>();
+        v525.Items = v524;
+        v525.Count = 0;
+        return v525;
     }
 
     System.Collections.Generic.IEnumerable<int> EmptySelectRewritten_ProceduralLinq1()
     {
-        int v540;
-        v540 = 0;
-        for (; v540 < 0; v540++)
+        int v526;
+        v526 = 0;
+        for (; v526 < 0; v526++)
             yield return (default(int) + 3);
     }
 
     System.Collections.Generic.IEnumerable<int> EmptyWhereRewritten_ProceduralLinq1()
     {
-        int v541;
-        v541 = 0;
-        for (; v541 < 0; v541++)
+        int v527;
+        v527 = 0;
+        for (; v527 < 0; v527++)
         {
             if (!((default(int) > 3)))
                 continue;
@@ -238,13 +238,13 @@ public class EmptyTests
 
     System.Collections.Generic.IEnumerable<int> EmptyDistinctRewritten_ProceduralLinq1()
     {
-        int v542;
-        HashSet<int> v543;
-        v543 = new HashSet<int>();
-        v542 = 0;
-        for (; v542 < 0; v542++)
+        int v528;
+        HashSet<int> v529;
+        v529 = new HashSet<int>();
+        v528 = 0;
+        for (; v528 < 0; v528++)
         {
-            if (!(v543.Add(default(int))))
+            if (!(v529.Add(default(int))))
                 continue;
             yield return default(int);
         }
@@ -252,9 +252,9 @@ public class EmptyTests
 
     bool EmptyContainsRewritten_ProceduralLinq1()
     {
-        int v545;
-        v545 = 0;
-        for (; v545 < 0; v545++)
+        int v531;
+        v531 = 0;
+        for (; v531 < 0; v531++)
             if (default(int) == 23)
                 return true;
         return false;
@@ -262,64 +262,64 @@ public class EmptyTests
 
     System.Collections.Generic.IEnumerable<float> EmptyCastRewritten_ProceduralLinq1()
     {
-        int v546;
-        v546 = 0;
-        for (; v546 < 0; v546++)
+        int v532;
+        v532 = 0;
+        for (; v532 < 0; v532++)
             yield return (float)(object)default(int);
     }
 
     double EmptyAggregateDefaultRewritten_ProceduralLinq1()
     {
-        int v548;
-        double v549;
-        bool v550;
-        v549 = 1.0;
-        v550 = true;
-        v548 = 0;
-        for (; v548 < 0; v548++)
-            if (v550)
+        int v534;
+        double v535;
+        bool v536;
+        v535 = 1.0;
+        v536 = true;
+        v534 = 0;
+        for (; v534 < 0; v534++)
+            if (v536)
             {
-                v549 = default(int);
-                v550 = false;
+                v535 = default(int);
+                v536 = false;
                 continue;
             }
             else
-                v549 = (v549 + default(int));
-        return v549;
+                v535 = (v535 + default(int));
+        return v535;
     }
 
     int EmptyAggregateRewritten_ProceduralLinq1()
     {
-        int v551;
-        int v552;
-        bool v553;
-        v552 = default(int);
-        v553 = true;
-        v551 = 0;
-        for (; v551 < 0; v551++)
-            if (v553)
+        int v537;
+        int v538;
+        bool v539;
+        v538 = default(int);
+        v539 = true;
+        v537 = 0;
+        for (; v537 < 0; v537++)
+            if (v539)
             {
-                v552 = default(int);
-                v553 = false;
+                v538 = default(int);
+                v539 = false;
                 continue;
             }
             else
-                v552 = (v552 + default(int));
-        if (v553)
+                v538 = (v538 + default(int));
+        if (v539)
             throw new System.InvalidOperationException("The sequence did not contain valid elements.");
-        return v552;
+        return v538;
     }
 
     double EmptyAverageRewritten_ProceduralLinq1()
     {
-        int v554;
-        double v555;
-        v555 = 0;
-        v554 = 0;
-        for (; v554 < 0; v554++)
-            v555 += default(int);
+        int v540;
+        double v541;
+        v541 = 0;
+        v540 = 0;
+        for (; v540 < 0; v540++)
+            v541 += default(int);
         if (0 == 0)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
-        return (v555 / 0);
+        return (v541 / 0);
     }
 }}

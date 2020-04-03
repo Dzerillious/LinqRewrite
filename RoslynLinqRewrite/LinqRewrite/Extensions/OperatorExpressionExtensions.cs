@@ -26,8 +26,9 @@ namespace LinqRewrite.Extensions
             => BinaryExpression(SyntaxKind.LogicalAndExpression, ParenthesizedExpression(a), b);
 
         
+        
         public static ValueBridge Is(this TypedValueBridge a, TypeBridge type)
-            => IsPatternExpression(a, ConstantPattern(type));
+            => BinaryExpression(SyntaxKind.IsExpression, a, type);
 
         
         public static PostfixUnaryExpressionSyntax PostDecrement(this ValueBridge identifier)

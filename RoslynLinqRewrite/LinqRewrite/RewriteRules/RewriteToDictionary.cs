@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -20,15 +21,14 @@ namespace LinqRewrite.RewriteRules
                 _ => p.LastValue
             };
 
-            TypeBridge dictType = ParseTypeName($"Dictionary<{p.CurrentCollection.ItemType},{keySelector.ReturnType(p)}>");
             var dictionaryVariable = args.Length switch
             {
-                2 when !(args[1].OldVal.IsInvokable(p)) => p.GlobalVariable(dictType, New(dictType, args[1])),
-                3 => p.GlobalVariable(dictType, New(dictType, args[2])),
-                _ => p.GlobalVariable(dictType, New(dictType))
+                2 when !(args[1].OldVal.IsInvokable(p)) => p.GlobalVariable(p.ReturnType, New(p.ReturnType, args[1])),
+                3 => p.GlobalVariable(p.ReturnType, New(p.ReturnType, args[2])),
+                _ => p.GlobalVariable(p.ReturnType, New(p.ReturnType))
             };
 
-            p.ForAdd(dictionaryVariable.ArrayAccess(keySelector.Inline(p, p.LastValue)).Assign(elementSelectorValue));
+            p.ForAdd(dictionaryVariable.Access("Add").Invoke(keySelector.Inline(p, p.LastValue), elementSelectorValue));
             p.ResultAdd(Return(dictionaryVariable));
         }
     }

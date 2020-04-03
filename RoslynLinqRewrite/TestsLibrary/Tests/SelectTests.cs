@@ -9,6 +9,8 @@ namespace TestsLibrary.Tests
 public class SelectTests
 {
     [Datapoints]
+    private int[] NullItems = null;
+    [Datapoints]
     private int[] ArrayItems = Enumerable.Range(0, 100).ToArray();
     [Datapoints]
     private static int[] StaticArrayItems = Enumerable.Range(0, 100).ToArray();
@@ -22,6 +24,8 @@ public class SelectTests
     public double SelectorIndex(int x, int i) => x + i;
     public void RunTests()
     {
+        TestsExtensions.TestEquals(nameof(NullSelect), NullSelect, NullSelectRewritten);
+        TestsExtensions.TestEquals(nameof(NullableSelect), NullableSelect, NullableSelectRewritten);
         TestsExtensions.TestEquals(nameof(SelectArray), SelectArray, SelectArrayRewritten);
         TestsExtensions.TestEquals(nameof(SelectList), SelectList, SelectListRewritten);
         TestsExtensions.TestEquals(nameof(SelectSimpleList), SelectSimpleList, SelectSimpleListRewritten);
@@ -58,6 +62,28 @@ public class SelectTests
         TestsExtensions.TestEquals(nameof(ArraySelectIndexMethodToArray), ArraySelectIndexMethodToArray, ArraySelectIndexMethodToArrayRewritten);
         TestsExtensions.TestEquals(nameof(ArraySelectIndexMethod), ArraySelectIndexMethod, ArraySelectIndexMethodRewritten);
     }
+
+    [NoRewrite]
+    public IEnumerable<int> NullSelect()
+    {
+        return NullItems.Select(x => x + 3);
+    } //EndMethod
+
+    public IEnumerable<int> NullSelectRewritten()
+    {
+        return NullItems.Select(x => x + 3);
+    } //EndMethod
+
+    [NoRewrite]
+    public IEnumerable<int> NullableSelect()
+    {
+        return NullItems?.Select(x => x + 3);
+    } //EndMethod
+
+    public IEnumerable<int> NullableSelectRewritten()
+    {
+        return NullItems?.Select(x => x + 3);
+    } //EndMethod
 
     [NoRewrite]
     public IEnumerable<int> SelectArray()
@@ -427,7 +453,7 @@ public class SelectTests
     {
         return ArrayItems.Select((x, i) => x + i);
     } //EndMethod
-
+    
     [NoRewrite]
     public IEnumerable<int> ArraySelectIndexToArray()
     {

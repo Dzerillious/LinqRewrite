@@ -14,6 +14,7 @@ namespace LinqRewrite.RewriteRules
             p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
             var itemValue = args[0];
             var countValue = args[1];
+            if (!p.AssertGreaterEqual(countValue, 0)) return;
             
             p.AddIterator();
             p.ForMin = p.ForReMin = 0;
@@ -33,7 +34,6 @@ namespace LinqRewrite.RewriteRules
             p.LastValue = new TypedValueBridge(itemValue.GetType(p), itemValue);
             
             p.FirstCollection = p.CurrentCollection = null;
-            p.InitialAdd(If(countValue < 0, Throw("System.InvalidOperationException", "Negative number of elements")));
         }
     }
 }

@@ -13,11 +13,7 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             var collectionValue = args[0];
-            if (IsNull(collectionValue, p))
-            {
-                p.PreForAdd(Throw("System.InvalidOperationException", "Collection was null"));
-                return;
-            }
+            if (!p.AssertNotNull(collectionValue)) return;
             var methodValue = args[1];
             p.WrapWithTry = true;
 
@@ -27,12 +23,12 @@ namespace LinqRewrite.RewriteRules
                 .Access("GetEnumerator").Invoke()));
             
             p.ForAdd(If(Not(enumeratorVariable.Access("MoveNext").Invoke()),
-                ThrowExpression("System.InvalidOperationException", "Invalid sizes of sources")));
+                Throw("System.InvalidOperationException", "Invalid sizes of sources")));
 
             p.LastValue = methodValue.Inline(p, p.LastValue, new TypedValueBridge(collectionValue.ItemType(p), enumeratorVariable.Access("Current")));
             
             p.ResultAdd(If(enumeratorVariable.Access("MoveNext").Invoke(),
-                ThrowExpression("System.InvalidOperationException", "Invalid sizes of sources")));
+                Throw("System.InvalidOperationException", "Invalid sizes of sources")));
 
             p.FinalAdd(enumeratorVariable.Access("Dispose").Invoke());
             p.ListEnumeration = false;

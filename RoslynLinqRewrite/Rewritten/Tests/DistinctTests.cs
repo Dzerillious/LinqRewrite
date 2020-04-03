@@ -92,7 +92,7 @@ public class DistinctTests
 
     public IEnumerable<int> ArraySelectDistinctRewritten()
     {
-        return ArraySelectDistinctRewritten_ProceduralLinq1(ArrayItems, x => x % 2);
+        return ArraySelectDistinctRewritten_ProceduralLinq1(ArrayItems);
     } //EndMethod
 
     [NoRewrite]
@@ -116,7 +116,7 @@ public class DistinctTests
 
     public IEnumerable<int> ArrayWhereSelectDistinctRewritten()
     {
-        return ArrayWhereSelectDistinctRewritten_ProceduralLinq1(ArrayItems, x => x > 50, x => x % 10);
+        return ArrayWhereSelectDistinctRewritten_ProceduralLinq1(ArrayItems);
     } //EndMethod
 
     [NoRewrite]
@@ -154,228 +154,228 @@ public class DistinctTests
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v462;
-        HashSet<int> v463;
-        v463 = new HashSet<int>();
-        v462 = 0;
-        for (; v462 < ArrayItems.Length; v462++)
+        int v451;
+        HashSet<int> v452;
+        v452 = new HashSet<int>();
+        v451 = 0;
+        for (; v451 < ArrayItems.Length; v451++)
         {
-            if (!(v463.Add(ArrayItems[v462])))
+            if (!(v452.Add(ArrayItems[v451])))
                 continue;
-            yield return ArrayItems[v462];
+            yield return ArrayItems[v451];
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayDefaultComparerDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v464;
-        HashSet<int> v465;
-        v465 = new HashSet<int>(EqualityComparer<int>.Default);
-        v464 = 0;
-        for (; v464 < ArrayItems.Length; v464++)
+        int v453;
+        HashSet<int> v454;
+        v454 = new HashSet<int>(EqualityComparer<int>.Default);
+        v453 = 0;
+        for (; v453 < ArrayItems.Length; v453++)
         {
-            if (!(v465.Add(ArrayItems[v464])))
+            if (!(v454.Add(ArrayItems[v453])))
                 continue;
-            yield return ArrayItems[v464];
+            yield return ArrayItems[v453];
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayStrangeComparerDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v466;
-        HashSet<int> v467;
-        v467 = new HashSet<int>(new IntStrangeComparer());
-        v466 = 0;
-        for (; v466 < ArrayItems.Length; v466++)
+        int v455;
+        HashSet<int> v456;
+        v456 = new HashSet<int>(new IntStrangeComparer());
+        v455 = 0;
+        for (; v455 < ArrayItems.Length; v455++)
         {
-            if (!(v467.Add(ArrayItems[v466])))
+            if (!(v456.Add(ArrayItems[v455])))
                 continue;
-            yield return ArrayItems[v466];
+            yield return ArrayItems[v455];
         }
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayRepeatDistinctRewritten_ProceduralLinq1(int[] RepeatArrayItems)
     {
-        int v468;
-        HashSet<int> v469;
-        v469 = new HashSet<int>();
-        v468 = 0;
-        for (; v468 < RepeatArrayItems.Length; v468++)
+        int v457;
+        HashSet<int> v458;
+        v458 = new HashSet<int>();
+        v457 = 0;
+        for (; v457 < RepeatArrayItems.Length; v457++)
         {
-            if (!(v469.Add(RepeatArrayItems[v468])))
+            if (!(v458.Add(RepeatArrayItems[v457])))
                 continue;
-            yield return RepeatArrayItems[v468];
+            yield return RepeatArrayItems[v457];
         }
     }
 
     System.Collections.Generic.IEnumerable<int> EnumerableDistinctRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v470;
-        HashSet<int> v471;
-        int v472;
-        v470 = EnumerableItems.GetEnumerator();
-        v471 = new HashSet<int>();
+        IEnumerator<int> v459;
+        HashSet<int> v460;
+        int v461;
+        v459 = EnumerableItems.GetEnumerator();
+        v460 = new HashSet<int>();
         try
         {
-            while (v470.MoveNext())
+            while (v459.MoveNext())
             {
-                v472 = v470.Current;
-                if (!(v471.Add(v472)))
+                v461 = v459.Current;
+                if (!(v460.Add(v461)))
                     continue;
-                yield return v472;
+                yield return v461;
             }
         }
         finally
         {
-            v470.Dispose();
+            v459.Dispose();
         }
     }
 
-    System.Collections.Generic.IEnumerable<int> ArraySelectDistinctRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int> v474)
+    System.Collections.Generic.IEnumerable<int> ArraySelectDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v473;
-        HashSet<int> v475;
-        int v476;
-        v475 = new HashSet<int>();
-        v473 = 0;
-        for (; v473 < ArrayItems.Length; v473++)
+        int v462;
+        HashSet<int> v463;
+        int v464;
+        v463 = new HashSet<int>();
+        v462 = 0;
+        for (; v462 < ArrayItems.Length; v462++)
         {
-            v476 = v474(ArrayItems[v473]);
-            if (!(v475.Add(v476)))
+            v464 = (ArrayItems[v462] % 2);
+            if (!(v463.Add(v464)))
                 continue;
-            yield return v476;
+            yield return v464;
         }
     }
 
-    System.Collections.Generic.IEnumerable<int> RepeatArraySelectDistinctRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int> v478)
+    System.Collections.Generic.IEnumerable<int> RepeatArraySelectDistinctRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int> v466)
     {
-        int v477;
-        HashSet<int> v479;
-        int v480;
-        v479 = new HashSet<int>();
-        v477 = 0;
-        for (; v477 < ArrayItems.Length; v477++)
+        int v465;
+        HashSet<int> v467;
+        int v468;
+        v467 = new HashSet<int>();
+        v465 = 0;
+        for (; v465 < ArrayItems.Length; v465++)
         {
-            v480 = v478(ArrayItems[v477]);
-            if (!(v479.Add(v480)))
+            v468 = v466(ArrayItems[v465]);
+            if (!(v467.Add(v468)))
                 continue;
-            yield return v480;
+            yield return v468;
         }
     }
 
-    System.Collections.Generic.IEnumerable<int> ArrayWhereSelectDistinctRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, bool> v482, System.Func<int, int> v483)
+    System.Collections.Generic.IEnumerable<int> ArrayWhereSelectDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v481;
-        HashSet<int> v484;
-        int v485;
-        v484 = new HashSet<int>();
-        v481 = 0;
-        for (; v481 < ArrayItems.Length; v481++)
+        int v469;
+        HashSet<int> v470;
+        int v471;
+        v470 = new HashSet<int>();
+        v469 = 0;
+        for (; v469 < ArrayItems.Length; v469++)
         {
-            if (!(v482(ArrayItems[v481])))
+            if (!((ArrayItems[v469] > 50)))
                 continue;
-            v485 = v483(ArrayItems[v481]);
-            if (!(v484.Add(v485)))
+            v471 = (ArrayItems[v469] % 10);
+            if (!(v470.Add(v471)))
                 continue;
-            yield return v485;
+            yield return v471;
         }
     }
 
     int[] EnumerableDistinctToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v486;
-        HashSet<int> v487;
-        int v488;
-        int v489;
-        int v490;
-        int[] v491;
-        v486 = EnumerableItems.GetEnumerator();
-        v487 = new HashSet<int>();
-        v489 = 0;
-        v490 = 8;
-        v491 = new int[8];
+        IEnumerator<int> v472;
+        HashSet<int> v473;
+        int v474;
+        int v475;
+        int v476;
+        int[] v477;
+        v472 = EnumerableItems.GetEnumerator();
+        v473 = new HashSet<int>();
+        v475 = 0;
+        v476 = 8;
+        v477 = new int[8];
         try
         {
-            while (v486.MoveNext())
+            while (v472.MoveNext())
             {
-                v488 = v486.Current;
-                if (!(v487.Add(v488)))
+                v474 = v472.Current;
+                if (!(v473.Add(v474)))
                     continue;
-                if (v489 >= v490)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v491, ref v490);
-                v491[v489] = v488;
-                v489++;
+                if (v475 >= v476)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v477, ref v476);
+                v477[v475] = v474;
+                v475++;
             }
         }
         finally
         {
-            v486.Dispose();
+            v472.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v491, v489);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v477, v475);
     }
 
     int[] ArrayDistinctToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v492;
-        HashSet<int> v493;
-        int v494;
-        int v495;
-        int v496;
-        int v497;
-        int[] v498;
-        v493 = new HashSet<int>();
-        v495 = 0;
-        v496 = (LinqRewrite.Core.IntExtensions.Log2((uint)ArrayItems.Length) - 3);
-        v496 -= (v496 % 2);
-        v497 = 8;
-        v498 = new int[8];
-        v492 = 0;
-        for (; v492 < ArrayItems.Length; v492++)
+        int v478;
+        HashSet<int> v479;
+        int v480;
+        int v481;
+        int v482;
+        int v483;
+        int[] v484;
+        v479 = new HashSet<int>();
+        v481 = 0;
+        v482 = (LinqRewrite.Core.IntExtensions.Log2((uint)ArrayItems.Length) - 3);
+        v482 -= (v482 % 2);
+        v483 = 8;
+        v484 = new int[8];
+        v478 = 0;
+        for (; v478 < ArrayItems.Length; v478++)
         {
-            v494 = (ArrayItems[v492] % 10);
-            if (!(v493.Add(v494)))
+            v480 = (ArrayItems[v478] % 10);
+            if (!(v479.Add(v480)))
                 continue;
-            if (v495 >= v497)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ArrayItems.Length, ref v498, ref v496, out v497);
-            v498[v495] = v494;
-            v495++;
+            if (v481 >= v483)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ArrayItems.Length, ref v484, ref v482, out v483);
+            v484[v481] = v480;
+            v481++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v498, v495);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v484, v481);
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> ArrayDistinctToSimpleListRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v499;
-        HashSet<int> v500;
-        int v501;
-        int v502;
-        int v503;
-        int v504;
-        int[] v505;
-        SimpleList<int> v506;
-        v500 = new HashSet<int>();
-        v502 = 0;
-        v503 = (LinqRewrite.Core.IntExtensions.Log2((uint)ArrayItems.Length) - 3);
-        v503 -= (v503 % 2);
-        v504 = 8;
-        v505 = new int[8];
-        v499 = 0;
-        for (; v499 < ArrayItems.Length; v499++)
+        int v485;
+        HashSet<int> v486;
+        int v487;
+        int v488;
+        int v489;
+        int v490;
+        int[] v491;
+        SimpleList<int> v492;
+        v486 = new HashSet<int>();
+        v488 = 0;
+        v489 = (LinqRewrite.Core.IntExtensions.Log2((uint)ArrayItems.Length) - 3);
+        v489 -= (v489 % 2);
+        v490 = 8;
+        v491 = new int[8];
+        v485 = 0;
+        for (; v485 < ArrayItems.Length; v485++)
         {
-            v501 = (ArrayItems[v499] % 10);
-            if (!(v500.Add(v501)))
+            v487 = (ArrayItems[v485] % 10);
+            if (!(v486.Add(v487)))
                 continue;
-            if (v502 >= v504)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ArrayItems.Length, ref v505, ref v503, out v504);
-            v505[v502] = v501;
-            v502++;
+            if (v488 >= v490)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ArrayItems.Length, ref v491, ref v489, out v490);
+            v491[v488] = v487;
+            v488++;
         }
 
-        v506 = new SimpleList<int>();
-        v506.Items = v505;
-        v506.Count = v502;
-        return v506;
+        v492 = new SimpleList<int>();
+        v492.Items = v491;
+        v492.Count = v488;
+        return v492;
     }
 }}

@@ -330,8 +330,6 @@ public class AnyTests
     bool RangeAnyRewritten_ProceduralLinq1()
     {
         int v55;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
         v55 = 0;
         for (; v55 < 100; v55++)
             if (((v55 + 0) > 50))
@@ -342,8 +340,6 @@ public class AnyTests
     bool RepeatAnyRewritten_ProceduralLinq1()
     {
         int v56;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
         v56 = 0;
         for (; v56 < 100; v56++)
             if ((0 > 50))
@@ -354,8 +350,6 @@ public class AnyTests
     bool RepeatAnyTrueRewritten_ProceduralLinq1()
     {
         int v57;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
         v57 = 0;
         for (; v57 < 100; v57++)
             if ((0 > -1))

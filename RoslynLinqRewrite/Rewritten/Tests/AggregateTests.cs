@@ -374,8 +374,6 @@ public class AggregateTests
     int AggregateRangeSumRewritten_ProceduralLinq1()
     {
         int v23;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
         int v24;
         bool v25;
         v24 = default(int);
@@ -398,8 +396,6 @@ public class AggregateTests
     double AggregateRangeFactorial0Rewritten_ProceduralLinq1()
     {
         int v26;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
         double v27;
         bool v28;
         v27 = 1.0;
@@ -420,8 +416,6 @@ public class AggregateTests
     double AggregateRangeFactorial20Rewritten_ProceduralLinq1()
     {
         int v29;
-        if (20 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
         double v30;
         bool v31;
         v30 = 1.0;
@@ -442,8 +436,6 @@ public class AggregateTests
     double AggregateRangeFactorial100Rewritten_ProceduralLinq1()
     {
         int v32;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
         double v33;
         bool v34;
         v33 = 1.0;

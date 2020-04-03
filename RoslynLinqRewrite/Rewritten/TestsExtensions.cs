@@ -36,6 +36,7 @@ namespace TestsLibrary
             return (firstExcept, firstVal, secondExcept, secondVal);
         }
 
+        private static int[] items = null;
         private static (bool ex1, T[] val1, bool ex2, T[] val2) GetValues<T>(Func<IEnumerable<T>> first, Func<IEnumerable<T>> second)
         {
             var firstExcept = false;
@@ -47,7 +48,7 @@ namespace TestsLibrary
             {
                 firstVal = first().ToArray();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 firstExcept = true;
             }
@@ -55,11 +56,51 @@ namespace TestsLibrary
             {
                 secondVal = second().ToArray();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 secondExcept = true;
             }
             return (firstExcept, firstVal, secondExcept, secondVal);
+        }
+        
+        [NoRewrite]
+        public static void TestEquals<T, Y>(string name, Func<ILookup<T, Y>> first, Func<ILookup<T, Y>> second)
+        {
+            var (ex1, val1, ex2, val2) = GetValues(first, second);
+            if (ex1 && ex2 || !ex1 && !ex2 && val1.Select(x => x.Key).SequenceEqual(val2.Select(x => x.Key))) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            else
+            {
+                Console.WriteLine("\n-------------------------------------------------------------\n");
+                Console.Write($"[{_valid}/{++_tests}] {name} is invalid\n\nCollection 1: ");
+                if (ex1) Console.Write("Error");
+                val1?.ForEach(x => Console.Write(x.Key + " "));
+                
+                Console.Write("\n\nCollection 2: ");
+                if (ex2) Console.Write("Error");
+                val2?.ForEach(x => Console.Write(x.Key + " "));
+                
+                Console.WriteLine("\n\n-------------------------------------------------------------\n");
+            }
+        }
+        
+        [NoRewrite]
+        public static void TestEquals<T, Y>(string name, Func<Dictionary<T, Y>> first, Func<Dictionary<T, Y>> second)
+        {
+            var (ex1, val1, ex2, val2) = GetValues(first, second);
+            if (ex1 && ex2 || !ex1 && !ex2 && val1.Keys.SequenceEqual(val2.Keys) && val1.Values.SequenceEqual(val2.Values)) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            else
+            {
+                Console.WriteLine("\n-------------------------------------------------------------\n");
+                Console.Write($"[{_valid}/{++_tests}] {name} is invalid\n\nCollection 1: ");
+                if (ex1) Console.Write("Error");
+                val1?.ForEach(x => Console.Write("k: " + x.Key + "v: " + x.Value + " "));
+                
+                Console.Write("\n\nCollection 2: ");
+                if (ex2) Console.Write("Error");
+                val2?.ForEach(x => Console.Write("k: " + x.Key + "v: " + x.Value + " "));
+                
+                Console.WriteLine("\n\n-------------------------------------------------------------\n");
+            }
         }
         
         [NoRewrite]
@@ -71,9 +112,11 @@ namespace TestsLibrary
             {
                 Console.WriteLine("\n-------------------------------------------------------------\n");
                 Console.Write($"[{_valid}/{++_tests}] {name} is invalid\n\nCollection 1: ");
+                if (ex1) Console.Write("Error");
                 val1?.ForEach(x => Console.Write(x + " "));
                 
                 Console.Write("\n\nCollection 2: ");
+                if (ex2) Console.Write("Error");
                 val2?.ForEach(x => Console.Write(x + " "));
                 
                 Console.WriteLine("\n\n-------------------------------------------------------------\n");

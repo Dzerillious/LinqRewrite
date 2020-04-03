@@ -94,8 +94,8 @@ namespace LinqRewrite.RewriteRules
                 var minValue = p.CurrentIterator == null ? 0 : p.CurrentIterator.ForMin;
                 var sizeValue = p.CurrentIterator == null ? p.ResultSize : p.CurrentIterator.ForMax - p.CurrentIterator.ForMin;
                 
-                var resultVariable = p.GlobalVariable(p.ReturnType, CreateArray((ArrayTypeSyntax) p.ReturnType, p.CurrentCollection.Count));
-                p.ResultAdd("Array".Access("Copy")
+                var resultVariable = p.GlobalVariable(p.ReturnType, CreateArray((ArrayTypeSyntax) p.ReturnType, p.ResultSize));
+                p.ResultAdd("System".Access("Array", "Copy")
                     .Invoke(p.CurrentCollection, minValue, resultVariable, 0, sizeValue));
                 p.ResultAdd(Return(resultVariable));
                 return true;
@@ -103,7 +103,7 @@ namespace LinqRewrite.RewriteRules
             else if (p.CurrentCollection.CollectionType == CollectionType.List)
             {
                 var resultVariable = p.GlobalVariable(p.ReturnType,
-                    CreateArray((ArrayTypeSyntax) p.ReturnType, p.CurrentCollection.Count));
+                    CreateArray((ArrayTypeSyntax) p.ReturnType, p.ResultSize));
                 p.ResultAdd(p.CurrentCollection.Access("CopyTo").Invoke(resultVariable));
                 p.ResultAdd(Return(resultVariable));
                 return true;

@@ -49,15 +49,16 @@ namespace LinqRewrite.Services
 
             _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, coreFunction));
 
-            var args = _data.CurrentMethodArguments.Where(x => p.HasResultMethod || x.RefKindKeyword.Text != "ref");
-            var inv = InvocationExpression(
-                _code.CreateMethodNameSyntaxWithCurrentTypeParameters(functionName), CreateArguments(args));
+            var args = _data.CurrentMethodArguments.Where(x => p.HasResultMethod || x.RefKindKeyword.Text != "ref")
+                .Select(x => (ArgumentBridge)x).ToArray();
+            var inv = _code.CreateMethod(functionName).Invoke(args);
 
             return inv;
         }
 
-        private StatementSyntax GetBody(RewriteParameters p, List<IStatementSyntax> body) => AggregateStatementSyntax(body.Select(x => x.GetStatementSyntax(p)).Where(x => x != null).ToArray());
-        public ForStatementSyntax GetForStatement(RewriteParameters p, LocalVariable indexerVariable, ValueBridge max, List<IStatementSyntax> loopContent)
+        private static StatementSyntax GetBody(RewriteParameters p, List<IStatementSyntax> body) 
+            => AggregateStatementSyntax(body.Select(x => x.GetStatementSyntax(p)).Where(x => x != null).ToArray());
+        public static ForStatementSyntax GetForStatement(RewriteParameters p, LocalVariable indexerVariable, ValueBridge max, List<IStatementSyntax> loopContent)
             => ForStatement(
                 null,
                 default,
@@ -65,7 +66,7 @@ namespace LinqRewrite.Services
                 indexerVariable.SeparatedPostIncrement(),
                 GetBody(p, loopContent));
 
-        public ForStatementSyntax GetReverseForStatement(RewriteParameters p, LocalVariable indexerVariable, ValueBridge min, List<IStatementSyntax> loopContent)
+        public static ForStatementSyntax GetReverseForStatement(RewriteParameters p, LocalVariable indexerVariable, ValueBridge min, List<IStatementSyntax> loopContent)
             => ForStatement(
                 null,
                 default,
@@ -73,7 +74,7 @@ namespace LinqRewrite.Services
                 indexerVariable.SeparatedPostDecrement(),
                 GetBody(p, loopContent));
 
-        public StatementSyntax GetForEachStatement(RewriteParameters p, LocalVariable enumeratorVariable, ValueBridge collection, List<IStatementSyntax> loopContent) 
+        public static StatementSyntax GetForEachStatement(RewriteParameters p, LocalVariable enumeratorVariable, ValueBridge collection, List<IStatementSyntax> loopContent) 
             => TryF(Block(
                     (StatementBridge)While(enumeratorVariable.Access("MoveNext").Invoke(),
                         GetBody(p, loopContent)

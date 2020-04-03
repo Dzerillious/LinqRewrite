@@ -1,6 +1,7 @@
 ﻿using System;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -10,7 +11,15 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
 
-            p.ForAdd(args[0].Inline(p, p.LastValue));
+            var inlined = args[0].Inline(p, p.LastValue);
+            p.ForAdd(GetExpression(inlined));
+        }
+
+        private static ExpressionSyntax GetExpression(ExpressionSyntax expression)
+        {
+            if (expression is ParenthesizedExpressionSyntax parenthesizedExpressionSyntax)
+                return GetExpression(parenthesizedExpressionSyntax.Expression);
+            return expression;
         }
     }
 }

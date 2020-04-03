@@ -115,37 +115,37 @@ public class ElementAtTests
 
     int ArrayElementAtRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v520;
-        v520 = 0;
-        for (; v520 < ArrayItems.Length; v520++)
-            if (v520 == 23)
-                return ArrayItems[v520];
+        int v506;
+        v506 = 0;
+        for (; v506 < ArrayItems.Length; v506++)
+            if (v506 == 23)
+                return ArrayItems[v506];
         throw new System.InvalidOperationException("The sequence did not contain enough elements.");
     }
 
     int ArraySelectElementAtRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v521;
-        v521 = 0;
-        for (; v521 < ArrayItems.Length; v521++)
-            if (v521 == 23)
-                return (ArrayItems[v521] + 20);
+        int v507;
+        v507 = 0;
+        for (; v507 < ArrayItems.Length; v507++)
+            if (v507 == 23)
+                return (ArrayItems[v507] + 20);
         throw new System.InvalidOperationException("The sequence did not contain enough elements.");
     }
 
     int ArrayWhereElementAtRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v522;
-        int v523;
-        v523 = 0;
-        v522 = 0;
-        for (; v522 < ArrayItems.Length; v522++)
+        int v508;
+        int v509;
+        v509 = 0;
+        v508 = 0;
+        for (; v508 < ArrayItems.Length; v508++)
         {
-            if (!((ArrayItems[v522] > 30)))
+            if (!((ArrayItems[v508] > 30)))
                 continue;
-            if (v523 == 23)
-                return ArrayItems[v522];
-            v523++;
+            if (v509 == 23)
+                return ArrayItems[v508];
+            v509++;
         }
 
         throw new System.InvalidOperationException("The sequence did not contain enough elements.");
@@ -153,19 +153,19 @@ public class ElementAtTests
 
     int ArraySelectWhereElementAtRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v524;
-        int v525;
-        int v526;
-        v526 = 0;
-        v524 = 0;
-        for (; v524 < ArrayItems.Length; v524++)
+        int v510;
+        int v511;
+        int v512;
+        v512 = 0;
+        v510 = 0;
+        for (; v510 < ArrayItems.Length; v510++)
         {
-            v525 = (ArrayItems[v524] + 30);
-            if (!((v525 > 30)))
+            v511 = (ArrayItems[v510] + 30);
+            if (!((v511 > 30)))
                 continue;
-            if (v526 == 23)
-                return v525;
-            v526++;
+            if (v512 == 23)
+                return v511;
+            v512++;
         }
 
         throw new System.InvalidOperationException("The sequence did not contain enough elements.");
@@ -173,32 +173,34 @@ public class ElementAtTests
 
     int ArrayElementAtParamRewritten_ProceduralLinq1(int a, int[] ArrayItems)
     {
-        int v527;
-        v527 = 0;
-        for (; v527 < ArrayItems.Length; v527++)
-            if (v527 == a)
-                return ArrayItems[v527];
+        int v513;
+        if (a < 0)
+            throw new System.InvalidOperationException("Index out of range");
+        v513 = 0;
+        for (; v513 < ArrayItems.Length; v513++)
+            if (v513 == a)
+                return ArrayItems[v513];
         throw new System.InvalidOperationException("The sequence did not contain enough elements.");
     }
 
     int EnumerableElementAtRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v528;
-        int v529;
-        v528 = EnumerableItems.GetEnumerator();
-        v529 = 0;
+        IEnumerator<int> v514;
+        int v515;
+        v514 = EnumerableItems.GetEnumerator();
+        v515 = 0;
         try
         {
-            while (v528.MoveNext())
+            while (v514.MoveNext())
             {
-                if (v529 == 23)
-                    return v528.Current;
-                v529++;
+                if (v515 == 23)
+                    return v514.Current;
+                v515++;
             }
         }
         finally
         {
-            v528.Dispose();
+            v514.Dispose();
         }
 
         throw new System.InvalidOperationException("The sequence did not contain enough elements.");
@@ -206,27 +208,27 @@ public class ElementAtTests
 
     int ArrayElementAtOutRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v530;
-        v530 = 0;
-        for (; v530 < ArrayItems.Length; v530++)
-            if (v530 == 20000)
-                return ArrayItems[v530];
+        int v516;
+        v516 = 0;
+        for (; v516 < ArrayItems.Length; v516++)
+            if (v516 == 20000)
+                return ArrayItems[v516];
         throw new System.InvalidOperationException("The sequence did not contain enough elements.");
     }
 
     int ArrayElementAtWhereOutRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v531;
-        int v532;
-        v532 = 0;
-        v531 = 0;
-        for (; v531 < ArrayItems.Length; v531++)
+        int v517;
+        int v518;
+        v518 = 0;
+        v517 = 0;
+        for (; v517 < ArrayItems.Length; v517++)
         {
-            if (!((ArrayItems[v531] > 10)))
+            if (!((ArrayItems[v517] > 10)))
                 continue;
-            if (v532 == 20000)
-                return ArrayItems[v531];
-            v532++;
+            if (v518 == 20000)
+                return ArrayItems[v517];
+            v518++;
         }
 
         throw new System.InvalidOperationException("The sequence did not contain enough elements.");

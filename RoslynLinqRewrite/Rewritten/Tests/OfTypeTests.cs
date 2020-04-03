@@ -79,7 +79,7 @@ public class OfTypeTests
 
     public IEnumerable<int> ArraySelectOfTypeRewritten()
     {
-        return ArraySelectOfTypeRewritten_ProceduralLinq1(ArrayItems, x => x + 0.2);
+        return ArraySelectOfTypeRewritten_ProceduralLinq1(ArrayItems);
     } //EndMethod
 
     [NoRewrite]
@@ -90,7 +90,7 @@ public class OfTypeTests
 
     public IEnumerable<double> ArrayWhereOfTypeRewritten()
     {
-        return ArrayWhereOfTypeRewritten_ProceduralLinq1(ArrayItems, x => x % 2 == 1);
+        return ArrayWhereOfTypeRewritten_ProceduralLinq1(ArrayItems);
     } //EndMethod
 
     [NoRewrite]
@@ -161,112 +161,112 @@ public class OfTypeTests
 
     System.Collections.Generic.IEnumerable<int> ArrayOfTypeRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1433;
-        v1433 = 0;
-        for (; v1433 < ArrayItems.Length; v1433++)
+        int v1406;
+        v1406 = 0;
+        for (; v1406 < ArrayItems.Length; v1406++)
         {
-            if (!(ArrayItems[v1433] is int))
+            if (!(ArrayItems[v1406] is int))
                 continue;
-            yield return (int)(object)ArrayItems[v1433];
+            yield return (int)(object)ArrayItems[v1406];
         }
     }
 
     System.Collections.Generic.IEnumerable<float> ArrayOfType2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1434;
-        v1434 = 0;
-        for (; v1434 < ArrayItems.Length; v1434++)
+        int v1407;
+        v1407 = 0;
+        for (; v1407 < ArrayItems.Length; v1407++)
         {
-            if (!(ArrayItems[v1434] is float))
+            if (!(ArrayItems[v1407] is float))
                 continue;
-            yield return (float)(object)ArrayItems[v1434];
+            yield return (float)(object)ArrayItems[v1407];
         }
     }
 
     System.Collections.Generic.IEnumerable<double> ArrayOfType3Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1435;
-        v1435 = 0;
-        for (; v1435 < ArrayItems.Length; v1435++)
+        int v1408;
+        v1408 = 0;
+        for (; v1408 < ArrayItems.Length; v1408++)
         {
-            if (!(ArrayItems[v1435] is double))
+            if (!(ArrayItems[v1408] is double))
                 continue;
-            yield return (double)(object)ArrayItems[v1435];
+            yield return (double)(object)ArrayItems[v1408];
         }
     }
 
     System.Collections.Generic.IEnumerable<double?> ArrayOfType4Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1436;
-        v1436 = 0;
-        for (; v1436 < ArrayItems.Length; v1436++)
+        int v1409;
+        v1409 = 0;
+        for (; v1409 < ArrayItems.Length; v1409++)
         {
-            if (!(ArrayItems[v1436] is double? ))
+            if (!(ArrayItems[v1409] is double? ))
                 continue;
-            yield return (double? )(object)ArrayItems[v1436];
+            yield return (double? )(object)ArrayItems[v1409];
         }
     }
 
-    System.Collections.Generic.IEnumerable<int> ArraySelectOfTypeRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, double> v1438)
+    System.Collections.Generic.IEnumerable<int> ArraySelectOfTypeRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1437;
-        double v1439;
-        v1437 = 0;
-        for (; v1437 < ArrayItems.Length; v1437++)
+        int v1410;
+        double v1411;
+        v1410 = 0;
+        for (; v1410 < ArrayItems.Length; v1410++)
         {
-            v1439 = v1438(ArrayItems[v1437]);
-            if (!(v1439 is int))
+            v1411 = (ArrayItems[v1410] + 0.2);
+            if (!(v1411 is int))
                 continue;
-            yield return (int)(object)v1439;
+            yield return (int)(object)v1411;
         }
     }
 
-    System.Collections.Generic.IEnumerable<double> ArrayWhereOfTypeRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, bool> v1441)
+    System.Collections.Generic.IEnumerable<double> ArrayWhereOfTypeRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1440;
-        v1440 = 0;
-        for (; v1440 < ArrayItems.Length; v1440++)
+        int v1412;
+        v1412 = 0;
+        for (; v1412 < ArrayItems.Length; v1412++)
         {
-            if (!(v1441(ArrayItems[v1440])))
+            if (!((ArrayItems[v1412] % 2 == 1)))
                 continue;
-            if (!(ArrayItems[v1440] is double))
+            if (!(ArrayItems[v1412] is double))
                 continue;
-            yield return (double)(object)ArrayItems[v1440];
+            yield return (double)(object)ArrayItems[v1412];
         }
     }
 
     double? ArrayOfTypeAverageRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1442;
-        double v1443;
-        double? v1444;
-        int v1445;
-        v1443 = 0;
-        v1445 = 0;
-        v1442 = 0;
-        for (; v1442 < ArrayItems.Length; v1442++)
+        int v1413;
+        double v1414;
+        double? v1415;
+        int v1416;
+        v1414 = 0;
+        v1416 = 0;
+        v1413 = 0;
+        for (; v1413 < ArrayItems.Length; v1413++)
         {
-            if (!(ArrayItems[v1442] is double? ))
+            if (!(ArrayItems[v1413] is double? ))
                 continue;
-            v1444 = (double? )(object)ArrayItems[v1442];
-            if (v1444 == null)
+            v1415 = (double? )(object)ArrayItems[v1413];
+            if (v1415 == null)
                 continue;
-            v1443 += (double)v1444;
-            v1445++;
+            v1414 += (double)v1415;
+            v1416++;
         }
 
-        return v1445 == 0 ? null : ((double? )v1443 / v1445);
+        return v1416 == 0 ? null : ((double? )v1414 / v1416);
     }
 
     bool ArrayOfTypeAnyRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1446;
-        v1446 = 0;
-        for (; v1446 < ArrayItems.Length; v1446++)
+        int v1417;
+        v1417 = 0;
+        for (; v1417 < ArrayItems.Length; v1417++)
         {
-            if (!(ArrayItems[v1446] is double? ))
+            if (!(ArrayItems[v1417] is double? ))
                 continue;
-            if (((double? )(object)ArrayItems[v1446] == null))
+            if (((double? )(object)ArrayItems[v1417] == null))
                 return true;
         }
 
@@ -275,107 +275,107 @@ public class OfTypeTests
 
     double ArrayOfTypeAggregateRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1447;
-        double v1448;
-        bool v1449;
-        v1448 = default(double);
-        v1449 = true;
-        v1447 = 0;
-        for (; v1447 < ArrayItems.Length; v1447++)
+        int v1418;
+        double v1419;
+        bool v1420;
+        v1419 = default(double);
+        v1420 = true;
+        v1418 = 0;
+        for (; v1418 < ArrayItems.Length; v1418++)
         {
-            if (!(ArrayItems[v1447] is double))
+            if (!(ArrayItems[v1418] is double))
                 continue;
-            if (v1449)
+            if (v1420)
             {
-                v1448 = (double)(object)ArrayItems[v1447];
-                v1449 = false;
+                v1419 = (double)(object)ArrayItems[v1418];
+                v1420 = false;
                 continue;
             }
             else
-                v1448 = (v1448 * (double)(object)ArrayItems[v1447]);
+                v1419 = (v1419 * (double)(object)ArrayItems[v1418]);
         }
 
-        if (v1449)
+        if (v1420)
             throw new System.InvalidOperationException("The sequence did not contain valid elements.");
-        return v1448;
+        return v1419;
     }
 
     System.Collections.Generic.IEnumerable<double> EnumerableOfTypeRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1450;
-        int v1451;
-        v1450 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v1421;
+        int v1422;
+        v1421 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v1450.MoveNext())
+            while (v1421.MoveNext())
             {
-                v1451 = v1450.Current;
-                if (!(v1451 is double))
+                v1422 = v1421.Current;
+                if (!(v1422 is double))
                     continue;
-                yield return (double)(object)v1451;
+                yield return (double)(object)v1422;
             }
         }
         finally
         {
-            v1450.Dispose();
+            v1421.Dispose();
         }
     }
 
     double[] EnumerableOfTypeToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1452;
-        int v1453;
-        int v1454;
-        int v1455;
-        double[] v1456;
-        v1452 = EnumerableItems.GetEnumerator();
-        v1454 = 0;
-        v1455 = 8;
-        v1456 = new double[8];
+        IEnumerator<int> v1423;
+        int v1424;
+        int v1425;
+        int v1426;
+        double[] v1427;
+        v1423 = EnumerableItems.GetEnumerator();
+        v1425 = 0;
+        v1426 = 8;
+        v1427 = new double[8];
         try
         {
-            while (v1452.MoveNext())
+            while (v1423.MoveNext())
             {
-                v1453 = v1452.Current;
-                if (!(v1453 is double))
+                v1424 = v1423.Current;
+                if (!(v1424 is double))
                     continue;
-                if (v1454 >= v1455)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1456, ref v1455);
-                v1456[v1454] = (double)(object)v1453;
-                v1454++;
+                if (v1425 >= v1426)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1427, ref v1426);
+                v1427[v1425] = (double)(object)v1424;
+                v1425++;
             }
         }
         finally
         {
-            v1452.Dispose();
+            v1423.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1456, v1454);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1427, v1425);
     }
 
     double[] ArrayOfTypeToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1457;
-        int v1458;
-        int v1459;
-        int v1460;
-        double[] v1461;
-        v1458 = 0;
-        v1459 = (LinqRewrite.Core.IntExtensions.Log2((uint)ArrayItems.Length) - 3);
-        v1459 -= (v1459 % 2);
-        v1460 = 8;
-        v1461 = new double[8];
-        v1457 = 0;
-        for (; v1457 < ArrayItems.Length; v1457++)
+        int v1428;
+        int v1429;
+        int v1430;
+        int v1431;
+        double[] v1432;
+        v1429 = 0;
+        v1430 = (LinqRewrite.Core.IntExtensions.Log2((uint)ArrayItems.Length) - 3);
+        v1430 -= (v1430 % 2);
+        v1431 = 8;
+        v1432 = new double[8];
+        v1428 = 0;
+        for (; v1428 < ArrayItems.Length; v1428++)
         {
-            if (!(ArrayItems[v1457] is double))
+            if (!(ArrayItems[v1428] is double))
                 continue;
-            if (v1458 >= v1460)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ArrayItems.Length, ref v1461, ref v1459, out v1460);
-            v1461[v1458] = (double)(object)ArrayItems[v1457];
-            v1458++;
+            if (v1429 >= v1431)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ArrayItems.Length, ref v1432, ref v1430, out v1431);
+            v1432[v1429] = (double)(object)ArrayItems[v1428];
+            v1429++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1461, v1458);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1432, v1429);
     }
 }}

@@ -13,6 +13,7 @@ namespace LinqRewrite.RewriteRules
             p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
             var fromValue = args[0];
             var countValue = args[1];
+            if (!p.AssertGreaterEqual(countValue, 0)) return;
 
             p.FirstCollection = p.CurrentCollection = null;
             p.AddIterator();
@@ -31,7 +32,6 @@ namespace LinqRewrite.RewriteRules
                         
             p.ResultSize = countValue;
             p.SourceSize = countValue;
-            p.InitialAdd(If(countValue < 0, Throw("System.InvalidOperationException", "Negative number of elements")));
         }
     }
 }

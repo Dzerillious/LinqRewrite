@@ -13,11 +13,7 @@ namespace LinqRewrite.RewriteRules
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             var sourceSizeValue = p.SourceSize;
             var collectionValue = args[0];
-            if (IsNull(collectionValue, p))
-            {
-                p.PreForAdd(Throw("System.InvalidOperationException", "Collection was null"));
-                return;
-            }
+            if (!p.AssertNotNull(collectionValue)) return;
 
             var oldLast = p.LastValue;
             var oldIterator = p.InsertIterator(collectionValue);
@@ -39,7 +35,7 @@ namespace LinqRewrite.RewriteRules
             
             p.LastValue = p.LastValue.Reusable(p);
             p.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue)),
-                Continue()));
+                        Continue()));
 
             if (sourceSizeValue != null && p.SourceSize != null) p.SourceSize += sourceSizeValue;
             else p.SourceSize = null;

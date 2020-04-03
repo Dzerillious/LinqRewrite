@@ -583,8 +583,6 @@ public class AverageTests
     double EnumerableRangeAverageRewritten_ProceduralLinq1()
     {
         int v112;
-        if (100 < 0)
-            throw new System.InvalidOperationException("Negative number of elements");
         double v113;
         v113 = 0;
         v112 = 0;

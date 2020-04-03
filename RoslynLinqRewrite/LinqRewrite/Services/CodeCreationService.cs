@@ -51,7 +51,7 @@ namespace LinqRewrite.Services
             ).Access("GetValueOrDefault").Invoke();
         }
 
-        public ExpressionSyntax CreateMethodNameSyntaxWithCurrentTypeParameters(string identifier)
+        public ExpressionSyntax CreateMethod(string identifier)
             => (_data.CurrentMethodTypeParameters?.Parameters.Count).GetValueOrDefault() != 0
                 ? GenericName(
                     Identifier(identifier),
@@ -75,7 +75,7 @@ namespace LinqRewrite.Services
                 .Select(x => CreateVariableCapture(x, currentFlow.DataFlowsOut, currentFlow.WrittenInside))
                 .ToList();
 
-            if (!p.HasResultMethod && p.Data.CurrentMethodParams.Any(x => !x.Modifiers.Any()))
+            if (!p.HasResultMethod && p.Data.CurrentMethodParams.Any(x => x.Modifiers.Any()))
             {
                 var parameterTypes = parameters.Select(x => x.Type.ToString()).Concat(new[] {returnType.ToString()});
                 var funcType = ParseTypeName($"System.Func<{string.Join(",", parameterTypes)}>");
@@ -118,7 +118,7 @@ namespace LinqRewrite.Services
 
             _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, method));
             return ParenthesizedExpression(InvocationExpression(
-                CreateMethodNameSyntaxWithCurrentTypeParameters(fn),
+                CreateMethod(fn),
                 CreateArguments(param.Select(x => SyntaxFactory.Argument(IdentifierName(x.Identifier.ValueText)))
                     .Union(captures.Select(x =>  SyntaxFactory.Argument(IdentifierName(x.Name)).WithRef(x.Changes))))));
         }
@@ -149,11 +149,11 @@ namespace LinqRewrite.Services
 
         public string GetMethodFullName(InvocationExpressionSyntax invocation)
         {
-            var n = (_data.Semantic.GetSymbolInfo(invocation.Expression).Symbol as IMethodSymbol)?.OriginalDefinition
+            var definition = (_data.Semantic.GetSymbolInfo(invocation.Expression).Symbol as IMethodSymbol)?.OriginalDefinition
                 .ToDisplayString();
             const string iEnumerableOfTSource = "System.Collections.Generic.IEnumerable<TSource>";
 
-            return n?.Replace("System.Collections.Generic.List<TSource>", iEnumerableOfTSource)
+            return definition?.Replace("System.Collections.Generic.List<TSource>", iEnumerableOfTSource)
                 .Replace("TSource[]", iEnumerableOfTSource);
         }
 
@@ -162,7 +162,8 @@ namespace LinqRewrite.Services
             for (var i = 1;; i++)
             {
                 var name = v + i;
-                if (_data.MethodsToAddToCurrentType.Any(x => x.Item2.Identifier.ValueText == name)) continue;
+                if (_data.MethodsToAddToCurrentType.Any(x => x.Item2.Identifier.ValueText == name)) 
+                    continue;
                 return name;
             }
         }

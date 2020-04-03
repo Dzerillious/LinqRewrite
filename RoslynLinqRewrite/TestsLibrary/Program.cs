@@ -1,15 +1,20 @@
-﻿using TestsLibrary.Tests;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using TestsLibrary.Tests;
 
 namespace TestsLibrary
 {
     internal class Program
     {
+        private static int[] items = null;
         public static void Main(string[] args)
         {
             new SelectTests().RunTests();
             new WhereTests().RunTests();
-            // new CastTests().RunTests();
-            // new OfTypeTests().RunTests();
+            new CastTests().RunTests();
+            new OfTypeTests().RunTests();
+            new ZipTests().RunTests();
             
             new AggregateTests().RunTests();
             new AverageTests().RunTests();
@@ -41,6 +46,18 @@ namespace TestsLibrary
             new IntersectTests().RunTests();
             new UnionTests().RunTests();
             new SequenceEqualTests().RunTests();
+            
+            new SkipTests().RunTests();
+            new TakeTests().RunTests();
+            new SkipWhile().RunTests();
+            new TakeWhile().RunTests();
+            new ForEachTests().RunTests();
+            
+            new ToArrayTests().RunTests();
+            new ToListTests().RunTests();
+            new ToSimpleListTests().RunTests();
+            new ToDictionaryTests().RunTests();
+            new ToLookupTests().RunTests();
         }
     }
 }
