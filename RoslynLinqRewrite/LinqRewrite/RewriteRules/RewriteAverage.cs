@@ -32,7 +32,7 @@ namespace LinqRewrite.RewriteRules
                 p.ForAdd(sumVariable.AddAssign(inlinedValue.Cast(elementType)));
                 p.Indexer = null;
                 
-                p.FinalAdd(Return(SyntaxFactory.ConditionalExpression(p.Indexer.IsEqual(0),
+                p.ResultAdd(Return(SyntaxFactory.ConditionalExpression(p.Indexer.IsEqual(0),
                     Null, sumVariable.Cast(p.ReturnType.Type) / p.Indexer)));
             }
             else
@@ -40,13 +40,13 @@ namespace LinqRewrite.RewriteRules
                 p.ForAdd(sumVariable.AddAssign(selectionValue));
                 if (p.ResultSize == null)
                 {
-                    p.FinalAdd(If(p.Indexer.IsEqual(0), Throw("System.InvalidOperationException", "The sequence did not contain any elements.")));
-                    p.FinalAdd(Return(sumVariable / p.Indexer));
+                    p.ResultAdd(If(p.Indexer.IsEqual(0), Throw("System.InvalidOperationException", "The sequence did not contain any elements.")));
+                    p.ResultAdd(Return(sumVariable / p.Indexer));
                 }
                 else
                 {
-                    p.FinalAdd(If(p.ResultSize.IsEqual(0), Throw("System.InvalidOperationException", "The sequence did not contain any elements.")));
-                    p.FinalAdd(Return(sumVariable / p.ResultSize));
+                    p.ResultAdd(If(p.ResultSize.IsEqual(0), Throw("System.InvalidOperationException", "The sequence did not contain any elements.")));
+                    p.ResultAdd(Return(sumVariable / p.ResultSize));
                 }
             }
         }

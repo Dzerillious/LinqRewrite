@@ -23,6 +23,8 @@ namespace LinqRewrite.Extensions
             => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.FloatKeyword));
         public static TypeSyntax Double
             => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.DoubleKeyword));
+        public static TypeSyntax Decimal
+            => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.DecimalKeyword));
         public static TypeSyntax Bool
             => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.BoolKeyword));
 

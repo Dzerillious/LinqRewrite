@@ -23,7 +23,7 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(If(p.Indexer.IsEqual(positionValue),
                         Return(p.LastValue)));
             
-            p.FinalAdd(Return(Default(p.ReturnType)));
+            p.ResultAdd(Return(Default(p.ReturnType)));
         }
     }
 }

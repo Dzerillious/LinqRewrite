@@ -14,8 +14,16 @@ namespace LinqRewrite.Extensions
                 BracketedArgumentList(SyntaxFactoryHelper.CreateSeparatedList(Argument(index))));
 
         
+        public static BinaryExpressionSyntax Or(this ValueBridge a, ValueBridge b)
+            => BinaryExpression(SyntaxKind.LogicalOrExpression, a, b);
+        public static BinaryExpressionSyntax And(this ValueBridge a, ValueBridge b)
+            => BinaryExpression(SyntaxKind.LogicalAndExpression, a, b);
         public static PrefixUnaryExpressionSyntax Not(ValueBridge a)
-            => PrefixUnaryExpression(SyntaxKind.LogicalNotExpression, a);
+            => PrefixUnaryExpression(SyntaxKind.LogicalNotExpression, ParenthesizedExpression(a));
+        public static BinaryExpressionSyntax Or(this ExpressionSyntax a, ValueBridge b)
+            => BinaryExpression(SyntaxKind.LogicalOrExpression, ParenthesizedExpression(a), b);
+        public static BinaryExpressionSyntax And(this ExpressionSyntax a, ValueBridge b)
+            => BinaryExpression(SyntaxKind.LogicalAndExpression, ParenthesizedExpression(a), b);
 
         
         public static ValueBridge Is(this TypedValueBridge a, TypeBridge type)
@@ -45,6 +53,8 @@ namespace LinqRewrite.Extensions
         public static CastExpressionSyntax Cast(this int a, TypeBridge type)
             => Cast((ValueBridge)a, type);
         public static CastExpressionSyntax Cast(this ValueBridge a, TypeBridge type)
+            => CastExpression(type, a);
+        public static CastExpressionSyntax Cast(this ExpressionSyntax a, TypeBridge type)
             => CastExpression(type, a);
         
         

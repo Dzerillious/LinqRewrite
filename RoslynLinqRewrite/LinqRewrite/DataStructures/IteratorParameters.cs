@@ -19,6 +19,7 @@ namespace LinqRewrite.DataStructures
         public List<StatementSyntax> PreFor { get; } = new List<StatementSyntax>();
         public List<IStatementSyntax> ForBody { get; private set; } = new List<IStatementSyntax>();
         public List<IStatementSyntax> ForEnd { get; private set; } = new List<IStatementSyntax>();
+        public List<StatementSyntax> PostFor { get; } = new List<StatementSyntax>();
         
         public LocalVariable CurrentIndexer { get; set; }
         public LocalVariable ForIndexer { get; set; }
@@ -58,7 +59,7 @@ namespace LinqRewrite.DataStructures
             });
             if (ForMin == null)
             {
-                PreFor.Add((StatementBridge)EnumeratorVariable.Assign(Collection.Access("GetEnumerator").Invoke()));
+                p.InitialAdd(EnumeratorVariable.Assign(Collection.Access("GetEnumerator").Invoke()));
             }
             else if (p.IsReversed)
             {

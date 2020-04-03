@@ -11,31 +11,34 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            if (p.CanSimpleRewrite() && p.CurrentCollection?.Count == p.ResultSize && args.Length == 0) 
+            if (p.CanSimpleRewrite() && p.ListEnumeration && p.CurrentCollection?.Count == p.ResultSize && args.Length == 0) 
             {
-                ConditionalExpression(p.CurrentCollection.Count.IsEqual(1),
+                p.SimpleRewrite = ConditionalExpression(p.CurrentCollection.Count.IsEqual(1),
                 p.CurrentCollection[0],
-                Default(p.ReturnType));
+                ConditionalExpression(p.ResultSize.IsEqual(0),
+                            Default(p.ReturnType),
+                            ThrowExpression("System.InvalidOperationException", "The sequence contains more than one element.")));
+                return;
             }
             
             var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
             if (args.Length == 0)
             {
                 p.ForAdd(If(foundVariable.IsEqual(null),
-                            foundVariable.Assign(p.LastValue), 
-                            Return(Default(p.ReturnType))));
+                    foundVariable.Assign(p.LastValue), 
+                    Throw("System.InvalidOperationException", "The sequence contains more than single matching element.")));
             }
             else
             {
                 p.ForAdd(If(args[0].Inline(p, p.LastValue),
-                            If(foundVariable.IsEqual(null),
-                                foundVariable.Assign(p.LastValue),
-                                Return(Default(p.ReturnType)))));
+                    If(foundVariable.IsEqual(null),
+                        foundVariable.Assign(p.LastValue),
+                        Throw("System.InvalidOperationException", "The sequence contains more than single matching element."))));
             }
             
-            p.FinalAdd(If(foundVariable.IsEqual(null),
-                            Return(Default(p.ReturnType)), 
-                            Return(foundVariable.Cast(p.ReturnType))));
+            p.ResultAdd(If(foundVariable.IsEqual(null),
+                Return(Default(p.ReturnType)), 
+                Return(foundVariable.Cast(p.ReturnType))));
         }
     }
 }

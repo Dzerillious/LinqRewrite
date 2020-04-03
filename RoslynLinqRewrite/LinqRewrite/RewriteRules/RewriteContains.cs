@@ -20,7 +20,7 @@ namespace LinqRewrite.RewriteRules
             };
             
             p.ForAdd(If(elementEqualityValue, Return(true)));
-            p.FinalAdd(Return(false));
+            p.ResultAdd(Return(false));
         }
     }
 }

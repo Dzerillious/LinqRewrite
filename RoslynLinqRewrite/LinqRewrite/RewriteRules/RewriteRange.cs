@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
+using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
@@ -30,6 +31,7 @@ namespace LinqRewrite.RewriteRules
                         
             p.ResultSize = countValue;
             p.SourceSize = countValue;
+            p.InitialAdd(If(countValue < 0, Throw("System.InvalidOperationException", "Negative number of elements")));
         }
     }
 }

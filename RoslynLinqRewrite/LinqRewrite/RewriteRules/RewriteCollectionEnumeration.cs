@@ -14,13 +14,15 @@ namespace LinqRewrite.RewriteRules
             RewriteOther(p, p.CurrentCollection);
         }
         
-        public static void RewriteOther(RewriteParameters p, CollectionValueBridge collection, LocalVariable variable = null)
+        public static void RewriteOther(RewriteParameters p, CollectionValueBridge collection, LocalVariable variable = null, bool otherIndexer = false)
         {
             p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
             
             if (collection.CollectionType == CollectionType.Array) ArrayEnumeration(p, collection, variable);
             else if (collection.CollectionType == CollectionType.List) ListEnumeration(p, collection, variable);
             else if (collection.CollectionType == CollectionType.Enumerable) EnumerableEnumeration(p, collection, variable);
+
+            if (otherIndexer) p.CurrentIterator.CurrentIndexer = null;
         }
 
         public static void ArrayEnumeration(RewriteParameters p, CollectionValueBridge collection, LocalVariable variable = null)
@@ -90,7 +92,7 @@ namespace LinqRewrite.RewriteRules
             p.CurrentIterator.EnumeratorVariable = p.GlobalVariable(p.WrappedItemType("IEnumerator<", collection, ">"));
             if (variable != null)
             {
-                p.LastForAdd(variable.Assign(p.CurrentIterator.EnumeratorVariable.Access("Current")));
+                p.CurrentForAdd(variable.Assign(p.CurrentIterator.EnumeratorVariable.Access("Current")));
                 p.LastValue = new TypedValueBridge(collection.ItemType, variable);
             }
             else p.LastValue = new TypedValueBridge(collection.ItemType, p.CurrentIterator.EnumeratorVariable.Access("Current"));

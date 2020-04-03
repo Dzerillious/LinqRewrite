@@ -75,6 +75,7 @@ namespace LinqRewrite
         private static bool TryRewriteSimple(RewriteParameters parameters, string[] names)
         {
             if (MatchNames(names, "Range", "Sum")) return RangeSumRewrite.Rewrite(parameters);
+            else if (MatchNames(names, "Select", "First")) return SelectFirstRewrite.Rewrite(parameters);
             return false;
         }
 

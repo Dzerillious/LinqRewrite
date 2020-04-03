@@ -29,7 +29,7 @@ namespace LinqRewrite.RewriteRules
             };
 
             p.ForAdd(dictionaryVariable.ArrayAccess(keySelector.Inline(p, p.LastValue)).Assign(elementSelectorValue));
-            p.FinalAdd(Return(dictionaryVariable));
+            p.ResultAdd(Return(dictionaryVariable));
         }
     }
 }

@@ -2,6 +2,7 @@
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.VariableExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
@@ -19,10 +20,14 @@ namespace LinqRewrite.RewriteRules
             var minVariable = elementType.ToString() switch
             {
                 "int" => p.GlobalVariable(Int, int.MaxValue),
+                "long" => p.GlobalVariable(Long, long.MaxValue),
                 "float" => p.GlobalVariable(Float, float.MaxValue),
                 "double" => p.GlobalVariable(VariableExtensions.Double, double.MaxValue),
+                "decimal" => p.GlobalVariable(VariableExtensions.Decimal, decimal.MaxValue),
                 _ => null
             };
+            var foundVariable = p.GlobalVariable(Bool, false);
+            
             var value = args.Length switch
             {
                 0 => p.LastValue.Reusable(p),
@@ -30,17 +35,19 @@ namespace LinqRewrite.RewriteRules
             };
             if (p.ReturnType.Type is NullableTypeSyntax)
             {
-                p.ForAdd(If(value.NotEqual(null),
-                            If(value < minVariable,
-                                minVariable.Assign(value))));
+                p.ForAdd(If(value.IsEqual(null).Or(value >= minVariable), Continue()));
+                p.ForAdd(minVariable.Assign(value.Cast(elementType)));
+                p.ForAdd(foundVariable.Assign(true));
             }
             else
             {
-                p.ForAdd(If(value < minVariable,
-                            minVariable.Assign(value)));
+                p.ForAdd(If(value >= minVariable, Continue()));
+                p.ForAdd(minVariable.Assign(value));
+                p.ForAdd(foundVariable.Assign(true));
             }
             
-            p.FinalAdd(Return(minVariable));
+            p.ResultAdd(If(Not(foundVariable), Throw("System.InvalidOperationException", "Sequence does not contains any elements")));
+            p.ResultAdd(Return(minVariable));
         }
     }
 }

@@ -19,11 +19,11 @@ namespace LinqRewrite.RewriteRules
 
             if (args.Length != 0)
             {
+                p.Indexer = null;
                 p.ForAdd(If(Not(args[0].Inline(p, p.LastValue)),
                         Continue()));
-                p.Indexer = null;
             }
-            p.FinalAdd(Return(p.Indexer));
+            p.ResultAdd(Return(p.Indexer));
         }
     }
 }

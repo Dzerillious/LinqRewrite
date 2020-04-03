@@ -11,59 +11,57 @@ public class CountTests
     private int[] ArrayItems = Enumerable.Range(0, 100).ToArray();
     [Datapoints]
     private IEnumerable<int> EnumerableItems = Enumerable.Range(0, 100);
+    private bool Predicate(int i) => i > 50;
     public void RunTests()
     {
         TestsExtensions.TestEquals(nameof(ArrayCount), ArrayCount, ArrayCountRewritten);
         TestsExtensions.TestEquals(nameof(ArrayCount2), ArrayCount2, ArrayCount2Rewritten);
-        TestsExtensions.TestEquals(nameof(ArrayCount3), ArrayCount3, ArrayCount3Rewritten);
-        TestsExtensions.TestEquals(nameof(ArrayCount4), ArrayCount4, ArrayCount4Rewritten);
+        TestsExtensions.TestEquals(nameof(ArraySelectCount), ArraySelectCount, ArraySelectCountRewritten);
         TestsExtensions.TestEquals(nameof(ArrayCount5), ArrayCount5, ArrayCount5Rewritten);
         TestsExtensions.TestEquals(nameof(EnumerableCount2), EnumerableCount2, EnumerableCount2Rewritten);
         TestsExtensions.TestEquals(nameof(EnumerableCount3), EnumerableCount3, EnumerableCount3Rewritten);
         TestsExtensions.TestEquals(nameof(EnumerableCount4), EnumerableCount4, EnumerableCount4Rewritten);
         TestsExtensions.TestEquals(nameof(EnumerableCount5), EnumerableCount5, EnumerableCount5Rewritten);
+        TestsExtensions.TestEquals(nameof(RangeCount), RangeCount, RangeCountRewritten);
+        TestsExtensions.TestEquals(nameof(RangeSelectCount), RangeSelectCount, RangeSelectCountRewritten);
+        TestsExtensions.TestEquals(nameof(RangeWhereCount), RangeWhereCount, RangeWhereCountRewritten);
+        TestsExtensions.TestEquals(nameof(RangeCount2), RangeCount2, RangeCount2Rewritten);
+        TestsExtensions.TestEquals(nameof(RepeatCount), RepeatCount, RepeatCountRewritten);
+        TestsExtensions.TestEquals(nameof(ArrayMethodCount), ArrayMethodCount, ArrayMethodCountRewritten);
+        TestsExtensions.TestEquals(nameof(ArrayDistinctCount), ArrayDistinctCount, ArrayDistinctCountRewritten);
+        TestsExtensions.TestEquals(nameof(EmptyCount), EmptyCount, EmptyCountRewritten);
+        TestsExtensions.TestEquals(nameof(EmptyDistinctCount), EmptyDistinctCount, EmptyDistinctCountRewritten);
     }
 
     [NoRewrite]
     public int ArrayCount()
     {
-        return ArrayItems.Length;
+        return ArrayItems.Count();
     } //EndMethod
 
     public int ArrayCountRewritten()
     {
         return ArrayItems.Length;
-    } //EndMethod
+    } //EndMethod=
 
     [NoRewrite]
     public int ArrayCount2()
     {
-        return ArrayItems.Count();
+        return ArrayItems.Count(x => x > 3);
     } //EndMethod
 
     public int ArrayCount2Rewritten()
     {
-        return ArrayItems.Length;
+        return ArrayCount2Rewritten_ProceduralLinq1(ArrayItems);
     } //EndMethod
 
     [NoRewrite]
-    public int ArrayCount3()
-    {
-        return ArrayItems.Count(x => x > 3);
-    } //EndMethod
-
-    public int ArrayCount3Rewritten()
-    {
-        return ArrayCount3Rewritten_ProceduralLinq1(ArrayItems);
-    } //EndMethod
-
-    [NoRewrite]
-    public int ArrayCount4()
+    public int ArraySelectCount()
     {
         return ArrayItems.Select(x => x + 10).Count();
     } //EndMethod
 
-    public int ArrayCount4Rewritten()
+    public int ArraySelectCountRewritten()
     {
         return ArrayItems.Length;
     } //EndMethod
@@ -123,97 +121,286 @@ public class CountTests
         return EnumerableCount5Rewritten_ProceduralLinq1(ArrayItems);
     } //EndMethod
 
-    int ArrayCount3Rewritten_ProceduralLinq1(int[] ArrayItems)
+    [NoRewrite]
+    public int RangeCount()
     {
-        int v154;
-        int v155;
-        v155 = 0;
-        v154 = 0;
-        for (; v154 < ArrayItems.Length; v154++)
+        return Enumerable.Range(5, 256).Count();
+    } //EndMethod
+
+    public int RangeCountRewritten()
+    {
+        return 256;
+    } //EndMethod
+
+    [NoRewrite]
+    public int RangeSelectCount()
+    {
+        return Enumerable.Range(5, 256).Select(x => x + 3).Count();
+    } //EndMethod
+
+    public int RangeSelectCountRewritten()
+    {
+        return 256;
+    } //EndMethod
+
+    [NoRewrite]
+    public int RangeWhereCount()
+    {
+        return Enumerable.Range(5, 256).Where(x => x > 100).Count();
+    } //EndMethod
+
+    public int RangeWhereCountRewritten()
+    {
+        return RangeWhereCountRewritten_ProceduralLinq1();
+    } //EndMethod
+
+    [NoRewrite]
+    public int RangeCount2()
+    {
+        return Enumerable.Range(5, 256).Count(x => x > 100);
+    } //EndMethod
+
+    public int RangeCount2Rewritten()
+    {
+        return RangeCount2Rewritten_ProceduralLinq1();
+    } //EndMethod
+
+    [NoRewrite]
+    public int RepeatCount()
+    {
+        return Enumerable.Repeat(5, 256).Count();
+    } //EndMethod
+
+    public int RepeatCountRewritten()
+    {
+        return 256;
+    } //EndMethod
+
+    [NoRewrite]
+    public int ArrayMethodCount()
+    {
+        return ArrayItems.Count(Predicate);
+    } //EndMethod
+
+    public int ArrayMethodCountRewritten()
+    {
+        return ArrayMethodCountRewritten_ProceduralLinq1(ArrayItems);
+    } //EndMethod
+
+    [NoRewrite]
+    public int ArrayDistinctCount()
+    {
+        return ArrayItems.Distinct().Count();
+    } //EndMethod
+
+    public int ArrayDistinctCountRewritten()
+    {
+        return ArrayDistinctCountRewritten_ProceduralLinq1(ArrayItems);
+    } //EndMethod
+
+    [NoRewrite]
+    public int EmptyCount()
+    {
+        return Enumerable.Empty<int>().Count();
+    } //EndMethod
+
+    public int EmptyCountRewritten()
+    {
+        return 0;
+    } //EndMethod
+
+    [NoRewrite]
+    public int EmptyDistinctCount()
+    {
+        return Enumerable.Empty<int>().Distinct().Count();
+    } //EndMethod
+
+    public int EmptyDistinctCountRewritten()
+    {
+        return EmptyDistinctCountRewritten_ProceduralLinq1();
+    } //EndMethod
+
+    int ArrayCount2Rewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v433;
+        int v434;
+        v434 = 0;
+        v433 = 0;
+        for (; v433 < ArrayItems.Length; v433++)
         {
-            if (!(ArrayItems[v154] > 3))
+            if (!((ArrayItems[v433] > 3)))
                 continue;
-            v155++;
+            v434++;
         }
 
-        return v155;
+        return v434;
     }
 
     int ArrayCount5Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v157;
-        int v158;
-        v158 = 0;
-        v157 = 0;
-        for (; v157 < ArrayItems.Length; v157++)
+        int v436;
+        int v437;
+        v437 = 0;
+        v436 = 0;
+        for (; v436 < ArrayItems.Length; v436++)
         {
-            if (!(ArrayItems[v157] > 4))
+            if (!((ArrayItems[v436] > 4)))
                 continue;
-            if (!(ArrayItems[v157] % 2 == 0))
+            if (!((ArrayItems[v436] % 2 == 0)))
                 continue;
-            v158++;
+            v437++;
         }
 
-        return v158;
+        return v437;
     }
 
     int EnumerableCount2Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v159;
-        int v160;
-        v160 = 0;
-        v159 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v438;
+        int v439;
+        v438 = EnumerableItems.GetEnumerator();
+        v439 = 0;
         try
         {
-            while (v159.MoveNext())
-                v160++;
+            while (v438.MoveNext())
+                v439++;
         }
         finally
         {
-            v159.Dispose();
+            v438.Dispose();
         }
 
-        return v160;
+        return v439;
     }
 
     int EnumerableCount3Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v161;
-        int v162;
-        v162 = 0;
-        v161 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v440;
+        int v441;
+        v440 = EnumerableItems.GetEnumerator();
+        v441 = 0;
         try
         {
-            while (v161.MoveNext())
+            while (v440.MoveNext())
             {
-                if (!(v161.Current > 3))
+                if (!((v440.Current > 3)))
                     continue;
-                v162++;
+                v441++;
             }
         }
         finally
         {
-            v161.Dispose();
+            v440.Dispose();
         }
 
-        return v162;
+        return v441;
     }
 
     int EnumerableCount5Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v164;
-        int v165;
-        v165 = 0;
-        v164 = 0;
-        for (; v164 < ArrayItems.Length; v164++)
+        int v443;
+        int v444;
+        v444 = 0;
+        v443 = 0;
+        for (; v443 < ArrayItems.Length; v443++)
         {
-            if (!(ArrayItems[v164] > 4))
+            if (!((ArrayItems[v443] > 4)))
                 continue;
-            if (!(ArrayItems[v164] % 2 == 0))
+            if (!((ArrayItems[v443] % 2 == 0)))
                 continue;
-            v165++;
+            v444++;
         }
 
-        return v165;
+        return v444;
+    }
+
+    int RangeWhereCountRewritten_ProceduralLinq1()
+    {
+        int v447;
+        if (256 < 0)
+            throw new System.InvalidOperationException("Negative number of elements");
+        int v448;
+        int v449;
+        v449 = 0;
+        v447 = 0;
+        for (; v447 < 256; v447++)
+        {
+            v448 = (v447 + 5);
+            if (!((v448 > 100)))
+                continue;
+            v449++;
+        }
+
+        return v449;
+    }
+
+    int RangeCount2Rewritten_ProceduralLinq1()
+    {
+        int v450;
+        if (256 < 0)
+            throw new System.InvalidOperationException("Negative number of elements");
+        int v451;
+        v451 = 0;
+        v450 = 0;
+        for (; v450 < 256; v450++)
+        {
+            if (!(((v450 + 5) > 100)))
+                continue;
+            v451++;
+        }
+
+        return v451;
+    }
+
+    int ArrayMethodCountRewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v453;
+        int v454;
+        v454 = 0;
+        v453 = 0;
+        for (; v453 < ArrayItems.Length; v453++)
+        {
+            if (!(Predicate(ArrayItems[v453])))
+                continue;
+            v454++;
+        }
+
+        return v454;
+    }
+
+    int ArrayDistinctCountRewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v455;
+        HashSet<int> v456;
+        int v457;
+        v456 = new HashSet<int>();
+        v457 = 0;
+        v455 = 0;
+        for (; v455 < ArrayItems.Length; v455++)
+        {
+            if (!(v456.Add(ArrayItems[v455])))
+                continue;
+            v457++;
+        }
+
+        return v457;
+    }
+
+    int EmptyDistinctCountRewritten_ProceduralLinq1()
+    {
+        int v459;
+        HashSet<int> v460;
+        int v461;
+        v460 = new HashSet<int>();
+        v461 = 0;
+        v459 = 0;
+        for (; v459 < 0; v459++)
+        {
+            if (!(v460.Add(default(int))))
+                continue;
+            v461++;
+        }
+
+        return v461;
     }
 }}

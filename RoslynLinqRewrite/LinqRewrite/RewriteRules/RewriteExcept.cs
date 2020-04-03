@@ -13,6 +13,15 @@ namespace LinqRewrite.RewriteRules
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             var sourceSizeValue = p.SourceSize;
             var collectionValue = args[0];
+            if (IsNull(collectionValue, p))
+            {
+                p.PreForAdd(Throw("System.InvalidOperationException", "Collection was null"));
+                return;
+            }
+
+            var oldLast = p.LastValue;
+            var oldIterator = p.InsertIterator(collectionValue);
+            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(collectionValue.ItemType(p), collectionValue.GetType(p), collectionValue.Count(p), collectionValue.Old));
 
             var hashsetType = p.WrappedType("HashSet<", p.LastValue.Type, ">");
             var hashsetCreation = args.Length switch
@@ -21,15 +30,15 @@ namespace LinqRewrite.RewriteRules
                 2 => New(hashsetType, args[1])
             };
             var hashsetVariable = p.GlobalVariable(hashsetType, hashsetCreation);
-
-            p.ForAdd(hashsetVariable.Access("Add").Invoke(p.LastValue));
-            p.Iterators.ForEach(x => x.Complete = true);
             
-            p.AddIterator(collectionValue);
-            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(collectionValue.ItemType(p), collectionValue.GetType(p), collectionValue.Count(p), collectionValue.Old));
-
+            p.CurrentForAdd(hashsetVariable.Access("Add").Invoke(p.LastValue));
+            p.CurrentIterator.Complete = true;
+            
+            p.CurrentIterator = oldIterator;
+            p.LastValue = oldLast;
+            
             p.LastValue = p.LastValue.Reusable(p);
-            p.LastForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue)),
+            p.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue)),
                 Continue()));
 
             if (sourceSizeValue != null && p.SourceSize != null) p.SourceSize += sourceSizeValue;

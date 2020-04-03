@@ -20,7 +20,13 @@ namespace LinqRewrite.DataStructures
         public ValueBridge(int value)
             => Value = SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(value));
 
+        public ValueBridge(long value)
+            => Value = SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(value));
+
         public ValueBridge(double value)
+            => Value = SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(value));
+
+        public ValueBridge(decimal value)
             => Value = SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(value));
 
         public ValueBridge(float value)
@@ -41,10 +47,16 @@ namespace LinqRewrite.DataStructures
         public static implicit operator ValueBridge(int value)
             => new ValueBridge(value);
 
+        public static implicit operator ValueBridge(long value)
+            => new ValueBridge(value);
+
         public static implicit operator ValueBridge(float value)
             => new ValueBridge(value);
 
         public static implicit operator ValueBridge(double value)
+            => new ValueBridge(value);
+
+        public static implicit operator ValueBridge(decimal value)
             => new ValueBridge(value);
         
         public static implicit operator ValueBridge(bool value)

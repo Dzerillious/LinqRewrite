@@ -11,12 +11,13 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            if (p.CanSimpleRewrite() && p.CurrentCollection?.Count == p.ResultSize && args.Length == 0) 
+            if (p.CanSimpleRewrite() && p.ListEnumeration && p.CurrentCollection?.Count == p.ResultSize && args.Length == 0) 
             {
                 p.SimpleRewrite = ConditionalExpression(
                 p.CurrentCollection.Count.IsEqual(0),
-                p.CurrentCollection[p.CurrentCollection.Count - 1],
-                Default(p.ReturnType));
+                Default(p.ReturnType),
+                p.CurrentCollection[p.CurrentCollection.Count - 1]);
+                return;
             }
             
             var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
@@ -29,7 +30,7 @@ namespace LinqRewrite.RewriteRules
                             foundVariable.Assign(p.LastValue)));
             }
             
-            p.FinalAdd(If(foundVariable.IsEqual(null),
+            p.ResultAdd(If(foundVariable.IsEqual(null),
                             Return(Default(p.ReturnType)), 
                             Return(foundVariable.Cast(p.ReturnType))));
         }

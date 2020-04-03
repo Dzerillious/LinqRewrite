@@ -13,6 +13,11 @@ namespace LinqRewrite.RewriteRules
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             var sourceSizeValue = p.SourceSize;
             var collectionValue = args[0];
+            if (IsNull(collectionValue, p))
+            {
+                p.PreForAdd(Throw("System.InvalidOperationException", "Collection was null"));
+                return;
+            }
 
             var hashsetType = p.WrappedType("HashSet<", p.LastValue.Type, ">");
             var hashsetVariable = p.GlobalVariable(hashsetType, args.Length switch
@@ -28,7 +33,7 @@ namespace LinqRewrite.RewriteRules
             RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(collectionValue.ItemType(p), collectionValue.GetType(p), collectionValue.Count(p), collectionValue.Old));
 
             p.LastValue = p.LastValue.Reusable(p);
-            p.LastForAdd(If(Not(hashsetVariable.Access("Remove").Invoke(p.LastValue)),
+            p.CurrentForAdd(If(Not(hashsetVariable.Access("Remove").Invoke(p.LastValue)),
                             Continue()));
 
             if (sourceSizeValue != null && p.SourceSize != null) p.SourceSize += sourceSizeValue;

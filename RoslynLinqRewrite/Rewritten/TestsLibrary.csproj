@@ -54,15 +54,32 @@
         <Compile Include="Tests\AnyTests.cs" />
         <Compile Include="Tests\AverageTests.cs" />
         <Compile Include="Tests\CastTests.cs" />
+        <Compile Include="Tests\ConcatTests.cs" />
         <Compile Include="Tests\ContainsTests.cs" />
         <Compile Include="Tests\CountTests.cs" />
         <Compile Include="Tests\DistinctTests.cs" />
         <Compile Include="Tests\ElementAtOrDefaultTests.cs" />
         <Compile Include="Tests\ElementAtTests.cs" />
         <Compile Include="Tests\EmptyTests.cs" />
+        <Compile Include="Tests\ExceptTests.cs" />
+        <Compile Include="Tests\FirstOrDefaultTests.cs" />
         <Compile Include="Tests\FirstTests.cs" />
+        <Compile Include="Tests\IntersectTests.cs" />
+        <Compile Include="Tests\LastOrDefaultTests.cs" />
+        <Compile Include="Tests\LastTests.cs" />
+        <Compile Include="Tests\LongCountTests.cs" />
+        <Compile Include="Tests\MaxTests.cs" />
+        <Compile Include="Tests\MinTests.cs" />
+        <Compile Include="Tests\OfTypeTests.cs" />
+        <Compile Include="Tests\RangeTests.cs" />
+        <Compile Include="Tests\RepeatTests.cs" />
         <Compile Include="Tests\SelectTests.cs" />
+        <Compile Include="Tests\SequenceEqualsTests.cs" />
+        <Compile Include="Tests\SingleOrDefaultTests.cs" />
+        <Compile Include="Tests\SingleTests.cs" />
+        <Compile Include="Tests\UnionTests.cs" />
         <Compile Include="Tests\WhereTests.cs" />
+        <Compile Include="Tests\ZipTests.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />

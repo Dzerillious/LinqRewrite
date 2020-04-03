@@ -117,7 +117,7 @@ namespace TestsLibrary.Tests
         {
             return ArrayItems.Cast<double?>().Any(x => x == null);
         } //EndMethod
-        
+
         public bool ArrayCastAnyRewritten()
         {
             return ArrayItems.Cast<double?>().Any(x => x == null);

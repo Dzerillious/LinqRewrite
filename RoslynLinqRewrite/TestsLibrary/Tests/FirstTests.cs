@@ -16,175 +16,175 @@ namespace TestsLibrary.Tests
         
         public void RunTests()
         {
-            TestsExtensions.TestEquals(nameof(FirstTest), FirstTest, FirstTestRewritten);
-            TestsExtensions.TestEquals(nameof(EnumerableFirstTest), EnumerableFirstTest, EnumerableFirstTestRewritten);
-            TestsExtensions.TestEquals(nameof(FirstConditionTest), FirstConditionTest, FirstConditionTestRewritten);
-            TestsExtensions.TestEquals(nameof(FirstFalseConditionTest), FirstFalseConditionTest, FirstFalseConditionTestRewritten);
-            TestsExtensions.TestEquals(nameof(FirstMethodTest), FirstMethodTest, FirstMethodTestRewritten);
-            TestsExtensions.TestEquals(nameof(FirstWhereMethodTest), FirstWhereMethodTest, FirstWhereMethodTestRewritten);
-            TestsExtensions.TestEquals(nameof(SelectFirstMethodTest), SelectFirstMethodTest, SelectFirstMethodTestRewritten);
-            TestsExtensions.TestEquals(nameof(RangeFirstTest), RangeFirstTest, RangeFirstTestRewritten);
-            TestsExtensions.TestEquals(nameof(Range1FirstTest), Range1FirstTest, Range1FirstTestRewritten);
-            TestsExtensions.TestEquals(nameof(RangeRepeatTest), RangeRepeatTest, RangeRepeatTestRewritten);
-            TestsExtensions.TestEquals(nameof(EmptyFirstTest), EmptyFirstTest, EmptyFirstTestRewritten);
-            TestsExtensions.TestEquals(nameof(ArrayDistinctFirstTest), ArrayDistinctFirstTest, ArrayDistinctFirstTestRewritten);
-            TestsExtensions.TestEquals(nameof(ArrayFirstParamTest), ArrayFirstParamTest, ArrayFirstParamTestRewritten);
-            TestsExtensions.TestEquals(nameof(ArrayFirstChangingParamTest), ArrayFirstChangingParamTest, ArrayFirstChangingParamTestRewritten);
-            TestsExtensions.TestEquals(nameof(ArrayFirstUsingFirstTest), ArrayFirstUsingFirstTest, ArrayFirstUsingFirstTestRewritten);
+            TestsExtensions.TestEquals(nameof(First), First, FirstRewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableFirst), EnumerableFirst, EnumerableFirstRewritten);
+            TestsExtensions.TestEquals(nameof(FirstCondition), FirstCondition, FirstConditionRewritten);
+            TestsExtensions.TestEquals(nameof(FirstFalseCondition), FirstFalseCondition, FirstFalseConditionRewritten);
+            TestsExtensions.TestEquals(nameof(FirstMethod), FirstMethod, FirstMethodRewritten);
+            TestsExtensions.TestEquals(nameof(FirstWhereMethod), FirstWhereMethod, FirstWhereMethodRewritten);
+            TestsExtensions.TestEquals(nameof(SelectFirstMethod), SelectFirstMethod, SelectFirstMethodRewritten);
+            TestsExtensions.TestEquals(nameof(RangeFirst), RangeFirst, RangeFirstRewritten);
+            TestsExtensions.TestEquals(nameof(Range1First), Range1First, Range1FirstRewritten);
+            TestsExtensions.TestEquals(nameof(RangeRepeat), RangeRepeat, RangeRepeatRewritten);
+            TestsExtensions.TestEquals(nameof(EmptyFirst), EmptyFirst, EmptyFirstRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayDistinctFirst), ArrayDistinctFirst, ArrayDistinctFirstRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayFirstParam), ArrayFirstParam, ArrayFirstParamRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayFirstChangingParam), ArrayFirstChangingParam, ArrayFirstChangingParamRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayFirstUsingFirst), ArrayFirstUsingFirst, ArrayFirstUsingFirstRewritten);
         }
 
         [NoRewrite]
-        public int FirstTest()
+        public int First()
         {
             return ArrayItems.First();
         } //EndMethod
 
-        public int FirstTestRewritten()
+        public int FirstRewritten()
         {
             return ArrayItems.First();
         } //EndMethod
 
 
         [NoRewrite]
-        public int EnumerableFirstTest()
+        public int EnumerableFirst()
         {
             return EnumerableItems.First();
         } //EndMethod
 
-        public int EnumerableFirstTestRewritten()
+        public int EnumerableFirstRewritten()
         {
             return EnumerableItems.First();
         } //EndMethod
 
 
         [NoRewrite]
-        public int FirstConditionTest()
+        public int FirstCondition()
         {
             return ArrayItems.First(x => x > 30);
         } //EndMethod
 
-        public int FirstConditionTestRewritten()
+        public int FirstConditionRewritten()
         {
             return ArrayItems.First(x => x > 30);
         } //EndMethod
 
 
         [NoRewrite]
-        public int FirstFalseConditionTest()
+        public int FirstFalseCondition()
         {
             return ArrayItems.First(x => x > 105);
         } //EndMethod
 
-        public int FirstFalseConditionTestRewritten()
+        public int FirstFalseConditionRewritten()
         {
             return ArrayItems.First(x => x > 105);
         } //EndMethod
 
 
         [NoRewrite]
-        public int FirstMethodTest()
+        public int FirstMethod()
         {
             return ArrayItems.First(Predicate);
         } //EndMethod
 
-        public int FirstMethodTestRewritten()
+        public int FirstMethodRewritten()
         {
             return ArrayItems.First(Predicate);
         } //EndMethod
 
 
         [NoRewrite]
-        public int FirstWhereMethodTest()
+        public int FirstWhereMethod()
         {
             return ArrayItems.Where(x => x > 10).First();
         } //EndMethod
 
-        public int FirstWhereMethodTestRewritten()
+        public int FirstWhereMethodRewritten()
         {
             return ArrayItems.Where(x => x > 10).First();
         } //EndMethod
 
 
         [NoRewrite]
-        public int SelectFirstMethodTest()
+        public int SelectFirstMethod()
         {
             return ArrayItems.Select(x => x + 10).First();
         } //EndMethod
 
-        public int SelectFirstMethodTestRewritten()
+        public int SelectFirstMethodRewritten()
         {
             return ArrayItems.Select(x => x + 10).First();
         } //EndMethod
 
 
         [NoRewrite]
-        public int RangeFirstTest()
+        public int RangeFirst()
         {
             return Enumerable.Range(0, 100).First();
         } //EndMethod
 
-        public int RangeFirstTestRewritten()
+        public int RangeFirstRewritten()
         {
             return Enumerable.Range(0, 100).First();
         } //EndMethod
 
 
         [NoRewrite]
-        public int Range1FirstTest()
+        public int Range1First()
         {
             return Enumerable.Range(0, 1).First();
         } //EndMethod
 
-        public int Range1FirstTestRewritten()
+        public int Range1FirstRewritten()
         {
             return Enumerable.Range(0, 1).First();
         } //EndMethod
 
 
         [NoRewrite]
-        public int RangeRepeatTest()
+        public int RangeRepeat()
         {
             return Enumerable.Repeat(0, 100).First();
         } //EndMethod
 
-        public int RangeRepeatTestRewritten()
+        public int RangeRepeatRewritten()
         {
             return Enumerable.Repeat(0, 100).First();
         } //EndMethod
 
 
         [NoRewrite]
-        public int EmptyFirstTest()
+        public int EmptyFirst()
         {
             return Enumerable.Empty<int>().First();
         } //EndMethod
 
-        public int EmptyFirstTestRewritten()
+        public int EmptyFirstRewritten()
         {
             return Enumerable.Empty<int>().First();
         } //EndMethod
 
 
         [NoRewrite]
-        public int ArrayDistinctFirstTest()
+        public int ArrayDistinctFirst()
         {
             return ArrayItems.Distinct().First();
         } //EndMethod
 
-        public int ArrayDistinctFirstTestRewritten()
+        public int ArrayDistinctFirstRewritten()
         {
             return ArrayItems.Distinct().First();
         } //EndMethod
 
 
         [NoRewrite]
-        public int ArrayFirstParamTest()
+        public int ArrayFirstParam()
         {
             var a = 50;
             return ArrayItems.First(x => x > a);
         } //EndMethod
 
-        public int ArrayFirstParamTestRewritten()
+        public int ArrayFirstParamRewritten()
         {
             var a = 50;
             return ArrayItems.First(x => x > a);
@@ -192,13 +192,13 @@ namespace TestsLibrary.Tests
 
 
         [NoRewrite]
-        public int ArrayFirstChangingParamTest()
+        public int ArrayFirstChangingParam()
         {
             var a = 100;
             return ArrayItems.First(x => x > a--);
         } //EndMethod
 
-        public int ArrayFirstChangingParamTestRewritten()
+        public int ArrayFirstChangingParamRewritten()
         {
             var a = 100;
             return ArrayItems.First(x => x > a--);
@@ -206,13 +206,13 @@ namespace TestsLibrary.Tests
 
 
         [NoRewrite]
-        public int ArrayFirstUsingFirstTest()
+        public int ArrayFirstUsingFirst()
         {
             var a = 100;
             return ArrayItems.First(x => x > ArrayItems.First(y => y > x));
         } //EndMethod
 
-        public int ArrayFirstUsingFirstTestRewritten()
+        public int ArrayFirstUsingFirstRewritten()
         {
             var a = 100;
             return ArrayItems.First(x => x > ArrayItems.First(y => y > x));

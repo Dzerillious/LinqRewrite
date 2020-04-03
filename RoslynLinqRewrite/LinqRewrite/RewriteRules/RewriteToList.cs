@@ -14,7 +14,7 @@ namespace LinqRewrite.RewriteRules
             var listVariable = p.GlobalVariable(p.ReturnType, New(p.ReturnType));
             p.ForAdd(listVariable.Access("Add").Invoke(p.LastValue));
             
-            p.FinalAdd(Return(listVariable));
+            p.ResultAdd(Return(listVariable));
         }
     }
 }

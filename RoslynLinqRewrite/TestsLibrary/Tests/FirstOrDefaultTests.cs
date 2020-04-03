@@ -16,175 +16,175 @@ namespace TestsLibrary.Tests
         
         public void RunTests()
         {
-            TestsExtensions.TestEquals(nameof(FirstOrDefaultTest), FirstOrDefaultTest, FirstOrDefaultTestRewritten);
-            TestsExtensions.TestEquals(nameof(EnumerableFirstOrDefaultTest), EnumerableFirstOrDefaultTest, EnumerableFirstOrDefaultTestRewritten);
-            TestsExtensions.TestEquals(nameof(FirstOrDefaultConditionTest), FirstOrDefaultConditionTest, FirstOrDefaultConditionTestRewritten);
-            TestsExtensions.TestEquals(nameof(FirstOrDefaultFalseConditionTest), FirstOrDefaultFalseConditionTest, FirstOrDefaultFalseConditionTestRewritten);
-            TestsExtensions.TestEquals(nameof(FirstOrDefaultMethodTest), FirstOrDefaultMethodTest, FirstOrDefaultMethodTestRewritten);
-            TestsExtensions.TestEquals(nameof(FirstOrDefaultWhereMethodTest), FirstOrDefaultWhereMethodTest, FirstOrDefaultWhereMethodTestRewritten);
-            TestsExtensions.TestEquals(nameof(SelectFirstOrDefaultMethodTest), SelectFirstOrDefaultMethodTest, SelectFirstOrDefaultMethodTestRewritten);
-            TestsExtensions.TestEquals(nameof(RangeFirstOrDefaultTest), RangeFirstOrDefaultTest, RangeFirstOrDefaultTestRewritten);
-            TestsExtensions.TestEquals(nameof(Range1FirstOrDefaultTest), Range1FirstOrDefaultTest, Range1FirstOrDefaultTestRewritten);
-            TestsExtensions.TestEquals(nameof(RangeRepeatTest), RangeRepeatTest, RangeRepeatTestRewritten);
-            TestsExtensions.TestEquals(nameof(EmptyFirstOrDefaultTest), EmptyFirstOrDefaultTest, EmptyFirstOrDefaultTestRewritten);
-            TestsExtensions.TestEquals(nameof(ArrayDistinctFirstOrDefaultTest), ArrayDistinctFirstOrDefaultTest, ArrayDistinctFirstOrDefaultTestRewritten);
-            TestsExtensions.TestEquals(nameof(ArrayFirstOrDefaultParamTest), ArrayFirstOrDefaultParamTest, ArrayFirstOrDefaultParamTestRewritten);
-            TestsExtensions.TestEquals(nameof(ArrayFirstOrDefaultChangingParamTest), ArrayFirstOrDefaultChangingParamTest, ArrayFirstOrDefaultChangingParamTestRewritten);
-            TestsExtensions.TestEquals(nameof(ArrayFirstOrDefaultUsingFirstOrDefaultTest), ArrayFirstOrDefaultUsingFirstOrDefaultTest, ArrayFirstOrDefaultUsingFirstOrDefaultTestRewritten);
+            TestsExtensions.TestEquals(nameof(FirstOrDefault), FirstOrDefault, FirstOrDefaultRewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableFirstOrDefault), EnumerableFirstOrDefault, EnumerableFirstOrDefaultRewritten);
+            TestsExtensions.TestEquals(nameof(FirstOrDefaultCondition), FirstOrDefaultCondition, FirstOrDefaultConditionRewritten);
+            TestsExtensions.TestEquals(nameof(FirstOrDefaultFalseCondition), FirstOrDefaultFalseCondition, FirstOrDefaultFalseConditionRewritten);
+            TestsExtensions.TestEquals(nameof(FirstOrDefaultMethod), FirstOrDefaultMethod, FirstOrDefaultMethodRewritten);
+            TestsExtensions.TestEquals(nameof(FirstOrDefaultWhereMethod), FirstOrDefaultWhereMethod, FirstOrDefaultWhereMethodRewritten);
+            TestsExtensions.TestEquals(nameof(SelectFirstOrDefaultMethod), SelectFirstOrDefaultMethod, SelectFirstOrDefaultMethodRewritten);
+            TestsExtensions.TestEquals(nameof(RangeFirstOrDefault), RangeFirstOrDefault, RangeFirstOrDefaultRewritten);
+            TestsExtensions.TestEquals(nameof(Range1FirstOrDefault), Range1FirstOrDefault, Range1FirstOrDefaultRewritten);
+            TestsExtensions.TestEquals(nameof(RangeRepeat), RangeRepeat, RangeRepeatRewritten);
+            TestsExtensions.TestEquals(nameof(EmptyFirstOrDefault), EmptyFirstOrDefault, EmptyFirstOrDefaultRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayDistinctFirstOrDefault), ArrayDistinctFirstOrDefault, ArrayDistinctFirstOrDefaultRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayFirstOrDefaultParam), ArrayFirstOrDefaultParam, ArrayFirstOrDefaultParamRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayFirstOrDefaultChangingParam), ArrayFirstOrDefaultChangingParam, ArrayFirstOrDefaultChangingParamRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayFirstOrDefaultUsingFirstOrDefault), ArrayFirstOrDefaultUsingFirstOrDefault, ArrayFirstOrDefaultUsingFirstOrDefaultRewritten);
         }
 
         [NoRewrite]
-        public int FirstOrDefaultTest()
+        public int FirstOrDefault()
         {
             return ArrayItems.FirstOrDefault();
         } //EndMethod
 
-        public int FirstOrDefaultTestRewritten()
+        public int FirstOrDefaultRewritten()
         {
             return ArrayItems.FirstOrDefault();
         } //EndMethod
 
 
         [NoRewrite]
-        public int EnumerableFirstOrDefaultTest()
+        public int EnumerableFirstOrDefault()
         {
             return EnumerableItems.FirstOrDefault();
         } //EndMethod
 
-        public int EnumerableFirstOrDefaultTestRewritten()
+        public int EnumerableFirstOrDefaultRewritten()
         {
             return EnumerableItems.FirstOrDefault();
         } //EndMethod
 
 
         [NoRewrite]
-        public int FirstOrDefaultConditionTest()
+        public int FirstOrDefaultCondition()
         {
             return ArrayItems.FirstOrDefault(x => x > 30);
         } //EndMethod
 
-        public int FirstOrDefaultConditionTestRewritten()
+        public int FirstOrDefaultConditionRewritten()
         {
             return ArrayItems.FirstOrDefault(x => x > 30);
         } //EndMethod
 
 
         [NoRewrite]
-        public int FirstOrDefaultFalseConditionTest()
+        public int FirstOrDefaultFalseCondition()
         {
             return ArrayItems.FirstOrDefault(x => x > 105);
         } //EndMethod
 
-        public int FirstOrDefaultFalseConditionTestRewritten()
+        public int FirstOrDefaultFalseConditionRewritten()
         {
             return ArrayItems.FirstOrDefault(x => x > 105);
         } //EndMethod
 
 
         [NoRewrite]
-        public int FirstOrDefaultMethodTest()
+        public int FirstOrDefaultMethod()
         {
             return ArrayItems.FirstOrDefault(Predicate);
         } //EndMethod
 
-        public int FirstOrDefaultMethodTestRewritten()
+        public int FirstOrDefaultMethodRewritten()
         {
             return ArrayItems.FirstOrDefault(Predicate);
         } //EndMethod
 
 
         [NoRewrite]
-        public int FirstOrDefaultWhereMethodTest()
+        public int FirstOrDefaultWhereMethod()
         {
             return ArrayItems.Where(x => x > 10).FirstOrDefault();
         } //EndMethod
 
-        public int FirstOrDefaultWhereMethodTestRewritten()
+        public int FirstOrDefaultWhereMethodRewritten()
         {
             return ArrayItems.Where(x => x > 10).FirstOrDefault();
         } //EndMethod
 
 
         [NoRewrite]
-        public int SelectFirstOrDefaultMethodTest()
+        public int SelectFirstOrDefaultMethod()
         {
             return ArrayItems.Select(x => x + 10).FirstOrDefault();
         } //EndMethod
 
-        public int SelectFirstOrDefaultMethodTestRewritten()
+        public int SelectFirstOrDefaultMethodRewritten()
         {
             return ArrayItems.Select(x => x + 10).FirstOrDefault();
         } //EndMethod
 
 
         [NoRewrite]
-        public int RangeFirstOrDefaultTest()
+        public int RangeFirstOrDefault()
         {
             return Enumerable.Range(0, 100).FirstOrDefault();
         } //EndMethod
 
-        public int RangeFirstOrDefaultTestRewritten()
+        public int RangeFirstOrDefaultRewritten()
         {
             return Enumerable.Range(0, 100).FirstOrDefault();
         } //EndMethod
 
 
         [NoRewrite]
-        public int Range1FirstOrDefaultTest()
+        public int Range1FirstOrDefault()
         {
             return Enumerable.Range(0, 1).FirstOrDefault();
         } //EndMethod
 
-        public int Range1FirstOrDefaultTestRewritten()
+        public int Range1FirstOrDefaultRewritten()
         {
             return Enumerable.Range(0, 1).FirstOrDefault();
         } //EndMethod
 
 
         [NoRewrite]
-        public int RangeRepeatTest()
+        public int RangeRepeat()
         {
             return Enumerable.Repeat(0, 100).FirstOrDefault();
         } //EndMethod
 
-        public int RangeRepeatTestRewritten()
+        public int RangeRepeatRewritten()
         {
             return Enumerable.Repeat(0, 100).FirstOrDefault();
         } //EndMethod
 
 
         [NoRewrite]
-        public int EmptyFirstOrDefaultTest()
+        public int EmptyFirstOrDefault()
         {
             return Enumerable.Empty<int>().FirstOrDefault();
         } //EndMethod
 
-        public int EmptyFirstOrDefaultTestRewritten()
+        public int EmptyFirstOrDefaultRewritten()
         {
             return Enumerable.Empty<int>().FirstOrDefault();
         } //EndMethod
 
 
         [NoRewrite]
-        public int ArrayDistinctFirstOrDefaultTest()
+        public int ArrayDistinctFirstOrDefault()
         {
             return ArrayItems.Distinct().FirstOrDefault();
         } //EndMethod
 
-        public int ArrayDistinctFirstOrDefaultTestRewritten()
+        public int ArrayDistinctFirstOrDefaultRewritten()
         {
             return ArrayItems.Distinct().FirstOrDefault();
         } //EndMethod
 
 
         [NoRewrite]
-        public int ArrayFirstOrDefaultParamTest()
+        public int ArrayFirstOrDefaultParam()
         {
             var a = 50;
             return ArrayItems.FirstOrDefault(x => x > a);
         } //EndMethod
 
-        public int ArrayFirstOrDefaultParamTestRewritten()
+        public int ArrayFirstOrDefaultParamRewritten()
         {
             var a = 50;
             return ArrayItems.FirstOrDefault(x => x > a);
@@ -192,13 +192,13 @@ namespace TestsLibrary.Tests
 
 
         [NoRewrite]
-        public int ArrayFirstOrDefaultChangingParamTest()
+        public int ArrayFirstOrDefaultChangingParam()
         {
             var a = 100;
             return ArrayItems.FirstOrDefault(x => x > a--);
         } //EndMethod
 
-        public int ArrayFirstOrDefaultChangingParamTestRewritten()
+        public int ArrayFirstOrDefaultChangingParamRewritten()
         {
             var a = 100;
             return ArrayItems.FirstOrDefault(x => x > a--);
@@ -206,13 +206,13 @@ namespace TestsLibrary.Tests
 
 
         [NoRewrite]
-        public int ArrayFirstOrDefaultUsingFirstOrDefaultTest()
+        public int ArrayFirstOrDefaultUsingFirstOrDefault()
         {
             var a = 100;
             return ArrayItems.FirstOrDefault(x => x > ArrayItems.FirstOrDefault(y => y > x));
         } //EndMethod
 
-        public int ArrayFirstOrDefaultUsingFirstOrDefaultTestRewritten()
+        public int ArrayFirstOrDefaultUsingFirstOrDefaultRewritten()
         {
             var a = 100;
             return ArrayItems.FirstOrDefault(x => x > ArrayItems.FirstOrDefault(y => y > x));

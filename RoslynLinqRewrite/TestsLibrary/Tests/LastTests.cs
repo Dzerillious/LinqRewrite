@@ -16,175 +16,175 @@ namespace TestsLibrary.Tests
         
         public void RunTests()
         {
-            TestsExtensions.TestEquals(nameof(LastTest), LastTest, LastTestRewritten);
-            TestsExtensions.TestEquals(nameof(EnumerableLastTest), EnumerableLastTest, EnumerableLastTestRewritten);
-            TestsExtensions.TestEquals(nameof(LastConditionTest), LastConditionTest, LastConditionTestRewritten);
-            TestsExtensions.TestEquals(nameof(LastFalseConditionTest), LastFalseConditionTest, LastFalseConditionTestRewritten);
-            TestsExtensions.TestEquals(nameof(LastMethodTest), LastMethodTest, LastMethodTestRewritten);
-            TestsExtensions.TestEquals(nameof(LastWhereMethodTest), LastWhereMethodTest, LastWhereMethodTestRewritten);
-            TestsExtensions.TestEquals(nameof(SelectLastMethodTest), SelectLastMethodTest, SelectLastMethodTestRewritten);
-            TestsExtensions.TestEquals(nameof(RangeLastTest), RangeLastTest, RangeLastTestRewritten);
-            TestsExtensions.TestEquals(nameof(Range1LastTest), Range1LastTest, Range1LastTestRewritten);
-            TestsExtensions.TestEquals(nameof(RangeRepeatTest), RangeRepeatTest, RangeRepeatTestRewritten);
-            TestsExtensions.TestEquals(nameof(EmptyLastTest), EmptyLastTest, EmptyLastTestRewritten);
-            TestsExtensions.TestEquals(nameof(ArrayDistinctLastTest), ArrayDistinctLastTest, ArrayDistinctLastTestRewritten);
-            TestsExtensions.TestEquals(nameof(ArrayLastParamTest), ArrayLastParamTest, ArrayLastParamTestRewritten);
-            TestsExtensions.TestEquals(nameof(ArrayLastChangingParamTest), ArrayLastChangingParamTest, ArrayLastChangingParamTestRewritten);
-            TestsExtensions.TestEquals(nameof(ArrayLastUsingLastTest), ArrayLastUsingLastTest, ArrayLastUsingLastTestRewritten);
+            TestsExtensions.TestEquals(nameof(Last), Last, LastRewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableLast), EnumerableLast, EnumerableLastRewritten);
+            TestsExtensions.TestEquals(nameof(LastCondition), LastCondition, LastConditionRewritten);
+            TestsExtensions.TestEquals(nameof(LastFalseCondition), LastFalseCondition, LastFalseConditionRewritten);
+            TestsExtensions.TestEquals(nameof(LastMethod), LastMethod, LastMethodRewritten);
+            TestsExtensions.TestEquals(nameof(LastWhereMethod), LastWhereMethod, LastWhereMethodRewritten);
+            TestsExtensions.TestEquals(nameof(SelectLastMethod), SelectLastMethod, SelectLastMethodRewritten);
+            TestsExtensions.TestEquals(nameof(RangeLast), RangeLast, RangeLastRewritten);
+            TestsExtensions.TestEquals(nameof(Range1Last), Range1Last, Range1LastRewritten);
+            TestsExtensions.TestEquals(nameof(RangeRepeat), RangeRepeat, RangeRepeatRewritten);
+            TestsExtensions.TestEquals(nameof(EmptyLast), EmptyLast, EmptyLastRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayDistinctLast), ArrayDistinctLast, ArrayDistinctLastRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayLastParam), ArrayLastParam, ArrayLastParamRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayLastChangingParam), ArrayLastChangingParam, ArrayLastChangingParamRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayLastUsingLast), ArrayLastUsingLast, ArrayLastUsingLastRewritten);
         }
 
         [NoRewrite]
-        public int LastTest()
+        public int Last()
         {
             return ArrayItems.Last();
         } //EndMethod
 
-        public int LastTestRewritten()
+        public int LastRewritten()
         {
             return ArrayItems.Last();
         } //EndMethod
 
 
         [NoRewrite]
-        public int EnumerableLastTest()
+        public int EnumerableLast()
         {
             return EnumerableItems.Last();
         } //EndMethod
 
-        public int EnumerableLastTestRewritten()
+        public int EnumerableLastRewritten()
         {
             return EnumerableItems.Last();
         } //EndMethod
 
 
         [NoRewrite]
-        public int LastConditionTest()
+        public int LastCondition()
         {
             return ArrayItems.Last(x => x > 30);
         } //EndMethod
 
-        public int LastConditionTestRewritten()
+        public int LastConditionRewritten()
         {
             return ArrayItems.Last(x => x > 30);
         } //EndMethod
 
 
         [NoRewrite]
-        public int LastFalseConditionTest()
+        public int LastFalseCondition()
         {
             return ArrayItems.Last(x => x > 105);
         } //EndMethod
 
-        public int LastFalseConditionTestRewritten()
+        public int LastFalseConditionRewritten()
         {
             return ArrayItems.Last(x => x > 105);
         } //EndMethod
 
 
         [NoRewrite]
-        public int LastMethodTest()
+        public int LastMethod()
         {
             return ArrayItems.Last(Predicate);
         } //EndMethod
 
-        public int LastMethodTestRewritten()
+        public int LastMethodRewritten()
         {
             return ArrayItems.Last(Predicate);
         } //EndMethod
 
 
         [NoRewrite]
-        public int LastWhereMethodTest()
+        public int LastWhereMethod()
         {
             return ArrayItems.Where(x => x > 10).Last();
         } //EndMethod
 
-        public int LastWhereMethodTestRewritten()
+        public int LastWhereMethodRewritten()
         {
             return ArrayItems.Where(x => x > 10).Last();
         } //EndMethod
 
 
         [NoRewrite]
-        public int SelectLastMethodTest()
+        public int SelectLastMethod()
         {
             return ArrayItems.Select(x => x + 10).Last();
         } //EndMethod
 
-        public int SelectLastMethodTestRewritten()
+        public int SelectLastMethodRewritten()
         {
             return ArrayItems.Select(x => x + 10).Last();
         } //EndMethod
 
 
         [NoRewrite]
-        public int RangeLastTest()
+        public int RangeLast()
         {
             return Enumerable.Range(0, 100).Last();
         } //EndMethod
 
-        public int RangeLastTestRewritten()
+        public int RangeLastRewritten()
         {
             return Enumerable.Range(0, 100).Last();
         } //EndMethod
 
 
         [NoRewrite]
-        public int Range1LastTest()
+        public int Range1Last()
         {
             return Enumerable.Range(0, 1).Last();
         } //EndMethod
 
-        public int Range1LastTestRewritten()
+        public int Range1LastRewritten()
         {
             return Enumerable.Range(0, 1).Last();
         } //EndMethod
 
 
         [NoRewrite]
-        public int RangeRepeatTest()
+        public int RangeRepeat()
         {
             return Enumerable.Repeat(0, 100).Last();
         } //EndMethod
 
-        public int RangeRepeatTestRewritten()
+        public int RangeRepeatRewritten()
         {
             return Enumerable.Repeat(0, 100).Last();
         } //EndMethod
 
 
         [NoRewrite]
-        public int EmptyLastTest()
+        public int EmptyLast()
         {
             return Enumerable.Empty<int>().Last();
         } //EndMethod
 
-        public int EmptyLastTestRewritten()
+        public int EmptyLastRewritten()
         {
             return Enumerable.Empty<int>().Last();
         } //EndMethod
 
 
         [NoRewrite]
-        public int ArrayDistinctLastTest()
+        public int ArrayDistinctLast()
         {
             return ArrayItems.Distinct().Last();
         } //EndMethod
 
-        public int ArrayDistinctLastTestRewritten()
+        public int ArrayDistinctLastRewritten()
         {
             return ArrayItems.Distinct().Last();
         } //EndMethod
 
 
         [NoRewrite]
-        public int ArrayLastParamTest()
+        public int ArrayLastParam()
         {
             var a = 50;
             return ArrayItems.Last(x => x > a);
         } //EndMethod
 
-        public int ArrayLastParamTestRewritten()
+        public int ArrayLastParamRewritten()
         {
             var a = 50;
             return ArrayItems.Last(x => x > a);
@@ -192,13 +192,13 @@ namespace TestsLibrary.Tests
 
 
         [NoRewrite]
-        public int ArrayLastChangingParamTest()
+        public int ArrayLastChangingParam()
         {
             var a = 100;
             return ArrayItems.Last(x => x > a--);
         } //EndMethod
 
-        public int ArrayLastChangingParamTestRewritten()
+        public int ArrayLastChangingParamRewritten()
         {
             var a = 100;
             return ArrayItems.Last(x => x > a--);
@@ -206,13 +206,13 @@ namespace TestsLibrary.Tests
 
 
         [NoRewrite]
-        public int ArrayLastUsingLastTest()
+        public int ArrayLastUsingLast()
         {
             var a = 100;
             return ArrayItems.Last(x => x > ArrayItems.Last(y => y > x));
         } //EndMethod
 
-        public int ArrayLastUsingLastTestRewritten()
+        public int ArrayLastUsingLastRewritten()
         {
             var a = 100;
             return ArrayItems.Last(x => x > ArrayItems.Last(y => y > x));

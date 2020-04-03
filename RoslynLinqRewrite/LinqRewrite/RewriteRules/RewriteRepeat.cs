@@ -2,6 +2,7 @@
 using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
@@ -29,9 +30,10 @@ namespace LinqRewrite.RewriteRules
                 p.CurrentIterator.CurrentIndexer = p.CurrentIterator.ForIndexer;
                 p.CurrentIterator.CurrentIndexer.IsGlobal = true;
             }
-            p.LastValue = new TypedValueBridge(p.CurrentCollection.ItemType(p), itemValue);
+            p.LastValue = new TypedValueBridge(itemValue.GetType(p), itemValue);
             
             p.FirstCollection = p.CurrentCollection = null;
+            p.InitialAdd(If(countValue < 0, Throw("System.InvalidOperationException", "Negative number of elements")));
         }
     }
 }

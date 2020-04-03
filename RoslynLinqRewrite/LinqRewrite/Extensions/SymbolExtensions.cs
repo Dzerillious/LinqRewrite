@@ -46,13 +46,6 @@ namespace LinqRewrite.Extensions
             return SyntaxFactory.ParseTypeName(itemString);
         }
 
-        public static TypeSyntax WrappedItemType(this RewriteParameters p, string pre, ValueBridge collection,
-            string post)
-        {
-            var itemString = pre + collection.GetItemTypeSymbol(p).ToDisplayString() + post;
-            return SyntaxFactory.ParseTypeName(itemString);
-        }
-
         public static TypeBridge ItemType(this RewrittenValueBridge collection, RewriteParameters p)
         {
             var itemString = collection.Old.GetItemTypeSymbol(p).ToDisplayString();

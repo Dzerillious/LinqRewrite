@@ -2,6 +2,7 @@
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -15,7 +16,7 @@ namespace LinqRewrite.RewriteRules
             var name = (GenericNameSyntax) access.Name;
             var type = name.TypeArgumentList.Arguments[0];
 
-            p.LastValue = new TypedValueBridge(type, p.LastValue.Cast(type));
+            p.LastValue = new TypedValueBridge(type, p.LastValue.Cast(ParseTypeName("object")).Cast(type));
             p.ListEnumeration = false;
         }
     }

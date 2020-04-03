@@ -16,175 +16,175 @@ namespace TestsLibrary.Tests
         
         public void RunTests()
         {
-            TestsExtensions.TestEquals(nameof(SingleTest), SingleTest, SingleTestRewritten);
-            TestsExtensions.TestEquals(nameof(EnumerableSingleTest), EnumerableSingleTest, EnumerableSingleTestRewritten);
-            TestsExtensions.TestEquals(nameof(SingleConditionTest), SingleConditionTest, SingleConditionTestRewritten);
-            TestsExtensions.TestEquals(nameof(SingleFalseConditionTest), SingleFalseConditionTest, SingleFalseConditionTestRewritten);
-            TestsExtensions.TestEquals(nameof(SingleMethodTest), SingleMethodTest, SingleMethodTestRewritten);
-            TestsExtensions.TestEquals(nameof(SingleWhereMethodTest), SingleWhereMethodTest, SingleWhereMethodTestRewritten);
-            TestsExtensions.TestEquals(nameof(SelectSingleMethodTest), SelectSingleMethodTest, SelectSingleMethodTestRewritten);
-            TestsExtensions.TestEquals(nameof(RangeSingleTest), RangeSingleTest, RangeSingleTestRewritten);
-            TestsExtensions.TestEquals(nameof(Range1SingleTest), Range1SingleTest, Range1SingleTestRewritten);
-            TestsExtensions.TestEquals(nameof(RangeRepeatTest), RangeRepeatTest, RangeRepeatTestRewritten);
-            TestsExtensions.TestEquals(nameof(EmptySingleTest), EmptySingleTest, EmptySingleTestRewritten);
-            TestsExtensions.TestEquals(nameof(ArrayDistinctSingleTest), ArrayDistinctSingleTest, ArrayDistinctSingleTestRewritten);
-            TestsExtensions.TestEquals(nameof(ArraySingleParamTest), ArraySingleParamTest, ArraySingleParamTestRewritten);
-            TestsExtensions.TestEquals(nameof(ArraySingleChangingParamTest), ArraySingleChangingParamTest, ArraySingleChangingParamTestRewritten);
-            TestsExtensions.TestEquals(nameof(ArraySingleUsingSingleTest), ArraySingleUsingSingleTest, ArraySingleUsingSingleTestRewritten);
+            TestsExtensions.TestEquals(nameof(Single), Single, SingleRewritten);
+            TestsExtensions.TestEquals(nameof(EnumerableSingle), EnumerableSingle, EnumerableSingleRewritten);
+            TestsExtensions.TestEquals(nameof(SingleCondition), SingleCondition, SingleConditionRewritten);
+            TestsExtensions.TestEquals(nameof(SingleFalseCondition), SingleFalseCondition, SingleFalseConditionRewritten);
+            TestsExtensions.TestEquals(nameof(SingleMethod), SingleMethod, SingleMethodRewritten);
+            TestsExtensions.TestEquals(nameof(SingleWhereMethod), SingleWhereMethod, SingleWhereMethodRewritten);
+            TestsExtensions.TestEquals(nameof(SelectSingleMethod), SelectSingleMethod, SelectSingleMethodRewritten);
+            TestsExtensions.TestEquals(nameof(RangeSingle), RangeSingle, RangeSingleRewritten);
+            TestsExtensions.TestEquals(nameof(Range1Single), Range1Single, Range1SingleRewritten);
+            TestsExtensions.TestEquals(nameof(RangeRepeat), RangeRepeat, RangeRepeatRewritten);
+            TestsExtensions.TestEquals(nameof(EmptySingle), EmptySingle, EmptySingleRewritten);
+            TestsExtensions.TestEquals(nameof(ArrayDistinctSingle), ArrayDistinctSingle, ArrayDistinctSingleRewritten);
+            TestsExtensions.TestEquals(nameof(ArraySingleParam), ArraySingleParam, ArraySingleParamRewritten);
+            TestsExtensions.TestEquals(nameof(ArraySingleChangingParam), ArraySingleChangingParam, ArraySingleChangingParamRewritten);
+            TestsExtensions.TestEquals(nameof(ArraySingleUsingSingle), ArraySingleUsingSingle, ArraySingleUsingSingleRewritten);
         }
 
         [NoRewrite]
-        public int SingleTest()
+        public int Single()
         {
             return ArrayItems.Single();
         } //EndMethod
 
-        public int SingleTestRewritten()
+        public int SingleRewritten()
         {
             return ArrayItems.Single();
         } //EndMethod
 
 
         [NoRewrite]
-        public int EnumerableSingleTest()
+        public int EnumerableSingle()
         {
             return EnumerableItems.Single();
         } //EndMethod
 
-        public int EnumerableSingleTestRewritten()
+        public int EnumerableSingleRewritten()
         {
             return EnumerableItems.Single();
         } //EndMethod
 
 
         [NoRewrite]
-        public int SingleConditionTest()
+        public int SingleCondition()
         {
             return ArrayItems.Single(x => x > 30);
         } //EndMethod
 
-        public int SingleConditionTestRewritten()
+        public int SingleConditionRewritten()
         {
             return ArrayItems.Single(x => x > 30);
         } //EndMethod
 
 
         [NoRewrite]
-        public int SingleFalseConditionTest()
+        public int SingleFalseCondition()
         {
             return ArrayItems.Single(x => x > 105);
         } //EndMethod
 
-        public int SingleFalseConditionTestRewritten()
+        public int SingleFalseConditionRewritten()
         {
             return ArrayItems.Single(x => x > 105);
         } //EndMethod
 
 
         [NoRewrite]
-        public int SingleMethodTest()
+        public int SingleMethod()
         {
             return ArrayItems.Single(Predicate);
         } //EndMethod
 
-        public int SingleMethodTestRewritten()
+        public int SingleMethodRewritten()
         {
             return ArrayItems.Single(Predicate);
         } //EndMethod
 
 
         [NoRewrite]
-        public int SingleWhereMethodTest()
+        public int SingleWhereMethod()
         {
             return ArrayItems.Where(x => x > 10).Single();
         } //EndMethod
 
-        public int SingleWhereMethodTestRewritten()
+        public int SingleWhereMethodRewritten()
         {
             return ArrayItems.Where(x => x > 10).Single();
         } //EndMethod
 
 
         [NoRewrite]
-        public int SelectSingleMethodTest()
+        public int SelectSingleMethod()
         {
             return ArrayItems.Select(x => x + 10).Single();
         } //EndMethod
 
-        public int SelectSingleMethodTestRewritten()
+        public int SelectSingleMethodRewritten()
         {
             return ArrayItems.Select(x => x + 10).Single();
         } //EndMethod
 
 
         [NoRewrite]
-        public int RangeSingleTest()
+        public int RangeSingle()
         {
             return Enumerable.Range(0, 100).Single();
         } //EndMethod
 
-        public int RangeSingleTestRewritten()
+        public int RangeSingleRewritten()
         {
             return Enumerable.Range(0, 100).Single();
         } //EndMethod
 
 
         [NoRewrite]
-        public int Range1SingleTest()
+        public int Range1Single()
         {
             return Enumerable.Range(0, 1).Single();
         } //EndMethod
 
-        public int Range1SingleTestRewritten()
+        public int Range1SingleRewritten()
         {
             return Enumerable.Range(0, 1).Single();
         } //EndMethod
 
 
         [NoRewrite]
-        public int RangeRepeatTest()
+        public int RangeRepeat()
         {
             return Enumerable.Repeat(0, 100).Single();
         } //EndMethod
 
-        public int RangeRepeatTestRewritten()
+        public int RangeRepeatRewritten()
         {
             return Enumerable.Repeat(0, 100).Single();
         } //EndMethod
 
 
         [NoRewrite]
-        public int EmptySingleTest()
+        public int EmptySingle()
         {
             return Enumerable.Empty<int>().Single();
         } //EndMethod
 
-        public int EmptySingleTestRewritten()
+        public int EmptySingleRewritten()
         {
             return Enumerable.Empty<int>().Single();
         } //EndMethod
 
 
         [NoRewrite]
-        public int ArrayDistinctSingleTest()
+        public int ArrayDistinctSingle()
         {
             return ArrayItems.Distinct().Single();
         } //EndMethod
 
-        public int ArrayDistinctSingleTestRewritten()
+        public int ArrayDistinctSingleRewritten()
         {
             return ArrayItems.Distinct().Single();
         } //EndMethod
 
 
         [NoRewrite]
-        public int ArraySingleParamTest()
+        public int ArraySingleParam()
         {
             var a = 50;
             return ArrayItems.Single(x => x > a);
         } //EndMethod
 
-        public int ArraySingleParamTestRewritten()
+        public int ArraySingleParamRewritten()
         {
             var a = 50;
             return ArrayItems.Single(x => x > a);
@@ -192,13 +192,13 @@ namespace TestsLibrary.Tests
 
 
         [NoRewrite]
-        public int ArraySingleChangingParamTest()
+        public int ArraySingleChangingParam()
         {
             var a = 100;
             return ArrayItems.Single(x => x > a--);
         } //EndMethod
 
-        public int ArraySingleChangingParamTestRewritten()
+        public int ArraySingleChangingParamRewritten()
         {
             var a = 100;
             return ArrayItems.Single(x => x > a--);
@@ -206,13 +206,13 @@ namespace TestsLibrary.Tests
 
 
         [NoRewrite]
-        public int ArraySingleUsingSingleTest()
+        public int ArraySingleUsingSingle()
         {
             var a = 100;
             return ArrayItems.Single(x => x > ArrayItems.Single(y => y > x));
         } //EndMethod
 
-        public int ArraySingleUsingSingleTestRewritten()
+        public int ArraySingleUsingSingleRewritten()
         {
             var a = 100;
             return ArrayItems.Single(x => x > ArrayItems.Single(y => y > x));

@@ -15,7 +15,7 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(If(Not(args[0].Inline(p, p.LastValue)),
                         Return(false)));
 
-            p.FinalAdd(Return(true));
+            p.ResultAdd(Return(true));
         }
     }
 }

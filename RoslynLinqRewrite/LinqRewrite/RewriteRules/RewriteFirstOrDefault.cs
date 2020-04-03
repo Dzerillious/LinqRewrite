@@ -11,12 +11,13 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            if (p.CanSimpleRewrite() && p.FirstCollection != null && args.Length == 0) 
+            if (p.CanSimpleRewrite() && p.ListEnumeration && p.FirstCollection != null && args.Length == 0) 
             {
                 p.SimpleRewrite = ConditionalExpression(
                 p.FirstCollection.Count.IsEqual(0),
-                p.FirstCollection[0],
-                Default(p.ReturnType));
+                Default(p.ReturnType),
+                p.FirstCollection[0]);
+                return;
             }
             
             if (args.Length == 0)
@@ -27,7 +28,7 @@ namespace LinqRewrite.RewriteRules
                             Return(p.LastValue)));
             }
             
-            p.FinalAdd(Return(Default(p.ReturnType)));
+            p.ResultAdd(Return(Default(p.ReturnType)));
         }
     }
 }

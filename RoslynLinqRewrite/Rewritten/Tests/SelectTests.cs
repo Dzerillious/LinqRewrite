@@ -461,458 +461,458 @@ public class SelectTests
         return ArraySelectIndexMethodToArrayRewritten_ProceduralLinq1(ArrayItems);
     } //EndMethod
 
-    System.Collections.Generic.IEnumerable<int> SelectArrayRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int> v250)
+    System.Collections.Generic.IEnumerable<int> SelectArrayRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int> v1490)
     {
-        int v249;
-        v249 = 0;
-        for (; v249 < ArrayItems.Length; v249++)
-            yield return v250(ArrayItems[v249]);
+        int v1489;
+        v1489 = 0;
+        for (; v1489 < ArrayItems.Length; v1489++)
+            yield return v1490(ArrayItems[v1489]);
     }
 
-    System.Collections.Generic.IEnumerable<int> SelectListRewritten_ProceduralLinq1(System.Collections.Generic.List<int> ListItems, System.Func<int, int> v253)
+    System.Collections.Generic.IEnumerable<int> SelectListRewritten_ProceduralLinq1(System.Collections.Generic.List<int> ListItems, System.Func<int, int> v1493)
     {
-        int v251;
-        int v252;
-        v251 = ListItems.Count;
-        v252 = 0;
-        for (; v252 < v251; v252++)
-            yield return v253(ListItems[v252]);
+        int v1491;
+        int v1492;
+        v1491 = ListItems.Count;
+        v1492 = 0;
+        for (; v1492 < v1491; v1492++)
+            yield return v1493(ListItems[v1492]);
     }
 
-    System.Collections.Generic.IEnumerable<int> SelectSimpleListRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems, System.Func<int, int> v255)
+    System.Collections.Generic.IEnumerable<int> SelectSimpleListRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems, System.Func<int, int> v1495)
     {
-        IEnumerator<int> v254;
-        v254 = SimpleListItems.GetEnumerator();
+        IEnumerator<int> v1494;
+        v1494 = SimpleListItems.GetEnumerator();
         try
         {
-            while (v254.MoveNext())
-                yield return v255(v254.Current);
+            while (v1494.MoveNext())
+                yield return v1495(v1494.Current);
         }
         finally
         {
-            v254.Dispose();
+            v1494.Dispose();
         }
     }
 
-    System.Collections.Generic.IEnumerable<int> SelectEnumerableRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems, System.Func<int, int> v257)
+    System.Collections.Generic.IEnumerable<int> SelectEnumerableRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems, System.Func<int, int> v1497)
     {
-        IEnumerator<int> v256;
-        v256 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v1496;
+        v1496 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v256.MoveNext())
-                yield return v257(v256.Current);
+            while (v1496.MoveNext())
+                yield return v1497(v1496.Current);
         }
         finally
         {
-            v256.Dispose();
+            v1496.Dispose();
         }
     }
 
     int[] SelectArrayToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v258;
-        int[] v259;
-        v259 = new int[ArrayItems.Length];
-        v258 = 0;
-        for (; v258 < ArrayItems.Length; v258++)
-            v259[v258] = (ArrayItems[v258] + 3);
-        return v259;
+        int v1498;
+        int[] v1499;
+        v1499 = new int[ArrayItems.Length];
+        v1498 = 0;
+        for (; v1498 < ArrayItems.Length; v1498++)
+            v1499[v1498] = (ArrayItems[v1498] + 3);
+        return v1499;
     }
 
     int[] SelectListToArrayRewritten_ProceduralLinq1(System.Collections.Generic.List<int> ListItems)
     {
-        int v260;
-        int v261;
-        int[] v262;
-        v260 = ListItems.Count;
-        v262 = new int[v260];
-        v261 = 0;
-        for (; v261 < v260; v261++)
-            v262[v261] = (ListItems[v261] + 3);
-        return v262;
+        int v1500;
+        int v1501;
+        int[] v1502;
+        v1500 = ListItems.Count;
+        v1502 = new int[v1500];
+        v1501 = 0;
+        for (; v1501 < v1500; v1501++)
+            v1502[v1501] = (ListItems[v1501] + 3);
+        return v1502;
     }
 
     int[] SelectEnumerableToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v263;
-        int v264;
-        int v265;
-        int[] v266;
-        v264 = 0;
-        v265 = 8;
-        v266 = new int[8];
-        v263 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v1503;
+        int v1504;
+        int v1505;
+        int[] v1506;
+        v1503 = EnumerableItems.GetEnumerator();
+        v1504 = 0;
+        v1505 = 8;
+        v1506 = new int[8];
         try
         {
-            while (v263.MoveNext())
+            while (v1503.MoveNext())
             {
-                if (v264 >= v265)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v266, ref v265);
-                v266[v264] = (v263.Current + 3);
-                v264++;
+                if (v1504 >= v1505)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1506, ref v1505);
+                v1506[v1504] = (v1503.Current + 3);
+                v1504++;
             }
         }
         finally
         {
-            v263.Dispose();
+            v1503.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v266, v264);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1506, v1504);
     }
 
     int[] SelectSimpleListToArrayRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        IEnumerator<int> v267;
-        int v268;
-        int v269;
-        int[] v270;
-        v268 = 0;
-        v269 = 8;
-        v270 = new int[8];
-        v267 = SimpleListItems.GetEnumerator();
+        IEnumerator<int> v1507;
+        int v1508;
+        int v1509;
+        int[] v1510;
+        v1507 = SimpleListItems.GetEnumerator();
+        v1508 = 0;
+        v1509 = 8;
+        v1510 = new int[8];
         try
         {
-            while (v267.MoveNext())
+            while (v1507.MoveNext())
             {
-                if (v268 >= v269)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v270, ref v269);
-                v270[v268] = (v267.Current + 3);
-                v268++;
+                if (v1508 >= v1509)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1510, ref v1509);
+                v1510[v1508] = (v1507.Current + 3);
+                v1508++;
             }
         }
         finally
         {
-            v267.Dispose();
+            v1507.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v270, v268);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1510, v1508);
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> SelectArrayToSimpleListRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v271;
-        int[] v272;
-        SimpleList<int> v273;
-        v272 = new int[ArrayItems.Length];
-        v271 = 0;
-        for (; v271 < ArrayItems.Length; v271++)
-            v272[v271] = (ArrayItems[v271] + 3);
-        v273 = new SimpleList<int>();
-        v273.Items = v272;
-        v273.Count = ArrayItems.Length;
-        return v273;
+        int v1511;
+        int[] v1512;
+        SimpleList<int> v1513;
+        v1512 = new int[ArrayItems.Length];
+        v1511 = 0;
+        for (; v1511 < ArrayItems.Length; v1511++)
+            v1512[v1511] = (ArrayItems[v1511] + 3);
+        v1513 = new SimpleList<int>();
+        v1513.Items = v1512;
+        v1513.Count = ArrayItems.Length;
+        return v1513;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> SelectListToSimpleListRewritten_ProceduralLinq1(System.Collections.Generic.List<int> ListItems)
     {
-        int v274;
-        int v275;
-        int[] v276;
-        SimpleList<int> v277;
-        v274 = ListItems.Count;
-        v276 = new int[v274];
-        v275 = 0;
-        for (; v275 < v274; v275++)
-            v276[v275] = (ListItems[v275] + 3);
-        v277 = new SimpleList<int>();
-        v277.Items = v276;
-        v277.Count = v274;
-        return v277;
+        int v1514;
+        int v1515;
+        int[] v1516;
+        SimpleList<int> v1517;
+        v1514 = ListItems.Count;
+        v1516 = new int[v1514];
+        v1515 = 0;
+        for (; v1515 < v1514; v1515++)
+            v1516[v1515] = (ListItems[v1515] + 3);
+        v1517 = new SimpleList<int>();
+        v1517.Items = v1516;
+        v1517.Count = v1514;
+        return v1517;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> SelectEnumerableToSimpleListRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v278;
-        int v279;
-        int v280;
-        int[] v281;
-        SimpleList<int> v282;
-        v279 = 0;
-        v280 = 8;
-        v281 = new int[8];
-        v278 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v1518;
+        int v1519;
+        int v1520;
+        int[] v1521;
+        SimpleList<int> v1522;
+        v1518 = EnumerableItems.GetEnumerator();
+        v1519 = 0;
+        v1520 = 8;
+        v1521 = new int[8];
         try
         {
-            while (v278.MoveNext())
+            while (v1518.MoveNext())
             {
-                if (v279 >= v280)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v281, ref v280);
-                v281[v279] = (v278.Current + 3);
-                v279++;
+                if (v1519 >= v1520)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1521, ref v1520);
+                v1521[v1519] = (v1518.Current + 3);
+                v1519++;
             }
         }
         finally
         {
-            v278.Dispose();
+            v1518.Dispose();
         }
 
-        v282 = new SimpleList<int>();
-        v282.Items = v281;
-        v282.Count = v279;
-        return v282;
+        v1522 = new SimpleList<int>();
+        v1522.Items = v1521;
+        v1522.Count = v1519;
+        return v1522;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> SelectSimpleListToSimpleListRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        IEnumerator<int> v283;
-        int v284;
-        int v285;
-        int[] v286;
-        SimpleList<int> v287;
-        v284 = 0;
-        v285 = 8;
-        v286 = new int[8];
-        v283 = SimpleListItems.GetEnumerator();
+        IEnumerator<int> v1523;
+        int v1524;
+        int v1525;
+        int[] v1526;
+        SimpleList<int> v1527;
+        v1523 = SimpleListItems.GetEnumerator();
+        v1524 = 0;
+        v1525 = 8;
+        v1526 = new int[8];
         try
         {
-            while (v283.MoveNext())
+            while (v1523.MoveNext())
             {
-                if (v284 >= v285)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v286, ref v285);
-                v286[v284] = (v283.Current + 3);
-                v284++;
+                if (v1524 >= v1525)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1526, ref v1525);
+                v1526[v1524] = (v1523.Current + 3);
+                v1524++;
             }
         }
         finally
         {
-            v283.Dispose();
+            v1523.Dispose();
         }
 
-        v287 = new SimpleList<int>();
-        v287.Items = v286;
-        v287.Count = v284;
-        return v287;
+        v1527 = new SimpleList<int>();
+        v1527.Items = v1526;
+        v1527.Count = v1524;
+        return v1527;
     }
 
     System.Collections.Generic.List<int> SelectArrayToListRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v288;
-        System.Collections.Generic.List<int> v289;
-        v289 = new System.Collections.Generic.List<int>();
-        v288 = 0;
-        for (; v288 < ArrayItems.Length; v288++)
-            v289.Add((ArrayItems[v288] + 3));
-        return v289;
+        int v1528;
+        System.Collections.Generic.List<int> v1529;
+        v1529 = new System.Collections.Generic.List<int>();
+        v1528 = 0;
+        for (; v1528 < ArrayItems.Length; v1528++)
+            v1529.Add((ArrayItems[v1528] + 3));
+        return v1529;
     }
 
     System.Collections.Generic.List<int> SelectListToListRewritten_ProceduralLinq1(System.Collections.Generic.List<int> ListItems)
     {
-        int v290;
-        int v291;
-        System.Collections.Generic.List<int> v292;
-        v290 = ListItems.Count;
-        v292 = new System.Collections.Generic.List<int>();
-        v291 = 0;
-        for (; v291 < v290; v291++)
-            v292.Add((ListItems[v291] + 3));
-        return v292;
+        int v1530;
+        int v1531;
+        System.Collections.Generic.List<int> v1532;
+        v1530 = ListItems.Count;
+        v1532 = new System.Collections.Generic.List<int>();
+        v1531 = 0;
+        for (; v1531 < v1530; v1531++)
+            v1532.Add((ListItems[v1531] + 3));
+        return v1532;
     }
 
     System.Collections.Generic.List<int> SelectEnumerableToListRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v293;
-        System.Collections.Generic.List<int> v294;
-        v294 = new System.Collections.Generic.List<int>();
-        v293 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v1533;
+        System.Collections.Generic.List<int> v1534;
+        v1533 = EnumerableItems.GetEnumerator();
+        v1534 = new System.Collections.Generic.List<int>();
         try
         {
-            while (v293.MoveNext())
-                v294.Add((v293.Current + 3));
+            while (v1533.MoveNext())
+                v1534.Add((v1533.Current + 3));
         }
         finally
         {
-            v293.Dispose();
+            v1533.Dispose();
         }
 
-        return v294;
+        return v1534;
     }
 
     System.Collections.Generic.List<int> SelectSimpleListToListRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        IEnumerator<int> v295;
-        System.Collections.Generic.List<int> v296;
-        v296 = new System.Collections.Generic.List<int>();
-        v295 = SimpleListItems.GetEnumerator();
+        IEnumerator<int> v1535;
+        System.Collections.Generic.List<int> v1536;
+        v1535 = SimpleListItems.GetEnumerator();
+        v1536 = new System.Collections.Generic.List<int>();
         try
         {
-            while (v295.MoveNext())
-                v296.Add((v295.Current + 3));
+            while (v1535.MoveNext())
+                v1536.Add((v1535.Current + 3));
         }
         finally
         {
-            v295.Dispose();
+            v1535.Dispose();
         }
 
-        return v296;
+        return v1536;
     }
 
-    System.Collections.Generic.IEnumerable<int> SelectStaticArrayRewritten_ProceduralLinq1(int[] StaticArrayItems, System.Func<int, int> v298)
+    System.Collections.Generic.IEnumerable<int> SelectStaticArrayRewritten_ProceduralLinq1(int[] StaticArrayItems, System.Func<int, int> v1538)
     {
-        int v297;
-        v297 = 0;
-        for (; v297 < StaticArrayItems.Length; v297++)
-            yield return v298(StaticArrayItems[v297]);
+        int v1537;
+        v1537 = 0;
+        for (; v1537 < StaticArrayItems.Length; v1537++)
+            yield return v1538(StaticArrayItems[v1537]);
     }
 
     System.Collections.Generic.IEnumerable<double> SelectMethodSelectorRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v299;
-        v299 = 0;
-        for (; v299 < ArrayItems.Length; v299++)
-            yield return Selector(ArrayItems[v299]);
+        int v1539;
+        v1539 = 0;
+        for (; v1539 < ArrayItems.Length; v1539++)
+            yield return Selector(ArrayItems[v1539]);
     }
 
-    System.Collections.Generic.IEnumerable<double> SelectRetypeRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, double> v301)
+    System.Collections.Generic.IEnumerable<double> SelectRetypeRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, double> v1541)
     {
-        int v300;
-        v300 = 0;
-        for (; v300 < ArrayItems.Length; v300++)
-            yield return v301(ArrayItems[v300]);
+        int v1540;
+        v1540 = 0;
+        for (; v1540 < ArrayItems.Length; v1540++)
+            yield return v1541(ArrayItems[v1540]);
     }
 
-    System.Collections.Generic.IEnumerable<int[]> SelectArrayFromArrayRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int[]> v303)
+    System.Collections.Generic.IEnumerable<int[]> SelectArrayFromArrayRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int[]> v1543)
     {
-        int v302;
-        v302 = 0;
-        for (; v302 < ArrayItems.Length; v302++)
-            yield return v303(ArrayItems[v302]);
+        int v1542;
+        v1542 = 0;
+        for (; v1542 < ArrayItems.Length; v1542++)
+            yield return v1543(ArrayItems[v1542]);
     }
 
-    static System.Collections.Generic.IEnumerable<int> StaticSelectRewritten_ProceduralLinq1(int[] StaticArrayItems, System.Func<int, int> v305)
+    static System.Collections.Generic.IEnumerable<int> StaticSelectRewritten_ProceduralLinq1(int[] StaticArrayItems, System.Func<int, int> v1545)
     {
-        int v304;
-        v304 = 0;
-        for (; v304 < StaticArrayItems.Length; v304++)
-            yield return v305(StaticArrayItems[v304]);
+        int v1544;
+        v1544 = 0;
+        for (; v1544 < StaticArrayItems.Length; v1544++)
+            yield return v1545(StaticArrayItems[v1544]);
     }
 
-    System.Collections.Generic.IEnumerable<int> SelectParamsRewritten_ProceduralLinq1(int a, int[] ArrayItems, System.Func<int, int> v307)
+    System.Collections.Generic.IEnumerable<int> SelectParamsRewritten_ProceduralLinq1(int a, int[] ArrayItems, System.Func<int, int> v1547)
     {
-        int v306;
-        v306 = 0;
-        for (; v306 < ArrayItems.Length; v306++)
-            yield return v307(ArrayItems[v306]);
+        int v1546;
+        v1546 = 0;
+        for (; v1546 < ArrayItems.Length; v1546++)
+            yield return v1547(ArrayItems[v1546]);
     }
 
-    System.Collections.Generic.IEnumerable<int> SelectMultipleParamsRewritten_ProceduralLinq1(int a, int b, int c, int d, int e, int f, int g, int h, int i, int[] ArrayItems, System.Func<int, int> v309)
+    System.Collections.Generic.IEnumerable<int> SelectMultipleParamsRewritten_ProceduralLinq1(int a, int b, int c, int d, int e, int f, int g, int h, int i, int[] ArrayItems, System.Func<int, int> v1549)
     {
-        int v308;
-        v308 = 0;
-        for (; v308 < ArrayItems.Length; v308++)
-            yield return v309(ArrayItems[v308]);
+        int v1548;
+        v1548 = 0;
+        for (; v1548 < ArrayItems.Length; v1548++)
+            yield return v1549(ArrayItems[v1548]);
     }
 
-    System.Collections.Generic.IEnumerable<int> MultipleSelectRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int> v311, System.Func<int, int> v312, System.Func<int, int> v313, System.Func<int, int> v314, System.Func<int, int> v315, System.Func<int, int> v316, System.Func<int, int> v317, System.Func<int, int> v318, System.Func<int, int> v319, System.Func<int, int> v320)
+    System.Collections.Generic.IEnumerable<int> MultipleSelectRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int> v1551, System.Func<int, int> v1552, System.Func<int, int> v1553, System.Func<int, int> v1554, System.Func<int, int> v1555, System.Func<int, int> v1556, System.Func<int, int> v1557, System.Func<int, int> v1558, System.Func<int, int> v1559, System.Func<int, int> v1560)
     {
-        int v310;
-        v310 = 0;
-        for (; v310 < ArrayItems.Length; v310++)
-            yield return v320(v319(v318(v317(v316(v315(v314(v313(v312(v311(ArrayItems[v310]))))))))));
+        int v1550;
+        v1550 = 0;
+        for (; v1550 < ArrayItems.Length; v1550++)
+            yield return v1560(v1559(v1558(v1557(v1556(v1555(v1554(v1553(v1552(v1551(ArrayItems[v1550]))))))))));
     }
 
-    System.Collections.Generic.IEnumerable<int> MultipleSelect2Rewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int> v322, System.Func<int, int> v324, System.Func<int, int> v326, System.Func<int, int> v328, System.Func<int, int> v330, System.Func<int, int> v332, System.Func<int, int> v334, System.Func<int, int> v336, System.Func<int, int> v338, System.Func<int, int> v340)
+    System.Collections.Generic.IEnumerable<int> MultipleSelect2Rewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int> v1562, System.Func<int, int> v1564, System.Func<int, int> v1566, System.Func<int, int> v1568, System.Func<int, int> v1570, System.Func<int, int> v1572, System.Func<int, int> v1574, System.Func<int, int> v1576, System.Func<int, int> v1578, System.Func<int, int> v1580)
     {
-        int v321;
-        int v323;
-        int v325;
-        int v327;
-        int v329;
-        int v331;
-        int v333;
-        int v335;
-        int v337;
-        int v339;
-        v321 = 0;
-        for (; v321 < ArrayItems.Length; v321++)
+        int v1561;
+        int v1563;
+        int v1565;
+        int v1567;
+        int v1569;
+        int v1571;
+        int v1573;
+        int v1575;
+        int v1577;
+        int v1579;
+        v1561 = 0;
+        for (; v1561 < ArrayItems.Length; v1561++)
         {
-            v323 = v322(ArrayItems[v321]);
-            v325 = v324(v323);
-            v327 = v326(v325);
-            v329 = v328(v327);
-            v331 = v330(v329);
-            v333 = v332(v331);
-            v335 = v334(v333);
-            v337 = v336(v335);
-            v339 = v338(v337);
-            yield return v340(v339);
+            v1563 = v1562(ArrayItems[v1561]);
+            v1565 = v1564(v1563);
+            v1567 = v1566(v1565);
+            v1569 = v1568(v1567);
+            v1571 = v1570(v1569);
+            v1573 = v1572(v1571);
+            v1575 = v1574(v1573);
+            v1577 = v1576(v1575);
+            v1579 = v1578(v1577);
+            yield return v1580(v1579);
         }
     }
 
-    System.Collections.Generic.IEnumerable<int> SelectChangingParamRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int> v342)
+    System.Collections.Generic.IEnumerable<int> SelectChangingParamRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int> v1582)
     {
-        int v341;
-        v341 = 0;
-        for (; v341 < ArrayItems.Length; v341++)
-            yield return v342(ArrayItems[v341]);
+        int v1581;
+        v1581 = 0;
+        for (; v1581 < ArrayItems.Length; v1581++)
+            yield return v1582(ArrayItems[v1581]);
     }
 
     int[] SelectChangingParam2Rewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
     {
-        int v343;
-        int[] v344;
-        v344 = new int[ArrayItems.Length];
-        v343 = 0;
-        for (; v343 < ArrayItems.Length; v343++)
-            v344[v343] = (ArrayItems[v343] + a++);
-        return v344;
+        int v1583;
+        int[] v1584;
+        v1584 = new int[ArrayItems.Length];
+        v1583 = 0;
+        for (; v1583 < ArrayItems.Length; v1583++)
+            v1584[v1583] = (ArrayItems[v1583] + a++);
+        return v1584;
     }
 
-    System.Collections.Generic.IEnumerable<int> SelectChangingParam3Rewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int> v346, System.Func<int, int> v347, System.Func<int, int> v348, System.Func<int, int> v349, System.Func<int, int> v350)
+    System.Collections.Generic.IEnumerable<int> SelectChangingParam3Rewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int> v1586, System.Func<int, int> v1587, System.Func<int, int> v1588, System.Func<int, int> v1589, System.Func<int, int> v1590)
     {
-        int v345;
-        v345 = 0;
-        for (; v345 < ArrayItems.Length; v345++)
-            yield return v350(v349(v348(v347(v346(ArrayItems[v345])))));
+        int v1585;
+        v1585 = 0;
+        for (; v1585 < ArrayItems.Length; v1585++)
+            yield return v1590(v1589(v1588(v1587(v1586(ArrayItems[v1585])))));
     }
 
     int[] SelectChangingParam4Rewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
     {
-        int v351;
-        int[] v352;
-        v352 = new int[ArrayItems.Length];
-        v351 = 0;
-        for (; v351 < ArrayItems.Length; v351++)
-            v352[v351] = (((((ArrayItems[v351] + a++) + a++) + a++) + a++) + a++);
-        return v352;
+        int v1591;
+        int[] v1592;
+        v1592 = new int[ArrayItems.Length];
+        v1591 = 0;
+        for (; v1591 < ArrayItems.Length; v1591++)
+            v1592[v1591] = (((((ArrayItems[v1591] + a++) + a++) + a++) + a++) + a++);
+        return v1592;
     }
 
-    System.Collections.Generic.IEnumerable<int> ArraySelectIndexRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int, int> v354)
+    System.Collections.Generic.IEnumerable<int> ArraySelectIndexRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, int, int> v1594)
     {
-        int v353;
-        v353 = 0;
-        for (; v353 < ArrayItems.Length; v353++)
-            yield return v354(ArrayItems[v353], v353);
+        int v1593;
+        v1593 = 0;
+        for (; v1593 < ArrayItems.Length; v1593++)
+            yield return v1594(ArrayItems[v1593], v1593);
     }
 
     int[] ArraySelectIndexToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v355;
-        int[] v356;
-        v356 = new int[ArrayItems.Length];
-        v355 = 0;
-        for (; v355 < ArrayItems.Length; v355++)
-            v356[v355] = (ArrayItems[v355] + v355);
-        return v356;
+        int v1595;
+        int[] v1596;
+        v1596 = new int[ArrayItems.Length];
+        v1595 = 0;
+        for (; v1595 < ArrayItems.Length; v1595++)
+            v1596[v1595] = (ArrayItems[v1595] + v1595);
+        return v1596;
     }
 
     System.Collections.Generic.IEnumerable<double> ArraySelectIndexMethodRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v357;
-        v357 = 0;
-        for (; v357 < ArrayItems.Length; v357++)
-            yield return SelectorIndex(ArrayItems[v357], v357);
+        int v1597;
+        v1597 = 0;
+        for (; v1597 < ArrayItems.Length; v1597++)
+            yield return SelectorIndex(ArrayItems[v1597], v1597);
     }
 
     double[] ArraySelectIndexMethodToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v358;
-        double[] v359;
-        v359 = new double[ArrayItems.Length];
-        v358 = 0;
-        for (; v358 < ArrayItems.Length; v358++)
-            v359[v358] = SelectorIndex(ArrayItems[v358], v358);
-        return v359;
+        int v1598;
+        double[] v1599;
+        v1599 = new double[ArrayItems.Length];
+        v1598 = 0;
+        for (; v1598 < ArrayItems.Length; v1598++)
+            v1599[v1598] = SelectorIndex(ArrayItems[v1598], v1598);
+        return v1599;
     }
 }public static class StaticSelectTests
 {
@@ -929,11 +929,11 @@ public class SelectTests
         return StaticSelectRewritten_ProceduralLinq1(StaticArrayItems, x => x + 3);
     } //EndMethod
 
-    static System.Collections.Generic.IEnumerable<int> StaticSelectRewritten_ProceduralLinq1(int[] StaticArrayItems, System.Func<int, int> v361)
+    static System.Collections.Generic.IEnumerable<int> StaticSelectRewritten_ProceduralLinq1(int[] StaticArrayItems, System.Func<int, int> v1601)
     {
-        int v360;
-        v360 = 0;
-        for (; v360 < StaticArrayItems.Length; v360++)
-            yield return v361(StaticArrayItems[v360]);
+        int v1600;
+        v1600 = 0;
+        for (; v1600 < StaticArrayItems.Length; v1600++)
+            yield return v1601(StaticArrayItems[v1600]);
     }
 }}

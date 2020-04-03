@@ -23,7 +23,7 @@ namespace LinqRewrite.RewriteRules
                 ? ListAggregate(p, aggregationValue, args)
                 : EnumerableAggregate(p, aggregationValue, args);
             
-            p.FinalAdd(Return(args.Length switch
+            p.ResultAdd(Return(args.Length switch
             {
                 3 => args[2].Inline(p, resultValue),
                 _ => resultValue
@@ -64,7 +64,7 @@ namespace LinqRewrite.RewriteRules
                 resultVariable.Assign(aggregationValue.Inline(p, resultVariable, p.LastValue))));
 
             if (args.Length == 1)
-                p.FinalAdd(If(firstVariable, Throw("System.InvalidOperationException", "The sequence did not contain valid elements.")));
+                p.ResultAdd(If(firstVariable, Throw("System.InvalidOperationException", "The sequence did not contain valid elements.")));
             return resultVariable;
         }
     }

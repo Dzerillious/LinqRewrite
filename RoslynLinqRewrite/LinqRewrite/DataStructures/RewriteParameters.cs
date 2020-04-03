@@ -32,6 +32,7 @@ namespace LinqRewrite.DataStructures
         private readonly List<IteratorParameters> _resultIterators = new List<IteratorParameters>();
         private readonly List<StatementSyntax> _initialStatements = new List<StatementSyntax>();
         private readonly List<StatementSyntax> _finalStatements = new List<StatementSyntax>();
+        private readonly List<StatementSyntax> _resultStatements = new List<StatementSyntax>();
         public List<IteratorParameters> Iterators { get; } = new List<IteratorParameters>();
         public IEnumerable<IteratorParameters> IncompleteIterators => Iterators.Where(x => !x.Complete);
         public IteratorParameters CurrentIterator { get; set; }
@@ -80,8 +81,6 @@ namespace LinqRewrite.DataStructures
                 if (CurrentIndexer != null || iterator?.CurrentIndexer != null)
                 {
                     var indexer = iterator.CurrentIndexer;
-                    if (indexer == null) return CurrentIndexer;
-
                     IncompleteIterators.Where(x => x.CurrentIndexer == null).ForEach(x =>
                     {
                         x.CurrentIndexer = indexer;
@@ -171,6 +170,7 @@ namespace LinqRewrite.DataStructures
         {
             _initialStatements.Clear();
             _finalStatements.Clear();
+            _resultStatements.Clear();
             Iterators.Clear();
             Variables.Clear();
             _resultIterators.Clear();
@@ -216,8 +216,9 @@ namespace LinqRewrite.DataStructures
         {
             IncompleteIterators.ForEach(x => x.ForEnd.Add(_));
         }
-        public void LastForAdd(StatementBridge _) => CurrentIterator.BodyAdd(_);
+        public void CurrentForAdd(StatementBridge _) => CurrentIterator.BodyAdd(_);
         public void FinalAdd(StatementBridge _) => _finalStatements.Add(_);
+        public void ResultAdd(StatementBridge _) => _resultStatements.Add(_);
         
         public IteratorParameters AddIterator()
         {
@@ -237,6 +238,24 @@ namespace LinqRewrite.DataStructures
             return oldBody;
         }
         
+        public IteratorParameters InsertIterator()
+        {
+            var oldBody = CurrentIterator;
+            CurrentIterator = new IteratorParameters(this);
+            Iterators.Insert(0, CurrentIterator);
+            _resultIterators.Insert(0, CurrentIterator);
+            return oldBody;
+        }
+        
+        public IteratorParameters InsertIterator(RewrittenValueBridge collection)
+        {
+            var oldBody = CurrentIterator;
+            CurrentIterator = new IteratorParameters(this, collection);
+            Iterators.Insert(0, CurrentIterator);
+            _resultIterators.Insert(0, CurrentIterator);
+            return oldBody;
+        }
+        
         public IteratorParameters CopyIterator()
         {
             var oldBody = CurrentIterator;
@@ -248,7 +267,7 @@ namespace LinqRewrite.DataStructures
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {
-            if (Iterators.Count == 0) return _initialStatements.Concat(_finalStatements);
+            if (Iterators.Count == 0) return _initialStatements.Concat(_finalStatements).Concat(_resultStatements);
             var result = new List<StatementSyntax>();
             if (IsReversed)
             {
@@ -257,6 +276,7 @@ namespace LinqRewrite.DataStructures
                     var statement = _resultIterators[i].GetStatementSyntax(this);
                     result.AddRange(_resultIterators[i].PreFor);
                     if (statement != null) result.Add(statement);
+                    result.AddRange(_resultIterators[i].PostFor);
                 }
             }
             else for (var i = 0; i < _resultIterators.Count; i++)
@@ -264,16 +284,18 @@ namespace LinqRewrite.DataStructures
                 var statement = _resultIterators[i].GetStatementSyntax(this);
                 result.AddRange(_resultIterators[i].PreFor);
                 if (statement != null) result.Add(statement);
+                result.AddRange(_resultIterators[i].PostFor);
             }
 
             if (WrapWithTry)
             {
-                result = new List<StatementSyntax>(_initialStatements) {TryF(Block(result), Block(_finalStatements))};
+                result = _initialStatements.Concat(new []{TryF(Block(result), Block(_finalStatements))}).Concat(_resultStatements).ToList();
             }
             else
             {
                 result.InsertRange(0, _initialStatements);
                 result.AddRange(_finalStatements);
+                result.AddRange(_resultStatements);
             }
             return result;
         }

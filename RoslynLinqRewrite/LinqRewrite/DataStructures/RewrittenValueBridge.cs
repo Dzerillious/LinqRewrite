@@ -9,16 +9,16 @@ namespace LinqRewrite.DataStructures
         public ValueBridge New { get; }
         public ExpressionSyntax NewVal => New.Value;
 
-        public RewrittenValueBridge(ValueBridge old, ValueBridge @new) : base(@new)
+        public RewrittenValueBridge(ValueBridge old, ValueBridge @new) : base(@new?.Value == null ? old : @new)
         {
             Old = old;
-            New = @new;
+            New = Value;
         }
 
-        public RewrittenValueBridge(ExpressionSyntax old, ExpressionSyntax @new) : base(@new)
+        public RewrittenValueBridge(ExpressionSyntax old, ExpressionSyntax @new) : base(@new ?? old)
         {
             Old = old;
-            New = @new;
+            New = Value;
         }
 
         public RewrittenValueBridge(ExpressionSyntax old) : base(old)

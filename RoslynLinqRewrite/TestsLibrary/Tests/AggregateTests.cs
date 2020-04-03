@@ -30,6 +30,7 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(AggregateRangeFactorial100), AggregateRangeFactorial100, AggregateRangeFactorial100Rewritten);
             TestsExtensions.TestEquals(nameof(AggregateEmpty), AggregateEmpty, AggregateEmptyRewritten);
             TestsExtensions.TestEquals(nameof(AggregateEmptyDefault), AggregateEmptyDefault, AggregateEmptyDefaultRewritten);
+            TestsExtensions.TestEquals(nameof(AggregateNull), AggregateNull, AggregateNullRewritten);
         }
         
         [NoRewrite]
@@ -221,6 +222,18 @@ namespace TestsLibrary.Tests
         public double AggregateEmptyRewritten()
         {
             return ArrayItems.Where(x => false).Aggregate((x, y) => x + y);
+        } //EndMethod
+        
+        
+        [NoRewrite]
+        public double AggregateNull()
+        {
+            return ArrayItems.Aggregate(null);
+        } //EndMethod
+        
+        public double AggregateNullRewritten()
+        {
+            return ArrayItems.Aggregate(null);
         } //EndMethod
     }
 }

@@ -16,10 +16,10 @@ namespace LinqRewrite.RewriteRules
             var listResultType = SyntaxFactory.ParseTypeName($"SimpleList<{p.LastValue.Type}>");
 
             var finalResult = p.GlobalVariable(listResultType);
-            p.FinalAdd(finalResult.Assign(New(listResultType)));
-            p.FinalAdd(finalResult.Access("Items").Assign(result));
-            p.FinalAdd(finalResult.Access("Count").Assign(p.ResultSize ?? p.Indexer));
-            p.FinalAdd(Return(finalResult));
+            p.ResultAdd(finalResult.Assign(New(listResultType)));
+            p.ResultAdd(finalResult.Access("Items").Assign(result));
+            p.ResultAdd(finalResult.Access("Count").Assign(p.ResultSize ?? p.Indexer));
+            p.ResultAdd(Return(finalResult));
         }
     }
 }

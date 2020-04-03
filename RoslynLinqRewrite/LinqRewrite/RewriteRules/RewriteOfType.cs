@@ -4,6 +4,7 @@ using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -21,7 +22,7 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(If(Not(p.LastValue.Is(type)),
                         Continue()));
 
-            p.LastValue = new TypedValueBridge(type, p.LastValue.Cast(type));
+            p.LastValue = new TypedValueBridge(type, p.LastValue.Cast(ParseTypeName("object")).Cast(type));
 
             p.ResultSize = null;
             p.ModifiedEnumeration = true;

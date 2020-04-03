@@ -31,6 +31,7 @@ public class AverageTests
         TestsExtensions.TestEquals(nameof(EnumerableAverage), EnumerableAverage, EnumerableAverageRewritten);
         TestsExtensions.TestEquals(nameof(EnumerableEmptyAverage), EnumerableEmptyAverage, EnumerableEmptyAverageRewritten);
         TestsExtensions.TestEquals(nameof(ArrayMethodAverageChangingParam), ArrayMethodAverageChangingParam, ArrayMethodAverageChangingParamRewritten);
+        TestsExtensions.TestEquals(nameof(EnumerableRangeAverage), EnumerableRangeAverage, EnumerableRangeAverageRewritten);
     }
 
     [NoRewrite]
@@ -233,338 +234,364 @@ public class AverageTests
         return EnumerableEmptyAverageRewritten_ProceduralLinq1(EnumerableItems);
     } //EndMethod
 
-    double ArrayAverageRewritten_ProceduralLinq1(int[] ArrayItems)
+    [NoRewrite]
+    public double EnumerableRangeAverage()
     {
-        int v56;
-        double v57;
-        v57 = 0;
-        v56 = 0;
-        for (; v56 < ArrayItems.Length; v56++)
-            v57 += ArrayItems[v56];
-        if (ArrayItems.Length == 0)
-            throw new System.InvalidOperationException("The sequence did not contain any elements.");
-        return (v57 / ArrayItems.Length);
-    }
+        return Enumerable.Range(5, 100).Average();
+    } //EndMethod
 
-    double ArrayAverage1Rewritten_ProceduralLinq1(int[] ArrayItems)
+    public double EnumerableRangeAverageRewritten()
+    {
+        return EnumerableRangeAverageRewritten_ProceduralLinq1();
+    } //EndMethod
+
+    double ArrayAverageRewritten_ProceduralLinq1(int[] ArrayItems)
     {
         int v58;
         double v59;
         v59 = 0;
         v58 = 0;
         for (; v58 < ArrayItems.Length; v58++)
-            v59 += (ArrayItems[v58] + 3);
+            v59 += ArrayItems[v58];
         if (ArrayItems.Length == 0)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         return (v59 / ArrayItems.Length);
     }
 
-    double? ArrayAverage2Rewritten_ProceduralLinq1(int[] ArrayItems)
+    double ArrayAverage1Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
         int v60;
-        int v61;
-        int? v62;
-        int v63;
+        double v61;
         v61 = 0;
-        v63 = 0;
         v60 = 0;
         for (; v60 < ArrayItems.Length; v60++)
+            v61 += (ArrayItems[v60] + 3);
+        if (ArrayItems.Length == 0)
+            throw new System.InvalidOperationException("The sequence did not contain any elements.");
+        return (v61 / ArrayItems.Length);
+    }
+
+    double? ArrayAverage2Rewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v62;
+        int v63;
+        int? v64;
+        int v65;
+        v63 = 0;
+        v65 = 0;
+        v62 = 0;
+        for (; v62 < ArrayItems.Length; v62++)
         {
-            v62 = (ArrayItems[v60] > 10 ? (int? )null : ArrayItems[v60]);
-            if (v62 == null)
+            v64 = (ArrayItems[v62] > 10 ? (int? )null : ArrayItems[v62]);
+            if (v64 == null)
                 continue;
-            v61 += (int)v62;
-            v63++;
+            v63 += (int)v64;
+            v65++;
         }
 
-        return v63 == 0 ? null : ((double? )v61 / v63);
+        return v65 == 0 ? null : ((double? )v63 / v65);
     }
 
     float ArrayAverage3Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v64;
-        float v65;
-        v65 = 0;
-        v64 = 0;
-        for (; v64 < ArrayItems.Length; v64++)
-            v65 += (ArrayItems[v64] + 5f);
+        int v66;
+        float v67;
+        v67 = 0;
+        v66 = 0;
+        for (; v66 < ArrayItems.Length; v66++)
+            v67 += (ArrayItems[v66] + 5f);
         if (ArrayItems.Length == 0)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
-        return (v65 / ArrayItems.Length);
+        return (v67 / ArrayItems.Length);
     }
 
     float? ArrayAverage4Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v66;
-        float v67;
-        float? v68;
-        int v69;
-        v67 = 0;
+        int v68;
+        float v69;
+        float? v70;
+        int v71;
         v69 = 0;
-        v66 = 0;
-        for (; v66 < ArrayItems.Length; v66++)
+        v71 = 0;
+        v68 = 0;
+        for (; v68 < ArrayItems.Length; v68++)
         {
-            v68 = (ArrayItems[v66] > 10 ? (float? )null : ArrayItems[v66]);
-            if (v68 == null)
+            v70 = (ArrayItems[v68] > 10 ? (float? )null : ArrayItems[v68]);
+            if (v70 == null)
                 continue;
-            v67 += (float)v68;
-            v69++;
+            v69 += (float)v70;
+            v71++;
         }
 
-        return v69 == 0 ? null : ((float? )v67 / v69);
+        return v71 == 0 ? null : ((float? )v69 / v71);
     }
 
     double ArrayAverage5Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v70;
-        double v71;
-        v71 = 0;
-        v70 = 0;
-        for (; v70 < ArrayItems.Length; v70++)
-            v71 += (ArrayItems[v70] + 5d);
+        int v72;
+        double v73;
+        v73 = 0;
+        v72 = 0;
+        for (; v72 < ArrayItems.Length; v72++)
+            v73 += (ArrayItems[v72] + 5d);
         if (ArrayItems.Length == 0)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
-        return (v71 / ArrayItems.Length);
+        return (v73 / ArrayItems.Length);
     }
 
     double? ArrayAverage6Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v72;
-        double v73;
-        double? v74;
-        int v75;
-        v73 = 0;
+        int v74;
+        double v75;
+        double? v76;
+        int v77;
         v75 = 0;
-        v72 = 0;
-        for (; v72 < ArrayItems.Length; v72++)
+        v77 = 0;
+        v74 = 0;
+        for (; v74 < ArrayItems.Length; v74++)
         {
-            v74 = (ArrayItems[v72] > 10 ? (double? )null : ArrayItems[v72]);
-            if (v74 == null)
+            v76 = (ArrayItems[v74] > 10 ? (double? )null : ArrayItems[v74]);
+            if (v76 == null)
                 continue;
-            v73 += (double)v74;
-            v75++;
+            v75 += (double)v76;
+            v77++;
         }
 
-        return v75 == 0 ? null : ((double? )v73 / v75);
+        return v77 == 0 ? null : ((double? )v75 / v77);
     }
 
     decimal ArrayAverage7Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v76;
-        decimal v77;
-        v77 = 0;
-        v76 = 0;
-        for (; v76 < ArrayItems.Length; v76++)
-            v77 += (ArrayItems[v76] + 5m);
+        int v78;
+        decimal v79;
+        v79 = 0;
+        v78 = 0;
+        for (; v78 < ArrayItems.Length; v78++)
+            v79 += (ArrayItems[v78] + 5m);
         if (ArrayItems.Length == 0)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
-        return (v77 / ArrayItems.Length);
+        return (v79 / ArrayItems.Length);
     }
 
     decimal? ArrayAverage8Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v78;
-        decimal v79;
-        decimal? v80;
-        int v81;
-        v79 = 0;
+        int v80;
+        decimal v81;
+        decimal? v82;
+        int v83;
         v81 = 0;
-        v78 = 0;
-        for (; v78 < ArrayItems.Length; v78++)
+        v83 = 0;
+        v80 = 0;
+        for (; v80 < ArrayItems.Length; v80++)
         {
-            v80 = (ArrayItems[v78] > 10 ? (decimal? )null : ArrayItems[v78]);
-            if (v80 == null)
+            v82 = (ArrayItems[v80] > 10 ? (decimal? )null : ArrayItems[v80]);
+            if (v82 == null)
                 continue;
-            v79 += (decimal)v80;
-            v81++;
+            v81 += (decimal)v82;
+            v83++;
         }
 
-        return v81 == 0 ? null : ((decimal? )v79 / v81);
+        return v83 == 0 ? null : ((decimal? )v81 / v83);
     }
 
     double ArrayAverage9Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v82;
-        double v83;
-        v83 = 0;
-        v82 = 0;
-        for (; v82 < ArrayItems.Length; v82++)
-            v83 += (ArrayItems[v82] + 5L);
+        int v84;
+        double v85;
+        v85 = 0;
+        v84 = 0;
+        for (; v84 < ArrayItems.Length; v84++)
+            v85 += (ArrayItems[v84] + 5L);
         if (ArrayItems.Length == 0)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
-        return (v83 / ArrayItems.Length);
+        return (v85 / ArrayItems.Length);
     }
 
     double? ArrayAverage10Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v84;
-        long v85;
-        long? v86;
-        int v87;
-        v85 = 0;
+        int v86;
+        long v87;
+        long? v88;
+        int v89;
         v87 = 0;
-        v84 = 0;
-        for (; v84 < ArrayItems.Length; v84++)
+        v89 = 0;
+        v86 = 0;
+        for (; v86 < ArrayItems.Length; v86++)
         {
-            v86 = (ArrayItems[v84] > 10 ? (long? )null : ArrayItems[v84]);
-            if (v86 == null)
+            v88 = (ArrayItems[v86] > 10 ? (long? )null : ArrayItems[v86]);
+            if (v88 == null)
                 continue;
-            v85 += (long)v86;
-            v87++;
+            v87 += (long)v88;
+            v89++;
         }
 
-        return v87 == 0 ? null : ((double? )v85 / v87);
+        return v89 == 0 ? null : ((double? )v87 / v89);
     }
 
     double ArraySelectAverageRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v88;
-        double v89;
-        v89 = 0;
-        v88 = 0;
-        for (; v88 < ArrayItems.Length; v88++)
-            v89 += (ArrayItems[v88] + 10);
+        int v90;
+        double v91;
+        v91 = 0;
+        v90 = 0;
+        for (; v90 < ArrayItems.Length; v90++)
+            v91 += (ArrayItems[v90] + 10);
         if (ArrayItems.Length == 0)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
-        return (v89 / ArrayItems.Length);
+        return (v91 / ArrayItems.Length);
     }
 
     double ArrayWhereAverageRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v90;
-        double v91;
         int v92;
-        v91 = 0;
+        double v93;
+        int v94;
+        v93 = 0;
+        v94 = 0;
         v92 = 0;
-        v90 = 0;
-        for (; v90 < ArrayItems.Length; v90++)
+        for (; v92 < ArrayItems.Length; v92++)
         {
-            if (!(ArrayItems[v90] % 2 == 0))
+            if (!((ArrayItems[v92] % 2 == 0)))
                 continue;
-            v91 += ArrayItems[v90];
-            v92++;
+            v93 += ArrayItems[v92];
+            v94++;
         }
 
-        if (v92 == 0)
+        if (v94 == 0)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
-        return (v91 / v92);
+        return (v93 / v94);
     }
 
     double? ArrayMethodAverageRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v93;
-        double v94;
-        double? v95;
-        int v96;
-        v94 = 0;
+        int v95;
+        double v96;
+        double? v97;
+        int v98;
         v96 = 0;
-        v93 = 0;
-        for (; v93 < ArrayItems.Length; v93++)
+        v98 = 0;
+        v95 = 0;
+        for (; v95 < ArrayItems.Length; v95++)
         {
-            v95 = Selector(ArrayItems[v93]);
-            if (v95 == null)
+            v97 = Selector(ArrayItems[v95]);
+            if (v97 == null)
                 continue;
-            v94 += (double)v95;
-            v96++;
+            v96 += (double)v97;
+            v98++;
         }
 
-        return v96 == 0 ? null : ((double? )v94 / v96);
+        return v98 == 0 ? null : ((double? )v96 / v98);
     }
 
     double EnumerableAverageRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v97;
-        double v98;
-        int v99;
-        v98 = 0;
-        v99 = 0;
-        v97 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v99;
+        double v100;
+        int v101;
+        v99 = EnumerableItems.GetEnumerator();
+        v100 = 0;
+        v101 = 0;
         try
         {
-            while (v97.MoveNext())
+            while (v99.MoveNext())
             {
-                v98 += v97.Current;
-                v99++;
+                v100 += v99.Current;
+                v101++;
             }
         }
         finally
         {
-            v97.Dispose();
+            v99.Dispose();
         }
 
-        if (v99 == 0)
+        if (v101 == 0)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
-        return (v98 / v99);
+        return (v100 / v101);
     }
 
     double ArrayMethodAverageChangingParamRewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
     {
-        int v100;
-        double v101;
-        v101 = 0;
-        v100 = 0;
-        for (; v100 < ArrayItems.Length; v100++)
-            v101 += (ArrayItems[v100] + a++);
+        int v102;
+        double v103;
+        v103 = 0;
+        v102 = 0;
+        for (; v102 < ArrayItems.Length; v102++)
+            v103 += (ArrayItems[v102] + a++);
         if (ArrayItems.Length == 0)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
-        return (v101 / ArrayItems.Length);
+        return (v103 / ArrayItems.Length);
     }
 
     double? EnumerableNullAverageRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v102;
-        int v103;
-        int? v104;
+        IEnumerator<int> v104;
         int v105;
-        v103 = 0;
+        int? v106;
+        int v107;
+        v104 = EnumerableItems.GetEnumerator();
         v105 = 0;
-        v102 = EnumerableItems.GetEnumerator();
+        v107 = 0;
         try
         {
-            while (v102.MoveNext())
+            while (v104.MoveNext())
             {
-                v104 = ((int? )null);
-                if (v104 == null)
+                v106 = ((int? )null);
+                if (v106 == null)
                     continue;
-                v103 += (int)v104;
-                v105++;
+                v105 += (int)v106;
+                v107++;
             }
         }
         finally
         {
-            v102.Dispose();
+            v104.Dispose();
         }
 
-        return v105 == 0 ? null : ((double? )v103 / v105);
+        return v107 == 0 ? null : ((double? )v105 / v107);
     }
 
     double EnumerableEmptyAverageRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v106;
-        int v107;
-        double v108;
+        IEnumerator<int> v108;
         int v109;
-        v108 = 0;
-        v109 = 0;
-        v106 = EnumerableItems.GetEnumerator();
+        double v110;
+        int v111;
+        v108 = EnumerableItems.GetEnumerator();
+        v110 = 0;
+        v111 = 0;
         try
         {
-            while (v106.MoveNext())
+            while (v108.MoveNext())
             {
-                v107 = v106.Current;
-                if (!(false))
+                v109 = v108.Current;
+                if (!((false)))
                     continue;
-                v108 += v107;
-                v109++;
+                v110 += v109;
+                v111++;
             }
         }
         finally
         {
-            v106.Dispose();
+            v108.Dispose();
         }
 
-        if (v109 == 0)
+        if (v111 == 0)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
-        return (v108 / v109);
+        return (v110 / v111);
+    }
+
+    double EnumerableRangeAverageRewritten_ProceduralLinq1()
+    {
+        int v112;
+        if (100 < 0)
+            throw new System.InvalidOperationException("Negative number of elements");
+        double v113;
+        v113 = 0;
+        v112 = 0;
+        for (; v112 < 100; v112++)
+            v113 += (v112 + 5);
+        if (100 == 0)
+            throw new System.InvalidOperationException("The sequence did not contain any elements.");
+        return (v113 / 100);
     }
 }}

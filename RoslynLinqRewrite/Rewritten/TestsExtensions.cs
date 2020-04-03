@@ -35,6 +35,32 @@ namespace TestsLibrary
             }
             return (firstExcept, firstVal, secondExcept, secondVal);
         }
+
+        private static (bool ex1, T[] val1, bool ex2, T[] val2) GetValues<T>(Func<IEnumerable<T>> first, Func<IEnumerable<T>> second)
+        {
+            var firstExcept = false;
+            var secondExcept = false;
+            
+            T[] firstVal = default;
+            T[] secondVal = default;
+            try
+            {
+                firstVal = first().ToArray();
+            }
+            catch (Exception)
+            {
+                firstExcept = true;
+            }
+            try
+            {
+                secondVal = second().ToArray();
+            }
+            catch (Exception)
+            {
+                secondExcept = true;
+            }
+            return (firstExcept, firstVal, secondExcept, secondVal);
+        }
         
         [NoRewrite]
         public static void TestEquals<T>(string name, Func<IEnumerable<T>> first, Func<IEnumerable<T>> second)
@@ -45,12 +71,10 @@ namespace TestsLibrary
             {
                 Console.WriteLine("\n-------------------------------------------------------------\n");
                 Console.Write($"[{_valid}/{++_tests}] {name} is invalid\n\nCollection 1: ");
-                foreach (var x1 in val1)
-                    Console.Write(x1 + " ");
+                val1?.ForEach(x => Console.Write(x + " "));
                 
                 Console.Write("\n\nCollection 2: ");
-                foreach (var x1 in val2)
-                    Console.Write(x1 + " ");
+                val2?.ForEach(x => Console.Write(x + " "));
                 
                 Console.WriteLine("\n\n-------------------------------------------------------------\n");
             }
@@ -72,6 +96,22 @@ namespace TestsLibrary
             else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {val1}. Value 2: {val2}");
         }
         
+        public static void TestEquals(string name, Func<long> first, Func<long> second)
+        {
+            var (ex1, val1, ex2, val2) = GetValues(first, second);
+            
+            if (ex1 && ex2 || !ex1 && !ex2 && val1.Equals(val2)) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {val1}. Value 2: {val2}");
+        }
+        
+        public static void TestEquals(string name, Func<long?> first, Func<long?> second)
+        {
+            var (ex1, val1, ex2, val2) = GetValues(first, second);
+            
+            if (ex1 && ex2 || !ex1 && !ex2 && val1.Equals(val2)) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {val1}. Value 2: {val2}");
+        }
+        
         public static void TestEquals(string name, Func<bool> first, Func<bool> second)
         {
             var (ex1, val1, ex2, val2) = GetValues(first, second);
@@ -85,6 +125,24 @@ namespace TestsLibrary
             var (ex1, val1, ex2, val2) = GetValues(first, second);
             
             if (ex1 && ex2 || !ex1 && !ex2 && val1.Equals(val2)) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {val1}. Value 2: {val2}");
+        }
+        
+        public static void TestEquals(string name, Func<float> first, Func<float> second)
+        {
+            var (ex1, val1, ex2, val2) = GetValues(first, second);
+            
+            if (ex1 && ex2 || !ex1 && !ex2 && Math.Abs(val1 - val2) < double.Epsilon) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {val1}. Value 2: {val2}");
+        }
+        
+        public static void TestEquals(string name, Func<float?> first, Func<float?> second)
+        {
+            var (ex1, val1, ex2, val2) = GetValues(first, second);
+            
+            if (ex1 && ex2 || !ex1 && !ex2 && 
+                val1 == null && val2 == null || val1 != null && val2 != null && 
+                Math.Abs((double)val1 - (double)val2) < double.Epsilon) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
             else Console.WriteLine($"[{_valid}/{++_tests}] {name} is invalid. Value 1: {val1}. Value 2: {val2}");
         }
         

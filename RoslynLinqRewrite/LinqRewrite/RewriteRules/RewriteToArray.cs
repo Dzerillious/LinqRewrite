@@ -20,9 +20,9 @@ namespace LinqRewrite.RewriteRules
                 RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             var resultVariable = RewriteOther(p);
-            if (p.ResultSize == null) p.FinalAdd(Return("LinqRewrite".Access("Core", "SimpleArrayExtensions", "EnsureFullArray")
+            if (p.ResultSize == null) p.ResultAdd(Return("LinqRewrite".Access("Core", "SimpleArrayExtensions", "EnsureFullArray")
                 .Invoke(resultVariable, p.Indexer)));
-            else p.FinalAdd(Return(resultVariable));
+            else p.ResultAdd(Return(resultVariable));
         }
         
         public static VariableBridge RewriteOther(RewriteParameters p, TypeSyntax itemType = null)
@@ -95,17 +95,17 @@ namespace LinqRewrite.RewriteRules
                 var sizeValue = p.CurrentIterator == null ? p.ResultSize : p.CurrentIterator.ForMax - p.CurrentIterator.ForMin;
                 
                 var resultVariable = p.GlobalVariable(p.ReturnType, CreateArray((ArrayTypeSyntax) p.ReturnType, p.CurrentCollection.Count));
-                p.FinalAdd("Array".Access("Copy")
+                p.ResultAdd("Array".Access("Copy")
                     .Invoke(p.CurrentCollection, minValue, resultVariable, 0, sizeValue));
-                p.FinalAdd(Return(resultVariable));
+                p.ResultAdd(Return(resultVariable));
                 return true;
             }
             else if (p.CurrentCollection.CollectionType == CollectionType.List)
             {
                 var resultVariable = p.GlobalVariable(p.ReturnType,
                     CreateArray((ArrayTypeSyntax) p.ReturnType, p.CurrentCollection.Count));
-                p.FinalAdd(p.CurrentCollection.Access("CopyTo").Invoke(resultVariable));
-                p.FinalAdd(Return(resultVariable));
+                p.ResultAdd(p.CurrentCollection.Access("CopyTo").Invoke(resultVariable));
+                p.ResultAdd(Return(resultVariable));
                 return true;
             }
             p.NotRewrite = true;

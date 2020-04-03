@@ -322,5 +322,14 @@ namespace LinqRewrite.Extensions
                     };
             }
         }
+
+        public static bool IsNull(RewrittenValueBridge collectionValue, RewriteParameters rewriteParameters)
+        {
+            if (collectionValue?.Old?.Value == null) return true;
+            var value = collectionValue.Old.Value;
+            if (value is LiteralExpressionSyntax literal)
+                return literal.ToString() == "null";
+            return false;
+        }
     };
 }
