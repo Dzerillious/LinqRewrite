@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using LinqRewrite.RewriteRules;
@@ -34,9 +35,13 @@ namespace LinqRewrite
                 parameters.InitialAdd(If(parameters.CurrentCollection.IsEqual(null), ReturnStatement()));
 
             if (parameters.SimpleRewrite != null) return parameters.SimpleRewrite;
-            if (!parameters.HasResultMethod) parameters.ForAdd(YieldStatement(SyntaxKind.YieldReturnStatement, parameters.LastValue));
+            if (!parameters.HasResultMethod)
+            {
+                parameters.ForAdd(YieldStatement(SyntaxKind.YieldReturnStatement, parameters.LastValue));
+                parameters.ResultAdd(YieldStatement(SyntaxKind.YieldBreakStatement));
+            }
+                    
             var body = parameters.GetMethodBody();
-
             if (parameters.NotRewrite) throw new NotSupportedException("Not good for rewrite");
 
             if (parameters.Data.CurrentMethodIsConditional && parameters.ReturnType.Type.ToString() != "void")
@@ -79,7 +84,10 @@ namespace LinqRewrite
         private static void RewriteComposite(RewriteParameters parameters, string[] names)
         {
             for (var i = 0; i < names.Length; i++)
+            {
+                parameters.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
                 RewritePart(names[i], parameters, i);
+            }
         }
 
         private static bool TryRewriteSimple(RewriteParameters parameters, string[] names)

@@ -27,6 +27,8 @@ namespace LinqRewrite.RewriteRules
 
             p.FirstCollection = p.CurrentCollection = null;
             p.AddIterator();
+            p.CurrentIterator.IgnoreIterator = true;
+            
             p.ForMin = p.ForReMin = 0;
             p.ForMax = 0;
             p.ForReMax = -1;

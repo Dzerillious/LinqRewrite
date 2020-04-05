@@ -12,7 +12,7 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
 
-            p.LastValue = p.LastValue.ReusableConst(p);
+            p.LastValue = p.LastValue.Reusable(p);
             var conditionValue = args.Length switch
             {
                 1 when args[0].OldVal.InvokableWith1Param(p) => args[0].Inline(p, p.LastValue),

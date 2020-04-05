@@ -12,10 +12,7 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             if (p.CanSimpleRewrite() && p.FirstCollection != null && args.Length == 0)
-            {
                 p.SimpleRewrite = p.FirstCollection[args[0]];
-                return;
-            }
 
             if (!p.AssertGreaterEqual(args[0], 0)) return;
             

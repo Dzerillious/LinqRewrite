@@ -86,7 +86,6 @@ namespace LinqRewrite.RewriteRules
 
         private static bool RewriteList(RewriteParameters p)
         {
-            p.HasResultMethod = true;
             if (p.CurrentIterator != null) p.CurrentIterator.IgnoreIterator = true;
             
             if (p.CurrentCollection.CollectionType == CollectionType.Array)

@@ -17,9 +17,12 @@ namespace LinqRewrite.RewriteRules
 
         private static ExpressionSyntax GetExpression(ExpressionSyntax expression)
         {
-            if (expression is ParenthesizedExpressionSyntax parenthesizedExpressionSyntax)
-                return GetExpression(parenthesizedExpressionSyntax.Expression);
-            return expression;
+            while (true)
+            {
+                if (!(expression is ParenthesizedExpressionSyntax parenthesizedExpressionSyntax)) 
+                    return expression;
+                expression = parenthesizedExpressionSyntax.Expression;
+            }
         }
     }
 }

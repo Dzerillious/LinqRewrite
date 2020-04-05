@@ -13,10 +13,7 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             if (p.CanSimpleRewrite() && args.Length == 0)
-            {
                 p.SimpleRewrite = p.ResultSize.Cast(Long);
-                return;
-            }
 
             if (args.Length != 0)
             {

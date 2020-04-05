@@ -12,14 +12,11 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             if (p.CanSimpleRewrite() && p.ListEnumeration && p.CurrentCollection?.Count == p.ResultSize && args.Length == 0) 
-            {
                 p.SimpleRewrite = ConditionalExpression(p.CurrentCollection.Count.IsEqual(1),
-                p.CurrentCollection[0],
-                ConditionalExpression(p.ResultSize.IsEqual(0),
-                            Default(p.ReturnType),
-                            ThrowExpression("System.InvalidOperationException", "The sequence contains more than one element.")));
-                return;
-            }
+                    p.CurrentCollection[0],
+                    ConditionalExpression(p.ResultSize.IsEqual(0),
+                        Default(p.ReturnType),
+                        ThrowExpression("System.InvalidOperationException", "The sequence contains more than one element.")));
             
             var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
             if (args.Length == 0)

@@ -32,7 +32,7 @@ namespace LinqRewrite.RewriteRules
 
         private static void CalculateNullableAverage(RewriteParameters p, TypeBridge elementType, TypedValueBridge selectionValue, LocalVariable sumVariable)
         {
-            var inlinedValue = selectionValue.ReusableConst(p);
+            var inlinedValue = selectionValue.Reusable(p);
             p.ForAdd(If(inlinedValue.IsEqual(null), Continue()));
             p.ForAdd(sumVariable.AddAssign(inlinedValue.Cast(elementType)));
             p.Indexer = null;
@@ -52,8 +52,7 @@ namespace LinqRewrite.RewriteRules
             }
             else
             {
-                p.ResultAdd(If(p.ResultSize.IsEqual(0),
-                    Throw("System.InvalidOperationException", "The sequence did not contain any elements.")));
+                p.AssertGreaterEqual(p.ResultSize, 0);
                 p.ResultAdd(Return(sumVariable / p.ResultSize));
             }
         }

@@ -14,25 +14,31 @@ namespace LinqRewrite.RewriteRules
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             var takeValue = args[0];
+            var takeCheck = true;
             if (int.TryParse(takeValue.OldVal.ToString(), out var takeInt))
-                if (takeInt < 0) takeValue = new RewrittenValueBridge(IntValue(0));
+            {
+                if (takeInt < 0)
+                    takeValue = new RewrittenValueBridge(IntValue(0));
+                takeCheck = false;
+            }
                 
             if (!p.ModifiedEnumeration)
             {
                 var takeVariable = p.GlobalVariable(Int);
-                p.InitialAdd(If(takeValue < 0, takeVariable.Assign(IntValue(0)),
-                                If(takeValue > p.ForMax, takeVariable.Assign(p.ForMax),
-                                        takeVariable.Assign(takeValue))));
+                if (takeCheck)
+                {
+                    p.InitialAdd(If(takeValue < 0, takeVariable.Assign(IntValue(0)),
+                                    If(takeValue > p.ForMax, takeVariable.Assign(p.ForMax),
+                                            takeVariable.Assign(takeValue))));
+                    takeValue = new RewrittenValueBridge(takeVariable);
+                }
                 
-                takeValue = new RewrittenValueBridge(takeVariable);
                 p.ForReMin = p.ForMax - takeValue;
                 p.ForMax = takeValue;
             }
             else p.ForAdd(If(p.Indexer >= takeValue, Break()));
             
-            if (p.ResultSize != null)
-                p.ResultSize = takeValue;
-            
+            if (p.ResultSize != null) p.ResultSize = takeValue;
             p.Indexer = null;
         }
     }

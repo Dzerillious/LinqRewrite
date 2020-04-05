@@ -132,7 +132,8 @@ namespace LinqRewrite.Services
             foreach (var document in project.Documents)
                 syntaxTrees.Add(CSharpSyntaxTree.ParseText(File.ReadAllText(document.FilePath)));
 
-            var compilationOptions = project.CompilationOptions.WithOptimizationLevel(OptimizationLevel.Release);
+            var compilationOptions = project.CompilationOptions.WithOptimizationLevel(OptimizationLevel.Release)
+                .WithPlatform(Platform.X64);
             var compilation = CSharpCompilation.Create(project.AssemblyName, syntaxTrees, references,
                 (CSharpCompilationOptions)compilationOptions);
             

@@ -12,12 +12,9 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             if (p.CanSimpleRewrite() && p.ListEnumeration && p.CurrentCollection?.Count == p.ResultSize && args.Length == 0) 
-            {
                 p.SimpleRewrite = ConditionalExpression(p.CurrentCollection.Count.IsEqual(0),
-                Default(p.ReturnType),
-                p.CurrentCollection[p.CurrentCollection.Count - 1]);
-                return;
-            }
+                    Default(p.ReturnType),
+                    p.CurrentCollection[p.CurrentCollection.Count - 1]);
             
             var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
             

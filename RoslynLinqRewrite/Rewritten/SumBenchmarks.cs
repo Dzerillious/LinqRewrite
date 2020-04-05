@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using BenchmarkDotNet.Attributes;
 using LinqRewrite.Core;
 
@@ -6,18 +6,17 @@ namespace BenchmarkLibrary
 {
     public class SumBenchmarks
     {
-        [NoRewrite, Benchmark]
-        public int RangeSum()
+        [NoRewrite]
+        [Benchmark]
+        public int Select1()
         {
             return Enumerable.Range(567, 675).Sum();
         }
         
         [Benchmark]
-        public int RangeSumRewritten()
+        public int Select1Rewritten()
         {
-            var a = 567;
-            var b = 675;
-            return Enumerable.Range(a, b).Sum();
+            return (((((567+567)+675)-1)*675)/2);
         }
     }
 }

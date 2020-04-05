@@ -11,6 +11,8 @@ namespace BenchmarkLibrary
         public static int[] StaticArraySource;
         public int[] ArraySource;
         public IEnumerable<int> EnumerableSource;
+        [Params(0, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000)]
+        public int Offset { get; set; } = 10;
 
         [GlobalSetup]
         public void GlobalSetup()
@@ -20,82 +22,30 @@ namespace BenchmarkLibrary
             EnumerableSource = Enumerable.Range(0, 100);
         }
 
-        [NoRewrite]
-        [Benchmark]
-        public void Select1()
+        [NoRewrite, Benchmark]
+        public void ArrayWhereToArray()
         {
-            ArraySource.Where(x => x > 1).ToArray();
-        }
+            ArraySource.Where(x => x < Offset).ToArray();
+        }//EndMethod
+
+		[Benchmark]
+        public void ArrayWhereToArrayRewritten()
+        {
+            ArraySource.Where(x => x < Offset).ToArray();
+        }//EndMethod
+
         
-        [NoRewrite]
-        [Benchmark]
-        public void Select2()
+        [NoRewrite, Benchmark]
+        public void ArrayWhereToSimpleList()
         {
-            ArraySource.Where(x => x > 1).ToSimpleList();
-        }
-        
-        [NoRewrite]
-        [Benchmark]
-        public void Select3()
+            ArraySource.Where(x => x < Offset).ToSimpleList();
+        }//EndMethod
+
+		[Benchmark]
+        public void ArrayWhereToSimpleListRewritten()
         {
-            ArraySource.Where(x => x > 500).ToArray();
-        }
-        
-        [NoRewrite]
-        [Benchmark]
-        public void Select4()
-        {
-            ArraySource.Where(x => x > 500).ToSimpleList();
-        }
-        
-        [NoRewrite]
-        [Benchmark]
-        public void Select5()
-        {
-            ArraySource.Where(x => x > 1000).ToArray();
-        }
-        
-        [NoRewrite]
-        [Benchmark]
-        public void Select6()
-        {
-            ArraySource.Where(x => x > 1000).ToSimpleList();
-        }
-        
-        [Benchmark]
-        public void Select1Rewritten()
-        {
-            ArraySource.Where(x => x > 1).ToArray();
-        }
-        
-        [Benchmark]
-        public void Select2Rewritten()
-        {
-            ArraySource.Where(x => x > 1).ToSimpleList();
-        }
-        
-        [Benchmark]
-        public void Select3Rewritten()
-        {
-            ArraySource.Where(x => x > 500).ToArray();
-        }
-        
-        [Benchmark]
-        public void Select4Rewritten()
-        {
-            ArraySource.Where(x => x > 500).ToSimpleList();
-        }
-        
-        [Benchmark]
-        public void Select5Rewritten()
-        {
-            ArraySource.Where(x => x > 1000).ToArray();
-        }
-        
-        [Benchmark]
-        public void Select6Rewritten()
-        {
-            ArraySource.Where(x => x > 1000).ToSimpleList();
-        }
+            ArraySource.Where(x => x < Offset).ToSimpleList();
+        }//EndMethod
+
     }
 }

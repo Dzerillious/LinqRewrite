@@ -12,10 +12,7 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             if (p.CanSimpleRewrite() && p.ListEnumeration && p.CurrentCollection?.Count == p.ResultSize && args.Length == 0)
-            {
                 p.SimpleRewrite = p.CurrentCollection[p.ResultSize - 1];
-                return;
-            }
             
             var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
             

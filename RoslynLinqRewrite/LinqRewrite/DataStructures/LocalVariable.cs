@@ -7,7 +7,7 @@ namespace LinqRewrite.DataStructures
     {
         public TypeSyntax Type { get; }
 
-        public bool IsUsed { get; set; } = true;
+        public bool IsUsed { get; set; }
         public bool IsGlobal { get; set; }
 
         public LocalVariable(string name, TypeSyntax type)

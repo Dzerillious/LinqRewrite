@@ -16,25 +16,26 @@ namespace LinqRewrite.RewriteRules
             var skippedValue = args[0];
 
             if (int.TryParse(skippedValue.OldVal.ToString(), out var skippedInt))
+            {
                 if (skippedInt < 0) return;
-                
-            if (!p.ModifiedEnumeration)
+            }
+            else if (!p.ModifiedEnumeration)
             {
                 var skippedVariable = p.GlobalVariable(Int, skippedValue);
                 p.InitialAdd(skippedVariable.Assign(ConditionalExpression(
-                        skippedValue < 0, skippedValue, IntValue(0))));
+                    skippedValue < 0, skippedValue, IntValue(0))));
                 skippedValue = new RewrittenValueBridge(skippedVariable);
-                
-                p.ForMin = p.ForReMin += skippedValue;
             }
+                
+            if (!p.ModifiedEnumeration)
+                p.ForMin = p.ForReMin += skippedValue;
             else 
             {
-                p.ForAdd(
-                If(p.Indexer < skippedValue, 
-                    Block(
-            p.Indexer.PostIncrement(),
-                             Continue()
-                        )));
+                p.ForAdd(If(p.Indexer < skippedValue, 
+                            Block(
+                    p.Indexer.PostIncrement(),
+                                     Continue()
+                                )));
             }
             
             if (p.ResultSize != null) p.ResultSize -= skippedValue;

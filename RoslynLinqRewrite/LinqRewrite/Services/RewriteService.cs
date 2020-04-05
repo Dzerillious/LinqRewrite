@@ -83,17 +83,35 @@ namespace LinqRewrite.Services
                 Block(
                     (StatementBridge)enumeratorVariable.Access("Dispose").Invoke()
                 ));
-
+        
         public MethodDeclarationSyntax GetCoreMethod(TypeSyntax returnType, 
             string functionName, 
             IEnumerable<ParameterSyntax> parameters,
             IEnumerable<StatementSyntax> body)
             => MethodDeclaration(returnType, functionName)
                 .WithParameterList(CreateParameters(parameters))
+                // .WithAttributeLists(GetAttributeList(aggressiveInlining))
                 .WithBody(Block(body))
                 .WithStatic(_data.CurrentMethodIsStatic)
                 .WithTypeParameterList(_data.CurrentMethodTypeParameters)
                 .WithConstraintClauses(_data.CurrentMethodConstraintClauses)
                 .NormalizeWhitespace();
+
+        // private SyntaxList<AttributeListSyntax> GetAttributeList(bool aggressiveInlining)
+        // {
+        //     return !aggressiveInlining
+        //         ? new SyntaxList<AttributeListSyntax>()
+        //         : new SyntaxList<AttributeListSyntax>(AttributeList(
+        //         SingletonSeparatedList(
+        //             Attribute(IdentifierName("System.Runtime.CompilerServices.MethodImpl"),
+        //                 AttributeArgumentList(
+        //                     SeparatedList(new[]
+        //                     {
+        //                         AttributeArgument(
+        //                             ParseTypeName(
+        //                                 "System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining")
+        //                         )
+        //                     }))))));
+        // }
     }
 }

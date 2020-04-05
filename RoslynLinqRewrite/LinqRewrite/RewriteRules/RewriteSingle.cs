@@ -13,12 +13,9 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             if (p.CanSimpleRewrite() && p.ListEnumeration && p.CurrentCollection?.Count == p.ResultSize && args.Length == 0) 
-            {
                 p.SimpleRewrite = ConditionalExpression(p.ResultSize.IsEqual(1),
-                p.CurrentCollection[0],
-                ThrowExpression("System.InvalidOperationException", "The sequence does not contain one element."));
-                return;
-            }
+                    p.CurrentCollection[0],
+                    ThrowExpression("System.InvalidOperationException", "The sequence does not contain one element."));
             
             var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
             if (args.Length == 0)

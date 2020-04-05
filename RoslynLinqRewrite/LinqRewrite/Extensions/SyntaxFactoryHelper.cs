@@ -140,7 +140,7 @@ namespace LinqRewrite.Extensions
         {
             if (IsReusable(e)) return new TypedValueBridge(e.Old.GetType(p), e);
 
-            var tmpVariable = p.LocalVariable(e.Old.GetType(p), e);
+            var tmpVariable = p.GlobalVariable(e.Old.GetType(p), e);
             return new TypedValueBridge(Int, IdentifierName(tmpVariable));
         }
 
@@ -148,34 +148,35 @@ namespace LinqRewrite.Extensions
         {
             if (IsReusable(e)) return new TypedValueBridge(type, e);
 
-            var tmpVariable = p.LocalVariable(type, e);
+            var tmpVariable = p.GlobalVariable(type, e);
             return new TypedValueBridge(Int, IdentifierName(tmpVariable));
         }
 
         public static TypedValueBridge ReusableConst(this TypedValueBridge e, RewriteParameters p)
         {
-            if (IsReusable(e)) return e;
+            if (IsReusable(e))
+            {
+                if (e.Value is LocalVariable localVariable)
+                    localVariable.IsGlobal = true;
+                return e;
+            }
 
-            var tmpVariable = p.LocalVariable(e.Type);
-            p.ForAdd(tmpVariable.Assign(e));
+            var tmpVariable = p.GlobalVariable(e.Type, e);
             return new TypedValueBridge(e.Type, tmpVariable);
-        }
-
-        public static TypedValueBridge Reusable(this ValueBridge e, RewriteParameters p, TypeBridge type)
-        {
-            if (IsReusable(e)) return new TypedValueBridge(type, e);
-
-            var tmpVariable = p.LocalVariable(type);
-            p.ForAdd(tmpVariable.Assign(e));
-            return new TypedValueBridge(Int, IdentifierName(tmpVariable));
         }
 
         public static TypedValueBridge Reusable(this TypedValueBridge e, RewriteParameters p)
         {
-            if (IsReusable(e)) return new TypedValueBridge(e.Type, e);
+            if (IsReusable(e))
+            {
+                if (e.Value is LocalVariable localVariable)
+                    localVariable.IsUsed = true;
+                return e;
+            }
 
             var tmpVariable = p.LocalVariable(e.Type);
             p.ForAdd(tmpVariable.Assign(e));
+            tmpVariable.IsUsed = true;
             return new TypedValueBridge(Int, IdentifierName(tmpVariable));
         }
 

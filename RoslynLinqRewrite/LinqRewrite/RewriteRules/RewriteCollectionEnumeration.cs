@@ -16,8 +16,6 @@ namespace LinqRewrite.RewriteRules
         
         public static void RewriteOther(RewriteParameters p, CollectionValueBridge collection, LocalVariable variable = null, bool otherIndexer = false)
         {
-            p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
-            
             if (collection.CollectionType == CollectionType.Array) ArrayEnumeration(p, collection, variable);
             else if (collection.CollectionType == CollectionType.List) ListEnumeration(p, collection, variable);
             else if (collection.CollectionType == CollectionType.Enumerable) EnumerableEnumeration(p, collection, variable);
@@ -31,7 +29,7 @@ namespace LinqRewrite.RewriteRules
             p.ForMax = collection.Count;
             p.ForReMax = collection.Count - 1;
 
-            p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
+            p.CurrentIterator.ForIndexer = p.GlobalVariable(Int);
             if (p.CurrentIndexer == null)
             {
                 p.CurrentIterator.CurrentIndexer = p.CurrentIterator.ForIndexer;
@@ -61,7 +59,7 @@ namespace LinqRewrite.RewriteRules
             p.ForMax = sourceCountValue;
             p.ForReMax = sourceCountValue - 1;
             
-            p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
+            p.CurrentIterator.ForIndexer = p.GlobalVariable(Int);
             if (p.CurrentIndexer == null)
             {
                 p.CurrentIterator.CurrentIndexer = p.CurrentIterator.ForIndexer;

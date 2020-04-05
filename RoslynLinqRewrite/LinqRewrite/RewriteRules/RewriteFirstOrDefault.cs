@@ -12,12 +12,9 @@ namespace LinqRewrite.RewriteRules
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             if (p.CanSimpleRewrite() && p.ListEnumeration && p.FirstCollection != null && args.Length == 0) 
-            {
                 p.SimpleRewrite = ConditionalExpression(p.FirstCollection.Count.IsEqual(0),
-                Default(p.ReturnType),
-                p.FirstCollection[0]);
-                return;
-            }
+                    Default(p.ReturnType),
+                    p.FirstCollection[0]);
             
             if (args.Length == 0)
                 p.ForAdd(Return(p.LastValue));

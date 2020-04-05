@@ -31,7 +31,7 @@ namespace LinqRewrite.DataStructures
         public ValueBridge SourceSize { get; set; }
         public TypedValueBridge LastValue { get; set; }
 
-        private readonly List<IteratorParameters> _resultIterators = new List<IteratorParameters>();
+        public readonly List<IteratorParameters> ResultIterators = new List<IteratorParameters>();
         private readonly List<StatementSyntax> _initialStatements = new List<StatementSyntax>();
         private readonly List<StatementSyntax> _finalStatements = new List<StatementSyntax>();
         private readonly List<StatementSyntax> _resultStatements = new List<StatementSyntax>();
@@ -103,8 +103,6 @@ namespace LinqRewrite.DataStructures
             {
                 if (value != null) throw new NotImplementedException("Implemented only for setting null");
                 
-                var iterator = IncompleteIterators.FirstOrDefault();
-                if (iterator?.CurrentIndexer != null) iterator.CurrentIndexer.IsGlobal = false;
                 CurrentIndexer = null;
                 IncompleteIterators.ForEach(x => x.CurrentIndexer = null);
             }
@@ -175,7 +173,7 @@ namespace LinqRewrite.DataStructures
             _resultStatements.Clear();
             Iterators.Clear();
             Variables.Clear();
-            _resultIterators.Clear();
+            ResultIterators.Clear();
             CurrentIterator = null;
             
             var collectionType = collection.GetType(this);
@@ -205,8 +203,8 @@ namespace LinqRewrite.DataStructures
 
         public void PreUseAdd(StatementBridge _)
         {
-            if (_resultIterators.Count == 0) _initialStatements.Add(_);
-            else _resultIterators.First(x => !x.Complete).PreFor.Add(_);
+            if (ResultIterators.Count == 0) _initialStatements.Add(_);
+            else ResultIterators.First(x => !x.Complete).PreFor.Add(_);
         }
 
         public void PreForAdd(StatementBridge _) => CurrentIterator.PreFor.Add(_);
@@ -227,7 +225,7 @@ namespace LinqRewrite.DataStructures
             var oldBody = CurrentIterator;
             CurrentIterator = new IteratorParameters(this);
             Iterators.Add(CurrentIterator);
-            _resultIterators.Add(CurrentIterator);
+            ResultIterators.Add(CurrentIterator);
             return oldBody;
         }
         
@@ -236,7 +234,7 @@ namespace LinqRewrite.DataStructures
             var oldBody = CurrentIterator;
             CurrentIterator = new IteratorParameters(this, collection);
             Iterators.Add(CurrentIterator);
-            _resultIterators.Add(CurrentIterator);
+            ResultIterators.Add(CurrentIterator);
             return oldBody;
         }
         
@@ -245,7 +243,7 @@ namespace LinqRewrite.DataStructures
             var oldBody = CurrentIterator;
             CurrentIterator = new IteratorParameters(this);
             Iterators.Insert(0, CurrentIterator);
-            _resultIterators.Insert(0, CurrentIterator);
+            ResultIterators.Insert(0, CurrentIterator);
             return oldBody;
         }
         
@@ -254,7 +252,7 @@ namespace LinqRewrite.DataStructures
             var oldBody = CurrentIterator;
             CurrentIterator = new IteratorParameters(this, collection);
             Iterators.Insert(0, CurrentIterator);
-            _resultIterators.Insert(0, CurrentIterator);
+            ResultIterators.Insert(0, CurrentIterator);
             return oldBody;
         }
         
@@ -263,7 +261,7 @@ namespace LinqRewrite.DataStructures
             var oldBody = CurrentIterator;
             CurrentIterator = CurrentIterator.Copy();
             Iterators.Add(CurrentIterator);
-            _resultIterators.Add(CurrentIterator);
+            ResultIterators.Add(CurrentIterator);
             return oldBody;
         }
 
@@ -273,20 +271,20 @@ namespace LinqRewrite.DataStructures
             var result = new List<StatementSyntax>();
             if (IsReversed)
             {
-                for (var i = _resultIterators.Count - 1; i >= 0; i--)
+                for (var i = ResultIterators.Count - 1; i >= 0; i--)
                 {
-                    var statement = _resultIterators[i].GetStatementSyntax(this);
-                    result.AddRange(_resultIterators[i].PreFor);
+                    var statement = ResultIterators[i].GetStatementSyntax(this);
+                    result.AddRange(ResultIterators[i].PreFor);
                     if (statement != null) result.Add(statement);
-                    result.AddRange(_resultIterators[i].PostFor);
+                    result.AddRange(ResultIterators[i].PostFor);
                 }
             }
-            else for (var i = 0; i < _resultIterators.Count; i++)
+            else for (var i = 0; i < ResultIterators.Count; i++)
             {
-                var statement = _resultIterators[i].GetStatementSyntax(this);
-                result.AddRange(_resultIterators[i].PreFor);
+                var statement = ResultIterators[i].GetStatementSyntax(this);
+                result.AddRange(ResultIterators[i].PreFor);
                 if (statement != null) result.Add(statement);
-                result.AddRange(_resultIterators[i].PostFor);
+                result.AddRange(ResultIterators[i].PostFor);
             }
 
             if (WrapWithTry)
@@ -306,7 +304,7 @@ namespace LinqRewrite.DataStructures
         public LocalVariable GlobalVariable(TypeSyntax type)
         {
             var variable = "v" + _variableIndex++;
-            var created = new LocalVariable(variable, type) {IsGlobal = true};
+            var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
             Variables.Add(created);
             
             InitialAdd(LocalVariableCreation(variable, type));
@@ -316,7 +314,7 @@ namespace LinqRewrite.DataStructures
         public LocalVariable GlobalVariable(TypeSyntax type, ValueBridge initial)
         {
             var variable = "v" + _variableIndex++;
-            var created = new LocalVariable(variable, type) {IsGlobal = true};
+            var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
             Variables.Add(created);
             
             InitialAdd(LocalVariableCreation(variable, type));
@@ -399,6 +397,7 @@ namespace LinqRewrite.DataStructures
             {
                 if (biggerD >= smallerD) return true;
                 InitialAdd(Throw("System.InvalidOperationException", "Index out of range"));
+                Iterators.ForEach(x => x.IgnoreIterator = true);
                 return false;
             }
             InitialAdd(If(bigger < smaller, Throw("System.InvalidOperationException", "Index out of range")));
@@ -414,6 +413,7 @@ namespace LinqRewrite.DataStructures
             {
                 if (biggerD >= smallerD) return true;
                 InitialAdd(Throw("System.InvalidOperationException", "Index out of range"));
+                Iterators.ForEach(x => x.IgnoreIterator = true);
                 return false;
             }
             InitialAdd(If(bigger < smaller, Throw("System.InvalidOperationException", "Index out of range")));
@@ -455,6 +455,7 @@ namespace LinqRewrite.DataStructures
             if (notNull.ToString() == "null")
             {
                 InitialAdd(Throw("System.InvalidOperationException", "Invalid null object"));
+                Iterators.ForEach(x => x.IgnoreIterator = true);
                 return false;
             }
             InitialAdd(If(notNull.IsEqual(null), Throw("System.InvalidOperationException", "Invalid null object")));

@@ -222,7 +222,6 @@
       <Content Include="CreateRewrittenRegex.md" />
       <Content Include="Results\SelectResults.md" />
       <Content Include="Results\SkipResults.md" />
-      <Content Include="Results\WhereResults.md" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
