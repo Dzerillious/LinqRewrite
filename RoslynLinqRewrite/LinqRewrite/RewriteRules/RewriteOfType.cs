@@ -22,7 +22,8 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(If(Not(p.LastValue.Is(type)),
                         Continue()));
 
-            p.LastValue = new TypedValueBridge(type, p.LastValue.Cast(ParseTypeName("object")).Cast(type));
+            p.LastValue = p.Unchecked ? new TypedValueBridge(type, p.LastValue.Cast(type)) 
+                : new TypedValueBridge(type, p.LastValue.Cast(ParseTypeName("object")).Cast(type));
 
             p.ResultSize = null;
             p.ModifiedEnumeration = true;

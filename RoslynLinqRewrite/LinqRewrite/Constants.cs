@@ -53,6 +53,7 @@ namespace LinqRewrite
 
         private const string ForEach1 = "System.Collections.Generic.List<T>.ForEach(System.Action<T>)";
         public const string ForEach2 = "System.Collections.Generic.IEnumerable<T>.ForEach<T>(System.Action<T>)";
+        public const string Unchecked = "System.Collections.Generic.IEnumerable<T>.Unchecked<T>()";
 
         private const string Range1 = "System.Linq.Enumerable.Range(int, int)";
         private const string Repeat1 = "System.Linq.Enumerable.Repeat<TResult>(TResult, int)";
@@ -125,7 +126,7 @@ namespace LinqRewrite
             
             Contains1, Contains2,
             
-            ForEach1,
+            ForEach1, ForEach2,
             
             Select1, Select2, Where1, Where2, Cast1, OfType1,
             SelectMany1, SelectMany2, SelectMany3, SelectMany4,
@@ -136,13 +137,14 @@ namespace LinqRewrite
             
             Concat1, Union1, Union2, Except1, Except2, Intersect1, Intersect2, Distinct1, Distinct2,
             
-            ForEach2,
             
             SequenceEqual1, SequenceEqual2, Zip1,
             
             Join1, Join2, 
             GroupBy1, GroupBy2, GroupBy3, GroupBy4, GroupBy5, GroupBy6, GroupBy7, GroupBy8,
-            GroupJoin1
+            GroupJoin1,
+            
+            Unchecked
         };
 
         public const int MaximumSizeForByValStruct = 128 / 8; // eg. two longs, or two references

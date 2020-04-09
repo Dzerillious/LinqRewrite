@@ -62,7 +62,7 @@ namespace LinqRewrite.RewriteRules
 
             p.ResultSize = null;
             p.SourceSize *= collection.Count;
-            p.ListEnumeration = true;
+            p.SimpleEnumeration = true;
         }
     }
 }

@@ -11,9 +11,10 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            if (p.CanSimpleRewrite() && p.ListEnumeration && p.CurrentCollection?.Count == p.ResultSize && args.Length == 0)
-                p.SimpleRewrite = p.CurrentCollection[p.ResultSize - 1];
+            if (p.CanSimpleRewrite() && p.SimpleEnumeration && args.Length == 0)
+                p.SimpleRewrite = ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMax);
             
+            if (!p.AssertResultSizeGreaterEqual(0, true)) return;
             var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
             
             if (args.Length == 0)

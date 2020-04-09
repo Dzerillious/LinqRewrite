@@ -14,13 +14,14 @@ namespace LinqRewrite.RewriteRules
             if (p.CanSimpleRewrite() && p.FirstCollection != null && args.Length == 0)
                 p.SimpleRewrite = p.FirstCollection[args[0]];
 
-            if (!p.AssertGreaterEqual(args[0], 0)) return;
+            if (!p.AssertGreaterEqual(args[0], 0, true, true)) return;
+            if (!p.AssertLesser(args[0], p.ResultSize, true, true)) return;
             
             var positionValue = args[0].ReusableConst(p);
             p.ForAdd(If(p.Indexer.IsEqual(positionValue),
                         Return(p.LastValue)));
             
-            p.ResultAdd(Throw("System.InvalidOperationException", "The sequence did not contain enough elements."));
+            if (!p.Unchecked) p.ResultAdd(Throw("System.InvalidOperationException", "The sequence did not contain enough elements."));
         }
     }
 }

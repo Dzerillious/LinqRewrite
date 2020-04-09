@@ -83,9 +83,7 @@ namespace LinqRewrite.Services
                 return new TypedValueBridge(returnType, lambdaVariable.Invoke(parameters));
             }
             lambda = RenameSymbol(lambda, parameters);
-            var inlinedValue = new TypedValueBridge(returnType, InlineOrCreateMethod(lambda.Body, returnType, currentCaptures, pS));
-
-            return inlinedValue;
+            return new TypedValueBridge(returnType, InlineOrCreateMethod(lambda.Body, returnType, currentCaptures, pS));
         }
 
         public TypeSyntax GetLambdaReturnType(SemanticModel semantic, LambdaExpressionSyntax lambdaExpression) 

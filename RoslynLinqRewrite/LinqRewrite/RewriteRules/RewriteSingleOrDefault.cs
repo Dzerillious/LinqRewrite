@@ -1,5 +1,6 @@
 ﻿using System;
 using LinqRewrite.DataStructures;
+using LinqRewrite.Extensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -11,9 +12,9 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            if (p.CanSimpleRewrite() && p.ListEnumeration && p.CurrentCollection?.Count == p.ResultSize && args.Length == 0) 
+            if (p.CanSimpleRewrite() && p.SimpleEnumeration && p.CurrentCollection?.Count == p.ResultSize && args.Length == 0) 
                 p.SimpleRewrite = ConditionalExpression(p.CurrentCollection.Count.IsEqual(1),
-                    p.CurrentCollection[0],
+                    ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin),
                     ConditionalExpression(p.ResultSize.IsEqual(0),
                         Default(p.ReturnType),
                         ThrowExpression("System.InvalidOperationException", "The sequence contains more than one element.")));

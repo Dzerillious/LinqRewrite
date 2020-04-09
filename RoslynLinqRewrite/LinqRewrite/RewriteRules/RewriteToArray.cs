@@ -13,7 +13,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.ListEnumeration && p.IncompleteIterators.Count() <= 1 && RewriteList(p))
+            if (p.IncompleteIterators.Count() <= 1 && RewriteSimplified(p))
                 return;
             
             if (p.CurrentIterator ==  null)
@@ -47,7 +47,7 @@ namespace LinqRewrite.RewriteRules
                 
             var logVariable = p.GlobalVariable(Int, 
                 "LinqRewrite".Access("Core", "IntExtensions", "Log2")
-                    .Invoke(p.SourceSize.Cast(SyntaxKind.UIntKeyword)) - 3);
+                    .Invoke(Parenthesize(p.SourceSize).Cast(SyntaxKind.UIntKeyword)) - 3);
                 
             p.PreUseAdd(logVariable.SubAssign(logVariable % 2));
             var currentLengthVariable = p.GlobalVariable(Int, 8);
@@ -83,19 +83,21 @@ namespace LinqRewrite.RewriteRules
             p.HasResultMethod = true;
             return resultVariable;
         }
-
-        private static bool RewriteList(RewriteParameters p)
+        
+        private static bool RewriteSimplified(RewriteParameters p)
         {
             if (p.CurrentIterator != null) p.CurrentIterator.IgnoreIterator = true;
             
+            var minValue = p.CurrentMin;
+            if (p.SimpleEnumeration && ExpressionSimplifier.TryGetInt(p.ResultSize, out var intSize) && intSize <= 30)
+                return CreateTakeArray(p, minValue, intSize);
+
+            if (!p.ListEnumeration) return false;
             if (p.CurrentCollection.CollectionType == CollectionType.Array)
             {
-                var minValue = p.CurrentIterator == null ? 0 : p.CurrentIterator.ForMin;
-                var sizeValue = p.CurrentIterator == null ? p.ResultSize : p.CurrentIterator.ForMax - p.CurrentIterator.ForMin;
-                
                 var resultVariable = p.GlobalVariable(p.ReturnType, CreateArray((ArrayTypeSyntax) p.ReturnType, p.ResultSize));
                 p.ResultAdd("System".Access("Array", "Copy")
-                    .Invoke(p.CurrentCollection, minValue, resultVariable, 0, sizeValue));
+                    .Invoke(p.CurrentCollection, minValue, resultVariable, 0, p.ResultSize));
                 p.ResultAdd(Return(resultVariable));
                 return true;
             }
@@ -108,6 +110,14 @@ namespace LinqRewrite.RewriteRules
                 return true;
             }
             p.NotRewrite = true;
+            return true;
+        }
+
+        private static bool CreateTakeArray(RewriteParameters p, ValueBridge minValue, int intSize)
+        {
+            p.SimpleRewrite = CreateArray((ArrayTypeSyntax) p.ReturnType, p.ResultSize,
+                Enumerable.Range(0, intSize).Select(x 
+                    => (ExpressionSyntax) ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, minValue + x)));
             return true;
         }
     }

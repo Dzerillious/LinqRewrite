@@ -31,6 +31,7 @@ namespace LinqRewrite.RewriteRules
                 Throw("System.InvalidOperationException", "Invalid sizes of sources")));
 
             p.FinalAdd(enumeratorVariable.Access("Dispose").Invoke());
+            p.SimpleEnumeration = false;
             p.ListEnumeration = false;
         }
     }

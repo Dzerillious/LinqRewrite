@@ -16,7 +16,8 @@ namespace LinqRewrite.RewriteRules
             var name = (GenericNameSyntax) access.Name;
             var type = name.TypeArgumentList.Arguments[0];
 
-            p.LastValue = new TypedValueBridge(type, p.LastValue.Cast(ParseTypeName("object")).Cast(type));
+            p.LastValue = p.Unchecked ? new TypedValueBridge(type, p.LastValue.Cast(type))
+                : new TypedValueBridge(type, p.LastValue.Cast(ParseTypeName("object")).Cast(type));
             p.ListEnumeration = false;
         }
     }

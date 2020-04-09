@@ -7,7 +7,6 @@ namespace TestsLibrary
 {
     internal class Program
     {
-        private static int[] items = null;
         public static void Main(string[] args)
         {
             new SelectTests().RunTests();

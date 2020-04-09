@@ -23,7 +23,9 @@ namespace LinqRewrite.RewriteRules
             
             p.ResultSize = countValue;
             p.SourceSize = countValue;
+                
             p.ListEnumeration = false;
+            p.SimpleEnumeration = true;
             
             p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
             if (p.CurrentIndexer == null)

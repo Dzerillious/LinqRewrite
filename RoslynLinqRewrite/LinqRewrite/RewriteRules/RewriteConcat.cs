@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
-    public static class RewriteConcat
+    public static class  RewriteConcat
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
@@ -17,8 +19,11 @@ namespace LinqRewrite.RewriteRules
             if (!p.AssertNotNull(collectionValue)) return;
 
             LocalVariable itemVariable;
-            if (p.LastValue.Value != null && p.LastValue.Value is LocalVariable lastVariable)
+            var lastVariable = p.TryGetVariable(p.LastValue);
+            if (lastVariable != null)
+            {
                 itemVariable = lastVariable;
+            }
             else
             {
                 itemVariable = p.GlobalVariable(p.LastValue.Type);
@@ -35,6 +40,8 @@ namespace LinqRewrite.RewriteRules
             
             if (resultSizeValue != null && p.ResultSize != null) p.ResultSize += resultSizeValue;
             else p.ResultSize = null;
+
+            p.ModifiedEnumeration = true;
         }
     }
 }

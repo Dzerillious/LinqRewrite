@@ -93,7 +93,8 @@ namespace LinqRewrite
         private static bool TryRewriteSimple(RewriteParameters parameters, string[] names)
         {
             if (MatchNames(names, "Range", "Sum")) return RangeSumRewrite.Rewrite(parameters);
-            else if (MatchNames(names, "Select", "First")) return SelectFirstRewrite.Rewrite(parameters);
+            else if (MatchNames(names, "Range", "Average")) return RangeAverageRewrite.Rewrite(parameters);
+            else if (MatchNames(names, "Repeat", "Sum")) return RepeatSumRewrite.Rewrite(parameters);
             return false;
         }
 
@@ -162,6 +163,8 @@ namespace LinqRewrite
                 case "ToSimpleList": RewriteToSimpleList.Rewrite(parameters, args); return;
                 case "ToDictionary": RewriteToDictionary.Rewrite(parameters, args); return;
                 case "ToLookup": RewriteToLookup.Rewrite(parameters, args); return;
+                
+                case "Unchecked": RewriteUnchecked.Rewrite(parameters, args); return;
                 default: throw new NotImplementedException($"Rewrite of {last} not implemented");
             }
         }

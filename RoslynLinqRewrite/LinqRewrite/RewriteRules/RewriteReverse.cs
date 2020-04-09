@@ -19,6 +19,7 @@ namespace LinqRewrite.RewriteRules
             else if (p.SourceSize != null) KnownSourceSize(p);
             else UnknownSourceSize(p);
             
+            p.SimpleEnumeration = false;
             p.ListEnumeration = false;
         }
 

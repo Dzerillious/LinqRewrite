@@ -24,7 +24,8 @@ namespace LinqRewrite.RewriteRules
             var hashsetVariable = p.GlobalVariable(hashsetType, hashsetCreation);
 
             LocalVariable itemVariable;
-            if (p.LastValue.Value != null && p.LastValue.Value is LocalVariable lastVariable)
+            var lastVariable = p.TryGetVariable(p.LastValue);
+            if (lastVariable != null)
                 itemVariable = lastVariable;
             else
             {

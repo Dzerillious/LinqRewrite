@@ -5,6 +5,7 @@ namespace LinqRewrite.DataStructures
 {
     public class TypedValueBridge : ValueBridge
     {
+        public ExpressionSyntax Expression => Value.Value;
         public new ValueBridge Value { get; }
         public TypeSyntax Type { get; }
 

@@ -1,9 +1,7 @@
 ﻿using System;
 using LinqRewrite.Core;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using LinqRewrite.Extensions;
 using LinqRewrite.Services;
 using Microsoft.CodeAnalysis;
@@ -27,9 +25,32 @@ namespace LinqRewrite.DataStructures
 
 
         public TypeBridge ReturnType { get; private set; }
-        public ValueBridge ResultSize { get; set; }
-        public ValueBridge SourceSize { get; set; }
-        public TypedValueBridge LastValue { get; set; }
+
+        private ValueBridge _resultSize;
+        public ValueBridge ResultSize
+        {
+            get => _resultSize;
+            set => _resultSize = value?.Value == null 
+                ? null : ExpressionSimplifier.Simplify(value);
+        }
+
+        public ValueBridge CalculatedResultsSize => ResultSize ?? Indexer;
+        
+        private ValueBridge _sourceSize;
+        public ValueBridge SourceSize
+        {
+            get => _sourceSize;
+            set => _sourceSize = value?.Value == null 
+                ? null : ExpressionSimplifier.Simplify(value);
+        }
+
+        private TypedValueBridge _lastValue;
+        public TypedValueBridge LastValue
+        {
+            get => _lastValue;
+            set => _lastValue = value?.Value == null 
+                ? null : new TypedValueBridge(value.Type, ExpressionSimplifier.Simplify(value));
+        }
 
         public readonly List<IteratorParameters> ResultIterators = new List<IteratorParameters>();
         private readonly List<StatementSyntax> _initialStatements = new List<StatementSyntax>();
@@ -46,6 +67,7 @@ namespace LinqRewrite.DataStructures
         public bool IsReversed { get; set; }
         public bool HasResultMethod { get; set; }
         public bool NotRewrite { get; set; }
+        public bool Unchecked { get; set; }
 
         private bool _listEnumeration;
         public bool ListEnumeration
@@ -59,6 +81,18 @@ namespace LinqRewrite.DataStructures
             }
         }
 
+        private bool _simpleEnumeration;
+        public bool SimpleEnumeration
+        {
+            get => _simpleEnumeration;
+            set
+            {
+                _simpleEnumeration = value;
+                if (value) {return;}
+                ModifiedEnumeration = false;
+            }
+        }
+
         private bool _modifiedEnumeration;
         public bool ModifiedEnumeration
         {
@@ -68,6 +102,7 @@ namespace LinqRewrite.DataStructures
                 _modifiedEnumeration = value;
 
                 if (!value) return;
+                SimpleEnumeration = false;
                 ListEnumeration = false;
                 ResultSize = null;
                 Indexer = null;
@@ -136,25 +171,29 @@ namespace LinqRewrite.DataStructures
         public ValueBridge ForMin
         {
             get => CurrentIterator.ForMin;
-            set => CurrentIterator.ForMin = value;
+            set => CurrentIterator.ForMin = value?.Value == null 
+                ? null : ExpressionSimplifier.Simplify(value);
         }
         
         public ValueBridge ForMax
         {
             get => CurrentIterator.ForMax;
-            set => CurrentIterator.ForMax = value;
+            set => CurrentIterator.ForMax = value?.Value == null 
+                ? null : ExpressionSimplifier.Simplify(value);
         }
         
         public ValueBridge ForReMin
         {
             get => CurrentIterator.ForReverseMin;
-            set => CurrentIterator.ForReverseMin = value;
+            set => CurrentIterator.ForReverseMin = value?.Value == null 
+                ? null : ExpressionSimplifier.Simplify(value);
         }
         
         public ValueBridge ForReMax
         {
             get => CurrentIterator.ForReverseMax;
-            set => CurrentIterator.ForReverseMax = value;
+            set => CurrentIterator.ForReverseMax = value?.Value == null 
+                ? null : ExpressionSimplifier.Simplify(value);
         }
         
         public SemanticModel Semantic => Data.Semantic;
@@ -187,10 +226,11 @@ namespace LinqRewrite.DataStructures
             HasResultMethod = false;
             NotRewrite = false;
             IsReversed = false;
-            ListEnumeration = true;
+            SimpleEnumeration = true;
             CurrentIndexer = null;
             NotRewrite = false;
             WrapWithTry = false;
+            Unchecked = false;
 
             SimpleRewrite = null;
             LastValue = null;
@@ -387,79 +427,94 @@ namespace LinqRewrite.DataStructures
         public bool CanSimpleRewrite() => !ModifiedEnumeration && ResultSize != null;
 
         public void Dispose() => RewriteParametersFactory.ReturnParameters(this);
+        
+        public bool AssertResultSizeGreaterEqual(ValueBridge smaller, bool preCheck = false)
+            => AssertLesserEqual(smaller, CalculatedResultsSize, ResultSize != null, preCheck);
+        
+        public bool AssertResultSizeGreater(ValueBridge smaller, bool preCheck = false)
+            => AssertLesser(smaller, CalculatedResultsSize, ResultSize != null, preCheck);
+        
+        public bool AssertResultSizeLesserEqual(ValueBridge bigger, bool preCheck = false)
+            => AssertLesserEqual(CalculatedResultsSize, bigger, ResultSize != null, preCheck);
+        
+        public bool AssertResultSizeLesser(ValueBridge bigger, bool preCheck = false)
+            => AssertLesser(CalculatedResultsSize, bigger, ResultSize != null, preCheck);
 
-        public bool AssertGreaterEqual(ValueBridge bigger, ValueBridge smaller)
+        public bool AssertGreaterEqual(ValueBridge bigger, ValueBridge smaller, bool initialCheck = true, bool preCheck = false)
+            => AssertLesserEqual(smaller, bigger, initialCheck, preCheck);
+
+        public bool AssertGreater(ValueBridge bigger, ValueBridge smaller, bool initialCheck = true, bool preCheck = false)
+            => AssertLesser(smaller, bigger, initialCheck, preCheck);
+
+        public bool AssertLesserEqual(ValueBridge smaller, ValueBridge bigger, bool initialCheck = true, bool preCheck = false)
         {
-            var biggerPass = double.TryParse(bigger.ToString(), out var biggerD);
-            var smallerPass = double.TryParse(smaller.ToString(), out var smallerD);
+            if (Unchecked) return true;
+            var biggerPass = ExpressionSimplifier.TryGetDouble(bigger, out var biggerD);
+            var smallerPass = ExpressionSimplifier.TryGetDouble(smaller, out var smallerD);
             
             if (biggerPass && smallerPass)
             {
-                if (biggerD >= smallerD) return true;
+                if (smallerD <= biggerD) return true;
                 InitialAdd(Throw("System.InvalidOperationException", "Index out of range"));
                 Iterators.ForEach(x => x.IgnoreIterator = true);
                 return false;
             }
-            InitialAdd(If(bigger < smaller, Throw("System.InvalidOperationException", "Index out of range")));
+            if (preCheck) return true;
+            if (initialCheck) InitialAdd(If(smaller > bigger, Throw("System.InvalidOperationException", "Index out of range")));
+            else FinalAdd(If(smaller > bigger, Throw("System.InvalidOperationException", "Index out of range")));
             return true;
         }
 
-        public bool AssertLesserEqual(ValueBridge smaller, ValueBridge bigger)
+        public bool AssertLesser(ValueBridge smaller, ValueBridge bigger, bool initialCheck = true, bool preCheck = false)
         {
-            var biggerPass = double.TryParse(bigger.ToString(), out var biggerD);
-            var smallerPass = double.TryParse(smaller.ToString(), out var smallerD);
+            if (Unchecked) return true;
+            var biggerPass = ExpressionSimplifier.TryGetDouble(bigger, out var biggerD);
+            var smallerPass = ExpressionSimplifier.TryGetDouble(smaller, out var smallerD);
             
             if (biggerPass && smallerPass)
             {
-                if (biggerD >= smallerD) return true;
+                if (smallerD < biggerD) return true;
                 InitialAdd(Throw("System.InvalidOperationException", "Index out of range"));
                 Iterators.ForEach(x => x.IgnoreIterator = true);
                 return false;
             }
-            InitialAdd(If(bigger < smaller, Throw("System.InvalidOperationException", "Index out of range")));
+            if (preCheck) return true;
+            if (initialCheck) InitialAdd(If(smaller >= bigger, Throw("System.InvalidOperationException", "Index out of range")));
+            else FinalAdd(If(smaller >= bigger, Throw("System.InvalidOperationException", "Index out of range")));
             return true;
         }
 
-        public bool AssertGreaterEqual(ValueBridge bigger, ValueBridge smaller, Action onFalse, StatementSyntax onFalseStatement)
+        public bool AssertNotNull(ValueBridge notNull, bool preCheck = false)
         {
-            var biggerPass = double.TryParse(bigger.ToString(), out var biggerD);
-            var smallerPass = double.TryParse(smaller.ToString(), out var smallerD);
-            
-            if (biggerPass && smallerPass)
-            {
-                if (biggerD >= smallerD) return true;
-                onFalse();
-                return false;
-            }
-            InitialAdd(If(bigger < smaller, onFalseStatement));
-            return true;
-        }
-
-        public bool AssertLesserEqual(ValueBridge smaller, ValueBridge bigger, Action onFalse, StatementSyntax onFalseStatement)
-        {
-            var biggerPass = double.TryParse(bigger.ToString(), out var biggerD);
-            var smallerPass = double.TryParse(smaller.ToString(), out var smallerD);
-            
-            if (biggerPass && smallerPass)
-            {
-                if (biggerD >= smallerD) return true;
-                onFalse();
-                return false;
-            }
-            InitialAdd(If(bigger < smaller, onFalseStatement));
-            return true;
-        }
-
-        public bool AssertNotNull(ValueBridge notNull)
-        {
+            if (Unchecked) return true;
             if (notNull.ToString() == "null")
             {
                 InitialAdd(Throw("System.InvalidOperationException", "Invalid null object"));
                 Iterators.ForEach(x => x.IgnoreIterator = true);
                 return false;
             }
+            if (preCheck) return true;
             InitialAdd(If(notNull.IsEqual(null), Throw("System.InvalidOperationException", "Invalid null object")));
             return true;
         }
+
+        public LocalVariable TryGetVariable(TypedValueBridge value)
+        {
+            if (value?.Value?.Value == null) return null;
+            var expression = value.Expression;
+            while (expression is ParenthesizedExpressionSyntax parenthesizedExpressionSyntax)
+                expression = parenthesizedExpressionSyntax.Expression;
+            return Variables.FirstOrDefault(x => x.Name == expression.ToString());
+        }
+
+        public ValueBridge CurrentMin => Iterators.FirstOrDefault() == null
+            ? 0 : IsReversed
+                ? CurrentIterator.ForReverseMax
+                : CurrentIterator.ForMin;
+
+        public ValueBridge CurrentMax => Iterators.FirstOrDefault() == null
+            ? CurrentCollection[CurrentCollection.Count - 1] : IsReversed
+                ? CurrentIterator.ForReverseMin - 1
+                : CurrentIterator.ForMax - 1;
     }
 }

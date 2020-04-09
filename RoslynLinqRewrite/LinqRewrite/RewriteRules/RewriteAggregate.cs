@@ -12,6 +12,7 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            if (args.Length == 1 && !p.AssertResultSizeGreaterEqual(1, true)) return;
             
             var aggregationValue = args.Length switch
             {
@@ -19,7 +20,7 @@ namespace LinqRewrite.RewriteRules
                 _ => args[1]
             };
 
-            var resultValue = p.ListEnumeration
+            var resultValue = p.SimpleEnumeration
                 ? ListAggregate(p, aggregationValue, args)
                 : EnumerableAggregate(p, aggregationValue, args);
             
@@ -63,8 +64,7 @@ namespace LinqRewrite.RewriteRules
                             ),
                        resultVariable.Assign(aggregationValue.Inline(p, resultVariable, p.LastValue))));
 
-            if (args.Length == 1)
-                p.ResultAdd(If(firstVariable, Throw("System.InvalidOperationException", "The sequence did not contain valid elements.")));
+            if (args.Length == 1 && !p.Unchecked) p.ResultAdd(If(firstVariable, Throw("System.InvalidOperationException", "The sequence did not contain enough elements.")));
             return resultVariable;
         }
     }

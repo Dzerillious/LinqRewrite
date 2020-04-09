@@ -22,6 +22,8 @@ namespace LinqRewrite.RewriteRules
             p.ForReMax = countValue - 1;
             
             p.ListEnumeration = false;
+            p.SimpleEnumeration = true;
+            
             p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
             if (p.CurrentIndexer == null)
             {

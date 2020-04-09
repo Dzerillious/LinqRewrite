@@ -14,8 +14,7 @@ namespace LinqRewrite.RewriteRules
             if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             
             var skippedValue = args[0];
-
-            if (int.TryParse(skippedValue.OldVal.ToString(), out var skippedInt))
+            if (ExpressionSimplifier.TryGetInt(skippedValue, out var skippedInt))
             {
                 if (skippedInt < 0) return;
             }

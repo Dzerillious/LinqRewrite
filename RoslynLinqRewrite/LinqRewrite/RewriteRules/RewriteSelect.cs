@@ -19,7 +19,6 @@ namespace LinqRewrite.RewriteRules
                 1 => args[0].Inline(p, p.LastValue, p.Indexer),
                 _ => p.LastValue
             };
-
             p.ListEnumeration = false;
         }
     }

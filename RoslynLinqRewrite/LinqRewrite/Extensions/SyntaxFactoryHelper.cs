@@ -188,7 +188,7 @@ namespace LinqRewrite.Extensions
             params TypedValueBridge[] values)
         {
             var returnType = ((LambdaExpressionSyntax) e).ReturnType(p);
-            if (e.IsLambdaSimple())
+            if (IsLambdaSimple(e))
                 return p.Code.InlineLambda(p, e, returnType, values);
 
             var vals = values.Select(x =>
@@ -222,16 +222,17 @@ namespace LinqRewrite.Extensions
             return p.Code.InlineLambda(p, e, returnType, val);
         }
 
-        public static bool IsLambdaSimple(this ExpressionSyntax e)
+        public static bool IsLambdaSimple(ExpressionSyntax e)
         {
             int maxParams;
             if (e is SimpleLambdaExpressionSyntax l)
-                maxParams = Regex.Matches(l.ToString(), l.Parameter.ToString()).Count;
+                maxParams = Regex.Matches(ExpressionSimplifier.Simplify(l.ExpressionBody).ToString(), l.Parameter.ToString()).Count;
             else if (e is ParenthesizedLambdaExpressionSyntax p)
-                maxParams = p.ParameterList.Parameters.Max(x => Regex.Matches(p.ToString(), x.ToString()).Count);
+                maxParams = p.ParameterList.Parameters.Max(x => Regex.Matches(
+                    ExpressionSimplifier.Simplify(p.ExpressionBody).ToString(), x.ToString()).Count);
             else return true;
 
-            return maxParams <= 2;
+            return maxParams <= 1;
         }
 
         public static bool NotVeryCostly(this ExpressionSyntax e)
@@ -324,15 +325,6 @@ namespace LinqRewrite.Extensions
                         return false;
                     };
             }
-        }
-
-        public static bool IsNull(RewrittenValueBridge collectionValue, RewriteParameters rewriteParameters)
-        {
-            if (collectionValue?.Old?.Value == null) return true;
-            var value = collectionValue.Old.Value;
-            if (value is LiteralExpressionSyntax literal)
-                return literal.ToString() == "null";
-            return false;
         }
     };
 }
