@@ -191,10 +191,10 @@ namespace LinqRewrite.Extensions
             TypeBridge returnType;
             if (e.OldVal is LambdaExpressionSyntax lambda)
                 returnType = lambda.ReturnType(p);
-            else returnType = ParseTypeName(((INamedTypeSymbol)p.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.ReturnType.ToDisplayString());
+            else returnType = ParseTypeName(((INamedTypeSymbol)p.Semantic.GetTypeInfo(e.OldVal).ConvertedType).DelegateInvokeMethod.ReturnType.ToDisplayString());
             
-            if (IsLambdaSimple(e.Old))
-                return p.Code.InlineLambda(p, e, returnType, values);
+            if (IsLambdaSimple(e.OldVal))
+                return p.Code.InlineLambda(p, e.OldVal, returnType, values);
 
             var val = values.Select(x =>
             {
@@ -203,7 +203,7 @@ namespace LinqRewrite.Extensions
                 p.ForAdd(inlineVariable.Assign(x));
                 return new TypedValueBridge(x.Type, inlineVariable);
             }).ToArray();
-            return p.Code.InlineLambda(p, e, returnType, val);
+            return p.Code.InlineLambda(p, e.OldVal, returnType, val);
         }
 
         public static bool IsLambdaSimple(ExpressionSyntax e)

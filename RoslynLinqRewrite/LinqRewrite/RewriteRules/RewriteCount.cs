@@ -9,8 +9,11 @@ namespace LinqRewrite.RewriteRules
     public static class RewriteCount
     {
         public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
-            => p.ResultSize;
-        
+        {
+            if (args.Length != 0) return null;
+            return p.ResultSize;
+        }
+
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (args.Length != 0)

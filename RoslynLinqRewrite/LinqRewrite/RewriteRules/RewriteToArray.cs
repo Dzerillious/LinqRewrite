@@ -12,12 +12,12 @@ namespace LinqRewrite.RewriteRules
     {
         public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (!ExpressionSimplifier.TryGetInt(p.ResultSize, out var intSize) || intSize > 30)
+            if (!ExpressionSimplifier.TryGetInt(p.ResultSize, out var intSize) || intSize > 20)
                 return null;
-            
-            return CreateArray((ArrayTypeSyntax) p.ReturnType, p.ResultSize,
-                Enumerable.Range(0, intSize).Select(x 
-                    => (ExpressionSyntax) ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x)));
+
+            var items = Enumerable.Range(0, intSize).Select(x
+                => (ExpressionSyntax) ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x));
+            return CreateArray((ArrayTypeSyntax) p.ReturnType, p.ResultSize, items);
         }
         
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
@@ -95,7 +95,7 @@ namespace LinqRewrite.RewriteRules
         private static bool RewriteSimplified(RewriteParameters p)
         {
             var minValue = p.CurrentMin;
-            if (!p.ListEnumeration) return false;
+            if (!p.ListEnumeration || p.CurrentCollection == null) return false;
             if (p.CurrentCollection.CollectionType == CollectionType.Array)
             {
                 var resultVariable = p.GlobalVariable(p.ReturnType, CreateArray((ArrayTypeSyntax) p.ReturnType, p.ResultSize));

@@ -69,13 +69,18 @@ namespace LinqRewrite
             if (parameters.CurrentCollection?.CollectionType == CollectionType.Enumerable) return (false, null);
             if (names.Any(x => MethodsModifyingEnumeration.Contains(x))) return (false, null);
             if (parameters.Data.CurrentMethodParams.Any(x => x.Modifiers.Any())) return (false, null);
-            if (!MethodsSimplyRewritable.Contains(names.Last())) return (false, null);
-            if (parameters.RewriteChain.Last().Arguments.Any()) return (false, null);
 
             if (!MethodsCreateArray.Contains(names.First())) RewriteCollectionEnumeration.Rewrite(parameters, Array.Empty<RewrittenValueBridge>(), false);
             for (var i = 0; i < names.Length; i++)
             {
                 var res = RewriteSimplePart(names[i], parameters, i);
+                if (!parameters.SimpleEnumeration) return (true, null);
+                if (res != null) return (true, res);
+            }
+
+            if (!MethodsWithResult.Contains(names.Last()))
+            {
+                var res = RewriteToArray.SimpleRewrite(parameters, Array.Empty<RewrittenValueBridge>());
                 if (!parameters.SimpleEnumeration) return (true, null);
                 if (res != null) return (true, res);
             }
@@ -88,7 +93,12 @@ namespace LinqRewrite
             var args = parameters.RewriteChain[i].Arguments;
             switch (last)
             {
+                case "Aggregate": return RewriteAggregate.SimpleRewrite(parameters, args);
+                case "All": return RewriteAll.SimpleRewrite(parameters, args);
                 case "Any": return RewriteAny.SimpleRewrite(parameters, args);
+                case "Average": return RewriteAverage.SimpleRewrite(parameters, args);
+                case "Sum": return RewriteSum.SimpleRewrite(parameters, args);
+                
                 case "Count": return RewriteCount.SimpleRewrite(parameters, args);
                 case "LongCount": return RewriteLongCount.SimpleRewrite(parameters, args);
                 
@@ -112,6 +122,8 @@ namespace LinqRewrite
                 case "Cast": RewriteCast.Rewrite(parameters, args, parameters.RewriteChain[i].Invocation); return null;
                 
                 case "ToArray": return RewriteToArray.SimpleRewrite(parameters, args);
+                case "ToList": return RewriteToList.SimpleRewrite(parameters, args);
+                case "ToSimpleList": return RewriteToSimpleList.SimpleRewrite(parameters, args);
                 
                 case "Unchecked": RewriteUnchecked.Rewrite(parameters, args); return null;
                 case "WithResultSize": RewriteResultSize.Rewrite(parameters, args); return null;

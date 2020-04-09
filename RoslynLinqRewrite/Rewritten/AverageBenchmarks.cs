@@ -7,53 +7,59 @@ namespace BenchmarkLibrary
 public class AverageBenchmarks
 {
     private int[] Items = Enumerable.Range(0, 100).ToArray();
-    [NoRewrite]
+    //
+    // [NoRewrite]
+    // [Benchmark]
+    // public double RangeAverage()
+    // {
+    //     return Enumerable.Range(567, 675).Average();
+    // }
+    //
+    // [Benchmark]
+    // public double RangeAverageToArray()
+    // {
+    //     return Enumerable.Range(567, 675).Average();
+    // }
+    //
+    // [NoRewrite]
+    // [Benchmark]
+    // public double ArrayAverage()
+    // {
+    //     return Items.Unchecked().Take(10).Average();
+    // }
+    //
+    // [Benchmark]
+    // public double ArrayAverageRewritten()
+    // {
+    //     return Items.Unchecked().Take(10).Average();
+    // }
+    // [NoRewrite]
+    // [Benchmark]
+    // public double ArrayAverage1()
+    // {
+    //     return Items.Unchecked().Take(10).Aggregate(100, (x, y) => x + y);
+    // }
     [Benchmark]
-    public double RangeAverage()
+    public double ArrayAverageRewritten2()
     {
-        return Enumerable.Range(567, 675).Average();
+        var sum = 0;
+        ArrayAverageRewritten2_ProceduralLinq1().ForEach(x =>
+        {
+            sum += (Items[x] + Items[1 + x] + Items[2 + x] + Items[3 + x] + Items[4 + x] + Items[5 + x] + Items[6 + x] + Items[7 + x] + Items[8 + x] + Items[9 + x]);
+        }
+
+        );
+        return sum;
     }
 
-    [Benchmark]
-    public double RangeAverageToArray()
+    System.Collections.Generic.IEnumerable<int> ArrayAverageRewritten2_ProceduralLinq1()
     {
-        return RangeAverageToArray_ProceduralLinq1();
-    }
-
-    [NoRewrite]
-    [Benchmark]
-    public double ArrayAverage()
-    {
-        return Items.Average();
-    }
-
-    [Benchmark]
-    public double ArrayAverageRewritten()
-    {
-        return ArrayAverageRewritten_ProceduralLinq1(Items);
-    }
-
-    double RangeAverageToArray_ProceduralLinq1()
-    {
-        int v0;
-        double v1;
-        v1 = 0;
-        v0 = (0);
-        for (; v0 < (675); v0++)
-            v1 += (567 + v0);
-        return (v1 / (675));
-    }
-
-    double ArrayAverageRewritten_ProceduralLinq1(int[] Items)
-    {
-        int v2;
-        double v3;
-        if (1 > (Items.Length))
+        if (0 > Items.Length / 10)
             throw new System.InvalidOperationException("Index out of range");
-        v3 = 0;
-        v2 = (0);
-        for (; v2 < (Items.Length); v2++)
-            v3 += (Items[v2]);
-        return (v3 / (Items.Length));
+        int v1;
+        v1 = (0);
+        for (; v1 < (Items.Length / 10); v1++)
+            yield return (v1);
+        yield break;
     }
 }}

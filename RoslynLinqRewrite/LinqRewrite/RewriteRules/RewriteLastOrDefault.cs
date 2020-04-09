@@ -9,10 +9,13 @@ namespace LinqRewrite.RewriteRules
     public static class RewriteLastOrDefault
     {
         public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
-            => ConditionalExpression(p.ResultSize.IsEqual(0),
+        {
+            if (args.Length != 0) return null;
+            return ConditionalExpression(p.ResultSize.IsEqual(0),
                 Default(p.ReturnType),
                 ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMax));
-        
+        }
+
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);

@@ -136,7 +136,7 @@ namespace LinqRewrite.Core.SimpleList
         [MethodImpl(MethodImplOptions.AggressiveInlining)] 
         public void MakeEmpty()
         {
-            Items = new T[0];
+            Items = Array.Empty<T>();
             Count = 0;
         }
 

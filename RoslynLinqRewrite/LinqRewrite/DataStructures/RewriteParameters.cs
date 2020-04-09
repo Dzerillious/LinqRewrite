@@ -87,7 +87,7 @@ namespace LinqRewrite.DataStructures
             set
             {
                 _simpleEnumeration = value;
-                if (value) {return;}
+                if (!value) return;
                 ModifiedEnumeration = false;
             }
         }

@@ -89,9 +89,22 @@ namespace LinqRewrite.Services
             return new TypedValueBridge(returnType, InlineOrCreateMethod(lambda.Body, returnType, currentCaptures, pS));
         }
 
+        private ExpressionSyntax GetStatementExpression(StatementSyntax statement)
+        {
+            return statement switch
+            {
+                ExpressionStatementSyntax expressionStatementSyntax => expressionStatementSyntax.Expression,
+                LocalDeclarationStatementSyntax localDeclarationStatementSyntax => localDeclarationStatementSyntax
+                    .Declaration.Variables.Last()
+                    .Initializer.Value,
+                ReturnStatementSyntax returnStatementSyntax => returnStatementSyntax.Expression,
+                _ => null
+            };
+        }
+
         public TypeSyntax GetLambdaReturnType(SemanticModel semantic, LambdaExpressionSyntax lambdaExpression) 
             => lambdaExpression.ExpressionBody == null 
-                ? semantic.GetTypeFromExpression(((ReturnStatementSyntax) lambdaExpression.Block.Statements.Last()).Expression)
+                ? semantic.GetTypeFromExpression(GetStatementExpression(lambdaExpression.Block.Statements.Last()))
                 : semantic.GetTypeFromExpression(lambdaExpression.ExpressionBody);
 
         public ExpressionSyntax InlineOrCreateMethod(CSharpSyntaxNode body, TypeSyntax returnType,

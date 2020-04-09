@@ -15,7 +15,7 @@ namespace LinqRewrite.RewriteRules
             {
                 if (skippedInt < 0) return;
             }
-            else if (!p.ModifiedEnumeration)
+            else if (!p.Unchecked && !p.ModifiedEnumeration)
             {
                 var skippedVariable = p.GlobalVariable(Int, skippedValue);
                 p.InitialAdd(skippedVariable.Assign(ConditionalExpression(

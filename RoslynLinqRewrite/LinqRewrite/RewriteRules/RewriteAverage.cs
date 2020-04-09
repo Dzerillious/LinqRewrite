@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Linq;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -9,6 +10,17 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteAverage
     {
+        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        {
+            if (args.Length != 0) return null;
+            if (!ExpressionSimplifier.TryGetInt(p.ResultSize, out var intSize) || intSize > 10)
+                return null;
+
+            var items = Enumerable.Range(0, intSize).Select(x
+                => new TypedValueBridge(p.LastValue.Type, ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x)));
+            return Parenthesize(items.Aggregate((x, y) => new TypedValueBridge(p.LastValue.Type, x + y))).Div(intSize);
+        }
+        
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             var selectionValue = args.Length switch

@@ -193,10 +193,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="SimpleRewriteRules" />
-  </ItemGroup>
   
   <PropertyGroup>
     <PostBuildEvent>

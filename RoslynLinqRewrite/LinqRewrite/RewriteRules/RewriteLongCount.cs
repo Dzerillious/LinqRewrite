@@ -10,8 +10,11 @@ namespace LinqRewrite.RewriteRules
     public static class RewriteLongCount
     {
         public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
-            => p.ResultSize.Cast(Long);
-        
+        {
+            if (args.Length != 0) return null;
+            return p.ResultSize.Cast(Long);
+        }
+
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (args.Length != 0)

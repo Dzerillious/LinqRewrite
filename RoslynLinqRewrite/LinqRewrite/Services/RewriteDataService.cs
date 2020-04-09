@@ -19,7 +19,7 @@ namespace LinqRewrite.Services
         public bool CurrentMethodIsConditional { get; set; }
         public TypeParameterListSyntax CurrentMethodTypeParameters { get; set; }
         public SyntaxList<TypeParameterConstraintClauseSyntax> CurrentMethodConstraintClauses { get; set; }
-
+        
         public readonly List<Tuple<TypeDeclarationSyntax, MethodDeclarationSyntax>> MethodsToAddToCurrentType =
             new List<Tuple<TypeDeclarationSyntax, MethodDeclarationSyntax>>();
     }

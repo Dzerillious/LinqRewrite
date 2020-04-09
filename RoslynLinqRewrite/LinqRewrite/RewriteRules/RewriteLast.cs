@@ -9,8 +9,11 @@ namespace LinqRewrite.RewriteRules
     public static class RewriteLast
     {
         public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
-            => ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMax);
-        
+        {
+            if (args.Length != 0) return null;
+            return ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMax);
+        }
+
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (!p.AssertResultSizeGreaterEqual(0, true)) return;

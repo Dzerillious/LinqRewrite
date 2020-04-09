@@ -1,4 +1,7 @@
-﻿Range(.Skip|.Take|.Distinct|.Reverse)*.Sum              -> (min + max) * count / 2
+﻿Fix new project style
+rewrite lambda methods in rewritten
+
+Range(.Skip|.Take|.Distinct|.Reverse)*.Sum              -> (min + max) * count / 2
 Range(.Skip|.Take|.Distinct|.Reverse)*.Average          -> (min + max) / 2
 Range(.Skip|.Take|.Distinct|.Reverse)*.Count            -> count
 Range(.Skip|.Take|.Distinct|.Reverse)*.ElementAt        -> min + arg[0]

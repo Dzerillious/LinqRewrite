@@ -8,8 +8,11 @@ namespace LinqRewrite.RewriteRules
     public static class RewriteFirst
     {
         public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
-            => ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin);
-        
+        {
+            if (args.Length != 0) return null;
+            return ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin);
+        }
+
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (!p.AssertResultSizeGreaterEqual(0, true)) return;

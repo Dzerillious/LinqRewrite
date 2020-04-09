@@ -42,6 +42,11 @@ namespace LinqRewrite.Extensions
 
         public static bool TryGetInt(ValueBridge expression, out int result)
         {
+            if (expression == null)
+            {
+                result = 0;
+                return false;
+            }
             var str = StringSimplify(expression.ToString());
             var success = int.TryParse(str, out result);
             return success;
@@ -49,6 +54,11 @@ namespace LinqRewrite.Extensions
 
         public static bool TryGetDouble(ValueBridge expression, out double result)
         {
+            if (expression == null)
+            {
+                result = 0;
+                return false;
+            }
             var str = StringSimplify(expression.ToString());
             var success = double.TryParse(str, out result);
             return success;

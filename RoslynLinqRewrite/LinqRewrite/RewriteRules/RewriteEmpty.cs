@@ -36,7 +36,7 @@ namespace LinqRewrite.RewriteRules
             p.ListEnumeration = true;
             p.SimpleEnumeration = true;
             
-            p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
+            p.CurrentIterator.ForIndexer = p.LocalVariable(Int, 0);
             if (p.CurrentIndexer == null)
             {
                 p.CurrentIterator.CurrentIndexer = p.CurrentIterator.ForIndexer;

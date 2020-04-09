@@ -1,12 +1,27 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Linq;
+using LinqRewrite.Core.SimpleList;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
     public static class RewriteToSimpleList
     {
+        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        {
+            if (!ExpressionSimplifier.TryGetInt(p.ResultSize, out var intSize) || intSize > 20)
+                return null;
+            
+            return CreateArray(p.CurrentCollection.ItemType.ArrayType(), p.ResultSize,
+                Enumerable.Range(0, intSize).Select(x 
+                    => (ExpressionSyntax) ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x)))
+                .Cast(p.ReturnType);
+        }
+        
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             var result = RewriteToArray.RewriteOther(p, p.LastValue.Type);

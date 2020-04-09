@@ -9,10 +9,13 @@ namespace LinqRewrite.RewriteRules
     public static class RewriteSingle
     {
         public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
-            => ConditionalExpression(p.ResultSize.IsEqual(1),
+        {
+            if (args.Length != 0) return null;
+            return ConditionalExpression(p.ResultSize.IsEqual(1),
                 ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin),
                 ThrowExpression("System.InvalidOperationException", "The sequence does not contain one element."));
-        
+        }
+
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
