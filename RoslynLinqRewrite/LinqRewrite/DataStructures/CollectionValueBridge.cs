@@ -7,7 +7,8 @@ namespace LinqRewrite.DataStructures
 {
     public enum CollectionType
     {
-        Array, List, Enumerable
+        Array, List, Enumerable,
+        SimpleList
     }
     
     public class CollectionValueBridge : TypedValueBridge
@@ -28,6 +29,8 @@ namespace LinqRewrite.DataStructures
                 CollectionType = CollectionType.Array;
             else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
                 CollectionType = CollectionType.List;
+            else if (collectionName.StartsWith(SimpleListPrefix, StringComparison.OrdinalIgnoreCase))
+                CollectionType = CollectionType.SimpleList;
             else CollectionType = CollectionType.Enumerable;
         }
 

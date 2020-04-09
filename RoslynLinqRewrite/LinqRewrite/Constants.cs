@@ -54,6 +54,8 @@ namespace LinqRewrite
         private const string ForEach1 = "System.Collections.Generic.List<T>.ForEach(System.Action<T>)";
         public const string ForEach2 = "System.Collections.Generic.IEnumerable<T>.ForEach<T>(System.Action<T>)";
         public const string Unchecked = "System.Collections.Generic.IEnumerable<T>.Unchecked<T>()";
+        public const string WithResultSize = "System.Collections.Generic.IEnumerable<T>.WithResultSize<T>(int)";
+        public const string WithMaxSize = "System.Collections.Generic.IEnumerable<T>.WithMaxSize<T>(int)";
 
         private const string Range1 = "System.Linq.Enumerable.Range(int, int)";
         private const string Repeat1 = "System.Linq.Enumerable.Repeat<TResult>(TResult, int)";
@@ -104,7 +106,36 @@ namespace LinqRewrite
         private const string GroupJoin1 = "System.Collections.Generic.IEnumerable<TOuter>.GroupJoin<TOuter, TInner, TKey, TResult>(System.Collections.Generic.IEnumerable<TInner>, System.Func<TOuter, TKey>, System.Func<TInner, TKey>, System.Func<TOuter, System.Collections.Generic.IEnumerable<TInner>, TResult>)";
 
         public const string ListPrefix = "System.Collections.Generic.List";
-        public const string IEnumerablePrefix = "System.Collections.Generic.IEnumerable";
+        public const string SimpleListPrefix = "LinqRewrite.Core.SimpleList.SimpleList<int>";
+
+        public static readonly HashSet<string> MethodsCreateArray = new HashSet<string>
+        {
+            "Empty", "Range", "Repeat",
+        };
+
+        public static readonly HashSet<string> MethodsSimplyRewritable = new HashSet<string>
+        {
+            "Any", "Count", "ElementAt", "ElementAtOrDefault",
+            "First", "FirstOrDefault", "Last", "LastOrDefault",
+            "LongCount", "Single", "SingleOrDefault"
+        };
+
+        public static readonly HashSet<string> MethodsModifyingEnumeration = new HashSet<string>
+        {
+            "Concat", "Distinct", "Except", "GroupBy",
+            "GroupJoin", "Intersect", "Join", "OfType",
+            "SkipWhile", "TakeWhile", "Union", "Where", "Zip",
+        };
+
+        public static readonly HashSet<string> MethodsWithResult = new HashSet<string>
+        {
+            "Aggregate", "All", "Any", "Average",
+            "Contains", "Count", "ElementAt", "ElementAtOrDefault",
+            "First", "FirstOrDefault", "ForEach", "Last", "LastOrDefault",
+            "LongCount", "Max", "Min", "SequenceEqual",
+            "Single", "SingleOrDefault", "Sum", "ToArray",
+            "ToDictionary", "ToList", "ToLookup", "ToSimpleList"
+        };
 
         public static readonly HashSet<string> KnownMethods = new HashSet<string>
         {
@@ -144,7 +175,7 @@ namespace LinqRewrite
             GroupBy1, GroupBy2, GroupBy3, GroupBy4, GroupBy5, GroupBy6, GroupBy7, GroupBy8,
             GroupJoin1,
             
-            Unchecked
+            Unchecked, WithMaxSize, WithResultSize
         };
 
         public const int MaximumSizeForByValStruct = 128 / 8; // eg. two longs, or two references

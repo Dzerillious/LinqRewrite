@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using LinqRewrite.DataStructures;
+﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
@@ -11,7 +9,6 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             if (args.Length == 1 && !p.AssertResultSizeGreaterEqual(1, true)) return;
             
             var aggregationValue = args.Length switch

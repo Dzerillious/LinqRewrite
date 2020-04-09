@@ -1,5 +1,4 @@
-﻿using System;
-using LinqRewrite.DataStructures;
+﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -11,9 +10,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             var keySelector = (LambdaExpressionSyntax)args[0];
-            
             var elementSelectorValue = args.Length switch
             {
                 1 => p.LastValue,

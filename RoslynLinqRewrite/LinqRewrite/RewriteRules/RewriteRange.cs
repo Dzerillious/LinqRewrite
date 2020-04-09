@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
-using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules

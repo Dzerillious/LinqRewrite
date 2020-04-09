@@ -144,9 +144,10 @@ namespace LinqRewrite.Extensions
             return new TypedValueBridge(Int, IdentifierName(tmpVariable));
         }
 
-        public static TypedValueBridge ReusableConst(this ValueBridge e, RewriteParameters p, TypeBridge type)
+        public static TypedValueBridge ReusableConst(this ValueBridge e, RewriteParameters p, TypeBridge type, bool? reuse = false)
         {
-            if (IsReusable(e)) return new TypedValueBridge(type, e);
+            if (reuse == false) return new TypedValueBridge(type, e);
+            if (reuse == null && IsReusable(e)) return new TypedValueBridge(type, e);
 
             var tmpVariable = p.GlobalVariable(type, e);
             return new TypedValueBridge(Int, IdentifierName(tmpVariable));
@@ -180,26 +181,9 @@ namespace LinqRewrite.Extensions
             return new TypedValueBridge(Int, IdentifierName(tmpVariable));
         }
 
-        public static TypedValueBridge Inline(this TypedValueBridge e, RewriteParameters p,
-            params TypedValueBridge[] values)
-            => Inline(e.Value, p, values);
-
         public static TypedValueBridge Inline(this ExpressionSyntax e, RewriteParameters p,
             params TypedValueBridge[] values)
-        {
-            var returnType = ((LambdaExpressionSyntax) e).ReturnType(p);
-            if (IsLambdaSimple(e))
-                return p.Code.InlineLambda(p, e, returnType, values);
-
-            var vals = values.Select(x =>
-            {
-                if (IsReusable(x)) return x;
-                var inlineVariable = p.LocalVariable(x.Type);
-                p.ForAdd(inlineVariable.Assign(x));
-                return new TypedValueBridge(x.Type, inlineVariable);
-            }).ToArray();
-            return p.Code.InlineLambda(p, e, returnType, vals);
-        }
+            => Inline(new RewrittenValueBridge(e), p, values);
 
         public static TypedValueBridge Inline(this RewrittenValueBridge e, RewriteParameters p,
             params TypedValueBridge[] values)

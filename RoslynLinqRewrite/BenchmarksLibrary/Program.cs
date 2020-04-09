@@ -1,5 +1,3 @@
-using BenchmarkDotNet.Running;
-
 namespace BenchmarkLibrary
 {
     internal class Program

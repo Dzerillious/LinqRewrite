@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
 using LinqRewrite.Core;
@@ -12,6 +11,7 @@ namespace BenchmarkLibrary
         public static int[] StaticArraySource;
         public int[] ArraySource;
         public IEnumerable<int> EnumerableSource;
+        public SimpleList<int> SimpleListSource;
         public int Selector(int a) => a + 3;
 
         [GlobalSetup]
@@ -20,7 +20,20 @@ namespace BenchmarkLibrary
             StaticArraySource = Enumerable.Range(0, 1000).ToArray();
             ArraySource = Enumerable.Range(0, 1000).ToArray();
             EnumerableSource = Enumerable.Range(0, 1000);
+            SimpleListSource = Enumerable.Range(0, 1000).ToSimpleList();
         }
+
+        [Benchmark]
+        public void SimpleListLast()
+        {
+            var res = SimpleListSource.Last();
+        }//EndMethod
+
+        [Benchmark]
+        public void SimpleListLast2()
+        {
+            var res = SimpleListSource.Last(x => x > 5);
+        }//EndMethod
 
         [NoRewrite, Benchmark]
         public void ArrayLast()

@@ -17,7 +17,7 @@ public class AverageBenchmarks
     [Benchmark]
     public double RangeAverageToArray()
     {
-        return ((((567 + 567) + 675) - 1) / 2);
+        return RangeAverageToArray_ProceduralLinq1();
     }
 
     [NoRewrite]
@@ -33,16 +33,27 @@ public class AverageBenchmarks
         return ArrayAverageRewritten_ProceduralLinq1(Items);
     }
 
-    double ArrayAverageRewritten_ProceduralLinq1(int[] Items)
+    double RangeAverageToArray_ProceduralLinq1()
     {
         int v0;
         double v1;
-        if (1 > (Items.Length))
-            throw new System.InvalidOperationException("Index out of range");
         v1 = 0;
         v0 = (0);
-        for (; v0 < (Items.Length); v0++)
-            v1 += (Items[v0]);
-        return (v1 / (Items.Length));
+        for (; v0 < (675); v0++)
+            v1 += (567 + v0);
+        return (v1 / (675));
+    }
+
+    double ArrayAverageRewritten_ProceduralLinq1(int[] Items)
+    {
+        int v2;
+        double v3;
+        if (1 > (Items.Length))
+            throw new System.InvalidOperationException("Index out of range");
+        v3 = 0;
+        v2 = (0);
+        for (; v2 < (Items.Length); v2++)
+            v3 += (Items[v2]);
+        return (v3 / (Items.Length));
     }
 }}

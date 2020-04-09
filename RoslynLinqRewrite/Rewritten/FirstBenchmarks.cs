@@ -59,36 +59,42 @@ public class FirstBenchmarks
 
     int[] GlobalSetup_ProceduralLinq1()
     {
-        int v2;
-        int[] v3;
-        v3 = new int[(1000)];
-        return v3;
+        int v4;
+        int[] v5;
+        v5 = new int[(1000)];
+        v4 = (0);
+        for (; v4 < (1000); v4++)
+            v5[v4] = (v4);
+        return v5;
     }
 
     int[] GlobalSetup_ProceduralLinq2()
     {
-        int v4;
-        int[] v5;
-        v5 = new int[(1000)];
-        return v5;
+        int v6;
+        int[] v7;
+        v7 = new int[(1000)];
+        v6 = (0);
+        for (; v6 < (1000); v6++)
+            v7[v6] = (v6);
+        return v7;
     }
 
     System.Collections.Generic.IEnumerable<int> GlobalSetup_ProceduralLinq3()
     {
-        int v6;
-        v6 = (0);
-        for (; v6 < (1000); v6++)
-            yield return (v6);
+        int v8;
+        v8 = (0);
+        for (; v8 < (1000); v8++)
+            yield return (v8);
         yield break;
     }
 
     int ArrayFirstRewrittenCondition_ProceduralLinq1(int[] ArraySource)
     {
-        int v8;
-        v8 = (0);
-        for (; v8 < (ArraySource.Length); v8++)
-            if (((ArraySource[v8]) > 3))
-                return (ArraySource[v8]);
+        int v10;
+        v10 = (0);
+        for (; v10 < (ArraySource.Length); v10++)
+            if (((ArraySource[v10]) > 3))
+                return (ArraySource[v10]);
         throw new System.InvalidOperationException("The sequence did not contain any elements.");
     }
 }}

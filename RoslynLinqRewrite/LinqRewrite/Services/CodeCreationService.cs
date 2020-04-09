@@ -35,6 +35,9 @@ namespace LinqRewrite.Services
                 
             if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.ICollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.ICollection<")))
                 return collection.Access("Count");
+                
+            if (collectionType.ToDisplayString().StartsWith("LinqRewrite.Core.SimpleList.SimpleList<int>"))
+                return collection.Access("Count");
 
             if (!allowUnknown) return null;
             if (collectionType.IsValueType) return null;

@@ -1,33 +1,35 @@
-﻿using System.Linq;
-using LinqRewrite.DataStructures;
+﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
-using LinqRewrite.Core;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
     public static class RewriteCollectionEnumeration
     {
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args, bool? reuseVariables = null)
         {
             p.AddIterator(new RewrittenValueBridge(p.CurrentCollection));
-            RewriteOther(p, p.CurrentCollection);
+            RewriteOther(p, p.CurrentCollection, null, false, reuseVariables);
         }
         
-        public static void RewriteOther(RewriteParameters p, CollectionValueBridge collection, LocalVariable variable = null, bool otherIndexer = false)
+        public static void RewriteOther(RewriteParameters p, CollectionValueBridge collection, LocalVariable variable = null, bool otherIndexer = false, bool? reuseVariables = null)
         {
-            if (collection.CollectionType == CollectionType.Array) ArrayEnumeration(p, collection, variable);
-            else if (collection.CollectionType == CollectionType.List) ListEnumeration(p, collection, variable);
+            if (collection.CollectionType == CollectionType.Array) ArrayEnumeration(p, collection.ItemType, collection.Count, collection, variable);
+            else if (collection.CollectionType == CollectionType.List) ArrayEnumeration(p, collection.ItemType, 
+                collection.Count.ReusableConst(p, Int, reuseVariables), collection, variable);
+            else if (collection.CollectionType == CollectionType.SimpleList) ArrayEnumeration(p, collection.ItemType, 
+                collection.Count.ReusableConst(p, Int, reuseVariables), 
+                collection.ReusableConst(p, collection.Type, reuseVariables), variable);
             else if (collection.CollectionType == CollectionType.Enumerable) EnumerableEnumeration(p, collection, variable);
 
             if (otherIndexer) p.CurrentIterator.CurrentIndexer = null;
         }
 
-        public static void ArrayEnumeration(RewriteParameters p, CollectionValueBridge collection, LocalVariable variable = null)
+        public static void ArrayEnumeration(RewriteParameters p, TypeBridge itemType, ValueBridge count, ValueBridge collection, LocalVariable variable = null)
         {
             p.ForMin = p.ForReMin = 0;
-            p.ForMax = collection.Count;
-            p.ForReMax = collection.Count - 1;
+            p.ForMax = count;
+            p.ForReMax = count - 1;
 
             p.CurrentIterator.ForIndexer = p.GlobalVariable(Int);
             if (p.CurrentIndexer == null)
@@ -38,47 +40,16 @@ namespace LinqRewrite.RewriteRules
             
             if (variable == null)
             {
-                p.LastValue = new TypedValueBridge(collection.ItemType, collection[p.CurrentIterator.ForIndexer]);
+                p.LastValue = new TypedValueBridge(itemType, collection[p.CurrentIterator.ForIndexer]);
             }
             else
             {
                 p.CurrentIterator.BodyAdd(variable.Assign(collection[p.CurrentIterator.ForIndexer]));
-                p.LastValue = new TypedValueBridge(collection.ItemType, variable);
+                p.LastValue = new TypedValueBridge(itemType, variable);
             }
             
-            p.ResultSize = collection.Count;
-            p.SourceSize = collection.Count;
-            p.SimpleEnumeration = true;
-            p.ListEnumeration = true;
-        }
-
-        public static void ListEnumeration(RewriteParameters p, CollectionValueBridge collection, LocalVariable variable = null)
-        {
-            var sourceCountValue = collection.Count.ReusableConst(p, Int);
-
-            p.ForMin = p.ForReMin = 0;
-            p.ForMax = sourceCountValue;
-            p.ForReMax = sourceCountValue - 1;
-            
-            p.CurrentIterator.ForIndexer = p.GlobalVariable(Int);
-            if (p.CurrentIndexer == null)
-            {
-                p.CurrentIterator.CurrentIndexer = p.CurrentIterator.ForIndexer;
-                p.CurrentIterator.CurrentIndexer.IsGlobal = true;
-            }
-            
-            if (variable == null)
-            {
-                p.LastValue = new TypedValueBridge(collection.ItemType, collection[p.CurrentIterator.ForIndexer]);
-            }
-            else
-            {
-                p.CurrentIterator.BodyAdd(variable.Assign(collection[p.CurrentIterator.ForIndexer]));
-                p.LastValue = new TypedValueBridge(collection.ItemType, variable);
-            }
-            
-            p.ResultSize = sourceCountValue;
-            p.SourceSize = sourceCountValue;
+            p.ResultSize = count;
+            p.SourceSize = count;
             p.SimpleEnumeration = true;
             p.ListEnumeration = true;
         }

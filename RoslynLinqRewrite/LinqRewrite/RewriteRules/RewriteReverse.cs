@@ -13,8 +13,6 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            
             if (!p.ModifiedEnumeration) p.IsReversed = !p.IsReversed;
             else if (p.SourceSize != null) KnownSourceSize(p);
             else UnknownSourceSize(p);

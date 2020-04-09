@@ -1,18 +1,12 @@
-﻿using System;
-using System.Linq;
-using LinqRewrite.DataStructures;
+﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using static LinqRewrite.Extensions.SyntaxFactoryHelper;
-using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
-    public static class  RewriteConcat
+    public static class RewriteConcat
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             var sourceSizeValue = p.SourceSize;
             var resultSizeValue = p.ResultSize;
             var collectionValue = args[0];

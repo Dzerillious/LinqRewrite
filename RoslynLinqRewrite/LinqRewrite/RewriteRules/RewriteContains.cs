@@ -1,5 +1,4 @@
-﻿using System;
-using LinqRewrite.DataStructures;
+﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
@@ -9,9 +8,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
             var elementSyntax = p.Node.ArgumentList.Arguments.First().Expression;
-            
             var elementEqualityValue = args.Length switch
             {
                 1 => p.LastValue.IsEqual(elementSyntax),

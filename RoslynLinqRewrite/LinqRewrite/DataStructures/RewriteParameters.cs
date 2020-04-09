@@ -62,7 +62,6 @@ namespace LinqRewrite.DataStructures
         
         public List<LocalVariable> Variables { get; } = new List<LocalVariable>();
         
-        public ExpressionSyntax SimpleRewrite { get; set; }
         public bool WrapWithTry { get; set; }
         public bool IsReversed { get; set; }
         public bool HasResultMethod { get; set; }
@@ -232,7 +231,6 @@ namespace LinqRewrite.DataStructures
             WrapWithTry = false;
             Unchecked = false;
 
-            SimpleRewrite = null;
             LastValue = null;
         }
 
@@ -348,6 +346,7 @@ namespace LinqRewrite.DataStructures
             Variables.Add(created);
             
             InitialAdd(LocalVariableCreation(variable, type));
+            SimpleEnumeration = false;
             return created;
         }
         
@@ -359,6 +358,7 @@ namespace LinqRewrite.DataStructures
             
             InitialAdd(LocalVariableCreation(variable, type));
             PreUseAdd(((ValueBridge)variable).Assign(initial));
+            SimpleEnumeration = false;
             return created;
         }
         
@@ -376,6 +376,7 @@ namespace LinqRewrite.DataStructures
             
             InitialAdd(LocalVariableCreation(variable, value.Type));
             PreUseAdd(((ValueBridge)variable).Assign(value));
+            SimpleEnumeration = false;
             return created;
         }
         
@@ -393,6 +394,7 @@ namespace LinqRewrite.DataStructures
             
             InitialAdd(LocalVariableCreation(variable, type));
             PreUseAdd(((ValueBridge)variable).Assign(initial));
+            SimpleEnumeration = false;
             return created;
         }
         
@@ -409,6 +411,7 @@ namespace LinqRewrite.DataStructures
             Variables.Add(created);
 
             InitialAdd(LocalVariableCreation(variable, type));
+            SimpleEnumeration = false;
             return created;
         }
 

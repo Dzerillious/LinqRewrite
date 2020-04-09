@@ -107,11 +107,8 @@ namespace LinqRewrite
             if (!rewrite) return null;
             
             var returnType = _data.Semantic.GetTypeFromExpression(node);
-            
-            using var parameters = RewriteParametersFactory.BorrowParameters();
-            parameters.SetData(collection, returnType, chain, node);
 
-            return InvocationRewriter.TryRewrite(parameters)
+            return InvocationRewriter.TryRewrite(collection, returnType, chain, node)
                 .WithLeadingTrivia(((CSharpSyntaxNode) containingForEach ?? node).GetLeadingTrivia())
                 .WithTrailingTrivia(((CSharpSyntaxNode) containingForEach ?? node).GetTrailingTrivia());
         }

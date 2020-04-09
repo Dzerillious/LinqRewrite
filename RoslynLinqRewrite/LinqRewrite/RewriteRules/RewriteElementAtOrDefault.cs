@@ -1,6 +1,6 @@
-﻿using System;
-using LinqRewrite.DataStructures;
+﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
@@ -8,14 +8,13 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteElementAtOrDefault
     {
+        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
+            => ConditionalExpression(p.ResultSize <= args[0],
+                ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + args[0]),
+                Default(p.ReturnType));
+        
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            if (p.CanSimpleRewrite() && p.CurrentCollection?.Count == p.ResultSize  && args.Length == 0) 
-                ConditionalExpression(p.CurrentCollection.Count <= args[0],
-                    p.CurrentCollection[args[0]],
-                    Default(p.ReturnType));
-            
             var positionValue = args[0].ReusableConst(p);
             p.ForAdd(If(p.Indexer.IsEqual(positionValue),
                         Return(p.LastValue)));

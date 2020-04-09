@@ -1,6 +1,6 @@
-﻿using System;
-using LinqRewrite.DataStructures;
+﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
@@ -8,12 +8,11 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteCount
     {
+        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
+            => p.ResultSize;
+        
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-            if (p.CanSimpleRewrite() && args.Length == 0)
-                p.SimpleRewrite = p.ResultSize;
-
             if (args.Length != 0)
             {
                 p.Indexer = null;

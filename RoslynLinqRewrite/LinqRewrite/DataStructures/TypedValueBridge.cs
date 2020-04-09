@@ -6,8 +6,8 @@ namespace LinqRewrite.DataStructures
     public class TypedValueBridge : ValueBridge
     {
         public ExpressionSyntax Expression => Value.Value;
-        public new ValueBridge Value { get; }
-        public TypeSyntax Type { get; }
+        public new ValueBridge Value { get; protected set; }
+        public TypeSyntax Type { get; protected set; }
 
         public TypedValueBridge(RewriteParameters p, ValueBridge value) : base(value)
         {

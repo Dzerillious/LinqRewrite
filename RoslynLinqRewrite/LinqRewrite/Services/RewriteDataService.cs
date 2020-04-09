@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using LinqRewrite.DataStructures;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 

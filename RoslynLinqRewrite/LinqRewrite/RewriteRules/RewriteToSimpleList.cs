@@ -1,5 +1,4 @@
-﻿using System;
-using LinqRewrite.DataStructures;
+﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -10,8 +9,6 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (p.CurrentIterator == null) RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
-
             var result = RewriteToArray.RewriteOther(p, p.LastValue.Type);
             var listResultType = SyntaxFactory.ParseTypeName($"SimpleList<{p.LastValue.Type}>");
 

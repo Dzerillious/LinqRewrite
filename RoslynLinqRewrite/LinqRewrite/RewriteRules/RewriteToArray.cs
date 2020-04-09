@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
@@ -11,13 +10,23 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteToArray
     {
+        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        {
+            if (!ExpressionSimplifier.TryGetInt(p.ResultSize, out var intSize) || intSize > 30)
+                return null;
+            
+            return CreateArray((ArrayTypeSyntax) p.ReturnType, p.ResultSize,
+                Enumerable.Range(0, intSize).Select(x 
+                    => (ExpressionSyntax) ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x)));
+        }
+        
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (p.IncompleteIterators.Count() <= 1 && RewriteSimplified(p))
+            {
+                p.CurrentIterator.IgnoreIterator = true;
                 return;
-            
-            if (p.CurrentIterator ==  null)
-                RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
+            }
             
             var resultVariable = RewriteOther(p);
             if (p.ResultSize == null) p.ResultAdd(Return("LinqRewrite".Access("Core", "SimpleArrayExtensions", "EnsureFullArray")
@@ -80,24 +89,26 @@ namespace LinqRewrite.RewriteRules
                                     .Invoke(2, RefArg(resultVariable), RefArg(currentLengthVariable))));
                 
             p.ForAdd(resultVariable[indexerVariable].Assign(p.LastValue));
-            p.HasResultMethod = true;
             return resultVariable;
         }
         
         private static bool RewriteSimplified(RewriteParameters p)
         {
-            if (p.CurrentIterator != null) p.CurrentIterator.IgnoreIterator = true;
-            
             var minValue = p.CurrentMin;
-            if (p.SimpleEnumeration && ExpressionSimplifier.TryGetInt(p.ResultSize, out var intSize) && intSize <= 30)
-                return CreateTakeArray(p, minValue, intSize);
-
             if (!p.ListEnumeration) return false;
             if (p.CurrentCollection.CollectionType == CollectionType.Array)
             {
                 var resultVariable = p.GlobalVariable(p.ReturnType, CreateArray((ArrayTypeSyntax) p.ReturnType, p.ResultSize));
                 p.ResultAdd("System".Access("Array", "Copy")
                     .Invoke(p.CurrentCollection, minValue, resultVariable, 0, p.ResultSize));
+                p.ResultAdd(Return(resultVariable));
+                return true;
+            }
+            else if (p.CurrentCollection.CollectionType == CollectionType.SimpleList)
+            {
+                var resultVariable = p.GlobalVariable(p.ReturnType, CreateArray((ArrayTypeSyntax) p.ReturnType, p.ResultSize));
+                p.ResultAdd("System".Access("Array", "Copy")
+                    .Invoke(p.CurrentCollection.Access("Items"), minValue, resultVariable, 0, p.ResultSize));
                 p.ResultAdd(Return(resultVariable));
                 return true;
             }
@@ -110,14 +121,6 @@ namespace LinqRewrite.RewriteRules
                 return true;
             }
             p.NotRewrite = true;
-            return true;
-        }
-
-        private static bool CreateTakeArray(RewriteParameters p, ValueBridge minValue, int intSize)
-        {
-            p.SimpleRewrite = CreateArray((ArrayTypeSyntax) p.ReturnType, p.ResultSize,
-                Enumerable.Range(0, intSize).Select(x 
-                    => (ExpressionSyntax) ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, minValue + x)));
             return true;
         }
     }
