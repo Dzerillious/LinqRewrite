@@ -169,191 +169,181 @@ public class ToDictionaryTests
 
     System.Collections.Generic.Dictionary<int, int> ArrayToDictionaryTestRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2813;
-        System.Collections.Generic.Dictionary<int, int> v2814;
-        v2814 = new System.Collections.Generic.Dictionary<int, int>();
-        v2813 = (0);
-        for (; v2813 < (ArrayItems.Length); v2813++)
-            v2814.Add(((ArrayItems[v2813])), ((ArrayItems[v2813])));
-        return v2814;
+        int v2545;
+        System.Collections.Generic.Dictionary<int, int> v2546;
+        v2546 = new System.Collections.Generic.Dictionary<int, int>();
+        v2545 = (0);
+        for (; v2545 < (ArrayItems.Length); v2545 += 1)
+            v2546.Add(((ArrayItems[v2545])), ((ArrayItems[v2545])));
+        return v2546;
     }
 
     System.Collections.Generic.Dictionary<int, int> ListToDictionaryTestRewritten_ProceduralLinq1(System.Collections.Generic.List<int> ListItems)
     {
-        int v2816;
-        int v2817;
-        System.Collections.Generic.Dictionary<int, int> v2818;
-        v2816 = ListItems.Count;
-        v2818 = new System.Collections.Generic.Dictionary<int, int>();
-        v2817 = (0);
-        for (; v2817 < (v2816); v2817++)
-            v2818.Add(((ListItems[v2817])), ((ListItems[v2817])));
-        return v2818;
+        int v2548;
+        System.Collections.Generic.Dictionary<int, int> v2549;
+        int v2550;
+        v2550 = (ListItems.Count);
+        v2549 = new System.Collections.Generic.Dictionary<int, int>();
+        v2548 = (0);
+        for (; v2548 < v2550; v2548 += 1)
+            v2549.Add(((ListItems[v2548])), ((ListItems[v2548])));
+        return v2549;
     }
 
     System.Collections.Generic.Dictionary<int, int> EnumerableToDictionaryTestRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v2819;
-        System.Collections.Generic.Dictionary<int, int> v2820;
-        v2819 = EnumerableItems.GetEnumerator();
-        v2820 = new System.Collections.Generic.Dictionary<int, int>();
+        IEnumerator<int> v2551;
+        System.Collections.Generic.Dictionary<int, int> v2552;
+        v2551 = EnumerableItems.GetEnumerator();
+        v2552 = new System.Collections.Generic.Dictionary<int, int>();
         try
         {
-            while (v2819.MoveNext())
-                v2820.Add(((v2819.Current)), ((v2819.Current)));
+            while (v2551.MoveNext())
+                v2552.Add(((v2551.Current)), ((v2551.Current)));
         }
         finally
         {
-            v2819.Dispose();
+            v2551.Dispose();
         }
 
-        return v2820;
+        return v2552;
     }
 
     System.Collections.Generic.Dictionary<int, int> ArrayWhereParamToDictionaryTestRewritten_ProceduralLinq1(int offset, int[] ArrayItems)
     {
-        int v2821;
-        int v2822;
-        System.Collections.Generic.Dictionary<int, int> v2823;
-        v2823 = new System.Collections.Generic.Dictionary<int, int>();
-        v2821 = (0);
-        for (; v2821 < (ArrayItems.Length); v2821++)
+        int v2553;
+        System.Collections.Generic.Dictionary<int, int> v2554;
+        v2554 = new System.Collections.Generic.Dictionary<int, int>();
+        v2553 = (0);
+        for (; v2553 < (ArrayItems.Length); v2553 += 1)
         {
-            v2822 = (ArrayItems[v2821]);
-            if (!(((v2822) > offset)))
+            if (!((((ArrayItems[v2553])) > offset)))
                 continue;
-            v2823.Add(((v2822)), ((v2822)));
+            v2554.Add((((ArrayItems[v2553]))), (((ArrayItems[v2553]))));
         }
 
-        return v2823;
+        return v2554;
     }
 
     System.Collections.Generic.Dictionary<int, int> EnumerableWhereParamToDictionaryTestRewritten_ProceduralLinq1(int offset, System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v2824;
-        int v2825;
-        System.Collections.Generic.Dictionary<int, int> v2826;
-        v2824 = EnumerableItems.GetEnumerator();
-        v2826 = new System.Collections.Generic.Dictionary<int, int>();
+        IEnumerator<int> v2555;
+        int v2556;
+        System.Collections.Generic.Dictionary<int, int> v2557;
+        v2555 = EnumerableItems.GetEnumerator();
+        v2557 = new System.Collections.Generic.Dictionary<int, int>();
         try
         {
-            while (v2824.MoveNext())
+            while (v2555.MoveNext())
             {
-                v2825 = (v2824.Current);
-                if (!(((v2825) > offset)))
+                v2556 = (v2555.Current);
+                if (!(((v2556) > offset)))
                     continue;
-                v2826.Add(((v2825)), ((v2825)));
+                v2557.Add(((v2556)), ((v2556)));
             }
         }
         finally
         {
-            v2824.Dispose();
+            v2555.Dispose();
         }
 
-        return v2826;
+        return v2557;
     }
 
     System.Collections.Generic.Dictionary<int, int> SimpleListWhereParamToDictionaryTestRewritten_ProceduralLinq1(int offset, LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v2827;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v2828;
-        int v2829;
-        int v2830;
-        System.Collections.Generic.Dictionary<int, int> v2831;
-        v2827 = SimpleListItems.Count;
-        v2828 = SimpleListItems;
-        v2831 = new System.Collections.Generic.Dictionary<int, int>();
-        v2829 = (0);
-        for (; v2829 < (v2827); v2829++)
+        int v2558;
+        v2558 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v2559;
+        v2559 = SimpleListItems;
+        int v2560;
+        System.Collections.Generic.Dictionary<int, int> v2561;
+        v2561 = new System.Collections.Generic.Dictionary<int, int>();
+        v2560 = (0);
+        for (; v2560 < (v2558); v2560 += 1)
         {
-            v2830 = (v2828[v2829]);
-            if (!(((v2830) > offset)))
+            if (!((((v2559[v2560])) > offset)))
                 continue;
-            v2831.Add(((v2830)), ((v2830)));
+            v2561.Add((((v2559[v2560]))), (((v2559[v2560]))));
         }
 
-        return v2831;
+        return v2561;
     }
 
     System.Collections.Generic.Dictionary<int, int> ListWhereParamToDictionaryTestRewritten_ProceduralLinq1(int offset, System.Collections.Generic.List<int> ListItems)
     {
-        int v2832;
-        int v2833;
-        int v2834;
-        System.Collections.Generic.Dictionary<int, int> v2835;
-        v2832 = ListItems.Count;
-        v2835 = new System.Collections.Generic.Dictionary<int, int>();
-        v2833 = (0);
-        for (; v2833 < (v2832); v2833++)
+        int v2562;
+        System.Collections.Generic.Dictionary<int, int> v2563;
+        int v2564;
+        v2564 = (ListItems.Count);
+        v2563 = new System.Collections.Generic.Dictionary<int, int>();
+        v2562 = (0);
+        for (; v2562 < v2564; v2562 += 1)
         {
-            v2834 = (ListItems[v2833]);
-            if (!(((v2834) > offset)))
+            if (!((((ListItems[v2562])) > offset)))
                 continue;
-            v2835.Add(((v2834)), ((v2834)));
+            v2563.Add((((ListItems[v2562]))), (((ListItems[v2562]))));
         }
 
-        return v2835;
+        return v2563;
     }
 
     System.Collections.Generic.Dictionary<int, int> RangeWhereParamToDictionaryTestRewritten_ProceduralLinq1(int offset)
     {
-        int v2836;
-        int v2837;
-        System.Collections.Generic.Dictionary<int, int> v2838;
-        v2838 = new System.Collections.Generic.Dictionary<int, int>();
-        v2836 = (0);
-        for (; v2836 < (1000); v2836++)
+        int v2565;
+        System.Collections.Generic.Dictionary<int, int> v2566;
+        v2566 = new System.Collections.Generic.Dictionary<int, int>();
+        v2565 = (0);
+        for (; v2565 < (1000); v2565 += (1))
         {
-            v2837 = (v2836);
-            if (!(((v2837) > offset)))
+            if (!((((v2565)) > offset)))
                 continue;
-            v2838.Add(((v2837)), ((v2837)));
+            v2566.Add((((v2565))), (((v2565))));
         }
 
-        return v2838;
+        return v2566;
     }
 
     System.Collections.Generic.Dictionary<int, int> RangeParamToDictionaryTestRewritten_ProceduralLinq1(int count)
     {
         if (0 > count)
             throw new System.InvalidOperationException("Index out of range");
-        int v2839;
-        System.Collections.Generic.Dictionary<int, int> v2840;
-        v2840 = new System.Collections.Generic.Dictionary<int, int>();
-        v2839 = (0);
-        for (; v2839 < (count); v2839++)
-            v2840.Add(((v2839)), ((v2839)));
-        return v2840;
+        int v2567;
+        System.Collections.Generic.Dictionary<int, int> v2568;
+        v2568 = new System.Collections.Generic.Dictionary<int, int>();
+        v2567 = (0);
+        for (; v2567 < (count); v2567 += (1))
+            v2568.Add(((v2567)), ((v2567)));
+        return v2568;
     }
 
     System.Collections.Generic.Dictionary<int, int> RepeatParamToDictionaryTestRewritten_ProceduralLinq1(int count)
     {
         if (0 > count)
             throw new System.InvalidOperationException("Index out of range");
-        int v2841;
-        System.Collections.Generic.Dictionary<int, int> v2842;
-        v2842 = new System.Collections.Generic.Dictionary<int, int>();
-        v2841 = (0);
-        for (; v2841 < (count); v2841++)
-            v2842.Add(((0)), ((0)));
-        return v2842;
+        int v2569;
+        System.Collections.Generic.Dictionary<int, int> v2570;
+        v2570 = new System.Collections.Generic.Dictionary<int, int>();
+        v2569 = (0);
+        for (; v2569 < (count); v2569 += 1)
+            v2570.Add(((0)), ((0)));
+        return v2570;
     }
 
     System.Collections.Generic.Dictionary<int, int> RepeatWhereParamToDictionaryTestRewritten_ProceduralLinq1(int offset)
     {
-        int v2843;
-        int v2844;
-        System.Collections.Generic.Dictionary<int, int> v2845;
-        v2845 = new System.Collections.Generic.Dictionary<int, int>();
-        v2843 = (0);
-        for (; v2843 < (1000); v2843++)
+        int v2571;
+        System.Collections.Generic.Dictionary<int, int> v2572;
+        v2572 = new System.Collections.Generic.Dictionary<int, int>();
+        v2571 = (0);
+        for (; v2571 < (1000); v2571 += 1)
         {
-            v2844 = (0);
-            if (!((v2843 < offset)))
+            if (!((v2571 < offset)))
                 continue;
-            v2845.Add(((v2844)), ((v2844)));
+            v2572.Add((((0))), (((0))));
         }
 
-        return v2845;
+        return v2572;
     }
 }}

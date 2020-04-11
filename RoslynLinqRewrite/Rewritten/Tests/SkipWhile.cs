@@ -814,18 +814,16 @@ public class SkipWhile
 
     System.Collections.Generic.IEnumerable<int> ArraySkipWhileRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2140;
-        int v2141;
-        bool v2142;
-        v2142 = true;
-        v2140 = (0);
-        for (; v2140 < (ArrayItems.Length); v2140++)
+        int v1941;
+        bool v1942;
+        v1942 = true;
+        v1941 = (0);
+        for (; v1941 < (ArrayItems.Length); v1941 += 1)
         {
-            v2141 = (ArrayItems[v2140]);
-            if (v2142 && ((v2141) < 50))
+            if (v1942 && (((ArrayItems[v1941])) < 50))
                 continue;
-            v2142 = false;
-            yield return (v2141);
+            v1942 = false;
+            yield return ((ArrayItems[v1941]));
         }
 
         yield break;
@@ -833,18 +831,16 @@ public class SkipWhile
 
     System.Collections.Generic.IEnumerable<int> ArraySkipWhileReverseRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2143;
-        int v2144;
-        bool v2145;
-        v2145 = true;
-        v2143 = (0);
-        for (; v2143 < (ArrayItems.Length); v2143++)
+        int v1943;
+        bool v1944;
+        v1944 = true;
+        v1943 = (0);
+        for (; v1943 < (ArrayItems.Length); v1943 += 1)
         {
-            v2144 = (ArrayItems[v2143]);
-            if (v2145 && ((v2144) > 50))
+            if (v1944 && (((ArrayItems[v1943])) > 50))
                 continue;
-            v2145 = false;
-            yield return (v2144);
+            v1944 = false;
+            yield return ((ArrayItems[v1943]));
         }
 
         yield break;
@@ -852,18 +848,16 @@ public class SkipWhile
 
     System.Collections.Generic.IEnumerable<int> ArraySkipWhileTrueRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2146;
-        int v2147;
-        bool v2148;
-        v2148 = true;
-        v2146 = (0);
-        for (; v2146 < (ArrayItems.Length); v2146++)
+        int v1945;
+        bool v1946;
+        v1946 = true;
+        v1945 = (0);
+        for (; v1945 < (ArrayItems.Length); v1945 += 1)
         {
-            v2147 = (ArrayItems[v2146]);
-            if (v2148 && (true))
+            if (v1946 && (true))
                 continue;
-            v2148 = false;
-            yield return (v2147);
+            v1946 = false;
+            yield return ((ArrayItems[v1945]));
         }
 
         yield break;
@@ -871,18 +865,16 @@ public class SkipWhile
 
     System.Collections.Generic.IEnumerable<int> ArraySkipWhileFalseRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2149;
-        int v2150;
-        bool v2151;
-        v2151 = true;
-        v2149 = (0);
-        for (; v2149 < (ArrayItems.Length); v2149++)
+        int v1947;
+        bool v1948;
+        v1948 = true;
+        v1947 = (0);
+        for (; v1947 < (ArrayItems.Length); v1947 += 1)
         {
-            v2150 = (ArrayItems[v2149]);
-            if (v2151 && (false))
+            if (v1948 && (false))
                 continue;
-            v2151 = false;
-            yield return (v2150);
+            v1948 = false;
+            yield return ((ArrayItems[v1947]));
         }
 
         yield break;
@@ -890,18 +882,18 @@ public class SkipWhile
 
     System.Collections.Generic.IEnumerable<int> ArraySelectSkipWhileRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2152;
-        int v2153;
-        bool v2154;
-        v2154 = true;
-        v2152 = (0);
-        for (; v2152 < (ArrayItems.Length); v2152++)
+        int v1949;
+        int v1950;
+        bool v1951;
+        v1951 = true;
+        v1949 = (0);
+        for (; v1949 < (ArrayItems.Length); v1949 += 1)
         {
-            v2153 = (20 + ArrayItems[v2152]);
-            if (v2154 && ((v2153) < 50))
+            v1950 = (20 + ArrayItems[v1949]);
+            if (v1951 && ((v1950) < 50))
                 continue;
-            v2154 = false;
-            yield return (v2153);
+            v1951 = false;
+            yield return (v1950);
         }
 
         yield break;
@@ -909,21 +901,18 @@ public class SkipWhile
 
     System.Collections.Generic.IEnumerable<int> ArrayWhereSkipWhileRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2155;
-        int v2156;
-        bool v2157;
-        v2157 = true;
-        v2155 = (0);
-        for (; v2155 < (ArrayItems.Length); v2155++)
+        int v1952;
+        bool v1953;
+        v1953 = true;
+        v1952 = (0);
+        for (; v1952 < (ArrayItems.Length); v1952 += 1)
         {
-            v2156 = (ArrayItems[v2155]);
-            if (!(((v2156) > 20)))
+            if (!((((ArrayItems[v1952])) > 20)))
                 continue;
-            v2156 = (v2156);
-            if (v2157 && ((v2156) < 50))
+            if (v1953 && ((((ArrayItems[v1952]))) < 50))
                 continue;
-            v2157 = false;
-            yield return (v2156);
+            v1953 = false;
+            yield return (((ArrayItems[v1952])));
         }
 
         yield break;
@@ -931,75 +920,67 @@ public class SkipWhile
 
     System.Collections.Generic.IEnumerable<int> ArraySkipWhileParamRewritten_ProceduralLinq1(int a, int[] ArrayItems)
     {
-        int v2158;
-        int v2159;
-        bool v2160;
-        v2160 = true;
-        v2158 = (0);
-        for (; v2158 < (ArrayItems.Length); v2158++)
+        int v1954;
+        bool v1955;
+        v1955 = true;
+        v1954 = (0);
+        for (; v1954 < (ArrayItems.Length); v1954 += 1)
         {
-            v2159 = (ArrayItems[v2158]);
-            if (v2160 && ((v2159) < a))
+            if (v1955 && (((ArrayItems[v1954])) < a))
                 continue;
-            v2160 = false;
-            yield return (v2159);
+            v1955 = false;
+            yield return ((ArrayItems[v1954]));
         }
 
         yield break;
     }
 
-    System.Collections.Generic.IEnumerable<int> ArraySkipWhileChangingParamRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, bool> v2163)
+    System.Collections.Generic.IEnumerable<int> ArraySkipWhileChangingParamRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, bool> v1957)
     {
-        int v2161;
-        int v2162;
-        bool v2164;
-        v2164 = true;
-        v2161 = (0);
-        for (; v2161 < (ArrayItems.Length); v2161++)
+        int v1956;
+        bool v1958;
+        v1958 = true;
+        v1956 = (0);
+        for (; v1956 < (ArrayItems.Length); v1956 += 1)
         {
-            v2162 = (ArrayItems[v2161]);
-            if (v2164 && v2163((v2162)))
+            if (v1958 && v1957(((ArrayItems[v1956]))))
                 continue;
-            v2164 = false;
-            yield return (v2162);
+            v1958 = false;
+            yield return ((ArrayItems[v1956]));
         }
 
         yield break;
     }
 
-    System.Collections.Generic.IEnumerable<int> ArraySkipWhileChangingParam2Rewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, bool> v2167)
+    System.Collections.Generic.IEnumerable<int> ArraySkipWhileChangingParam2Rewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, bool> v1960)
     {
-        int v2165;
-        int v2166;
-        bool v2168;
-        v2168 = true;
-        v2165 = (0);
-        for (; v2165 < (ArrayItems.Length); v2165++)
+        int v1959;
+        bool v1961;
+        v1961 = true;
+        v1959 = (0);
+        for (; v1959 < (ArrayItems.Length); v1959 += 1)
         {
-            v2166 = (ArrayItems[v2165]);
-            if (v2168 && v2167((v2166)))
+            if (v1961 && v1960(((ArrayItems[v1959]))))
                 continue;
-            v2168 = false;
-            yield return (v2166);
+            v1961 = false;
+            yield return ((ArrayItems[v1959]));
         }
 
         yield break;
     }
 
-    System.Collections.Generic.IEnumerable<int> ArraySkipWhileChangingParamsRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, bool> v2171)
+    System.Collections.Generic.IEnumerable<int> ArraySkipWhileChangingParamsRewritten_ProceduralLinq1(int[] ArrayItems, System.Func<int, bool> v1963)
     {
-        int v2169;
-        int v2170;
-        bool v2172;
-        v2172 = true;
-        v2169 = (0);
-        for (; v2169 < (ArrayItems.Length); v2169++)
+        int v1962;
+        bool v1964;
+        v1964 = true;
+        v1962 = (0);
+        for (; v1962 < (ArrayItems.Length); v1962 += 1)
         {
-            v2170 = (ArrayItems[v2169]);
-            if (v2172 && v2171((v2170)))
+            if (v1964 && v1963(((ArrayItems[v1962]))))
                 continue;
-            v2172 = false;
-            yield return (v2170);
+            v1964 = false;
+            yield return ((ArrayItems[v1962]));
         }
 
         yield break;
@@ -1007,7 +988,1235 @@ public class SkipWhile
 
     int[] ArraySkipWhileToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2173;
+        int v1965;
+        bool v1966;
+        int v1967;
+        int v1968;
+        int v1969;
+        int[] v1970;
+        v1966 = true;
+        v1967 = 0;
+        v1968 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
+        v1968 -= (v1968 % 2);
+        v1969 = 8;
+        v1970 = new int[8];
+        v1965 = (0);
+        for (; v1965 < (ArrayItems.Length); v1965 += 1)
+        {
+            if (v1966 && (((ArrayItems[v1965])) < 50))
+                continue;
+            v1966 = false;
+            if (v1967 >= v1969)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v1970, ref v1968, out v1969);
+            v1970[v1967] = ((ArrayItems[v1965]));
+            v1967++;
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1970, v1967);
+    }
+
+    int[] ArraySkipWhileReverseToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1971;
+        bool v1972;
+        int v1973;
+        int v1974;
+        int v1975;
+        int[] v1976;
+        v1972 = true;
+        v1973 = 0;
+        v1974 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
+        v1974 -= (v1974 % 2);
+        v1975 = 8;
+        v1976 = new int[8];
+        v1971 = (0);
+        for (; v1971 < (ArrayItems.Length); v1971 += 1)
+        {
+            if (v1972 && (((ArrayItems[v1971])) > 50))
+                continue;
+            v1972 = false;
+            if (v1973 >= v1975)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v1976, ref v1974, out v1975);
+            v1976[v1973] = ((ArrayItems[v1971]));
+            v1973++;
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1976, v1973);
+    }
+
+    int[] ArraySkipWhileTrueToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1977;
+        bool v1978;
+        int v1979;
+        int v1980;
+        int v1981;
+        int[] v1982;
+        v1978 = true;
+        v1979 = 0;
+        v1980 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
+        v1980 -= (v1980 % 2);
+        v1981 = 8;
+        v1982 = new int[8];
+        v1977 = (0);
+        for (; v1977 < (ArrayItems.Length); v1977 += 1)
+        {
+            if (v1978 && (true))
+                continue;
+            v1978 = false;
+            if (v1979 >= v1981)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v1982, ref v1980, out v1981);
+            v1982[v1979] = ((ArrayItems[v1977]));
+            v1979++;
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1982, v1979);
+    }
+
+    int[] ArraySkipWhileFalseToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1983;
+        bool v1984;
+        int v1985;
+        int v1986;
+        int v1987;
+        int[] v1988;
+        v1984 = true;
+        v1985 = 0;
+        v1986 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
+        v1986 -= (v1986 % 2);
+        v1987 = 8;
+        v1988 = new int[8];
+        v1983 = (0);
+        for (; v1983 < (ArrayItems.Length); v1983 += 1)
+        {
+            if (v1984 && (false))
+                continue;
+            v1984 = false;
+            if (v1985 >= v1987)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v1988, ref v1986, out v1987);
+            v1988[v1985] = ((ArrayItems[v1983]));
+            v1985++;
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1988, v1985);
+    }
+
+    int[] ArraySelectSkipWhileToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1989;
+        int v1990;
+        bool v1991;
+        int v1992;
+        int v1993;
+        int v1994;
+        int[] v1995;
+        v1991 = true;
+        v1992 = 0;
+        v1993 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
+        v1993 -= (v1993 % 2);
+        v1994 = 8;
+        v1995 = new int[8];
+        v1989 = (0);
+        for (; v1989 < (ArrayItems.Length); v1989 += 1)
+        {
+            v1990 = (20 + ArrayItems[v1989]);
+            if (v1991 && ((v1990) < 50))
+                continue;
+            v1991 = false;
+            if (v1992 >= v1994)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v1995, ref v1993, out v1994);
+            v1995[v1992] = (v1990);
+            v1992++;
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1995, v1992);
+    }
+
+    int[] ArrayWhereSkipWhileToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
+    {
+        int v1996;
+        bool v1997;
+        int v1998;
+        int v1999;
+        int v2000;
+        int[] v2001;
+        v1997 = true;
+        v1998 = 0;
+        v1999 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
+        v1999 -= (v1999 % 2);
+        v2000 = 8;
+        v2001 = new int[8];
+        v1996 = (0);
+        for (; v1996 < (ArrayItems.Length); v1996 += 1)
+        {
+            if (!((((ArrayItems[v1996])) > 20)))
+                continue;
+            if (v1997 && ((((ArrayItems[v1996]))) < 50))
+                continue;
+            v1997 = false;
+            if (v1998 >= v2000)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2001, ref v1999, out v2000);
+            v2001[v1998] = (((ArrayItems[v1996])));
+            v1998++;
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2001, v1998);
+    }
+
+    int[] ArraySkipWhileParamToArrayRewritten_ProceduralLinq1(int a, int[] ArrayItems)
+    {
+        int v2002;
+        bool v2003;
+        int v2004;
+        int v2005;
+        int v2006;
+        int[] v2007;
+        v2003 = true;
+        v2004 = 0;
+        v2005 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
+        v2005 -= (v2005 % 2);
+        v2006 = 8;
+        v2007 = new int[8];
+        v2002 = (0);
+        for (; v2002 < (ArrayItems.Length); v2002 += 1)
+        {
+            if (v2003 && (((ArrayItems[v2002])) < a))
+                continue;
+            v2003 = false;
+            if (v2004 >= v2006)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2007, ref v2005, out v2006);
+            v2007[v2004] = ((ArrayItems[v2002]));
+            v2004++;
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2007, v2004);
+    }
+
+    int[] ArraySkipWhileChangingParamToArrayRewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
+    {
+        int v2008;
+        bool v2009;
+        int v2010;
+        int v2011;
+        int v2012;
+        int[] v2013;
+        v2009 = true;
+        v2010 = 0;
+        v2011 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
+        v2011 -= (v2011 % 2);
+        v2012 = 8;
+        v2013 = new int[8];
+        v2008 = (0);
+        for (; v2008 < (ArrayItems.Length); v2008 += 1)
+        {
+            if (v2009 && (((ArrayItems[v2008])) < a++))
+                continue;
+            v2009 = false;
+            if (v2010 >= v2012)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2013, ref v2011, out v2012);
+            v2013[v2010] = ((ArrayItems[v2008]));
+            v2010++;
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2013, v2010);
+    }
+
+    int[] ArraySkipWhileChangingParamToArray2Rewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
+    {
+        int v2014;
+        bool v2015;
+        int v2016;
+        int v2017;
+        int v2018;
+        int[] v2019;
+        v2015 = true;
+        v2016 = 0;
+        v2017 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
+        v2017 -= (v2017 % 2);
+        v2018 = 8;
+        v2019 = new int[8];
+        v2014 = (0);
+        for (; v2014 < (ArrayItems.Length); v2014 += 1)
+        {
+            if (v2015 && (((ArrayItems[v2014])) < a--))
+                continue;
+            v2015 = false;
+            if (v2016 >= v2018)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2019, ref v2017, out v2018);
+            v2019[v2016] = ((ArrayItems[v2014]));
+            v2016++;
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2019, v2016);
+    }
+
+    int[] ArraySkipWhileChangingParamsToArrayRewritten_ProceduralLinq1(ref int a, ref int b, int[] ArrayItems)
+    {
+        int v2020;
+        bool v2021;
+        int v2022;
+        int v2023;
+        int v2024;
+        int[] v2025;
+        v2021 = true;
+        v2022 = 0;
+        v2023 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
+        v2023 -= (v2023 % 2);
+        v2024 = 8;
+        v2025 = new int[8];
+        v2020 = (0);
+        for (; v2020 < (ArrayItems.Length); v2020 += 1)
+        {
+            if (v2021 && (((ArrayItems[v2020])) < a++ - b--))
+                continue;
+            v2021 = false;
+            if (v2022 >= v2024)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2025, ref v2023, out v2024);
+            v2025[v2022] = ((ArrayItems[v2020]));
+            v2022++;
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2025, v2022);
+    }
+
+    System.Collections.Generic.IEnumerable<int> EnumerableSkipWhileRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2026;
+        int v2027;
+        bool v2028;
+        v2026 = EnumerableItems.GetEnumerator();
+        v2028 = true;
+        try
+        {
+            while (v2026.MoveNext())
+            {
+                v2027 = (v2026.Current);
+                if (v2028 && ((v2027) < 50))
+                    continue;
+                v2028 = false;
+                yield return (v2027);
+            }
+        }
+        finally
+        {
+            v2026.Dispose();
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> EnumerableSkipWhileReverseRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2029;
+        int v2030;
+        bool v2031;
+        v2029 = EnumerableItems.GetEnumerator();
+        v2031 = true;
+        try
+        {
+            while (v2029.MoveNext())
+            {
+                v2030 = (v2029.Current);
+                if (v2031 && ((v2030) > 50))
+                    continue;
+                v2031 = false;
+                yield return (v2030);
+            }
+        }
+        finally
+        {
+            v2029.Dispose();
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> EnumerableSkipWhileTrueRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2032;
+        int v2033;
+        bool v2034;
+        v2032 = EnumerableItems.GetEnumerator();
+        v2034 = true;
+        try
+        {
+            while (v2032.MoveNext())
+            {
+                v2033 = (v2032.Current);
+                if (v2034 && (true))
+                    continue;
+                v2034 = false;
+                yield return (v2033);
+            }
+        }
+        finally
+        {
+            v2032.Dispose();
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> EnumerableSkipWhileFalseRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2035;
+        int v2036;
+        bool v2037;
+        v2035 = EnumerableItems.GetEnumerator();
+        v2037 = true;
+        try
+        {
+            while (v2035.MoveNext())
+            {
+                v2036 = (v2035.Current);
+                if (v2037 && (false))
+                    continue;
+                v2037 = false;
+                yield return (v2036);
+            }
+        }
+        finally
+        {
+            v2035.Dispose();
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> EnumerableSelectSkipWhileRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2038;
+        int v2039;
+        bool v2040;
+        v2038 = EnumerableItems.GetEnumerator();
+        v2040 = true;
+        try
+        {
+            while (v2038.MoveNext())
+            {
+                v2039 = (20 + v2038.Current);
+                if (v2040 && ((v2039) < 50))
+                    continue;
+                v2040 = false;
+                yield return (v2039);
+            }
+        }
+        finally
+        {
+            v2038.Dispose();
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> EnumerableWhereSkipWhileRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2041;
+        int v2042;
+        bool v2043;
+        v2041 = EnumerableItems.GetEnumerator();
+        v2043 = true;
+        try
+        {
+            while (v2041.MoveNext())
+            {
+                v2042 = (v2041.Current);
+                if (!(((v2042) > 20)))
+                    continue;
+                if (v2043 && (((v2042)) < 50))
+                    continue;
+                v2043 = false;
+                yield return ((v2042));
+            }
+        }
+        finally
+        {
+            v2041.Dispose();
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> EnumerableSkipWhileParamRewritten_ProceduralLinq1(int a, System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2044;
+        int v2045;
+        bool v2046;
+        v2044 = EnumerableItems.GetEnumerator();
+        v2046 = true;
+        try
+        {
+            while (v2044.MoveNext())
+            {
+                v2045 = (v2044.Current);
+                if (v2046 && ((v2045) < a))
+                    continue;
+                v2046 = false;
+                yield return (v2045);
+            }
+        }
+        finally
+        {
+            v2044.Dispose();
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> EnumerableSkipWhileChangingParamRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems, System.Func<int, bool> v2049)
+    {
+        IEnumerator<int> v2047;
+        int v2048;
+        bool v2050;
+        v2047 = EnumerableItems.GetEnumerator();
+        v2050 = true;
+        try
+        {
+            while (v2047.MoveNext())
+            {
+                v2048 = (v2047.Current);
+                if (v2050 && v2049((v2048)))
+                    continue;
+                v2050 = false;
+                yield return (v2048);
+            }
+        }
+        finally
+        {
+            v2047.Dispose();
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> EnumerableSkipWhileChangingParam2Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems, System.Func<int, bool> v2053)
+    {
+        IEnumerator<int> v2051;
+        int v2052;
+        bool v2054;
+        v2051 = EnumerableItems.GetEnumerator();
+        v2054 = true;
+        try
+        {
+            while (v2051.MoveNext())
+            {
+                v2052 = (v2051.Current);
+                if (v2054 && v2053((v2052)))
+                    continue;
+                v2054 = false;
+                yield return (v2052);
+            }
+        }
+        finally
+        {
+            v2051.Dispose();
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> EnumerableSkipWhileChangingParamsRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems, System.Func<int, bool> v2057)
+    {
+        IEnumerator<int> v2055;
+        int v2056;
+        bool v2058;
+        v2055 = EnumerableItems.GetEnumerator();
+        v2058 = true;
+        try
+        {
+            while (v2055.MoveNext())
+            {
+                v2056 = (v2055.Current);
+                if (v2058 && v2057((v2056)))
+                    continue;
+                v2058 = false;
+                yield return (v2056);
+            }
+        }
+        finally
+        {
+            v2055.Dispose();
+        }
+
+        yield break;
+    }
+
+    int[] EnumerableSkipWhileToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2059;
+        int v2060;
+        bool v2061;
+        int v2062;
+        int v2063;
+        int[] v2064;
+        v2059 = EnumerableItems.GetEnumerator();
+        v2061 = true;
+        v2062 = 0;
+        v2063 = 8;
+        v2064 = new int[8];
+        try
+        {
+            while (v2059.MoveNext())
+            {
+                v2060 = (v2059.Current);
+                if (v2061 && ((v2060) < 50))
+                    continue;
+                v2061 = false;
+                if (v2062 >= v2063)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2064, ref v2063);
+                v2064[v2062] = (v2060);
+                v2062++;
+            }
+        }
+        finally
+        {
+            v2059.Dispose();
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2064, v2062);
+    }
+
+    int[] EnumerableSkipWhileReverseToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2065;
+        int v2066;
+        bool v2067;
+        int v2068;
+        int v2069;
+        int[] v2070;
+        v2065 = EnumerableItems.GetEnumerator();
+        v2067 = true;
+        v2068 = 0;
+        v2069 = 8;
+        v2070 = new int[8];
+        try
+        {
+            while (v2065.MoveNext())
+            {
+                v2066 = (v2065.Current);
+                if (v2067 && ((v2066) > 50))
+                    continue;
+                v2067 = false;
+                if (v2068 >= v2069)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2070, ref v2069);
+                v2070[v2068] = (v2066);
+                v2068++;
+            }
+        }
+        finally
+        {
+            v2065.Dispose();
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2070, v2068);
+    }
+
+    int[] EnumerableSkipWhileTrueToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2071;
+        int v2072;
+        bool v2073;
+        int v2074;
+        int v2075;
+        int[] v2076;
+        v2071 = EnumerableItems.GetEnumerator();
+        v2073 = true;
+        v2074 = 0;
+        v2075 = 8;
+        v2076 = new int[8];
+        try
+        {
+            while (v2071.MoveNext())
+            {
+                v2072 = (v2071.Current);
+                if (v2073 && (true))
+                    continue;
+                v2073 = false;
+                if (v2074 >= v2075)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2076, ref v2075);
+                v2076[v2074] = (v2072);
+                v2074++;
+            }
+        }
+        finally
+        {
+            v2071.Dispose();
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2076, v2074);
+    }
+
+    int[] EnumerableSkipWhileFalseToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2077;
+        int v2078;
+        bool v2079;
+        int v2080;
+        int v2081;
+        int[] v2082;
+        v2077 = EnumerableItems.GetEnumerator();
+        v2079 = true;
+        v2080 = 0;
+        v2081 = 8;
+        v2082 = new int[8];
+        try
+        {
+            while (v2077.MoveNext())
+            {
+                v2078 = (v2077.Current);
+                if (v2079 && (false))
+                    continue;
+                v2079 = false;
+                if (v2080 >= v2081)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2082, ref v2081);
+                v2082[v2080] = (v2078);
+                v2080++;
+            }
+        }
+        finally
+        {
+            v2077.Dispose();
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2082, v2080);
+    }
+
+    int[] EnumerableSelectSkipWhileToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2083;
+        int v2084;
+        bool v2085;
+        int v2086;
+        int v2087;
+        int[] v2088;
+        v2083 = EnumerableItems.GetEnumerator();
+        v2085 = true;
+        v2086 = 0;
+        v2087 = 8;
+        v2088 = new int[8];
+        try
+        {
+            while (v2083.MoveNext())
+            {
+                v2084 = (20 + v2083.Current);
+                if (v2085 && ((v2084) < 50))
+                    continue;
+                v2085 = false;
+                if (v2086 >= v2087)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2088, ref v2087);
+                v2088[v2086] = (v2084);
+                v2086++;
+            }
+        }
+        finally
+        {
+            v2083.Dispose();
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2088, v2086);
+    }
+
+    int[] EnumerableWhereSkipWhileToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2089;
+        int v2090;
+        bool v2091;
+        int v2092;
+        int v2093;
+        int[] v2094;
+        v2089 = EnumerableItems.GetEnumerator();
+        v2091 = true;
+        v2092 = 0;
+        v2093 = 8;
+        v2094 = new int[8];
+        try
+        {
+            while (v2089.MoveNext())
+            {
+                v2090 = (v2089.Current);
+                if (!(((v2090) > 20)))
+                    continue;
+                if (v2091 && (((v2090)) < 50))
+                    continue;
+                v2091 = false;
+                if (v2092 >= v2093)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2094, ref v2093);
+                v2094[v2092] = ((v2090));
+                v2092++;
+            }
+        }
+        finally
+        {
+            v2089.Dispose();
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2094, v2092);
+    }
+
+    int[] EnumerableSkipWhileParamToArrayRewritten_ProceduralLinq1(int a, System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2095;
+        int v2096;
+        bool v2097;
+        int v2098;
+        int v2099;
+        int[] v2100;
+        v2095 = EnumerableItems.GetEnumerator();
+        v2097 = true;
+        v2098 = 0;
+        v2099 = 8;
+        v2100 = new int[8];
+        try
+        {
+            while (v2095.MoveNext())
+            {
+                v2096 = (v2095.Current);
+                if (v2097 && ((v2096) < a))
+                    continue;
+                v2097 = false;
+                if (v2098 >= v2099)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2100, ref v2099);
+                v2100[v2098] = (v2096);
+                v2098++;
+            }
+        }
+        finally
+        {
+            v2095.Dispose();
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2100, v2098);
+    }
+
+    int[] EnumerableSkipWhileChangingParamToArrayRewritten_ProceduralLinq1(ref int a, System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2101;
+        int v2102;
+        bool v2103;
+        int v2104;
+        int v2105;
+        int[] v2106;
+        v2101 = EnumerableItems.GetEnumerator();
+        v2103 = true;
+        v2104 = 0;
+        v2105 = 8;
+        v2106 = new int[8];
+        try
+        {
+            while (v2101.MoveNext())
+            {
+                v2102 = (v2101.Current);
+                if (v2103 && ((v2102) < a++))
+                    continue;
+                v2103 = false;
+                if (v2104 >= v2105)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2106, ref v2105);
+                v2106[v2104] = (v2102);
+                v2104++;
+            }
+        }
+        finally
+        {
+            v2101.Dispose();
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2106, v2104);
+    }
+
+    int[] EnumerableSkipWhileChangingParamToArray2Rewritten_ProceduralLinq1(ref int a, System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2107;
+        int v2108;
+        bool v2109;
+        int v2110;
+        int v2111;
+        int[] v2112;
+        v2107 = EnumerableItems.GetEnumerator();
+        v2109 = true;
+        v2110 = 0;
+        v2111 = 8;
+        v2112 = new int[8];
+        try
+        {
+            while (v2107.MoveNext())
+            {
+                v2108 = (v2107.Current);
+                if (v2109 && ((v2108) < a--))
+                    continue;
+                v2109 = false;
+                if (v2110 >= v2111)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2112, ref v2111);
+                v2112[v2110] = (v2108);
+                v2110++;
+            }
+        }
+        finally
+        {
+            v2107.Dispose();
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2112, v2110);
+    }
+
+    int[] EnumerableSkipWhileChangingParamsToArrayRewritten_ProceduralLinq1(ref int a, ref int b, System.Collections.Generic.IEnumerable<int> EnumerableItems)
+    {
+        IEnumerator<int> v2113;
+        int v2114;
+        bool v2115;
+        int v2116;
+        int v2117;
+        int[] v2118;
+        v2113 = EnumerableItems.GetEnumerator();
+        v2115 = true;
+        v2116 = 0;
+        v2117 = 8;
+        v2118 = new int[8];
+        try
+        {
+            while (v2113.MoveNext())
+            {
+                v2114 = (v2113.Current);
+                if (v2115 && ((v2114) < a++ - b--))
+                    continue;
+                v2115 = false;
+                if (v2116 >= v2117)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2118, ref v2117);
+                v2118[v2116] = (v2114);
+                v2116++;
+            }
+        }
+        finally
+        {
+            v2113.Dispose();
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2118, v2116);
+    }
+
+    System.Collections.Generic.IEnumerable<int> RangeSkipWhileRewritten_ProceduralLinq1()
+    {
+        int v2119;
+        bool v2120;
+        v2120 = true;
+        v2119 = (0);
+        for (; v2119 < (100); v2119 += (1))
+        {
+            if (v2120 && (((v2119)) < 50))
+                continue;
+            v2120 = false;
+            yield return ((v2119));
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> RangeSkipWhileReverseRewritten_ProceduralLinq1()
+    {
+        int v2121;
+        bool v2122;
+        v2122 = true;
+        v2121 = (0);
+        for (; v2121 < (100); v2121 += (1))
+        {
+            if (v2122 && (((v2121)) > 50))
+                continue;
+            v2122 = false;
+            yield return ((v2121));
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> RangeSkipWhileTrueRewritten_ProceduralLinq1()
+    {
+        int v2123;
+        bool v2124;
+        v2124 = true;
+        v2123 = (0);
+        for (; v2123 < (100); v2123 += (1))
+        {
+            if (v2124 && (true))
+                continue;
+            v2124 = false;
+            yield return ((v2123));
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> RangeSkipWhileFalseRewritten_ProceduralLinq1()
+    {
+        int v2125;
+        bool v2126;
+        v2126 = true;
+        v2125 = (0);
+        for (; v2125 < (100); v2125 += (1))
+        {
+            if (v2126 && (false))
+                continue;
+            v2126 = false;
+            yield return ((v2125));
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> RangeSelectSkipWhileRewritten_ProceduralLinq1()
+    {
+        int v2127;
+        int v2128;
+        bool v2129;
+        v2129 = true;
+        v2127 = (0);
+        for (; v2127 < (100); v2127 += (1))
+        {
+            v2128 = (20 + v2127);
+            if (v2129 && ((v2128) < 50))
+                continue;
+            v2129 = false;
+            yield return (v2128);
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> RangeWhereSkipWhileRewritten_ProceduralLinq1()
+    {
+        int v2130;
+        bool v2131;
+        v2131 = true;
+        v2130 = (0);
+        for (; v2130 < (100); v2130 += (1))
+        {
+            if (!((((v2130)) > 20)))
+                continue;
+            if (v2131 && ((((v2130))) < 50))
+                continue;
+            v2131 = false;
+            yield return (((v2130)));
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> RangeSkipWhileParamRewritten_ProceduralLinq1(int a)
+    {
+        int v2132;
+        bool v2133;
+        v2133 = true;
+        v2132 = (0);
+        for (; v2132 < (100); v2132 += (1))
+        {
+            if (v2133 && (((v2132)) < a))
+                continue;
+            v2133 = false;
+            yield return ((v2132));
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> RangeSkipWhileChangingParamRewritten_ProceduralLinq1(System.Func<int, bool> v2135)
+    {
+        int v2134;
+        bool v2136;
+        v2136 = true;
+        v2134 = (0);
+        for (; v2134 < (100); v2134 += (1))
+        {
+            if (v2136 && v2135(((v2134))))
+                continue;
+            v2136 = false;
+            yield return ((v2134));
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> RangeSkipWhileChangingParam2Rewritten_ProceduralLinq1(System.Func<int, bool> v2138)
+    {
+        int v2137;
+        bool v2139;
+        v2139 = true;
+        v2137 = (0);
+        for (; v2137 < (100); v2137 += (1))
+        {
+            if (v2139 && v2138(((v2137))))
+                continue;
+            v2139 = false;
+            yield return ((v2137));
+        }
+
+        yield break;
+    }
+
+    System.Collections.Generic.IEnumerable<int> RangeSkipWhileChangingParamsRewritten_ProceduralLinq1(System.Func<int, bool> v2141)
+    {
+        int v2140;
+        bool v2142;
+        v2142 = true;
+        v2140 = (0);
+        for (; v2140 < (100); v2140 += (1))
+        {
+            if (v2142 && v2141(((v2140))))
+                continue;
+            v2142 = false;
+            yield return ((v2140));
+        }
+
+        yield break;
+    }
+
+    int[] RangeSkipWhileToArrayRewritten_ProceduralLinq1()
+    {
+        int v2143;
+        bool v2144;
+        int v2145;
+        int v2146;
+        int v2147;
+        int[] v2148;
+        v2144 = true;
+        v2145 = 0;
+        v2146 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
+        v2146 -= (v2146 % 2);
+        v2147 = 8;
+        v2148 = new int[8];
+        v2143 = (0);
+        for (; v2143 < (100); v2143 += (1))
+        {
+            if (v2144 && (((v2143)) < 50))
+                continue;
+            v2144 = false;
+            if (v2145 >= v2147)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2148, ref v2146, out v2147);
+            v2148[v2145] = ((v2143));
+            v2145++;
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2148, v2145);
+    }
+
+    int[] RangeSkipWhileReverseToArrayRewritten_ProceduralLinq1()
+    {
+        int v2149;
+        bool v2150;
+        int v2151;
+        int v2152;
+        int v2153;
+        int[] v2154;
+        v2150 = true;
+        v2151 = 0;
+        v2152 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
+        v2152 -= (v2152 % 2);
+        v2153 = 8;
+        v2154 = new int[8];
+        v2149 = (0);
+        for (; v2149 < (100); v2149 += (1))
+        {
+            if (v2150 && (((v2149)) > 50))
+                continue;
+            v2150 = false;
+            if (v2151 >= v2153)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2154, ref v2152, out v2153);
+            v2154[v2151] = ((v2149));
+            v2151++;
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2154, v2151);
+    }
+
+    int[] RangeSkipWhileTrueToArrayRewritten_ProceduralLinq1()
+    {
+        int v2155;
+        bool v2156;
+        int v2157;
+        int v2158;
+        int v2159;
+        int[] v2160;
+        v2156 = true;
+        v2157 = 0;
+        v2158 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
+        v2158 -= (v2158 % 2);
+        v2159 = 8;
+        v2160 = new int[8];
+        v2155 = (0);
+        for (; v2155 < (100); v2155 += (1))
+        {
+            if (v2156 && (true))
+                continue;
+            v2156 = false;
+            if (v2157 >= v2159)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2160, ref v2158, out v2159);
+            v2160[v2157] = ((v2155));
+            v2157++;
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2160, v2157);
+    }
+
+    int[] RangeSkipWhileFalseToArrayRewritten_ProceduralLinq1()
+    {
+        int v2161;
+        bool v2162;
+        int v2163;
+        int v2164;
+        int v2165;
+        int[] v2166;
+        v2162 = true;
+        v2163 = 0;
+        v2164 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
+        v2164 -= (v2164 % 2);
+        v2165 = 8;
+        v2166 = new int[8];
+        v2161 = (0);
+        for (; v2161 < (100); v2161 += (1))
+        {
+            if (v2162 && (false))
+                continue;
+            v2162 = false;
+            if (v2163 >= v2165)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2166, ref v2164, out v2165);
+            v2166[v2163] = ((v2161));
+            v2163++;
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2166, v2163);
+    }
+
+    int[] RangeSelectSkipWhileToArrayRewritten_ProceduralLinq1()
+    {
+        int v2167;
+        int v2168;
+        bool v2169;
+        int v2170;
+        int v2171;
+        int v2172;
+        int[] v2173;
+        v2169 = true;
+        v2170 = 0;
+        v2171 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
+        v2171 -= (v2171 % 2);
+        v2172 = 8;
+        v2173 = new int[8];
+        v2167 = (0);
+        for (; v2167 < (100); v2167 += (1))
+        {
+            v2168 = (20 + v2167);
+            if (v2169 && ((v2168) < 50))
+                continue;
+            v2169 = false;
+            if (v2170 >= v2172)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2173, ref v2171, out v2172);
+            v2173[v2170] = (v2168);
+            v2170++;
+        }
+
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2173, v2170);
+    }
+
+    int[] RangeWhereSkipWhileToArrayRewritten_ProceduralLinq1()
+    {
         int v2174;
         bool v2175;
         int v2176;
@@ -1016,1427 +2225,140 @@ public class SkipWhile
         int[] v2179;
         v2175 = true;
         v2176 = 0;
-        v2177 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
+        v2177 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
         v2177 -= (v2177 % 2);
         v2178 = 8;
         v2179 = new int[8];
-        v2173 = (0);
-        for (; v2173 < (ArrayItems.Length); v2173++)
+        v2174 = (0);
+        for (; v2174 < (100); v2174 += (1))
         {
-            v2174 = (ArrayItems[v2173]);
-            if (v2175 && ((v2174) < 50))
+            if (!((((v2174)) > 20)))
+                continue;
+            if (v2175 && ((((v2174))) < 50))
                 continue;
             v2175 = false;
             if (v2176 >= v2178)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2179, ref v2177, out v2178);
-            v2179[v2176] = (v2174);
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2179, ref v2177, out v2178);
+            v2179[v2176] = (((v2174)));
             v2176++;
         }
 
         return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2179, v2176);
     }
 
-    int[] ArraySkipWhileReverseToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v2180;
-        int v2181;
-        bool v2182;
-        int v2183;
-        int v2184;
-        int v2185;
-        int[] v2186;
-        v2182 = true;
-        v2183 = 0;
-        v2184 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
-        v2184 -= (v2184 % 2);
-        v2185 = 8;
-        v2186 = new int[8];
-        v2180 = (0);
-        for (; v2180 < (ArrayItems.Length); v2180++)
-        {
-            v2181 = (ArrayItems[v2180]);
-            if (v2182 && ((v2181) > 50))
-                continue;
-            v2182 = false;
-            if (v2183 >= v2185)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2186, ref v2184, out v2185);
-            v2186[v2183] = (v2181);
-            v2183++;
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2186, v2183);
-    }
-
-    int[] ArraySkipWhileTrueToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v2187;
-        int v2188;
-        bool v2189;
-        int v2190;
-        int v2191;
-        int v2192;
-        int[] v2193;
-        v2189 = true;
-        v2190 = 0;
-        v2191 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
-        v2191 -= (v2191 % 2);
-        v2192 = 8;
-        v2193 = new int[8];
-        v2187 = (0);
-        for (; v2187 < (ArrayItems.Length); v2187++)
-        {
-            v2188 = (ArrayItems[v2187]);
-            if (v2189 && (true))
-                continue;
-            v2189 = false;
-            if (v2190 >= v2192)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2193, ref v2191, out v2192);
-            v2193[v2190] = (v2188);
-            v2190++;
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2193, v2190);
-    }
-
-    int[] ArraySkipWhileFalseToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v2194;
-        int v2195;
-        bool v2196;
-        int v2197;
-        int v2198;
-        int v2199;
-        int[] v2200;
-        v2196 = true;
-        v2197 = 0;
-        v2198 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
-        v2198 -= (v2198 % 2);
-        v2199 = 8;
-        v2200 = new int[8];
-        v2194 = (0);
-        for (; v2194 < (ArrayItems.Length); v2194++)
-        {
-            v2195 = (ArrayItems[v2194]);
-            if (v2196 && (false))
-                continue;
-            v2196 = false;
-            if (v2197 >= v2199)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2200, ref v2198, out v2199);
-            v2200[v2197] = (v2195);
-            v2197++;
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2200, v2197);
-    }
-
-    int[] ArraySelectSkipWhileToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v2201;
-        int v2202;
-        bool v2203;
-        int v2204;
-        int v2205;
-        int v2206;
-        int[] v2207;
-        v2203 = true;
-        v2204 = 0;
-        v2205 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
-        v2205 -= (v2205 % 2);
-        v2206 = 8;
-        v2207 = new int[8];
-        v2201 = (0);
-        for (; v2201 < (ArrayItems.Length); v2201++)
-        {
-            v2202 = (20 + ArrayItems[v2201]);
-            if (v2203 && ((v2202) < 50))
-                continue;
-            v2203 = false;
-            if (v2204 >= v2206)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2207, ref v2205, out v2206);
-            v2207[v2204] = (v2202);
-            v2204++;
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2207, v2204);
-    }
-
-    int[] ArrayWhereSkipWhileToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
-    {
-        int v2208;
-        int v2209;
-        bool v2210;
-        int v2211;
-        int v2212;
-        int v2213;
-        int[] v2214;
-        v2210 = true;
-        v2211 = 0;
-        v2212 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
-        v2212 -= (v2212 % 2);
-        v2213 = 8;
-        v2214 = new int[8];
-        v2208 = (0);
-        for (; v2208 < (ArrayItems.Length); v2208++)
-        {
-            v2209 = (ArrayItems[v2208]);
-            if (!(((v2209) > 20)))
-                continue;
-            v2209 = (v2209);
-            if (v2210 && ((v2209) < 50))
-                continue;
-            v2210 = false;
-            if (v2211 >= v2213)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2214, ref v2212, out v2213);
-            v2214[v2211] = (v2209);
-            v2211++;
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2214, v2211);
-    }
-
-    int[] ArraySkipWhileParamToArrayRewritten_ProceduralLinq1(int a, int[] ArrayItems)
-    {
-        int v2215;
-        int v2216;
-        bool v2217;
-        int v2218;
-        int v2219;
-        int v2220;
-        int[] v2221;
-        v2217 = true;
-        v2218 = 0;
-        v2219 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
-        v2219 -= (v2219 % 2);
-        v2220 = 8;
-        v2221 = new int[8];
-        v2215 = (0);
-        for (; v2215 < (ArrayItems.Length); v2215++)
-        {
-            v2216 = (ArrayItems[v2215]);
-            if (v2217 && ((v2216) < a))
-                continue;
-            v2217 = false;
-            if (v2218 >= v2220)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2221, ref v2219, out v2220);
-            v2221[v2218] = (v2216);
-            v2218++;
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2221, v2218);
-    }
-
-    int[] ArraySkipWhileChangingParamToArrayRewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
-    {
-        int v2222;
-        int v2223;
-        bool v2224;
-        int v2225;
-        int v2226;
-        int v2227;
-        int[] v2228;
-        v2224 = true;
-        v2225 = 0;
-        v2226 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
-        v2226 -= (v2226 % 2);
-        v2227 = 8;
-        v2228 = new int[8];
-        v2222 = (0);
-        for (; v2222 < (ArrayItems.Length); v2222++)
-        {
-            v2223 = (ArrayItems[v2222]);
-            if (v2224 && ((v2223) < a++))
-                continue;
-            v2224 = false;
-            if (v2225 >= v2227)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2228, ref v2226, out v2227);
-            v2228[v2225] = (v2223);
-            v2225++;
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2228, v2225);
-    }
-
-    int[] ArraySkipWhileChangingParamToArray2Rewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
-    {
-        int v2229;
-        int v2230;
-        bool v2231;
-        int v2232;
-        int v2233;
-        int v2234;
-        int[] v2235;
-        v2231 = true;
-        v2232 = 0;
-        v2233 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
-        v2233 -= (v2233 % 2);
-        v2234 = 8;
-        v2235 = new int[8];
-        v2229 = (0);
-        for (; v2229 < (ArrayItems.Length); v2229++)
-        {
-            v2230 = (ArrayItems[v2229]);
-            if (v2231 && ((v2230) < a--))
-                continue;
-            v2231 = false;
-            if (v2232 >= v2234)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2235, ref v2233, out v2234);
-            v2235[v2232] = (v2230);
-            v2232++;
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2235, v2232);
-    }
-
-    int[] ArraySkipWhileChangingParamsToArrayRewritten_ProceduralLinq1(ref int a, ref int b, int[] ArrayItems)
-    {
-        int v2236;
-        int v2237;
-        bool v2238;
-        int v2239;
-        int v2240;
-        int v2241;
-        int[] v2242;
-        v2238 = true;
-        v2239 = 0;
-        v2240 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
-        v2240 -= (v2240 % 2);
-        v2241 = 8;
-        v2242 = new int[8];
-        v2236 = (0);
-        for (; v2236 < (ArrayItems.Length); v2236++)
-        {
-            v2237 = (ArrayItems[v2236]);
-            if (v2238 && ((v2237) < a++ - b--))
-                continue;
-            v2238 = false;
-            if (v2239 >= v2241)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2242, ref v2240, out v2241);
-            v2242[v2239] = (v2237);
-            v2239++;
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2242, v2239);
-    }
-
-    System.Collections.Generic.IEnumerable<int> EnumerableSkipWhileRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2243;
-        int v2244;
-        bool v2245;
-        v2243 = EnumerableItems.GetEnumerator();
-        v2245 = true;
-        try
-        {
-            while (v2243.MoveNext())
-            {
-                v2244 = (v2243.Current);
-                if (v2245 && ((v2244) < 50))
-                    continue;
-                v2245 = false;
-                yield return (v2244);
-            }
-        }
-        finally
-        {
-            v2243.Dispose();
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> EnumerableSkipWhileReverseRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2246;
-        int v2247;
-        bool v2248;
-        v2246 = EnumerableItems.GetEnumerator();
-        v2248 = true;
-        try
-        {
-            while (v2246.MoveNext())
-            {
-                v2247 = (v2246.Current);
-                if (v2248 && ((v2247) > 50))
-                    continue;
-                v2248 = false;
-                yield return (v2247);
-            }
-        }
-        finally
-        {
-            v2246.Dispose();
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> EnumerableSkipWhileTrueRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2249;
-        int v2250;
-        bool v2251;
-        v2249 = EnumerableItems.GetEnumerator();
-        v2251 = true;
-        try
-        {
-            while (v2249.MoveNext())
-            {
-                v2250 = (v2249.Current);
-                if (v2251 && (true))
-                    continue;
-                v2251 = false;
-                yield return (v2250);
-            }
-        }
-        finally
-        {
-            v2249.Dispose();
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> EnumerableSkipWhileFalseRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2252;
-        int v2253;
-        bool v2254;
-        v2252 = EnumerableItems.GetEnumerator();
-        v2254 = true;
-        try
-        {
-            while (v2252.MoveNext())
-            {
-                v2253 = (v2252.Current);
-                if (v2254 && (false))
-                    continue;
-                v2254 = false;
-                yield return (v2253);
-            }
-        }
-        finally
-        {
-            v2252.Dispose();
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> EnumerableSelectSkipWhileRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2255;
-        int v2256;
-        bool v2257;
-        v2255 = EnumerableItems.GetEnumerator();
-        v2257 = true;
-        try
-        {
-            while (v2255.MoveNext())
-            {
-                v2256 = (20 + v2255.Current);
-                if (v2257 && ((v2256) < 50))
-                    continue;
-                v2257 = false;
-                yield return (v2256);
-            }
-        }
-        finally
-        {
-            v2255.Dispose();
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> EnumerableWhereSkipWhileRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2258;
-        int v2259;
-        bool v2260;
-        v2258 = EnumerableItems.GetEnumerator();
-        v2260 = true;
-        try
-        {
-            while (v2258.MoveNext())
-            {
-                v2259 = (v2258.Current);
-                if (!(((v2259) > 20)))
-                    continue;
-                v2259 = (v2259);
-                if (v2260 && ((v2259) < 50))
-                    continue;
-                v2260 = false;
-                yield return (v2259);
-            }
-        }
-        finally
-        {
-            v2258.Dispose();
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> EnumerableSkipWhileParamRewritten_ProceduralLinq1(int a, System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2261;
-        int v2262;
-        bool v2263;
-        v2261 = EnumerableItems.GetEnumerator();
-        v2263 = true;
-        try
-        {
-            while (v2261.MoveNext())
-            {
-                v2262 = (v2261.Current);
-                if (v2263 && ((v2262) < a))
-                    continue;
-                v2263 = false;
-                yield return (v2262);
-            }
-        }
-        finally
-        {
-            v2261.Dispose();
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> EnumerableSkipWhileChangingParamRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems, System.Func<int, bool> v2266)
-    {
-        IEnumerator<int> v2264;
-        int v2265;
-        bool v2267;
-        v2264 = EnumerableItems.GetEnumerator();
-        v2267 = true;
-        try
-        {
-            while (v2264.MoveNext())
-            {
-                v2265 = (v2264.Current);
-                if (v2267 && v2266((v2265)))
-                    continue;
-                v2267 = false;
-                yield return (v2265);
-            }
-        }
-        finally
-        {
-            v2264.Dispose();
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> EnumerableSkipWhileChangingParam2Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems, System.Func<int, bool> v2270)
-    {
-        IEnumerator<int> v2268;
-        int v2269;
-        bool v2271;
-        v2268 = EnumerableItems.GetEnumerator();
-        v2271 = true;
-        try
-        {
-            while (v2268.MoveNext())
-            {
-                v2269 = (v2268.Current);
-                if (v2271 && v2270((v2269)))
-                    continue;
-                v2271 = false;
-                yield return (v2269);
-            }
-        }
-        finally
-        {
-            v2268.Dispose();
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> EnumerableSkipWhileChangingParamsRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems, System.Func<int, bool> v2274)
-    {
-        IEnumerator<int> v2272;
-        int v2273;
-        bool v2275;
-        v2272 = EnumerableItems.GetEnumerator();
-        v2275 = true;
-        try
-        {
-            while (v2272.MoveNext())
-            {
-                v2273 = (v2272.Current);
-                if (v2275 && v2274((v2273)))
-                    continue;
-                v2275 = false;
-                yield return (v2273);
-            }
-        }
-        finally
-        {
-            v2272.Dispose();
-        }
-
-        yield break;
-    }
-
-    int[] EnumerableSkipWhileToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2276;
-        int v2277;
-        bool v2278;
-        int v2279;
-        int v2280;
-        int[] v2281;
-        v2276 = EnumerableItems.GetEnumerator();
-        v2278 = true;
-        v2279 = 0;
-        v2280 = 8;
-        v2281 = new int[8];
-        try
-        {
-            while (v2276.MoveNext())
-            {
-                v2277 = (v2276.Current);
-                if (v2278 && ((v2277) < 50))
-                    continue;
-                v2278 = false;
-                if (v2279 >= v2280)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2281, ref v2280);
-                v2281[v2279] = (v2277);
-                v2279++;
-            }
-        }
-        finally
-        {
-            v2276.Dispose();
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2281, v2279);
-    }
-
-    int[] EnumerableSkipWhileReverseToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2282;
-        int v2283;
-        bool v2284;
-        int v2285;
-        int v2286;
-        int[] v2287;
-        v2282 = EnumerableItems.GetEnumerator();
-        v2284 = true;
-        v2285 = 0;
-        v2286 = 8;
-        v2287 = new int[8];
-        try
-        {
-            while (v2282.MoveNext())
-            {
-                v2283 = (v2282.Current);
-                if (v2284 && ((v2283) > 50))
-                    continue;
-                v2284 = false;
-                if (v2285 >= v2286)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2287, ref v2286);
-                v2287[v2285] = (v2283);
-                v2285++;
-            }
-        }
-        finally
-        {
-            v2282.Dispose();
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2287, v2285);
-    }
-
-    int[] EnumerableSkipWhileTrueToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2288;
-        int v2289;
-        bool v2290;
-        int v2291;
-        int v2292;
-        int[] v2293;
-        v2288 = EnumerableItems.GetEnumerator();
-        v2290 = true;
-        v2291 = 0;
-        v2292 = 8;
-        v2293 = new int[8];
-        try
-        {
-            while (v2288.MoveNext())
-            {
-                v2289 = (v2288.Current);
-                if (v2290 && (true))
-                    continue;
-                v2290 = false;
-                if (v2291 >= v2292)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2293, ref v2292);
-                v2293[v2291] = (v2289);
-                v2291++;
-            }
-        }
-        finally
-        {
-            v2288.Dispose();
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2293, v2291);
-    }
-
-    int[] EnumerableSkipWhileFalseToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2294;
-        int v2295;
-        bool v2296;
-        int v2297;
-        int v2298;
-        int[] v2299;
-        v2294 = EnumerableItems.GetEnumerator();
-        v2296 = true;
-        v2297 = 0;
-        v2298 = 8;
-        v2299 = new int[8];
-        try
-        {
-            while (v2294.MoveNext())
-            {
-                v2295 = (v2294.Current);
-                if (v2296 && (false))
-                    continue;
-                v2296 = false;
-                if (v2297 >= v2298)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2299, ref v2298);
-                v2299[v2297] = (v2295);
-                v2297++;
-            }
-        }
-        finally
-        {
-            v2294.Dispose();
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2299, v2297);
-    }
-
-    int[] EnumerableSelectSkipWhileToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2300;
-        int v2301;
-        bool v2302;
-        int v2303;
-        int v2304;
-        int[] v2305;
-        v2300 = EnumerableItems.GetEnumerator();
-        v2302 = true;
-        v2303 = 0;
-        v2304 = 8;
-        v2305 = new int[8];
-        try
-        {
-            while (v2300.MoveNext())
-            {
-                v2301 = (20 + v2300.Current);
-                if (v2302 && ((v2301) < 50))
-                    continue;
-                v2302 = false;
-                if (v2303 >= v2304)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2305, ref v2304);
-                v2305[v2303] = (v2301);
-                v2303++;
-            }
-        }
-        finally
-        {
-            v2300.Dispose();
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2305, v2303);
-    }
-
-    int[] EnumerableWhereSkipWhileToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2306;
-        int v2307;
-        bool v2308;
-        int v2309;
-        int v2310;
-        int[] v2311;
-        v2306 = EnumerableItems.GetEnumerator();
-        v2308 = true;
-        v2309 = 0;
-        v2310 = 8;
-        v2311 = new int[8];
-        try
-        {
-            while (v2306.MoveNext())
-            {
-                v2307 = (v2306.Current);
-                if (!(((v2307) > 20)))
-                    continue;
-                v2307 = (v2307);
-                if (v2308 && ((v2307) < 50))
-                    continue;
-                v2308 = false;
-                if (v2309 >= v2310)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2311, ref v2310);
-                v2311[v2309] = (v2307);
-                v2309++;
-            }
-        }
-        finally
-        {
-            v2306.Dispose();
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2311, v2309);
-    }
-
-    int[] EnumerableSkipWhileParamToArrayRewritten_ProceduralLinq1(int a, System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2312;
-        int v2313;
-        bool v2314;
-        int v2315;
-        int v2316;
-        int[] v2317;
-        v2312 = EnumerableItems.GetEnumerator();
-        v2314 = true;
-        v2315 = 0;
-        v2316 = 8;
-        v2317 = new int[8];
-        try
-        {
-            while (v2312.MoveNext())
-            {
-                v2313 = (v2312.Current);
-                if (v2314 && ((v2313) < a))
-                    continue;
-                v2314 = false;
-                if (v2315 >= v2316)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2317, ref v2316);
-                v2317[v2315] = (v2313);
-                v2315++;
-            }
-        }
-        finally
-        {
-            v2312.Dispose();
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2317, v2315);
-    }
-
-    int[] EnumerableSkipWhileChangingParamToArrayRewritten_ProceduralLinq1(ref int a, System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2318;
-        int v2319;
-        bool v2320;
-        int v2321;
-        int v2322;
-        int[] v2323;
-        v2318 = EnumerableItems.GetEnumerator();
-        v2320 = true;
-        v2321 = 0;
-        v2322 = 8;
-        v2323 = new int[8];
-        try
-        {
-            while (v2318.MoveNext())
-            {
-                v2319 = (v2318.Current);
-                if (v2320 && ((v2319) < a++))
-                    continue;
-                v2320 = false;
-                if (v2321 >= v2322)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2323, ref v2322);
-                v2323[v2321] = (v2319);
-                v2321++;
-            }
-        }
-        finally
-        {
-            v2318.Dispose();
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2323, v2321);
-    }
-
-    int[] EnumerableSkipWhileChangingParamToArray2Rewritten_ProceduralLinq1(ref int a, System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2324;
-        int v2325;
-        bool v2326;
-        int v2327;
-        int v2328;
-        int[] v2329;
-        v2324 = EnumerableItems.GetEnumerator();
-        v2326 = true;
-        v2327 = 0;
-        v2328 = 8;
-        v2329 = new int[8];
-        try
-        {
-            while (v2324.MoveNext())
-            {
-                v2325 = (v2324.Current);
-                if (v2326 && ((v2325) < a--))
-                    continue;
-                v2326 = false;
-                if (v2327 >= v2328)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2329, ref v2328);
-                v2329[v2327] = (v2325);
-                v2327++;
-            }
-        }
-        finally
-        {
-            v2324.Dispose();
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2329, v2327);
-    }
-
-    int[] EnumerableSkipWhileChangingParamsToArrayRewritten_ProceduralLinq1(ref int a, ref int b, System.Collections.Generic.IEnumerable<int> EnumerableItems)
-    {
-        IEnumerator<int> v2330;
-        int v2331;
-        bool v2332;
-        int v2333;
-        int v2334;
-        int[] v2335;
-        v2330 = EnumerableItems.GetEnumerator();
-        v2332 = true;
-        v2333 = 0;
-        v2334 = 8;
-        v2335 = new int[8];
-        try
-        {
-            while (v2330.MoveNext())
-            {
-                v2331 = (v2330.Current);
-                if (v2332 && ((v2331) < a++ - b--))
-                    continue;
-                v2332 = false;
-                if (v2333 >= v2334)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2335, ref v2334);
-                v2335[v2333] = (v2331);
-                v2333++;
-            }
-        }
-        finally
-        {
-            v2330.Dispose();
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2335, v2333);
-    }
-
-    System.Collections.Generic.IEnumerable<int> RangeSkipWhileRewritten_ProceduralLinq1()
-    {
-        int v2336;
-        int v2337;
-        bool v2338;
-        v2338 = true;
-        v2336 = (0);
-        for (; v2336 < (100); v2336++)
-        {
-            v2337 = (v2336);
-            if (v2338 && ((v2337) < 50))
-                continue;
-            v2338 = false;
-            yield return (v2337);
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> RangeSkipWhileReverseRewritten_ProceduralLinq1()
-    {
-        int v2339;
-        int v2340;
-        bool v2341;
-        v2341 = true;
-        v2339 = (0);
-        for (; v2339 < (100); v2339++)
-        {
-            v2340 = (v2339);
-            if (v2341 && ((v2340) > 50))
-                continue;
-            v2341 = false;
-            yield return (v2340);
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> RangeSkipWhileTrueRewritten_ProceduralLinq1()
-    {
-        int v2342;
-        int v2343;
-        bool v2344;
-        v2344 = true;
-        v2342 = (0);
-        for (; v2342 < (100); v2342++)
-        {
-            v2343 = (v2342);
-            if (v2344 && (true))
-                continue;
-            v2344 = false;
-            yield return (v2343);
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> RangeSkipWhileFalseRewritten_ProceduralLinq1()
-    {
-        int v2345;
-        int v2346;
-        bool v2347;
-        v2347 = true;
-        v2345 = (0);
-        for (; v2345 < (100); v2345++)
-        {
-            v2346 = (v2345);
-            if (v2347 && (false))
-                continue;
-            v2347 = false;
-            yield return (v2346);
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> RangeSelectSkipWhileRewritten_ProceduralLinq1()
-    {
-        int v2348;
-        int v2349;
-        bool v2350;
-        v2350 = true;
-        v2348 = (0);
-        for (; v2348 < (100); v2348++)
-        {
-            v2349 = (20 + v2348);
-            if (v2350 && ((v2349) < 50))
-                continue;
-            v2350 = false;
-            yield return (v2349);
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> RangeWhereSkipWhileRewritten_ProceduralLinq1()
-    {
-        int v2351;
-        int v2352;
-        bool v2353;
-        v2353 = true;
-        v2351 = (0);
-        for (; v2351 < (100); v2351++)
-        {
-            v2352 = (v2351);
-            if (!(((v2352) > 20)))
-                continue;
-            v2352 = (v2352);
-            if (v2353 && ((v2352) < 50))
-                continue;
-            v2353 = false;
-            yield return (v2352);
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> RangeSkipWhileParamRewritten_ProceduralLinq1(int a)
-    {
-        int v2354;
-        int v2355;
-        bool v2356;
-        v2356 = true;
-        v2354 = (0);
-        for (; v2354 < (100); v2354++)
-        {
-            v2355 = (v2354);
-            if (v2356 && ((v2355) < a))
-                continue;
-            v2356 = false;
-            yield return (v2355);
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> RangeSkipWhileChangingParamRewritten_ProceduralLinq1(System.Func<int, bool> v2359)
-    {
-        int v2357;
-        int v2358;
-        bool v2360;
-        v2360 = true;
-        v2357 = (0);
-        for (; v2357 < (100); v2357++)
-        {
-            v2358 = (v2357);
-            if (v2360 && v2359((v2358)))
-                continue;
-            v2360 = false;
-            yield return (v2358);
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> RangeSkipWhileChangingParam2Rewritten_ProceduralLinq1(System.Func<int, bool> v2363)
-    {
-        int v2361;
-        int v2362;
-        bool v2364;
-        v2364 = true;
-        v2361 = (0);
-        for (; v2361 < (100); v2361++)
-        {
-            v2362 = (v2361);
-            if (v2364 && v2363((v2362)))
-                continue;
-            v2364 = false;
-            yield return (v2362);
-        }
-
-        yield break;
-    }
-
-    System.Collections.Generic.IEnumerable<int> RangeSkipWhileChangingParamsRewritten_ProceduralLinq1(System.Func<int, bool> v2367)
-    {
-        int v2365;
-        int v2366;
-        bool v2368;
-        v2368 = true;
-        v2365 = (0);
-        for (; v2365 < (100); v2365++)
-        {
-            v2366 = (v2365);
-            if (v2368 && v2367((v2366)))
-                continue;
-            v2368 = false;
-            yield return (v2366);
-        }
-
-        yield break;
-    }
-
-    int[] RangeSkipWhileToArrayRewritten_ProceduralLinq1()
-    {
-        int v2369;
-        int v2370;
-        bool v2371;
-        int v2372;
-        int v2373;
-        int v2374;
-        int[] v2375;
-        v2371 = true;
-        v2372 = 0;
-        v2373 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
-        v2373 -= (v2373 % 2);
-        v2374 = 8;
-        v2375 = new int[8];
-        v2369 = (0);
-        for (; v2369 < (100); v2369++)
-        {
-            v2370 = (v2369);
-            if (v2371 && ((v2370) < 50))
-                continue;
-            v2371 = false;
-            if (v2372 >= v2374)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2375, ref v2373, out v2374);
-            v2375[v2372] = (v2370);
-            v2372++;
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2375, v2372);
-    }
-
-    int[] RangeSkipWhileReverseToArrayRewritten_ProceduralLinq1()
-    {
-        int v2376;
-        int v2377;
-        bool v2378;
-        int v2379;
-        int v2380;
-        int v2381;
-        int[] v2382;
-        v2378 = true;
-        v2379 = 0;
-        v2380 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
-        v2380 -= (v2380 % 2);
-        v2381 = 8;
-        v2382 = new int[8];
-        v2376 = (0);
-        for (; v2376 < (100); v2376++)
-        {
-            v2377 = (v2376);
-            if (v2378 && ((v2377) > 50))
-                continue;
-            v2378 = false;
-            if (v2379 >= v2381)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2382, ref v2380, out v2381);
-            v2382[v2379] = (v2377);
-            v2379++;
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2382, v2379);
-    }
-
-    int[] RangeSkipWhileTrueToArrayRewritten_ProceduralLinq1()
-    {
-        int v2383;
-        int v2384;
-        bool v2385;
-        int v2386;
-        int v2387;
-        int v2388;
-        int[] v2389;
-        v2385 = true;
-        v2386 = 0;
-        v2387 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
-        v2387 -= (v2387 % 2);
-        v2388 = 8;
-        v2389 = new int[8];
-        v2383 = (0);
-        for (; v2383 < (100); v2383++)
-        {
-            v2384 = (v2383);
-            if (v2385 && (true))
-                continue;
-            v2385 = false;
-            if (v2386 >= v2388)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2389, ref v2387, out v2388);
-            v2389[v2386] = (v2384);
-            v2386++;
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2389, v2386);
-    }
-
-    int[] RangeSkipWhileFalseToArrayRewritten_ProceduralLinq1()
-    {
-        int v2390;
-        int v2391;
-        bool v2392;
-        int v2393;
-        int v2394;
-        int v2395;
-        int[] v2396;
-        v2392 = true;
-        v2393 = 0;
-        v2394 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
-        v2394 -= (v2394 % 2);
-        v2395 = 8;
-        v2396 = new int[8];
-        v2390 = (0);
-        for (; v2390 < (100); v2390++)
-        {
-            v2391 = (v2390);
-            if (v2392 && (false))
-                continue;
-            v2392 = false;
-            if (v2393 >= v2395)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2396, ref v2394, out v2395);
-            v2396[v2393] = (v2391);
-            v2393++;
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2396, v2393);
-    }
-
-    int[] RangeSelectSkipWhileToArrayRewritten_ProceduralLinq1()
-    {
-        int v2397;
-        int v2398;
-        bool v2399;
-        int v2400;
-        int v2401;
-        int v2402;
-        int[] v2403;
-        v2399 = true;
-        v2400 = 0;
-        v2401 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
-        v2401 -= (v2401 % 2);
-        v2402 = 8;
-        v2403 = new int[8];
-        v2397 = (0);
-        for (; v2397 < (100); v2397++)
-        {
-            v2398 = (20 + v2397);
-            if (v2399 && ((v2398) < 50))
-                continue;
-            v2399 = false;
-            if (v2400 >= v2402)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2403, ref v2401, out v2402);
-            v2403[v2400] = (v2398);
-            v2400++;
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2403, v2400);
-    }
-
-    int[] RangeWhereSkipWhileToArrayRewritten_ProceduralLinq1()
-    {
-        int v2404;
-        int v2405;
-        bool v2406;
-        int v2407;
-        int v2408;
-        int v2409;
-        int[] v2410;
-        v2406 = true;
-        v2407 = 0;
-        v2408 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
-        v2408 -= (v2408 % 2);
-        v2409 = 8;
-        v2410 = new int[8];
-        v2404 = (0);
-        for (; v2404 < (100); v2404++)
-        {
-            v2405 = (v2404);
-            if (!(((v2405) > 20)))
-                continue;
-            v2405 = (v2405);
-            if (v2406 && ((v2405) < 50))
-                continue;
-            v2406 = false;
-            if (v2407 >= v2409)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2410, ref v2408, out v2409);
-            v2410[v2407] = (v2405);
-            v2407++;
-        }
-
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2410, v2407);
-    }
-
     int[] RangeSkipWhileParamToArrayRewritten_ProceduralLinq1(int a)
     {
-        int v2411;
-        int v2412;
-        bool v2413;
-        int v2414;
-        int v2415;
-        int v2416;
-        int[] v2417;
-        v2413 = true;
-        v2414 = 0;
-        v2415 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
-        v2415 -= (v2415 % 2);
-        v2416 = 8;
-        v2417 = new int[8];
-        v2411 = (0);
-        for (; v2411 < (100); v2411++)
+        int v2180;
+        bool v2181;
+        int v2182;
+        int v2183;
+        int v2184;
+        int[] v2185;
+        v2181 = true;
+        v2182 = 0;
+        v2183 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
+        v2183 -= (v2183 % 2);
+        v2184 = 8;
+        v2185 = new int[8];
+        v2180 = (0);
+        for (; v2180 < (100); v2180 += (1))
         {
-            v2412 = (v2411);
-            if (v2413 && ((v2412) < a))
+            if (v2181 && (((v2180)) < a))
                 continue;
-            v2413 = false;
-            if (v2414 >= v2416)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2417, ref v2415, out v2416);
-            v2417[v2414] = (v2412);
-            v2414++;
+            v2181 = false;
+            if (v2182 >= v2184)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2185, ref v2183, out v2184);
+            v2185[v2182] = ((v2180));
+            v2182++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2417, v2414);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2185, v2182);
     }
 
     int[] RangeSkipWhileChangingParamToArrayRewritten_ProceduralLinq1(ref int a)
     {
-        int v2418;
-        int v2419;
-        bool v2420;
-        int v2421;
-        int v2422;
-        int v2423;
-        int[] v2424;
-        v2420 = true;
-        v2421 = 0;
-        v2422 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
-        v2422 -= (v2422 % 2);
-        v2423 = 8;
-        v2424 = new int[8];
-        v2418 = (0);
-        for (; v2418 < (100); v2418++)
+        int v2186;
+        bool v2187;
+        int v2188;
+        int v2189;
+        int v2190;
+        int[] v2191;
+        v2187 = true;
+        v2188 = 0;
+        v2189 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
+        v2189 -= (v2189 % 2);
+        v2190 = 8;
+        v2191 = new int[8];
+        v2186 = (0);
+        for (; v2186 < (100); v2186 += (1))
         {
-            v2419 = (v2418);
-            if (v2420 && ((v2419) < a++))
+            if (v2187 && (((v2186)) < a++))
                 continue;
-            v2420 = false;
-            if (v2421 >= v2423)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2424, ref v2422, out v2423);
-            v2424[v2421] = (v2419);
-            v2421++;
+            v2187 = false;
+            if (v2188 >= v2190)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2191, ref v2189, out v2190);
+            v2191[v2188] = ((v2186));
+            v2188++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2424, v2421);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2191, v2188);
     }
 
     int[] RangeSkipWhileChangingParamToArray2Rewritten_ProceduralLinq1(ref int a)
     {
-        int v2425;
-        int v2426;
-        bool v2427;
-        int v2428;
-        int v2429;
-        int v2430;
-        int[] v2431;
-        v2427 = true;
-        v2428 = 0;
-        v2429 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
-        v2429 -= (v2429 % 2);
-        v2430 = 8;
-        v2431 = new int[8];
-        v2425 = (0);
-        for (; v2425 < (100); v2425++)
+        int v2192;
+        bool v2193;
+        int v2194;
+        int v2195;
+        int v2196;
+        int[] v2197;
+        v2193 = true;
+        v2194 = 0;
+        v2195 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
+        v2195 -= (v2195 % 2);
+        v2196 = 8;
+        v2197 = new int[8];
+        v2192 = (0);
+        for (; v2192 < (100); v2192 += (1))
         {
-            v2426 = (v2425);
-            if (v2427 && ((v2426) < a--))
+            if (v2193 && (((v2192)) < a--))
                 continue;
-            v2427 = false;
-            if (v2428 >= v2430)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2431, ref v2429, out v2430);
-            v2431[v2428] = (v2426);
-            v2428++;
+            v2193 = false;
+            if (v2194 >= v2196)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2197, ref v2195, out v2196);
+            v2197[v2194] = ((v2192));
+            v2194++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2431, v2428);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2197, v2194);
     }
 
     int[] RangeSkipWhileChangingParamsToArrayRewritten_ProceduralLinq1(ref int a, ref int b)
     {
-        int v2432;
-        int v2433;
-        bool v2434;
-        int v2435;
-        int v2436;
-        int v2437;
-        int[] v2438;
-        v2434 = true;
-        v2435 = 0;
-        v2436 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
-        v2436 -= (v2436 % 2);
-        v2437 = 8;
-        v2438 = new int[8];
-        v2432 = (0);
-        for (; v2432 < (100); v2432++)
+        int v2198;
+        bool v2199;
+        int v2200;
+        int v2201;
+        int v2202;
+        int[] v2203;
+        v2199 = true;
+        v2200 = 0;
+        v2201 = (LinqRewrite.Core.IntExtensions.Log2((uint)((100))) - 3);
+        v2201 -= (v2201 % 2);
+        v2202 = 8;
+        v2203 = new int[8];
+        v2198 = (0);
+        for (; v2198 < (100); v2198 += (1))
         {
-            v2433 = (v2432);
-            if (v2434 && ((v2433) < a++ - b--))
+            if (v2199 && (((v2198)) < a++ - b--))
                 continue;
-            v2434 = false;
-            if (v2435 >= v2437)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2438, ref v2436, out v2437);
-            v2438[v2435] = (v2433);
-            v2435++;
+            v2199 = false;
+            if (v2200 >= v2202)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (100), ref v2203, ref v2201, out v2202);
+            v2203[v2200] = ((v2198));
+            v2200++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2438, v2435);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2203, v2200);
     }
 }}

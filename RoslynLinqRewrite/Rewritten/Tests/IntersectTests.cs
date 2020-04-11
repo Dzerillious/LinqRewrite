@@ -870,23 +870,21 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1090;
+        int v974;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1091;
-        int v1092;
-        int v1093;
-        v1091 = new HashSet<int>();
-        v1090 = (0);
-        for (; v1090 < (ArrayItems.Length); v1090++)
-            v1091.Add((ArrayItems[v1090]));
-        v1092 = (0);
-        for (; v1092 < (ArrayItems2.Length); v1092++)
+        HashSet<int> v975;
+        int v976;
+        v975 = new HashSet<int>();
+        v974 = (0);
+        for (; v974 < (ArrayItems.Length); v974 += 1)
+            v975.Add((ArrayItems[v974]));
+        v976 = (0);
+        for (; v976 < (ArrayItems2.Length); v976 += 1)
         {
-            v1093 = (ArrayItems2[v1092]);
-            if (!(v1091.Remove((v1093))))
+            if (!(v975.Remove(((ArrayItems2[v976])))))
                 continue;
-            yield return (v1093);
+            yield return ((ArrayItems2[v976]));
         }
 
         yield break;
@@ -894,25 +892,23 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectSimpleListRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1094;
+        int v977;
         if (SimpleListItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1095;
-        int v1096;
-        int v1097;
-        int v1098;
-        v1095 = new HashSet<int>();
-        v1094 = (0);
-        for (; v1094 < (ArrayItems.Length); v1094++)
-            v1095.Add((ArrayItems[v1094]));
-        v1096 = SimpleListItems2.Count;
-        v1097 = (0);
-        for (; v1097 < (v1096); v1097++)
+        HashSet<int> v978;
+        int v979;
+        v979 = SimpleListItems2.Count;
+        int v980;
+        v978 = new HashSet<int>();
+        v977 = (0);
+        for (; v977 < (ArrayItems.Length); v977 += 1)
+            v978.Add((ArrayItems[v977]));
+        v980 = (0);
+        for (; v980 < (v979); v980 += 1)
         {
-            v1098 = (SimpleListItems2[v1097]);
-            if (!(v1095.Remove((v1098))))
+            if (!(v978.Remove(((SimpleListItems2[v980])))))
                 continue;
-            yield return (v1098);
+            yield return ((SimpleListItems2[v980]));
         }
 
         yield break;
@@ -920,30 +916,30 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectEnumerableRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1099;
+        int v981;
         if (EnumerableItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1100;
-        IEnumerator<int> v1101;
-        int v1102;
-        v1101 = EnumerableItems2.GetEnumerator();
-        v1100 = new HashSet<int>();
-        v1099 = (0);
-        for (; v1099 < (ArrayItems.Length); v1099++)
-            v1100.Add((ArrayItems[v1099]));
+        HashSet<int> v982;
+        IEnumerator<int> v983;
+        int v984;
+        v983 = EnumerableItems2.GetEnumerator();
+        v982 = new HashSet<int>();
+        v981 = (0);
+        for (; v981 < (ArrayItems.Length); v981 += 1)
+            v982.Add((ArrayItems[v981]));
         try
         {
-            while (v1101.MoveNext())
+            while (v983.MoveNext())
             {
-                v1102 = (v1101.Current);
-                if (!(v1100.Remove((v1102))))
+                v984 = (v983.Current);
+                if (!(v982.Remove((v984))))
                     continue;
-                yield return (v1102);
+                yield return (v984);
             }
         }
         finally
         {
-            v1101.Dispose();
+            v983.Dispose();
         }
 
         yield break;
@@ -951,30 +947,30 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectMethodRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1103;
+        int v985;
         if (MethodEnumerable2() == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1104;
-        IEnumerator<int> v1105;
-        int v1106;
-        v1105 = MethodEnumerable2().GetEnumerator();
-        v1104 = new HashSet<int>();
-        v1103 = (0);
-        for (; v1103 < (ArrayItems.Length); v1103++)
-            v1104.Add((ArrayItems[v1103]));
+        HashSet<int> v986;
+        IEnumerator<int> v987;
+        int v988;
+        v987 = MethodEnumerable2().GetEnumerator();
+        v986 = new HashSet<int>();
+        v985 = (0);
+        for (; v985 < (ArrayItems.Length); v985 += 1)
+            v986.Add((ArrayItems[v985]));
         try
         {
-            while (v1105.MoveNext())
+            while (v987.MoveNext())
             {
-                v1106 = (v1105.Current);
-                if (!(v1104.Remove((v1106))))
+                v988 = (v987.Current);
+                if (!(v986.Remove((v988))))
                     continue;
-                yield return (v1106);
+                yield return (v988);
             }
         }
         finally
         {
-            v1105.Dispose();
+            v987.Dispose();
         }
 
         yield break;
@@ -982,27 +978,25 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> SimpleListIntersectArrayRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v1107;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v1108;
-        int v1109;
+        int v989;
+        v989 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v990;
+        v990 = SimpleListItems;
+        int v991;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1110;
-        int v1111;
-        int v1112;
-        v1107 = SimpleListItems.Count;
-        v1108 = SimpleListItems;
-        v1110 = new HashSet<int>();
-        v1109 = (0);
-        for (; v1109 < (v1107); v1109++)
-            v1110.Add((v1108[v1109]));
-        v1111 = (0);
-        for (; v1111 < (ArrayItems2.Length); v1111++)
+        HashSet<int> v992;
+        int v993;
+        v992 = new HashSet<int>();
+        v991 = (0);
+        for (; v991 < (v989); v991 += 1)
+            v992.Add((v990[v991]));
+        v993 = (0);
+        for (; v993 < (ArrayItems2.Length); v993 += 1)
         {
-            v1112 = (ArrayItems2[v1111]);
-            if (!(v1110.Remove((v1112))))
+            if (!(v992.Remove(((ArrayItems2[v993])))))
                 continue;
-            yield return (v1112);
+            yield return ((ArrayItems2[v993]));
         }
 
         yield break;
@@ -1010,29 +1004,27 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> SimpleListIntersectSimpleListRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v1113;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v1114;
-        int v1115;
+        int v994;
+        v994 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v995;
+        v995 = SimpleListItems;
+        int v996;
         if (SimpleListItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1116;
-        int v1117;
-        int v1118;
-        int v1119;
-        v1113 = SimpleListItems.Count;
-        v1114 = SimpleListItems;
-        v1116 = new HashSet<int>();
-        v1115 = (0);
-        for (; v1115 < (v1113); v1115++)
-            v1116.Add((v1114[v1115]));
-        v1117 = SimpleListItems2.Count;
-        v1118 = (0);
-        for (; v1118 < (v1117); v1118++)
+        HashSet<int> v997;
+        int v998;
+        v998 = SimpleListItems2.Count;
+        int v999;
+        v997 = new HashSet<int>();
+        v996 = (0);
+        for (; v996 < (v994); v996 += 1)
+            v997.Add((v995[v996]));
+        v999 = (0);
+        for (; v999 < (v998); v999 += 1)
         {
-            v1119 = (SimpleListItems2[v1118]);
-            if (!(v1116.Remove((v1119))))
+            if (!(v997.Remove(((SimpleListItems2[v999])))))
                 continue;
-            yield return (v1119);
+            yield return ((SimpleListItems2[v999]));
         }
 
         yield break;
@@ -1040,34 +1032,34 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> SimpleListIntersectEnumerableRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v1120;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v1121;
-        int v1122;
+        int v1000;
+        v1000 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v1001;
+        v1001 = SimpleListItems;
+        int v1002;
         if (EnumerableItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1123;
-        IEnumerator<int> v1124;
-        int v1125;
-        v1124 = EnumerableItems2.GetEnumerator();
-        v1120 = SimpleListItems.Count;
-        v1121 = SimpleListItems;
-        v1123 = new HashSet<int>();
-        v1122 = (0);
-        for (; v1122 < (v1120); v1122++)
-            v1123.Add((v1121[v1122]));
+        HashSet<int> v1003;
+        IEnumerator<int> v1004;
+        int v1005;
+        v1004 = EnumerableItems2.GetEnumerator();
+        v1003 = new HashSet<int>();
+        v1002 = (0);
+        for (; v1002 < (v1000); v1002 += 1)
+            v1003.Add((v1001[v1002]));
         try
         {
-            while (v1124.MoveNext())
+            while (v1004.MoveNext())
             {
-                v1125 = (v1124.Current);
-                if (!(v1123.Remove((v1125))))
+                v1005 = (v1004.Current);
+                if (!(v1003.Remove((v1005))))
                     continue;
-                yield return (v1125);
+                yield return (v1005);
             }
         }
         finally
         {
-            v1124.Dispose();
+            v1004.Dispose();
         }
 
         yield break;
@@ -1075,34 +1067,34 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> SimpleListIntersectMethodRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v1126;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v1127;
-        int v1128;
+        int v1006;
+        v1006 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v1007;
+        v1007 = SimpleListItems;
+        int v1008;
         if (MethodEnumerable2() == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1129;
-        IEnumerator<int> v1130;
-        int v1131;
-        v1130 = MethodEnumerable2().GetEnumerator();
-        v1126 = SimpleListItems.Count;
-        v1127 = SimpleListItems;
-        v1129 = new HashSet<int>();
-        v1128 = (0);
-        for (; v1128 < (v1126); v1128++)
-            v1129.Add((v1127[v1128]));
+        HashSet<int> v1009;
+        IEnumerator<int> v1010;
+        int v1011;
+        v1010 = MethodEnumerable2().GetEnumerator();
+        v1009 = new HashSet<int>();
+        v1008 = (0);
+        for (; v1008 < (v1006); v1008 += 1)
+            v1009.Add((v1007[v1008]));
         try
         {
-            while (v1130.MoveNext())
+            while (v1010.MoveNext())
             {
-                v1131 = (v1130.Current);
-                if (!(v1129.Remove((v1131))))
+                v1011 = (v1010.Current);
+                if (!(v1009.Remove((v1011))))
                     continue;
-                yield return (v1131);
+                yield return (v1011);
             }
         }
         finally
         {
-            v1130.Dispose();
+            v1010.Dispose();
         }
 
         yield break;
@@ -1110,31 +1102,29 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> EnumerableIntersectArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1132;
+        IEnumerator<int> v1012;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1133;
-        int v1134;
-        int v1135;
-        v1132 = EnumerableItems.GetEnumerator();
-        v1133 = new HashSet<int>();
+        HashSet<int> v1013;
+        int v1014;
+        v1012 = EnumerableItems.GetEnumerator();
+        v1013 = new HashSet<int>();
         try
         {
-            while (v1132.MoveNext())
-                v1133.Add((v1132.Current));
+            while (v1012.MoveNext())
+                v1013.Add((v1012.Current));
         }
         finally
         {
-            v1132.Dispose();
+            v1012.Dispose();
         }
 
-        v1134 = (0);
-        for (; v1134 < (ArrayItems2.Length); v1134++)
+        v1014 = (0);
+        for (; v1014 < (ArrayItems2.Length); v1014 += 1)
         {
-            v1135 = (ArrayItems2[v1134]);
-            if (!(v1133.Remove((v1135))))
+            if (!(v1013.Remove(((ArrayItems2[v1014])))))
                 continue;
-            yield return (v1135);
+            yield return ((ArrayItems2[v1014]));
         }
 
         yield break;
@@ -1142,33 +1132,31 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> EnumerableIntersectSimpleListRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1136;
+        IEnumerator<int> v1015;
         if (SimpleListItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1137;
-        int v1138;
-        int v1139;
-        int v1140;
-        v1136 = EnumerableItems.GetEnumerator();
-        v1137 = new HashSet<int>();
+        HashSet<int> v1016;
+        int v1017;
+        v1017 = SimpleListItems2.Count;
+        int v1018;
+        v1015 = EnumerableItems.GetEnumerator();
+        v1016 = new HashSet<int>();
         try
         {
-            while (v1136.MoveNext())
-                v1137.Add((v1136.Current));
+            while (v1015.MoveNext())
+                v1016.Add((v1015.Current));
         }
         finally
         {
-            v1136.Dispose();
+            v1015.Dispose();
         }
 
-        v1138 = SimpleListItems2.Count;
-        v1139 = (0);
-        for (; v1139 < (v1138); v1139++)
+        v1018 = (0);
+        for (; v1018 < (v1017); v1018 += 1)
         {
-            v1140 = (SimpleListItems2[v1139]);
-            if (!(v1137.Remove((v1140))))
+            if (!(v1016.Remove(((SimpleListItems2[v1018])))))
                 continue;
-            yield return (v1140);
+            yield return ((SimpleListItems2[v1018]));
         }
 
         yield break;
@@ -1176,38 +1164,38 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> EnumerableIntersectEnumerableRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1141;
+        IEnumerator<int> v1019;
         if (EnumerableItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1142;
-        IEnumerator<int> v1143;
-        int v1144;
-        v1141 = EnumerableItems.GetEnumerator();
-        v1143 = EnumerableItems2.GetEnumerator();
-        v1142 = new HashSet<int>();
+        HashSet<int> v1020;
+        IEnumerator<int> v1021;
+        int v1022;
+        v1019 = EnumerableItems.GetEnumerator();
+        v1021 = EnumerableItems2.GetEnumerator();
+        v1020 = new HashSet<int>();
         try
         {
-            while (v1141.MoveNext())
-                v1142.Add((v1141.Current));
+            while (v1019.MoveNext())
+                v1020.Add((v1019.Current));
         }
         finally
         {
-            v1141.Dispose();
+            v1019.Dispose();
         }
 
         try
         {
-            while (v1143.MoveNext())
+            while (v1021.MoveNext())
             {
-                v1144 = (v1143.Current);
-                if (!(v1142.Remove((v1144))))
+                v1022 = (v1021.Current);
+                if (!(v1020.Remove((v1022))))
                     continue;
-                yield return (v1144);
+                yield return (v1022);
             }
         }
         finally
         {
-            v1143.Dispose();
+            v1021.Dispose();
         }
 
         yield break;
@@ -1215,38 +1203,38 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> EnumerableIntersectMethodRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1145;
+        IEnumerator<int> v1023;
         if (MethodEnumerable2() == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1146;
-        IEnumerator<int> v1147;
-        int v1148;
-        v1145 = EnumerableItems.GetEnumerator();
-        v1147 = MethodEnumerable2().GetEnumerator();
-        v1146 = new HashSet<int>();
+        HashSet<int> v1024;
+        IEnumerator<int> v1025;
+        int v1026;
+        v1023 = EnumerableItems.GetEnumerator();
+        v1025 = MethodEnumerable2().GetEnumerator();
+        v1024 = new HashSet<int>();
         try
         {
-            while (v1145.MoveNext())
-                v1146.Add((v1145.Current));
+            while (v1023.MoveNext())
+                v1024.Add((v1023.Current));
         }
         finally
         {
-            v1145.Dispose();
+            v1023.Dispose();
         }
 
         try
         {
-            while (v1147.MoveNext())
+            while (v1025.MoveNext())
             {
-                v1148 = (v1147.Current);
-                if (!(v1146.Remove((v1148))))
+                v1026 = (v1025.Current);
+                if (!(v1024.Remove((v1026))))
                     continue;
-                yield return (v1148);
+                yield return (v1026);
             }
         }
         finally
         {
-            v1147.Dispose();
+            v1025.Dispose();
         }
 
         yield break;
@@ -1254,395 +1242,381 @@ public class IntersectTests
 
     int[] ArrayIntersectArrayToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1149;
+        int v1027;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1150;
-        int v1151;
-        int v1152;
-        int v1153;
-        int v1154;
-        int v1155;
-        int[] v1156;
-        v1150 = new HashSet<int>();
-        v1149 = (0);
-        for (; v1149 < (ArrayItems.Length); v1149++)
-            v1150.Add((ArrayItems[v1149]));
-        v1153 = 0;
-        v1154 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems2.Length + ArrayItems.Length))) - 3);
-        v1154 -= (v1154 % 2);
-        v1155 = 8;
-        v1156 = new int[8];
-        v1151 = (0);
-        for (; v1151 < (ArrayItems2.Length); v1151++)
+        HashSet<int> v1028;
+        int v1029;
+        int v1030;
+        int v1031;
+        int v1032;
+        int[] v1033;
+        v1028 = new HashSet<int>();
+        v1027 = (0);
+        for (; v1027 < (ArrayItems.Length); v1027 += 1)
+            v1028.Add((ArrayItems[v1027]));
+        v1030 = 0;
+        v1031 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems2.Length + ArrayItems.Length))) - 3);
+        v1031 -= (v1031 % 2);
+        v1032 = 8;
+        v1033 = new int[8];
+        v1029 = (0);
+        for (; v1029 < (ArrayItems2.Length); v1029 += 1)
         {
-            v1152 = (ArrayItems2[v1151]);
-            if (!(v1150.Remove((v1152))))
+            if (!(v1028.Remove(((ArrayItems2[v1029])))))
                 continue;
-            if (v1153 >= v1155)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems2.Length + ArrayItems.Length), ref v1156, ref v1154, out v1155);
-            v1156[v1153] = (v1152);
-            v1153++;
+            if (v1030 >= v1032)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems2.Length + ArrayItems.Length), ref v1033, ref v1031, out v1032);
+            v1033[v1030] = ((ArrayItems2[v1029]));
+            v1030++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1156, v1153);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1033, v1030);
     }
 
     int[] ArrayIntersectSimpleListToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1157;
+        int v1034;
         if (SimpleListItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1158;
-        int v1159;
-        int v1160;
-        int v1161;
-        int v1162;
-        int v1163;
-        int v1164;
-        int[] v1165;
-        v1158 = new HashSet<int>();
-        v1157 = (0);
-        for (; v1157 < (ArrayItems.Length); v1157++)
-            v1158.Add((ArrayItems[v1157]));
-        v1159 = SimpleListItems2.Count;
-        v1162 = 0;
-        v1163 = (LinqRewrite.Core.IntExtensions.Log2((uint)((v1159 + ArrayItems.Length))) - 3);
-        v1163 -= (v1163 % 2);
-        v1164 = 8;
-        v1165 = new int[8];
-        v1160 = (0);
-        for (; v1160 < (v1159); v1160++)
+        HashSet<int> v1035;
+        int v1036;
+        v1036 = SimpleListItems2.Count;
+        int v1037;
+        int v1038;
+        int v1039;
+        int v1040;
+        int[] v1041;
+        v1035 = new HashSet<int>();
+        v1034 = (0);
+        for (; v1034 < (ArrayItems.Length); v1034 += 1)
+            v1035.Add((ArrayItems[v1034]));
+        v1038 = 0;
+        v1039 = (LinqRewrite.Core.IntExtensions.Log2((uint)((v1036 + ArrayItems.Length))) - 3);
+        v1039 -= (v1039 % 2);
+        v1040 = 8;
+        v1041 = new int[8];
+        v1037 = (0);
+        for (; v1037 < (v1036); v1037 += 1)
         {
-            v1161 = (SimpleListItems2[v1160]);
-            if (!(v1158.Remove((v1161))))
+            if (!(v1035.Remove(((SimpleListItems2[v1037])))))
                 continue;
-            if (v1162 >= v1164)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (v1159 + ArrayItems.Length), ref v1165, ref v1163, out v1164);
-            v1165[v1162] = (v1161);
-            v1162++;
+            if (v1038 >= v1040)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (v1036 + ArrayItems.Length), ref v1041, ref v1039, out v1040);
+            v1041[v1038] = ((SimpleListItems2[v1037]));
+            v1038++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1165, v1162);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1041, v1038);
     }
 
     int[] ArrayIntersectEnumerableToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1166;
+        int v1042;
         if (EnumerableItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1167;
-        IEnumerator<int> v1168;
-        int v1169;
-        int v1170;
-        int v1171;
-        int[] v1172;
-        v1168 = EnumerableItems2.GetEnumerator();
-        v1167 = new HashSet<int>();
-        v1166 = (0);
-        for (; v1166 < (ArrayItems.Length); v1166++)
-            v1167.Add((ArrayItems[v1166]));
-        v1170 = 0;
-        v1171 = 8;
-        v1172 = new int[8];
+        HashSet<int> v1043;
+        IEnumerator<int> v1044;
+        int v1045;
+        int v1046;
+        int v1047;
+        int[] v1048;
+        v1044 = EnumerableItems2.GetEnumerator();
+        v1043 = new HashSet<int>();
+        v1042 = (0);
+        for (; v1042 < (ArrayItems.Length); v1042 += 1)
+            v1043.Add((ArrayItems[v1042]));
+        v1046 = 0;
+        v1047 = 8;
+        v1048 = new int[8];
         try
         {
-            while (v1168.MoveNext())
+            while (v1044.MoveNext())
             {
-                v1169 = (v1168.Current);
-                if (!(v1167.Remove((v1169))))
+                v1045 = (v1044.Current);
+                if (!(v1043.Remove((v1045))))
                     continue;
-                if (v1170 >= v1171)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1172, ref v1171);
-                v1172[v1170] = (v1169);
-                v1170++;
+                if (v1046 >= v1047)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1048, ref v1047);
+                v1048[v1046] = (v1045);
+                v1046++;
             }
         }
         finally
         {
-            v1168.Dispose();
+            v1044.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1172, v1170);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1048, v1046);
     }
 
     int[] SimpleListIntersectArrayToArrayRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v1173;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v1174;
-        int v1175;
+        int v1049;
+        v1049 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v1050;
+        v1050 = SimpleListItems;
+        int v1051;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1176;
-        int v1177;
-        int v1178;
-        int v1179;
-        int v1180;
-        int v1181;
-        int[] v1182;
-        v1173 = SimpleListItems.Count;
-        v1174 = SimpleListItems;
-        v1176 = new HashSet<int>();
-        v1175 = (0);
-        for (; v1175 < (v1173); v1175++)
-            v1176.Add((v1174[v1175]));
-        v1179 = 0;
-        v1180 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems2.Length + v1173))) - 3);
-        v1180 -= (v1180 % 2);
-        v1181 = 8;
-        v1182 = new int[8];
-        v1177 = (0);
-        for (; v1177 < (ArrayItems2.Length); v1177++)
+        HashSet<int> v1052;
+        int v1053;
+        int v1054;
+        int v1055;
+        int v1056;
+        int[] v1057;
+        v1052 = new HashSet<int>();
+        v1051 = (0);
+        for (; v1051 < (v1049); v1051 += 1)
+            v1052.Add((v1050[v1051]));
+        v1054 = 0;
+        v1055 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems2.Length + v1049))) - 3);
+        v1055 -= (v1055 % 2);
+        v1056 = 8;
+        v1057 = new int[8];
+        v1053 = (0);
+        for (; v1053 < (ArrayItems2.Length); v1053 += 1)
         {
-            v1178 = (ArrayItems2[v1177]);
-            if (!(v1176.Remove((v1178))))
+            if (!(v1052.Remove(((ArrayItems2[v1053])))))
                 continue;
-            if (v1179 >= v1181)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems2.Length + v1173), ref v1182, ref v1180, out v1181);
-            v1182[v1179] = (v1178);
-            v1179++;
+            if (v1054 >= v1056)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems2.Length + v1049), ref v1057, ref v1055, out v1056);
+            v1057[v1054] = ((ArrayItems2[v1053]));
+            v1054++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1182, v1179);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1057, v1054);
     }
 
     int[] SimpleListIntersectSimpleListToArrayRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v1183;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v1184;
-        int v1185;
+        int v1058;
+        v1058 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v1059;
+        v1059 = SimpleListItems;
+        int v1060;
         if (SimpleListItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1186;
-        int v1187;
-        int v1188;
-        int v1189;
-        int v1190;
-        int v1191;
-        int v1192;
-        int[] v1193;
-        v1183 = SimpleListItems.Count;
-        v1184 = SimpleListItems;
-        v1186 = new HashSet<int>();
-        v1185 = (0);
-        for (; v1185 < (v1183); v1185++)
-            v1186.Add((v1184[v1185]));
-        v1187 = SimpleListItems2.Count;
-        v1190 = 0;
-        v1191 = (LinqRewrite.Core.IntExtensions.Log2((uint)((v1187 + v1183))) - 3);
-        v1191 -= (v1191 % 2);
-        v1192 = 8;
-        v1193 = new int[8];
-        v1188 = (0);
-        for (; v1188 < (v1187); v1188++)
+        HashSet<int> v1061;
+        int v1062;
+        v1062 = SimpleListItems2.Count;
+        int v1063;
+        int v1064;
+        int v1065;
+        int v1066;
+        int[] v1067;
+        v1061 = new HashSet<int>();
+        v1060 = (0);
+        for (; v1060 < (v1058); v1060 += 1)
+            v1061.Add((v1059[v1060]));
+        v1064 = 0;
+        v1065 = (LinqRewrite.Core.IntExtensions.Log2((uint)((v1062 + v1058))) - 3);
+        v1065 -= (v1065 % 2);
+        v1066 = 8;
+        v1067 = new int[8];
+        v1063 = (0);
+        for (; v1063 < (v1062); v1063 += 1)
         {
-            v1189 = (SimpleListItems2[v1188]);
-            if (!(v1186.Remove((v1189))))
+            if (!(v1061.Remove(((SimpleListItems2[v1063])))))
                 continue;
-            if (v1190 >= v1192)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (v1187 + v1183), ref v1193, ref v1191, out v1192);
-            v1193[v1190] = (v1189);
-            v1190++;
+            if (v1064 >= v1066)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (v1062 + v1058), ref v1067, ref v1065, out v1066);
+            v1067[v1064] = ((SimpleListItems2[v1063]));
+            v1064++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1193, v1190);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1067, v1064);
     }
 
     int[] SimpleListIntersectEnumerableToArrayRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v1194;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v1195;
-        int v1196;
+        int v1068;
+        v1068 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v1069;
+        v1069 = SimpleListItems;
+        int v1070;
         if (EnumerableItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1197;
-        IEnumerator<int> v1198;
-        int v1199;
-        int v1200;
-        int v1201;
-        int[] v1202;
-        v1198 = EnumerableItems2.GetEnumerator();
-        v1194 = SimpleListItems.Count;
-        v1195 = SimpleListItems;
-        v1197 = new HashSet<int>();
-        v1196 = (0);
-        for (; v1196 < (v1194); v1196++)
-            v1197.Add((v1195[v1196]));
-        v1200 = 0;
-        v1201 = 8;
-        v1202 = new int[8];
+        HashSet<int> v1071;
+        IEnumerator<int> v1072;
+        int v1073;
+        int v1074;
+        int v1075;
+        int[] v1076;
+        v1072 = EnumerableItems2.GetEnumerator();
+        v1071 = new HashSet<int>();
+        v1070 = (0);
+        for (; v1070 < (v1068); v1070 += 1)
+            v1071.Add((v1069[v1070]));
+        v1074 = 0;
+        v1075 = 8;
+        v1076 = new int[8];
         try
         {
-            while (v1198.MoveNext())
+            while (v1072.MoveNext())
             {
-                v1199 = (v1198.Current);
-                if (!(v1197.Remove((v1199))))
+                v1073 = (v1072.Current);
+                if (!(v1071.Remove((v1073))))
                     continue;
-                if (v1200 >= v1201)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1202, ref v1201);
-                v1202[v1200] = (v1199);
-                v1200++;
+                if (v1074 >= v1075)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1076, ref v1075);
+                v1076[v1074] = (v1073);
+                v1074++;
             }
         }
         finally
         {
-            v1198.Dispose();
+            v1072.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1202, v1200);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1076, v1074);
     }
 
     int[] EnumerableIntersectArrayToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1203;
+        IEnumerator<int> v1077;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1204;
-        int v1205;
-        int v1206;
-        int v1207;
-        int v1208;
-        int[] v1209;
-        v1203 = EnumerableItems.GetEnumerator();
-        v1204 = new HashSet<int>();
+        HashSet<int> v1078;
+        int v1079;
+        int v1080;
+        int v1081;
+        int[] v1082;
+        v1077 = EnumerableItems.GetEnumerator();
+        v1078 = new HashSet<int>();
         try
         {
-            while (v1203.MoveNext())
-                v1204.Add((v1203.Current));
+            while (v1077.MoveNext())
+                v1078.Add((v1077.Current));
         }
         finally
         {
-            v1203.Dispose();
+            v1077.Dispose();
         }
 
-        v1207 = 0;
-        v1208 = 8;
-        v1209 = new int[8];
-        v1205 = (0);
-        for (; v1205 < (ArrayItems2.Length); v1205++)
+        v1080 = 0;
+        v1081 = 8;
+        v1082 = new int[8];
+        v1079 = (0);
+        for (; v1079 < (ArrayItems2.Length); v1079 += 1)
         {
-            v1206 = (ArrayItems2[v1205]);
-            if (!(v1204.Remove((v1206))))
+            if (!(v1078.Remove(((ArrayItems2[v1079])))))
                 continue;
-            if (v1207 >= v1208)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1209, ref v1208);
-            v1209[v1207] = (v1206);
-            v1207++;
+            if (v1080 >= v1081)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1082, ref v1081);
+            v1082[v1080] = ((ArrayItems2[v1079]));
+            v1080++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1209, v1207);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1082, v1080);
     }
 
     int[] EnumerableIntersectSimpleListToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1210;
+        IEnumerator<int> v1083;
         if (SimpleListItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1211;
-        int v1212;
-        int v1213;
-        int v1214;
-        int v1215;
-        int v1216;
-        int[] v1217;
-        v1210 = EnumerableItems.GetEnumerator();
-        v1211 = new HashSet<int>();
+        HashSet<int> v1084;
+        int v1085;
+        v1085 = SimpleListItems2.Count;
+        int v1086;
+        int v1087;
+        int v1088;
+        int[] v1089;
+        v1083 = EnumerableItems.GetEnumerator();
+        v1084 = new HashSet<int>();
         try
         {
-            while (v1210.MoveNext())
-                v1211.Add((v1210.Current));
+            while (v1083.MoveNext())
+                v1084.Add((v1083.Current));
         }
         finally
         {
-            v1210.Dispose();
+            v1083.Dispose();
         }
 
-        v1212 = SimpleListItems2.Count;
-        v1215 = 0;
-        v1216 = 8;
-        v1217 = new int[8];
-        v1213 = (0);
-        for (; v1213 < (v1212); v1213++)
+        v1087 = 0;
+        v1088 = 8;
+        v1089 = new int[8];
+        v1086 = (0);
+        for (; v1086 < (v1085); v1086 += 1)
         {
-            v1214 = (SimpleListItems2[v1213]);
-            if (!(v1211.Remove((v1214))))
+            if (!(v1084.Remove(((SimpleListItems2[v1086])))))
                 continue;
-            if (v1215 >= v1216)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1217, ref v1216);
-            v1217[v1215] = (v1214);
-            v1215++;
+            if (v1087 >= v1088)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1089, ref v1088);
+            v1089[v1087] = ((SimpleListItems2[v1086]));
+            v1087++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1217, v1215);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1089, v1087);
     }
 
     int[] EnumerableIntersectEnumerableToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1218;
+        IEnumerator<int> v1090;
         if (EnumerableItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1219;
-        IEnumerator<int> v1220;
-        int v1221;
-        int v1222;
-        int v1223;
-        int[] v1224;
-        v1218 = EnumerableItems.GetEnumerator();
-        v1220 = EnumerableItems2.GetEnumerator();
-        v1219 = new HashSet<int>();
+        HashSet<int> v1091;
+        IEnumerator<int> v1092;
+        int v1093;
+        int v1094;
+        int v1095;
+        int[] v1096;
+        v1090 = EnumerableItems.GetEnumerator();
+        v1092 = EnumerableItems2.GetEnumerator();
+        v1091 = new HashSet<int>();
         try
         {
-            while (v1218.MoveNext())
-                v1219.Add((v1218.Current));
+            while (v1090.MoveNext())
+                v1091.Add((v1090.Current));
         }
         finally
         {
-            v1218.Dispose();
+            v1090.Dispose();
         }
 
-        v1222 = 0;
-        v1223 = 8;
-        v1224 = new int[8];
+        v1094 = 0;
+        v1095 = 8;
+        v1096 = new int[8];
         try
         {
-            while (v1220.MoveNext())
+            while (v1092.MoveNext())
             {
-                v1221 = (v1220.Current);
-                if (!(v1219.Remove((v1221))))
+                v1093 = (v1092.Current);
+                if (!(v1091.Remove((v1093))))
                     continue;
-                if (v1222 >= v1223)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1224, ref v1223);
-                v1224[v1222] = (v1221);
-                v1222++;
+                if (v1094 >= v1095)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1096, ref v1095);
+                v1096[v1094] = (v1093);
+                v1094++;
             }
         }
         finally
         {
-            v1220.Dispose();
+            v1092.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1224, v1222);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1096, v1094);
     }
 
     System.Collections.Generic.IEnumerable<int> ArraySelectIntersectArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1225;
+        int v1097;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1226;
-        int v1227;
-        int v1228;
-        v1226 = new HashSet<int>();
-        v1225 = (0);
-        for (; v1225 < (ArrayItems.Length); v1225++)
-            v1226.Add((50 + ArrayItems[v1225]));
-        v1227 = (0);
-        for (; v1227 < (ArrayItems2.Length); v1227++)
+        HashSet<int> v1098;
+        int v1099;
+        v1098 = new HashSet<int>();
+        v1097 = (0);
+        for (; v1097 < (ArrayItems.Length); v1097 += 1)
+            v1098.Add((50 + ArrayItems[v1097]));
+        v1099 = (0);
+        for (; v1099 < (ArrayItems2.Length); v1099 += 1)
         {
-            v1228 = (ArrayItems2[v1227]);
-            if (!(v1226.Remove((v1228))))
+            if (!(v1098.Remove(((ArrayItems2[v1099])))))
                 continue;
-            yield return (v1228);
+            yield return ((ArrayItems2[v1099]));
         }
 
         yield break;
@@ -1650,39 +1624,39 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArraySelectIntersectArraySelectRewritten_ProceduralLinq1(int[] ArrayItems2)
     {
-        int v1230;
-        v1230 = (0);
-        for (; v1230 < (ArrayItems2.Length); v1230++)
-            yield return (((ArrayItems2[v1230]) + 50));
+        int v1101;
+        v1101 = (0);
+        for (; v1101 < (ArrayItems2.Length); v1101 += 1)
+            yield return (((ArrayItems2[v1101]) + 50));
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> ArraySelectIntersectArraySelectRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1231;
+        int v1102;
         if (ArraySelectIntersectArraySelectRewritten_ProceduralLinq1(ArrayItems2) == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1232;
-        IEnumerator<int> v1233;
-        int v1234;
-        v1233 = ArraySelectIntersectArraySelectRewritten_ProceduralLinq1(ArrayItems2).GetEnumerator();
-        v1232 = new HashSet<int>();
-        v1231 = (0);
-        for (; v1231 < (ArrayItems.Length); v1231++)
-            v1232.Add((50 + ArrayItems[v1231]));
+        HashSet<int> v1103;
+        IEnumerator<int> v1104;
+        int v1105;
+        v1104 = ArraySelectIntersectArraySelectRewritten_ProceduralLinq1(ArrayItems2).GetEnumerator();
+        v1103 = new HashSet<int>();
+        v1102 = (0);
+        for (; v1102 < (ArrayItems.Length); v1102 += 1)
+            v1103.Add((50 + ArrayItems[v1102]));
         try
         {
-            while (v1233.MoveNext())
+            while (v1104.MoveNext())
             {
-                v1234 = (v1233.Current);
-                if (!(v1232.Remove((v1234))))
+                v1105 = (v1104.Current);
+                if (!(v1103.Remove((v1105))))
                     continue;
-                yield return (v1234);
+                yield return (v1105);
             }
         }
         finally
         {
-            v1233.Dispose();
+            v1104.Dispose();
         }
 
         yield break;
@@ -1690,15 +1664,13 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayWhereIntersectArrayWhereRewritten_ProceduralLinq1(int[] ArrayItems2)
     {
-        int v1235;
-        int v1236;
-        v1235 = (0);
-        for (; v1235 < (ArrayItems2.Length); v1235++)
+        int v1106;
+        v1106 = (0);
+        for (; v1106 < (ArrayItems2.Length); v1106 += 1)
         {
-            v1236 = (ArrayItems2[v1235]);
-            if (!(((v1236) > 50)))
+            if (!((((ArrayItems2[v1106])) > 50)))
                 continue;
-            yield return (v1236);
+            yield return ((ArrayItems2[v1106]));
         }
 
         yield break;
@@ -1706,36 +1678,35 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayWhereIntersectArrayWhereRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1237;
-        int v1238;
+        int v1107;
         if (ArrayWhereIntersectArrayWhereRewritten_ProceduralLinq1(ArrayItems2) == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1239;
-        IEnumerator<int> v1240;
-        v1240 = ArrayWhereIntersectArrayWhereRewritten_ProceduralLinq1(ArrayItems2).GetEnumerator();
-        v1239 = new HashSet<int>();
-        v1237 = (0);
-        for (; v1237 < (ArrayItems.Length); v1237++)
+        HashSet<int> v1108;
+        IEnumerator<int> v1109;
+        int v1110;
+        v1109 = ArrayWhereIntersectArrayWhereRewritten_ProceduralLinq1(ArrayItems2).GetEnumerator();
+        v1108 = new HashSet<int>();
+        v1107 = (0);
+        for (; v1107 < (ArrayItems.Length); v1107 += 1)
         {
-            v1238 = (ArrayItems[v1237]);
-            if (!(((v1238) > 50)))
+            if (!((((ArrayItems[v1107])) > 50)))
                 continue;
-            v1239.Add((v1238));
+            v1108.Add(((ArrayItems[v1107])));
         }
 
         try
         {
-            while (v1240.MoveNext())
+            while (v1109.MoveNext())
             {
-                v1238 = (v1240.Current);
-                if (!(v1239.Remove((v1238))))
+                v1110 = (v1109.Current);
+                if (!(v1108.Remove((v1110))))
                     continue;
-                yield return (v1238);
+                yield return (v1110);
             }
         }
         finally
         {
-            v1240.Dispose();
+            v1109.Dispose();
         }
 
         yield break;
@@ -1743,135 +1714,123 @@ public class IntersectTests
 
     int ArrayIntersectArrayCountRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1241;
+        int v1111;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1242;
-        int v1243;
-        int v1244;
-        int v1245;
-        v1242 = new HashSet<int>();
-        v1241 = (0);
-        for (; v1241 < (ArrayItems.Length); v1241++)
-            v1242.Add((ArrayItems[v1241]));
-        v1245 = 0;
-        v1243 = (0);
-        for (; v1243 < (ArrayItems2.Length); v1243++)
+        HashSet<int> v1112;
+        int v1113;
+        int v1114;
+        v1112 = new HashSet<int>();
+        v1111 = (0);
+        for (; v1111 < (ArrayItems.Length); v1111 += 1)
+            v1112.Add((ArrayItems[v1111]));
+        v1114 = 0;
+        v1113 = (0);
+        for (; v1113 < (ArrayItems2.Length); v1113 += 1)
         {
-            v1244 = (ArrayItems2[v1243]);
-            if (!(v1242.Remove((v1244))))
+            if (!(v1112.Remove(((ArrayItems2[v1113])))))
                 continue;
-            v1245++;
+            v1114++;
         }
 
-        return v1245;
+        return v1114;
     }
 
     int ArrayIntersectArrayCount2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1246;
+        int v1115;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1247;
-        int v1248;
-        int v1249;
-        int v1250;
-        v1247 = new HashSet<int>();
-        v1246 = (0);
-        for (; v1246 < (ArrayItems.Length); v1246++)
-            v1247.Add((ArrayItems[v1246]));
-        v1250 = 0;
-        v1248 = (0);
-        for (; v1248 < (ArrayItems2.Length); v1248++)
+        HashSet<int> v1116;
+        int v1117;
+        int v1118;
+        v1116 = new HashSet<int>();
+        v1115 = (0);
+        for (; v1115 < (ArrayItems.Length); v1115 += 1)
+            v1116.Add((ArrayItems[v1115]));
+        v1118 = 0;
+        v1117 = (0);
+        for (; v1117 < (ArrayItems2.Length); v1117 += 1)
         {
-            v1249 = (ArrayItems2[v1248]);
-            if (!(v1247.Remove((v1249))))
+            if (!(v1116.Remove(((ArrayItems2[v1117])))))
                 continue;
-            if (!(((v1249) > 70)))
+            if (!((((ArrayItems2[v1117])) > 70)))
                 continue;
-            v1250++;
+            v1118++;
         }
 
-        return v1250;
+        return v1118;
     }
 
     int ArrayIntersectArraySumRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1251;
+        int v1119;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1252;
-        int v1253;
-        int v1254;
-        int v1255;
-        v1252 = new HashSet<int>();
-        v1251 = (0);
-        for (; v1251 < (ArrayItems.Length); v1251++)
-            v1252.Add((ArrayItems[v1251]));
-        v1255 = 0;
-        v1253 = (0);
-        for (; v1253 < (ArrayItems2.Length); v1253++)
+        HashSet<int> v1120;
+        int v1121;
+        int v1122;
+        v1120 = new HashSet<int>();
+        v1119 = (0);
+        for (; v1119 < (ArrayItems.Length); v1119 += 1)
+            v1120.Add((ArrayItems[v1119]));
+        v1122 = 0;
+        v1121 = (0);
+        for (; v1121 < (ArrayItems2.Length); v1121 += 1)
         {
-            v1254 = (ArrayItems2[v1253]);
-            if (!(v1252.Remove((v1254))))
+            if (!(v1120.Remove(((ArrayItems2[v1121])))))
                 continue;
-            v1255 += (v1254);
+            v1122 += ((ArrayItems2[v1121]));
         }
 
-        return v1255;
+        return v1122;
     }
 
     int ArrayIntersectArraySum2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1256;
+        int v1123;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1257;
-        int v1258;
-        int v1259;
-        int v1260;
-        v1257 = new HashSet<int>();
-        v1256 = (0);
-        for (; v1256 < (ArrayItems.Length); v1256++)
-            v1257.Add((ArrayItems[v1256]));
-        v1260 = 0;
-        v1258 = (0);
-        for (; v1258 < (ArrayItems2.Length); v1258++)
+        HashSet<int> v1124;
+        int v1125;
+        int v1126;
+        v1124 = new HashSet<int>();
+        v1123 = (0);
+        for (; v1123 < (ArrayItems.Length); v1123 += 1)
+            v1124.Add((ArrayItems[v1123]));
+        v1126 = 0;
+        v1125 = (0);
+        for (; v1125 < (ArrayItems2.Length); v1125 += 1)
         {
-            v1259 = (ArrayItems2[v1258]);
-            if (!(v1257.Remove((v1259))))
+            if (!(v1124.Remove(((ArrayItems2[v1125])))))
                 continue;
-            v1259 = ((v1259) + 10);
-            v1260 += v1259;
+            v1126 += (((ArrayItems2[v1125])) + 10);
         }
 
-        return v1260;
+        return v1126;
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectArrayDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1261;
+        int v1127;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1262;
-        int v1263;
-        int v1264;
-        HashSet<int> v1265;
-        v1262 = new HashSet<int>();
-        v1261 = (0);
-        for (; v1261 < (ArrayItems.Length); v1261++)
-            v1262.Add((ArrayItems[v1261]));
-        v1265 = new HashSet<int>();
-        v1263 = (0);
-        for (; v1263 < (ArrayItems2.Length); v1263++)
+        HashSet<int> v1128;
+        int v1129;
+        HashSet<int> v1130;
+        v1128 = new HashSet<int>();
+        v1127 = (0);
+        for (; v1127 < (ArrayItems.Length); v1127 += 1)
+            v1128.Add((ArrayItems[v1127]));
+        v1130 = new HashSet<int>();
+        v1129 = (0);
+        for (; v1129 < (ArrayItems2.Length); v1129 += 1)
         {
-            v1264 = (ArrayItems2[v1263]);
-            if (!(v1262.Remove((v1264))))
+            if (!(v1128.Remove(((ArrayItems2[v1129])))))
                 continue;
-            v1264 = (v1264);
-            if (!(v1265.Add((v1264))))
+            if (!(v1130.Add((((ArrayItems2[v1129]))))))
                 continue;
-            yield return (v1264);
+            yield return (((ArrayItems2[v1129])));
         }
 
         yield break;
@@ -1879,28 +1838,25 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectArrayDistinct2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1266;
+        int v1131;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1267;
-        int v1268;
-        int v1269;
-        HashSet<int> v1270;
-        v1267 = new HashSet<int>();
-        v1266 = (0);
-        for (; v1266 < (ArrayItems.Length); v1266++)
-            v1267.Add((ArrayItems[v1266]));
-        v1270 = new HashSet<int>(EqualityComparer<int>.Default);
-        v1268 = (0);
-        for (; v1268 < (ArrayItems2.Length); v1268++)
+        HashSet<int> v1132;
+        int v1133;
+        HashSet<int> v1134;
+        v1132 = new HashSet<int>();
+        v1131 = (0);
+        for (; v1131 < (ArrayItems.Length); v1131 += 1)
+            v1132.Add((ArrayItems[v1131]));
+        v1134 = new HashSet<int>(EqualityComparer<int>.Default);
+        v1133 = (0);
+        for (; v1133 < (ArrayItems2.Length); v1133 += 1)
         {
-            v1269 = (ArrayItems2[v1268]);
-            if (!(v1267.Remove((v1269))))
+            if (!(v1132.Remove(((ArrayItems2[v1133])))))
                 continue;
-            v1269 = (v1269);
-            if (!(v1270.Add((v1269))))
+            if (!(v1134.Add((((ArrayItems2[v1133]))))))
                 continue;
-            yield return (v1269);
+            yield return (((ArrayItems2[v1133])));
         }
 
         yield break;
@@ -1908,27 +1864,25 @@ public class IntersectTests
 
     int ArrayIntersectArrayElementAtRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1271;
+        int v1135;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1272;
-        int v1273;
-        int v1274;
-        int v1275;
-        v1272 = new HashSet<int>();
-        v1271 = (0);
-        for (; v1271 < (ArrayItems.Length); v1271++)
-            v1272.Add((ArrayItems[v1271]));
-        v1275 = 0;
-        v1273 = (0);
-        for (; v1273 < (ArrayItems2.Length); v1273++)
+        HashSet<int> v1136;
+        int v1137;
+        int v1138;
+        v1136 = new HashSet<int>();
+        v1135 = (0);
+        for (; v1135 < (ArrayItems.Length); v1135 += 1)
+            v1136.Add((ArrayItems[v1135]));
+        v1138 = 0;
+        v1137 = (0);
+        for (; v1137 < (ArrayItems2.Length); v1137 += 1)
         {
-            v1274 = (ArrayItems2[v1273]);
-            if (!(v1272.Remove((v1274))))
+            if (!(v1136.Remove(((ArrayItems2[v1137])))))
                 continue;
-            if (v1275 == 45)
-                return (v1274);
-            v1275++;
+            if (v1138 == 45)
+                return ((ArrayItems2[v1137]));
+            v1138++;
         }
 
         throw new System.InvalidOperationException("The sequence did not contain enough elements.");
@@ -1936,27 +1890,25 @@ public class IntersectTests
 
     int ArrayIntersectArrayElementAtOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1276;
+        int v1139;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1277;
-        int v1278;
-        int v1279;
-        int v1280;
-        v1277 = new HashSet<int>();
-        v1276 = (0);
-        for (; v1276 < (ArrayItems.Length); v1276++)
-            v1277.Add((ArrayItems[v1276]));
-        v1280 = 0;
-        v1278 = (0);
-        for (; v1278 < (ArrayItems2.Length); v1278++)
+        HashSet<int> v1140;
+        int v1141;
+        int v1142;
+        v1140 = new HashSet<int>();
+        v1139 = (0);
+        for (; v1139 < (ArrayItems.Length); v1139 += 1)
+            v1140.Add((ArrayItems[v1139]));
+        v1142 = 0;
+        v1141 = (0);
+        for (; v1141 < (ArrayItems2.Length); v1141 += 1)
         {
-            v1279 = (ArrayItems2[v1278]);
-            if (!(v1277.Remove((v1279))))
+            if (!(v1140.Remove(((ArrayItems2[v1141])))))
                 continue;
-            if (v1280 == 45)
-                return (v1279);
-            v1280++;
+            if (v1142 == 45)
+                return ((ArrayItems2[v1141]));
+            v1142++;
         }
 
         return default(int);
@@ -1964,26 +1916,24 @@ public class IntersectTests
 
     int ArrayIntersectArrayFirstRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1281;
+        int v1143;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1282;
-        int v1283;
-        int v1284;
-        int v1285;
-        v1282 = new HashSet<int>();
-        v1281 = (0);
-        for (; v1281 < (ArrayItems.Length); v1281++)
-            v1282.Add((ArrayItems[v1281]));
-        v1285 = 0;
-        v1283 = (0);
-        for (; v1283 < (ArrayItems2.Length); v1283++)
+        HashSet<int> v1144;
+        int v1145;
+        int v1146;
+        v1144 = new HashSet<int>();
+        v1143 = (0);
+        for (; v1143 < (ArrayItems.Length); v1143 += 1)
+            v1144.Add((ArrayItems[v1143]));
+        v1146 = 0;
+        v1145 = (0);
+        for (; v1145 < (ArrayItems2.Length); v1145 += 1)
         {
-            v1284 = (ArrayItems2[v1283]);
-            if (!(v1282.Remove((v1284))))
+            if (!(v1144.Remove(((ArrayItems2[v1145])))))
                 continue;
-            return (v1284);
-            v1285++;
+            return ((ArrayItems2[v1145]));
+            v1146++;
         }
 
         throw new System.InvalidOperationException("The sequence did not contain any elements.");
@@ -1991,23 +1941,21 @@ public class IntersectTests
 
     int ArrayIntersectArrayFirstOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1286;
+        int v1147;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1287;
-        int v1288;
-        int v1289;
-        v1287 = new HashSet<int>();
-        v1286 = (0);
-        for (; v1286 < (ArrayItems.Length); v1286++)
-            v1287.Add((ArrayItems[v1286]));
-        v1288 = (0);
-        for (; v1288 < (ArrayItems2.Length); v1288++)
+        HashSet<int> v1148;
+        int v1149;
+        v1148 = new HashSet<int>();
+        v1147 = (0);
+        for (; v1147 < (ArrayItems.Length); v1147 += 1)
+            v1148.Add((ArrayItems[v1147]));
+        v1149 = (0);
+        for (; v1149 < (ArrayItems2.Length); v1149 += 1)
         {
-            v1289 = (ArrayItems2[v1288]);
-            if (!(v1287.Remove((v1289))))
+            if (!(v1148.Remove(((ArrayItems2[v1149])))))
                 continue;
-            return (v1289);
+            return ((ArrayItems2[v1149]));
         }
 
         return default(int);
@@ -2015,373 +1963,347 @@ public class IntersectTests
 
     int ArrayIntersectArrayLastRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1290;
+        int v1150;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1291;
-        int v1292;
-        int v1293;
-        int v1294;
-        int? v1295;
-        v1291 = new HashSet<int>();
-        v1290 = (0);
-        for (; v1290 < (ArrayItems.Length); v1290++)
-            v1291.Add((ArrayItems[v1290]));
-        v1294 = 0;
-        v1295 = null;
-        v1292 = (0);
-        for (; v1292 < (ArrayItems2.Length); v1292++)
+        HashSet<int> v1151;
+        int v1152;
+        int v1153;
+        int? v1154;
+        v1151 = new HashSet<int>();
+        v1150 = (0);
+        for (; v1150 < (ArrayItems.Length); v1150 += 1)
+            v1151.Add((ArrayItems[v1150]));
+        v1153 = 0;
+        v1154 = null;
+        v1152 = (0);
+        for (; v1152 < (ArrayItems2.Length); v1152 += 1)
         {
-            v1293 = (ArrayItems2[v1292]);
-            if (!(v1291.Remove((v1293))))
+            if (!(v1151.Remove(((ArrayItems2[v1152])))))
                 continue;
-            v1295 = (v1293);
-            v1294++;
+            v1154 = ((ArrayItems2[v1152]));
+            v1153++;
         }
 
-        if (v1295 == null)
+        if (v1154 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1295;
+            return (int)v1154;
     }
 
     int ArrayIntersectArrayLastOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1296;
+        int v1155;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1297;
-        int v1298;
-        int v1299;
-        int? v1300;
-        v1297 = new HashSet<int>();
-        v1296 = (0);
-        for (; v1296 < (ArrayItems.Length); v1296++)
-            v1297.Add((ArrayItems[v1296]));
-        v1300 = null;
-        v1298 = (0);
-        for (; v1298 < (ArrayItems2.Length); v1298++)
+        HashSet<int> v1156;
+        int v1157;
+        int? v1158;
+        v1156 = new HashSet<int>();
+        v1155 = (0);
+        for (; v1155 < (ArrayItems.Length); v1155 += 1)
+            v1156.Add((ArrayItems[v1155]));
+        v1158 = null;
+        v1157 = (0);
+        for (; v1157 < (ArrayItems2.Length); v1157 += 1)
         {
-            v1299 = (ArrayItems2[v1298]);
-            if (!(v1297.Remove((v1299))))
+            if (!(v1156.Remove(((ArrayItems2[v1157])))))
                 continue;
-            v1300 = (v1299);
+            v1158 = ((ArrayItems2[v1157]));
         }
 
-        if (v1300 == null)
+        if (v1158 == null)
             return default(int);
         else
-            return (int)v1300;
+            return (int)v1158;
     }
 
     int ArrayIntersectArraySingleRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1301;
+        int v1159;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1302;
-        int v1303;
-        int v1304;
-        int? v1305;
-        v1302 = new HashSet<int>();
-        v1301 = (0);
-        for (; v1301 < (ArrayItems.Length); v1301++)
-            v1302.Add((ArrayItems[v1301]));
-        v1305 = null;
-        v1303 = (0);
-        for (; v1303 < (ArrayItems2.Length); v1303++)
+        HashSet<int> v1160;
+        int v1161;
+        int? v1162;
+        v1160 = new HashSet<int>();
+        v1159 = (0);
+        for (; v1159 < (ArrayItems.Length); v1159 += 1)
+            v1160.Add((ArrayItems[v1159]));
+        v1162 = null;
+        v1161 = (0);
+        for (; v1161 < (ArrayItems2.Length); v1161 += 1)
         {
-            v1304 = (ArrayItems2[v1303]);
-            if (!(v1302.Remove((v1304))))
+            if (!(v1160.Remove(((ArrayItems2[v1161])))))
                 continue;
-            if (v1305 == null)
-                v1305 = (v1304);
+            if (v1162 == null)
+                v1162 = ((ArrayItems2[v1161]));
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        if (v1305 == null)
+        if (v1162 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1305;
+            return (int)v1162;
     }
 
     int ArrayIntersectArraySingle2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1306;
+        int v1163;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1307;
-        int v1308;
-        int v1309;
-        int? v1310;
-        v1307 = new HashSet<int>();
-        v1306 = (0);
-        for (; v1306 < (ArrayItems.Length); v1306++)
-            v1307.Add((ArrayItems[v1306]));
-        v1310 = null;
-        v1308 = (0);
-        for (; v1308 < (ArrayItems2.Length); v1308++)
+        HashSet<int> v1164;
+        int v1165;
+        int? v1166;
+        v1164 = new HashSet<int>();
+        v1163 = (0);
+        for (; v1163 < (ArrayItems.Length); v1163 += 1)
+            v1164.Add((ArrayItems[v1163]));
+        v1166 = null;
+        v1165 = (0);
+        for (; v1165 < (ArrayItems2.Length); v1165 += 1)
         {
-            v1309 = (ArrayItems2[v1308]);
-            if (!(v1307.Remove((v1309))))
+            if (!(v1164.Remove(((ArrayItems2[v1165])))))
                 continue;
-            if (((v1309) == 76))
-                if (v1310 == null)
-                    v1310 = (v1309);
+            if ((((ArrayItems2[v1165])) == 76))
+                if (v1166 == null)
+                    v1166 = ((ArrayItems2[v1165]));
                 else
                     throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        if (v1310 == null)
+        if (v1166 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1310;
+            return (int)v1166;
     }
 
     int ArrayIntersectArraySingleOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1311;
+        int v1167;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1312;
-        int v1313;
-        int v1314;
-        int? v1315;
-        v1312 = new HashSet<int>();
-        v1311 = (0);
-        for (; v1311 < (ArrayItems.Length); v1311++)
-            v1312.Add((ArrayItems[v1311]));
-        v1315 = null;
-        v1313 = (0);
-        for (; v1313 < (ArrayItems2.Length); v1313++)
+        HashSet<int> v1168;
+        int v1169;
+        int? v1170;
+        v1168 = new HashSet<int>();
+        v1167 = (0);
+        for (; v1167 < (ArrayItems.Length); v1167 += 1)
+            v1168.Add((ArrayItems[v1167]));
+        v1170 = null;
+        v1169 = (0);
+        for (; v1169 < (ArrayItems2.Length); v1169 += 1)
         {
-            v1314 = (ArrayItems2[v1313]);
-            if (!(v1312.Remove((v1314))))
+            if (!(v1168.Remove(((ArrayItems2[v1169])))))
                 continue;
-            if (v1315 == null)
-                v1315 = (v1314);
+            if (v1170 == null)
+                v1170 = ((ArrayItems2[v1169]));
             else
                 throw new System.InvalidOperationException("The sequence contains more than single matching element.");
         }
 
-        if (v1315 == null)
+        if (v1170 == null)
             return default(int);
         else
-            return (int)v1315;
+            return (int)v1170;
     }
 
     int ArrayIntersectArrayMinRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1316;
+        int v1171;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1317;
-        int v1318;
-        int v1319;
-        int v1320;
-        int v1321;
-        v1317 = new HashSet<int>();
-        v1316 = (0);
-        for (; v1316 < (ArrayItems.Length); v1316++)
-            v1317.Add((ArrayItems[v1316]));
-        v1320 = 0;
-        v1321 = 2147483647;
-        v1318 = (0);
-        for (; v1318 < (ArrayItems2.Length); v1318++)
+        HashSet<int> v1172;
+        int v1173;
+        int v1174;
+        int v1175;
+        v1172 = new HashSet<int>();
+        v1171 = (0);
+        for (; v1171 < (ArrayItems.Length); v1171 += 1)
+            v1172.Add((ArrayItems[v1171]));
+        v1174 = 0;
+        v1175 = 2147483647;
+        v1173 = (0);
+        for (; v1173 < (ArrayItems2.Length); v1173 += 1)
         {
-            v1319 = (ArrayItems2[v1318]);
-            if (!(v1317.Remove((v1319))))
+            if (!(v1172.Remove(((ArrayItems2[v1173])))))
                 continue;
-            v1319 = (v1319);
-            if (v1319 >= v1321)
+            if (((ArrayItems2[v1173])) >= v1175)
                 continue;
-            v1321 = v1319;
-            v1320++;
+            v1175 = ((ArrayItems2[v1173]));
+            v1174++;
         }
 
-        if (1 > v1320)
+        if (1 > v1174)
             throw new System.InvalidOperationException("Index out of range");
-        return v1321;
+        return v1175;
     }
 
     decimal ArrayIntersectArrayMin2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1322;
+        int v1176;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1323;
-        int v1324;
-        int v1325;
-        int v1326;
-        decimal v1327;
-        decimal v1328;
-        v1323 = new HashSet<int>();
-        v1322 = (0);
-        for (; v1322 < (ArrayItems.Length); v1322++)
-            v1323.Add((ArrayItems[v1322]));
-        v1326 = 0;
-        v1327 = 79228162514264337593543950335M;
-        v1324 = (0);
-        for (; v1324 < (ArrayItems2.Length); v1324++)
+        HashSet<int> v1177;
+        int v1178;
+        int v1179;
+        decimal v1180;
+        decimal v1181;
+        v1177 = new HashSet<int>();
+        v1176 = (0);
+        for (; v1176 < (ArrayItems.Length); v1176 += 1)
+            v1177.Add((ArrayItems[v1176]));
+        v1179 = 0;
+        v1180 = 79228162514264337593543950335M;
+        v1178 = (0);
+        for (; v1178 < (ArrayItems2.Length); v1178 += 1)
         {
-            v1325 = (ArrayItems2[v1324]);
-            if (!(v1323.Remove((v1325))))
+            if (!(v1177.Remove(((ArrayItems2[v1178])))))
                 continue;
-            v1328 = ((v1325) + 2m);
-            if (v1328 >= v1327)
+            v1181 = (((ArrayItems2[v1178])) + 2m);
+            if (v1181 >= v1180)
                 continue;
-            v1327 = v1328;
-            v1326++;
+            v1180 = v1181;
+            v1179++;
         }
 
-        if (1 > v1326)
+        if (1 > v1179)
             throw new System.InvalidOperationException("Index out of range");
-        return v1327;
+        return v1180;
     }
 
     int ArrayIntersectArrayMaxRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1329;
+        int v1182;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1330;
-        int v1331;
-        int v1332;
-        int v1333;
-        int v1334;
-        v1330 = new HashSet<int>();
-        v1329 = (0);
-        for (; v1329 < (ArrayItems.Length); v1329++)
-            v1330.Add((ArrayItems[v1329]));
-        v1333 = 0;
-        v1334 = -2147483648;
-        v1331 = (0);
-        for (; v1331 < (ArrayItems2.Length); v1331++)
+        HashSet<int> v1183;
+        int v1184;
+        int v1185;
+        int v1186;
+        v1183 = new HashSet<int>();
+        v1182 = (0);
+        for (; v1182 < (ArrayItems.Length); v1182 += 1)
+            v1183.Add((ArrayItems[v1182]));
+        v1185 = 0;
+        v1186 = -2147483648;
+        v1184 = (0);
+        for (; v1184 < (ArrayItems2.Length); v1184 += 1)
         {
-            v1332 = (ArrayItems2[v1331]);
-            if (!(v1330.Remove((v1332))))
+            if (!(v1183.Remove(((ArrayItems2[v1184])))))
                 continue;
-            v1332 = (v1332);
-            if (v1332 <= v1334)
+            if (((ArrayItems2[v1184])) <= v1186)
                 continue;
-            v1334 = v1332;
-            v1333++;
+            v1186 = ((ArrayItems2[v1184]));
+            v1185++;
         }
 
-        if (1 > v1333)
+        if (1 > v1185)
             throw new System.InvalidOperationException("Index out of range");
-        return v1334;
+        return v1186;
     }
 
     decimal ArrayIntersectArrayMax2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1335;
+        int v1187;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1336;
-        int v1337;
-        int v1338;
-        int v1339;
-        decimal v1340;
-        decimal v1341;
-        v1336 = new HashSet<int>();
-        v1335 = (0);
-        for (; v1335 < (ArrayItems.Length); v1335++)
-            v1336.Add((ArrayItems[v1335]));
-        v1339 = 0;
-        v1340 = -79228162514264337593543950335M;
-        v1337 = (0);
-        for (; v1337 < (ArrayItems2.Length); v1337++)
+        HashSet<int> v1188;
+        int v1189;
+        int v1190;
+        decimal v1191;
+        decimal v1192;
+        v1188 = new HashSet<int>();
+        v1187 = (0);
+        for (; v1187 < (ArrayItems.Length); v1187 += 1)
+            v1188.Add((ArrayItems[v1187]));
+        v1190 = 0;
+        v1191 = -79228162514264337593543950335M;
+        v1189 = (0);
+        for (; v1189 < (ArrayItems2.Length); v1189 += 1)
         {
-            v1338 = (ArrayItems2[v1337]);
-            if (!(v1336.Remove((v1338))))
+            if (!(v1188.Remove(((ArrayItems2[v1189])))))
                 continue;
-            v1341 = ((v1338) + 2m);
-            if (v1341 <= v1340)
+            v1192 = (((ArrayItems2[v1189])) + 2m);
+            if (v1192 <= v1191)
                 continue;
-            v1340 = v1341;
-            v1339++;
+            v1191 = v1192;
+            v1190++;
         }
 
-        if (1 > v1339)
+        if (1 > v1190)
             throw new System.InvalidOperationException("Index out of range");
-        return v1340;
+        return v1191;
     }
 
     long ArrayIntersectArrayLongCountRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1342;
+        int v1193;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1343;
-        int v1344;
-        int v1345;
-        long v1346;
-        v1343 = new HashSet<int>();
-        v1342 = (0);
-        for (; v1342 < (ArrayItems.Length); v1342++)
-            v1343.Add((ArrayItems[v1342]));
-        v1346 = 0;
-        v1344 = (0);
-        for (; v1344 < (ArrayItems2.Length); v1344++)
+        HashSet<int> v1194;
+        int v1195;
+        long v1196;
+        v1194 = new HashSet<int>();
+        v1193 = (0);
+        for (; v1193 < (ArrayItems.Length); v1193 += 1)
+            v1194.Add((ArrayItems[v1193]));
+        v1196 = 0;
+        v1195 = (0);
+        for (; v1195 < (ArrayItems2.Length); v1195 += 1)
         {
-            v1345 = (ArrayItems2[v1344]);
-            if (!(v1343.Remove((v1345))))
+            if (!(v1194.Remove(((ArrayItems2[v1195])))))
                 continue;
-            v1346++;
+            v1196++;
         }
 
-        return v1346;
+        return v1196;
     }
 
     long ArrayIntersectArrayLongCount2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1347;
+        int v1197;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1348;
-        int v1349;
-        int v1350;
-        long v1351;
-        v1348 = new HashSet<int>();
-        v1347 = (0);
-        for (; v1347 < (ArrayItems.Length); v1347++)
-            v1348.Add((ArrayItems[v1347]));
-        v1351 = 0;
-        v1349 = (0);
-        for (; v1349 < (ArrayItems2.Length); v1349++)
+        HashSet<int> v1198;
+        int v1199;
+        long v1200;
+        v1198 = new HashSet<int>();
+        v1197 = (0);
+        for (; v1197 < (ArrayItems.Length); v1197 += 1)
+            v1198.Add((ArrayItems[v1197]));
+        v1200 = 0;
+        v1199 = (0);
+        for (; v1199 < (ArrayItems2.Length); v1199 += 1)
         {
-            v1350 = (ArrayItems2[v1349]);
-            if (!(v1348.Remove((v1350))))
+            if (!(v1198.Remove(((ArrayItems2[v1199])))))
                 continue;
-            if (!(((v1350) > 50)))
+            if (!((((ArrayItems2[v1199])) > 50)))
                 continue;
-            v1351++;
+            v1200++;
         }
 
-        return v1351;
+        return v1200;
     }
 
     bool ArrayIntersectArrayContainsRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1352;
+        int v1201;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1353;
-        int v1354;
-        int v1355;
-        v1353 = new HashSet<int>();
-        v1352 = (0);
-        for (; v1352 < (ArrayItems.Length); v1352++)
-            v1353.Add((ArrayItems[v1352]));
-        v1354 = (0);
-        for (; v1354 < (ArrayItems2.Length); v1354++)
+        HashSet<int> v1202;
+        int v1203;
+        v1202 = new HashSet<int>();
+        v1201 = (0);
+        for (; v1201 < (ArrayItems.Length); v1201 += 1)
+            v1202.Add((ArrayItems[v1201]));
+        v1203 = (0);
+        for (; v1203 < (ArrayItems2.Length); v1203 += 1)
         {
-            v1355 = (ArrayItems2[v1354]);
-            if (!(v1353.Remove((v1355))))
+            if (!(v1202.Remove(((ArrayItems2[v1203])))))
                 continue;
-            if ((v1355) == 56)
+            if (((ArrayItems2[v1203])) == 56)
                 return true;
         }
 
@@ -2390,87 +2312,81 @@ public class IntersectTests
 
     double ArrayIntersectArrayAverageRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1356;
+        int v1204;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1357;
-        int v1358;
-        int v1359;
-        double v1360;
-        int v1361;
-        v1357 = new HashSet<int>();
-        v1356 = (0);
-        for (; v1356 < (ArrayItems.Length); v1356++)
-            v1357.Add((ArrayItems[v1356]));
-        v1360 = 0;
-        v1361 = 0;
-        v1358 = (0);
-        for (; v1358 < (ArrayItems2.Length); v1358++)
+        HashSet<int> v1205;
+        int v1206;
+        double v1207;
+        int v1208;
+        v1205 = new HashSet<int>();
+        v1204 = (0);
+        for (; v1204 < (ArrayItems.Length); v1204 += 1)
+            v1205.Add((ArrayItems[v1204]));
+        v1207 = 0;
+        v1208 = 0;
+        v1206 = (0);
+        for (; v1206 < (ArrayItems2.Length); v1206 += 1)
         {
-            v1359 = (ArrayItems2[v1358]);
-            if (!(v1357.Remove((v1359))))
+            if (!(v1205.Remove(((ArrayItems2[v1206])))))
                 continue;
-            v1360 += (v1359);
-            v1361++;
+            v1207 += ((ArrayItems2[v1206]));
+            v1208++;
         }
 
-        if (1 > v1361)
+        if (1 > v1208)
             throw new System.InvalidOperationException("Index out of range");
-        return (v1360 / v1361);
+        return (v1207 / v1208);
     }
 
     double ArrayIntersectArrayAverage2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1362;
+        int v1209;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1363;
-        int v1364;
-        int v1365;
-        double v1366;
-        int v1367;
-        v1363 = new HashSet<int>();
-        v1362 = (0);
-        for (; v1362 < (ArrayItems.Length); v1362++)
-            v1363.Add((ArrayItems[v1362]));
-        v1366 = 0;
-        v1367 = 0;
-        v1364 = (0);
-        for (; v1364 < (ArrayItems2.Length); v1364++)
+        HashSet<int> v1210;
+        int v1211;
+        double v1212;
+        int v1213;
+        v1210 = new HashSet<int>();
+        v1209 = (0);
+        for (; v1209 < (ArrayItems.Length); v1209 += 1)
+            v1210.Add((ArrayItems[v1209]));
+        v1212 = 0;
+        v1213 = 0;
+        v1211 = (0);
+        for (; v1211 < (ArrayItems2.Length); v1211 += 1)
         {
-            v1365 = (ArrayItems2[v1364]);
-            if (!(v1363.Remove((v1365))))
+            if (!(v1210.Remove(((ArrayItems2[v1211])))))
                 continue;
-            v1366 += ((v1365) + 10);
-            v1367++;
+            v1212 += (((ArrayItems2[v1211])) + 10);
+            v1213++;
         }
 
-        if (1 > v1367)
+        if (1 > v1213)
             throw new System.InvalidOperationException("Index out of range");
-        return (v1366 / v1367);
+        return (v1212 / v1213);
     }
 
     bool ArrayIntersectArrayContains2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1368;
+        int v1214;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1369;
-        int v1370;
-        int v1371;
-        System.Collections.Generic.EqualityComparer<int> v1372;
-        v1369 = new HashSet<int>();
-        v1368 = (0);
-        for (; v1368 < (ArrayItems.Length); v1368++)
-            v1369.Add((ArrayItems[v1368]));
-        v1372 = EqualityComparer<int>.Default;
-        v1370 = (0);
-        for (; v1370 < (ArrayItems2.Length); v1370++)
+        HashSet<int> v1215;
+        int v1216;
+        System.Collections.Generic.EqualityComparer<int> v1217;
+        v1217 = EqualityComparer<int>.Default;
+        v1215 = new HashSet<int>();
+        v1214 = (0);
+        for (; v1214 < (ArrayItems.Length); v1214 += 1)
+            v1215.Add((ArrayItems[v1214]));
+        v1216 = (0);
+        for (; v1216 < (ArrayItems2.Length); v1216 += 1)
         {
-            v1371 = (ArrayItems2[v1370]);
-            if (!(v1369.Remove((v1371))))
+            if (!(v1215.Remove(((ArrayItems2[v1216])))))
                 continue;
-            if (v1372.Equals((v1371), 56))
+            if (v1217.Equals(((ArrayItems2[v1216])), 56))
                 return true;
         }
 
@@ -2479,15 +2395,15 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> SelectWhereArrayIntersectSelectWhereArrayContainsRewritten_ProceduralLinq1(int[] ArrayItems2)
     {
-        int v1373;
-        int v1374;
-        v1373 = (0);
-        for (; v1373 < (ArrayItems2.Length); v1373++)
+        int v1218;
+        int v1219;
+        v1218 = (0);
+        for (; v1218 < (ArrayItems2.Length); v1218 += 1)
         {
-            v1374 = (((ArrayItems2[v1373]) + 10));
-            if (!(((v1374) > 80)))
+            v1219 = (((ArrayItems2[v1218]) + 10));
+            if (!(((v1219) > 80)))
                 continue;
-            yield return (v1374);
+            yield return (v1219);
         }
 
         yield break;
@@ -2495,37 +2411,37 @@ public class IntersectTests
 
     bool SelectWhereArrayIntersectSelectWhereArrayContainsRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1375;
-        int v1376;
+        int v1220;
+        int v1221;
         if (SelectWhereArrayIntersectSelectWhereArrayContainsRewritten_ProceduralLinq1(ArrayItems2) == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1377;
-        IEnumerator<int> v1378;
-        v1378 = SelectWhereArrayIntersectSelectWhereArrayContainsRewritten_ProceduralLinq1(ArrayItems2).GetEnumerator();
-        v1377 = new HashSet<int>();
-        v1375 = (0);
-        for (; v1375 < (ArrayItems.Length); v1375++)
+        HashSet<int> v1222;
+        IEnumerator<int> v1223;
+        v1223 = SelectWhereArrayIntersectSelectWhereArrayContainsRewritten_ProceduralLinq1(ArrayItems2).GetEnumerator();
+        v1222 = new HashSet<int>();
+        v1220 = (0);
+        for (; v1220 < (ArrayItems.Length); v1220 += 1)
         {
-            v1376 = (10 + ArrayItems[v1375]);
-            if (!(((v1376) > 80)))
+            v1221 = (10 + ArrayItems[v1220]);
+            if (!(((v1221) > 80)))
                 continue;
-            v1377.Add((v1376));
+            v1222.Add((v1221));
         }
 
         try
         {
-            while (v1378.MoveNext())
+            while (v1223.MoveNext())
             {
-                v1376 = (v1378.Current);
-                if (!(v1377.Remove((v1376))))
+                v1221 = (v1223.Current);
+                if (!(v1222.Remove((v1221))))
                     continue;
-                if ((v1376) == 112)
+                if ((v1221) == 112)
                     return true;
             }
         }
         finally
         {
-            v1378.Dispose();
+            v1223.Dispose();
         }
 
         return false;
@@ -2533,23 +2449,21 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> RangeIntersectArrayRewritten_ProceduralLinq1()
     {
-        int v1379;
+        int v1224;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1380;
-        int v1381;
-        int v1382;
-        v1380 = new HashSet<int>();
-        v1379 = (0);
-        for (; v1379 < (100); v1379++)
-            v1380.Add((20 + v1379));
-        v1381 = (0);
-        for (; v1381 < (ArrayItems2.Length); v1381++)
+        HashSet<int> v1225;
+        int v1226;
+        v1225 = new HashSet<int>();
+        v1224 = (0);
+        for (; v1224 < (100); v1224 += (1))
+            v1225.Add((20 + v1224));
+        v1226 = (0);
+        for (; v1226 < (ArrayItems2.Length); v1226 += 1)
         {
-            v1382 = (ArrayItems2[v1381]);
-            if (!(v1380.Remove((v1382))))
+            if (!(v1225.Remove(((ArrayItems2[v1226])))))
                 continue;
-            yield return (v1382);
+            yield return ((ArrayItems2[v1226]));
         }
 
         yield break;
@@ -2557,23 +2471,21 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> RepeatIntersectArrayRewritten_ProceduralLinq1()
     {
-        int v1383;
+        int v1227;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1384;
-        int v1385;
-        int v1386;
-        v1384 = new HashSet<int>();
-        v1383 = (0);
-        for (; v1383 < (100); v1383++)
-            v1384.Add((20));
-        v1385 = (0);
-        for (; v1385 < (ArrayItems2.Length); v1385++)
+        HashSet<int> v1228;
+        int v1229;
+        v1228 = new HashSet<int>();
+        v1227 = (0);
+        for (; v1227 < (100); v1227 += 1)
+            v1228.Add((20));
+        v1229 = (0);
+        for (; v1229 < (ArrayItems2.Length); v1229 += 1)
         {
-            v1386 = (ArrayItems2[v1385]);
-            if (!(v1384.Remove((v1386))))
+            if (!(v1228.Remove(((ArrayItems2[v1229])))))
                 continue;
-            yield return (v1386);
+            yield return ((ArrayItems2[v1229]));
         }
 
         yield break;
@@ -2581,21 +2493,19 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> EmptyIntersectArrayRewritten_ProceduralLinq1()
     {
-        int v1387;
+        int v1230;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1388;
-        int v1389;
-        int v1390;
-        v1387 = 0;
-        v1388 = new HashSet<int>();
-        v1389 = (0);
-        for (; v1389 < (ArrayItems2.Length); v1389++)
+        HashSet<int> v1231;
+        int v1232;
+        v1230 = 0;
+        v1231 = new HashSet<int>();
+        v1232 = (0);
+        for (; v1232 < (ArrayItems2.Length); v1232 += 1)
         {
-            v1390 = (ArrayItems2[v1389]);
-            if (!(v1388.Remove((v1390))))
+            if (!(v1231.Remove(((ArrayItems2[v1232])))))
                 continue;
-            yield return (v1390);
+            yield return ((ArrayItems2[v1232]));
         }
 
         yield break;
@@ -2603,29 +2513,26 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> RangeEmpty2ArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1391;
-        int v1392;
+        int v1233;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1393;
-        int v1394;
-        v1393 = new HashSet<int>();
-        v1391 = (0);
-        for (; v1391 < (ArrayItems.Length); v1391++)
+        HashSet<int> v1234;
+        int v1235;
+        v1234 = new HashSet<int>();
+        v1233 = (0);
+        for (; v1233 < (ArrayItems.Length); v1233 += 1)
         {
-            v1392 = (ArrayItems[v1391]);
             if (!((false)))
                 continue;
-            v1393.Add((v1392));
+            v1234.Add(((ArrayItems[v1233])));
         }
 
-        v1394 = (0);
-        for (; v1394 < (ArrayItems2.Length); v1394++)
+        v1235 = (0);
+        for (; v1235 < (ArrayItems2.Length); v1235 += 1)
         {
-            v1392 = (ArrayItems2[v1394]);
-            if (!(v1393.Remove((v1392))))
+            if (!(v1234.Remove(((ArrayItems2[v1235])))))
                 continue;
-            yield return (v1392);
+            yield return ((ArrayItems2[v1235]));
         }
 
         yield break;
@@ -2633,39 +2540,39 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectRangeRewritten_ProceduralLinq1()
     {
-        int v1395;
-        v1395 = (0);
-        for (; v1395 < (260); v1395++)
-            yield return (70 + v1395);
+        int v1236;
+        v1236 = (0);
+        for (; v1236 < (260); v1236 += (1))
+            yield return (70 + v1236);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectRangeRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1396;
+        int v1237;
         if (ArrayIntersectRangeRewritten_ProceduralLinq1() == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1397;
-        IEnumerator<int> v1398;
-        int v1399;
-        v1398 = ArrayIntersectRangeRewritten_ProceduralLinq1().GetEnumerator();
-        v1397 = new HashSet<int>();
-        v1396 = (0);
-        for (; v1396 < (ArrayItems.Length); v1396++)
-            v1397.Add((ArrayItems[v1396]));
+        HashSet<int> v1238;
+        IEnumerator<int> v1239;
+        int v1240;
+        v1239 = ArrayIntersectRangeRewritten_ProceduralLinq1().GetEnumerator();
+        v1238 = new HashSet<int>();
+        v1237 = (0);
+        for (; v1237 < (ArrayItems.Length); v1237 += 1)
+            v1238.Add((ArrayItems[v1237]));
         try
         {
-            while (v1398.MoveNext())
+            while (v1239.MoveNext())
             {
-                v1399 = (v1398.Current);
-                if (!(v1397.Remove((v1399))))
+                v1240 = (v1239.Current);
+                if (!(v1238.Remove((v1240))))
                     continue;
-                yield return (v1399);
+                yield return (v1240);
             }
         }
         finally
         {
-            v1398.Dispose();
+            v1239.Dispose();
         }
 
         yield break;
@@ -2673,39 +2580,39 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectRepeatRewritten_ProceduralLinq1()
     {
-        int v1400;
-        v1400 = (0);
-        for (; v1400 < (100); v1400++)
+        int v1241;
+        v1241 = (0);
+        for (; v1241 < (100); v1241 += 1)
             yield return (70);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectRepeatRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1401;
+        int v1242;
         if (ArrayIntersectRepeatRewritten_ProceduralLinq1() == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1402;
-        IEnumerator<int> v1403;
-        int v1404;
-        v1403 = ArrayIntersectRepeatRewritten_ProceduralLinq1().GetEnumerator();
-        v1402 = new HashSet<int>();
-        v1401 = (0);
-        for (; v1401 < (ArrayItems.Length); v1401++)
-            v1402.Add((ArrayItems[v1401]));
+        HashSet<int> v1243;
+        IEnumerator<int> v1244;
+        int v1245;
+        v1244 = ArrayIntersectRepeatRewritten_ProceduralLinq1().GetEnumerator();
+        v1243 = new HashSet<int>();
+        v1242 = (0);
+        for (; v1242 < (ArrayItems.Length); v1242 += 1)
+            v1243.Add((ArrayItems[v1242]));
         try
         {
-            while (v1403.MoveNext())
+            while (v1244.MoveNext())
             {
-                v1404 = (v1403.Current);
-                if (!(v1402.Remove((v1404))))
+                v1245 = (v1244.Current);
+                if (!(v1243.Remove((v1245))))
                     continue;
-                yield return (v1404);
+                yield return (v1245);
             }
         }
         finally
         {
-            v1403.Dispose();
+            v1244.Dispose();
         }
 
         yield break;
@@ -2713,30 +2620,30 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectEmptyRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1405;
+        int v1246;
         if (Enumerable.Empty<int>() == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1406;
-        IEnumerator<int> v1407;
-        int v1408;
-        v1407 = Enumerable.Empty<int>().GetEnumerator();
-        v1406 = new HashSet<int>();
-        v1405 = (0);
-        for (; v1405 < (ArrayItems.Length); v1405++)
-            v1406.Add((ArrayItems[v1405]));
+        HashSet<int> v1247;
+        IEnumerator<int> v1248;
+        int v1249;
+        v1248 = Enumerable.Empty<int>().GetEnumerator();
+        v1247 = new HashSet<int>();
+        v1246 = (0);
+        for (; v1246 < (ArrayItems.Length); v1246 += 1)
+            v1247.Add((ArrayItems[v1246]));
         try
         {
-            while (v1407.MoveNext())
+            while (v1248.MoveNext())
             {
-                v1408 = (v1407.Current);
-                if (!(v1406.Remove((v1408))))
+                v1249 = (v1248.Current);
+                if (!(v1247.Remove((v1249))))
                     continue;
-                yield return (v1408);
+                yield return (v1249);
             }
         }
         finally
         {
-            v1407.Dispose();
+            v1248.Dispose();
         }
 
         yield break;
@@ -2744,15 +2651,13 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectEmpty2Rewritten_ProceduralLinq1(int[] ArrayItems2)
     {
-        int v1409;
-        int v1410;
-        v1409 = (0);
-        for (; v1409 < (ArrayItems2.Length); v1409++)
+        int v1250;
+        v1250 = (0);
+        for (; v1250 < (ArrayItems2.Length); v1250 += 1)
         {
-            v1410 = (ArrayItems2[v1409]);
             if (!((false)))
                 continue;
-            yield return (v1410);
+            yield return ((ArrayItems2[v1250]));
         }
 
         yield break;
@@ -2760,30 +2665,30 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectEmpty2Rewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1411;
+        int v1251;
         if (ArrayIntersectEmpty2Rewritten_ProceduralLinq1(ArrayItems2) == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1412;
-        IEnumerator<int> v1413;
-        int v1414;
-        v1413 = ArrayIntersectEmpty2Rewritten_ProceduralLinq1(ArrayItems2).GetEnumerator();
-        v1412 = new HashSet<int>();
-        v1411 = (0);
-        for (; v1411 < (ArrayItems.Length); v1411++)
-            v1412.Add((ArrayItems[v1411]));
+        HashSet<int> v1252;
+        IEnumerator<int> v1253;
+        int v1254;
+        v1253 = ArrayIntersectEmpty2Rewritten_ProceduralLinq1(ArrayItems2).GetEnumerator();
+        v1252 = new HashSet<int>();
+        v1251 = (0);
+        for (; v1251 < (ArrayItems.Length); v1251 += 1)
+            v1252.Add((ArrayItems[v1251]));
         try
         {
-            while (v1413.MoveNext())
+            while (v1253.MoveNext())
             {
-                v1414 = (v1413.Current);
-                if (!(v1412.Remove((v1414))))
+                v1254 = (v1253.Current);
+                if (!(v1252.Remove((v1254))))
                     continue;
-                yield return (v1414);
+                yield return (v1254);
             }
         }
         finally
         {
-            v1413.Dispose();
+            v1253.Dispose();
         }
 
         yield break;
@@ -2791,39 +2696,39 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectAllRewritten_ProceduralLinq1()
     {
-        int v1415;
-        v1415 = (0);
-        for (; v1415 < (1000); v1415++)
-            yield return (v1415);
+        int v1255;
+        v1255 = (0);
+        for (; v1255 < (1000); v1255 += (1))
+            yield return (v1255);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectAllRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1416;
+        int v1256;
         if (ArrayIntersectAllRewritten_ProceduralLinq1() == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1417;
-        IEnumerator<int> v1418;
-        int v1419;
-        v1418 = ArrayIntersectAllRewritten_ProceduralLinq1().GetEnumerator();
-        v1417 = new HashSet<int>();
-        v1416 = (0);
-        for (; v1416 < (ArrayItems.Length); v1416++)
-            v1417.Add((ArrayItems[v1416]));
+        HashSet<int> v1257;
+        IEnumerator<int> v1258;
+        int v1259;
+        v1258 = ArrayIntersectAllRewritten_ProceduralLinq1().GetEnumerator();
+        v1257 = new HashSet<int>();
+        v1256 = (0);
+        for (; v1256 < (ArrayItems.Length); v1256 += 1)
+            v1257.Add((ArrayItems[v1256]));
         try
         {
-            while (v1418.MoveNext())
+            while (v1258.MoveNext())
             {
-                v1419 = (v1418.Current);
-                if (!(v1417.Remove((v1419))))
+                v1259 = (v1258.Current);
+                if (!(v1257.Remove((v1259))))
                     continue;
-                yield return (v1419);
+                yield return (v1259);
             }
         }
         finally
         {
-            v1418.Dispose();
+            v1258.Dispose();
         }
 
         yield break;
@@ -2831,51 +2736,50 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectNullRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1420;
+        int v1260;
         throw new System.InvalidOperationException("Invalid null object");
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectArrayIntersectEnumerableRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1421;
+        int v1261;
         if (ArrayItems == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1422;
-        int v1423;
-        int v1424;
+        HashSet<int> v1262;
+        int v1263;
         if (EnumerableItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1425;
-        IEnumerator<int> v1426;
-        v1426 = EnumerableItems2.GetEnumerator();
-        v1422 = new HashSet<int>();
-        v1421 = (0);
-        for (; v1421 < (ArrayItems.Length); v1421++)
-            v1422.Add((ArrayItems[v1421]));
-        v1425 = new HashSet<int>();
-        v1423 = (0);
-        for (; v1423 < (ArrayItems.Length); v1423++)
+        HashSet<int> v1264;
+        IEnumerator<int> v1265;
+        int v1266;
+        v1265 = EnumerableItems2.GetEnumerator();
+        v1262 = new HashSet<int>();
+        v1261 = (0);
+        for (; v1261 < (ArrayItems.Length); v1261 += 1)
+            v1262.Add((ArrayItems[v1261]));
+        v1264 = new HashSet<int>();
+        v1263 = (0);
+        for (; v1263 < (ArrayItems.Length); v1263 += 1)
         {
-            v1424 = (ArrayItems[v1423]);
-            if (!(v1422.Remove((v1424))))
+            if (!(v1262.Remove(((ArrayItems[v1263])))))
                 continue;
-            v1425.Add((v1424));
+            v1264.Add(((ArrayItems[v1263])));
         }
 
         try
         {
-            while (v1426.MoveNext())
+            while (v1265.MoveNext())
             {
-                v1424 = (v1426.Current);
-                if (!(v1425.Remove((v1424))))
+                v1266 = (v1265.Current);
+                if (!(v1264.Remove((v1266))))
                     continue;
-                yield return (v1424);
+                yield return (v1266);
             }
         }
         finally
         {
-            v1426.Dispose();
+            v1265.Dispose();
         }
 
         yield break;
@@ -2883,30 +2787,30 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectArrayIntersectEnumerable2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1427;
+        int v1267;
         if (EnumerableItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1428;
-        IEnumerator<int> v1429;
-        int v1430;
-        v1429 = EnumerableItems2.GetEnumerator();
-        v1428 = new HashSet<int>();
-        v1427 = (0);
-        for (; v1427 < (ArrayItems.Length); v1427++)
-            v1428.Add((ArrayItems[v1427]));
+        HashSet<int> v1268;
+        IEnumerator<int> v1269;
+        int v1270;
+        v1269 = EnumerableItems2.GetEnumerator();
+        v1268 = new HashSet<int>();
+        v1267 = (0);
+        for (; v1267 < (ArrayItems.Length); v1267 += 1)
+            v1268.Add((ArrayItems[v1267]));
         try
         {
-            while (v1429.MoveNext())
+            while (v1269.MoveNext())
             {
-                v1430 = (v1429.Current);
-                if (!(v1428.Remove((v1430))))
+                v1270 = (v1269.Current);
+                if (!(v1268.Remove((v1270))))
                     continue;
-                yield return (v1430);
+                yield return (v1270);
             }
         }
         finally
         {
-            v1429.Dispose();
+            v1269.Dispose();
         }
 
         yield break;
@@ -2914,30 +2818,30 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayIntersectArrayIntersectEnumerable2Rewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1431;
+        int v1271;
         if (ArrayIntersectArrayIntersectEnumerable2Rewritten_ProceduralLinq1(ArrayItems) == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1432;
-        IEnumerator<int> v1433;
-        int v1434;
-        v1433 = ArrayIntersectArrayIntersectEnumerable2Rewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
-        v1432 = new HashSet<int>();
-        v1431 = (0);
-        for (; v1431 < (ArrayItems.Length); v1431++)
-            v1432.Add((ArrayItems[v1431]));
+        HashSet<int> v1272;
+        IEnumerator<int> v1273;
+        int v1274;
+        v1273 = ArrayIntersectArrayIntersectEnumerable2Rewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
+        v1272 = new HashSet<int>();
+        v1271 = (0);
+        for (; v1271 < (ArrayItems.Length); v1271 += 1)
+            v1272.Add((ArrayItems[v1271]));
         try
         {
-            while (v1433.MoveNext())
+            while (v1273.MoveNext())
             {
-                v1434 = (v1433.Current);
-                if (!(v1432.Remove((v1434))))
+                v1274 = (v1273.Current);
+                if (!(v1272.Remove((v1274))))
                     continue;
-                yield return (v1434);
+                yield return (v1274);
             }
         }
         finally
         {
-            v1433.Dispose();
+            v1273.Dispose();
         }
 
         yield break;
@@ -2945,17 +2849,15 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctIntersectArrayDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1435;
-        HashSet<int> v1436;
-        int v1437;
-        v1436 = new HashSet<int>();
-        v1435 = (0);
-        for (; v1435 < (ArrayItems.Length); v1435++)
+        int v1275;
+        HashSet<int> v1276;
+        v1276 = new HashSet<int>();
+        v1275 = (0);
+        for (; v1275 < (ArrayItems.Length); v1275 += 1)
         {
-            v1437 = (ArrayItems[v1435]);
-            if (!(v1436.Add((v1437))))
+            if (!(v1276.Add(((ArrayItems[v1275])))))
                 continue;
-            yield return (v1437);
+            yield return ((ArrayItems[v1275]));
         }
 
         yield break;
@@ -2963,38 +2865,37 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctIntersectArrayDistinctRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1438;
-        HashSet<int> v1439;
-        int v1440;
+        int v1277;
+        HashSet<int> v1278;
         if (ArrayDistinctIntersectArrayDistinctRewritten_ProceduralLinq1(ArrayItems) == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1441;
-        IEnumerator<int> v1442;
-        v1442 = ArrayDistinctIntersectArrayDistinctRewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
-        v1439 = new HashSet<int>();
-        v1441 = new HashSet<int>();
-        v1438 = (0);
-        for (; v1438 < (ArrayItems.Length); v1438++)
+        HashSet<int> v1279;
+        IEnumerator<int> v1280;
+        int v1281;
+        v1280 = ArrayDistinctIntersectArrayDistinctRewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
+        v1278 = new HashSet<int>();
+        v1279 = new HashSet<int>();
+        v1277 = (0);
+        for (; v1277 < (ArrayItems.Length); v1277 += 1)
         {
-            v1440 = (ArrayItems[v1438]);
-            if (!(v1439.Add((v1440))))
+            if (!(v1278.Add(((ArrayItems[v1277])))))
                 continue;
-            v1441.Add((v1440));
+            v1279.Add(((ArrayItems[v1277])));
         }
 
         try
         {
-            while (v1442.MoveNext())
+            while (v1280.MoveNext())
             {
-                v1440 = (v1442.Current);
-                if (!(v1441.Remove((v1440))))
+                v1281 = (v1280.Current);
+                if (!(v1279.Remove((v1281))))
                     continue;
-                yield return (v1440);
+                yield return (v1281);
             }
         }
         finally
         {
-            v1442.Dispose();
+            v1280.Dispose();
         }
 
         yield break;
@@ -3002,17 +2903,15 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctIntersectArrayDistinctDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1443;
-        HashSet<int> v1444;
-        int v1445;
-        v1444 = new HashSet<int>();
-        v1443 = (0);
-        for (; v1443 < (ArrayItems.Length); v1443++)
+        int v1282;
+        HashSet<int> v1283;
+        v1283 = new HashSet<int>();
+        v1282 = (0);
+        for (; v1282 < (ArrayItems.Length); v1282 += 1)
         {
-            v1445 = (ArrayItems[v1443]);
-            if (!(v1444.Add((v1445))))
+            if (!(v1283.Add(((ArrayItems[v1282])))))
                 continue;
-            yield return (v1445);
+            yield return ((ArrayItems[v1282]));
         }
 
         yield break;
@@ -3020,43 +2919,41 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctIntersectArrayDistinctDistinctRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1446;
-        HashSet<int> v1447;
-        int v1448;
+        int v1284;
+        HashSet<int> v1285;
         if (ArrayDistinctIntersectArrayDistinctDistinctRewritten_ProceduralLinq1(ArrayItems) == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1449;
-        IEnumerator<int> v1450;
-        HashSet<int> v1451;
-        v1450 = ArrayDistinctIntersectArrayDistinctDistinctRewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
-        v1447 = new HashSet<int>();
-        v1449 = new HashSet<int>();
-        v1446 = (0);
-        for (; v1446 < (ArrayItems.Length); v1446++)
+        HashSet<int> v1286;
+        IEnumerator<int> v1287;
+        int v1288;
+        HashSet<int> v1289;
+        v1287 = ArrayDistinctIntersectArrayDistinctDistinctRewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
+        v1285 = new HashSet<int>();
+        v1286 = new HashSet<int>();
+        v1284 = (0);
+        for (; v1284 < (ArrayItems.Length); v1284 += 1)
         {
-            v1448 = (ArrayItems[v1446]);
-            if (!(v1447.Add((v1448))))
+            if (!(v1285.Add(((ArrayItems[v1284])))))
                 continue;
-            v1449.Add((v1448));
+            v1286.Add(((ArrayItems[v1284])));
         }
 
-        v1451 = new HashSet<int>();
+        v1289 = new HashSet<int>();
         try
         {
-            while (v1450.MoveNext())
+            while (v1287.MoveNext())
             {
-                v1448 = (v1450.Current);
-                if (!(v1449.Remove((v1448))))
+                v1288 = (v1287.Current);
+                if (!(v1286.Remove((v1288))))
                     continue;
-                v1448 = (v1448);
-                if (!(v1451.Add((v1448))))
+                if (!(v1289.Add(((v1288)))))
                     continue;
-                yield return (v1448);
+                yield return ((v1288));
             }
         }
         finally
         {
-            v1450.Dispose();
+            v1287.Dispose();
         }
 
         yield break;
@@ -3064,17 +2961,15 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctIntersectArrayDistinctDistinct2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1452;
-        HashSet<int> v1453;
-        int v1454;
-        v1453 = new HashSet<int>(EqualityComparer<int>.Default);
-        v1452 = (0);
-        for (; v1452 < (ArrayItems.Length); v1452++)
+        int v1290;
+        HashSet<int> v1291;
+        v1291 = new HashSet<int>(EqualityComparer<int>.Default);
+        v1290 = (0);
+        for (; v1290 < (ArrayItems.Length); v1290 += 1)
         {
-            v1454 = (ArrayItems[v1452]);
-            if (!(v1453.Add((v1454))))
+            if (!(v1291.Add(((ArrayItems[v1290])))))
                 continue;
-            yield return (v1454);
+            yield return ((ArrayItems[v1290]));
         }
 
         yield break;
@@ -3082,43 +2977,41 @@ public class IntersectTests
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctIntersectArrayDistinctDistinct2Rewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1455;
-        HashSet<int> v1456;
-        int v1457;
+        int v1292;
+        HashSet<int> v1293;
         if (ArrayDistinctIntersectArrayDistinctDistinct2Rewritten_ProceduralLinq1(ArrayItems) == null)
             throw new System.InvalidOperationException("Invalid null object");
-        HashSet<int> v1458;
-        IEnumerator<int> v1459;
-        HashSet<int> v1460;
-        v1459 = ArrayDistinctIntersectArrayDistinctDistinct2Rewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
-        v1456 = new HashSet<int>(EqualityComparer<int>.Default);
-        v1458 = new HashSet<int>();
-        v1455 = (0);
-        for (; v1455 < (ArrayItems.Length); v1455++)
+        HashSet<int> v1294;
+        IEnumerator<int> v1295;
+        int v1296;
+        HashSet<int> v1297;
+        v1295 = ArrayDistinctIntersectArrayDistinctDistinct2Rewritten_ProceduralLinq1(ArrayItems).GetEnumerator();
+        v1293 = new HashSet<int>(EqualityComparer<int>.Default);
+        v1294 = new HashSet<int>();
+        v1292 = (0);
+        for (; v1292 < (ArrayItems.Length); v1292 += 1)
         {
-            v1457 = (ArrayItems[v1455]);
-            if (!(v1456.Add((v1457))))
+            if (!(v1293.Add(((ArrayItems[v1292])))))
                 continue;
-            v1458.Add((v1457));
+            v1294.Add(((ArrayItems[v1292])));
         }
 
-        v1460 = new HashSet<int>(EqualityComparer<int>.Default);
+        v1297 = new HashSet<int>(EqualityComparer<int>.Default);
         try
         {
-            while (v1459.MoveNext())
+            while (v1295.MoveNext())
             {
-                v1457 = (v1459.Current);
-                if (!(v1458.Remove((v1457))))
+                v1296 = (v1295.Current);
+                if (!(v1294.Remove((v1296))))
                     continue;
-                v1457 = (v1457);
-                if (!(v1460.Add((v1457))))
+                if (!(v1297.Add(((v1296)))))
                     continue;
-                yield return (v1457);
+                yield return ((v1296));
             }
         }
         finally
         {
-            v1459.Dispose();
+            v1295.Dispose();
         }
 
         yield break;

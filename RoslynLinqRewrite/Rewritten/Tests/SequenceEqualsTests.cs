@@ -426,23 +426,23 @@ public class SequenceEqualTests
 
     bool ArraySequenceEqualArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1896;
+        int v1707;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1897;
-        v1897 = ((IEnumerable<int>)ArrayItems2).GetEnumerator();
+        IEnumerator<int> v1708;
+        v1708 = ((IEnumerable<int>)ArrayItems2).GetEnumerator();
         try
         {
-            v1896 = (0);
-            for (; v1896 < (ArrayItems.Length); v1896++)
-                if (!((v1897.MoveNext()) && v1897.Current.Equals((ArrayItems[v1896]))))
+            v1707 = (0);
+            for (; v1707 < (ArrayItems.Length); v1707 += 1)
+                if (!((v1708.MoveNext()) && v1708.Current.Equals((ArrayItems[v1707]))))
                     return false;
-            if (v1897.MoveNext())
+            if (v1708.MoveNext())
                 return false;
         }
         finally
         {
-            v1897.Dispose();
+            v1708.Dispose();
         }
 
         return true;
@@ -450,23 +450,23 @@ public class SequenceEqualTests
 
     bool ArraySequenceEqualSimpleListRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1899;
+        int v1710;
         if (SimpleListItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1900;
-        v1900 = ((IEnumerable<int>)SimpleListItems2).GetEnumerator();
+        IEnumerator<int> v1711;
+        v1711 = ((IEnumerable<int>)SimpleListItems2).GetEnumerator();
         try
         {
-            v1899 = (0);
-            for (; v1899 < (ArrayItems.Length); v1899++)
-                if (!((v1900.MoveNext()) && v1900.Current.Equals((ArrayItems[v1899]))))
+            v1710 = (0);
+            for (; v1710 < (ArrayItems.Length); v1710 += 1)
+                if (!((v1711.MoveNext()) && v1711.Current.Equals((ArrayItems[v1710]))))
                     return false;
-            if (v1900.MoveNext())
+            if (v1711.MoveNext())
                 return false;
         }
         finally
         {
-            v1900.Dispose();
+            v1711.Dispose();
         }
 
         return true;
@@ -474,23 +474,23 @@ public class SequenceEqualTests
 
     bool ArraySequenceEqualEnumerableRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1902;
+        int v1713;
         if (EnumerableItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1903;
-        v1903 = ((IEnumerable<int>)EnumerableItems2).GetEnumerator();
+        IEnumerator<int> v1714;
+        v1714 = ((IEnumerable<int>)EnumerableItems2).GetEnumerator();
         try
         {
-            v1902 = (0);
-            for (; v1902 < (ArrayItems.Length); v1902++)
-                if (!((v1903.MoveNext()) && v1903.Current.Equals((ArrayItems[v1902]))))
+            v1713 = (0);
+            for (; v1713 < (ArrayItems.Length); v1713 += 1)
+                if (!((v1714.MoveNext()) && v1714.Current.Equals((ArrayItems[v1713]))))
                     return false;
-            if (v1903.MoveNext())
+            if (v1714.MoveNext())
                 return false;
         }
         finally
         {
-            v1903.Dispose();
+            v1714.Dispose();
         }
 
         return true;
@@ -498,23 +498,23 @@ public class SequenceEqualTests
 
     bool ArraySequenceEqualMethodRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1905;
+        int v1716;
         if (MethodEnumerable2() == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1906;
-        v1906 = ((IEnumerable<int>)MethodEnumerable2()).GetEnumerator();
+        IEnumerator<int> v1717;
+        v1717 = ((IEnumerable<int>)MethodEnumerable2()).GetEnumerator();
         try
         {
-            v1905 = (0);
-            for (; v1905 < (ArrayItems.Length); v1905++)
-                if (!((v1906.MoveNext()) && v1906.Current.Equals((ArrayItems[v1905]))))
+            v1716 = (0);
+            for (; v1716 < (ArrayItems.Length); v1716 += 1)
+                if (!((v1717.MoveNext()) && v1717.Current.Equals((ArrayItems[v1716]))))
                     return false;
-            if (v1906.MoveNext())
+            if (v1717.MoveNext())
                 return false;
         }
         finally
         {
-            v1906.Dispose();
+            v1717.Dispose();
         }
 
         return true;
@@ -522,27 +522,27 @@ public class SequenceEqualTests
 
     bool SimpleListSequenceEqualArrayRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v1908;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v1909;
-        int v1910;
+        int v1719;
+        v1719 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v1720;
+        v1720 = SimpleListItems;
+        int v1721;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1911;
-        v1911 = ((IEnumerable<int>)ArrayItems2).GetEnumerator();
+        IEnumerator<int> v1722;
+        v1722 = ((IEnumerable<int>)ArrayItems2).GetEnumerator();
         try
         {
-            v1908 = SimpleListItems.Count;
-            v1909 = SimpleListItems;
-            v1910 = (0);
-            for (; v1910 < (v1908); v1910++)
-                if (!((v1911.MoveNext()) && v1911.Current.Equals((v1909[v1910]))))
+            v1721 = (0);
+            for (; v1721 < (v1719); v1721 += 1)
+                if (!((v1722.MoveNext()) && v1722.Current.Equals((v1720[v1721]))))
                     return false;
-            if (v1911.MoveNext())
+            if (v1722.MoveNext())
                 return false;
         }
         finally
         {
-            v1911.Dispose();
+            v1722.Dispose();
         }
 
         return true;
@@ -550,27 +550,27 @@ public class SequenceEqualTests
 
     bool SimpleListSequenceEqualSimpleListRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v1913;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v1914;
-        int v1915;
+        int v1724;
+        v1724 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v1725;
+        v1725 = SimpleListItems;
+        int v1726;
         if (SimpleListItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1916;
-        v1916 = ((IEnumerable<int>)SimpleListItems2).GetEnumerator();
+        IEnumerator<int> v1727;
+        v1727 = ((IEnumerable<int>)SimpleListItems2).GetEnumerator();
         try
         {
-            v1913 = SimpleListItems.Count;
-            v1914 = SimpleListItems;
-            v1915 = (0);
-            for (; v1915 < (v1913); v1915++)
-                if (!((v1916.MoveNext()) && v1916.Current.Equals((v1914[v1915]))))
+            v1726 = (0);
+            for (; v1726 < (v1724); v1726 += 1)
+                if (!((v1727.MoveNext()) && v1727.Current.Equals((v1725[v1726]))))
                     return false;
-            if (v1916.MoveNext())
+            if (v1727.MoveNext())
                 return false;
         }
         finally
         {
-            v1916.Dispose();
+            v1727.Dispose();
         }
 
         return true;
@@ -578,27 +578,27 @@ public class SequenceEqualTests
 
     bool SimpleListSequenceEqualEnumerableRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v1918;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v1919;
-        int v1920;
+        int v1729;
+        v1729 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v1730;
+        v1730 = SimpleListItems;
+        int v1731;
         if (EnumerableItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1921;
-        v1921 = ((IEnumerable<int>)EnumerableItems2).GetEnumerator();
+        IEnumerator<int> v1732;
+        v1732 = ((IEnumerable<int>)EnumerableItems2).GetEnumerator();
         try
         {
-            v1918 = SimpleListItems.Count;
-            v1919 = SimpleListItems;
-            v1920 = (0);
-            for (; v1920 < (v1918); v1920++)
-                if (!((v1921.MoveNext()) && v1921.Current.Equals((v1919[v1920]))))
+            v1731 = (0);
+            for (; v1731 < (v1729); v1731 += 1)
+                if (!((v1732.MoveNext()) && v1732.Current.Equals((v1730[v1731]))))
                     return false;
-            if (v1921.MoveNext())
+            if (v1732.MoveNext())
                 return false;
         }
         finally
         {
-            v1921.Dispose();
+            v1732.Dispose();
         }
 
         return true;
@@ -606,27 +606,27 @@ public class SequenceEqualTests
 
     bool SimpleListSequenceEqualMethodRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v1923;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v1924;
-        int v1925;
+        int v1734;
+        v1734 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v1735;
+        v1735 = SimpleListItems;
+        int v1736;
         if (MethodEnumerable2() == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1926;
-        v1926 = ((IEnumerable<int>)MethodEnumerable2()).GetEnumerator();
+        IEnumerator<int> v1737;
+        v1737 = ((IEnumerable<int>)MethodEnumerable2()).GetEnumerator();
         try
         {
-            v1923 = SimpleListItems.Count;
-            v1924 = SimpleListItems;
-            v1925 = (0);
-            for (; v1925 < (v1923); v1925++)
-                if (!((v1926.MoveNext()) && v1926.Current.Equals((v1924[v1925]))))
+            v1736 = (0);
+            for (; v1736 < (v1734); v1736 += 1)
+                if (!((v1737.MoveNext()) && v1737.Current.Equals((v1735[v1736]))))
                     return false;
-            if (v1926.MoveNext())
+            if (v1737.MoveNext())
                 return false;
         }
         finally
         {
-            v1926.Dispose();
+            v1737.Dispose();
         }
 
         return true;
@@ -634,31 +634,31 @@ public class SequenceEqualTests
 
     bool EnumerableSequenceEqualArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1927;
+        IEnumerator<int> v1738;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1928;
-        v1928 = ((IEnumerable<int>)ArrayItems2).GetEnumerator();
-        v1927 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v1739;
+        v1739 = ((IEnumerable<int>)ArrayItems2).GetEnumerator();
+        v1738 = EnumerableItems.GetEnumerator();
         try
         {
             try
             {
-                while (v1927.MoveNext())
-                    if (!((v1928.MoveNext()) && v1928.Current.Equals((v1927.Current))))
+                while (v1738.MoveNext())
+                    if (!((v1739.MoveNext()) && v1739.Current.Equals((v1738.Current))))
                         return false;
             }
             finally
             {
-                v1927.Dispose();
+                v1738.Dispose();
             }
 
-            if (v1928.MoveNext())
+            if (v1739.MoveNext())
                 return false;
         }
         finally
         {
-            v1928.Dispose();
+            v1739.Dispose();
         }
 
         return true;
@@ -666,31 +666,31 @@ public class SequenceEqualTests
 
     bool EnumerableSequenceEqualSimpleListRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1929;
+        IEnumerator<int> v1740;
         if (SimpleListItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1930;
-        v1930 = ((IEnumerable<int>)SimpleListItems2).GetEnumerator();
-        v1929 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v1741;
+        v1741 = ((IEnumerable<int>)SimpleListItems2).GetEnumerator();
+        v1740 = EnumerableItems.GetEnumerator();
         try
         {
             try
             {
-                while (v1929.MoveNext())
-                    if (!((v1930.MoveNext()) && v1930.Current.Equals((v1929.Current))))
+                while (v1740.MoveNext())
+                    if (!((v1741.MoveNext()) && v1741.Current.Equals((v1740.Current))))
                         return false;
             }
             finally
             {
-                v1929.Dispose();
+                v1740.Dispose();
             }
 
-            if (v1930.MoveNext())
+            if (v1741.MoveNext())
                 return false;
         }
         finally
         {
-            v1930.Dispose();
+            v1741.Dispose();
         }
 
         return true;
@@ -698,31 +698,31 @@ public class SequenceEqualTests
 
     bool EnumerableSequenceEqualEnumerableRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1931;
+        IEnumerator<int> v1742;
         if (EnumerableItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1932;
-        v1932 = ((IEnumerable<int>)EnumerableItems2).GetEnumerator();
-        v1931 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v1743;
+        v1743 = ((IEnumerable<int>)EnumerableItems2).GetEnumerator();
+        v1742 = EnumerableItems.GetEnumerator();
         try
         {
             try
             {
-                while (v1931.MoveNext())
-                    if (!((v1932.MoveNext()) && v1932.Current.Equals((v1931.Current))))
+                while (v1742.MoveNext())
+                    if (!((v1743.MoveNext()) && v1743.Current.Equals((v1742.Current))))
                         return false;
             }
             finally
             {
-                v1931.Dispose();
+                v1742.Dispose();
             }
 
-            if (v1932.MoveNext())
+            if (v1743.MoveNext())
                 return false;
         }
         finally
         {
-            v1932.Dispose();
+            v1743.Dispose();
         }
 
         return true;
@@ -730,31 +730,31 @@ public class SequenceEqualTests
 
     bool EnumerableSequenceEqualMethodRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1933;
+        IEnumerator<int> v1744;
         if (MethodEnumerable2() == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1934;
-        v1934 = ((IEnumerable<int>)MethodEnumerable2()).GetEnumerator();
-        v1933 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v1745;
+        v1745 = ((IEnumerable<int>)MethodEnumerable2()).GetEnumerator();
+        v1744 = EnumerableItems.GetEnumerator();
         try
         {
             try
             {
-                while (v1933.MoveNext())
-                    if (!((v1934.MoveNext()) && v1934.Current.Equals((v1933.Current))))
+                while (v1744.MoveNext())
+                    if (!((v1745.MoveNext()) && v1745.Current.Equals((v1744.Current))))
                         return false;
             }
             finally
             {
-                v1933.Dispose();
+                v1744.Dispose();
             }
 
-            if (v1934.MoveNext())
+            if (v1745.MoveNext())
                 return false;
         }
         finally
         {
-            v1934.Dispose();
+            v1745.Dispose();
         }
 
         return true;
@@ -762,23 +762,23 @@ public class SequenceEqualTests
 
     bool ArraySelectSequenceEqualArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1936;
+        int v1747;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1937;
-        v1937 = ((IEnumerable<int>)ArrayItems2).GetEnumerator();
+        IEnumerator<int> v1748;
+        v1748 = ((IEnumerable<int>)ArrayItems2).GetEnumerator();
         try
         {
-            v1936 = (0);
-            for (; v1936 < (ArrayItems.Length); v1936++)
-                if (!((v1937.MoveNext()) && v1937.Current.Equals((50 + ArrayItems[v1936]))))
+            v1747 = (0);
+            for (; v1747 < (ArrayItems.Length); v1747 += 1)
+                if (!((v1748.MoveNext()) && v1748.Current.Equals((50 + ArrayItems[v1747]))))
                     return false;
-            if (v1937.MoveNext())
+            if (v1748.MoveNext())
                 return false;
         }
         finally
         {
-            v1937.Dispose();
+            v1748.Dispose();
         }
 
         return true;
@@ -786,32 +786,32 @@ public class SequenceEqualTests
 
     System.Collections.Generic.IEnumerable<int> ArraySelectSequenceEqualArraySelectRewritten_ProceduralLinq1(int[] ArrayItems2)
     {
-        int v1939;
-        v1939 = (0);
-        for (; v1939 < (ArrayItems2.Length); v1939++)
-            yield return (((ArrayItems2[v1939]) + 50));
+        int v1750;
+        v1750 = (0);
+        for (; v1750 < (ArrayItems2.Length); v1750 += 1)
+            yield return (((ArrayItems2[v1750]) + 50));
         yield break;
     }
 
     bool ArraySelectSequenceEqualArraySelectRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1941;
+        int v1752;
         if (ArraySelectSequenceEqualArraySelectRewritten_ProceduralLinq1(ArrayItems2) == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1942;
-        v1942 = ((IEnumerable<int>)ArraySelectSequenceEqualArraySelectRewritten_ProceduralLinq1(ArrayItems2)).GetEnumerator();
+        IEnumerator<int> v1753;
+        v1753 = ((IEnumerable<int>)ArraySelectSequenceEqualArraySelectRewritten_ProceduralLinq1(ArrayItems2)).GetEnumerator();
         try
         {
-            v1941 = (0);
-            for (; v1941 < (ArrayItems.Length); v1941++)
-                if (!((v1942.MoveNext()) && v1942.Current.Equals((50 + ArrayItems[v1941]))))
+            v1752 = (0);
+            for (; v1752 < (ArrayItems.Length); v1752 += 1)
+                if (!((v1753.MoveNext()) && v1753.Current.Equals((50 + ArrayItems[v1752]))))
                     return false;
-            if (v1942.MoveNext())
+            if (v1753.MoveNext())
                 return false;
         }
         finally
         {
-            v1942.Dispose();
+            v1753.Dispose();
         }
 
         return true;
@@ -819,15 +819,13 @@ public class SequenceEqualTests
 
     System.Collections.Generic.IEnumerable<int> ArrayWhereSequenceEqualArrayWhereRewritten_ProceduralLinq1(int[] ArrayItems2)
     {
-        int v1943;
-        int v1944;
-        v1943 = (0);
-        for (; v1943 < (ArrayItems2.Length); v1943++)
+        int v1754;
+        v1754 = (0);
+        for (; v1754 < (ArrayItems2.Length); v1754 += 1)
         {
-            v1944 = (ArrayItems2[v1943]);
-            if (!(((v1944) > 50)))
+            if (!((((ArrayItems2[v1754])) > 50)))
                 continue;
-            yield return (v1944);
+            yield return ((ArrayItems2[v1754]));
         }
 
         yield break;
@@ -835,30 +833,28 @@ public class SequenceEqualTests
 
     bool ArrayWhereSequenceEqualArrayWhereRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1945;
-        int v1946;
+        int v1755;
         if (ArrayWhereSequenceEqualArrayWhereRewritten_ProceduralLinq1(ArrayItems2) == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1947;
-        v1947 = ((IEnumerable<int>)ArrayWhereSequenceEqualArrayWhereRewritten_ProceduralLinq1(ArrayItems2)).GetEnumerator();
+        IEnumerator<int> v1756;
+        v1756 = ((IEnumerable<int>)ArrayWhereSequenceEqualArrayWhereRewritten_ProceduralLinq1(ArrayItems2)).GetEnumerator();
         try
         {
-            v1945 = (0);
-            for (; v1945 < (ArrayItems.Length); v1945++)
+            v1755 = (0);
+            for (; v1755 < (ArrayItems.Length); v1755 += 1)
             {
-                v1946 = (ArrayItems[v1945]);
-                if (!(((v1946) > 50)))
+                if (!((((ArrayItems[v1755])) > 50)))
                     continue;
-                if (!((v1947.MoveNext()) && v1947.Current.Equals((v1946))))
+                if (!((v1756.MoveNext()) && v1756.Current.Equals(((ArrayItems[v1755])))))
                     return false;
             }
 
-            if (v1947.MoveNext())
+            if (v1756.MoveNext())
                 return false;
         }
         finally
         {
-            v1947.Dispose();
+            v1756.Dispose();
         }
 
         return true;
@@ -866,15 +862,15 @@ public class SequenceEqualTests
 
     System.Collections.Generic.IEnumerable<int> SelectWhereArraySequenceEqualSelectWhereArrayRewritten_ProceduralLinq1(int[] ArrayItems2)
     {
-        int v1948;
-        int v1949;
-        v1948 = (0);
-        for (; v1948 < (ArrayItems2.Length); v1948++)
+        int v1757;
+        int v1758;
+        v1757 = (0);
+        for (; v1757 < (ArrayItems2.Length); v1757 += 1)
         {
-            v1949 = (((ArrayItems2[v1948]) + 10));
-            if (!(((v1949) > 80)))
+            v1758 = (((ArrayItems2[v1757]) + 10));
+            if (!(((v1758) > 80)))
                 continue;
-            yield return (v1949);
+            yield return (v1758);
         }
 
         yield break;
@@ -882,30 +878,30 @@ public class SequenceEqualTests
 
     bool SelectWhereArraySequenceEqualSelectWhereArrayRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1950;
-        int v1951;
+        int v1759;
+        int v1760;
         if (SelectWhereArraySequenceEqualSelectWhereArrayRewritten_ProceduralLinq1(ArrayItems2) == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1952;
-        v1952 = ((IEnumerable<int>)SelectWhereArraySequenceEqualSelectWhereArrayRewritten_ProceduralLinq1(ArrayItems2)).GetEnumerator();
+        IEnumerator<int> v1761;
+        v1761 = ((IEnumerable<int>)SelectWhereArraySequenceEqualSelectWhereArrayRewritten_ProceduralLinq1(ArrayItems2)).GetEnumerator();
         try
         {
-            v1950 = (0);
-            for (; v1950 < (ArrayItems.Length); v1950++)
+            v1759 = (0);
+            for (; v1759 < (ArrayItems.Length); v1759 += 1)
             {
-                v1951 = (10 + ArrayItems[v1950]);
-                if (!(((v1951) > 80)))
+                v1760 = (10 + ArrayItems[v1759]);
+                if (!(((v1760) > 80)))
                     continue;
-                if (!((v1952.MoveNext()) && v1952.Current.Equals((v1951))))
+                if (!((v1761.MoveNext()) && v1761.Current.Equals((v1760))))
                     return false;
             }
 
-            if (v1952.MoveNext())
+            if (v1761.MoveNext())
                 return false;
         }
         finally
         {
-            v1952.Dispose();
+            v1761.Dispose();
         }
 
         return true;
@@ -913,23 +909,23 @@ public class SequenceEqualTests
 
     bool RangeSequenceEqualArrayRewritten_ProceduralLinq1()
     {
-        int v1953;
+        int v1762;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1954;
-        v1954 = ((IEnumerable<int>)ArrayItems2).GetEnumerator();
+        IEnumerator<int> v1763;
+        v1763 = ((IEnumerable<int>)ArrayItems2).GetEnumerator();
         try
         {
-            v1953 = (0);
-            for (; v1953 < (100); v1953++)
-                if (!((v1954.MoveNext()) && v1954.Current.Equals((20 + v1953))))
+            v1762 = (0);
+            for (; v1762 < (100); v1762 += (1))
+                if (!((v1763.MoveNext()) && v1763.Current.Equals((20 + v1762))))
                     return false;
-            if (v1954.MoveNext())
+            if (v1763.MoveNext())
                 return false;
         }
         finally
         {
-            v1954.Dispose();
+            v1763.Dispose();
         }
 
         return true;
@@ -937,23 +933,23 @@ public class SequenceEqualTests
 
     bool RepeatSequenceEqualArrayRewritten_ProceduralLinq1()
     {
-        int v1955;
+        int v1764;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1956;
-        v1956 = ((IEnumerable<int>)ArrayItems2).GetEnumerator();
+        IEnumerator<int> v1765;
+        v1765 = ((IEnumerable<int>)ArrayItems2).GetEnumerator();
         try
         {
-            v1955 = (0);
-            for (; v1955 < (100); v1955++)
-                if (!((v1956.MoveNext()) && v1956.Current.Equals((20))))
+            v1764 = (0);
+            for (; v1764 < (100); v1764 += 1)
+                if (!((v1765.MoveNext()) && v1765.Current.Equals((20))))
                     return false;
-            if (v1956.MoveNext())
+            if (v1765.MoveNext())
                 return false;
         }
         finally
         {
-            v1956.Dispose();
+            v1765.Dispose();
         }
 
         return true;
@@ -961,20 +957,20 @@ public class SequenceEqualTests
 
     bool EmptySequenceEqualArrayRewritten_ProceduralLinq1()
     {
-        int v1957;
+        int v1766;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1958;
-        v1958 = ((IEnumerable<int>)ArrayItems2).GetEnumerator();
+        IEnumerator<int> v1767;
+        v1767 = ((IEnumerable<int>)ArrayItems2).GetEnumerator();
         try
         {
-            v1957 = 0;
-            if (v1958.MoveNext())
+            v1766 = 0;
+            if (v1767.MoveNext())
                 return false;
         }
         finally
         {
-            v1958.Dispose();
+            v1767.Dispose();
         }
 
         return true;
@@ -982,30 +978,28 @@ public class SequenceEqualTests
 
     bool RangeEmpty2ArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1959;
-        int v1960;
+        int v1768;
         if (ArrayItems2 == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1961;
-        v1961 = ((IEnumerable<int>)ArrayItems2).GetEnumerator();
+        IEnumerator<int> v1769;
+        v1769 = ((IEnumerable<int>)ArrayItems2).GetEnumerator();
         try
         {
-            v1959 = (0);
-            for (; v1959 < (ArrayItems.Length); v1959++)
+            v1768 = (0);
+            for (; v1768 < (ArrayItems.Length); v1768 += 1)
             {
-                v1960 = (ArrayItems[v1959]);
                 if (!((false)))
                     continue;
-                if (!((v1961.MoveNext()) && v1961.Current.Equals((v1960))))
+                if (!((v1769.MoveNext()) && v1769.Current.Equals(((ArrayItems[v1768])))))
                     return false;
             }
 
-            if (v1961.MoveNext())
+            if (v1769.MoveNext())
                 return false;
         }
         finally
         {
-            v1961.Dispose();
+            v1769.Dispose();
         }
 
         return true;
@@ -1013,32 +1007,32 @@ public class SequenceEqualTests
 
     System.Collections.Generic.IEnumerable<int> ArraySequenceEqualRangeRewritten_ProceduralLinq1()
     {
-        int v1962;
-        v1962 = (0);
-        for (; v1962 < (260); v1962++)
-            yield return (70 + v1962);
+        int v1770;
+        v1770 = (0);
+        for (; v1770 < (260); v1770 += (1))
+            yield return (70 + v1770);
         yield break;
     }
 
     bool ArraySequenceEqualRangeRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1964;
+        int v1772;
         if (ArraySequenceEqualRangeRewritten_ProceduralLinq1() == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1965;
-        v1965 = ((IEnumerable<int>)ArraySequenceEqualRangeRewritten_ProceduralLinq1()).GetEnumerator();
+        IEnumerator<int> v1773;
+        v1773 = ((IEnumerable<int>)ArraySequenceEqualRangeRewritten_ProceduralLinq1()).GetEnumerator();
         try
         {
-            v1964 = (0);
-            for (; v1964 < (ArrayItems.Length); v1964++)
-                if (!((v1965.MoveNext()) && v1965.Current.Equals((ArrayItems[v1964]))))
+            v1772 = (0);
+            for (; v1772 < (ArrayItems.Length); v1772 += 1)
+                if (!((v1773.MoveNext()) && v1773.Current.Equals((ArrayItems[v1772]))))
                     return false;
-            if (v1965.MoveNext())
+            if (v1773.MoveNext())
                 return false;
         }
         finally
         {
-            v1965.Dispose();
+            v1773.Dispose();
         }
 
         return true;
@@ -1046,32 +1040,32 @@ public class SequenceEqualTests
 
     System.Collections.Generic.IEnumerable<int> ArraySequenceEqualRepeatRewritten_ProceduralLinq1()
     {
-        int v1966;
-        v1966 = (0);
-        for (; v1966 < (100); v1966++)
+        int v1774;
+        v1774 = (0);
+        for (; v1774 < (100); v1774 += 1)
             yield return (70);
         yield break;
     }
 
     bool ArraySequenceEqualRepeatRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1968;
+        int v1776;
         if (ArraySequenceEqualRepeatRewritten_ProceduralLinq1() == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1969;
-        v1969 = ((IEnumerable<int>)ArraySequenceEqualRepeatRewritten_ProceduralLinq1()).GetEnumerator();
+        IEnumerator<int> v1777;
+        v1777 = ((IEnumerable<int>)ArraySequenceEqualRepeatRewritten_ProceduralLinq1()).GetEnumerator();
         try
         {
-            v1968 = (0);
-            for (; v1968 < (ArrayItems.Length); v1968++)
-                if (!((v1969.MoveNext()) && v1969.Current.Equals((ArrayItems[v1968]))))
+            v1776 = (0);
+            for (; v1776 < (ArrayItems.Length); v1776 += 1)
+                if (!((v1777.MoveNext()) && v1777.Current.Equals((ArrayItems[v1776]))))
                     return false;
-            if (v1969.MoveNext())
+            if (v1777.MoveNext())
                 return false;
         }
         finally
         {
-            v1969.Dispose();
+            v1777.Dispose();
         }
 
         return true;
@@ -1079,23 +1073,23 @@ public class SequenceEqualTests
 
     bool ArraySequenceEqualEmptyRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1971;
+        int v1779;
         if (Enumerable.Empty<int>() == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1972;
-        v1972 = ((IEnumerable<int>)Enumerable.Empty<int>()).GetEnumerator();
+        IEnumerator<int> v1780;
+        v1780 = ((IEnumerable<int>)Enumerable.Empty<int>()).GetEnumerator();
         try
         {
-            v1971 = (0);
-            for (; v1971 < (ArrayItems.Length); v1971++)
-                if (!((v1972.MoveNext()) && v1972.Current.Equals((ArrayItems[v1971]))))
+            v1779 = (0);
+            for (; v1779 < (ArrayItems.Length); v1779 += 1)
+                if (!((v1780.MoveNext()) && v1780.Current.Equals((ArrayItems[v1779]))))
                     return false;
-            if (v1972.MoveNext())
+            if (v1780.MoveNext())
                 return false;
         }
         finally
         {
-            v1972.Dispose();
+            v1780.Dispose();
         }
 
         return true;
@@ -1103,15 +1097,13 @@ public class SequenceEqualTests
 
     System.Collections.Generic.IEnumerable<int> ArraySequenceEqualEmpty2Rewritten_ProceduralLinq1(int[] ArrayItems2)
     {
-        int v1973;
-        int v1974;
-        v1973 = (0);
-        for (; v1973 < (ArrayItems2.Length); v1973++)
+        int v1781;
+        v1781 = (0);
+        for (; v1781 < (ArrayItems2.Length); v1781 += 1)
         {
-            v1974 = (ArrayItems2[v1973]);
             if (!((false)))
                 continue;
-            yield return (v1974);
+            yield return ((ArrayItems2[v1781]));
         }
 
         yield break;
@@ -1119,23 +1111,23 @@ public class SequenceEqualTests
 
     bool ArraySequenceEqualEmpty2Rewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1976;
+        int v1783;
         if (ArraySequenceEqualEmpty2Rewritten_ProceduralLinq1(ArrayItems2) == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1977;
-        v1977 = ((IEnumerable<int>)ArraySequenceEqualEmpty2Rewritten_ProceduralLinq1(ArrayItems2)).GetEnumerator();
+        IEnumerator<int> v1784;
+        v1784 = ((IEnumerable<int>)ArraySequenceEqualEmpty2Rewritten_ProceduralLinq1(ArrayItems2)).GetEnumerator();
         try
         {
-            v1976 = (0);
-            for (; v1976 < (ArrayItems.Length); v1976++)
-                if (!((v1977.MoveNext()) && v1977.Current.Equals((ArrayItems[v1976]))))
+            v1783 = (0);
+            for (; v1783 < (ArrayItems.Length); v1783 += 1)
+                if (!((v1784.MoveNext()) && v1784.Current.Equals((ArrayItems[v1783]))))
                     return false;
-            if (v1977.MoveNext())
+            if (v1784.MoveNext())
                 return false;
         }
         finally
         {
-            v1977.Dispose();
+            v1784.Dispose();
         }
 
         return true;
@@ -1143,32 +1135,32 @@ public class SequenceEqualTests
 
     System.Collections.Generic.IEnumerable<int> ArraySequenceEqualAllRewritten_ProceduralLinq1()
     {
-        int v1978;
-        v1978 = (0);
-        for (; v1978 < (1000); v1978++)
-            yield return (v1978);
+        int v1785;
+        v1785 = (0);
+        for (; v1785 < (1000); v1785 += (1))
+            yield return (v1785);
         yield break;
     }
 
     bool ArraySequenceEqualAllRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1980;
+        int v1787;
         if (ArraySequenceEqualAllRewritten_ProceduralLinq1() == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1981;
-        v1981 = ((IEnumerable<int>)ArraySequenceEqualAllRewritten_ProceduralLinq1()).GetEnumerator();
+        IEnumerator<int> v1788;
+        v1788 = ((IEnumerable<int>)ArraySequenceEqualAllRewritten_ProceduralLinq1()).GetEnumerator();
         try
         {
-            v1980 = (0);
-            for (; v1980 < (ArrayItems.Length); v1980++)
-                if (!((v1981.MoveNext()) && v1981.Current.Equals((ArrayItems[v1980]))))
+            v1787 = (0);
+            for (; v1787 < (ArrayItems.Length); v1787 += 1)
+                if (!((v1788.MoveNext()) && v1788.Current.Equals((ArrayItems[v1787]))))
                     return false;
-            if (v1981.MoveNext())
+            if (v1788.MoveNext())
                 return false;
         }
         finally
         {
-            v1981.Dispose();
+            v1788.Dispose();
         }
 
         return true;
@@ -1176,23 +1168,21 @@ public class SequenceEqualTests
 
     bool ArraySequenceEqualNullRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1983;
+        int v1790;
         throw new System.InvalidOperationException("Invalid null object");
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctSequenceEqualArrayDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1984;
-        HashSet<int> v1985;
-        int v1986;
-        v1985 = new HashSet<int>();
-        v1984 = (0);
-        for (; v1984 < (ArrayItems.Length); v1984++)
+        int v1791;
+        HashSet<int> v1792;
+        v1792 = new HashSet<int>();
+        v1791 = (0);
+        for (; v1791 < (ArrayItems.Length); v1791 += 1)
         {
-            v1986 = (ArrayItems[v1984]);
-            if (!(v1985.Add((v1986))))
+            if (!(v1792.Add(((ArrayItems[v1791])))))
                 continue;
-            yield return (v1986);
+            yield return ((ArrayItems[v1791]));
         }
 
         yield break;
@@ -1200,32 +1190,30 @@ public class SequenceEqualTests
 
     bool ArrayDistinctSequenceEqualArrayDistinctRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1987;
-        HashSet<int> v1988;
-        int v1989;
+        int v1793;
+        HashSet<int> v1794;
         if (ArrayDistinctSequenceEqualArrayDistinctRewritten_ProceduralLinq1(ArrayItems) == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1990;
-        v1990 = ((IEnumerable<int>)ArrayDistinctSequenceEqualArrayDistinctRewritten_ProceduralLinq1(ArrayItems)).GetEnumerator();
+        IEnumerator<int> v1795;
+        v1795 = ((IEnumerable<int>)ArrayDistinctSequenceEqualArrayDistinctRewritten_ProceduralLinq1(ArrayItems)).GetEnumerator();
         try
         {
-            v1988 = new HashSet<int>();
-            v1987 = (0);
-            for (; v1987 < (ArrayItems.Length); v1987++)
+            v1794 = new HashSet<int>();
+            v1793 = (0);
+            for (; v1793 < (ArrayItems.Length); v1793 += 1)
             {
-                v1989 = (ArrayItems[v1987]);
-                if (!(v1988.Add((v1989))))
+                if (!(v1794.Add(((ArrayItems[v1793])))))
                     continue;
-                if (!((v1990.MoveNext()) && v1990.Current.Equals((v1989))))
+                if (!((v1795.MoveNext()) && v1795.Current.Equals(((ArrayItems[v1793])))))
                     return false;
             }
 
-            if (v1990.MoveNext())
+            if (v1795.MoveNext())
                 return false;
         }
         finally
         {
-            v1990.Dispose();
+            v1795.Dispose();
         }
 
         return true;
@@ -1233,17 +1221,15 @@ public class SequenceEqualTests
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctSequenceEqualArrayDistinct2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1991;
-        HashSet<int> v1992;
-        int v1993;
-        v1992 = new HashSet<int>(EqualityComparer<int>.Default);
-        v1991 = (0);
-        for (; v1991 < (ArrayItems.Length); v1991++)
+        int v1796;
+        HashSet<int> v1797;
+        v1797 = new HashSet<int>(EqualityComparer<int>.Default);
+        v1796 = (0);
+        for (; v1796 < (ArrayItems.Length); v1796 += 1)
         {
-            v1993 = (ArrayItems[v1991]);
-            if (!(v1992.Add((v1993))))
+            if (!(v1797.Add(((ArrayItems[v1796])))))
                 continue;
-            yield return (v1993);
+            yield return ((ArrayItems[v1796]));
         }
 
         yield break;
@@ -1251,32 +1237,30 @@ public class SequenceEqualTests
 
     bool ArrayDistinctSequenceEqualArrayDistinct2Rewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v1994;
-        HashSet<int> v1995;
-        int v1996;
+        int v1798;
+        HashSet<int> v1799;
         if (ArrayDistinctSequenceEqualArrayDistinct2Rewritten_ProceduralLinq1(ArrayItems) == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v1997;
-        v1997 = ((IEnumerable<int>)ArrayDistinctSequenceEqualArrayDistinct2Rewritten_ProceduralLinq1(ArrayItems)).GetEnumerator();
+        IEnumerator<int> v1800;
+        v1800 = ((IEnumerable<int>)ArrayDistinctSequenceEqualArrayDistinct2Rewritten_ProceduralLinq1(ArrayItems)).GetEnumerator();
         try
         {
-            v1995 = new HashSet<int>(EqualityComparer<int>.Default);
-            v1994 = (0);
-            for (; v1994 < (ArrayItems.Length); v1994++)
+            v1799 = new HashSet<int>(EqualityComparer<int>.Default);
+            v1798 = (0);
+            for (; v1798 < (ArrayItems.Length); v1798 += 1)
             {
-                v1996 = (ArrayItems[v1994]);
-                if (!(v1995.Add((v1996))))
+                if (!(v1799.Add(((ArrayItems[v1798])))))
                     continue;
-                if (!((v1997.MoveNext()) && v1997.Current.Equals((v1996))))
+                if (!((v1800.MoveNext()) && v1800.Current.Equals(((ArrayItems[v1798])))))
                     return false;
             }
 
-            if (v1997.MoveNext())
+            if (v1800.MoveNext())
                 return false;
         }
         finally
         {
-            v1997.Dispose();
+            v1800.Dispose();
         }
 
         return true;

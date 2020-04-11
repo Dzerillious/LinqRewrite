@@ -31,7 +31,7 @@ public class ElementAtOrDefaultOrDefaultTests
 
     public int ArrayElementAtOrDefaultRewritten()
     {
-        return (ArrayItems.Length) <= 23 ? ArrayItems[23] : default(int);
+        return (ArrayItems.Length) <= 23 ? (ArrayItems[23]) : default(int);
     } //EndMethod
 
     [NoRewrite]
@@ -77,7 +77,7 @@ public class ElementAtOrDefaultOrDefaultTests
     public int ArrayElementAtOrDefaultParamRewritten()
     {
         var a = 23;
-        return (ArrayItems.Length) <= a ? ArrayItems[a] : default(int);
+        return (ArrayItems.Length) <= a ? (ArrayItems[a]) : default(int);
     } //EndMethod
 
     [NoRewrite]
@@ -99,7 +99,7 @@ public class ElementAtOrDefaultOrDefaultTests
 
     public int ArrayElementAtOrDefaultOutRewritten()
     {
-        return ArrayItems[20000];
+        return (ArrayItems[20000]);
     } //EndMethod
 
     [NoRewrite]
@@ -115,19 +115,17 @@ public class ElementAtOrDefaultOrDefaultTests
 
     int ArrayWhereElementAtOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v609;
-        int v610;
-        int v611;
-        v611 = 0;
-        v609 = (0);
-        for (; v609 < (ArrayItems.Length); v609++)
+        int v558;
+        int v559;
+        v559 = 0;
+        v558 = (0);
+        for (; v558 < (ArrayItems.Length); v558 += 1)
         {
-            v610 = (ArrayItems[v609]);
-            if (!(((v610) > 30)))
+            if (!((((ArrayItems[v558])) > 30)))
                 continue;
-            if (v611 == 23)
-                return (v610);
-            v611++;
+            if (v559 == 23)
+                return ((ArrayItems[v558]));
+            v559++;
         }
 
         return default(int);
@@ -135,19 +133,19 @@ public class ElementAtOrDefaultOrDefaultTests
 
     int ArraySelectWhereElementAtOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v612;
-        int v613;
-        int v614;
-        v614 = 0;
-        v612 = (0);
-        for (; v612 < (ArrayItems.Length); v612++)
+        int v560;
+        int v561;
+        int v562;
+        v562 = 0;
+        v560 = (0);
+        for (; v560 < (ArrayItems.Length); v560 += 1)
         {
-            v613 = (30 + ArrayItems[v612]);
-            if (!(((v613) > 30)))
+            v561 = (30 + ArrayItems[v560]);
+            if (!(((v561) > 30)))
                 continue;
-            if (v614 == 23)
-                return (v613);
-            v614++;
+            if (v562 == 23)
+                return (v561);
+            v562++;
         }
 
         return default(int);
@@ -155,22 +153,22 @@ public class ElementAtOrDefaultOrDefaultTests
 
     int EnumerableElementAtOrDefaultRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v616;
-        int v617;
-        v616 = EnumerableItems.GetEnumerator();
-        v617 = 0;
+        IEnumerator<int> v564;
+        int v565;
+        v564 = EnumerableItems.GetEnumerator();
+        v565 = 0;
         try
         {
-            while (v616.MoveNext())
+            while (v564.MoveNext())
             {
-                if (v617 == 23)
-                    return (v616.Current);
-                v617++;
+                if (v565 == 23)
+                    return (v564.Current);
+                v565++;
             }
         }
         finally
         {
-            v616.Dispose();
+            v564.Dispose();
         }
 
         return default(int);
@@ -178,19 +176,17 @@ public class ElementAtOrDefaultOrDefaultTests
 
     int ArrayElementAtOrDefaultWhereOutRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v619;
-        int v620;
-        int v621;
-        v621 = 0;
-        v619 = (0);
-        for (; v619 < (ArrayItems.Length); v619++)
+        int v567;
+        int v568;
+        v568 = 0;
+        v567 = (0);
+        for (; v567 < (ArrayItems.Length); v567 += 1)
         {
-            v620 = (ArrayItems[v619]);
-            if (!(((v620) > 10)))
+            if (!((((ArrayItems[v567])) > 10)))
                 continue;
-            if (v621 == 20000)
-                return (v620);
-            v621++;
+            if (v568 == 20000)
+                return ((ArrayItems[v567]));
+            v568++;
         }
 
         throw new System.InvalidOperationException("The sequence did not contain enough elements.");

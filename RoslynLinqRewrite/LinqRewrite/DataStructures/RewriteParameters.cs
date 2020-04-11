@@ -181,6 +181,13 @@ namespace LinqRewrite.DataStructures
                 ? null : ExpressionSimplifier.Simplify(value);
         }
         
+        public ValueBridge ForIncrement
+        {
+            get => CurrentIterator.ForIncrement;
+            set => CurrentIterator.ForIncrement = value?.Value == null 
+                ? null : ExpressionSimplifier.Simplify(value);
+        }
+        
         public ValueBridge ForReMin
         {
             get => CurrentIterator.ForReverseMin;
@@ -293,15 +300,6 @@ namespace LinqRewrite.DataStructures
             ResultIterators.Insert(0, CurrentIterator);
             return oldBody;
         }
-        
-        public IteratorParameters CopyIterator()
-        {
-            var oldBody = CurrentIterator;
-            CurrentIterator = CurrentIterator.Copy();
-            Iterators.Add(CurrentIterator);
-            ResultIterators.Add(CurrentIterator);
-            return oldBody;
-        }
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {
@@ -339,6 +337,19 @@ namespace LinqRewrite.DataStructures
         }
 
         private int _variableIndex;
+        
+        public LocalVariable SuperGlobalVariable(TypeSyntax type, ValueBridge initial)
+        {
+            var variable = "v" + _variableIndex++;
+            var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
+            Variables.Add(created);
+            
+            InitialAdd(LocalVariableCreation(variable, type));
+            InitialAdd(((ValueBridge)variable).Assign(initial));
+            SimpleEnumeration = false;
+            return created;
+        }
+        
         public LocalVariable GlobalVariable(TypeSyntax type)
         {
             var variable = "v" + _variableIndex++;
@@ -426,8 +437,6 @@ namespace LinqRewrite.DataStructures
 
             return created;
         }
-
-        public bool CanSimpleRewrite() => !ModifiedEnumeration && ResultSize != null;
 
         public void Dispose() => RewriteParametersFactory.ReturnParameters(this);
         

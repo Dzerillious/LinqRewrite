@@ -3,6 +3,7 @@ using System.Linq;
 using LinqRewrite.Extensions;
 using LinqRewrite.Services;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.DataStructures
 {
@@ -11,6 +12,7 @@ namespace LinqRewrite.DataStructures
         private readonly RewriteParameters _parameters;
         public ValueBridge ForMin { get; set; }
         public ValueBridge ForMax { get; set; }
+        public ValueBridge ForIncrement { get; set; } = 1;
         public ValueBridge ForReverseMin { get; set; }
         public ValueBridge ForReverseMax { get; set; }
         public RewrittenValueBridge Collection { get; }
@@ -82,10 +84,10 @@ namespace LinqRewrite.DataStructures
                     : new[] {x}).Concat(ForEnd).ToList();
             
             if (ForMin == null)
-                return RewriteService.GetForEachStatement(p, EnumeratorVariable, Collection, content);
+                return RewriteService.GetForEachStatement(p, EnumeratorVariable, content);
             else if (p.IsReversed)
-                return RewriteService.GetReverseForStatement(p, ForIndexer, ForReverseMin, content);
-            else return RewriteService.GetForStatement(p, ForIndexer, ForMax, content);
+                return RewriteService.GetReverseForStatement(p, ForIndexer, ForReverseMin.ReusableConst(_parameters, Int), ForIncrement, content);
+            else return RewriteService.GetForStatement(p, ForIndexer, ForMax.ReusableConst(_parameters, Int), ForIncrement, content);
         }
     }
 }

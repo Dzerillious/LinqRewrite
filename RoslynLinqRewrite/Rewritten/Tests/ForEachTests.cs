@@ -91,50 +91,50 @@ public class ForEachTests
 
     void ArrayForEachRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1083;
-        v1083 = (0);
-        for (; v1083 < (ArrayItems.Length); v1083++)
+        int v967;
+        v967 = (0);
+        for (; v967 < (ArrayItems.Length); v967 += 1)
             _ = 3;
     }
 
     void EnumerableForEachRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1084;
-        v1084 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v968;
+        v968 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v1084.MoveNext())
+            while (v968.MoveNext())
                 _ = 3;
         }
         finally
         {
-            v1084.Dispose();
+            v968.Dispose();
         }
     }
 
     void NullForEachRewritten_ProceduralLinq1(int[] NullItems)
     {
-        int v1086;
-        v1086 = (0);
-        for (; v1086 < (NullItems.Length); v1086++)
+        int v970;
+        v970 = (0);
+        for (; v970 < (NullItems.Length); v970 += 1)
             _ = 3;
     }
 
     void NullableForEachRewritten_ProceduralLinq1(int[] NullItems)
     {
-        int v1088;
+        int v972;
         if (NullItems == null)
             return;
-        v1088 = (0);
-        for (; v1088 < (NullItems.Length); v1088++)
+        v972 = (0);
+        for (; v972 < (NullItems.Length); v972 += 1)
             _ = 3;
     }
 
     void ArrayChangingParamsForEachRewritten_ProceduralLinq1(ref int a, int[] NullItems)
     {
-        int v1089;
-        v1089 = (0);
-        for (; v1089 < (NullItems.Length); v1089++)
+        int v973;
+        v973 = (0);
+        for (; v973 < (NullItems.Length); v973 += 1)
             a++;
     }
 }}

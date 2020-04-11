@@ -14,13 +14,10 @@ namespace LinqRewrite.Services
     {
         private static CompilationService _instance;
         public static CompilationService Instance => _instance ??= new CompilationService();
-
-        private readonly MsBuildService _msBuildService;
         private readonly PrintService _printService;
 
         public CompilationService()
         {
-            _msBuildService = MsBuildService.Instance;
             _printService = PrintService.Instance;
         }
 
@@ -61,7 +58,7 @@ namespace LinqRewrite.Services
             return 0;
         }
 
-        private List<object> GetBuildArgs(string[] args)
+        private static List<object> GetBuildArgs(string[] args)
         {
             var buildArgs = new List<object>();
             // if(!args.Any(x => x.StartsWith("/t:") || x.StartsWith("/target:")))
@@ -77,33 +74,32 @@ namespace LinqRewrite.Services
         public void RewriteProject(string path, string dstDir)
         {
             var msWorkspace = MSBuildWorkspace.Create();
-            var p = msWorkspace.OpenProjectAsync(path);
-            var project = p.Result;
+            var project = msWorkspace.OpenProjectAsync(path).Result;
+            var documents = project.Documents.ToArray();
+            var syntaxTrees = project.Documents.Select(document => CSharpSyntaxTree.ParseText(File.ReadAllText(document.FilePath))).ToList();
 
-            var syntaxTrees = new List<(Document document, SyntaxTree tree)>();
-            var references = project.MetadataReferences;
-            foreach (var document in project.Documents)
-                syntaxTrees.Add((document, CSharpSyntaxTree.ParseText(File.ReadAllText(document.FilePath))));
-
-            var compilationOptions = project.CompilationOptions.WithOptimizationLevel(OptimizationLevel.Release);
-            var compilation = CSharpCompilation.Create(project.AssemblyName, syntaxTrees.Select(x => x.tree), references,
-                (CSharpCompilationOptions)compilationOptions);
-            
+            var compilation = CompileRelease(project, syntaxTrees);
             if(PrintDiagnostics(compilation)) return;
 
             var projectDir =  Path.GetDirectoryName(project.FilePath);
             CopyFile(project.FilePath, projectDir, dstDir);
 
-            foreach (var (document, tree) in syntaxTrees)
-            {
-                var rewriter = new LinqRewriter(compilation.GetSemanticModel(tree));
-                var rewritten = rewriter.Visit(tree.GetRoot());
-                WriteFile(document.FilePath, CSharpSyntaxTree.Create((CSharpSyntaxNode) rewritten).ToString(), projectDir, dstDir);
-            }
+            var rewrittenTrees = GetRewrittenTrees(syntaxTrees, compilation);
+            for (var i = 0; i < rewrittenTrees.Count; i++)
+                WriteFile(documents[i].FilePath, rewrittenTrees[i].ToString(), projectDir, dstDir);
             
             Directory.CreateDirectory(dstDir);
             foreach (var document in project.AdditionalDocuments)
                 CopyFile(document.FilePath, projectDir, dstDir);
+        }
+
+        private static CSharpCompilation CompileRelease(Project project, List<SyntaxTree> syntaxTrees)
+        {
+            var references = project.MetadataReferences;
+            var compilationOptions = project.CompilationOptions.WithOptimizationLevel(OptimizationLevel.Release);
+            
+            return CSharpCompilation.Create(project.AssemblyName, syntaxTrees, references,
+                    (CSharpCompilationOptions)compilationOptions);
         }
 
         private static void WriteFile(string fileName, string content, string projectDir, string dstDir)
@@ -125,19 +121,24 @@ namespace LinqRewrite.Services
             var msWorkspace = MSBuildWorkspace.Create();
             var p = msWorkspace.OpenProjectAsync(path);
             var project = p.Result;
+            var syntaxTrees = project.Documents.Select(document => CSharpSyntaxTree.ParseText(File.ReadAllText(document.FilePath))).ToList();
 
-            var syntaxTrees = new List<SyntaxTree>();
-            var references = project.MetadataReferences;
-            foreach (var document in project.Documents)
-                syntaxTrees.Add(CSharpSyntaxTree.ParseText(File.ReadAllText(document.FilePath)));
+            var compilation = CompileRelease(project, syntaxTrees);
+            if(PrintDiagnostics(compilation)) return;
+            syntaxTrees = GetRewrittenTrees(syntaxTrees, compilation);
 
-            var compilationOptions = project.CompilationOptions.WithOptimizationLevel(OptimizationLevel.Release)
-                .WithPlatform(Platform.X64);
-            var compilation = CSharpCompilation.Create(project.AssemblyName, syntaxTrees, references,
-                (CSharpCompilationOptions)compilationOptions);
-            
+            compilation = CompileRelease(project, syntaxTrees);
             if(PrintDiagnostics(compilation)) return;
 
+            var outputDirectory = Path.GetDirectoryName(project.OutputFilePath);
+            Directory.CreateDirectory(outputDirectory);
+            foreach (var reference in project.MetadataReferences)
+                File.Copy(reference.Display, Path.Combine(outputDirectory, Path.GetFileName(reference.Display)), true);
+            compilation.Emit(project.OutputFilePath);
+        }
+
+        private List<SyntaxTree> GetRewrittenTrees(List<SyntaxTree> syntaxTrees, CSharpCompilation compilation)
+        {
             var rewrittenTrees = new List<SyntaxTree>();
             foreach (var syntaxTree in syntaxTrees)
             {
@@ -145,17 +146,7 @@ namespace LinqRewrite.Services
                 var rewritten = rewriter.Visit(syntaxTree.GetRoot());
                 rewrittenTrees.Add(CSharpSyntaxTree.ParseText(rewritten.ToString()));
             }
-
-            compilation = CSharpCompilation.Create(project.AssemblyName, rewrittenTrees, references,
-                (CSharpCompilationOptions)compilationOptions);
-
-            if(PrintDiagnostics(compilation)) return;
-
-            var outputDirectory = Path.GetDirectoryName(project.OutputFilePath);
-            Directory.CreateDirectory(outputDirectory);
-            foreach (var reference in references)
-                File.Copy(reference.Display, Path.Combine(outputDirectory, Path.GetFileName(reference.Display)), true);
-            compilation.Emit(project.OutputFilePath);
+            return rewrittenTrees;
         }
 
         private bool PrintDiagnostics(CSharpCompilation compilation)

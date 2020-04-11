@@ -181,112 +181,118 @@ public class EmptyTests
 
     int[] EmptyToArrayRewritten_ProceduralLinq1()
     {
-        int v637;
-        int[] v638;
-        v637 = 0;
-        v638 = new int[(0)];
-        return v638;
+        int v582;
+        int[] v583;
+        v582 = 0;
+        v583 = new int[(0)];
+        return v583;
     }
 
     System.Collections.Generic.List<int> EmptyToListRewritten_ProceduralLinq1()
     {
-        int v639;
-        System.Collections.Generic.List<int> v640;
-        v639 = 0;
-        v640 = new System.Collections.Generic.List<int>();
-        return v640;
+        int v584;
+        System.Collections.Generic.List<int> v585;
+        v584 = 0;
+        v585 = new System.Collections.Generic.List<int>();
+        return v585;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> EmptyToSimpleListRewritten_ProceduralLinq1()
     {
-        int v641;
-        int[] v642;
-        SimpleList<int> v643;
-        v641 = 0;
-        v642 = new int[(0)];
-        v643 = new SimpleList<int>();
-        v643.Items = v642;
-        v643.Count = (0);
-        return v643;
+        int v586;
+        int[] v587;
+        SimpleList<int> v588;
+        v586 = 0;
+        v587 = new int[(0)];
+        v588 = new SimpleList<int>();
+        v588.Items = v587;
+        v588.Count = (0);
+        return v588;
     }
 
     System.Collections.Generic.IEnumerable<int> EmptySelectRewritten_ProceduralLinq1()
     {
-        int v644;
-        v644 = 0;
+        int v589;
+        v589 = 0;
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> EmptyWhereRewritten_ProceduralLinq1()
     {
-        int v645;
-        int v646;
-        v645 = 0;
+        int v590;
+        v590 = 0;
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> EmptyDistinctRewritten_ProceduralLinq1()
     {
-        int v647;
-        HashSet<int> v648;
-        int v649;
-        v647 = 0;
-        v648 = new HashSet<int>();
+        int v591;
+        HashSet<int> v592;
+        v591 = 0;
+        v592 = new HashSet<int>();
         yield break;
     }
 
     int EmptyCountRewritten_ProceduralLinq1()
     {
-        int v650;
-        v650 = 0;
-        return v650;
+        int v593;
+        v593 = 0;
+        return v593;
     }
 
     bool EmptyContainsRewritten_ProceduralLinq1()
     {
-        int v651;
-        v651 = 0;
+        int v594;
+        v594 = 0;
         return false;
     }
 
     System.Collections.Generic.IEnumerable<float> EmptyCastRewritten_ProceduralLinq1()
     {
-        int v652;
-        v652 = 0;
+        int v595;
+        v595 = 0;
         yield break;
     }
 
     bool EmptyAnyRewritten_ProceduralLinq1()
     {
-        int v653;
-        v653 = 0;
+        int v596;
+        v596 = 0;
         return false;
     }
 
     double EmptyAggregateDefaultRewritten_ProceduralLinq1()
     {
-        int v654;
-        double v655;
-        bool v656;
-        v654 = 0;
-        v655 = 1.0;
-        v656 = true;
-        return v655;
+        int v597;
+        double v598;
+        bool v599;
+        v597 = 0;
+        v598 = 1.0;
+        v599 = true;
+        return v598;
     }
 
     int EmptyAggregateRewritten_ProceduralLinq1()
     {
-        int v657;
-        throw new System.InvalidOperationException("Index out of range");
-        v657 = 0;
+        int v600;
+        int v601;
+        bool v602;
+        v600 = 0;
+        v601 = default(int);
+        v602 = true;
+        if (v602)
+            throw new System.InvalidOperationException("The sequence did not contain enough elements.");
+        return v601;
     }
 
     double EmptyAverageRewritten_ProceduralLinq1()
     {
-        int v658;
-        double v659;
-        throw new System.InvalidOperationException("Index out of range");
-        v658 = 0;
-        v659 = 0;
+        int v603;
+        double v604;
+        if (1 > (0))
+            throw new System.InvalidOperationException("Index out of range");
+        v603 = 0;
+        v604 = 0;
+        return (v604 / (0));
     }
 }}

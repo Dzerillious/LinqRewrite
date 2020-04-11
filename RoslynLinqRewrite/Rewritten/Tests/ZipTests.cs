@@ -884,42 +884,40 @@ public class ZipTests
 
     System.Collections.Generic.IEnumerable<int> ArraySelectZipArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v3522;
-        v3522 = (0);
-        for (; v3522 < (ArrayItems.Length); v3522++)
-            yield return (50 + ArrayItems[v3522]);
+        int v3210;
+        v3210 = (0);
+        for (; v3210 < (ArrayItems.Length); v3210 += 1)
+            yield return (50 + ArrayItems[v3210]);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> ArraySelectZipArraySelectRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v3528;
-        v3528 = (0);
-        for (; v3528 < (ArrayItems.Length); v3528++)
-            yield return (50 + ArrayItems[v3528]);
+        int v3216;
+        v3216 = (0);
+        for (; v3216 < (ArrayItems.Length); v3216 += 1)
+            yield return (50 + ArrayItems[v3216]);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> ArraySelectZipArraySelectRewritten_ProceduralLinq2(int[] ArrayItems2)
     {
-        int v3530;
-        v3530 = (0);
-        for (; v3530 < (ArrayItems2.Length); v3530++)
-            yield return (((ArrayItems2[v3530]) + 50));
+        int v3218;
+        v3218 = (0);
+        for (; v3218 < (ArrayItems2.Length); v3218 += 1)
+            yield return (((ArrayItems2[v3218]) + 50));
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayWhereZipArrayWhereRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v3536;
-        int v3537;
-        v3536 = (0);
-        for (; v3536 < (ArrayItems.Length); v3536++)
+        int v3222;
+        v3222 = (0);
+        for (; v3222 < (ArrayItems.Length); v3222 += 1)
         {
-            v3537 = (ArrayItems[v3536]);
-            if (!(((v3537) > 50)))
+            if (!((((ArrayItems[v3222])) > 50)))
                 continue;
-            yield return (v3537);
+            yield return ((ArrayItems[v3222]));
         }
 
         yield break;
@@ -927,15 +925,13 @@ public class ZipTests
 
     System.Collections.Generic.IEnumerable<int> ArrayWhereZipArrayWhereRewritten_ProceduralLinq2(int[] ArrayItems2)
     {
-        int v3538;
-        int v3539;
-        v3538 = (0);
-        for (; v3538 < (ArrayItems2.Length); v3538++)
+        int v3223;
+        v3223 = (0);
+        for (; v3223 < (ArrayItems2.Length); v3223 += 1)
         {
-            v3539 = (ArrayItems2[v3538]);
-            if (!(((v3539) > 50)))
+            if (!((((ArrayItems2[v3223])) > 50)))
                 continue;
-            yield return (v3539);
+            yield return ((ArrayItems2[v3223]));
         }
 
         yield break;
@@ -943,15 +939,15 @@ public class ZipTests
 
     System.Collections.Generic.IEnumerable<int> SelectWhereArrayZipSelectWhereArrayContainsRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v3650;
-        int v3651;
-        v3650 = (0);
-        for (; v3650 < (ArrayItems.Length); v3650++)
+        int v3334;
+        int v3335;
+        v3334 = (0);
+        for (; v3334 < (ArrayItems.Length); v3334 += 1)
         {
-            v3651 = (10 + ArrayItems[v3650]);
-            if (!(((v3651) > 80)))
+            v3335 = (10 + ArrayItems[v3334]);
+            if (!(((v3335) > 80)))
                 continue;
-            yield return (v3651);
+            yield return (v3335);
         }
 
         yield break;
@@ -959,15 +955,15 @@ public class ZipTests
 
     System.Collections.Generic.IEnumerable<int> SelectWhereArrayZipSelectWhereArrayContainsRewritten_ProceduralLinq2(int[] ArrayItems2)
     {
-        int v3652;
-        int v3653;
-        v3652 = (0);
-        for (; v3652 < (ArrayItems2.Length); v3652++)
+        int v3336;
+        int v3337;
+        v3336 = (0);
+        for (; v3336 < (ArrayItems2.Length); v3336 += 1)
         {
-            v3653 = (((ArrayItems2[v3652]) + 10));
-            if (!(((v3653) > 80)))
+            v3337 = (((ArrayItems2[v3336]) + 10));
+            if (!(((v3337) > 80)))
                 continue;
-            yield return (v3653);
+            yield return (v3337);
         }
 
         yield break;
@@ -975,33 +971,31 @@ public class ZipTests
 
     System.Collections.Generic.IEnumerable<int> RangeZipArrayRewritten_ProceduralLinq1()
     {
-        int v3656;
-        v3656 = (0);
-        for (; v3656 < (100); v3656++)
-            yield return (20 + v3656);
+        int v3340;
+        v3340 = (0);
+        for (; v3340 < (100); v3340 += (1))
+            yield return (20 + v3340);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> RepeatZipArrayRewritten_ProceduralLinq1()
     {
-        int v3659;
-        v3659 = (0);
-        for (; v3659 < (100); v3659++)
+        int v3343;
+        v3343 = (0);
+        for (; v3343 < (100); v3343 += 1)
             yield return (20);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> RangeEmpty2ArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v3665;
-        int v3666;
-        v3665 = (0);
-        for (; v3665 < (ArrayItems.Length); v3665++)
+        int v3348;
+        v3348 = (0);
+        for (; v3348 < (ArrayItems.Length); v3348 += 1)
         {
-            v3666 = (ArrayItems[v3665]);
             if (!((false)))
                 continue;
-            yield return (v3666);
+            yield return ((ArrayItems[v3348]));
         }
 
         yield break;
@@ -1009,33 +1003,31 @@ public class ZipTests
 
     System.Collections.Generic.IEnumerable<int> ArrayZipRangeRewritten_ProceduralLinq1()
     {
-        int v3670;
-        v3670 = (0);
-        for (; v3670 < (260); v3670++)
-            yield return (70 + v3670);
+        int v3352;
+        v3352 = (0);
+        for (; v3352 < (260); v3352 += (1))
+            yield return (70 + v3352);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayZipRepeatRewritten_ProceduralLinq1()
     {
-        int v3674;
-        v3674 = (0);
-        for (; v3674 < (100); v3674++)
+        int v3356;
+        v3356 = (0);
+        for (; v3356 < (100); v3356 += 1)
             yield return (70);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayZipEmpty2Rewritten_ProceduralLinq1(int[] ArrayItems2)
     {
-        int v3681;
-        int v3682;
-        v3681 = (0);
-        for (; v3681 < (ArrayItems2.Length); v3681++)
+        int v3362;
+        v3362 = (0);
+        for (; v3362 < (ArrayItems2.Length); v3362 += 1)
         {
-            v3682 = (ArrayItems2[v3681]);
             if (!((false)))
                 continue;
-            yield return (v3682);
+            yield return ((ArrayItems2[v3362]));
         }
 
         yield break;
@@ -1043,33 +1035,31 @@ public class ZipTests
 
     System.Collections.Generic.IEnumerable<int> ArrayZipAllRewritten_ProceduralLinq1()
     {
-        int v3686;
-        v3686 = (0);
-        for (; v3686 < (1000); v3686++)
-            yield return (v3686);
+        int v3366;
+        v3366 = (0);
+        for (; v3366 < (1000); v3366 += (1))
+            yield return (v3366);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayZipNullRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v3687;
+        int v3367;
         throw new System.InvalidOperationException("Invalid null object");
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctZipArrayDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v3705;
-        HashSet<int> v3706;
-        int v3707;
-        v3706 = new HashSet<int>();
-        v3705 = (0);
-        for (; v3705 < (ArrayItems.Length); v3705++)
+        int v3383;
+        HashSet<int> v3384;
+        v3384 = new HashSet<int>();
+        v3383 = (0);
+        for (; v3383 < (ArrayItems.Length); v3383 += 1)
         {
-            v3707 = (ArrayItems[v3705]);
-            if (!(v3706.Add((v3707))))
+            if (!(v3384.Add(((ArrayItems[v3383])))))
                 continue;
-            yield return (v3707);
+            yield return ((ArrayItems[v3383]));
         }
 
         yield break;
@@ -1077,17 +1067,15 @@ public class ZipTests
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctZipArrayDistinctRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v3708;
-        HashSet<int> v3709;
-        int v3710;
-        v3709 = new HashSet<int>();
-        v3708 = (0);
-        for (; v3708 < (ArrayItems.Length); v3708++)
+        int v3385;
+        HashSet<int> v3386;
+        v3386 = new HashSet<int>();
+        v3385 = (0);
+        for (; v3385 < (ArrayItems.Length); v3385 += 1)
         {
-            v3710 = (ArrayItems[v3708]);
-            if (!(v3709.Add((v3710))))
+            if (!(v3386.Add(((ArrayItems[v3385])))))
                 continue;
-            yield return (v3710);
+            yield return ((ArrayItems[v3385]));
         }
 
         yield break;
@@ -1095,17 +1083,15 @@ public class ZipTests
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctZipArrayDistinctDistinctRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v3725;
-        HashSet<int> v3726;
-        int v3727;
-        v3726 = new HashSet<int>();
-        v3725 = (0);
-        for (; v3725 < (ArrayItems.Length); v3725++)
+        int v3397;
+        HashSet<int> v3398;
+        v3398 = new HashSet<int>();
+        v3397 = (0);
+        for (; v3397 < (ArrayItems.Length); v3397 += 1)
         {
-            v3727 = (ArrayItems[v3725]);
-            if (!(v3726.Add((v3727))))
+            if (!(v3398.Add(((ArrayItems[v3397])))))
                 continue;
-            yield return (v3727);
+            yield return ((ArrayItems[v3397]));
         }
 
         yield break;
@@ -1113,17 +1099,15 @@ public class ZipTests
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctZipArrayDistinctDistinctRewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v3728;
-        HashSet<int> v3729;
-        int v3730;
-        v3729 = new HashSet<int>();
-        v3728 = (0);
-        for (; v3728 < (ArrayItems.Length); v3728++)
+        int v3399;
+        HashSet<int> v3400;
+        v3400 = new HashSet<int>();
+        v3399 = (0);
+        for (; v3399 < (ArrayItems.Length); v3399 += 1)
         {
-            v3730 = (ArrayItems[v3728]);
-            if (!(v3729.Add((v3730))))
+            if (!(v3400.Add(((ArrayItems[v3399])))))
                 continue;
-            yield return (v3730);
+            yield return ((ArrayItems[v3399]));
         }
 
         yield break;
@@ -1131,17 +1115,15 @@ public class ZipTests
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctZipArrayDistinctDistinct2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v3745;
-        HashSet<int> v3746;
-        int v3747;
-        v3746 = new HashSet<int>(EqualityComparer<int>.Default);
-        v3745 = (0);
-        for (; v3745 < (ArrayItems.Length); v3745++)
+        int v3411;
+        HashSet<int> v3412;
+        v3412 = new HashSet<int>(EqualityComparer<int>.Default);
+        v3411 = (0);
+        for (; v3411 < (ArrayItems.Length); v3411 += 1)
         {
-            v3747 = (ArrayItems[v3745]);
-            if (!(v3746.Add((v3747))))
+            if (!(v3412.Add(((ArrayItems[v3411])))))
                 continue;
-            yield return (v3747);
+            yield return ((ArrayItems[v3411]));
         }
 
         yield break;
@@ -1149,17 +1131,15 @@ public class ZipTests
 
     System.Collections.Generic.IEnumerable<int> ArrayDistinctZipArrayDistinctDistinct2Rewritten_ProceduralLinq2(int[] ArrayItems)
     {
-        int v3748;
-        HashSet<int> v3749;
-        int v3750;
-        v3749 = new HashSet<int>(EqualityComparer<int>.Default);
-        v3748 = (0);
-        for (; v3748 < (ArrayItems.Length); v3748++)
+        int v3413;
+        HashSet<int> v3414;
+        v3414 = new HashSet<int>(EqualityComparer<int>.Default);
+        v3413 = (0);
+        for (; v3413 < (ArrayItems.Length); v3413 += 1)
         {
-            v3750 = (ArrayItems[v3748]);
-            if (!(v3749.Add((v3750))))
+            if (!(v3414.Add(((ArrayItems[v3413])))))
                 continue;
-            yield return (v3750);
+            yield return ((ArrayItems[v3413]));
         }
 
         yield break;
@@ -1167,27 +1147,27 @@ public class ZipTests
 
     System.Collections.Generic.IEnumerable<int> ArrayZipSelectorRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v3751;
+        int v3415;
         if (ArrayItems == null)
             throw new System.InvalidOperationException("Invalid null object");
-        IEnumerator<int> v3752;
-        v3752 = ((IEnumerable<int>)ArrayItems).GetEnumerator();
+        IEnumerator<int> v3416;
+        v3416 = ((IEnumerable<int>)ArrayItems).GetEnumerator();
         try
         {
-            v3751 = (0);
-            for (; v3751 < (ArrayItems.Length); v3751++)
+            v3415 = (0);
+            for (; v3415 < (ArrayItems.Length); v3415 += 1)
             {
-                if (!(v3752.MoveNext()))
+                if (!(v3416.MoveNext()))
                     throw new System.InvalidOperationException("Invalid sizes of sources");
-                yield return (ZipMethod((ArrayItems[v3751]), v3752.Current));
+                yield return (ZipMethod((ArrayItems[v3415]), v3416.Current));
             }
         }
         finally
         {
-            v3752.Dispose();
+            v3416.Dispose();
         }
 
-        if (v3752.MoveNext())
+        if (v3416.MoveNext())
             throw new System.InvalidOperationException("Invalid sizes of sources");
         yield break;
     }

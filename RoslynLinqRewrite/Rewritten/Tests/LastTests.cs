@@ -199,232 +199,238 @@ public class LastTests
     public int ArrayLastUsingLastRewritten()
     {
         var a = 100;
-        return ArrayLastUsingLastRewritten_ProceduralLinq1(ArrayItems);
+        return ArrayLastUsingLastRewritten_ProceduralLinq2(ArrayItems);
     } //EndMethod
 
     int EnumerableLastRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1499;
-        int v1500;
-        int? v1501;
-        v1499 = EnumerableItems.GetEnumerator();
-        v1500 = 0;
-        v1501 = null;
+        IEnumerator<int> v1336;
+        int v1337;
+        int? v1338;
+        v1336 = EnumerableItems.GetEnumerator();
+        v1337 = 0;
+        v1338 = null;
         try
         {
-            while (v1499.MoveNext())
+            while (v1336.MoveNext())
             {
-                v1501 = (v1499.Current);
-                v1500++;
+                v1338 = (v1336.Current);
+                v1337++;
             }
         }
         finally
         {
-            v1499.Dispose();
+            v1336.Dispose();
         }
 
-        if (v1501 == null)
+        if (v1338 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1501;
+            return (int)v1338;
     }
 
     int LastConditionRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1503;
-        int? v1504;
-        v1504 = null;
-        v1503 = (0);
-        for (; v1503 < (ArrayItems.Length); v1503++)
-            if (((ArrayItems[v1503]) > 30))
-                v1504 = (ArrayItems[v1503]);
-        if (v1504 == null)
+        int v1340;
+        int? v1341;
+        v1341 = null;
+        v1340 = (0);
+        for (; v1340 < (ArrayItems.Length); v1340 += 1)
+            if (((ArrayItems[v1340]) > 30))
+                v1341 = (ArrayItems[v1340]);
+        if (v1341 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1504;
+            return (int)v1341;
     }
 
     int LastFalseConditionRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1506;
-        int? v1507;
-        v1507 = null;
-        v1506 = (0);
-        for (; v1506 < (ArrayItems.Length); v1506++)
-            if (((ArrayItems[v1506]) > 105))
-                v1507 = (ArrayItems[v1506]);
-        if (v1507 == null)
+        int v1343;
+        int? v1344;
+        v1344 = null;
+        v1343 = (0);
+        for (; v1343 < (ArrayItems.Length); v1343 += 1)
+            if (((ArrayItems[v1343]) > 105))
+                v1344 = (ArrayItems[v1343]);
+        if (v1344 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1507;
+            return (int)v1344;
     }
 
     int LastMethodRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1509;
-        int? v1510;
-        v1510 = null;
-        v1509 = (0);
-        for (; v1509 < (ArrayItems.Length); v1509++)
-            if (Predicate((ArrayItems[v1509])))
-                v1510 = (ArrayItems[v1509]);
-        if (v1510 == null)
+        int v1346;
+        int? v1347;
+        v1347 = null;
+        v1346 = (0);
+        for (; v1346 < (ArrayItems.Length); v1346 += 1)
+            if (Predicate((ArrayItems[v1346])))
+                v1347 = (ArrayItems[v1346]);
+        if (v1347 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1510;
+            return (int)v1347;
     }
 
     int LastWhereMethodRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1511;
-        int v1512;
-        int v1513;
-        int? v1514;
-        v1513 = 0;
-        v1514 = null;
-        v1511 = (0);
-        for (; v1511 < (ArrayItems.Length); v1511++)
+        int v1348;
+        int v1349;
+        int? v1350;
+        v1349 = 0;
+        v1350 = null;
+        v1348 = (0);
+        for (; v1348 < (ArrayItems.Length); v1348 += 1)
         {
-            v1512 = (ArrayItems[v1511]);
-            if (!(((v1512) > 10)))
+            if (!((((ArrayItems[v1348])) > 10)))
                 continue;
-            v1514 = (v1512);
-            v1513++;
+            v1350 = ((ArrayItems[v1348]));
+            v1349++;
         }
 
-        if (v1514 == null)
+        if (v1350 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1514;
+            return (int)v1350;
     }
 
     int RangeLastRewritten_ProceduralLinq1()
     {
-        int v1516;
-        int? v1517;
-        v1517 = null;
-        v1516 = (0);
-        for (; v1516 < (100); v1516++)
-            v1517 = (v1516);
-        if (v1517 == null)
+        int v1352;
+        int? v1353;
+        v1353 = null;
+        v1352 = (0);
+        for (; v1352 < (100); v1352 += (1))
+            v1353 = (v1352);
+        if (v1353 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1517;
+            return (int)v1353;
     }
 
     int Range1LastRewritten_ProceduralLinq1()
     {
-        int v1518;
-        int? v1519;
-        v1519 = null;
-        v1518 = (0);
-        for (; v1518 < (1); v1518++)
-            v1519 = (v1518);
-        if (v1519 == null)
+        int v1354;
+        int? v1355;
+        v1355 = null;
+        v1354 = (0);
+        for (; v1354 < (1); v1354 += (1))
+            v1355 = (v1354);
+        if (v1355 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1519;
+            return (int)v1355;
     }
 
     int RangeRepeatRewritten_ProceduralLinq1()
     {
-        int v1520;
-        int? v1521;
-        v1521 = null;
-        v1520 = (0);
-        for (; v1520 < (100); v1520++)
-            v1521 = (0);
-        if (v1521 == null)
+        int v1356;
+        int? v1357;
+        v1357 = null;
+        v1356 = (0);
+        for (; v1356 < (100); v1356 += 1)
+            v1357 = (0);
+        if (v1357 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1521;
+            return (int)v1357;
     }
 
     int EmptyLastRewritten_ProceduralLinq1()
     {
-        int v1522;
-        int? v1523;
-        v1522 = 0;
-        v1523 = null;
-        if (v1523 == null)
+        int v1358;
+        int? v1359;
+        v1358 = 0;
+        v1359 = null;
+        if (v1359 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1523;
+            return (int)v1359;
     }
 
     int ArrayDistinctLastRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1524;
-        HashSet<int> v1525;
-        int v1526;
-        int v1527;
-        int? v1528;
-        v1525 = new HashSet<int>();
-        v1527 = 0;
-        v1528 = null;
-        v1524 = (0);
-        for (; v1524 < (ArrayItems.Length); v1524++)
+        int v1360;
+        HashSet<int> v1361;
+        int v1362;
+        int? v1363;
+        v1361 = new HashSet<int>();
+        v1362 = 0;
+        v1363 = null;
+        v1360 = (0);
+        for (; v1360 < (ArrayItems.Length); v1360 += 1)
         {
-            v1526 = (ArrayItems[v1524]);
-            if (!(v1525.Add((v1526))))
+            if (!(v1361.Add(((ArrayItems[v1360])))))
                 continue;
-            v1528 = (v1526);
-            v1527++;
+            v1363 = ((ArrayItems[v1360]));
+            v1362++;
         }
 
-        if (v1528 == null)
+        if (v1363 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1528;
+            return (int)v1363;
     }
 
     int ArrayLastParamRewritten_ProceduralLinq1(int a, int[] ArrayItems)
     {
-        int v1530;
-        int? v1531;
-        v1531 = null;
-        v1530 = (0);
-        for (; v1530 < (ArrayItems.Length); v1530++)
-            if (((ArrayItems[v1530]) > a))
-                v1531 = (ArrayItems[v1530]);
-        if (v1531 == null)
+        int v1365;
+        int? v1366;
+        v1366 = null;
+        v1365 = (0);
+        for (; v1365 < (ArrayItems.Length); v1365 += 1)
+            if (((ArrayItems[v1365]) > a))
+                v1366 = (ArrayItems[v1365]);
+        if (v1366 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1531;
+            return (int)v1366;
     }
 
     int ArrayLastChangingParamRewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
     {
-        int v1532;
-        int? v1533;
-        v1533 = null;
-        v1532 = (0);
-        for (; v1532 < (ArrayItems.Length); v1532++)
-            if (((ArrayItems[v1532]) > a--))
-                v1533 = (ArrayItems[v1532]);
-        if (v1533 == null)
+        int v1367;
+        int? v1368;
+        v1368 = null;
+        v1367 = (0);
+        for (; v1367 < (ArrayItems.Length); v1367 += 1)
+            if (((ArrayItems[v1367]) > a--))
+                v1368 = (ArrayItems[v1367]);
+        if (v1368 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1533;
+            return (int)v1368;
     }
 
-    int ArrayLastUsingLastRewritten_ProceduralLinq1(int[] ArrayItems)
+    int ArrayLastUsingLastRewritten_ProceduralLinq1(int x, int[] ArrayItems)
     {
-        int v1535;
-        int? v1536;
-        int v1537;
-        v1536 = null;
-        v1535 = (0);
-        for (; v1535 < (ArrayItems.Length); v1535++)
-        {
-            v1537 = (ArrayItems[v1535]);
-            if ((v1537 > ArrayItems.Last(y => y > v1537)))
-                v1536 = (ArrayItems[v1535]);
-        }
-
-        if (v1536 == null)
+        int v1370;
+        int? v1371;
+        v1371 = null;
+        v1370 = (0);
+        for (; v1370 < (ArrayItems.Length); v1370 += 1)
+            if (((ArrayItems[v1370]) > x))
+                v1371 = (ArrayItems[v1370]);
+        if (v1371 == null)
             throw new System.InvalidOperationException("The sequence did not contain any elements.");
         else
-            return (int)v1536;
+            return (int)v1371;
+    }
+
+    int ArrayLastUsingLastRewritten_ProceduralLinq2(int[] ArrayItems)
+    {
+        int v1373;
+        int? v1374;
+        v1374 = null;
+        v1373 = (0);
+        for (; v1373 < (ArrayItems.Length); v1373 += 1)
+            if (((ArrayItems[v1373]) > ArrayLastUsingLastRewritten_ProceduralLinq1((ArrayItems[v1373]), ArrayItems)))
+                v1374 = (ArrayItems[v1373]);
+        if (v1374 == null)
+            throw new System.InvalidOperationException("The sequence did not contain any elements.");
+        else
+            return (int)v1374;
     }
 }}

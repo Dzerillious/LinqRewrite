@@ -362,75 +362,75 @@ public class SkipTests
 
     System.Collections.Generic.IEnumerable<int> ArraySkipRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2073;
-        v2073 = (20);
-        for (; v2073 < (ArrayItems.Length); v2073++)
-            yield return (ArrayItems[v2073]);
+        int v1876;
+        v1876 = (20);
+        for (; v1876 < (ArrayItems.Length); v1876 += 1)
+            yield return (ArrayItems[v1876]);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> ArraySkip0Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2075;
-        v2075 = (0);
-        for (; v2075 < (ArrayItems.Length); v2075++)
-            yield return (ArrayItems[v2075]);
+        int v1878;
+        v1878 = (0);
+        for (; v1878 < (ArrayItems.Length); v1878 += 1)
+            yield return (ArrayItems[v1878]);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> ArraySkipM1Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2077;
-        v2077 = (0);
-        for (; v2077 < (ArrayItems.Length); v2077++)
-            yield return (ArrayItems[v2077]);
+        int v1880;
+        v1880 = (0);
+        for (; v1880 < (ArrayItems.Length); v1880 += 1)
+            yield return (ArrayItems[v1880]);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> ArraySkip1000Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2079;
-        v2079 = (1000);
-        for (; v2079 < (ArrayItems.Length); v2079++)
-            yield return (ArrayItems[v2079]);
+        int v1882;
+        v1882 = (1000);
+        for (; v1882 < (ArrayItems.Length); v1882 += 1)
+            yield return (ArrayItems[v1882]);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> ArraySkipParamRewritten_ProceduralLinq1(int a, int[] ArrayItems)
     {
-        int v2082;
-        int v2083;
-        v2083 = a < 0 ? a : 0;
-        v2083 = a;
-        v2082 = (v2083);
-        for (; v2082 < (ArrayItems.Length); v2082++)
-            yield return (ArrayItems[v2082]);
+        int v1885;
+        int v1886;
+        v1886 = a < 0 ? a : 0;
+        v1886 = a;
+        v1885 = (v1886);
+        for (; v1885 < (ArrayItems.Length); v1885 += 1)
+            yield return (ArrayItems[v1885]);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> EnumerableSkipRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v2084;
-        int v2085;
-        v2084 = EnumerableItems.GetEnumerator();
-        v2085 = 0;
+        IEnumerator<int> v1887;
+        int v1888;
+        v1887 = EnumerableItems.GetEnumerator();
+        v1888 = 0;
         try
         {
-            while (v2084.MoveNext())
+            while (v1887.MoveNext())
             {
-                if (v2085 < 20)
+                if (v1888 < 20)
                 {
-                    v2085++;
+                    v1888++;
                     continue;
                 }
 
-                yield return (v2084.Current);
-                v2085++;
+                yield return (v1887.Current);
+                v1888++;
             }
         }
         finally
         {
-            v2084.Dispose();
+            v1887.Dispose();
         }
 
         yield break;
@@ -438,27 +438,27 @@ public class SkipTests
 
     System.Collections.Generic.IEnumerable<int> EnumerableSkip0Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v2086;
-        int v2087;
-        v2086 = EnumerableItems.GetEnumerator();
-        v2087 = 0;
+        IEnumerator<int> v1889;
+        int v1890;
+        v1889 = EnumerableItems.GetEnumerator();
+        v1890 = 0;
         try
         {
-            while (v2086.MoveNext())
+            while (v1889.MoveNext())
             {
-                if (v2087 < 0)
+                if (v1890 < 0)
                 {
-                    v2087++;
+                    v1890++;
                     continue;
                 }
 
-                yield return (v2086.Current);
-                v2087++;
+                yield return (v1889.Current);
+                v1890++;
             }
         }
         finally
         {
-            v2086.Dispose();
+            v1889.Dispose();
         }
 
         yield break;
@@ -466,16 +466,16 @@ public class SkipTests
 
     System.Collections.Generic.IEnumerable<int> EnumerableSkipM1Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v2088;
-        v2088 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v1891;
+        v1891 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v2088.MoveNext())
-                yield return (v2088.Current);
+            while (v1891.MoveNext())
+                yield return (v1891.Current);
         }
         finally
         {
-            v2088.Dispose();
+            v1891.Dispose();
         }
 
         yield break;
@@ -483,27 +483,27 @@ public class SkipTests
 
     System.Collections.Generic.IEnumerable<int> EnumerableSkip1000Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v2089;
-        int v2090;
-        v2089 = EnumerableItems.GetEnumerator();
-        v2090 = 0;
+        IEnumerator<int> v1892;
+        int v1893;
+        v1892 = EnumerableItems.GetEnumerator();
+        v1893 = 0;
         try
         {
-            while (v2089.MoveNext())
+            while (v1892.MoveNext())
             {
-                if (v2090 < 1000)
+                if (v1893 < 1000)
                 {
-                    v2090++;
+                    v1893++;
                     continue;
                 }
 
-                yield return (v2089.Current);
-                v2090++;
+                yield return (v1892.Current);
+                v1893++;
             }
         }
         finally
         {
-            v2089.Dispose();
+            v1892.Dispose();
         }
 
         yield break;
@@ -511,27 +511,27 @@ public class SkipTests
 
     System.Collections.Generic.IEnumerable<int> EnumerableSkipParamRewritten_ProceduralLinq1(int a, System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v2091;
-        int v2092;
-        v2091 = EnumerableItems.GetEnumerator();
-        v2092 = 0;
+        IEnumerator<int> v1894;
+        int v1895;
+        v1894 = EnumerableItems.GetEnumerator();
+        v1895 = 0;
         try
         {
-            while (v2091.MoveNext())
+            while (v1894.MoveNext())
             {
-                if (v2092 < a)
+                if (v1895 < a)
                 {
-                    v2092++;
+                    v1895++;
                     continue;
                 }
 
-                yield return (v2091.Current);
-                v2092++;
+                yield return (v1894.Current);
+                v1895++;
             }
         }
         finally
         {
-            v2091.Dispose();
+            v1894.Dispose();
         }
 
         yield break;
@@ -539,279 +539,275 @@ public class SkipTests
 
     System.Collections.Generic.IEnumerable<int> RangeSkipRewritten_ProceduralLinq1()
     {
-        int v2093;
-        v2093 = (20);
-        for (; v2093 < (100); v2093++)
-            yield return (v2093);
+        int v1896;
+        v1896 = (20);
+        for (; v1896 < (100); v1896 += (1))
+            yield return (v1896);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> RangeSkip0Rewritten_ProceduralLinq1()
     {
-        int v2094;
-        v2094 = (0);
-        for (; v2094 < (100); v2094++)
-            yield return (v2094);
+        int v1897;
+        v1897 = (0);
+        for (; v1897 < (100); v1897 += (1))
+            yield return (v1897);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> RangeSkipM1Rewritten_ProceduralLinq1()
     {
-        int v2095;
-        v2095 = (0);
-        for (; v2095 < (100); v2095++)
-            yield return (v2095);
+        int v1898;
+        v1898 = (0);
+        for (; v1898 < (100); v1898 += (1))
+            yield return (v1898);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> RangeSkip1000Rewritten_ProceduralLinq1()
     {
-        int v2096;
-        v2096 = (1000);
-        for (; v2096 < (100); v2096++)
-            yield return (v2096);
+        int v1899;
+        v1899 = (1000);
+        for (; v1899 < (100); v1899 += (1))
+            yield return (v1899);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> RangeSkipParamRewritten_ProceduralLinq1(int a)
     {
-        int v2097;
-        int v2098;
-        v2098 = a < 0 ? a : 0;
-        v2098 = a;
-        v2097 = (v2098);
-        for (; v2097 < (100); v2097++)
-            yield return (v2097);
+        int v1900;
+        int v1901;
+        v1901 = a < 0 ? a : 0;
+        v1901 = a;
+        v1900 = (v1901);
+        for (; v1900 < (100); v1900 += (1))
+            yield return (v1900);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> RepeatSkipRewritten_ProceduralLinq1()
     {
-        int v2099;
-        v2099 = (20);
-        for (; v2099 < (100); v2099++)
+        int v1902;
+        v1902 = (20);
+        for (; v1902 < (100); v1902 += 1)
             yield return (0);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> RepeatSkip0Rewritten_ProceduralLinq1()
     {
-        int v2100;
-        v2100 = (0);
-        for (; v2100 < (100); v2100++)
+        int v1903;
+        v1903 = (0);
+        for (; v1903 < (100); v1903 += 1)
             yield return (0);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> RepeatSkipM1Rewritten_ProceduralLinq1()
     {
-        int v2101;
-        v2101 = (0);
-        for (; v2101 < (100); v2101++)
+        int v1904;
+        v1904 = (0);
+        for (; v1904 < (100); v1904 += 1)
             yield return (0);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> RepeatSkip1000Rewritten_ProceduralLinq1()
     {
-        int v2102;
-        v2102 = (1000);
-        for (; v2102 < (100); v2102++)
+        int v1905;
+        v1905 = (1000);
+        for (; v1905 < (100); v1905 += 1)
             yield return (0);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> RepeatSkipParamRewritten_ProceduralLinq1(int a)
     {
-        int v2103;
-        int v2104;
-        v2104 = a < 0 ? a : 0;
-        v2104 = a;
-        v2103 = (v2104);
-        for (; v2103 < (100); v2103++)
+        int v1906;
+        int v1907;
+        v1907 = a < 0 ? a : 0;
+        v1907 = a;
+        v1906 = (v1907);
+        for (; v1906 < (100); v1906 += 1)
             yield return (0);
         yield break;
     }
 
     int[] ArraySelectSkipToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2106;
-        int[] v2107;
-        int v2108;
-        v2107 = new int[(-20 + ArrayItems.Length)];
-        v2108 = 0;
-        v2106 = (20);
-        for (; v2106 < (ArrayItems.Length); v2106++)
+        int v1909;
+        int[] v1910;
+        int v1911;
+        v1910 = new int[(-20 + ArrayItems.Length)];
+        v1911 = 0;
+        v1909 = (20);
+        for (; v1909 < (ArrayItems.Length); v1909 += 1)
         {
-            v2107[v2108] = (10 + ArrayItems[v2106]);
-            v2108++;
+            v1910[v1911] = (10 + ArrayItems[v1909]);
+            v1911++;
         }
 
-        return v2107;
+        return v1910;
     }
 
     int[] ArraySelectSkipM1ToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2110;
-        int[] v2111;
-        v2111 = new int[(ArrayItems.Length)];
-        v2110 = (0);
-        for (; v2110 < (ArrayItems.Length); v2110++)
-            v2111[v2110] = (10 + ArrayItems[v2110]);
-        return v2111;
+        int v1913;
+        int[] v1914;
+        v1914 = new int[(ArrayItems.Length)];
+        v1913 = (0);
+        for (; v1913 < (ArrayItems.Length); v1913 += 1)
+            v1914[v1913] = (10 + ArrayItems[v1913]);
+        return v1914;
     }
 
     int[] ArrayWhereSkipToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2112;
-        int v2113;
-        int v2114;
-        int v2115;
-        int v2116;
-        int v2117;
-        int[] v2118;
-        v2114 = 0;
-        v2115 = 0;
-        v2116 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
-        v2116 -= (v2116 % 2);
-        v2117 = 8;
-        v2118 = new int[8];
-        v2112 = (0);
-        for (; v2112 < (ArrayItems.Length); v2112++)
+        int v1915;
+        int v1916;
+        int v1917;
+        int v1918;
+        int v1919;
+        int[] v1920;
+        v1916 = 0;
+        v1917 = 0;
+        v1918 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
+        v1918 -= (v1918 % 2);
+        v1919 = 8;
+        v1920 = new int[8];
+        v1915 = (0);
+        for (; v1915 < (ArrayItems.Length); v1915 += 1)
         {
-            v2113 = (ArrayItems[v2112]);
-            if (!(((v2113) > 20)))
+            if (!((((ArrayItems[v1915])) > 20)))
                 continue;
-            if (v2114 < 20)
+            if (v1916 < 20)
             {
-                v2114++;
+                v1916++;
                 continue;
             }
 
-            if (v2115 >= v2117)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2118, ref v2116, out v2117);
-            v2118[v2115] = (v2113);
-            v2114++;
-            v2115++;
+            if (v1917 >= v1919)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v1920, ref v1918, out v1919);
+            v1920[v1917] = ((ArrayItems[v1915]));
+            v1916++;
+            v1917++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2118, v2115);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1920, v1917);
     }
 
     int[] ArrayWhereFalseSkipToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2119;
-        int v2120;
-        int v2121;
-        int v2122;
-        int v2123;
-        int v2124;
-        int[] v2125;
-        v2121 = 0;
-        v2122 = 0;
-        v2123 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
-        v2123 -= (v2123 % 2);
-        v2124 = 8;
-        v2125 = new int[8];
-        v2119 = (0);
-        for (; v2119 < (ArrayItems.Length); v2119++)
+        int v1921;
+        int v1922;
+        int v1923;
+        int v1924;
+        int v1925;
+        int[] v1926;
+        v1922 = 0;
+        v1923 = 0;
+        v1924 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
+        v1924 -= (v1924 % 2);
+        v1925 = 8;
+        v1926 = new int[8];
+        v1921 = (0);
+        for (; v1921 < (ArrayItems.Length); v1921 += 1)
         {
-            v2120 = (ArrayItems[v2119]);
             if (!((false)))
                 continue;
-            if (v2121 < 20)
+            if (v1922 < 20)
             {
-                v2121++;
+                v1922++;
                 continue;
             }
 
-            if (v2122 >= v2124)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2125, ref v2123, out v2124);
-            v2125[v2122] = (v2120);
-            v2121++;
-            v2122++;
+            if (v1923 >= v1925)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v1926, ref v1924, out v1925);
+            v1926[v1923] = ((ArrayItems[v1921]));
+            v1922++;
+            v1923++;
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2125, v2122);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1926, v1923);
     }
 
     int[] ArraySkipToArrayRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2127;
-        int[] v2128;
-        v2128 = new int[(-20 + ArrayItems.Length)];
-        System.Array.Copy(ArrayItems, (20), v2128, 0, (-20 + ArrayItems.Length));
-        return v2128;
+        int v1928;
+        int[] v1929;
+        v1929 = new int[(-20 + ArrayItems.Length)];
+        System.Array.Copy(ArrayItems, (20), v1929, 0, (-20 + ArrayItems.Length));
+        return v1929;
     }
 
     int[] EnumerableSkipToArrayRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v2129;
-        int v2130;
-        int v2131;
-        int v2132;
-        int[] v2133;
-        v2129 = EnumerableItems.GetEnumerator();
-        v2130 = 0;
-        v2131 = 0;
-        v2132 = 8;
-        v2133 = new int[8];
+        IEnumerator<int> v1930;
+        int v1931;
+        int v1932;
+        int v1933;
+        int[] v1934;
+        v1930 = EnumerableItems.GetEnumerator();
+        v1931 = 0;
+        v1932 = 0;
+        v1933 = 8;
+        v1934 = new int[8];
         try
         {
-            while (v2129.MoveNext())
+            while (v1930.MoveNext())
             {
-                if (v2130 < 20)
+                if (v1931 < 20)
                 {
-                    v2130++;
+                    v1931++;
                     continue;
                 }
 
-                if (v2131 >= v2132)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2133, ref v2132);
-                v2133[v2131] = (v2129.Current);
-                v2130++;
-                v2131++;
+                if (v1932 >= v1933)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v1934, ref v1933);
+                v1934[v1932] = (v1930.Current);
+                v1931++;
+                v1932++;
             }
         }
         finally
         {
-            v2129.Dispose();
+            v1930.Dispose();
         }
 
-        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v2133, v2131);
+        return LinqRewrite.Core.SimpleArrayExtensions.EnsureFullArray(v1934, v1932);
     }
 
     int[] RangeSkipToArrayRewritten_ProceduralLinq1()
     {
-        int v2134;
-        int[] v2135;
-        int v2136;
-        v2135 = new int[(80)];
-        v2136 = 0;
-        v2134 = (20);
-        for (; v2134 < (100); v2134++)
+        int v1935;
+        int[] v1936;
+        int v1937;
+        v1936 = new int[(80)];
+        v1937 = 0;
+        v1935 = (20);
+        for (; v1935 < (100); v1935 += (1))
         {
-            v2135[v2136] = (v2134);
-            v2136++;
+            v1936[v1937] = (v1935);
+            v1937++;
         }
 
-        return v2135;
+        return v1936;
     }
 
     int[] RepeatSkipToArrayRewritten_ProceduralLinq1()
     {
-        int v2137;
-        int[] v2138;
-        int v2139;
-        v2138 = new int[(80)];
-        v2139 = 0;
-        v2137 = (20);
-        for (; v2137 < (100); v2137++)
+        int v1938;
+        int[] v1939;
+        int v1940;
+        v1939 = new int[(80)];
+        v1940 = 0;
+        v1938 = (20);
+        for (; v1938 < (100); v1938 += 1)
         {
-            v2138[v2139] = (0);
-            v2139++;
+            v1939[v1940] = (0);
+            v1940++;
         }
 
-        return v2138;
+        return v1939;
     }
 }}

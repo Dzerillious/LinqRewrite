@@ -109,19 +109,19 @@ public class RangeTests
 
     System.Collections.Generic.IEnumerable<int> Range1Rewritten_ProceduralLinq1()
     {
-        int v1763;
-        v1763 = (0);
-        for (; v1763 < (100); v1763++)
-            yield return (v1763);
+        int v1575;
+        v1575 = (0);
+        for (; v1575 < (100); v1575 += (1))
+            yield return (v1575);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> Range2Rewritten_ProceduralLinq1()
     {
-        int v1764;
-        v1764 = (0);
-        for (; v1764 < (100); v1764++)
-            yield return (-100 + v1764);
+        int v1576;
+        v1576 = (0);
+        for (; v1576 < (100); v1576 += (1))
+            yield return (-100 + v1576);
         yield break;
     }
 
@@ -133,63 +133,63 @@ public class RangeTests
 
     System.Collections.Generic.IEnumerable<int> Range4Rewritten_ProceduralLinq1()
     {
-        int v1765;
-        v1765 = (0);
-        for (; v1765 < (23); v1765++)
-            yield return (123 + v1765);
+        int v1577;
+        v1577 = (0);
+        for (; v1577 < (23); v1577 += (1))
+            yield return (123 + v1577);
         yield break;
     }
 
     int[] RangeToArrayRewritten_ProceduralLinq1()
     {
-        int v1766;
-        int[] v1767;
-        v1767 = new int[(23)];
-        v1766 = (0);
-        for (; v1766 < (23); v1766++)
-            v1767[v1766] = (123 + v1766);
-        return v1767;
+        int v1578;
+        int[] v1579;
+        v1579 = new int[(23)];
+        v1578 = (0);
+        for (; v1578 < (23); v1578 += (1))
+            v1579[v1578] = (123 + v1578);
+        return v1579;
     }
 
     System.Collections.Generic.List<int> RangeToListRewritten_ProceduralLinq1()
     {
-        int v1768;
-        System.Collections.Generic.List<int> v1769;
-        v1769 = new System.Collections.Generic.List<int>();
-        v1768 = (0);
-        for (; v1768 < (23); v1768++)
-            v1769.Add((123 + v1768));
-        return v1769;
+        int v1580;
+        System.Collections.Generic.List<int> v1581;
+        v1581 = new System.Collections.Generic.List<int>();
+        v1580 = (0);
+        for (; v1580 < (23); v1580 += (1))
+            v1581.Add((123 + v1580));
+        return v1581;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> RangeToSimpleListRewritten_ProceduralLinq1()
     {
-        int v1770;
-        int[] v1771;
-        SimpleList<int> v1772;
-        v1771 = new int[(23)];
-        v1770 = (0);
-        for (; v1770 < (23); v1770++)
-            v1771[v1770] = (123 + v1770);
-        v1772 = new SimpleList<int>();
-        v1772.Items = v1771;
-        v1772.Count = (23);
-        return v1772;
+        int v1582;
+        int[] v1583;
+        SimpleList<int> v1584;
+        v1583 = new int[(23)];
+        v1582 = (0);
+        for (; v1582 < (23); v1582 += (1))
+            v1583[v1582] = (123 + v1582);
+        v1584 = new SimpleList<int>();
+        v1584.Items = v1583;
+        v1584.Count = (23);
+        return v1584;
     }
 
     System.Collections.Generic.IEnumerable<int> RangeDistinctRewritten_ProceduralLinq1()
     {
-        int v1773;
-        HashSet<int> v1774;
-        int v1775;
-        v1774 = new HashSet<int>();
-        v1773 = (0);
-        for (; v1773 < (23); v1773++)
+        int v1585;
+        HashSet<int> v1586;
+        int v1587;
+        v1586 = new HashSet<int>();
+        v1585 = (0);
+        for (; v1585 < (23); v1585 += (1))
         {
-            v1775 = (123 + v1773);
-            if (!(v1774.Add((v1775))))
+            v1587 = (123 + v1585);
+            if (!(v1586.Add((v1587))))
                 continue;
-            yield return (v1775);
+            yield return (v1587);
         }
 
         yield break;

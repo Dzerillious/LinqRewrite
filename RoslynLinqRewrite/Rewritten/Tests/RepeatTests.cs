@@ -109,18 +109,18 @@ public class RepeatTests
 
     System.Collections.Generic.IEnumerable<int> Repeat1Rewritten_ProceduralLinq1()
     {
-        int v1776;
-        v1776 = (0);
-        for (; v1776 < (100); v1776++)
+        int v1588;
+        v1588 = (0);
+        for (; v1588 < (100); v1588 += 1)
             yield return (0);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> Repeat2Rewritten_ProceduralLinq1()
     {
-        int v1777;
-        v1777 = (0);
-        for (; v1777 < (100); v1777++)
+        int v1589;
+        v1589 = (0);
+        for (; v1589 < (100); v1589 += 1)
             yield return (-100);
         yield break;
     }
@@ -133,63 +133,61 @@ public class RepeatTests
 
     System.Collections.Generic.IEnumerable<int> Repeat4Rewritten_ProceduralLinq1()
     {
-        int v1778;
-        v1778 = (0);
-        for (; v1778 < (23); v1778++)
+        int v1590;
+        v1590 = (0);
+        for (; v1590 < (23); v1590 += 1)
             yield return (123);
         yield break;
     }
 
     int[] RepeatToArrayRewritten_ProceduralLinq1()
     {
-        int v1779;
-        int[] v1780;
-        v1780 = new int[(23)];
-        v1779 = (0);
-        for (; v1779 < (23); v1779++)
-            v1780[v1779] = (123);
-        return v1780;
+        int v1591;
+        int[] v1592;
+        v1592 = new int[(23)];
+        v1591 = (0);
+        for (; v1591 < (23); v1591 += 1)
+            v1592[v1591] = (123);
+        return v1592;
     }
 
     System.Collections.Generic.List<int> RepeatToListRewritten_ProceduralLinq1()
     {
-        int v1781;
-        System.Collections.Generic.List<int> v1782;
-        v1782 = new System.Collections.Generic.List<int>();
-        v1781 = (0);
-        for (; v1781 < (23); v1781++)
-            v1782.Add((123));
-        return v1782;
+        int v1593;
+        System.Collections.Generic.List<int> v1594;
+        v1594 = new System.Collections.Generic.List<int>();
+        v1593 = (0);
+        for (; v1593 < (23); v1593 += 1)
+            v1594.Add((123));
+        return v1594;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> RepeatToSimpleListRewritten_ProceduralLinq1()
     {
-        int v1783;
-        int[] v1784;
-        SimpleList<int> v1785;
-        v1784 = new int[(23)];
-        v1783 = (0);
-        for (; v1783 < (23); v1783++)
-            v1784[v1783] = (123);
-        v1785 = new SimpleList<int>();
-        v1785.Items = v1784;
-        v1785.Count = (23);
-        return v1785;
+        int v1595;
+        int[] v1596;
+        SimpleList<int> v1597;
+        v1596 = new int[(23)];
+        v1595 = (0);
+        for (; v1595 < (23); v1595 += 1)
+            v1596[v1595] = (123);
+        v1597 = new SimpleList<int>();
+        v1597.Items = v1596;
+        v1597.Count = (23);
+        return v1597;
     }
 
     System.Collections.Generic.IEnumerable<int> RepeatDistinctRewritten_ProceduralLinq1()
     {
-        int v1786;
-        HashSet<int> v1787;
-        int v1788;
-        v1787 = new HashSet<int>();
-        v1786 = (0);
-        for (; v1786 < (23); v1786++)
+        int v1598;
+        HashSet<int> v1599;
+        v1599 = new HashSet<int>();
+        v1598 = (0);
+        for (; v1598 < (23); v1598 += 1)
         {
-            v1788 = (123);
-            if (!(v1787.Add((v1788))))
+            if (!(v1599.Add(((123)))))
                 continue;
-            yield return (v1788);
+            yield return ((123));
         }
 
         yield break;

@@ -174,16 +174,16 @@ namespace LinqRewrite
                         var visited = TryVisitInvocationExpression(newInvocation, null);
                         arguments.Add(new RewrittenValueBridge(expression, visited));
                     }
-                    // else if (expression is SimpleLambdaExpressionSyntax simpleLambdaExpression)
-                    // {
-                    //     var visited = VisitSimpleLambdaExpression(simpleLambdaExpression);
-                    //     arguments.Add(new RewrittenValueBridge(expression, SyntaxFactory.ParseExpression(visited.ToString())));
-                    // }
-                    // else if (expression is ParenthesizedLambdaExpressionSyntax parenthesizedLambdaExpression)
-                    // {
-                    //     var visited = VisitParenthesizedLambdaExpression(parenthesizedLambdaExpression);
-                    //     arguments.Add(new RewrittenValueBridge(expression, SyntaxFactory.ParseExpression(visited.ToString())));
-                    // }
+                    else if (expression is SimpleLambdaExpressionSyntax simpleLambdaExpression)
+                    {
+                        var visited = VisitSimpleLambdaExpression(simpleLambdaExpression);
+                        arguments.Add(new RewrittenValueBridge(expression, SyntaxFactory.ParseExpression(visited.ToString())));
+                    }
+                    else if (expression is ParenthesizedLambdaExpressionSyntax parenthesizedLambdaExpression)
+                    {
+                        var visited = VisitParenthesizedLambdaExpression(parenthesizedLambdaExpression);
+                        arguments.Add(new RewrittenValueBridge(expression, SyntaxFactory.ParseExpression(visited.ToString())));
+                    }
                     else arguments.Add(new RewrittenValueBridge(expression));
                 }
                 chain.Insert(0, new LinqStep(_code.GetMethodFullName(lastNode), arguments.ToArray(), lastNode));

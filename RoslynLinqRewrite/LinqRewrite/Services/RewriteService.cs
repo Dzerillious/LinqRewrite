@@ -57,23 +57,23 @@ namespace LinqRewrite.Services
 
         private static StatementSyntax GetBody(RewriteParameters p, List<IStatementSyntax> body) 
             => AggregateStatementSyntax(body.Select(x => x.GetStatementSyntax(p)).Where(x => x != null).ToArray());
-        public static ForStatementSyntax GetForStatement(RewriteParameters p, LocalVariable indexerVariable, ValueBridge max, List<IStatementSyntax> loopContent)
+        public static ForStatementSyntax GetForStatement(RewriteParameters p, LocalVariable indexerVariable, ValueBridge max, ValueBridge increment, List<IStatementSyntax> loopContent)
             => ForStatement(
                 null,
                 default,
                 indexerVariable.LThan(max),
-                indexerVariable.SeparatedPostIncrement(),
+                CreateSeparatedExpressionList(indexerVariable.AddAssign(increment)), 
                 GetBody(p, loopContent));
 
-        public static ForStatementSyntax GetReverseForStatement(RewriteParameters p, LocalVariable indexerVariable, ValueBridge min, List<IStatementSyntax> loopContent)
+        public static ForStatementSyntax GetReverseForStatement(RewriteParameters p, LocalVariable indexerVariable, ValueBridge min, ValueBridge increment, List<IStatementSyntax> loopContent)
             => ForStatement(
                 null,
                 default,
                 indexerVariable.GeThan(min),
-                indexerVariable.SeparatedPostDecrement(),
+                CreateSeparatedExpressionList(indexerVariable.SubAssign(increment)), 
                 GetBody(p, loopContent));
 
-        public static StatementSyntax GetForEachStatement(RewriteParameters p, LocalVariable enumeratorVariable, ValueBridge collection, List<IStatementSyntax> loopContent) 
+        public static StatementSyntax GetForEachStatement(RewriteParameters p, LocalVariable enumeratorVariable, List<IStatementSyntax> loopContent) 
             => TryF(Block(
                     (StatementBridge)While(enumeratorVariable.Access("MoveNext").Invoke(),
                         GetBody(p, loopContent)

@@ -169,15 +169,13 @@ public class ToLookupTests
 
     System.Collections.Generic.IEnumerable<int> ArrayWhereParamToLookupTestRewritten_ProceduralLinq1(int offset, int[] ArrayItems)
     {
-        int v2897;
-        int v2898;
-        v2897 = (0);
-        for (; v2897 < (ArrayItems.Length); v2897++)
+        int v2618;
+        v2618 = (0);
+        for (; v2618 < (ArrayItems.Length); v2618 += 1)
         {
-            v2898 = (ArrayItems[v2897]);
-            if (!(((v2898) > offset)))
+            if (!((((ArrayItems[v2618])) > offset)))
                 continue;
-            yield return (v2898);
+            yield return ((ArrayItems[v2618]));
         }
 
         yield break;
@@ -185,22 +183,22 @@ public class ToLookupTests
 
     System.Collections.Generic.IEnumerable<int> EnumerableWhereParamToLookupTestRewritten_ProceduralLinq1(int offset, System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v2901;
-        int v2902;
-        v2901 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v2621;
+        int v2622;
+        v2621 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v2901.MoveNext())
+            while (v2621.MoveNext())
             {
-                v2902 = (v2901.Current);
-                if (!(((v2902) > offset)))
+                v2622 = (v2621.Current);
+                if (!(((v2622) > offset)))
                     continue;
-                yield return (v2902);
+                yield return (v2622);
             }
         }
         finally
         {
-            v2901.Dispose();
+            v2621.Dispose();
         }
 
         yield break;
@@ -208,19 +206,17 @@ public class ToLookupTests
 
     System.Collections.Generic.IEnumerable<int> SimpleListWhereParamToLookupTestRewritten_ProceduralLinq1(int offset, LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v2907;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v2908;
-        int v2909;
-        int v2910;
-        v2907 = SimpleListItems.Count;
-        v2908 = SimpleListItems;
-        v2909 = (0);
-        for (; v2909 < (v2907); v2909++)
+        int v2626;
+        v2626 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v2627;
+        v2627 = SimpleListItems;
+        int v2628;
+        v2628 = (0);
+        for (; v2628 < (v2626); v2628 += 1)
         {
-            v2910 = (v2908[v2909]);
-            if (!(((v2910) > offset)))
+            if (!((((v2627[v2628])) > offset)))
                 continue;
-            yield return (v2910);
+            yield return ((v2627[v2628]));
         }
 
         yield break;
@@ -228,17 +224,15 @@ public class ToLookupTests
 
     System.Collections.Generic.IEnumerable<int> ListWhereParamToLookupTestRewritten_ProceduralLinq1(int offset, System.Collections.Generic.List<int> ListItems)
     {
-        int v2914;
-        int v2915;
-        int v2916;
-        v2914 = ListItems.Count;
-        v2915 = (0);
-        for (; v2915 < (v2914); v2915++)
+        int v2631;
+        int v2632;
+        v2632 = (ListItems.Count);
+        v2631 = (0);
+        for (; v2631 < v2632; v2631 += 1)
         {
-            v2916 = (ListItems[v2915]);
-            if (!(((v2916) > offset)))
+            if (!((((ListItems[v2631])) > offset)))
                 continue;
-            yield return (v2916);
+            yield return ((ListItems[v2631]));
         }
 
         yield break;
@@ -246,15 +240,13 @@ public class ToLookupTests
 
     System.Collections.Generic.IEnumerable<int> RangeWhereParamToLookupTestRewritten_ProceduralLinq1(int offset)
     {
-        int v2919;
-        int v2920;
-        v2919 = (0);
-        for (; v2919 < (1000); v2919++)
+        int v2634;
+        v2634 = (0);
+        for (; v2634 < (1000); v2634 += (1))
         {
-            v2920 = (v2919);
-            if (!(((v2920) > offset)))
+            if (!((((v2634)) > offset)))
                 continue;
-            yield return (v2920);
+            yield return ((v2634));
         }
 
         yield break;
@@ -264,10 +256,10 @@ public class ToLookupTests
     {
         if (0 > count)
             throw new System.InvalidOperationException("Index out of range");
-        int v2922;
-        v2922 = (0);
-        for (; v2922 < (count); v2922++)
-            yield return (v2922);
+        int v2636;
+        v2636 = (0);
+        for (; v2636 < (count); v2636 += (1))
+            yield return (v2636);
         yield break;
     }
 
@@ -275,24 +267,22 @@ public class ToLookupTests
     {
         if (0 > count)
             throw new System.InvalidOperationException("Index out of range");
-        int v2924;
-        v2924 = (0);
-        for (; v2924 < (count); v2924++)
+        int v2638;
+        v2638 = (0);
+        for (; v2638 < (count); v2638 += 1)
             yield return (0);
         yield break;
     }
 
     System.Collections.Generic.IEnumerable<int> RepeatWhereParamToLookupTestRewritten_ProceduralLinq1(int offset)
     {
-        int v2927;
-        int v2928;
-        v2927 = (0);
-        for (; v2927 < (1000); v2927++)
+        int v2640;
+        v2640 = (0);
+        for (; v2640 < (1000); v2640 += 1)
         {
-            v2928 = (0);
-            if (!((v2927 < offset)))
+            if (!((v2640 < offset)))
                 continue;
-            yield return (v2928);
+            yield return ((0));
         }
 
         yield break;

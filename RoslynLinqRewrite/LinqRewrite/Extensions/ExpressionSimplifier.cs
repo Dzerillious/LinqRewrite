@@ -19,19 +19,18 @@ namespace LinqRewrite.Extensions
             var source = expression;
             var indexer = 0;
 
-            source = Regex.Replace(source, "\\s*\\/\\s*", ".Div");
+            for (var i = 0; i < source.Length; i++)
+                if (source[i] == '/') return source;
+            
             source = SubstituteCallsAsVariables(substitutions, reverseSubstitutions, source, ref indexer);
             source = SubstituteMathCalls(substitutions, reverseSubstitutions, source);
             
             source = SubstituteAsVariables(substitutions, reverseSubstitutions, source, "[_a-zA-Z][_a-zA-Z0-9\\.]*", ref indexer);
             var parsed = Infix.TryParse(source);
             
-            if (parsed != null)
-                source = Infix.Format(Algebraic.Expand(parsed.Value));
+            if (parsed != null) source = Infix.Format(Algebraic.Expand(parsed.Value));
 
             source = RevertSubstitutions(reverseSubstitutions, source);
-            
-            source = Regex.Replace(source, ".Div", " / ");
             source = RevertSubstitutions(reverseSubstitutions, source);
             source = RevertMathSubstitutions(reverseSubstitutions, source);
             return source;

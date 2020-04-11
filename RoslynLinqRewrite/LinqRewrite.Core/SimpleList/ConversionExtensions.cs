@@ -39,8 +39,31 @@ namespace LinqRewrite.Core.SimpleList
             => new SimpleList<T>(list);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)] 
-        public static SimpleList<T> ToSimpleList<T>(this IEnumerable<T> enumerable)
-            => new SimpleList<T>(enumerable);
+        public static SimpleList<T> ToSimpleList<T>(this IEnumerable<T> enumerable, EnlargingCoefficient coefficient = EnlargingCoefficient.By4)
+        {
+            var shift = coefficient switch
+            {
+                EnlargingCoefficient.By2 => 1,
+                EnlargingCoefficient.By4 => 2,
+                EnlargingCoefficient.By8 => 3,
+                _ => 0
+            };
+            
+            using var enumerator = enumerable.GetEnumerator();
+            var current = 0;
+            var currentLength = 8;
+            var result = new T[8];
+            while (enumerator.MoveNext())
+            {
+                if (current >= currentLength) EnlargeExtensions.LogEnlargeArray(shift, ref result, ref currentLength);
+                result[current] = enumerator.Current;
+                current++;
+            }
+            var simpleList = new SimpleList<T>();
+            simpleList.Items = result;
+            simpleList.Count = current;
+            return simpleList;
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)] 
         public static TSource[] ToArray<TSource>(this SimpleList<TSource> source)

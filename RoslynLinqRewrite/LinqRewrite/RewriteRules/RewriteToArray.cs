@@ -22,23 +22,30 @@ namespace LinqRewrite.RewriteRules
         
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
+            var enlarging = args.FirstOrDefault()?.ToString() switch
+            {
+                "EnlargingCoefficient.By2" => 1,
+                "EnlargingCoefficient.By4" => 2,
+                "EnlargingCoefficient.By8" => 3,
+                _ => 2
+            };
             if (p.IncompleteIterators.Count() <= 1 && RewriteSimplified(p))
             {
                 p.CurrentIterator.IgnoreIterator = true;
                 return;
             }
             
-            var resultVariable = RewriteOther(p);
+            var resultVariable = RewriteOther(p, enlarging);
             if (p.ResultSize == null) p.ResultAdd(Return("LinqRewrite".Access("Core", "SimpleArrayExtensions", "EnsureFullArray")
                 .Invoke(resultVariable, p.Indexer)));
             else p.ResultAdd(Return(resultVariable));
         }
         
-        public static VariableBridge RewriteOther(RewriteParameters p, TypeSyntax itemType = null)
+        public static VariableBridge RewriteOther(RewriteParameters p, int enlarging, TypeSyntax itemType = null)
         {
             if (p.ResultSize != null) return KnownSize(p, itemType);
-            else if (p.SourceSize != null) return KnownSourceSize(p, itemType);
-            else return UnknownSourceSize(p, itemType);
+            else if (p.SourceSize != null) return KnownSourceSize(p, enlarging, itemType);
+            else return UnknownSourceSize(p, enlarging, itemType);
         }
 
         private static VariableBridge KnownSize(RewriteParameters p, TypeSyntax itemType = null)
@@ -50,7 +57,7 @@ namespace LinqRewrite.RewriteRules
             return resultVariable;
         }
 
-        private static VariableBridge KnownSourceSize(RewriteParameters p, TypeSyntax itemType = null)
+        private static VariableBridge KnownSourceSize(RewriteParameters p, int enlarging, TypeSyntax itemType = null)
         {
             var indexerVariable = p.Indexer;
                 
@@ -58,7 +65,7 @@ namespace LinqRewrite.RewriteRules
                 "LinqRewrite".Access("Core", "IntExtensions", "Log2")
                     .Invoke(Parenthesize(p.SourceSize).Cast(SyntaxKind.UIntKeyword)) - 3);
                 
-            p.PreUseAdd(logVariable.SubAssign(logVariable % 2));
+            if (enlarging != 1) p.PreUseAdd(logVariable.SubAssign(logVariable % enlarging));
             var currentLengthVariable = p.GlobalVariable(Int, 8);
 
             var resultType = itemType == null ? (ArrayTypeSyntax) p.ReturnType : itemType.ArrayType();
@@ -66,7 +73,7 @@ namespace LinqRewrite.RewriteRules
 
             p.ForAdd(If(p.Indexer >= currentLengthVariable,
                         "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeArray")
-                                .Invoke(2, 
+                                .Invoke(enlarging, 
                                     p.SourceSize, 
                                     RefArg(resultVariable), 
                                     RefArg(logVariable),
@@ -76,7 +83,7 @@ namespace LinqRewrite.RewriteRules
             return resultVariable;
         }
 
-        private static VariableBridge UnknownSourceSize(RewriteParameters p, TypeSyntax itemType = null)
+        private static VariableBridge UnknownSourceSize(RewriteParameters p, int enlarging, TypeSyntax itemType = null)
         {
             var indexerVariable = p.Indexer;
             
@@ -86,7 +93,7 @@ namespace LinqRewrite.RewriteRules
                 
             p.ForAdd(If(p.Indexer >= currentLengthVariable,
                             "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeArray")
-                                    .Invoke(2, RefArg(resultVariable), RefArg(currentLengthVariable))));
+                                    .Invoke(enlarging, RefArg(resultVariable), RefArg(currentLengthVariable))));
                 
             p.ForAdd(resultVariable[indexerVariable].Assign(p.LastValue));
             return resultVariable;

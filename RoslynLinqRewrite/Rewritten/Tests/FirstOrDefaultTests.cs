@@ -39,7 +39,7 @@ public class FirstOrDefaultTests
 
     public int FirstOrDefaultRewritten()
     {
-        return ArrayItems.Length == 0 ? default(int) : ArrayItems[0];
+        return ArrayItems.Length == 0 ? default(int) : (ArrayItems[(0)]);
     } //EndMethod
 
     [NoRewrite]
@@ -105,7 +105,7 @@ public class FirstOrDefaultTests
 
     public int SelectFirstOrDefaultMethodRewritten()
     {
-        return ArrayItems.Length == 0 ? default(int) : 10 + ArrayItems[0];
+        return ArrayItems.Length == 0 ? default(int) : 10 + ArrayItems[(0)];
     } //EndMethod
 
     [NoRewrite]
@@ -199,21 +199,21 @@ public class FirstOrDefaultTests
     public int ArrayFirstOrDefaultUsingFirstOrDefaultRewritten()
     {
         var a = 100;
-        return ArrayFirstOrDefaultUsingFirstOrDefaultRewritten_ProceduralLinq1(ArrayItems);
+        return ArrayFirstOrDefaultUsingFirstOrDefaultRewritten_ProceduralLinq2(ArrayItems);
     } //EndMethod
 
     int EnumerableFirstOrDefaultRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1032;
-        v1032 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v918;
+        v918 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v1032.MoveNext())
-                return (v1032.Current);
+            while (v918.MoveNext())
+                return (v918.Current);
         }
         finally
         {
-            v1032.Dispose();
+            v918.Dispose();
         }
 
         return default(int);
@@ -221,45 +221,43 @@ public class FirstOrDefaultTests
 
     int FirstOrDefaultConditionRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1034;
-        v1034 = (0);
-        for (; v1034 < (ArrayItems.Length); v1034++)
-            if (((ArrayItems[v1034]) > 30))
-                return (ArrayItems[v1034]);
+        int v920;
+        v920 = (0);
+        for (; v920 < (ArrayItems.Length); v920 += 1)
+            if (((ArrayItems[v920]) > 30))
+                return (ArrayItems[v920]);
         return default(int);
     }
 
     int FirstOrDefaultFalseConditionRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1036;
-        v1036 = (0);
-        for (; v1036 < (ArrayItems.Length); v1036++)
-            if (((ArrayItems[v1036]) > 105))
-                return (ArrayItems[v1036]);
+        int v922;
+        v922 = (0);
+        for (; v922 < (ArrayItems.Length); v922 += 1)
+            if (((ArrayItems[v922]) > 105))
+                return (ArrayItems[v922]);
         return default(int);
     }
 
     int FirstOrDefaultMethodRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1038;
-        v1038 = (0);
-        for (; v1038 < (ArrayItems.Length); v1038++)
-            if (Predicate((ArrayItems[v1038])))
-                return (ArrayItems[v1038]);
+        int v924;
+        v924 = (0);
+        for (; v924 < (ArrayItems.Length); v924 += 1)
+            if (Predicate((ArrayItems[v924])))
+                return (ArrayItems[v924]);
         return default(int);
     }
 
     int FirstOrDefaultWhereMethodRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1039;
-        int v1040;
-        v1039 = (0);
-        for (; v1039 < (ArrayItems.Length); v1039++)
+        int v925;
+        v925 = (0);
+        for (; v925 < (ArrayItems.Length); v925 += 1)
         {
-            v1040 = (ArrayItems[v1039]);
-            if (!(((v1040) > 10)))
+            if (!((((ArrayItems[v925])) > 10)))
                 continue;
-            return (v1040);
+            return ((ArrayItems[v925]));
         }
 
         return default(int);
@@ -267,51 +265,49 @@ public class FirstOrDefaultTests
 
     int RangeFirstOrDefaultRewritten_ProceduralLinq1()
     {
-        int v1042;
-        v1042 = (0);
-        for (; v1042 < (100); v1042++)
-            return (v1042);
+        int v927;
+        v927 = (0);
+        for (; v927 < (100); v927 += (1))
+            return (v927);
         return default(int);
     }
 
     int Range1FirstOrDefaultRewritten_ProceduralLinq1()
     {
-        int v1043;
-        v1043 = (0);
-        for (; v1043 < (1); v1043++)
-            return (v1043);
+        int v928;
+        v928 = (0);
+        for (; v928 < (1); v928 += (1))
+            return (v928);
         return default(int);
     }
 
     int RangeRepeatRewritten_ProceduralLinq1()
     {
-        int v1044;
-        v1044 = (0);
-        for (; v1044 < (100); v1044++)
+        int v929;
+        v929 = (0);
+        for (; v929 < (100); v929 += 1)
             return (0);
         return default(int);
     }
 
     int EmptyFirstOrDefaultRewritten_ProceduralLinq1()
     {
-        int v1045;
-        v1045 = 0;
+        int v930;
+        v930 = 0;
         return default(int);
     }
 
     int ArrayDistinctFirstOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1046;
-        HashSet<int> v1047;
-        int v1048;
-        v1047 = new HashSet<int>();
-        v1046 = (0);
-        for (; v1046 < (ArrayItems.Length); v1046++)
+        int v931;
+        HashSet<int> v932;
+        v932 = new HashSet<int>();
+        v931 = (0);
+        for (; v931 < (ArrayItems.Length); v931 += 1)
         {
-            v1048 = (ArrayItems[v1046]);
-            if (!(v1047.Add((v1048))))
+            if (!(v932.Add(((ArrayItems[v931])))))
                 continue;
-            return (v1048);
+            return ((ArrayItems[v931]));
         }
 
         return default(int);
@@ -319,36 +315,41 @@ public class FirstOrDefaultTests
 
     int ArrayFirstOrDefaultParamRewritten_ProceduralLinq1(int a, int[] ArrayItems)
     {
-        int v1050;
-        v1050 = (0);
-        for (; v1050 < (ArrayItems.Length); v1050++)
-            if (((ArrayItems[v1050]) > a))
-                return (ArrayItems[v1050]);
+        int v934;
+        v934 = (0);
+        for (; v934 < (ArrayItems.Length); v934 += 1)
+            if (((ArrayItems[v934]) > a))
+                return (ArrayItems[v934]);
         return default(int);
     }
 
     int ArrayFirstOrDefaultChangingParamRewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
     {
-        int v1051;
-        v1051 = (0);
-        for (; v1051 < (ArrayItems.Length); v1051++)
-            if (((ArrayItems[v1051]) > a--))
-                return (ArrayItems[v1051]);
+        int v935;
+        v935 = (0);
+        for (; v935 < (ArrayItems.Length); v935 += 1)
+            if (((ArrayItems[v935]) > a--))
+                return (ArrayItems[v935]);
         return default(int);
     }
 
-    int ArrayFirstOrDefaultUsingFirstOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
+    int ArrayFirstOrDefaultUsingFirstOrDefaultRewritten_ProceduralLinq1(int x, int[] ArrayItems)
     {
-        int v1053;
-        int v1054;
-        v1053 = (0);
-        for (; v1053 < (ArrayItems.Length); v1053++)
-        {
-            v1054 = (ArrayItems[v1053]);
-            if ((v1054 > ArrayItems.FirstOrDefault(y => y > v1054)))
-                return (ArrayItems[v1053]);
-        }
+        int v937;
+        v937 = (0);
+        for (; v937 < (ArrayItems.Length); v937 += 1)
+            if (((ArrayItems[v937]) > x))
+                return (ArrayItems[v937]);
+        return default(int);
+    }
 
+    int ArrayFirstOrDefaultUsingFirstOrDefaultRewritten_ProceduralLinq2(int[] ArrayItems)
+    {
+        int v939;
+        v939 = (0);
+        for (; v939 < (ArrayItems.Length); v939 += 1)
+            if (((ArrayItems[v939]) > ArrayFirstOrDefaultUsingFirstOrDefaultRewritten_ProceduralLinq1((ArrayItems[v939]), ArrayItems)))
+                return (ArrayItems[v939]);
         return default(int);
     }
 }}

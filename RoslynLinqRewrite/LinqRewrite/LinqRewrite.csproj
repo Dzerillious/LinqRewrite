@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="LinqRewrite.Core">
-      <Version>0.5.8-preview</Version>
+      <Version>0.6.1-preview</Version>
     </PackageReference>
     <PackageReference Include="MathNet.Symbolics">
       <Version>0.20.0</Version>

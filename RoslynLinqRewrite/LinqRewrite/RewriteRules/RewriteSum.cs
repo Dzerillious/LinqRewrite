@@ -29,10 +29,11 @@ namespace LinqRewrite.RewriteRules
             var value = args.Length switch
             {
                 0 => p.LastValue,
-                1 => args[0].Inline(p, p.LastValue).Reusable(p)
+                1 => args[0].Inline(p, p.LastValue)
             };
             if (p.ReturnType.Type is NullableTypeSyntax)
             {
+                value = value.Reusable(p);
                 p.ForAdd(If(value.NotEqual(null),
                             sumVariable.AddAssign(value)));
             }

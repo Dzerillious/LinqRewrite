@@ -222,215 +222,208 @@ public class CountTests
 
     int ArrayCount2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v527;
-        int v528;
-        v528 = 0;
-        v527 = (0);
-        for (; v527 < (ArrayItems.Length); v527++)
+        int v484;
+        int v485;
+        v485 = 0;
+        v484 = (0);
+        for (; v484 < (ArrayItems.Length); v484 += 1)
         {
-            if (!(((ArrayItems[v527]) > 3)))
+            if (!(((ArrayItems[v484]) > 3)))
                 continue;
-            v528++;
+            v485++;
         }
 
-        return v528;
+        return v485;
     }
 
     int ArrayCount5Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v530;
-        int v531;
-        int v532;
-        v532 = 0;
-        v530 = (0);
-        for (; v530 < (ArrayItems.Length); v530++)
+        int v487;
+        int v488;
+        v488 = 0;
+        v487 = (0);
+        for (; v487 < (ArrayItems.Length); v487 += 1)
         {
-            v531 = (ArrayItems[v530]);
-            if (!(((v531) > 4)))
+            if (!((((ArrayItems[v487])) > 4)))
                 continue;
-            if (!(((v531) % 2 == 0)))
+            if (!((((ArrayItems[v487])) % 2 == 0)))
                 continue;
-            v532++;
+            v488++;
         }
 
-        return v532;
+        return v488;
     }
 
     int EnumerableCount2Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v533;
-        int v534;
-        v533 = EnumerableItems.GetEnumerator();
-        v534 = 0;
+        IEnumerator<int> v489;
+        int v490;
+        v489 = EnumerableItems.GetEnumerator();
+        v490 = 0;
         try
         {
-            while (v533.MoveNext())
-                v534++;
+            while (v489.MoveNext())
+                v490++;
         }
         finally
         {
-            v533.Dispose();
+            v489.Dispose();
         }
 
-        return v534;
+        return v490;
     }
 
     int EnumerableCount3Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v535;
-        int v536;
-        v535 = EnumerableItems.GetEnumerator();
-        v536 = 0;
+        IEnumerator<int> v491;
+        int v492;
+        v491 = EnumerableItems.GetEnumerator();
+        v492 = 0;
         try
         {
-            while (v535.MoveNext())
+            while (v491.MoveNext())
             {
-                if (!(((v535.Current) > 3)))
+                if (!(((v491.Current) > 3)))
                     continue;
-                v536++;
+                v492++;
             }
         }
         finally
         {
-            v535.Dispose();
+            v491.Dispose();
         }
 
-        return v536;
+        return v492;
     }
 
     int EnumerableCount5Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v538;
-        int v539;
-        int v540;
-        v540 = 0;
-        v538 = (0);
-        for (; v538 < (ArrayItems.Length); v538++)
+        int v494;
+        int v495;
+        v495 = 0;
+        v494 = (0);
+        for (; v494 < (ArrayItems.Length); v494 += 1)
         {
-            v539 = (ArrayItems[v538]);
-            if (!(((v539) > 4)))
+            if (!((((ArrayItems[v494])) > 4)))
                 continue;
-            if (!(((v539) % 2 == 0)))
+            if (!((((ArrayItems[v494])) % 2 == 0)))
                 continue;
-            v540++;
+            v495++;
         }
 
-        return v540;
+        return v495;
     }
 
     int RangeCountRewritten_ProceduralLinq1()
     {
-        int v541;
-        v541 = (0);
-        for (; v541 < (256); v541++)
+        int v496;
+        v496 = (0);
+        for (; v496 < (256); v496 += (1))
             ;
-        return v541;
+        return v496;
     }
 
     int RangeSelectCountRewritten_ProceduralLinq1()
     {
-        int v542;
-        v542 = (0);
-        for (; v542 < (256); v542++)
+        int v497;
+        v497 = (0);
+        for (; v497 < (256); v497 += (1))
             ;
-        return v542;
+        return v497;
     }
 
     int RangeWhereCountRewritten_ProceduralLinq1()
     {
-        int v543;
-        int v544;
-        int v545;
-        v545 = 0;
-        v543 = (0);
-        for (; v543 < (256); v543++)
+        int v498;
+        int v499;
+        int v500;
+        v500 = 0;
+        v498 = (0);
+        for (; v498 < (256); v498 += (1))
         {
-            v544 = (5 + v543);
-            if (!(((v544) > 100)))
+            v499 = (5 + v498);
+            if (!(((v499) > 100)))
                 continue;
-            v545++;
+            v500++;
         }
 
-        return v545;
+        return v500;
     }
 
     int RangeCount2Rewritten_ProceduralLinq1()
     {
-        int v546;
-        int v547;
-        v547 = 0;
-        v546 = (0);
-        for (; v546 < (256); v546++)
+        int v501;
+        int v502;
+        v502 = 0;
+        v501 = (0);
+        for (; v501 < (256); v501 += (1))
         {
-            if (!(((5 + v546) > 100)))
+            if (!(((5 + v501) > 100)))
                 continue;
-            v547++;
+            v502++;
         }
 
-        return v547;
+        return v502;
     }
 
     int RepeatCountRewritten_ProceduralLinq1()
     {
-        int v548;
-        v548 = (0);
-        for (; v548 < (256); v548++)
+        int v503;
+        v503 = (0);
+        for (; v503 < (256); v503 += 1)
             ;
-        return v548;
+        return v503;
     }
 
     int ArrayMethodCountRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v550;
-        int v551;
-        v551 = 0;
-        v550 = (0);
-        for (; v550 < (ArrayItems.Length); v550++)
+        int v505;
+        int v506;
+        v506 = 0;
+        v505 = (0);
+        for (; v505 < (ArrayItems.Length); v505 += 1)
         {
-            if (!(Predicate((ArrayItems[v550]))))
+            if (!(Predicate((ArrayItems[v505]))))
                 continue;
-            v551++;
+            v506++;
         }
 
-        return v551;
+        return v506;
     }
 
     int ArrayDistinctCountRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v552;
-        HashSet<int> v553;
-        int v554;
-        int v555;
-        v553 = new HashSet<int>();
-        v555 = 0;
-        v552 = (0);
-        for (; v552 < (ArrayItems.Length); v552++)
+        int v507;
+        HashSet<int> v508;
+        int v509;
+        v508 = new HashSet<int>();
+        v509 = 0;
+        v507 = (0);
+        for (; v507 < (ArrayItems.Length); v507 += 1)
         {
-            v554 = (ArrayItems[v552]);
-            if (!(v553.Add((v554))))
+            if (!(v508.Add(((ArrayItems[v507])))))
                 continue;
-            v555++;
+            v509++;
         }
 
-        return v555;
+        return v509;
     }
 
     int EmptyCountRewritten_ProceduralLinq1()
     {
-        int v556;
-        v556 = 0;
-        return v556;
+        int v510;
+        v510 = 0;
+        return v510;
     }
 
     int EmptyDistinctCountRewritten_ProceduralLinq1()
     {
-        int v557;
-        HashSet<int> v558;
-        int v559;
-        int v560;
-        v557 = 0;
-        v558 = new HashSet<int>();
-        v560 = 0;
-        return v560;
+        int v511;
+        HashSet<int> v512;
+        int v513;
+        v511 = 0;
+        v512 = new HashSet<int>();
+        v513 = 0;
+        return v513;
     }
 }}

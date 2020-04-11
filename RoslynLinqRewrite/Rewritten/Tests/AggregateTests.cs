@@ -225,7 +225,7 @@ public class AggregateTests
         int v2;
         v2 = ArrayItems[0];
         v1 = (1);
-        for (; v1 < (ArrayItems.Length); v1++)
+        for (; v1 < (ArrayItems.Length); v1 += 1)
             v2 = (v2 + (ArrayItems[v1]));
         return v2;
     }
@@ -271,7 +271,7 @@ public class AggregateTests
         int v9;
         v9 = ArrayItems[0];
         v8 = (1);
-        for (; v8 < (ArrayItems.Length); v8++)
+        for (; v8 < (ArrayItems.Length); v8 += 1)
             v9 = (v9 + 1);
         return v9;
     }
@@ -282,7 +282,7 @@ public class AggregateTests
         int v12;
         v12 = ArrayItems[0];
         v11 = (1);
-        for (; v11 < (ArrayItems.Length); v11++)
+        for (; v11 < (ArrayItems.Length); v11 += 1)
             v12 = ((v12 + (ArrayItems[v11])) / 2);
         return v12;
     }
@@ -293,7 +293,7 @@ public class AggregateTests
         double v15;
         v15 = 0.0;
         v14 = (0);
-        for (; v14 < (ArrayItems.Length); v14++)
+        for (; v14 < (ArrayItems.Length); v14 += 1)
             v15 = (v15 + (ArrayItems[v14]));
         return v15;
     }
@@ -304,7 +304,7 @@ public class AggregateTests
         double v18;
         v18 = 0.0;
         v17 = (0);
-        for (; v17 < (ArrayItems.Length); v17++)
+        for (; v17 < (ArrayItems.Length); v17 += 1)
             v18 = ((v18 + (ArrayItems[v17])) / 2);
         return v18;
     }
@@ -315,7 +315,7 @@ public class AggregateTests
         double v21;
         v21 = 1.0;
         v20 = (0);
-        for (; v20 < (ArrayItems.Length); v20++)
+        for (; v20 < (ArrayItems.Length); v20 += 1)
             v21 = (v21 * (ArrayItems[v20]));
         return v21;
     }
@@ -326,7 +326,7 @@ public class AggregateTests
         double v24;
         v24 = 0.0;
         v23 = (0);
-        for (; v23 < (ArrayItems.Length); v23++)
+        for (; v23 < (ArrayItems.Length); v23 += 1)
             v24 = (v24 + (ArrayItems[v23]));
         return (v24 / ArrayItems.Length);
     }
@@ -337,7 +337,7 @@ public class AggregateTests
         double v27;
         v27 = 0.0;
         v26 = (0);
-        for (; v26 < (ArrayItems.Length); v26++)
+        for (; v26 < (ArrayItems.Length); v26 += 1)
             v27 = (v27 + (5 + ArrayItems[v26]));
         return (v27 / ArrayItems.Length);
     }
@@ -345,168 +345,162 @@ public class AggregateTests
     double AggregateDoubleAverageWhereRewritten_ProceduralLinq1(int[] ArrayItems)
     {
         int v28;
-        int v29;
-        double v30;
-        bool v31;
-        v30 = 0.0;
-        v31 = true;
+        double v29;
+        bool v30;
+        v29 = 0.0;
+        v30 = true;
         v28 = (0);
-        for (; v28 < (ArrayItems.Length); v28++)
+        for (; v28 < (ArrayItems.Length); v28 += 1)
         {
-            v29 = (ArrayItems[v28]);
-            if (!(((v29) % 2 == 0)))
+            if (!((((ArrayItems[v28])) % 2 == 0)))
                 continue;
-            if (v31)
+            if (v30)
             {
-                v30 = (v29);
-                v31 = false;
+                v29 = ((ArrayItems[v28]));
+                v30 = false;
                 continue;
             }
             else
-                v30 = (v30 + (v29));
+                v29 = (v29 + ((ArrayItems[v28])));
         }
 
-        return (v30 / ArrayItems.Length);
+        return (v29 / ArrayItems.Length);
     }
 
     int AggregateRangeSumRewritten_ProceduralLinq1()
     {
+        int v31;
         int v32;
-        int v33;
-        bool v34;
-        v33 = default(int);
-        v34 = true;
-        v32 = (0);
-        for (; v32 < (100); v32++)
-            if (v34)
+        bool v33;
+        v32 = default(int);
+        v33 = true;
+        v31 = (0);
+        for (; v31 < (100); v31 += (1))
+            if (v33)
             {
-                v33 = (v32);
-                v34 = false;
+                v32 = (v31);
+                v33 = false;
                 continue;
             }
             else
-                v33 = (v33 + (v32));
-        if (v34)
+                v32 = (v32 + (v31));
+        if (v33)
             throw new System.InvalidOperationException("The sequence did not contain enough elements.");
-        return v33;
+        return v32;
     }
 
     double AggregateRangeFactorial0Rewritten_ProceduralLinq1()
     {
-        int v35;
-        double v36;
-        bool v37;
-        v36 = 1.0;
-        v37 = true;
-        v35 = (0);
-        for (; v35 < (100); v35++)
-            if (v37)
+        int v34;
+        double v35;
+        bool v36;
+        v35 = 1.0;
+        v36 = true;
+        v34 = (0);
+        for (; v34 < (100); v34 += (1))
+            if (v36)
             {
-                v36 = (v35);
-                v37 = false;
+                v35 = (v34);
+                v36 = false;
                 continue;
             }
             else
-                v36 = (v36 * (v35));
-        return v36;
+                v35 = (v35 * (v34));
+        return v35;
     }
 
     double AggregateRangeFactorial20Rewritten_ProceduralLinq1()
     {
-        int v38;
-        double v39;
-        bool v40;
-        v39 = 1.0;
-        v40 = true;
-        v38 = (0);
-        for (; v38 < (20); v38++)
-            if (v40)
+        int v37;
+        double v38;
+        bool v39;
+        v38 = 1.0;
+        v39 = true;
+        v37 = (0);
+        for (; v37 < (20); v37 += (1))
+            if (v39)
             {
-                v39 = (1 + v38);
-                v40 = false;
+                v38 = (1 + v37);
+                v39 = false;
                 continue;
             }
             else
-                v39 = (v39 * (1 + v38));
-        return v39;
+                v38 = (v38 * (1 + v37));
+        return v38;
     }
 
     double AggregateRangeFactorial100Rewritten_ProceduralLinq1()
     {
-        int v41;
-        double v42;
-        bool v43;
-        v42 = 1.0;
-        v43 = true;
-        v41 = (0);
-        for (; v41 < (100); v41++)
-            if (v43)
+        int v40;
+        double v41;
+        bool v42;
+        v41 = 1.0;
+        v42 = true;
+        v40 = (0);
+        for (; v40 < (100); v40 += (1))
+            if (v42)
             {
-                v42 = (1 + v41);
-                v43 = false;
+                v41 = (1 + v40);
+                v42 = false;
                 continue;
             }
             else
-                v42 = (v42 * (1 + v41));
-        return v42;
+                v41 = (v41 * (1 + v40));
+        return v41;
     }
 
     double AggregateEmptyDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v44;
-        int v45;
-        double v46;
-        bool v47;
-        v46 = 1.0;
-        v47 = true;
-        v44 = (0);
-        for (; v44 < (ArrayItems.Length); v44++)
+        int v43;
+        double v44;
+        bool v45;
+        v44 = 1.0;
+        v45 = true;
+        v43 = (0);
+        for (; v43 < (ArrayItems.Length); v43 += 1)
         {
-            v45 = (ArrayItems[v44]);
             if (!((false)))
                 continue;
-            if (v47)
+            if (v45)
             {
-                v46 = (v45);
-                v47 = false;
+                v44 = ((ArrayItems[v43]));
+                v45 = false;
                 continue;
             }
             else
-                v46 = (v46 + (v45));
+                v44 = (v44 + ((ArrayItems[v43])));
         }
 
-        return v46;
+        return v44;
     }
 
     int AggregateEmptyRewritten_ProceduralLinq1(int[] ArrayItems)
     {
+        int v46;
+        int v47;
         int v48;
-        int v49;
-        int v50;
-        int v51;
-        bool v52;
-        v50 = 0;
-        v51 = default(int);
-        v52 = true;
-        v48 = (0);
-        for (; v48 < (ArrayItems.Length); v48++)
+        bool v49;
+        v47 = 0;
+        v48 = default(int);
+        v49 = true;
+        v46 = (0);
+        for (; v46 < (ArrayItems.Length); v46 += 1)
         {
-            v49 = (ArrayItems[v48]);
             if (!((false)))
                 continue;
-            if (v52)
+            if (v49)
             {
-                v51 = (v49);
-                v52 = false;
+                v48 = ((ArrayItems[v46]));
+                v49 = false;
                 continue;
             }
             else
-                v51 = (v51 + (v49));
-            v50++;
+                v48 = (v48 + ((ArrayItems[v46])));
+            v47++;
         }
 
-        if (v52)
+        if (v49)
             throw new System.InvalidOperationException("The sequence did not contain enough elements.");
-        return v51;
+        return v48;
     }
 }}

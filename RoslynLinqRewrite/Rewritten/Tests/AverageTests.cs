@@ -247,359 +247,349 @@ public class AverageTests
 
     double ArrayAverageRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v79;
-        double v80;
+        int v74;
+        double v75;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        v80 = 0;
-        v79 = (0);
-        for (; v79 < (ArrayItems.Length); v79++)
-            v80 += (ArrayItems[v79]);
-        return (v80 / (ArrayItems.Length));
+        v75 = 0;
+        v74 = (0);
+        for (; v74 < (ArrayItems.Length); v74 += 1)
+            v75 += (ArrayItems[v74]);
+        return (v75 / (ArrayItems.Length));
     }
 
     double ArrayAverage1Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v82;
-        double v83;
+        int v77;
+        double v78;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        v83 = 0;
-        v82 = (0);
-        for (; v82 < (ArrayItems.Length); v82++)
-            v83 += ((ArrayItems[v82]) + 3);
-        return (v83 / (ArrayItems.Length));
+        v78 = 0;
+        v77 = (0);
+        for (; v77 < (ArrayItems.Length); v77 += 1)
+            v78 += ((ArrayItems[v77]) + 3);
+        return (v78 / (ArrayItems.Length));
     }
 
     double? ArrayAverage2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v85;
-        int v86;
-        int v87;
-        int? v88;
-        int v89;
-        v87 = 0;
-        v89 = 0;
-        v85 = (0);
-        for (; v85 < (ArrayItems.Length); v85++)
+        int v80;
+        int v81;
+        int? v82;
+        int v83;
+        v81 = 0;
+        v83 = 0;
+        v80 = (0);
+        for (; v80 < (ArrayItems.Length); v80 += 1)
         {
-            v86 = (ArrayItems[v85]);
-            v88 = (v86 > 10 ? (int? )null : v86);
-            if (v88 == null)
+            v82 = ((ArrayItems[v80]) > 10 ? (int? )null : (ArrayItems[v80]));
+            if (v82 == null)
                 continue;
-            v87 += (int)v88;
-            v89++;
+            v81 += (int)v82;
+            v83++;
         }
 
-        return v89 == 0 ? null : ((double? )v87 / v89);
+        return v83 == 0 ? null : ((double? )v81 / v83);
     }
 
     float ArrayAverage3Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v91;
-        float v92;
+        int v85;
+        float v86;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        v92 = 0;
-        v91 = (0);
-        for (; v91 < (ArrayItems.Length); v91++)
-            v92 += ((ArrayItems[v91]) + 5f);
-        return (v92 / (ArrayItems.Length));
+        v86 = 0;
+        v85 = (0);
+        for (; v85 < (ArrayItems.Length); v85 += 1)
+            v86 += ((ArrayItems[v85]) + 5f);
+        return (v86 / (ArrayItems.Length));
     }
 
     float? ArrayAverage4Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v94;
-        int v95;
-        float v96;
-        float? v97;
-        int v98;
-        v96 = 0;
-        v98 = 0;
-        v94 = (0);
-        for (; v94 < (ArrayItems.Length); v94++)
+        int v88;
+        float v89;
+        float? v90;
+        int v91;
+        v89 = 0;
+        v91 = 0;
+        v88 = (0);
+        for (; v88 < (ArrayItems.Length); v88 += 1)
         {
-            v95 = (ArrayItems[v94]);
-            v97 = (v95 > 10 ? (float? )null : v95);
-            if (v97 == null)
+            v90 = ((ArrayItems[v88]) > 10 ? (float? )null : (ArrayItems[v88]));
+            if (v90 == null)
                 continue;
-            v96 += (float)v97;
-            v98++;
+            v89 += (float)v90;
+            v91++;
         }
 
-        return v98 == 0 ? null : ((float? )v96 / v98);
+        return v91 == 0 ? null : ((float? )v89 / v91);
     }
 
     double ArrayAverage5Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v100;
-        double v101;
+        int v93;
+        double v94;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        v101 = 0;
-        v100 = (0);
-        for (; v100 < (ArrayItems.Length); v100++)
-            v101 += ((ArrayItems[v100]) + 5d);
-        return (v101 / (ArrayItems.Length));
+        v94 = 0;
+        v93 = (0);
+        for (; v93 < (ArrayItems.Length); v93 += 1)
+            v94 += ((ArrayItems[v93]) + 5d);
+        return (v94 / (ArrayItems.Length));
     }
 
     double? ArrayAverage6Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v103;
-        int v104;
-        double v105;
-        double? v106;
-        int v107;
-        v105 = 0;
-        v107 = 0;
-        v103 = (0);
-        for (; v103 < (ArrayItems.Length); v103++)
+        int v96;
+        double v97;
+        double? v98;
+        int v99;
+        v97 = 0;
+        v99 = 0;
+        v96 = (0);
+        for (; v96 < (ArrayItems.Length); v96 += 1)
         {
-            v104 = (ArrayItems[v103]);
-            v106 = (v104 > 10 ? (double? )null : v104);
-            if (v106 == null)
+            v98 = ((ArrayItems[v96]) > 10 ? (double? )null : (ArrayItems[v96]));
+            if (v98 == null)
                 continue;
-            v105 += (double)v106;
-            v107++;
+            v97 += (double)v98;
+            v99++;
         }
 
-        return v107 == 0 ? null : ((double? )v105 / v107);
+        return v99 == 0 ? null : ((double? )v97 / v99);
     }
 
     decimal ArrayAverage7Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v109;
-        decimal v110;
+        int v101;
+        decimal v102;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        v110 = 0;
-        v109 = (0);
-        for (; v109 < (ArrayItems.Length); v109++)
-            v110 += ((ArrayItems[v109]) + 5m);
-        return (v110 / (ArrayItems.Length));
+        v102 = 0;
+        v101 = (0);
+        for (; v101 < (ArrayItems.Length); v101 += 1)
+            v102 += ((ArrayItems[v101]) + 5m);
+        return (v102 / (ArrayItems.Length));
     }
 
     decimal? ArrayAverage8Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v112;
-        int v113;
-        decimal v114;
-        decimal? v115;
-        int v116;
-        v114 = 0;
-        v116 = 0;
-        v112 = (0);
-        for (; v112 < (ArrayItems.Length); v112++)
+        int v104;
+        decimal v105;
+        decimal? v106;
+        int v107;
+        v105 = 0;
+        v107 = 0;
+        v104 = (0);
+        for (; v104 < (ArrayItems.Length); v104 += 1)
         {
-            v113 = (ArrayItems[v112]);
-            v115 = (v113 > 10 ? (decimal? )null : v113);
-            if (v115 == null)
+            v106 = ((ArrayItems[v104]) > 10 ? (decimal? )null : (ArrayItems[v104]));
+            if (v106 == null)
                 continue;
-            v114 += (decimal)v115;
-            v116++;
+            v105 += (decimal)v106;
+            v107++;
         }
 
-        return v116 == 0 ? null : ((decimal? )v114 / v116);
+        return v107 == 0 ? null : ((decimal? )v105 / v107);
     }
 
     double ArrayAverage9Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v118;
-        double v119;
+        int v109;
+        double v110;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        v119 = 0;
-        v118 = (0);
-        for (; v118 < (ArrayItems.Length); v118++)
-            v119 += ((ArrayItems[v118]) + 5L);
-        return (v119 / (ArrayItems.Length));
+        v110 = 0;
+        v109 = (0);
+        for (; v109 < (ArrayItems.Length); v109 += 1)
+            v110 += ((ArrayItems[v109]) + 5L);
+        return (v110 / (ArrayItems.Length));
     }
 
     double? ArrayAverage10Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v121;
-        int v122;
-        long v123;
-        long? v124;
-        int v125;
-        v123 = 0;
-        v125 = 0;
-        v121 = (0);
-        for (; v121 < (ArrayItems.Length); v121++)
+        int v112;
+        long v113;
+        long? v114;
+        int v115;
+        v113 = 0;
+        v115 = 0;
+        v112 = (0);
+        for (; v112 < (ArrayItems.Length); v112 += 1)
         {
-            v122 = (ArrayItems[v121]);
-            v124 = (v122 > 10 ? (long? )null : v122);
-            if (v124 == null)
+            v114 = ((ArrayItems[v112]) > 10 ? (long? )null : (ArrayItems[v112]));
+            if (v114 == null)
                 continue;
-            v123 += (long)v124;
-            v125++;
+            v113 += (long)v114;
+            v115++;
         }
 
-        return v125 == 0 ? null : ((double? )v123 / v125);
+        return v115 == 0 ? null : ((double? )v113 / v115);
     }
 
     double ArraySelectAverageRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v127;
-        double v128;
+        int v117;
+        double v118;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        v128 = 0;
-        v127 = (0);
-        for (; v127 < (ArrayItems.Length); v127++)
-            v128 += (10 + ArrayItems[v127]);
-        return (v128 / (ArrayItems.Length));
+        v118 = 0;
+        v117 = (0);
+        for (; v117 < (ArrayItems.Length); v117 += 1)
+            v118 += (10 + ArrayItems[v117]);
+        return (v118 / (ArrayItems.Length));
     }
 
     double ArrayWhereAverageRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v129;
-        int v130;
-        double v131;
-        int v132;
-        v131 = 0;
-        v132 = 0;
-        v129 = (0);
-        for (; v129 < (ArrayItems.Length); v129++)
+        int v119;
+        double v120;
+        int v121;
+        v120 = 0;
+        v121 = 0;
+        v119 = (0);
+        for (; v119 < (ArrayItems.Length); v119 += 1)
         {
-            v130 = (ArrayItems[v129]);
-            if (!(((v130) % 2 == 0)))
+            if (!((((ArrayItems[v119])) % 2 == 0)))
                 continue;
-            v131 += (v130);
-            v132++;
+            v120 += ((ArrayItems[v119]));
+            v121++;
         }
 
-        if (1 > v132)
+        if (1 > v121)
             throw new System.InvalidOperationException("Index out of range");
-        return (v131 / v132);
+        return (v120 / v121);
     }
 
     double? ArrayMethodAverageRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v134;
-        double v135;
-        double? v136;
-        int v137;
-        v135 = 0;
-        v137 = 0;
-        v134 = (0);
-        for (; v134 < (ArrayItems.Length); v134++)
+        int v123;
+        double v124;
+        double? v125;
+        int v126;
+        v124 = 0;
+        v126 = 0;
+        v123 = (0);
+        for (; v123 < (ArrayItems.Length); v123 += 1)
         {
-            v136 = Selector((ArrayItems[v134]));
-            if (v136 == null)
+            v125 = Selector((ArrayItems[v123]));
+            if (v125 == null)
                 continue;
-            v135 += (double)v136;
-            v137++;
+            v124 += (double)v125;
+            v126++;
         }
 
-        return v137 == 0 ? null : ((double? )v135 / v137);
+        return v126 == 0 ? null : ((double? )v124 / v126);
     }
 
     double EnumerableAverageRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v138;
-        double v139;
-        int v140;
-        v138 = EnumerableItems.GetEnumerator();
-        v139 = 0;
-        v140 = 0;
+        IEnumerator<int> v127;
+        double v128;
+        int v129;
+        v127 = EnumerableItems.GetEnumerator();
+        v128 = 0;
+        v129 = 0;
         try
         {
-            while (v138.MoveNext())
+            while (v127.MoveNext())
             {
-                v139 += (v138.Current);
-                v140++;
+                v128 += (v127.Current);
+                v129++;
             }
         }
         finally
         {
-            v138.Dispose();
+            v127.Dispose();
         }
 
-        if (1 > v140)
+        if (1 > v129)
             throw new System.InvalidOperationException("Index out of range");
-        return (v139 / v140);
+        return (v128 / v129);
     }
 
     double ArrayMethodAverageChangingParamRewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
     {
-        int v141;
-        double v142;
+        int v130;
+        double v131;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        v142 = 0;
-        v141 = (0);
-        for (; v141 < (ArrayItems.Length); v141++)
-            v142 += ((ArrayItems[v141]) + a++);
-        return (v142 / (ArrayItems.Length));
+        v131 = 0;
+        v130 = (0);
+        for (; v130 < (ArrayItems.Length); v130 += 1)
+            v131 += ((ArrayItems[v130]) + a++);
+        return (v131 / (ArrayItems.Length));
     }
 
     double? EnumerableNullAverageRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v143;
-        int v144;
-        int? v145;
-        int v146;
-        v143 = EnumerableItems.GetEnumerator();
-        v144 = 0;
-        v146 = 0;
+        IEnumerator<int> v132;
+        int v133;
+        int? v134;
+        int v135;
+        v132 = EnumerableItems.GetEnumerator();
+        v133 = 0;
+        v135 = 0;
         try
         {
-            while (v143.MoveNext())
+            while (v132.MoveNext())
             {
-                v145 = ((int? )null);
-                if (v145 == null)
+                v134 = ((int? )null);
+                if (v134 == null)
                     continue;
-                v144 += (int)v145;
-                v146++;
+                v133 += (int)v134;
+                v135++;
             }
         }
         finally
         {
-            v143.Dispose();
+            v132.Dispose();
         }
 
-        return v146 == 0 ? null : ((double? )v144 / v146);
+        return v135 == 0 ? null : ((double? )v133 / v135);
     }
 
     double EnumerableEmptyAverageRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v147;
-        int v148;
-        double v149;
-        int v150;
-        v147 = EnumerableItems.GetEnumerator();
-        v149 = 0;
-        v150 = 0;
+        IEnumerator<int> v136;
+        int v137;
+        double v138;
+        int v139;
+        v136 = EnumerableItems.GetEnumerator();
+        v138 = 0;
+        v139 = 0;
         try
         {
-            while (v147.MoveNext())
+            while (v136.MoveNext())
             {
-                v148 = (v147.Current);
+                v137 = (v136.Current);
                 if (!((false)))
                     continue;
-                v149 += (v148);
-                v150++;
+                v138 += (v137);
+                v139++;
             }
         }
         finally
         {
-            v147.Dispose();
+            v136.Dispose();
         }
 
-        if (1 > v150)
+        if (1 > v139)
             throw new System.InvalidOperationException("Index out of range");
-        return (v149 / v150);
+        return (v138 / v139);
     }
 
     double EnumerableRangeAverageRewritten_ProceduralLinq1()
     {
-        int v151;
-        double v152;
-        v152 = 0;
-        v151 = (0);
-        for (; v151 < (100); v151++)
-            v152 += (5 + v151);
-        return (v152 / (100));
+        int v140;
+        double v141;
+        if (1 > (100))
+            throw new System.InvalidOperationException("Index out of range");
+        v141 = 0;
+        v140 = (0);
+        for (; v140 < (100); v140 += (1))
+            v141 += (5 + v140);
+        return (v141 / (100));
     }
 }}

@@ -24,7 +24,14 @@ namespace LinqRewrite.RewriteRules
         
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            var result = RewriteToArray.RewriteOther(p, p.LastValue.Type);
+            var enlarging = args.FirstOrDefault()?.ToString() switch
+            {
+                "EnlargingCoefficient.By2" => 1,
+                "EnlargingCoefficient.By4" => 2,
+                "EnlargingCoefficient.By8" => 3,
+                _ => 2
+            };
+            var result = RewriteToArray.RewriteOther(p, enlarging, p.LastValue.Type);
             var listResultType = SyntaxFactory.ParseTypeName($"SimpleList<{p.LastValue.Type}>");
 
             var finalResult = p.GlobalVariable(listResultType);

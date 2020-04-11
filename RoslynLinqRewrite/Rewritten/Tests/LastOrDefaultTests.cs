@@ -199,221 +199,227 @@ public class LastOrDefaultTests
     public int ArrayLastOrDefaultUsingLastOrDefaultRewritten()
     {
         var a = 100;
-        return ArrayLastOrDefaultUsingLastOrDefaultRewritten_ProceduralLinq1(ArrayItems);
+        return ArrayLastOrDefaultUsingLastOrDefaultRewritten_ProceduralLinq2(ArrayItems);
     } //EndMethod
 
     int EnumerableLastOrDefaultRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1462;
-        int? v1463;
-        v1462 = EnumerableItems.GetEnumerator();
-        v1463 = null;
+        IEnumerator<int> v1299;
+        int? v1300;
+        v1299 = EnumerableItems.GetEnumerator();
+        v1300 = null;
         try
         {
-            while (v1462.MoveNext())
-                v1463 = (v1462.Current);
+            while (v1299.MoveNext())
+                v1300 = (v1299.Current);
         }
         finally
         {
-            v1462.Dispose();
+            v1299.Dispose();
         }
 
-        if (v1463 == null)
+        if (v1300 == null)
             return default(int);
         else
-            return (int)v1463;
+            return (int)v1300;
     }
 
     int LastOrDefaultConditionRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1465;
-        int? v1466;
-        v1466 = null;
-        v1465 = (0);
-        for (; v1465 < (ArrayItems.Length); v1465++)
-            if (((ArrayItems[v1465]) > 30))
-                v1466 = (ArrayItems[v1465]);
-        if (v1466 == null)
+        int v1302;
+        int? v1303;
+        v1303 = null;
+        v1302 = (0);
+        for (; v1302 < (ArrayItems.Length); v1302 += 1)
+            if (((ArrayItems[v1302]) > 30))
+                v1303 = (ArrayItems[v1302]);
+        if (v1303 == null)
             return default(int);
         else
-            return (int)v1466;
+            return (int)v1303;
     }
 
     int LastOrDefaultFalseConditionRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1468;
-        int? v1469;
-        v1469 = null;
-        v1468 = (0);
-        for (; v1468 < (ArrayItems.Length); v1468++)
-            if (((ArrayItems[v1468]) > 105))
-                v1469 = (ArrayItems[v1468]);
-        if (v1469 == null)
+        int v1305;
+        int? v1306;
+        v1306 = null;
+        v1305 = (0);
+        for (; v1305 < (ArrayItems.Length); v1305 += 1)
+            if (((ArrayItems[v1305]) > 105))
+                v1306 = (ArrayItems[v1305]);
+        if (v1306 == null)
             return default(int);
         else
-            return (int)v1469;
+            return (int)v1306;
     }
 
     int LastOrDefaultMethodRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1471;
-        int? v1472;
-        v1472 = null;
-        v1471 = (0);
-        for (; v1471 < (ArrayItems.Length); v1471++)
-            if (Predicate((ArrayItems[v1471])))
-                v1472 = (ArrayItems[v1471]);
-        if (v1472 == null)
+        int v1308;
+        int? v1309;
+        v1309 = null;
+        v1308 = (0);
+        for (; v1308 < (ArrayItems.Length); v1308 += 1)
+            if (Predicate((ArrayItems[v1308])))
+                v1309 = (ArrayItems[v1308]);
+        if (v1309 == null)
             return default(int);
         else
-            return (int)v1472;
+            return (int)v1309;
     }
 
     int LastOrDefaultWhereMethodRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1473;
-        int v1474;
-        int? v1475;
-        v1475 = null;
-        v1473 = (0);
-        for (; v1473 < (ArrayItems.Length); v1473++)
+        int v1310;
+        int? v1311;
+        v1311 = null;
+        v1310 = (0);
+        for (; v1310 < (ArrayItems.Length); v1310 += 1)
         {
-            v1474 = (ArrayItems[v1473]);
-            if (!(((v1474) > 10)))
+            if (!((((ArrayItems[v1310])) > 10)))
                 continue;
-            v1475 = (v1474);
+            v1311 = ((ArrayItems[v1310]));
         }
 
-        if (v1475 == null)
+        if (v1311 == null)
             return default(int);
         else
-            return (int)v1475;
+            return (int)v1311;
     }
 
     int RangeLastOrDefaultRewritten_ProceduralLinq1()
     {
-        int v1477;
-        int? v1478;
-        v1478 = null;
-        v1477 = (0);
-        for (; v1477 < (100); v1477++)
-            v1478 = (v1477);
-        if (v1478 == null)
+        int v1313;
+        int? v1314;
+        v1314 = null;
+        v1313 = (0);
+        for (; v1313 < (100); v1313 += (1))
+            v1314 = (v1313);
+        if (v1314 == null)
             return default(int);
         else
-            return (int)v1478;
+            return (int)v1314;
     }
 
     int Range1LastOrDefaultRewritten_ProceduralLinq1()
     {
-        int v1479;
-        int? v1480;
-        v1480 = null;
-        v1479 = (0);
-        for (; v1479 < (1); v1479++)
-            v1480 = (v1479);
-        if (v1480 == null)
+        int v1315;
+        int? v1316;
+        v1316 = null;
+        v1315 = (0);
+        for (; v1315 < (1); v1315 += (1))
+            v1316 = (v1315);
+        if (v1316 == null)
             return default(int);
         else
-            return (int)v1480;
+            return (int)v1316;
     }
 
     int RangeRepeatRewritten_ProceduralLinq1()
     {
-        int v1481;
-        int? v1482;
-        v1482 = null;
-        v1481 = (0);
-        for (; v1481 < (100); v1481++)
-            v1482 = (0);
-        if (v1482 == null)
+        int v1317;
+        int? v1318;
+        v1318 = null;
+        v1317 = (0);
+        for (; v1317 < (100); v1317 += 1)
+            v1318 = (0);
+        if (v1318 == null)
             return default(int);
         else
-            return (int)v1482;
+            return (int)v1318;
     }
 
     int EmptyLastOrDefaultRewritten_ProceduralLinq1()
     {
-        int v1483;
-        int? v1484;
-        v1483 = 0;
-        v1484 = null;
-        if (v1484 == null)
+        int v1319;
+        int? v1320;
+        v1319 = 0;
+        v1320 = null;
+        if (v1320 == null)
             return default(int);
         else
-            return (int)v1484;
+            return (int)v1320;
     }
 
     int ArrayDistinctLastOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1485;
-        HashSet<int> v1486;
-        int v1487;
-        int? v1488;
-        v1486 = new HashSet<int>();
-        v1488 = null;
-        v1485 = (0);
-        for (; v1485 < (ArrayItems.Length); v1485++)
+        int v1321;
+        HashSet<int> v1322;
+        int? v1323;
+        v1322 = new HashSet<int>();
+        v1323 = null;
+        v1321 = (0);
+        for (; v1321 < (ArrayItems.Length); v1321 += 1)
         {
-            v1487 = (ArrayItems[v1485]);
-            if (!(v1486.Add((v1487))))
+            if (!(v1322.Add(((ArrayItems[v1321])))))
                 continue;
-            v1488 = (v1487);
+            v1323 = ((ArrayItems[v1321]));
         }
 
-        if (v1488 == null)
+        if (v1323 == null)
             return default(int);
         else
-            return (int)v1488;
+            return (int)v1323;
     }
 
     int ArrayLastOrDefaultParamRewritten_ProceduralLinq1(int a, int[] ArrayItems)
     {
-        int v1490;
-        int? v1491;
-        v1491 = null;
-        v1490 = (0);
-        for (; v1490 < (ArrayItems.Length); v1490++)
-            if (((ArrayItems[v1490]) > a))
-                v1491 = (ArrayItems[v1490]);
-        if (v1491 == null)
+        int v1325;
+        int? v1326;
+        v1326 = null;
+        v1325 = (0);
+        for (; v1325 < (ArrayItems.Length); v1325 += 1)
+            if (((ArrayItems[v1325]) > a))
+                v1326 = (ArrayItems[v1325]);
+        if (v1326 == null)
             return default(int);
         else
-            return (int)v1491;
+            return (int)v1326;
     }
 
     int ArrayLastOrDefaultChangingParamRewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
     {
-        int v1492;
-        int? v1493;
-        v1493 = null;
-        v1492 = (0);
-        for (; v1492 < (ArrayItems.Length); v1492++)
-            if (((ArrayItems[v1492]) > a--))
-                v1493 = (ArrayItems[v1492]);
-        if (v1493 == null)
+        int v1327;
+        int? v1328;
+        v1328 = null;
+        v1327 = (0);
+        for (; v1327 < (ArrayItems.Length); v1327 += 1)
+            if (((ArrayItems[v1327]) > a--))
+                v1328 = (ArrayItems[v1327]);
+        if (v1328 == null)
             return default(int);
         else
-            return (int)v1493;
+            return (int)v1328;
     }
 
-    int ArrayLastOrDefaultUsingLastOrDefaultRewritten_ProceduralLinq1(int[] ArrayItems)
+    int ArrayLastOrDefaultUsingLastOrDefaultRewritten_ProceduralLinq1(int x, int[] ArrayItems)
     {
-        int v1495;
-        int? v1496;
-        int v1497;
-        v1496 = null;
-        v1495 = (0);
-        for (; v1495 < (ArrayItems.Length); v1495++)
-        {
-            v1497 = (ArrayItems[v1495]);
-            if ((v1497 > ArrayItems.LastOrDefault(y => y > v1497)))
-                v1496 = (ArrayItems[v1495]);
-        }
-
-        if (v1496 == null)
+        int v1330;
+        int? v1331;
+        v1331 = null;
+        v1330 = (0);
+        for (; v1330 < (ArrayItems.Length); v1330 += 1)
+            if (((ArrayItems[v1330]) > x))
+                v1331 = (ArrayItems[v1330]);
+        if (v1331 == null)
             return default(int);
         else
-            return (int)v1496;
+            return (int)v1331;
+    }
+
+    int ArrayLastOrDefaultUsingLastOrDefaultRewritten_ProceduralLinq2(int[] ArrayItems)
+    {
+        int v1333;
+        int? v1334;
+        v1334 = null;
+        v1333 = (0);
+        for (; v1333 < (ArrayItems.Length); v1333 += 1)
+            if (((ArrayItems[v1333]) > ArrayLastOrDefaultUsingLastOrDefaultRewritten_ProceduralLinq1((ArrayItems[v1333]), ArrayItems)))
+                v1334 = (ArrayItems[v1333]);
+        if (v1334 == null)
+            return default(int);
+        else
+            return (int)v1334;
     }
 }}

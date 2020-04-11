@@ -33,7 +33,7 @@ namespace BenchmarkLibrary
         // {
         //     return Items.Unchecked().Take(10).Average();
         // }
-        
+        //
         // [NoRewrite]
         // [Benchmark]
         // public double ArrayAverage1()
@@ -42,13 +42,24 @@ namespace BenchmarkLibrary
         // }
         
         [Benchmark]
+        public double ArrayAverage2()
+        {
+            return Items.Sum();
+        }
+        
+        [Benchmark]
         public double ArrayAverageRewritten2()
         {
-            var sum = 0;
-            Enumerable.Range(0, Items.Length / 10).ForEach(x =>
-            {
-                sum += Items.Unchecked().Skip(x).Take(10).Sum();
-            });
+            var sum = ExtendedLinq.Range(0, Items.Length / 10, 10).Sum(x => Items.Unchecked().Skip(x).Take(10).Sum());
+            sum += Items.Unchecked().Skip(Items.Length - Items.Length % 10).Take(Items.Length % 10).Sum();
+            return sum;
+        }
+        
+        [Benchmark]
+        public double ArrayAverageRewritten3()
+        {
+            var sum = ExtendedLinq.Range(0, Items.Length / 5, 5).Sum(x => Items.Unchecked().Skip(x).Take(5).Sum());
+            sum += Items.Unchecked().Skip(Items.Length - Items.Length % 5).Take(Items.Length % 5).Sum();
             return sum;
         }
     }

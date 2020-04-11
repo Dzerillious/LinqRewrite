@@ -35,7 +35,9 @@ namespace LinqRewrite.RewriteRules
             if (resultSizeValue != null && p.ResultSize != null) p.ResultSize += resultSizeValue;
             else p.ResultSize = null;
 
+            var resSize = p.ResultSize;
             p.ModifiedEnumeration = true;
+            p.ResultSize = resSize;
         }
     }
 }

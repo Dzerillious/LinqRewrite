@@ -169,288 +169,278 @@ public class ToSimpleListTests
 
     LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListToSimpleListTestRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v2930;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v2931;
-        int v2932;
-        int[] v2933;
-        SimpleList<int> v2934;
-        v2930 = SimpleListItems.Count;
-        v2931 = SimpleListItems;
-        v2933 = new int[(v2930)];
-        v2932 = (0);
-        for (; v2932 < (v2930); v2932++)
-            v2933[v2932] = (v2931[v2932]);
-        v2934 = new SimpleList<int>();
-        v2934.Items = v2933;
-        v2934.Count = (v2930);
-        return v2934;
+        int v2642;
+        v2642 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v2643;
+        v2643 = SimpleListItems;
+        int v2644;
+        int[] v2645;
+        SimpleList<int> v2646;
+        v2645 = new int[(v2642)];
+        v2644 = (0);
+        for (; v2644 < (v2642); v2644 += 1)
+            v2645[v2644] = (v2643[v2644]);
+        v2646 = new SimpleList<int>();
+        v2646.Items = v2645;
+        v2646.Count = (v2642);
+        return v2646;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> EnumerableToSimpleListTestRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v2935;
-        int v2936;
-        int v2937;
-        int[] v2938;
-        SimpleList<int> v2939;
-        v2935 = EnumerableItems.GetEnumerator();
-        v2936 = 0;
-        v2937 = 8;
-        v2938 = new int[8];
+        IEnumerator<int> v2647;
+        int v2648;
+        int v2649;
+        int[] v2650;
+        SimpleList<int> v2651;
+        v2647 = EnumerableItems.GetEnumerator();
+        v2648 = 0;
+        v2649 = 8;
+        v2650 = new int[8];
         try
         {
-            while (v2935.MoveNext())
+            while (v2647.MoveNext())
             {
-                if (v2936 >= v2937)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2938, ref v2937);
-                v2938[v2936] = (v2935.Current);
-                v2936++;
+                if (v2648 >= v2649)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2650, ref v2649);
+                v2650[v2648] = (v2647.Current);
+                v2648++;
             }
         }
         finally
         {
-            v2935.Dispose();
+            v2647.Dispose();
         }
 
-        v2939 = new SimpleList<int>();
-        v2939.Items = v2938;
-        v2939.Count = v2936;
-        return v2939;
+        v2651 = new SimpleList<int>();
+        v2651.Items = v2650;
+        v2651.Count = v2648;
+        return v2651;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> ArrayWhereParamToSimpleListTestRewritten_ProceduralLinq1(int offset, int[] ArrayItems)
     {
-        int v2940;
-        int v2941;
-        int v2942;
-        int v2943;
-        int v2944;
-        int[] v2945;
-        SimpleList<int> v2946;
-        v2942 = 0;
-        v2943 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
-        v2943 -= (v2943 % 2);
-        v2944 = 8;
-        v2945 = new int[8];
-        v2940 = (0);
-        for (; v2940 < (ArrayItems.Length); v2940++)
+        int v2652;
+        int v2653;
+        int v2654;
+        int v2655;
+        int[] v2656;
+        SimpleList<int> v2657;
+        v2653 = 0;
+        v2654 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ArrayItems.Length))) - 3);
+        v2654 -= (v2654 % 2);
+        v2655 = 8;
+        v2656 = new int[8];
+        v2652 = (0);
+        for (; v2652 < (ArrayItems.Length); v2652 += 1)
         {
-            v2941 = (ArrayItems[v2940]);
-            if (!(((v2941) > offset)))
+            if (!((((ArrayItems[v2652])) > offset)))
                 continue;
-            if (v2942 >= v2944)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2945, ref v2943, out v2944);
-            v2945[v2942] = (v2941);
-            v2942++;
+            if (v2653 >= v2655)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ArrayItems.Length), ref v2656, ref v2654, out v2655);
+            v2656[v2653] = ((ArrayItems[v2652]));
+            v2653++;
         }
 
-        v2946 = new SimpleList<int>();
-        v2946.Items = v2945;
-        v2946.Count = v2942;
-        return v2946;
+        v2657 = new SimpleList<int>();
+        v2657.Items = v2656;
+        v2657.Count = v2653;
+        return v2657;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> EnumerableWhereParamToSimpleListTestRewritten_ProceduralLinq1(int offset, System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v2947;
-        int v2948;
-        int v2949;
-        int v2950;
-        int[] v2951;
-        SimpleList<int> v2952;
-        v2947 = EnumerableItems.GetEnumerator();
-        v2949 = 0;
-        v2950 = 8;
-        v2951 = new int[8];
+        IEnumerator<int> v2658;
+        int v2659;
+        int v2660;
+        int v2661;
+        int[] v2662;
+        SimpleList<int> v2663;
+        v2658 = EnumerableItems.GetEnumerator();
+        v2660 = 0;
+        v2661 = 8;
+        v2662 = new int[8];
         try
         {
-            while (v2947.MoveNext())
+            while (v2658.MoveNext())
             {
-                v2948 = (v2947.Current);
-                if (!(((v2948) > offset)))
+                v2659 = (v2658.Current);
+                if (!(((v2659) > offset)))
                     continue;
-                if (v2949 >= v2950)
-                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2951, ref v2950);
-                v2951[v2949] = (v2948);
-                v2949++;
+                if (v2660 >= v2661)
+                    LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, ref v2662, ref v2661);
+                v2662[v2660] = (v2659);
+                v2660++;
             }
         }
         finally
         {
-            v2947.Dispose();
+            v2658.Dispose();
         }
 
-        v2952 = new SimpleList<int>();
-        v2952.Items = v2951;
-        v2952.Count = v2949;
-        return v2952;
+        v2663 = new SimpleList<int>();
+        v2663.Items = v2662;
+        v2663.Count = v2660;
+        return v2663;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListWhereParamToSimpleListTestRewritten_ProceduralLinq1(int offset, LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v2953;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v2954;
-        int v2955;
-        int v2956;
-        int v2957;
-        int v2958;
-        int v2959;
-        int[] v2960;
-        SimpleList<int> v2961;
-        v2953 = SimpleListItems.Count;
-        v2954 = SimpleListItems;
-        v2957 = 0;
-        v2958 = (LinqRewrite.Core.IntExtensions.Log2((uint)((v2953))) - 3);
-        v2958 -= (v2958 % 2);
-        v2959 = 8;
-        v2960 = new int[8];
-        v2955 = (0);
-        for (; v2955 < (v2953); v2955++)
+        int v2664;
+        v2664 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v2665;
+        v2665 = SimpleListItems;
+        int v2666;
+        int v2667;
+        int v2668;
+        int v2669;
+        int[] v2670;
+        SimpleList<int> v2671;
+        v2667 = 0;
+        v2668 = (LinqRewrite.Core.IntExtensions.Log2((uint)((v2664))) - 3);
+        v2668 -= (v2668 % 2);
+        v2669 = 8;
+        v2670 = new int[8];
+        v2666 = (0);
+        for (; v2666 < (v2664); v2666 += 1)
         {
-            v2956 = (v2954[v2955]);
-            if (!(((v2956) > offset)))
+            if (!((((v2665[v2666])) > offset)))
                 continue;
-            if (v2957 >= v2959)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (v2953), ref v2960, ref v2958, out v2959);
-            v2960[v2957] = (v2956);
-            v2957++;
+            if (v2667 >= v2669)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (v2664), ref v2670, ref v2668, out v2669);
+            v2670[v2667] = ((v2665[v2666]));
+            v2667++;
         }
 
-        v2961 = new SimpleList<int>();
-        v2961.Items = v2960;
-        v2961.Count = v2957;
-        return v2961;
+        v2671 = new SimpleList<int>();
+        v2671.Items = v2670;
+        v2671.Count = v2667;
+        return v2671;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> ListWhereParamToSimpleListTestRewritten_ProceduralLinq1(int offset, System.Collections.Generic.List<int> ListItems)
     {
-        int v2962;
-        int v2963;
-        int v2964;
-        int v2965;
-        int v2966;
-        int v2967;
-        int[] v2968;
-        SimpleList<int> v2969;
-        v2962 = ListItems.Count;
-        v2965 = 0;
-        v2966 = (LinqRewrite.Core.IntExtensions.Log2((uint)((v2962))) - 3);
-        v2966 -= (v2966 % 2);
-        v2967 = 8;
-        v2968 = new int[8];
-        v2963 = (0);
-        for (; v2963 < (v2962); v2963++)
+        int v2672;
+        int v2673;
+        int v2674;
+        int v2675;
+        int[] v2676;
+        SimpleList<int> v2677;
+        int v2678;
+        v2678 = (ListItems.Count);
+        v2673 = 0;
+        v2674 = (LinqRewrite.Core.IntExtensions.Log2((uint)((ListItems.Count))) - 3);
+        v2674 -= (v2674 % 2);
+        v2675 = 8;
+        v2676 = new int[8];
+        v2672 = (0);
+        for (; v2672 < v2678; v2672 += 1)
         {
-            v2964 = (ListItems[v2963]);
-            if (!(((v2964) > offset)))
+            if (!((((ListItems[v2672])) > offset)))
                 continue;
-            if (v2965 >= v2967)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (v2962), ref v2968, ref v2966, out v2967);
-            v2968[v2965] = (v2964);
-            v2965++;
+            if (v2673 >= v2675)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (ListItems.Count), ref v2676, ref v2674, out v2675);
+            v2676[v2673] = ((ListItems[v2672]));
+            v2673++;
         }
 
-        v2969 = new SimpleList<int>();
-        v2969.Items = v2968;
-        v2969.Count = v2965;
-        return v2969;
+        v2677 = new SimpleList<int>();
+        v2677.Items = v2676;
+        v2677.Count = v2673;
+        return v2677;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> RangeWhereParamToSimpleListTestRewritten_ProceduralLinq1(int offset)
     {
-        int v2970;
-        int v2971;
-        int v2972;
-        int v2973;
-        int v2974;
-        int[] v2975;
-        SimpleList<int> v2976;
-        v2972 = 0;
-        v2973 = (LinqRewrite.Core.IntExtensions.Log2((uint)((1000))) - 3);
-        v2973 -= (v2973 % 2);
-        v2974 = 8;
-        v2975 = new int[8];
-        v2970 = (0);
-        for (; v2970 < (1000); v2970++)
+        int v2679;
+        int v2680;
+        int v2681;
+        int v2682;
+        int[] v2683;
+        SimpleList<int> v2684;
+        v2680 = 0;
+        v2681 = (LinqRewrite.Core.IntExtensions.Log2((uint)((1000))) - 3);
+        v2681 -= (v2681 % 2);
+        v2682 = 8;
+        v2683 = new int[8];
+        v2679 = (0);
+        for (; v2679 < (1000); v2679 += (1))
         {
-            v2971 = (v2970);
-            if (!(((v2971) > offset)))
+            if (!((((v2679)) > offset)))
                 continue;
-            if (v2972 >= v2974)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (1000), ref v2975, ref v2973, out v2974);
-            v2975[v2972] = (v2971);
-            v2972++;
+            if (v2680 >= v2682)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (1000), ref v2683, ref v2681, out v2682);
+            v2683[v2680] = ((v2679));
+            v2680++;
         }
 
-        v2976 = new SimpleList<int>();
-        v2976.Items = v2975;
-        v2976.Count = v2972;
-        return v2976;
+        v2684 = new SimpleList<int>();
+        v2684.Items = v2683;
+        v2684.Count = v2680;
+        return v2684;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> RangeParamToSimpleListTestRewritten_ProceduralLinq1(int count)
     {
         if (0 > count)
             throw new System.InvalidOperationException("Index out of range");
-        int v2977;
-        int[] v2978;
-        SimpleList<int> v2979;
-        v2978 = new int[(count)];
-        v2977 = (0);
-        for (; v2977 < (count); v2977++)
-            v2978[v2977] = (v2977);
-        v2979 = new SimpleList<int>();
-        v2979.Items = v2978;
-        v2979.Count = (count);
-        return v2979;
+        int v2685;
+        int[] v2686;
+        SimpleList<int> v2687;
+        v2686 = new int[(count)];
+        v2685 = (0);
+        for (; v2685 < (count); v2685 += (1))
+            v2686[v2685] = (v2685);
+        v2687 = new SimpleList<int>();
+        v2687.Items = v2686;
+        v2687.Count = (count);
+        return v2687;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> RepeatParamToSimpleListTestRewritten_ProceduralLinq1(int count)
     {
         if (0 > count)
             throw new System.InvalidOperationException("Index out of range");
-        int v2980;
-        int[] v2981;
-        SimpleList<int> v2982;
-        v2981 = new int[(count)];
-        v2980 = (0);
-        for (; v2980 < (count); v2980++)
-            v2981[v2980] = (0);
-        v2982 = new SimpleList<int>();
-        v2982.Items = v2981;
-        v2982.Count = (count);
-        return v2982;
+        int v2688;
+        int[] v2689;
+        SimpleList<int> v2690;
+        v2689 = new int[(count)];
+        v2688 = (0);
+        for (; v2688 < (count); v2688 += 1)
+            v2689[v2688] = (0);
+        v2690 = new SimpleList<int>();
+        v2690.Items = v2689;
+        v2690.Count = (count);
+        return v2690;
     }
 
     LinqRewrite.Core.SimpleList.SimpleList<int> RepeatWhereParamToSimpleListTestRewritten_ProceduralLinq1(int offset)
     {
-        int v2983;
-        int v2984;
-        int v2985;
-        int v2986;
-        int v2987;
-        int[] v2988;
-        SimpleList<int> v2989;
-        v2985 = 0;
-        v2986 = (LinqRewrite.Core.IntExtensions.Log2((uint)((1000))) - 3);
-        v2986 -= (v2986 % 2);
-        v2987 = 8;
-        v2988 = new int[8];
-        v2983 = (0);
-        for (; v2983 < (1000); v2983++)
+        int v2691;
+        int v2692;
+        int v2693;
+        int v2694;
+        int[] v2695;
+        SimpleList<int> v2696;
+        v2692 = 0;
+        v2693 = (LinqRewrite.Core.IntExtensions.Log2((uint)((1000))) - 3);
+        v2693 -= (v2693 % 2);
+        v2694 = 8;
+        v2695 = new int[8];
+        v2691 = (0);
+        for (; v2691 < (1000); v2691 += 1)
         {
-            v2984 = (0);
-            if (!((v2983 < offset)))
+            if (!((v2691 < offset)))
                 continue;
-            if (v2985 >= v2987)
-                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (1000), ref v2988, ref v2986, out v2987);
-            v2988[v2985] = (v2984);
-            v2985++;
+            if (v2692 >= v2694)
+                LinqRewrite.Core.EnlargeExtensions.LogEnlargeArray(2, (1000), ref v2695, ref v2693, out v2694);
+            v2695[v2692] = ((0));
+            v2692++;
         }
 
-        v2989 = new SimpleList<int>();
-        v2989.Items = v2988;
-        v2989.Count = v2985;
-        return v2989;
+        v2696 = new SimpleList<int>();
+        v2696.Items = v2695;
+        v2696.Count = v2692;
+        return v2696;
     }
 }}

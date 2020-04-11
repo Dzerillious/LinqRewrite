@@ -39,7 +39,7 @@ public class FirstTests
 
     public int FirstRewritten()
     {
-        return ArrayItems[0];
+        return (ArrayItems[(0)]);
     } //EndMethod
 
     [NoRewrite]
@@ -105,7 +105,7 @@ public class FirstTests
 
     public int SelectFirstMethodRewritten()
     {
-        return 10 + ArrayItems[0];
+        return 10 + ArrayItems[(0)];
     } //EndMethod
 
     [NoRewrite]
@@ -199,26 +199,26 @@ public class FirstTests
     public int ArrayFirstUsingFirstRewritten()
     {
         var a = 100;
-        return ArrayFirstUsingFirstRewritten_ProceduralLinq1(ArrayItems);
+        return ArrayFirstUsingFirstRewritten_ProceduralLinq2(ArrayItems);
     } //EndMethod
 
     int EnumerableFirstRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1056;
-        int v1057;
-        v1056 = EnumerableItems.GetEnumerator();
-        v1057 = 0;
+        IEnumerator<int> v941;
+        int v942;
+        v941 = EnumerableItems.GetEnumerator();
+        v942 = 0;
         try
         {
-            while (v1056.MoveNext())
+            while (v941.MoveNext())
             {
-                return (v1056.Current);
-                v1057++;
+                return (v941.Current);
+                v942++;
             }
         }
         finally
         {
-            v1056.Dispose();
+            v941.Dispose();
         }
 
         throw new System.InvalidOperationException("The sequence did not contain any elements.");
@@ -226,48 +226,46 @@ public class FirstTests
 
     int FirstConditionRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1059;
-        v1059 = (0);
-        for (; v1059 < (ArrayItems.Length); v1059++)
-            if (((ArrayItems[v1059]) > 30))
-                return (ArrayItems[v1059]);
+        int v944;
+        v944 = (0);
+        for (; v944 < (ArrayItems.Length); v944 += 1)
+            if (((ArrayItems[v944]) > 30))
+                return (ArrayItems[v944]);
         throw new System.InvalidOperationException("The sequence did not contain any elements.");
     }
 
     int FirstFalseConditionRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1061;
-        v1061 = (0);
-        for (; v1061 < (ArrayItems.Length); v1061++)
-            if (((ArrayItems[v1061]) > 105))
-                return (ArrayItems[v1061]);
+        int v946;
+        v946 = (0);
+        for (; v946 < (ArrayItems.Length); v946 += 1)
+            if (((ArrayItems[v946]) > 105))
+                return (ArrayItems[v946]);
         throw new System.InvalidOperationException("The sequence did not contain any elements.");
     }
 
     int FirstMethodRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1063;
-        v1063 = (0);
-        for (; v1063 < (ArrayItems.Length); v1063++)
-            if (Predicate((ArrayItems[v1063])))
-                return (ArrayItems[v1063]);
+        int v948;
+        v948 = (0);
+        for (; v948 < (ArrayItems.Length); v948 += 1)
+            if (Predicate((ArrayItems[v948])))
+                return (ArrayItems[v948]);
         throw new System.InvalidOperationException("The sequence did not contain any elements.");
     }
 
     int FirstWhereMethodRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1064;
-        int v1065;
-        int v1066;
-        v1066 = 0;
-        v1064 = (0);
-        for (; v1064 < (ArrayItems.Length); v1064++)
+        int v949;
+        int v950;
+        v950 = 0;
+        v949 = (0);
+        for (; v949 < (ArrayItems.Length); v949 += 1)
         {
-            v1065 = (ArrayItems[v1064]);
-            if (!(((v1065) > 10)))
+            if (!((((ArrayItems[v949])) > 10)))
                 continue;
-            return (v1065);
-            v1066++;
+            return ((ArrayItems[v949]));
+            v950++;
         }
 
         throw new System.InvalidOperationException("The sequence did not contain any elements.");
@@ -275,54 +273,52 @@ public class FirstTests
 
     int RangeFirstRewritten_ProceduralLinq1()
     {
-        int v1068;
-        v1068 = (0);
-        for (; v1068 < (100); v1068++)
-            return (v1068);
+        int v952;
+        v952 = (0);
+        for (; v952 < (100); v952 += (1))
+            return (v952);
         throw new System.InvalidOperationException("The sequence did not contain any elements.");
     }
 
     int Range1FirstRewritten_ProceduralLinq1()
     {
-        int v1069;
-        v1069 = (0);
-        for (; v1069 < (1); v1069++)
-            return (v1069);
+        int v953;
+        v953 = (0);
+        for (; v953 < (1); v953 += (1))
+            return (v953);
         throw new System.InvalidOperationException("The sequence did not contain any elements.");
     }
 
     int RangeRepeatRewritten_ProceduralLinq1()
     {
-        int v1070;
-        v1070 = (0);
-        for (; v1070 < (100); v1070++)
+        int v954;
+        v954 = (0);
+        for (; v954 < (100); v954 += 1)
             return (0);
         throw new System.InvalidOperationException("The sequence did not contain any elements.");
     }
 
     int EmptyFirstRewritten_ProceduralLinq1()
     {
-        int v1071;
-        v1071 = 0;
+        int v955;
+        v955 = 0;
         throw new System.InvalidOperationException("The sequence did not contain any elements.");
     }
 
     int ArrayDistinctFirstRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1072;
-        HashSet<int> v1073;
-        int v1074;
-        int v1075;
-        v1073 = new HashSet<int>();
-        v1075 = 0;
-        v1072 = (0);
-        for (; v1072 < (ArrayItems.Length); v1072++)
+        int v956;
+        HashSet<int> v957;
+        int v958;
+        v957 = new HashSet<int>();
+        v958 = 0;
+        v956 = (0);
+        for (; v956 < (ArrayItems.Length); v956 += 1)
         {
-            v1074 = (ArrayItems[v1072]);
-            if (!(v1073.Add((v1074))))
+            if (!(v957.Add(((ArrayItems[v956])))))
                 continue;
-            return (v1074);
-            v1075++;
+            return ((ArrayItems[v956]));
+            v958++;
         }
 
         throw new System.InvalidOperationException("The sequence did not contain any elements.");
@@ -330,36 +326,41 @@ public class FirstTests
 
     int ArrayFirstParamRewritten_ProceduralLinq1(int a, int[] ArrayItems)
     {
-        int v1077;
-        v1077 = (0);
-        for (; v1077 < (ArrayItems.Length); v1077++)
-            if (((ArrayItems[v1077]) > a))
-                return (ArrayItems[v1077]);
+        int v960;
+        v960 = (0);
+        for (; v960 < (ArrayItems.Length); v960 += 1)
+            if (((ArrayItems[v960]) > a))
+                return (ArrayItems[v960]);
         throw new System.InvalidOperationException("The sequence did not contain any elements.");
     }
 
     int ArrayFirstChangingParamRewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
     {
-        int v1078;
-        v1078 = (0);
-        for (; v1078 < (ArrayItems.Length); v1078++)
-            if (((ArrayItems[v1078]) > a--))
-                return (ArrayItems[v1078]);
+        int v961;
+        v961 = (0);
+        for (; v961 < (ArrayItems.Length); v961 += 1)
+            if (((ArrayItems[v961]) > a--))
+                return (ArrayItems[v961]);
         throw new System.InvalidOperationException("The sequence did not contain any elements.");
     }
 
-    int ArrayFirstUsingFirstRewritten_ProceduralLinq1(int[] ArrayItems)
+    int ArrayFirstUsingFirstRewritten_ProceduralLinq1(int x, int[] ArrayItems)
     {
-        int v1080;
-        int v1081;
-        v1080 = (0);
-        for (; v1080 < (ArrayItems.Length); v1080++)
-        {
-            v1081 = (ArrayItems[v1080]);
-            if ((v1081 > ArrayItems.First(y => y > v1081)))
-                return (ArrayItems[v1080]);
-        }
+        int v963;
+        v963 = (0);
+        for (; v963 < (ArrayItems.Length); v963 += 1)
+            if (((ArrayItems[v963]) > x))
+                return (ArrayItems[v963]);
+        throw new System.InvalidOperationException("The sequence did not contain any elements.");
+    }
 
+    int ArrayFirstUsingFirstRewritten_ProceduralLinq2(int[] ArrayItems)
+    {
+        int v965;
+        v965 = (0);
+        for (; v965 < (ArrayItems.Length); v965 += 1)
+            if (((ArrayItems[v965]) > ArrayFirstUsingFirstRewritten_ProceduralLinq1((ArrayItems[v965]), ArrayItems)))
+                return (ArrayItems[v965]);
         throw new System.InvalidOperationException("The sequence did not contain any elements.");
     }
 }}

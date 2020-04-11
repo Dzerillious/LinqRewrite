@@ -9,13 +9,13 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            var keySelector = (LambdaExpressionSyntax)args[0];
-            var elementSelectorValue = args.Length switch
+            var elementValue = args.Length switch
             {
                 1 => p.LastValue,
                 _ when args[1].OldVal.IsInvokable(p) => args[1].Inline(p, p.LastValue),
                 _ => p.LastValue
             };
+            var keyValue = args[0].Inline(p, p.LastValue);
 
             var dictionaryVariable = args.Length switch
             {
@@ -24,7 +24,7 @@ namespace LinqRewrite.RewriteRules
                 _ => p.GlobalVariable(p.ReturnType, New(p.ReturnType))
             };
 
-            p.ForAdd(dictionaryVariable.Access("Add").Invoke(keySelector.Inline(p, p.LastValue), elementSelectorValue));
+            p.ForAdd(dictionaryVariable.Access("Add").Invoke(keyValue, elementValue));
             p.ResultAdd(Return(dictionaryVariable));
         }
     }

@@ -254,394 +254,383 @@ public class MaxTests
 
     int Max1Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1575;
+        int v1408;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        int v1576;
-        int v1577;
-        v1576 = -2147483648;
-        v1575 = (0);
-        for (; v1575 < (ArrayItems.Length); v1575++)
+        int v1409;
+        v1409 = -2147483648;
+        v1408 = (0);
+        for (; v1408 < (ArrayItems.Length); v1408 += 1)
         {
-            v1577 = (ArrayItems[v1575]);
-            if (v1577 <= v1576)
+            if ((ArrayItems[v1408]) <= v1409)
                 continue;
-            v1576 = v1577;
+            v1409 = (ArrayItems[v1408]);
         }
 
-        return v1576;
+        return v1409;
     }
 
     int Max2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1579;
+        int v1411;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        int v1580;
-        int v1581;
-        v1580 = -2147483648;
-        v1579 = (0);
-        for (; v1579 < (ArrayItems.Length); v1579++)
+        int v1412;
+        int v1413;
+        v1412 = -2147483648;
+        v1411 = (0);
+        for (; v1411 < (ArrayItems.Length); v1411 += 1)
         {
-            v1581 = ((ArrayItems[v1579]) + 2);
-            if (v1581 <= v1580)
+            v1413 = ((ArrayItems[v1411]) + 2);
+            if (v1413 <= v1412)
                 continue;
-            v1580 = v1581;
+            v1412 = v1413;
         }
 
-        return v1580;
+        return v1412;
     }
 
     float Max3Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1583;
+        int v1415;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        float v1584;
-        float v1585;
-        v1584 = -3.4028235E+38F;
-        v1583 = (0);
-        for (; v1583 < (ArrayItems.Length); v1583++)
+        float v1416;
+        float v1417;
+        v1416 = -3.4028235E+38F;
+        v1415 = (0);
+        for (; v1415 < (ArrayItems.Length); v1415 += 1)
         {
-            v1585 = ((ArrayItems[v1583]) + 2f);
-            if (v1585 <= v1584)
+            v1417 = ((ArrayItems[v1415]) + 2f);
+            if (v1417 <= v1416)
                 continue;
-            v1584 = v1585;
+            v1416 = v1417;
         }
 
-        return v1584;
+        return v1416;
     }
 
     double Max4Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1587;
+        int v1419;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        double v1588;
-        double v1589;
-        v1588 = -1.7976931348623157E+308;
-        v1587 = (0);
-        for (; v1587 < (ArrayItems.Length); v1587++)
+        double v1420;
+        double v1421;
+        v1420 = -1.7976931348623157E+308;
+        v1419 = (0);
+        for (; v1419 < (ArrayItems.Length); v1419 += 1)
         {
-            v1589 = ((ArrayItems[v1587]) + 2d);
-            if (v1589 <= v1588)
+            v1421 = ((ArrayItems[v1419]) + 2d);
+            if (v1421 <= v1420)
                 continue;
-            v1588 = v1589;
+            v1420 = v1421;
         }
 
-        return v1588;
+        return v1420;
     }
 
     decimal Max5Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1591;
+        int v1423;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        decimal v1592;
-        decimal v1593;
-        v1592 = -79228162514264337593543950335M;
-        v1591 = (0);
-        for (; v1591 < (ArrayItems.Length); v1591++)
+        decimal v1424;
+        decimal v1425;
+        v1424 = -79228162514264337593543950335M;
+        v1423 = (0);
+        for (; v1423 < (ArrayItems.Length); v1423 += 1)
         {
-            v1593 = ((ArrayItems[v1591]) + 2m);
-            if (v1593 <= v1592)
+            v1425 = ((ArrayItems[v1423]) + 2m);
+            if (v1425 <= v1424)
                 continue;
-            v1592 = v1593;
+            v1424 = v1425;
         }
 
-        return v1592;
+        return v1424;
     }
 
     int? Max6Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1595;
+        int v1427;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        int v1596;
-        int v1597;
-        int? v1598;
-        v1596 = -2147483648;
-        v1595 = (0);
-        for (; v1595 < (ArrayItems.Length); v1595++)
+        int v1428;
+        int? v1429;
+        v1428 = -2147483648;
+        v1427 = (0);
+        for (; v1427 < (ArrayItems.Length); v1427 += 1)
         {
-            v1597 = (ArrayItems[v1595]);
-            v1598 = (v1597 > 10 ? (int? )null : v1597 + 2);
-            if ((v1598 == null) || v1598 <= v1596)
+            v1429 = ((ArrayItems[v1427]) > 10 ? (int? )null : (ArrayItems[v1427]) + 2);
+            if ((v1429 == null) || v1429 <= v1428)
                 continue;
-            v1596 = (int)v1598;
+            v1428 = (int)v1429;
         }
 
-        return v1596;
+        return v1428;
     }
 
     float? Max7Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1600;
+        int v1431;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        float v1601;
-        int v1602;
-        float? v1603;
-        v1601 = -3.4028235E+38F;
-        v1600 = (0);
-        for (; v1600 < (ArrayItems.Length); v1600++)
+        float v1432;
+        float? v1433;
+        v1432 = -3.4028235E+38F;
+        v1431 = (0);
+        for (; v1431 < (ArrayItems.Length); v1431 += 1)
         {
-            v1602 = (ArrayItems[v1600]);
-            v1603 = (v1602 > 10 ? (float? )null : v1602 + 2);
-            if ((v1603 == null) || v1603 <= v1601)
+            v1433 = ((ArrayItems[v1431]) > 10 ? (float? )null : (ArrayItems[v1431]) + 2);
+            if ((v1433 == null) || v1433 <= v1432)
                 continue;
-            v1601 = (float)v1603;
+            v1432 = (float)v1433;
         }
 
-        return v1601;
+        return v1432;
     }
 
     double? Max8Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1605;
+        int v1435;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        double v1606;
-        int v1607;
-        double? v1608;
-        v1606 = -1.7976931348623157E+308;
-        v1605 = (0);
-        for (; v1605 < (ArrayItems.Length); v1605++)
+        double v1436;
+        double? v1437;
+        v1436 = -1.7976931348623157E+308;
+        v1435 = (0);
+        for (; v1435 < (ArrayItems.Length); v1435 += 1)
         {
-            v1607 = (ArrayItems[v1605]);
-            v1608 = (v1607 > 10 ? (double? )null : v1607 + 2);
-            if ((v1608 == null) || v1608 <= v1606)
+            v1437 = ((ArrayItems[v1435]) > 10 ? (double? )null : (ArrayItems[v1435]) + 2);
+            if ((v1437 == null) || v1437 <= v1436)
                 continue;
-            v1606 = (double)v1608;
+            v1436 = (double)v1437;
         }
 
-        return v1606;
+        return v1436;
     }
 
     decimal? Max9Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1610;
+        int v1439;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        decimal v1611;
-        int v1612;
-        decimal? v1613;
-        v1611 = -79228162514264337593543950335M;
-        v1610 = (0);
-        for (; v1610 < (ArrayItems.Length); v1610++)
+        decimal v1440;
+        decimal? v1441;
+        v1440 = -79228162514264337593543950335M;
+        v1439 = (0);
+        for (; v1439 < (ArrayItems.Length); v1439 += 1)
         {
-            v1612 = (ArrayItems[v1610]);
-            v1613 = (v1612 > 10 ? (decimal? )null : v1612 + 2);
-            if ((v1613 == null) || v1613 <= v1611)
+            v1441 = ((ArrayItems[v1439]) > 10 ? (decimal? )null : (ArrayItems[v1439]) + 2);
+            if ((v1441 == null) || v1441 <= v1440)
                 continue;
-            v1611 = (decimal)v1613;
+            v1440 = (decimal)v1441;
         }
 
-        return v1611;
+        return v1440;
     }
 
     long Max10Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1615;
+        int v1443;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        long v1616;
-        long v1617;
-        v1616 = -9223372036854775808L;
-        v1615 = (0);
-        for (; v1615 < (ArrayItems.Length); v1615++)
+        long v1444;
+        long v1445;
+        v1444 = -9223372036854775808L;
+        v1443 = (0);
+        for (; v1443 < (ArrayItems.Length); v1443 += 1)
         {
-            v1617 = ((ArrayItems[v1615]) + 2L);
-            if (v1617 <= v1616)
+            v1445 = ((ArrayItems[v1443]) + 2L);
+            if (v1445 <= v1444)
                 continue;
-            v1616 = v1617;
+            v1444 = v1445;
         }
 
-        return v1616;
+        return v1444;
     }
 
     long? Max11Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1619;
+        int v1447;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        long v1620;
-        int v1621;
-        long? v1622;
-        v1620 = -9223372036854775808L;
-        v1619 = (0);
-        for (; v1619 < (ArrayItems.Length); v1619++)
+        long v1448;
+        long? v1449;
+        v1448 = -9223372036854775808L;
+        v1447 = (0);
+        for (; v1447 < (ArrayItems.Length); v1447 += 1)
         {
-            v1621 = (ArrayItems[v1619]);
-            v1622 = (v1621 > 10 ? (long? )null : v1621 + 2);
-            if ((v1622 == null) || v1622 <= v1620)
+            v1449 = ((ArrayItems[v1447]) > 10 ? (long? )null : (ArrayItems[v1447]) + 2);
+            if ((v1449 == null) || v1449 <= v1448)
                 continue;
-            v1620 = (long)v1622;
+            v1448 = (long)v1449;
         }
 
-        return v1620;
+        return v1448;
     }
 
     int Max12Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1624;
+        int v1451;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        int v1625;
-        int v1626;
-        v1625 = -2147483648;
-        v1624 = (0);
-        for (; v1624 < (ArrayItems.Length); v1624++)
+        int v1452;
+        int v1453;
+        v1452 = -2147483648;
+        v1451 = (0);
+        for (; v1451 < (ArrayItems.Length); v1451 += 1)
         {
-            v1626 = Selector((ArrayItems[v1624]));
-            if (v1626 <= v1625)
+            v1453 = Selector((ArrayItems[v1451]));
+            if (v1453 <= v1452)
                 continue;
-            v1625 = v1626;
+            v1452 = v1453;
         }
 
-        return v1625;
+        return v1452;
     }
 
     int MaxParamRewritten_ProceduralLinq1(int a, int[] ArrayItems)
     {
-        int v1628;
+        int v1455;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        int v1629;
-        int v1630;
-        v1629 = -2147483648;
-        v1628 = (0);
-        for (; v1628 < (ArrayItems.Length); v1628++)
+        int v1456;
+        int v1457;
+        v1456 = -2147483648;
+        v1455 = (0);
+        for (; v1455 < (ArrayItems.Length); v1455 += 1)
         {
-            v1630 = ((ArrayItems[v1628]) + a);
-            if (v1630 <= v1629)
+            v1457 = ((ArrayItems[v1455]) + a);
+            if (v1457 <= v1456)
                 continue;
-            v1629 = v1630;
+            v1456 = v1457;
         }
 
-        return v1629;
+        return v1456;
     }
 
     int MaxChangingParamRewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
     {
-        int v1631;
+        int v1458;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        int v1632;
-        int v1633;
-        v1632 = -2147483648;
-        v1631 = (0);
-        for (; v1631 < (ArrayItems.Length); v1631++)
+        int v1459;
+        int v1460;
+        v1459 = -2147483648;
+        v1458 = (0);
+        for (; v1458 < (ArrayItems.Length); v1458 += 1)
         {
-            v1633 = ((ArrayItems[v1631]) + a++);
-            if (v1633 <= v1632)
+            v1460 = ((ArrayItems[v1458]) + a++);
+            if (v1460 <= v1459)
                 continue;
-            v1632 = v1633;
+            v1459 = v1460;
         }
 
-        return v1632;
+        return v1459;
     }
 
     int MaxChangingParam2Rewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
     {
-        int v1634;
+        int v1461;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        int v1635;
-        int v1636;
-        v1635 = -2147483648;
-        v1634 = (0);
-        for (; v1634 < (ArrayItems.Length); v1634++)
+        int v1462;
+        int v1463;
+        v1462 = -2147483648;
+        v1461 = (0);
+        for (; v1461 < (ArrayItems.Length); v1461 += 1)
         {
-            v1636 = ((ArrayItems[v1634]) + a--);
-            if (v1636 <= v1635)
+            v1463 = ((ArrayItems[v1461]) + a--);
+            if (v1463 <= v1462)
                 continue;
-            v1635 = v1636;
+            v1462 = v1463;
         }
 
-        return v1635;
+        return v1462;
     }
 
     int SelectMaxRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1638;
+        int v1465;
         if (1 > (ArrayItems.Length))
             throw new System.InvalidOperationException("Index out of range");
-        int v1639;
-        int v1640;
-        v1639 = -2147483648;
-        v1638 = (0);
-        for (; v1638 < (ArrayItems.Length); v1638++)
+        int v1466;
+        int v1467;
+        v1466 = -2147483648;
+        v1465 = (0);
+        for (; v1465 < (ArrayItems.Length); v1465 += 1)
         {
-            v1640 = (3 + ArrayItems[v1638]);
-            if (v1640 <= v1639)
+            v1467 = (3 + ArrayItems[v1465]);
+            if (v1467 <= v1466)
                 continue;
-            v1639 = v1640;
+            v1466 = v1467;
         }
 
-        return v1639;
+        return v1466;
     }
 
     int EmptyMaxRewritten_ProceduralLinq1()
     {
-        int v1641;
-        throw new System.InvalidOperationException("Index out of range");
-        v1641 = 0;
+        int v1468;
+        if (1 > (0))
+            throw new System.InvalidOperationException("Index out of range");
+        int v1469;
+        v1468 = 0;
+        v1469 = -2147483648;
+        return v1469;
     }
 
     int EmptyMax2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v1642;
-        int v1643;
-        int v1644;
-        int v1645;
-        v1644 = 0;
-        v1645 = -2147483648;
-        v1642 = (0);
-        for (; v1642 < (ArrayItems.Length); v1642++)
+        int v1470;
+        int v1471;
+        int v1472;
+        v1471 = 0;
+        v1472 = -2147483648;
+        v1470 = (0);
+        for (; v1470 < (ArrayItems.Length); v1470 += 1)
         {
-            v1643 = (ArrayItems[v1642]);
             if (!((false)))
                 continue;
-            v1643 = (v1643);
-            if (v1643 <= v1645)
+            if (((ArrayItems[v1470])) <= v1472)
                 continue;
-            v1645 = v1643;
-            v1644++;
+            v1472 = ((ArrayItems[v1470]));
+            v1471++;
         }
 
-        if (1 > v1644)
+        if (1 > v1471)
             throw new System.InvalidOperationException("Index out of range");
-        return v1645;
+        return v1472;
     }
 
     int EnumerableMaxRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v1646;
-        int v1647;
-        int v1648;
-        int v1649;
-        v1646 = EnumerableItems.GetEnumerator();
-        v1647 = 0;
-        v1648 = -2147483648;
+        IEnumerator<int> v1473;
+        int v1474;
+        int v1475;
+        int v1476;
+        v1473 = EnumerableItems.GetEnumerator();
+        v1474 = 0;
+        v1475 = -2147483648;
         try
         {
-            while (v1646.MoveNext())
+            while (v1473.MoveNext())
             {
-                v1649 = (v1646.Current);
-                if (v1649 <= v1648)
+                v1476 = (v1473.Current);
+                if (v1476 <= v1475)
                     continue;
-                v1648 = v1649;
-                v1647++;
+                v1475 = v1476;
+                v1474++;
             }
         }
         finally
         {
-            v1646.Dispose();
+            v1473.Dispose();
         }
 
-        if (1 > v1647)
+        if (1 > v1474)
             throw new System.InvalidOperationException("Index out of range");
-        return v1648;
+        return v1475;
     }
 }}

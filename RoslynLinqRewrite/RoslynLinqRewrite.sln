@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarksLibrary", "Benchm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestsLibrary", "TestsLibrary\TestsLibrary.csproj", "{274529AD-A020-4868-A05B-275CC6E2474F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewProjectRewrite", "NewProjectRewrite\NewProjectRewrite.csproj", "{A572F2FE-3124-4CF2-BC00-8E9DD3DD48FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{274529AD-A020-4868-A05B-275CC6E2474F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{274529AD-A020-4868-A05B-275CC6E2474F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{274529AD-A020-4868-A05B-275CC6E2474F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A572F2FE-3124-4CF2-BC00-8E9DD3DD48FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A572F2FE-3124-4CF2-BC00-8E9DD3DD48FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A572F2FE-3124-4CF2-BC00-8E9DD3DD48FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A572F2FE-3124-4CF2-BC00-8E9DD3DD48FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

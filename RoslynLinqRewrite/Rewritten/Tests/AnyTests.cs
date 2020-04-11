@@ -204,35 +204,33 @@ public class AnyTests
 
     bool ArrayAnyRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v57;
-        v57 = (0);
-        for (; v57 < (ArrayItems.Length); v57++)
-            if (((ArrayItems[v57]) > 50))
+        int v54;
+        v54 = (0);
+        for (; v54 < (ArrayItems.Length); v54 += 1)
+            if (((ArrayItems[v54]) > 50))
                 return true;
         return false;
     }
 
     bool ArraySelectAnyRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v59;
-        v59 = (0);
-        for (; v59 < (ArrayItems.Length); v59++)
-            if (((10 + ArrayItems[v59]) > 50))
+        int v56;
+        v56 = (0);
+        for (; v56 < (ArrayItems.Length); v56 += 1)
+            if (((10 + ArrayItems[v56]) > 50))
                 return true;
         return false;
     }
 
     bool ArrayWhereAnyRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v60;
-        int v61;
-        v60 = (0);
-        for (; v60 < (ArrayItems.Length); v60++)
+        int v57;
+        v57 = (0);
+        for (; v57 < (ArrayItems.Length); v57 += 1)
         {
-            v61 = (ArrayItems[v60]);
-            if (!(((v61) > 40)))
+            if (!((((ArrayItems[v57])) > 40)))
                 continue;
-            if (((v61) > 50))
+            if ((((ArrayItems[v57])) > 50))
                 return true;
         }
 
@@ -241,13 +239,11 @@ public class AnyTests
 
     bool ArrayWhereEmptyAnyRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v64;
-        int v65;
-        v64 = (0);
-        for (; v64 < (ArrayItems.Length); v64++)
+        int v60;
+        v60 = (0);
+        for (; v60 < (ArrayItems.Length); v60 += 1)
         {
-            v65 = (ArrayItems[v64]);
-            if (!(((v65) > 40)))
+            if (!((((ArrayItems[v60])) > 40)))
                 continue;
             return true;
         }
@@ -257,57 +253,57 @@ public class AnyTests
 
     bool ArrayAnyFalseRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v67;
-        v67 = (0);
-        for (; v67 < (ArrayItems.Length); v67++)
-            if (((ArrayItems[v67]) > 105))
+        int v62;
+        v62 = (0);
+        for (; v62 < (ArrayItems.Length); v62 += 1)
+            if (((ArrayItems[v62]) > 105))
                 return true;
         return false;
     }
 
     bool ArrayAnyPredicateRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v69;
-        v69 = (0);
-        for (; v69 < (ArrayItems.Length); v69++)
-            if (Predicate((ArrayItems[v69])))
+        int v64;
+        v64 = (0);
+        for (; v64 < (ArrayItems.Length); v64 += 1)
+            if (Predicate((ArrayItems[v64])))
                 return true;
         return false;
     }
 
     bool ArrayAnyParameterRewritten_ProceduralLinq1(int a, int[] ArrayItems)
     {
-        int v71;
-        v71 = (0);
-        for (; v71 < (ArrayItems.Length); v71++)
-            if (((ArrayItems[v71]) > a))
+        int v66;
+        v66 = (0);
+        for (; v66 < (ArrayItems.Length); v66 += 1)
+            if (((ArrayItems[v66]) > a))
                 return true;
         return false;
     }
 
     bool ArrayAnyChangingParameterRewritten_ProceduralLinq1(ref int a, int[] ArrayItems)
     {
-        int v72;
-        v72 = (0);
-        for (; v72 < (ArrayItems.Length); v72++)
-            if (((ArrayItems[v72]) > a++))
+        int v67;
+        v67 = (0);
+        for (; v67 < (ArrayItems.Length); v67 += 1)
+            if (((ArrayItems[v67]) > a++))
                 return true;
         return false;
     }
 
     bool EnumerableAnyChangingParameterRewritten_ProceduralLinq1(ref int a, System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v73;
-        v73 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v68;
+        v68 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v73.MoveNext())
-                if (((v73.Current) > a++))
+            while (v68.MoveNext())
+                if (((v68.Current) > a++))
                     return true;
         }
         finally
         {
-            v73.Dispose();
+            v68.Dispose();
         }
 
         return false;
@@ -315,17 +311,17 @@ public class AnyTests
 
     bool EnumerableAnyRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v74;
-        v74 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v69;
+        v69 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v74.MoveNext())
-                if (((v74.Current) > 50))
+            while (v69.MoveNext())
+                if (((v69.Current) > 50))
                     return true;
         }
         finally
         {
-            v74.Dispose();
+            v69.Dispose();
         }
 
         return false;
@@ -333,19 +329,19 @@ public class AnyTests
 
     bool RangeAnyRewritten_ProceduralLinq1()
     {
-        int v75;
-        v75 = (0);
-        for (; v75 < (100); v75++)
-            if (((v75) > 50))
+        int v70;
+        v70 = (0);
+        for (; v70 < (100); v70 += (1))
+            if (((v70) > 50))
                 return true;
         return false;
     }
 
     bool RepeatAnyRewritten_ProceduralLinq1()
     {
-        int v76;
-        v76 = (0);
-        for (; v76 < (100); v76++)
+        int v71;
+        v71 = (0);
+        for (; v71 < (100); v71 += 1)
             if (((0) > 50))
                 return true;
         return false;
@@ -353,9 +349,9 @@ public class AnyTests
 
     bool RepeatAnyTrueRewritten_ProceduralLinq1()
     {
-        int v77;
-        v77 = (0);
-        for (; v77 < (100); v77++)
+        int v72;
+        v72 = (0);
+        for (; v72 < (100); v72 += 1)
             if (((0) > -1))
                 return true;
         return false;

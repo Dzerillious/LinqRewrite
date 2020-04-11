@@ -15,8 +15,10 @@ namespace LinqRewrite
         private const string ToLookup4 = "System.Collections.Generic.IEnumerable<TSource>.ToLookup<TSource, TKey>(System.Func<TSource, TKey>, System.Collections.Generic.IEqualityComparer<TKey>)";
         
         private const string ToArray1 = "System.Collections.Generic.IEnumerable<TSource>.ToArray<TSource>()";
+        private const string ToArray2 = "System.Collections.Generic.IEnumerable<T>.ToArray<T>(LinqRewrite.Core.EnlargingCoefficient)";
         private const string ToList1 = "System.Collections.Generic.IEnumerable<TSource>.ToList<TSource>()";
         private const string ToSimpleList1 = "System.Collections.Generic.IEnumerable<T>.ToSimpleList<T>()";
+        private const string ToSimpleList2 = "System.Collections.Generic.IEnumerable<T>.ToSimpleList<T>(LinqRewrite.Core.EnlargingCoefficient)";
 
         private const string Reverse1 = "System.Collections.Generic.IEnumerable<TSource>.Reverse<TSource>()";
         private const string First1 = "System.Collections.Generic.IEnumerable<TSource>.First<TSource>()";
@@ -58,6 +60,7 @@ namespace LinqRewrite
         public const string WithMaxSize = "System.Collections.Generic.IEnumerable<T>.WithMaxSize<T>(int)";
 
         private const string Range1 = "System.Linq.Enumerable.Range(int, int)";
+        private const string Range2 = "LinqRewrite.Core.ExtendedLinq.Range(int, int, int)";
         private const string Repeat1 = "System.Linq.Enumerable.Repeat<TResult>(TResult, int)";
         private const string Empty1 = "System.Linq.Enumerable.Empty<TResult>()";
 
@@ -141,7 +144,7 @@ namespace LinqRewrite
         {
             ToDictionary1, ToDictionary2, ToDictionary3, ToDictionary4,
             ToLookup1, ToLookup2, ToLookup3, ToLookup4,
-            ToArray1, ToList1, ToSimpleList1,
+            ToArray1, ToArray2, ToList1, ToSimpleList1, ToSimpleList2,
             Reverse1, 
             
             First1, First2, FirstOrDefault1, FirstOrDefault2, 
@@ -162,7 +165,7 @@ namespace LinqRewrite
             Select1, Select2, Where1, Where2, Cast1, OfType1,
             SelectMany1, SelectMany2, SelectMany3, SelectMany4,
             
-            Range1, Repeat1, Empty1,
+            Range1, Range2, Repeat1, Empty1,
             
             Skip1, SkipWhile1, Take1, TakeWhile1,
             

@@ -169,206 +169,196 @@ public class ToListTests
 
     System.Collections.Generic.List<int> ArrayToListTestRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v2847;
-        System.Collections.Generic.List<int> v2848;
-        v2848 = new System.Collections.Generic.List<int>();
-        v2847 = (0);
-        for (; v2847 < (ArrayItems.Length); v2847++)
-            v2848.Add((ArrayItems[v2847]));
-        return v2848;
+        int v2574;
+        System.Collections.Generic.List<int> v2575;
+        v2575 = new System.Collections.Generic.List<int>();
+        v2574 = (0);
+        for (; v2574 < (ArrayItems.Length); v2574 += 1)
+            v2575.Add((ArrayItems[v2574]));
+        return v2575;
     }
 
     System.Collections.Generic.List<int> ListToListTestRewritten_ProceduralLinq1(System.Collections.Generic.List<int> ListItems)
     {
-        int v2850;
-        int v2851;
-        System.Collections.Generic.List<int> v2852;
-        v2850 = ListItems.Count;
-        v2852 = new System.Collections.Generic.List<int>();
-        v2851 = (0);
-        for (; v2851 < (v2850); v2851++)
-            v2852.Add((ListItems[v2851]));
-        return v2852;
+        int v2577;
+        System.Collections.Generic.List<int> v2578;
+        int v2579;
+        v2579 = (ListItems.Count);
+        v2578 = new System.Collections.Generic.List<int>();
+        v2577 = (0);
+        for (; v2577 < v2579; v2577 += 1)
+            v2578.Add((ListItems[v2577]));
+        return v2578;
     }
 
     System.Collections.Generic.List<int> SimpleListToListTestRewritten_ProceduralLinq1(LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v2854;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v2855;
-        int v2856;
-        System.Collections.Generic.List<int> v2857;
-        v2854 = SimpleListItems.Count;
-        v2855 = SimpleListItems;
-        v2857 = new System.Collections.Generic.List<int>();
-        v2856 = (0);
-        for (; v2856 < (v2854); v2856++)
-            v2857.Add((v2855[v2856]));
-        return v2857;
+        int v2581;
+        v2581 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v2582;
+        v2582 = SimpleListItems;
+        int v2583;
+        System.Collections.Generic.List<int> v2584;
+        v2584 = new System.Collections.Generic.List<int>();
+        v2583 = (0);
+        for (; v2583 < (v2581); v2583 += 1)
+            v2584.Add((v2582[v2583]));
+        return v2584;
     }
 
     System.Collections.Generic.List<int> EnumerableToListTestRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v2858;
-        System.Collections.Generic.List<int> v2859;
-        v2858 = EnumerableItems.GetEnumerator();
-        v2859 = new System.Collections.Generic.List<int>();
+        IEnumerator<int> v2585;
+        System.Collections.Generic.List<int> v2586;
+        v2585 = EnumerableItems.GetEnumerator();
+        v2586 = new System.Collections.Generic.List<int>();
         try
         {
-            while (v2858.MoveNext())
-                v2859.Add((v2858.Current));
+            while (v2585.MoveNext())
+                v2586.Add((v2585.Current));
         }
         finally
         {
-            v2858.Dispose();
+            v2585.Dispose();
         }
 
-        return v2859;
+        return v2586;
     }
 
     System.Collections.Generic.List<int> ArrayWhereParamToListTestRewritten_ProceduralLinq1(int offset, int[] ArrayItems)
     {
-        int v2860;
-        int v2861;
-        System.Collections.Generic.List<int> v2862;
-        v2862 = new System.Collections.Generic.List<int>();
-        v2860 = (0);
-        for (; v2860 < (ArrayItems.Length); v2860++)
+        int v2587;
+        System.Collections.Generic.List<int> v2588;
+        v2588 = new System.Collections.Generic.List<int>();
+        v2587 = (0);
+        for (; v2587 < (ArrayItems.Length); v2587 += 1)
         {
-            v2861 = (ArrayItems[v2860]);
-            if (!(((v2861) > offset)))
+            if (!((((ArrayItems[v2587])) > offset)))
                 continue;
-            v2862.Add((v2861));
+            v2588.Add(((ArrayItems[v2587])));
         }
 
-        return v2862;
+        return v2588;
     }
 
     System.Collections.Generic.List<int> EnumerableWhereParamToListTestRewritten_ProceduralLinq1(int offset, System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v2863;
-        int v2864;
-        System.Collections.Generic.List<int> v2865;
-        v2863 = EnumerableItems.GetEnumerator();
-        v2865 = new System.Collections.Generic.List<int>();
+        IEnumerator<int> v2589;
+        int v2590;
+        System.Collections.Generic.List<int> v2591;
+        v2589 = EnumerableItems.GetEnumerator();
+        v2591 = new System.Collections.Generic.List<int>();
         try
         {
-            while (v2863.MoveNext())
+            while (v2589.MoveNext())
             {
-                v2864 = (v2863.Current);
-                if (!(((v2864) > offset)))
+                v2590 = (v2589.Current);
+                if (!(((v2590) > offset)))
                     continue;
-                v2865.Add((v2864));
+                v2591.Add((v2590));
             }
         }
         finally
         {
-            v2863.Dispose();
+            v2589.Dispose();
         }
 
-        return v2865;
+        return v2591;
     }
 
     System.Collections.Generic.List<int> SimpleListWhereParamToListTestRewritten_ProceduralLinq1(int offset, LinqRewrite.Core.SimpleList.SimpleList<int> SimpleListItems)
     {
-        int v2866;
-        LinqRewrite.Core.SimpleList.SimpleList<int> v2867;
-        int v2868;
-        int v2869;
-        System.Collections.Generic.List<int> v2870;
-        v2866 = SimpleListItems.Count;
-        v2867 = SimpleListItems;
-        v2870 = new System.Collections.Generic.List<int>();
-        v2868 = (0);
-        for (; v2868 < (v2866); v2868++)
+        int v2592;
+        v2592 = SimpleListItems.Count;
+        LinqRewrite.Core.SimpleList.SimpleList<int> v2593;
+        v2593 = SimpleListItems;
+        int v2594;
+        System.Collections.Generic.List<int> v2595;
+        v2595 = new System.Collections.Generic.List<int>();
+        v2594 = (0);
+        for (; v2594 < (v2592); v2594 += 1)
         {
-            v2869 = (v2867[v2868]);
-            if (!(((v2869) > offset)))
+            if (!((((v2593[v2594])) > offset)))
                 continue;
-            v2870.Add((v2869));
+            v2595.Add(((v2593[v2594])));
         }
 
-        return v2870;
+        return v2595;
     }
 
     System.Collections.Generic.List<int> ListWhereParamToListTestRewritten_ProceduralLinq1(int offset, System.Collections.Generic.List<int> ListItems)
     {
-        int v2871;
-        int v2872;
-        int v2873;
-        System.Collections.Generic.List<int> v2874;
-        v2871 = ListItems.Count;
-        v2874 = new System.Collections.Generic.List<int>();
-        v2872 = (0);
-        for (; v2872 < (v2871); v2872++)
+        int v2596;
+        System.Collections.Generic.List<int> v2597;
+        int v2598;
+        v2598 = (ListItems.Count);
+        v2597 = new System.Collections.Generic.List<int>();
+        v2596 = (0);
+        for (; v2596 < v2598; v2596 += 1)
         {
-            v2873 = (ListItems[v2872]);
-            if (!(((v2873) > offset)))
+            if (!((((ListItems[v2596])) > offset)))
                 continue;
-            v2874.Add((v2873));
+            v2597.Add(((ListItems[v2596])));
         }
 
-        return v2874;
+        return v2597;
     }
 
     System.Collections.Generic.List<int> RangeWhereParamToListTestRewritten_ProceduralLinq1(int offset)
     {
-        int v2875;
-        int v2876;
-        System.Collections.Generic.List<int> v2877;
-        v2877 = new System.Collections.Generic.List<int>();
-        v2875 = (0);
-        for (; v2875 < (1000); v2875++)
+        int v2599;
+        System.Collections.Generic.List<int> v2600;
+        v2600 = new System.Collections.Generic.List<int>();
+        v2599 = (0);
+        for (; v2599 < (1000); v2599 += (1))
         {
-            v2876 = (v2875);
-            if (!(((v2876) > offset)))
+            if (!((((v2599)) > offset)))
                 continue;
-            v2877.Add((v2876));
+            v2600.Add(((v2599)));
         }
 
-        return v2877;
+        return v2600;
     }
 
     System.Collections.Generic.List<int> RangeParamToListTestRewritten_ProceduralLinq1(int count)
     {
         if (0 > count)
             throw new System.InvalidOperationException("Index out of range");
-        int v2878;
-        System.Collections.Generic.List<int> v2879;
-        v2879 = new System.Collections.Generic.List<int>();
-        v2878 = (0);
-        for (; v2878 < (count); v2878++)
-            v2879.Add((v2878));
-        return v2879;
+        int v2601;
+        System.Collections.Generic.List<int> v2602;
+        v2602 = new System.Collections.Generic.List<int>();
+        v2601 = (0);
+        for (; v2601 < (count); v2601 += (1))
+            v2602.Add((v2601));
+        return v2602;
     }
 
     System.Collections.Generic.List<int> RepeatParamToListTestRewritten_ProceduralLinq1(int count)
     {
         if (0 > count)
             throw new System.InvalidOperationException("Index out of range");
-        int v2880;
-        System.Collections.Generic.List<int> v2881;
-        v2881 = new System.Collections.Generic.List<int>();
-        v2880 = (0);
-        for (; v2880 < (count); v2880++)
-            v2881.Add((0));
-        return v2881;
+        int v2603;
+        System.Collections.Generic.List<int> v2604;
+        v2604 = new System.Collections.Generic.List<int>();
+        v2603 = (0);
+        for (; v2603 < (count); v2603 += 1)
+            v2604.Add((0));
+        return v2604;
     }
 
     System.Collections.Generic.List<int> RepeatWhereParamToListTestRewritten_ProceduralLinq1(int offset)
     {
-        int v2882;
-        int v2883;
-        System.Collections.Generic.List<int> v2884;
-        v2884 = new System.Collections.Generic.List<int>();
-        v2882 = (0);
-        for (; v2882 < (1000); v2882++)
+        int v2605;
+        System.Collections.Generic.List<int> v2606;
+        v2606 = new System.Collections.Generic.List<int>();
+        v2605 = (0);
+        for (; v2605 < (1000); v2605 += 1)
         {
-            v2883 = (0);
-            if (!((v2882 < offset)))
+            if (!((v2605 < offset)))
                 continue;
-            v2884.Add((v2883));
+            v2606.Add(((0)));
         }
 
-        return v2884;
+        return v2606;
     }
 }}

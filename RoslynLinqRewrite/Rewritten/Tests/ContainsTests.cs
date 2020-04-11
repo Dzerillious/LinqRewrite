@@ -185,83 +185,81 @@ public class ContainsTests
 
     bool ArrayContainsRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v496;
-        v496 = (0);
-        for (; v496 < (ArrayItems.Length); v496++)
-            if ((ArrayItems[v496]) == 23)
+        int v456;
+        v456 = (0);
+        for (; v456 < (ArrayItems.Length); v456 += 1)
+            if ((ArrayItems[v456]) == 23)
                 return true;
         return false;
     }
 
     bool ArrayContains2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v498;
-        System.Collections.Generic.EqualityComparer<int> v499;
-        v499 = EqualityComparer<int>.Default;
-        v498 = (0);
-        for (; v498 < (ArrayItems.Length); v498++)
-            if (v499.Equals((ArrayItems[v498]), 23))
+        int v458;
+        System.Collections.Generic.EqualityComparer<int> v459;
+        v459 = EqualityComparer<int>.Default;
+        v458 = (0);
+        for (; v458 < (ArrayItems.Length); v458 += 1)
+            if (v459.Equals((ArrayItems[v458]), 23))
                 return true;
         return false;
     }
 
     bool ArrayContains3Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v501;
-        TestsLibrary.Tests.IntStrangeComparer v502;
-        v502 = new IntStrangeComparer();
-        v501 = (0);
-        for (; v501 < (ArrayItems.Length); v501++)
-            if (v502.Equals((ArrayItems[v501]), 23))
+        int v461;
+        TestsLibrary.Tests.IntStrangeComparer v462;
+        v462 = new IntStrangeComparer();
+        v461 = (0);
+        for (; v461 < (ArrayItems.Length); v461 += 1)
+            if (v462.Equals((ArrayItems[v461]), 23))
                 return true;
         return false;
     }
 
     bool ArraySelectContainsRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v504;
-        v504 = (0);
-        for (; v504 < (ArrayItems.Length); v504++)
-            if ((5 + ArrayItems[v504]) == 23)
+        int v464;
+        v464 = (0);
+        for (; v464 < (ArrayItems.Length); v464 += 1)
+            if ((5 + ArrayItems[v464]) == 23)
                 return true;
         return false;
     }
 
     bool ArraySelectContains2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v506;
-        System.Collections.Generic.EqualityComparer<int> v507;
-        v507 = EqualityComparer<int>.Default;
-        v506 = (0);
-        for (; v506 < (ArrayItems.Length); v506++)
-            if (v507.Equals((5 + ArrayItems[v506]), 23))
+        int v466;
+        System.Collections.Generic.EqualityComparer<int> v467;
+        v467 = EqualityComparer<int>.Default;
+        v466 = (0);
+        for (; v466 < (ArrayItems.Length); v466 += 1)
+            if (v467.Equals((5 + ArrayItems[v466]), 23))
                 return true;
         return false;
     }
 
     bool ArraySelectContains3Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v509;
-        TestsLibrary.Tests.IntStrangeComparer v510;
-        v510 = new IntStrangeComparer();
-        v509 = (0);
-        for (; v509 < (ArrayItems.Length); v509++)
-            if (v510.Equals((5 + ArrayItems[v509]), 23))
+        int v469;
+        TestsLibrary.Tests.IntStrangeComparer v470;
+        v470 = new IntStrangeComparer();
+        v469 = (0);
+        for (; v469 < (ArrayItems.Length); v469 += 1)
+            if (v470.Equals((5 + ArrayItems[v469]), 23))
                 return true;
         return false;
     }
 
     bool ArrayWhereContainsRewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v511;
-        int v512;
-        v511 = (0);
-        for (; v511 < (ArrayItems.Length); v511++)
+        int v471;
+        v471 = (0);
+        for (; v471 < (ArrayItems.Length); v471 += 1)
         {
-            v512 = (ArrayItems[v511]);
-            if (!(((v512) > 20)))
+            if (!((((ArrayItems[v471])) > 20)))
                 continue;
-            if ((v512) == 23)
+            if (((ArrayItems[v471])) == 23)
                 return true;
         }
 
@@ -270,17 +268,15 @@ public class ContainsTests
 
     bool ArrayWhereContains2Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v513;
-        int v514;
-        System.Collections.Generic.EqualityComparer<int> v515;
-        v515 = EqualityComparer<int>.Default;
-        v513 = (0);
-        for (; v513 < (ArrayItems.Length); v513++)
+        int v472;
+        System.Collections.Generic.EqualityComparer<int> v473;
+        v473 = EqualityComparer<int>.Default;
+        v472 = (0);
+        for (; v472 < (ArrayItems.Length); v472 += 1)
         {
-            v514 = (ArrayItems[v513]);
-            if (!(((v514) > 20)))
+            if (!((((ArrayItems[v472])) > 20)))
                 continue;
-            if (v515.Equals((v514), 23))
+            if (v473.Equals(((ArrayItems[v472])), 23))
                 return true;
         }
 
@@ -289,17 +285,15 @@ public class ContainsTests
 
     bool ArrayWhereContains3Rewritten_ProceduralLinq1(int[] ArrayItems)
     {
-        int v516;
-        int v517;
-        TestsLibrary.Tests.IntStrangeComparer v518;
-        v518 = new IntStrangeComparer();
-        v516 = (0);
-        for (; v516 < (ArrayItems.Length); v516++)
+        int v474;
+        TestsLibrary.Tests.IntStrangeComparer v475;
+        v475 = new IntStrangeComparer();
+        v474 = (0);
+        for (; v474 < (ArrayItems.Length); v474 += 1)
         {
-            v517 = (ArrayItems[v516]);
-            if (!(((v517) > 20)))
+            if (!((((ArrayItems[v474])) > 20)))
                 continue;
-            if (v518.Equals((v517), 23))
+            if (v475.Equals(((ArrayItems[v474])), 23))
                 return true;
         }
 
@@ -308,17 +302,17 @@ public class ContainsTests
 
     bool EnumerableContainsRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v519;
-        v519 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v476;
+        v476 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v519.MoveNext())
-                if ((v519.Current) == 23)
+            while (v476.MoveNext())
+                if ((v476.Current) == 23)
                     return true;
         }
         finally
         {
-            v519.Dispose();
+            v476.Dispose();
         }
 
         return false;
@@ -326,19 +320,19 @@ public class ContainsTests
 
     bool EnumerableContains2Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v520;
-        System.Collections.Generic.EqualityComparer<int> v521;
-        v520 = EnumerableItems.GetEnumerator();
-        v521 = EqualityComparer<int>.Default;
+        IEnumerator<int> v477;
+        System.Collections.Generic.EqualityComparer<int> v478;
+        v478 = EqualityComparer<int>.Default;
+        v477 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v520.MoveNext())
-                if (v521.Equals((v520.Current), 23))
+            while (v477.MoveNext())
+                if (v478.Equals((v477.Current), 23))
                     return true;
         }
         finally
         {
-            v520.Dispose();
+            v477.Dispose();
         }
 
         return false;
@@ -346,19 +340,19 @@ public class ContainsTests
 
     bool EnumerableContains3Rewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v522;
-        TestsLibrary.Tests.IntStrangeComparer v523;
-        v522 = EnumerableItems.GetEnumerator();
-        v523 = new IntStrangeComparer();
+        IEnumerator<int> v479;
+        TestsLibrary.Tests.IntStrangeComparer v480;
+        v480 = new IntStrangeComparer();
+        v479 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v522.MoveNext())
-                if (v523.Equals((v522.Current), 23))
+            while (v479.MoveNext())
+                if (v480.Equals((v479.Current), 23))
                     return true;
         }
         finally
         {
-            v522.Dispose();
+            v479.Dispose();
         }
 
         return false;
@@ -366,17 +360,17 @@ public class ContainsTests
 
     bool EnumerableContainsNotRewritten_ProceduralLinq1(System.Collections.Generic.IEnumerable<int> EnumerableItems)
     {
-        IEnumerator<int> v524;
-        v524 = EnumerableItems.GetEnumerator();
+        IEnumerator<int> v481;
+        v481 = EnumerableItems.GetEnumerator();
         try
         {
-            while (v524.MoveNext())
-                if ((v524.Current) == 20000)
+            while (v481.MoveNext())
+                if ((v481.Current) == 20000)
                     return true;
         }
         finally
         {
-            v524.Dispose();
+            v481.Dispose();
         }
 
         return false;

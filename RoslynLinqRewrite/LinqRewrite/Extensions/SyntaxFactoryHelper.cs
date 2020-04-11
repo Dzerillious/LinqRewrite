@@ -136,50 +136,44 @@ namespace LinqRewrite.Extensions
         public static DefaultExpressionSyntax Default(TypeBridge @type)
             => DefaultExpression(@type);
 
-        public static TypedValueBridge ReusableConst(this RewrittenValueBridge e, RewriteParameters p)
-        {
-            if (IsReusable(e)) return new TypedValueBridge(e.Old.GetType(p), e);
+        public static TypedValueBridge ReusableConst(this RewrittenValueBridge e, RewriteParameters p, bool? reuse = null)
+            => ReusableConst(e.New, p, e.Old.GetType(p), reuse);
 
-            var tmpVariable = p.GlobalVariable(e.Old.GetType(p), e);
-            return new TypedValueBridge(Int, IdentifierName(tmpVariable));
-        }
+        public static TypedValueBridge ReusableConst(this TypedValueBridge e, RewriteParameters p, bool? reuse = null)
+            => ReusableConst(e.Value, p, e.Type, reuse);
 
-        public static TypedValueBridge ReusableConst(this ValueBridge e, RewriteParameters p, TypeBridge type, bool? reuse = false)
+        public static TypedValueBridge ReusableConst(this ValueBridge e, RewriteParameters p, TypeBridge type, bool? reuse = null)
         {
             if (reuse == false) return new TypedValueBridge(type, e);
-            if (reuse == null && IsReusable(e)) return new TypedValueBridge(type, e);
+            if (reuse == null && IsReusable(e))
+            {
+                if (e is LocalVariable localVariable)
+                    localVariable.IsGlobal = true;
+                return new TypedValueBridge(type, e);
+            }
 
-            var tmpVariable = p.GlobalVariable(type, e);
+            var tmpVariable = p.SuperGlobalVariable(type, e);
             return new TypedValueBridge(Int, IdentifierName(tmpVariable));
         }
 
-        public static TypedValueBridge ReusableConst(this TypedValueBridge e, RewriteParameters p)
+        public static TypedValueBridge Reusable(this ValueBridge e, RewriteParameters p, TypeBridge type, bool? reuse = null)
         {
-            if (IsReusable(e))
+            if (reuse == false) return new TypedValueBridge(type, e);
+            if (reuse == null && IsReusable(e))
             {
-                if (e.Value is LocalVariable localVariable)
-                    localVariable.IsGlobal = true;
-                return e;
-            }
-
-            var tmpVariable = p.GlobalVariable(e.Type, e);
-            return new TypedValueBridge(e.Type, tmpVariable);
-        }
-
-        public static TypedValueBridge Reusable(this TypedValueBridge e, RewriteParameters p)
-        {
-            if (IsReusable(e))
-            {
-                if (e.Value is LocalVariable localVariable)
+                if (e is LocalVariable localVariable)
                     localVariable.IsUsed = true;
-                return e;
+                return new TypedValueBridge(type, e);
             }
 
-            var tmpVariable = p.LocalVariable(e.Type);
+            var tmpVariable = p.LocalVariable(type);
             p.ForAdd(tmpVariable.Assign(e));
             tmpVariable.IsUsed = true;
             return new TypedValueBridge(Int, IdentifierName(tmpVariable));
         }
+
+        public static TypedValueBridge Reusable(this TypedValueBridge e, RewriteParameters p, bool? reuse = null)
+            => Reusable(e.Value, p, e.Type, reuse);
 
         public static TypedValueBridge Inline(this ExpressionSyntax e, RewriteParameters p,
             params TypedValueBridge[] values)
@@ -194,7 +188,7 @@ namespace LinqRewrite.Extensions
             else returnType = ParseTypeName(((INamedTypeSymbol)p.Semantic.GetTypeInfo(e.OldVal).ConvertedType).DelegateInvokeMethod.ReturnType.ToDisplayString());
             
             if (IsLambdaSimple(e.OldVal))
-                return p.Code.InlineLambda(p, e.OldVal, returnType, values);
+                return p.Code.InlineLambda(p, e, returnType, values);
 
             var val = values.Select(x =>
             {
@@ -203,7 +197,7 @@ namespace LinqRewrite.Extensions
                 p.ForAdd(inlineVariable.Assign(x));
                 return new TypedValueBridge(x.Type, inlineVariable);
             }).ToArray();
-            return p.Code.InlineLambda(p, e.OldVal, returnType, val);
+            return p.Code.InlineLambda(p, e, returnType, val);
         }
 
         public static bool IsLambdaSimple(ExpressionSyntax e)
@@ -219,36 +213,24 @@ namespace LinqRewrite.Extensions
             return maxParams <= 1;
         }
 
-        public static bool NotVeryCostly(this ExpressionSyntax e)
-            => !(e is InvocationExpressionSyntax)
-               && !(e is ParenthesizedExpressionSyntax)
-               && !(e is ConditionalExpressionSyntax)
-               && !(e is AwaitExpressionSyntax)
-               && !(e is SimpleLambdaExpressionSyntax)
-               && !(e is ParenthesizedLambdaExpressionSyntax)
-               && !(e is ObjectCreationExpressionSyntax)
-               && !(e is IsPatternExpressionSyntax)
-               && !(e is InterpolatedStringExpressionSyntax)
-               && !(e is ArrayCreationExpressionSyntax)
-               && !(e is TupleExpressionSyntax)
-               && !(e is SwitchExpressionSyntax)
-               && !(e is RangeExpressionSyntax)
-               && !(e is QueryExpressionSyntax)
-               && !(e is LambdaExpressionSyntax)
-               && !(e is InitializerExpressionSyntax);
-
-        public static bool IsReusable(ExpressionSyntax e) =>
-            e is BaseExpressionSyntax
-            || e is ThisExpressionSyntax
-            || e is IdentifierNameSyntax
-            || e is LiteralExpressionSyntax
-            || e is DefaultExpressionSyntax
-            || e is RefExpressionSyntax
-            || e is SizeOfExpressionSyntax
-            || e is TypeOfExpressionSyntax
-            || e is ElementAccessExpressionSyntax
-            || e is PostfixUnaryExpressionSyntax
-            || e is PrefixUnaryExpressionSyntax;
+        public static bool IsReusable(ExpressionSyntax e)
+        {
+            while (e is ParenthesizedExpressionSyntax par)
+                e = par.Expression;
+            if (e is MemberAccessExpressionSyntax memberAccess && memberAccess.Name.ToString() == "Length")
+                return true;
+            return e is BaseExpressionSyntax
+                   || e is ThisExpressionSyntax
+                   || e is IdentifierNameSyntax
+                   || e is LiteralExpressionSyntax
+                   || e is DefaultExpressionSyntax
+                   || e is RefExpressionSyntax
+                   || e is SizeOfExpressionSyntax
+                   || e is TypeOfExpressionSyntax
+                   || e is ElementAccessExpressionSyntax
+                   || e is PostfixUnaryExpressionSyntax
+                   || e is PrefixUnaryExpressionSyntax;
+        }
 
         public static TypeBridge GetType(this RewrittenValueBridge expression, RewriteParameters p)
             => p.Semantic.GetTypeFromExpression(expression.Old);
