@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using LinqRewrite.Core;
+using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.MSBuild;
@@ -49,7 +51,10 @@ namespace LinqRewrite.Services
             try
             {
                 var dstDir = args.FirstOrDefault(x => x.StartsWith("--"))?.Replace("--reProj=", "");
-                RewriteProject(buildArgs[1].ToString(), dstDir);
+                if (args.First().EndsWith(".sln"))
+                    RewriteSolution(buildArgs[1].ToString(), dstDir);
+                else if (args.First().EndsWith(".csproj"))
+                    RewriteProject(buildArgs[1].ToString(), dstDir);
             }
             catch (ProcessException ex)
             {
@@ -73,8 +78,22 @@ namespace LinqRewrite.Services
 
         public void RewriteProject(string path, string dstDir)
         {
+            MSBuildLocator.RegisterDefaults();
             var msWorkspace = MSBuildWorkspace.Create();
             var project = msWorkspace.OpenProjectAsync(path).Result;
+            RewriteProject(project, dstDir);
+        }
+
+        public void RewriteSolution(string path, string dstDir)
+        {
+            MSBuildLocator.RegisterDefaults();
+            var msWorkspace = MSBuildWorkspace.Create();
+            var solution = msWorkspace.OpenSolutionAsync(path).Result;
+            solution.Projects.ForEach(x => RewriteProject(x, dstDir));
+        }
+
+        public void RewriteProject(Project project, string dstDir)
+        {
             var documents = project.Documents.ToArray();
             var syntaxTrees = project.Documents.Select(document => CSharpSyntaxTree.ParseText(File.ReadAllText(document.FilePath))).ToList();
 
