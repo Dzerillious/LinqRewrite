@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using LinqRewrite.DataStructures;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -22,5 +23,11 @@ namespace LinqRewrite.Services
         
         public readonly List<Tuple<TypeDeclarationSyntax, MethodDeclarationSyntax>> MethodsToAddToCurrentType =
             new List<Tuple<TypeDeclarationSyntax, MethodDeclarationSyntax>>();
+
+        public TypeInfo GetTypeInfo(RewrittenValueBridge collectionValue)
+            => Semantic.GetTypeInfo(collectionValue.OldVal);
+
+        public TypeInfo GetTypeInfo(ValueBridge collectionValue)
+            => Semantic.GetTypeInfo(collectionValue.Value);
     }
 }

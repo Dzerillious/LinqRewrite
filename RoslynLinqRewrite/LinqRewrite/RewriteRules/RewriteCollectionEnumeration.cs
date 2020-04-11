@@ -15,10 +15,8 @@ namespace LinqRewrite.RewriteRules
         public static void RewriteOther(RewriteParameters p, CollectionValueBridge collection, LocalVariable variable = null, bool otherIndexer = false, bool? reuseVariables = null)
         {
             if (collection.CollectionType == CollectionType.Array
-                || collection.CollectionType == CollectionType.List) ArrayEnumeration(p, collection.ItemType, collection.Count, collection, variable);
-            else if (collection.CollectionType == CollectionType.SimpleList) ArrayEnumeration(p, collection.ItemType, 
-                collection.Count.ReusableConst(p, Int, reuseVariables), 
-                collection.ReusableConst(p, collection.Type, reuseVariables), variable);
+                || collection.CollectionType == CollectionType.List
+                || collection.CollectionType == CollectionType.SimpleList) ArrayEnumeration(p, collection.ItemType, collection.Count, collection, variable);
             else if (collection.CollectionType == CollectionType.Enumerable) EnumerableEnumeration(p, collection, variable);
 
             if (otherIndexer) p.CurrentIterator.CurrentIndexer = null;

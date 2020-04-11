@@ -35,7 +35,8 @@ namespace LinqRewrite.RewriteRules
             var rewritten = new RewrittenValueBridge(keySelector.ExpressionBody, lookupVariable);
             p.AddIterator(rewritten);
             var iGroupingType = ParseTypeName($"IGrouping<{keySelector.ReturnType(p).Type},{elementSelectorValue.Type}>");
-            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(iGroupingType, lookupType, null, lookupVariable));
+            var collectionType = p.Data.GetTypeInfo(lookupVariable).Type;
+            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, lookupVariable, true));
             var elementsType = ParseTypeName($"IEnumerable<{elementSelectorValue.Type}>");
             
             var groupingType = ParseTypeName($"SimpleLookup<{keySelector.ReturnType(p).Type},{elementSelectorValue.Type}>.Grouping");

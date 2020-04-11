@@ -34,7 +34,9 @@ namespace LinqRewrite.RewriteRules
             itemVariable.IsGlobal = true;
             
             p.AddIterator(collectionValue);
-            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(collectionValue.ItemType(p), collectionValue.GetType(p), collectionValue.Count(p), collectionValue.Old), itemVariable, true);
+                
+            var collectionType = p.Data.GetTypeInfo(collectionValue).Type;
+            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, collectionValue, true), itemVariable, true);
 
             p.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue)),
                 Continue()));

@@ -2,7 +2,6 @@
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
 
@@ -53,7 +52,9 @@ namespace LinqRewrite.RewriteRules
             p.Indexer = null;
 
             p.ForAdd(resultVariable[reverseIndexerVariable].Assign(p.LastValue));
-            p.CurrentCollection = new CollectionValueBridge(p.LastValue.Type, ArrayType(p.LastValue.Type), currentLengthVariable - reverseIndexerVariable, resultVariable);
+                
+            var collectionType = p.Data.GetTypeInfo(resultVariable).Type;
+            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, resultVariable, true));
             
             p.CurrentIterator.Complete = true;
             RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());
@@ -89,7 +90,9 @@ namespace LinqRewrite.RewriteRules
             p.Indexer = null;
 
             p.ForAdd(resultVariable[reverseIndexerVariable].Assign(p.LastValue));
-            p.CurrentCollection = new CollectionValueBridge(p.LastValue.Type, ArrayType(p.LastValue.Type), currentLengthVariable - reverseIndexerVariable, resultVariable);
+                
+            var collectionType = p.Data.GetTypeInfo(resultVariable).Type;
+            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, resultVariable, true));
             
             p.CurrentIterator.Complete = true;
             RewriteCollectionEnumeration.Rewrite(p, Array.Empty<RewrittenValueBridge>());

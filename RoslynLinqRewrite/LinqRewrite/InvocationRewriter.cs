@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
@@ -19,19 +18,12 @@ namespace LinqRewrite
         public static ExpressionSyntax TryRewrite(ValueBridge collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node) 
         {
             using var parameters = RewriteParametersFactory.BorrowParameters();
-            parameters.SetData(collection, returnType, chain, node);
-            
-            var regex = new Regex("(.*\\.)?(.*?)(\\<.*\\>)?\\(.*");
-            var names = chain.Select(x =>
-            {
-                var match = regex.Match(x.MethodName);
-                return match.Groups[1].Value.EndsWith(".")
-                    ? match.Groups[2].Value : match.Groups[1].Value;
-            }).ToArray();
+            parameters.SetData(collection, returnType, chain, node, false);
+            var names = chain.Select(x => x.MethodName).ToArray();
             
             var (simpleSuccess, simpleResult) = TryRewriteSimple(parameters, names);
             if (simpleSuccess && simpleResult != null) return simpleResult;
-            if (simpleSuccess) parameters.SetData(collection, returnType, chain, node);
+            parameters.SetData(collection, returnType, chain, node, true);
 
             parameters.HasResultMethod = MethodsWithResult.Contains(names.Last());
             RewriteComposite(parameters, names);
@@ -57,11 +49,9 @@ namespace LinqRewrite
             if (parameters.Data.CurrentMethodIsConditional && parameters.ReturnType.Type.ToString() == "void")
                 parameters.InitialAdd(If(parameters.CurrentCollection.IsEqual(null), ReturnStatement()));
 
-            if (!parameters.HasResultMethod)
-            {
-                parameters.ForAdd(YieldStatement(SyntaxKind.YieldReturnStatement, parameters.LastValue));
-                parameters.ResultAdd(YieldStatement(SyntaxKind.YieldBreakStatement));
-            }
+            if (parameters.HasResultMethod) return;
+            parameters.ForAdd(YieldStatement(SyntaxKind.YieldReturnStatement, parameters.LastValue));
+            parameters.ResultAdd(YieldStatement(SyntaxKind.YieldBreakStatement));
         }
 
         private static (bool success, ExpressionSyntax result) TryRewriteSimple(RewriteParameters parameters, string[] names)

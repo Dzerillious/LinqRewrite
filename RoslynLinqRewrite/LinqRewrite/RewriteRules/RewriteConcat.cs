@@ -27,7 +27,8 @@ namespace LinqRewrite.RewriteRules
             itemVariable.IsGlobal = true;
             
             p.AddIterator(collectionValue);
-            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(collectionValue.ItemType(p), collectionValue.GetType(p), collectionValue.Count(p), collectionValue.Old), itemVariable, true);
+            var collectionType = p.Data.GetTypeInfo(collectionValue).Type;
+            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, collectionValue.Old, true), itemVariable, true);
 
             if (sourceSizeValue != null && p.SourceSize != null) p.SourceSize += sourceSizeValue;
             else p.SourceSize = null;

@@ -24,7 +24,8 @@ namespace LinqRewrite.RewriteRules
             p.Iterators.ForEach(x => x.Complete = true);
             
             p.AddIterator(collectionValue);
-            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(collectionValue.ItemType(p), collectionValue.GetType(p), collectionValue.Count(p), collectionValue.Old));
+            var collectionType = p.Data.GetTypeInfo(collectionValue).Type;
+            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, collectionValue, true));
 
             p.LastValue = p.LastValue.Reusable(p);
             p.CurrentForAdd(If(Not(hashsetVariable.Access("Remove").Invoke(p.LastValue)),

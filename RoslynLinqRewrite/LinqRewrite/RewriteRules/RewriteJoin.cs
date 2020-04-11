@@ -37,7 +37,8 @@ namespace LinqRewrite.RewriteRules
             p.Iterators.Remove(p.CurrentIterator);
             p.CurrentIterator = newIterator;
                 
-            GroupingEnumeration(p, new CollectionValueBridge(innerValue.ItemType(p), groupingType, groupingVariable.Access("count"), rewritten));
+            var collectionType = p.Data.GetTypeInfo(rewritten).Type;
+            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, rewritten, true));
             
             p.LastValue = resultSelectorValue.Inline(p, itemValue, p.LastValue);
             p.ModifiedEnumeration = true;

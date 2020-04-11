@@ -15,15 +15,12 @@ namespace LinqRewrite
     public class LinqRewriter : CSharpSyntaxRewriter
     {
         private readonly RewriteDataService _data;
-        private readonly CodeCreationService _code;
-
         public int RewrittenMethods { get; private set; }
         public int RewrittenLinqQueries { get; private set; }
 
         public LinqRewriter(SemanticModel semantic)
         {
             _data = RewriteDataService.Instance;
-            _code = CodeCreationService.Instance;
             RewriteService.Instance.Visit = VisitListElement;
             
             _data.Semantic = semantic;
@@ -31,20 +28,21 @@ namespace LinqRewrite
         public override SyntaxNode VisitInvocationExpression(InvocationExpressionSyntax node)
             => TryVisitInvocationExpression(node, null) ?? base.VisitInvocationExpression(node);
 
-        private bool _insideConditionalExpression;
         public override SyntaxNode VisitConditionalAccessExpression(ConditionalAccessExpressionSyntax node)
         {
-            var old = _insideConditionalExpression;
-            _insideConditionalExpression = true;
+            var old = _data.CurrentMethodIsConditional;
+            _data.CurrentMethodIsConditional = true;
             try
             {
-                if (node.WhenNotNull is InvocationExpressionSyntax invocation)
-                    return TryVisitInvocationExpression(invocation, null);
-                return base.VisitConditionalAccessExpression(node);
+                if (!(node.WhenNotNull is InvocationExpressionSyntax invocation))
+                    return base.VisitConditionalAccessExpression(node);
+                
+                var rewritten = TryVisitInvocationExpression(invocation, null);
+                return node.WhenNotNull.ToString() == rewritten.ToString() ? node : rewritten;
             }
             finally
             {
-                _insideConditionalExpression = old;
+                _data.CurrentMethodIsConditional = old;
             }
         }
 
@@ -97,9 +95,8 @@ namespace LinqRewrite
             _data.CurrentMethodName = ((MethodDeclarationSyntax) owner).Identifier.ValueText;
             _data.CurrentMethodTypeParameters = ((MethodDeclarationSyntax) owner).TypeParameterList;
             _data.CurrentMethodConstraintClauses = ((MethodDeclarationSyntax) owner).ConstraintClauses;
-            _data.CurrentMethodIsConditional = node.Expression is MemberBindingExpressionSyntax;
 
-            if (!IsSupportedMethod(node)) return null;
+            if (!IsSupportedMethod(node)) return node;
             var chain = GetInvocationStepChain(node, out var lastNode);
             if (containingForEach != null) InvocationChainInsertForEach(chain, containingForEach);
             
@@ -157,53 +154,68 @@ namespace LinqRewrite
                 : base.VisitForEachStatement(node);
         }
 
-        private List<LinqStep> GetInvocationStepChain(InvocationExpressionSyntax node, out InvocationExpressionSyntax lastNode)
+        private List<LinqStep> GetInvocationStepChain(InvocationExpressionSyntax node, out ExpressionSyntax lastNode)
         {
             var chain = new List<LinqStep>();
+            var invocationExpression = node;
             lastNode = node;
             while (true)
             {
-                var arguments = new List<RewrittenValueBridge>();
-                if (!IsSupportedMethod(lastNode)) break;
-                
-                foreach (var t in lastNode.ArgumentList.Arguments)
+                if (!IsSupportedMethod(invocationExpression)) break;
+                var arguments = RewriteArguments(invocationExpression);
+
+                if (invocationExpression.Expression is MemberAccessExpressionSyntax access)
                 {
-                    var expression = t.Expression;
-                    if (expression is InvocationExpressionSyntax newInvocation)
-                    {
-                        var visited = TryVisitInvocationExpression(newInvocation, null);
-                        arguments.Add(new RewrittenValueBridge(expression, visited));
-                    }
-                    else if (expression is SimpleLambdaExpressionSyntax simpleLambdaExpression)
-                    {
-                        var visited = VisitSimpleLambdaExpression(simpleLambdaExpression);
-                        arguments.Add(new RewrittenValueBridge(expression, SyntaxFactory.ParseExpression(visited.ToString())));
-                    }
-                    else if (expression is ParenthesizedLambdaExpressionSyntax parenthesizedLambdaExpression)
-                    {
-                        var visited = VisitParenthesizedLambdaExpression(parenthesizedLambdaExpression);
-                        arguments.Add(new RewrittenValueBridge(expression, SyntaxFactory.ParseExpression(visited.ToString())));
-                    }
-                    else arguments.Add(new RewrittenValueBridge(expression));
+                    chain.Insert(0, new LinqStep(access.Name.ToString(), arguments, invocationExpression));
+                    lastNode = access.Expression;
+                    if (lastNode is InvocationExpressionSyntax invocation)
+                        invocationExpression = invocation;
+                    else break;
                 }
-                chain.Insert(0, new LinqStep(_code.GetMethodFullName(lastNode), arguments.ToArray(), lastNode));
-                if (!(lastNode.Expression is MemberAccessExpressionSyntax access) ||
-                    !(access.Expression is InvocationExpressionSyntax invocation))
+                else if (invocationExpression.Expression is MemberBindingExpressionSyntax binding)
+                {
+                    chain.Insert(0, new LinqStep(binding.Name.ToString(), arguments, invocationExpression));
+                    var conditional = (ConditionalAccessExpressionSyntax) node.Parent;
+                    lastNode = conditional.Expression;
                     break;
-                
-                lastNode = invocation;
+                }
+                else break;
             }
             return chain;
         }
 
-        private (bool, ExpressionSyntax) CheckIfRewriteInvocation(List<LinqStep> chain, InvocationExpressionSyntax node, InvocationExpressionSyntax lastNode)
+        private RewrittenValueBridge[] RewriteArguments(InvocationExpressionSyntax invocationExpression)
+        {
+            var arguments = new List<RewrittenValueBridge>();
+            foreach (var t in invocationExpression.ArgumentList.Arguments)
+            {
+                var expression = t.Expression;
+                if (expression is InvocationExpressionSyntax newInvocation)
+                {
+                    var visited = TryVisitInvocationExpression(newInvocation, null);
+                    arguments.Add(new RewrittenValueBridge(expression, visited));
+                }
+                else if (expression is SimpleLambdaExpressionSyntax simpleLambdaExpression)
+                {
+                    var visited = VisitSimpleLambdaExpression(simpleLambdaExpression);
+                    arguments.Add(new RewrittenValueBridge(expression, SyntaxFactory.ParseExpression(visited.ToString())));
+                }
+                else if (expression is ParenthesizedLambdaExpressionSyntax parenthesizedLambdaExpression)
+                {
+                    var visited = VisitParenthesizedLambdaExpression(parenthesizedLambdaExpression);
+                    arguments.Add(new RewrittenValueBridge(expression, SyntaxFactory.ParseExpression(visited.ToString())));
+                }
+                else arguments.Add(new RewrittenValueBridge(expression));
+            }
+            return arguments.ToArray();
+        }
+
+        private (bool, ExpressionSyntax) CheckIfRewriteInvocation(List<LinqStep> chain, InvocationExpressionSyntax node, ExpressionSyntax lastNode)
         {
             var (flowsIn, flowsOut, writtenInside) = GetFlows(chain);
             
-            var collection = _data.CurrentMethodIsConditional 
-                ? ((ConditionalAccessExpressionSyntax)lastNode.Parent).Expression
-                : ((MemberAccessExpressionSyntax) lastNode.Expression).Expression;
-            var collectionSymbol = _data.Semantic.GetSymbolInfo(collection).Symbol;
+            if (lastNode.ToString() == "Enumerable") lastNode = (ExpressionSyntax)lastNode.Parent.Parent;
+            var collectionSymbol = _data.Semantic.GetSymbolInfo(lastNode).Symbol;
             if (SymbolExtensions.GetType(collectionSymbol) != null) flowsIn = flowsIn.Concat(new[] {collectionSymbol}).ToArray();
             
             var currentFlow = flowsIn.Union(flowsOut)
@@ -217,14 +229,14 @@ namespace LinqRewrite
                 .GroupBy(x => x.Symbol, (x, y) => new VariableCapture(x, y.Any(z => z.Changes)))
                 .Select(x => Argument(x.Name).WithRef(x.Changes)).ToList();
 
-            if (SyntaxExtensions.IsAnonymousType(_data.Semantic.GetTypeInfo(collection).Type)) return (false, null);
+            if (SyntaxExtensions.IsAnonymousType(_data.Semantic.GetTypeInfo(lastNode).Type)) return (false, null);
 
             var returnType = _data.Semantic.GetTypeInfo(node).Type;
             if (SyntaxExtensions.IsAnonymousType(returnType) ||
                 currentFlow.Any(x => SyntaxExtensions.IsAnonymousType(SymbolExtensions.GetType(x.Symbol)))) 
                 return (false, null);
 
-            return (true, collection);
+            return (true, lastNode);
         }
 
         private void InvocationChainInsertForEach(List<LinqStep> chain, ForEachStatementSyntax forEach)
@@ -235,7 +247,7 @@ namespace LinqRewrite
                     SyntaxFactory.Parameter(forEach.Identifier), forEach.Statement)), 
             };
             chain.Insert(0,
-                new LinqStep(Constants.ForEach2, identifiers)
+                new LinqStep("System.Collections.Generic.IEnumerable<T>.ForEach<T>(System.Action<T>)", identifiers)
                 {
                     Lambda = new Lambda(forEach.Statement,
                         new[]
@@ -261,23 +273,13 @@ namespace LinqRewrite
             return (flowsIn, flowsOut, writtenInside);
         }
 
-        private bool IsSupportedMethod(InvocationExpressionSyntax invocation)
-        {
-            var name = _code.GetMethodFullName(invocation);
-            if (name == null) return false;
-            if (Constants.KnownMethods.Contains(name)) return true;
-            
-            if (!name.StartsWith("System.Collections.Generic.IEnumerable<")) return false;
-            var k = name.Replace("<", "(");
-            
-            if (!k.Contains(">.Sum(") && !k.Contains(">.Average(") && !k.Contains(">.Min(") &&
-                !k.Contains(">.Max(")) return false;
-            
-            if (k.Contains("TResult")) return false;
-            if (name == "System.Collections.Generic.IEnumerable<TSource>.Min()") return false;
-            if (name == "System.Collections.Generic.IEnumerable<TSource>.Max()") return false;
-            return true;
-        }
+        private static bool IsSupportedMethod(InvocationExpressionSyntax invocation) 
+            => invocation.Expression switch
+            {
+                MemberAccessExpressionSyntax access => Constants.RewritableMethods.Contains(access.Name.ToString()),
+                MemberBindingExpressionSyntax binding => Constants.RewritableMethods.Contains(binding.Name.ToString()),
+                _ => false
+            };
 
         private bool HasNoRewriteAttribute(SyntaxList<AttributeListSyntax> attributeLists) =>
             attributeLists.Any(x => 
@@ -286,15 +288,5 @@ namespace LinqRewrite
                 var symbol = ((IMethodSymbol) _data.Semantic.GetSymbolInfo(y).Symbol).ContainingType;
                 return symbol.ToDisplayString() == "LinqRewrite.Core.NoRewriteAttribute";
             }));
-
-        public Diagnostic CreateDiagnosticForException(Exception ex, string path)
-        {
-            while (ex.InnerException != null)
-                ex = ex.InnerException;
-
-            var message = $"roslyn-linq-rewrite exception while processing '{path}', method {_data.CurrentMethodName}: {ex.Message} -- {ex.StackTrace?.Replace("\n", "")}";
-            return Diagnostic.Create("LQRW1001", "Compiler", new LiteralString(message), DiagnosticSeverity.Error,
-                DiagnosticSeverity.Error, true, 0);
-        }
     }
 }

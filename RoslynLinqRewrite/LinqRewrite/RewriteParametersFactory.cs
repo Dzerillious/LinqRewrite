@@ -23,10 +23,7 @@ namespace LinqRewrite
 
         public static void ReturnParameters(RewriteParameters parameters)
         {
-            lock (Lock)
-            {
-                Capital.Add(parameters);
-            }
+            lock (Lock) Capital.Add(parameters);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis;
@@ -27,33 +26,13 @@ namespace LinqRewrite.Services
             _data = RewriteDataService.Instance;
         }
 
-        public ValueBridge CreateCollectionCount(ValueBridge collection, ValueBridge fromType, bool allowUnknown = false)
-        {
-            var collectionType = _data.Semantic.GetTypeInfo(fromType).Type;
-            if (collectionType is IArrayTypeSymbol) return collection.Access("Length");
-            if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.IReadOnlyCollection<")))
-                return collection.Access("Count");
-                
-            if (collectionType.ToDisplayString().StartsWith("System.Collections.Generic.ICollection<") || collectionType.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.ICollection<")))
-                return collection.Access("Count");
-                
-            if (collectionType.ToDisplayString().StartsWith("LinqRewrite.Core.SimpleList.SimpleList<int>"))
-                return collection.Access("Count");
-
-            if (!allowUnknown) return null;
-            if (collectionType.IsValueType) return null;
-            var itemType = GetItemType(collectionType);
-            if (itemType == null) return null;
-            
-            return Parenthesize(
-                ConditionalAccessExpression(
-                    ParenthesizedExpression(
-                        ((VariableBridge)collection.ToString()).As(ParseTypeName($"System.Collections.Generic.ICollection<{itemType.ToDisplayString()}>"))
-                    ),
-                    MemberBindingExpression(IdentifierName("Count"))
-                )
-            ).Access("GetValueOrDefault").Invoke();
-        }
+        public static ValueBridge CreateCollectionCount(ValueBridge collection, CollectionType collectionType) 
+            => collectionType switch
+            {
+                CollectionType.Array => (ValueBridge) collection.Access("Length"),
+                CollectionType.List => collection.Access("Count"),
+                _ => collection.Access("Count").Invoke()
+            };
 
         public ExpressionSyntax CreateMethod(string identifier)
             => (_data.CurrentMethodTypeParameters?.Parameters.Count).GetValueOrDefault() != 0
@@ -164,16 +143,13 @@ namespace LinqRewrite.Services
             return resultParams;
         }
 
-        private Lambda RenameSymbol(Lambda newLambda, ValueBridge[] replace)
+        private static Lambda RenameSymbol(Lambda newLambda, ValueBridge[] replace)
         {
             var parameters = replace.Select((x, i) => GetLambdaParameter(newLambda, i)).ToArray();
             var tokensToRename = newLambda.Body.DescendantNodesAndSelf()
-                .Where(x =>
-            {
-                if (x is IdentifierNameSyntax)
-                    return parameters.Any(y => y.Identifier.ValueText == x.ToString());
-                else return false;
-            });
+                .Where(x => x is IdentifierNameSyntax && 
+                            parameters.Any(y => y.Identifier.ValueText == x.ToString()));
+            
             var syntax = ParenthesizedLambdaExpression(
                 CreateParameters(newLambda.Parameters.Select((x, i) =>  x)),
                 newLambda.Body.ReplaceNodes(tokensToRename, (a, b) =>
@@ -186,16 +162,6 @@ namespace LinqRewrite.Services
                     throw new NotImplementedException();
                 }));
             return new Lambda(syntax);
-        }
-
-        public string GetMethodFullName(InvocationExpressionSyntax invocation)
-        {
-            var definition = (_data.Semantic.GetSymbolInfo(invocation.Expression).Symbol as IMethodSymbol)?.OriginalDefinition
-                .ToDisplayString();
-            const string iEnumerableOfTSource = "System.Collections.Generic.IEnumerable<TSource>";
-
-            return definition?.Replace("System.Collections.Generic.List<TSource>", iEnumerableOfTSource)
-                .Replace("TSource[]", iEnumerableOfTSource);
         }
 
         public string GetUniqueName(string v)

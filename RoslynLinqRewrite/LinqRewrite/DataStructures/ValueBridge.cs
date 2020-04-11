@@ -6,7 +6,7 @@ namespace LinqRewrite.DataStructures
 {
     public class  ValueBridge
     {
-        public ExpressionSyntax Value { get; }
+        public ExpressionSyntax Value { get; set; }
         
         public ValueBridge this[ValueBridge i] => this.ArrayAccess(i);
 

@@ -74,7 +74,7 @@ namespace TestsLibrary.Tests
 
         public int NullableForEachRewritten()
         {
-            NullItems?.ForEach(x => _ = 3);
+            NullItems?.Select(x => x + 3).ForEach(x => _ = 3);
             return 0;
         } //EndMethod
 

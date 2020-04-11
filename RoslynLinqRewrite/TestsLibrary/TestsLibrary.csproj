@@ -10,6 +10,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>TestsLibrary</RootNamespace>
         <AssemblyName>TestsLibrary</AssemblyName>
+        <TargetFramework>net472</TargetFramework>
         <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
     </PropertyGroup>

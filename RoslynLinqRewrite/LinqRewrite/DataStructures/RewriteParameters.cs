@@ -211,7 +211,7 @@ namespace LinqRewrite.DataStructures
             Data = RewriteDataService.Instance;
         }
         
-        public void SetData(ValueBridge collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node)
+        public void SetData(ValueBridge collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node, bool reuse)
         {
             _initialStatements.Clear();
             _finalStatements.Clear();
@@ -221,8 +221,8 @@ namespace LinqRewrite.DataStructures
             ResultIterators.Clear();
             CurrentIterator = null;
             
-            var collectionType = collection.GetType(this);
-            FirstCollection = CurrentCollection = new CollectionValueBridge(collection.ItemType(this), collectionType, collection.Count(this), collection);
+            var collectionType = Semantic.GetTypeInfo(collection).Type;
+            FirstCollection = CurrentCollection = new CollectionValueBridge(this, collectionType, collection, reuse);
             SourceSize = ResultSize = FirstCollection.Count;
 
             ReturnType = returnType;

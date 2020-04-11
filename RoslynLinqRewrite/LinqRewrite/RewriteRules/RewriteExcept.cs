@@ -15,7 +15,8 @@ namespace LinqRewrite.RewriteRules
 
             var oldLast = p.LastValue;
             var oldIterator = p.InsertIterator(collectionValue);
-            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(collectionValue.ItemType(p), collectionValue.GetType(p), collectionValue.Count(p), collectionValue.Old));
+            var collectionType = p.Data.GetTypeInfo(collectionValue).Type;
+            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, collectionValue.Old, true));
 
             var hashsetType = p.WrappedType("HashSet<", p.LastValue.Type, ">");
             var hashsetCreation = args.Length switch

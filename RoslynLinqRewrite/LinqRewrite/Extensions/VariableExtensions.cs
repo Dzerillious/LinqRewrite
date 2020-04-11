@@ -87,11 +87,5 @@ namespace LinqRewrite.Extensions
             if (size > Constants.MaximumSizeForByValStruct) changes = true;
             return new VariableCapture(symbol, changes);
         }
-
-        public static ValueBridge Count(this RewrittenValueBridge value, RewriteParameters p)
-            => p.Code.CreateCollectionCount(value.New, value.Old);
-
-        public static ValueBridge Count(this ValueBridge value, RewriteParameters p)
-            => p.Code.CreateCollectionCount(value, value);
     }
 }

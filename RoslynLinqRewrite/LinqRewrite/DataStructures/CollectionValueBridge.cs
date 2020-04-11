@@ -1,7 +1,10 @@
-﻿using System;
-using LinqRewrite.Extensions;
+﻿using LinqRewrite.Extensions;
+using LinqRewrite.Services;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using static LinqRewrite.Constants;
+using System.Linq;
+using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.DataStructures
 {
@@ -16,39 +19,32 @@ namespace LinqRewrite.DataStructures
         public CollectionType CollectionType { get; set; }
         public ValueBridge Count { get; set; }
         public TypeSyntax ItemType { get; set; }
+        public ITypeSymbol CollectionTypeSymbol { get; set; }
         
         public new TypedValueBridge this[ValueBridge i] => new TypedValueBridge(ItemType, this.ArrayAccess(i));
             
-        public CollectionValueBridge(TypeBridge itemType, TypeBridge type, ValueBridge count, ValueBridge name) : base(type, name)
+        public CollectionValueBridge(RewriteParameters p, ITypeSymbol type, ValueBridge name, bool reuse) : base(null as TypeSyntax, name)
         {
-            Count = count;
-            ItemType = itemType;
+            ItemType = SyntaxFactory.ParseTypeName(SymbolExtensions.GetItemType(type).ToDisplayString());
+            CollectionTypeSymbol = type;
+            Type = SyntaxFactory.ParseTypeName(type.ToDisplayString());
             
-            var collectionName = type.ToString();
-            if (type.Type is ArrayTypeSyntax) 
-                CollectionType = CollectionType.Array;
-            else if (collectionName.StartsWith(ListPrefix, StringComparison.OrdinalIgnoreCase))
-                CollectionType = CollectionType.List;
-            else if (collectionName.StartsWith(SimpleListPrefix, StringComparison.OrdinalIgnoreCase))
-                CollectionType = CollectionType.SimpleList;
-            else CollectionType = CollectionType.Enumerable;
+            if (type is IArrayTypeSymbol) CollectionType = CollectionType.Array;
+            else
+            {
+                var displayString = type.ToDisplayString();
+                if (displayString.StartsWith("LinqRewrite.Core.SimpleList.SimpleList<int>"))
+                    CollectionType = CollectionType.SimpleList;
+                else if (displayString.StartsWith("System.Collections.Generic.IList<") || type.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.IList<")))
+                    CollectionType = CollectionType.List;
+                else CollectionType = CollectionType.Enumerable;
+            }
+            Count = CodeCreationService.CreateCollectionCount(Value, CollectionType);
+            
+            if (reuse) Value = name.ReusableConst(p, Type, reuse && CollectionType == CollectionType.SimpleList ? true : (bool?)null);
+            if (reuse) Count = Count.ReusableConst(p, Int);
         }
-
-        public CollectionValueBridge(TypeSyntax itemType, TypeSyntax type, ValueBridge count, IdentifierNameSyntax name)
-            : this(itemType, type, count, (ValueBridge)name)
-        {
-        }
-
-        public CollectionValueBridge(TypeSyntax itemType, TypeSyntax type, ValueBridge count, LocalVariable variable)
-            : this(itemType, type, count, (ValueBridge)variable)
-        {
-        }
-
-        public CollectionValueBridge(TypeBridge itemType, TypeBridge type, ValueBridge count, LocalVariable variable)
-            : this(itemType, type, count, (ValueBridge)variable)
-        {
-        }
-
+        
         public override string ToString() => Value.ToString();
     }
 }

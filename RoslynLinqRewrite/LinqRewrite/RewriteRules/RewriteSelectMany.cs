@@ -23,9 +23,8 @@ namespace LinqRewrite.RewriteRules
             p.Iterators.Remove(p.CurrentIterator);
             p.CurrentIterator = newIterator;
                 
-            var itemType = ((ValueBridge)method.ExpressionBody).ItemType(p);
-            var collectionType = method.ReturnType(p);
-            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(itemType, collectionType, rewritten.Count(p), rewritten));
+            var collectionType = p.Data.GetTypeInfo(rewritten).Type;
+            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, rewritten, true));
             
             p.LastValue = args.Length switch
             {
