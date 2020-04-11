@@ -223,7 +223,7 @@ namespace LinqRewrite.DataStructures
             
             var collectionType = Semantic.GetTypeInfo(collection).Type;
             FirstCollection = CurrentCollection = new CollectionValueBridge(this, collectionType, collection, reuse);
-            SourceSize = ResultSize = FirstCollection.Count;
+            _sourceSize = _resultSize = FirstCollection.Count;
 
             ReturnType = returnType;
             RewriteChain = chain;

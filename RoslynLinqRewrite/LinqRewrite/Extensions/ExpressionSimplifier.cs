@@ -22,17 +22,16 @@ namespace LinqRewrite.Extensions
             for (var i = 0; i < source.Length; i++)
                 if (source[i] == '/') return source;
             
-            source = SubstituteCallsAsVariables(substitutions, reverseSubstitutions, source, ref indexer);
-            source = SubstituteMathCalls(substitutions, reverseSubstitutions, source);
+            source = SubstituteCallsAsVariables(substitutions, reverseSubstitutions, source, ref indexer, out var substitutedCount);
+            source = SubstituteMathCalls(substitutions, reverseSubstitutions, source, out var substitutedMath);
+            source = SubstituteAsVariables(substitutions, reverseSubstitutions, source, ref indexer, ref substitutedCount);
             
-            source = SubstituteAsVariables(substitutions, reverseSubstitutions, source, "[_a-zA-Z][_a-zA-Z0-9\\.]*", ref indexer);
             var parsed = Infix.TryParse(source);
-            
             if (parsed != null) source = Infix.Format(Algebraic.Expand(parsed.Value));
 
-            source = RevertSubstitutions(reverseSubstitutions, source);
-            source = RevertSubstitutions(reverseSubstitutions, source);
-            source = RevertMathSubstitutions(reverseSubstitutions, source);
+            for (var i = 0; i < substitutedCount; i++)
+                source = RevertSubstitutions(reverseSubstitutions, source);
+            if (substitutedMath) source = RevertMathSubstitutions(reverseSubstitutions, source);
             return source;
         }
 
@@ -84,10 +83,12 @@ namespace LinqRewrite.Extensions
         }
 
         private static string SubstituteMathCalls(Dictionary<string, string> substitutions, Dictionary<string, string> reverseSubstitutions,
-            string source)
+            string source, out bool substituted)
         {
+            substituted = false;
             var matches = Regex.Matches(source, "Math\\.(\\w+\\()");
             if (matches.Count == 0) return source;
+            substituted = true;
             
             var stringBuilder = new StringBuilder();
             var offset = 0;
@@ -107,12 +108,13 @@ namespace LinqRewrite.Extensions
             return stringBuilder.ToString();
         }
         
+        private static readonly Regex VariableRegex = new Regex("[_a-zA-Z][_a-zA-Z0-9\\.]*");
         private static string SubstituteAsVariables(Dictionary<string, string> substitutions, Dictionary<string, string> reverseSubstitutions,
-            string source, string substitute, ref int indexer)
+            string source, ref int indexer, ref int substitutedCount)
         {
-            var regex = new Regex(substitute);
-            var matches = regex.Matches(source);
+            var matches = VariableRegex.Matches(source);
             if (matches.Count == 0) return source;
+            substitutedCount++;
             
             var stringBuilder = new StringBuilder();
             var offset = 0;
@@ -133,10 +135,12 @@ namespace LinqRewrite.Extensions
         }
         
         private static string SubstituteCallsAsVariables(Dictionary<string, string> substitutions, Dictionary<string, string> reverseSubstitutions,
-            string source, ref int indexer)
+            string source, ref int indexer, out int substitutedCount)
         {
+            substitutedCount = 0;
             var matches = FindCalls(source);
             if (matches.Count == 0) return source;
+            substitutedCount = 1;
             
             var stringBuilder = new StringBuilder();
             var offset = 0;
@@ -216,7 +220,7 @@ namespace LinqRewrite.Extensions
             var offset = 0;
             foreach (Match match in matches)
             {
-                reverseSubstitutions.TryGetValue(match.Value, out string found);
+                reverseSubstitutions.TryGetValue(match.Value, out var found);
 
                 stringBuilder.Append(source.Substring(offset, match.Index - offset));
                 stringBuilder.Append(found);
@@ -235,7 +239,7 @@ namespace LinqRewrite.Extensions
             var offset = 0;
             foreach (Match match in matches)
             {
-                if (!reverseSubstitutions.TryGetValue(match.Value, out string found))
+                if (!reverseSubstitutions.TryGetValue(match.Value, out var found))
                     continue;
 
                 stringBuilder.Append(source.Substring(offset, match.Index - offset));
