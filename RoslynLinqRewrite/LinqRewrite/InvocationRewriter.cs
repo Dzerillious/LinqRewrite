@@ -39,15 +39,15 @@ namespace LinqRewrite
 
         private static void RewriteComposite(RewriteParameters parameters, string[] names)
         {
+            if (parameters.Data.CurrentMethodIsConditional && parameters.ReturnType.Type.ToString() == "void")
+                parameters.InitialAdd(If(parameters.CurrentCollection.IsEqual(null), ReturnStatement()));
+            
             if (!MethodsCreateArray.Contains(names.First())) RewriteCollectionEnumeration.Rewrite(parameters, Array.Empty<RewrittenValueBridge>(), true);
             for (var i = 0; i < names.Length; i++)
             {
                 parameters.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
                 RewritePart(names[i], parameters, i);
             }
-            
-            if (parameters.Data.CurrentMethodIsConditional && parameters.ReturnType.Type.ToString() == "void")
-                parameters.InitialAdd(If(parameters.CurrentCollection.IsEqual(null), ReturnStatement()));
 
             if (parameters.HasResultMethod) return;
             parameters.ForAdd(YieldStatement(SyntaxKind.YieldReturnStatement, parameters.LastValue));

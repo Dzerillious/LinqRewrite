@@ -85,10 +85,4 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" Condition="'$(TargetFramework)' == 'net472'" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="test.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-  </ItemGroup>
 </Project>

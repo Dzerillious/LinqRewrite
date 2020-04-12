@@ -51,12 +51,11 @@ namespace LinqRewrite.Services
 
             var lambdaParams = replaceParameters.Select((x, i) => GetLambdaParameter(oldLambda, i)).ToArray();
             var currentFlow = _data.Semantic.AnalyzeDataFlow(oldLambda.Body);
-            var currentCaptures = currentFlow
-                .DataFlowsOut
-                .Union(currentFlow.DataFlowsIn)
-                .Where(x => lambdaParams.All(y => x.Name != y.Identifier.ValueText) &&(x as IParameterSymbol)?.IsThis != true)
-                .Select(x => CreateVariableCapture(x, currentFlow.DataFlowsOut, currentFlow.WrittenInside))
-                .ToList();
+            var changing = currentFlow.DataFlowsOut.Concat(currentFlow.WrittenInside).ToArray();
+            var currentCaptures = currentFlow.DataFlowsIn
+                .Where(x => lambdaParams.All(y => x.Name != y.Identifier.ValueText) && (x as IParameterSymbol)?.IsThis != true)
+                .Select(x => CreateVariableCapture(x, changing))
+                .ToArray();
 
             if (!p.HasResultMethod && p.Data.CurrentMethodParams.Any(x => x.Modifiers.Any()))
             {
@@ -70,9 +69,8 @@ namespace LinqRewrite.Services
             return new TypedValueBridge(returnType, InlineOrCreateMethod(p, currentFlow, newLambda, returnType, currentCaptures, replaceParameters));
         }
 
-        private ExpressionSyntax GetStatementExpression(StatementSyntax statement)
-        {
-            return statement switch
+        private static ExpressionSyntax GetStatementExpression(StatementSyntax statement) 
+            => statement switch
             {
                 ExpressionStatementSyntax expressionStatementSyntax => expressionStatementSyntax.Expression,
                 LocalDeclarationStatementSyntax localDeclarationStatementSyntax => localDeclarationStatementSyntax
@@ -81,9 +79,8 @@ namespace LinqRewrite.Services
                 ReturnStatementSyntax returnStatementSyntax => returnStatementSyntax.Expression,
                 _ => null
             };
-        }
 
-        public TypeSyntax GetLambdaReturnType(SemanticModel semantic, LambdaExpressionSyntax lambdaExpression) 
+        public static TypeSyntax GetLambdaReturnType(SemanticModel semantic, LambdaExpressionSyntax lambdaExpression) 
             => lambdaExpression.ExpressionBody == null 
                 ? semantic.GetTypeFromExpression(GetStatementExpression(lambdaExpression.Block.Statements.Last()))
                 : semantic.GetTypeFromExpression(lambdaExpression.ExpressionBody);

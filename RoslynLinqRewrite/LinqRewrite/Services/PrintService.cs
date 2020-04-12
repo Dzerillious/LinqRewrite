@@ -10,25 +10,21 @@ namespace LinqRewrite.Services
         private static PrintService _instance;
         public static PrintService Instance => _instance ??= new PrintService();
 
-        public PrintService()
-        {
-            //File.CreateText("logs.txt").Close();
-        }
-
         public int PrintHelp()
         {
             PrintLine($"roslyn-linq-rewrite {typeof(Program).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion}");
-            PrintLine(
-                $@"github.com/antiufo/roslyn-linq-rewrite
+            PrintLine($@"github.com/antiufo/roslyn-linq-rewrite
 
 Usage:
-  roslyn-linq-rewrite <path-to-csproj> [msbuild-options]
-  roslyn-linq-rewrite <path-to-sln> [msbuild-options]
-  roslyn-linq-rewrite --show <path-to-cs>
+  roslyn-linq-rewrite <path-to-csproj>
+  roslyn-linq-rewrite <path-to-sln>
+  roslyn-linq-rewrite <path-to-cs>
+  roslyn-linq-rewrite <path-to-csx>
 
-If you prefer to call msbuild directly, use msbuild /t:Rebuild /p:CscToolPath=""{Path.GetDirectoryName(typeof(Program).Assembly.Location)}""
-However, you won't see statistics about the rewritten methods.
-
+  roslyn-linq-rewrite <path-to-csproj> --rewriteDst=""Folder where to rewrite""
+  roslyn-linq-rewrite <path-to-sln> --rewriteDst=""Folder where to rewrite""
+  roslyn-linq-rewrite <path-to-cs> --rewriteDst=""Folder where to rewrite""
+  roslyn-linq-rewrite <path-to-csx> --rewriteDst=""Folder where to rewrite""
 ");
             return 0;
         }
@@ -49,19 +45,6 @@ However, you won't see statistics about the rewritten methods.
             Console.ResetColor();
         }
 
-        public bool PrintFile(string path)
-        {
-            PrintLine();
-            if (!File.Exists(path)) return false;
-            
-            PrintLine(File.ReadAllText(path));
-            return true;
-        }
-
-        public void PrintLine(string line = "")
-        {
-            Console.WriteLine(line);
-            //File.AppendAllLines("logs.txt", new []{line});
-        }
+        public void PrintLine(string line = "") => Console.WriteLine(line);
     }
 }

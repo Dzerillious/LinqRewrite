@@ -220,10 +220,11 @@ namespace LinqRewrite
                 .Where(x => x is IdentifierNameSyntax)
                 .Select(x => _data.Semantic.GetSymbolInfo(x).Symbol)
                 .Where(x => x is IFieldSymbol)).ToArray();
-            
+
+            var changingParams = flowsOut.Concat(flows.WrittenInside).ToArray();
             var currentFlow = flowsIn.Union(flowsOut)
                 .Where(x => (x as IParameterSymbol)?.IsThis != true)
-                .Select(x => VariableExtensions.CreateVariableCapture(x, flowsOut, flows.WrittenInside));
+                .Select(x => VariableExtensions.CreateVariableCapture(x, changingParams));
             
             _data.CurrentMethodParams = currentFlow
                 .Select(x => CreateParameter(x.Name, SymbolExtensions.GetType(x.Symbol)).WithRef(x.Changes))

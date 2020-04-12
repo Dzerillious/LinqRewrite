@@ -9,7 +9,7 @@ namespace LinqRewrite.RewriteRules
     public static class RewriteElementAtOrDefault
     {
         public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
-            => ConditionalExpression(p.ResultSize <= args[0],
+            => ConditionalExpression(p.ResultSize > args[0],
                 ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + args[0]),
                 Default(p.ReturnType));
         

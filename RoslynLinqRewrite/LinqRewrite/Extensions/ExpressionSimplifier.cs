@@ -146,7 +146,7 @@ namespace LinqRewrite.Extensions
             var offset = 0;
             foreach (var (from, count) in matches)
             {
-                var value = source.Substring(from, count);
+                string value = source.Substring(from, count);
                 string variable = substitutions.TryGetValue(value, out string found)
                     ? found : "xxx" + indexer++;
 

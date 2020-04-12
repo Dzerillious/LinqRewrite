@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using LinqRewrite.DataStructures;
+using LinqRewrite.Services;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -248,7 +249,7 @@ namespace LinqRewrite.Extensions
             => SyntaxFactory.ArrayType(type, new SyntaxList<ArrayRankSpecifierSyntax>(ArrayRankSpecifier(CreateSeparatedExpressionList(SyntaxFactory.OmittedArraySizeExpression(Token(SyntaxKind.OmittedArraySizeExpressionToken))))));
 
         public static TypeBridge ReturnType(this LambdaExpressionSyntax lambda, RewriteParameters p)
-            => p.Code.GetLambdaReturnType(p.Semantic, lambda);
+            => CodeCreationService.GetLambdaReturnType(p.Semantic, lambda);
 
         public static ValueBridge Parenthesize(ExpressionSyntax expression)
             => ParenthesizedExpression(expression);
