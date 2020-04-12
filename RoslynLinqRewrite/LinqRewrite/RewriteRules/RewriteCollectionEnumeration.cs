@@ -8,6 +8,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args, bool? reuseVariables = null)
         {
+            if (!p.AssertNotNull(p.CurrentCollection)) return;
             p.AddIterator(new RewrittenValueBridge(p.CurrentCollection));
             RewriteOther(p, p.CurrentCollection, null, false, reuseVariables);
         }

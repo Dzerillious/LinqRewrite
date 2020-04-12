@@ -40,8 +40,9 @@ namespace LinqRewrite.DataStructures
                 else CollectionType = CollectionType.Enumerable;
             }
             Count = CodeCreationService.CreateCollectionCount(Value, CollectionType);
-            
-            if (reuse) Value = name.ReusableConst(p, Type, reuse && CollectionType == CollectionType.SimpleList ? true : (bool?)null);
+
+            if (CollectionType == CollectionType.Enumerable) return;
+            if (reuse) Value = name.ReusableConst(p, Type, CollectionType == CollectionType.SimpleList ? true : (bool?)null);
             if (reuse) Count = Count.ReusableConst(p, Int);
         }
         

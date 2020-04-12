@@ -6,7 +6,7 @@ namespace BenchmarkLibrary
 {
     public class AverageBenchmarks
     {
-        private int[] Items = Enumerable.Range(0, 100).ToArray();
+        private int[] Items = new int[0];
         //
         // [NoRewrite]
         // [Benchmark]
@@ -42,25 +42,20 @@ namespace BenchmarkLibrary
         // }
         
         [Benchmark]
-        public double ArrayAverage2()
-        {
-            return Items.Sum();
-        }
-        
-        [Benchmark]
         public double ArrayAverageRewritten2()
         {
-            var sum = ExtendedLinq.Range(0, Items.Length / 10, 10).Sum(x => Items.Unchecked().Skip(x).Take(10).Sum());
+            var sum = 0;
+            ExtendedLinq.Range(0, Items.Length / 10, 10).ForEach(x => sum += Items.Unchecked().Skip(x).Take(10).Sum());
             sum += Items.Unchecked().Skip(Items.Length - Items.Length % 10).Take(Items.Length % 10).Sum();
             return sum;
         }
         
-        [Benchmark]
-        public double ArrayAverageRewritten3()
-        {
-            var sum = ExtendedLinq.Range(0, Items.Length / 5, 5).Sum(x => Items.Unchecked().Skip(x).Take(5).Sum());
-            sum += Items.Unchecked().Skip(Items.Length - Items.Length % 5).Take(Items.Length % 5).Sum();
-            return sum;
-        }
+        // [Benchmark]
+        // public double ArrayAverageRewritten3()
+        // {
+        //     var sum = ExtendedLinq.Range(0, Items.Length / 5, 5).Sum(x => Items.Unchecked().Skip(x).Take(5).Sum());
+        //     sum += Items.Unchecked().Skip(Items.Length - Items.Length % 5).Take(Items.Length % 5).Sum();
+        //     return sum;
+        // }
     }
 }

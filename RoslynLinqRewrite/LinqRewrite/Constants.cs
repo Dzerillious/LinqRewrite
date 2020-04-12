@@ -29,27 +29,28 @@ namespace LinqRewrite
         public static readonly HashSet<string> RewritableMethods = new HashSet<string>
         {
             "ToDictionary", "ToArray", "ToList", "ToSimpleList",
-            "Reverse",
             
             "First", "FirstOrDefault", "Last", "LastOrDefault",
             "Single", "SingleOrDefault", "ElementAt", "ElementAtOrDefault",
             
-            "Count", "LongCount", "Aggregate",
+            "Count", "LongCount", "Sum", "Average",
+            "Max", "Min", "Aggregate",
             
             "Any", "All", "Contains",
             
             "ForEach",
             
             "Select", "Where", "Cast", "OfType", "SelectMany",
-            "Range", "Repeat", "Empty",
             
-            "Skip", "SkipWhile", "Take", "TakeWhile",
+            "Skip", "SkipWhile", "Take", "TakeWhile", "Reverse",
             
             "Concat", "Union", "Except", "Intersect", "Distinct",
             
             "SequenceEqual", "Zip",
             
             "Join", "GroupBy", "GroupJoin",
+            
+            "Range", "Repeat", "Empty",
             
             "Unchecked", "WithMaxSize", "WithResultSize"
         };

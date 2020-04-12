@@ -100,7 +100,7 @@ namespace LinqRewrite
             var chain = GetInvocationStepChain(node, out var lastNode);
             if (containingForEach != null) InvocationChainInsertForEach(chain, containingForEach);
             
-            var (rewrite, collection) = CheckIfRewriteInvocation(chain, node, lastNode);
+            var (rewrite, collection) = CheckIfRewriteInvocation(node, lastNode);
             if (!rewrite) return null;
             
             var returnType = _data.Semantic.GetTypeFromExpression(node);
@@ -210,17 +210,20 @@ namespace LinqRewrite
             return arguments.ToArray();
         }
 
-        private (bool, ExpressionSyntax) CheckIfRewriteInvocation(List<LinqStep> chain, InvocationExpressionSyntax node, ExpressionSyntax lastNode)
+        private (bool, ExpressionSyntax) CheckIfRewriteInvocation(InvocationExpressionSyntax node, ExpressionSyntax lastNode)
         {
-            var (flowsIn, flowsOut, writtenInside) = GetFlows(chain);
+            if (lastNode.ToString() == "Enumerable" || lastNode.ToString() == "ExtendedLinq") lastNode = (ExpressionSyntax)lastNode.Parent.Parent;
+            var flows = _data.Semantic.AnalyzeDataFlow(node);
+            var flowsOut = flows.DataFlowsOut.ToArray();
             
-            if (lastNode.ToString() == "Enumerable") lastNode = (ExpressionSyntax)lastNode.Parent.Parent;
-            var collectionSymbol = _data.Semantic.GetSymbolInfo(lastNode).Symbol;
-            if (SymbolExtensions.GetType(collectionSymbol) != null) flowsIn = flowsIn.Concat(new[] {collectionSymbol}).ToArray();
+            var flowsIn = flows.DataFlowsIn.Concat(node.DescendantNodesAndSelf()
+                .Where(x => x is IdentifierNameSyntax)
+                .Select(x => _data.Semantic.GetSymbolInfo(x).Symbol)
+                .Where(x => x is IFieldSymbol)).ToArray();
             
             var currentFlow = flowsIn.Union(flowsOut)
                 .Where(x => (x as IParameterSymbol)?.IsThis != true)
-                .Select(x => VariableExtensions.CreateVariableCapture(x, flowsOut, writtenInside));
+                .Select(x => VariableExtensions.CreateVariableCapture(x, flowsOut, flows.WrittenInside));
             
             _data.CurrentMethodParams = currentFlow
                 .Select(x => CreateParameter(x.Name, SymbolExtensions.GetType(x.Symbol)).WithRef(x.Changes))
@@ -256,21 +259,6 @@ namespace LinqRewrite
                                 _data.Semantic.GetTypeInfo(forEach.Type).ConvertedType)
                         })
                 });
-        }
-
-        private (ISymbol[], ISymbol[], ISymbol[]) GetFlows(List<LinqStep> chain)
-        {
-            var flowsIn = Array.Empty<ISymbol>();
-            var flowsOut = Array.Empty<ISymbol>();
-            var writtenInside = Array.Empty<ISymbol>();
-            foreach (var item in chain)
-            {
-                var dataFlow = _data.Semantic.AnalyzeDataFlow(item.Invocation);
-                flowsIn = flowsIn.Union(dataFlow.DataFlowsIn).ToArray();
-                flowsOut = flowsOut.Union(dataFlow.DataFlowsOut).ToArray();
-                writtenInside = writtenInside.Union(dataFlow.WrittenInside).ToArray();
-            }
-            return (flowsIn, flowsOut, writtenInside);
         }
 
         private static bool IsSupportedMethod(InvocationExpressionSyntax invocation) 
