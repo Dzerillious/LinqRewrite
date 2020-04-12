@@ -1,5 +1,5 @@
 # roslyn-linq-rewrite
-This tool compiles C# code by first rewriting the syntax trees of LINQ expressions using plain procedural code, minimizing allocations and dynamic dispatch.
+This tool compiles C# code by first rewriting the syntax trees of LINQ expressions using plain procedural code, minimizing allocations and dynamic dispatch, inlining lambdas, optimizing simple math expressions and using known information for optimization.
 
 ## Example input code
 ```csharp
@@ -39,6 +39,7 @@ private int Method1_ProceduralLinq1(int[] arr, int q)
 It is based on https://github.com/antiufo/roslyn-linq-rewrite. But improves performance of not optimal ways (as using lists when not needed). Also implements a lot more operators and uses a lot more generic approach.
 For not known result sizes implemented SimpleList<T> which is in the halfway between .Net Core Span<T> and List<T>. (But compatible with both .Net Core and .Net Framework).
 
+## Rewriting of not known result size
 ```csharp
 public void Method1()
 {
@@ -117,7 +118,7 @@ LinqRewrite.Core.SimpleList.SimpleList<int> Method1_ProceduralLinq1(int[] arr, i
 * `OrderBy`, `OrderByDescending`, `ThenBy`, `ThenbyDescending`
 * `ToLookup`
 
-## Usage
+## Additional
 * If you need to exclude a specific method, class or struct, apply a `[NoRewrite]` attribute to that method, class or struct
 ```csharp
 [NoRewrite]
@@ -129,7 +130,7 @@ public void Method1()
 }
 ```
 * If you want to further optimize if you ensure conditions you can use Unchecked()
-* 
+* for example for sum of groups
 ```csharp
 public double ArrayAverageRewritten2()
 {
@@ -181,5 +182,24 @@ int ArrayAverageRewritten2_ProceduralLinq2(int[] Items)
 * Uses existing LINQ syntax, no need for `AsQueryExpr().Run()`
 * No allocations for `Expression<>` trees and enumerator boxing
 * Parallel LINQ is not supported (i.e. left intact)
+* Using a lot more information for optimization (For example different collection enumeration for different sources)
+* More operators
 * No support for F#
+
+## Comparsion to old roslyn-linq-rewrite
+* More operators (Old could rewrite only simple operators)
+* Math optimization (Without optimization of division because of different int and double division)
+* Using a lot more information for optimization (For example different collection enumeration for different sources)
+* Using more low end code (Using arrays for enlarging, not List<T>)
+* Working on new project types
+* Created over 1000 of tests
+
+## Comparsion to LinqFaster
+* Rewriting chained operators
+* When chaining operators, fewer allocations in rewritten
+* LinqFaster only on arrays
+* LinqFaster implements parallel and SIMD operations
+* LinqFaster not lazily evaluated
+* Rewritten linq does not alloc any arrays in Source.Select(x => x + 3).ToArray()
+* Rewritten linq uses enlarging for filling array of unknown size
 
