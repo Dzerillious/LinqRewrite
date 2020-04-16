@@ -18,7 +18,7 @@ namespace LinqRewrite.RewriteRules
             var collectionType = p.Data.GetTypeInfo(collectionValue).Type;
             RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, collectionValue.Old, true));
 
-            var hashsetType = p.WrappedType("HashSet<", p.LastValue.Type, ">");
+            var hashsetType = p.WrappedType("System.Collections.Generic.HashSet<", p.LastValue.Type, ">");
             var hashsetCreation = args.Length switch
             {
                 1 => New(hashsetType),

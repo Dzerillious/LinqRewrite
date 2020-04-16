@@ -20,8 +20,8 @@ namespace LinqRewrite.RewriteRules
                 "int" => p.GlobalVariable(Int, int.MinValue),
                 "long" => p.GlobalVariable(Long, long.MinValue),
                 "float" => p.GlobalVariable(Float, float.MinValue),
-                "double" => p.GlobalVariable(VariableExtensions.Double, double.MinValue),
-                "decimal" => p.GlobalVariable(VariableExtensions.Decimal, decimal.MinValue),
+                "double" => p.GlobalVariable(Double, double.MinValue),
+                "decimal" => p.GlobalVariable(Decimal, decimal.MinValue),
                 _ => null
             };
             

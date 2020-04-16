@@ -15,7 +15,7 @@ namespace LinqRewrite.RewriteRules
 
             p.WrapWithTry = true;
             var itemType = collectionValue.ItemType(p);
-            var enumeratorVariable = p.GlobalVariable(ParseTypeName($"IEnumerator<{itemType}>"));
+            var enumeratorVariable = p.GlobalVariable(ParseTypeName($"System.Collections.Generic.IEnumerator<{itemType}>"));
             p.InitialAdd(enumeratorVariable.Assign(Parenthesize(collectionValue.Cast(ParseTypeName($"IEnumerable<{itemType}>")))
                 .Access("GetEnumerator").Invoke()));
 

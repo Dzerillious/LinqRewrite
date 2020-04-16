@@ -205,6 +205,7 @@
     <ItemGroup>
         <Compile Include="AverageBenchmarks.cs" />
         <Compile Include="FirstBenchmarks.cs" />
+        <Compile Include="GroupByBenchmarks.cs" />
         <Compile Include="LastBenchmarks.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

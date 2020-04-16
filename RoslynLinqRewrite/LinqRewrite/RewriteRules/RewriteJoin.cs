@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
-using static LinqRewrite.Extensions.VariableExtensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LinqRewrite.RewriteRules
@@ -24,18 +22,17 @@ namespace LinqRewrite.RewriteRules
             var resultSelectorValue = args[3];
             var comparerValue = args.Length == 5 ? args[4] : null;
 
-            var lookupType = ParseTypeName($"SimpleLookup<{innerValue.ItemType(p).Type},{innerReturnType}>");
+            var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{innerValue.ItemType(p).Type},{innerReturnType}>");
             var lookupVariable = p.GlobalVariable(lookupType, lookupType.Access("CreateForJoin")
                 .Invoke(innerValue, innerKeySelector, comparerValue));
 
             var itemValue = p.LastValue;
-            var groupingType = ParseTypeName($"SimpleLookup<{innerValue.ItemType(p).Type},{outerReturnType}>.Grouping");
+            var groupingType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{innerValue.ItemType(p).Type},{outerReturnType}>.Grouping");
             var groupingVariable = p.GlobalVariable(groupingType);
             p.ForAdd(groupingVariable.Assign(lookupVariable.Access("GetGrouping")
                 .Invoke(outerKeySelector.Inline(p, itemValue), false)));
             
             p.ForAdd(If(groupingVariable.IsEqual(null), Continue()));
-            
             var rewritten = new RewrittenValueBridge(((LambdaExpressionSyntax) innerKeySelector.Old).ExpressionBody, groupingVariable);
 
             var iterator = p.GlobalVariable(innerReturnType);

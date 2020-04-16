@@ -9,7 +9,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            var hashsetType = p.WrappedType("HashSet<", p.LastValue.Type, ">");
+            var hashsetType = p.WrappedType("System.Collections.Generic.HashSet<", p.LastValue.Type, ">");
             var hashsetVariable = p.GlobalVariable(hashsetType, args.Length switch
             {
                 0 => New(hashsetType),

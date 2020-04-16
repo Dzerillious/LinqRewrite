@@ -13,7 +13,7 @@ namespace LinqRewrite.RewriteRules
             var collectionValue = args[0];
             if (!p.AssertNotNull(collectionValue)) return;
 
-            var hashsetType = p.WrappedType("HashSet<", p.LastValue.Type, ">");
+            var hashsetType = p.WrappedType("System.Collections.Generic.HashSet<", p.LastValue.Type, ">");
             var hashsetCreation = args.Length switch
             {
                 1 => New(hashsetType),

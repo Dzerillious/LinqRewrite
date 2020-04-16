@@ -20,8 +20,8 @@ namespace LinqRewrite.RewriteRules
                 "int" => p.GlobalVariable(Int, int.MaxValue),
                 "long" => p.GlobalVariable(Long, long.MaxValue),
                 "float" => p.GlobalVariable(Float, float.MaxValue),
-                "double" => p.GlobalVariable(VariableExtensions.Double, double.MaxValue),
-                "decimal" => p.GlobalVariable(VariableExtensions.Decimal, decimal.MaxValue),
+                "double" => p.GlobalVariable(Double, double.MaxValue),
+                "decimal" => p.GlobalVariable(Decimal, decimal.MaxValue),
                 _ => null
             };
             

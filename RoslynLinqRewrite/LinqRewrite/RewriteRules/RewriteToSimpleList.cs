@@ -31,7 +31,7 @@ namespace LinqRewrite.RewriteRules
                 _ => 2
             };
             var result = RewriteToArray.RewriteOther(p, enlarging, p.LastValue.Type);
-            var listResultType = SyntaxFactory.ParseTypeName($"SimpleList<{p.LastValue.Type}>");
+            var listResultType = SyntaxFactory.ParseTypeName($"LinqRewrite.Core.SimpleList.SimpleList<{p.LastValue.Type}>");
 
             var finalResult = p.GlobalVariable(listResultType);
             p.ResultAdd(finalResult.Assign(New(listResultType)));
