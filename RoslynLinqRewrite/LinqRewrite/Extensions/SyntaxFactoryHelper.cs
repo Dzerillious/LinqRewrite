@@ -157,6 +157,20 @@ namespace LinqRewrite.Extensions
             return new TypedValueBridge(Int, IdentifierName(tmpVariable));
         }
 
+        public static TypedValueBridge ReusableForConst(this ValueBridge e, RewriteParameters p, TypeBridge type, IteratorParameters iterator, bool? reuse = null)
+        {
+            if (reuse == false) return new TypedValueBridge(type, e);
+            if (reuse == null && IsReusable(e))
+            {
+                if (e is LocalVariable localVariable)
+                    localVariable.IsGlobal = true;
+                return new TypedValueBridge(type, e);
+            }
+
+            var tmpVariable = p.GlobalVariable(type, e, iterator);
+            return new TypedValueBridge(Int, IdentifierName(tmpVariable));
+        }
+
         public static TypedValueBridge Reusable(this ValueBridge e, RewriteParameters p, TypeBridge type, bool? reuse = null)
         {
             if (reuse == false) return new TypedValueBridge(type, e);

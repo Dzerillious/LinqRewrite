@@ -42,9 +42,8 @@ namespace LinqRewrite.Extensions
         {
             var rankSpecifiers = arrayType.RankSpecifiers;
             var newRankSpecifiers = rankSpecifiers.Select((x, i) 
-                => i == 0
-                    ? SyntaxFactory.ArrayRankSpecifier(SyntaxFactoryHelper.CreateSeparatedList((ExpressionSyntax) size))
-                    : x);
+                => i == 0 ? SyntaxFactory.ArrayRankSpecifier(SyntaxFactoryHelper.CreateSeparatedList((ExpressionSyntax) size)) : x);
+            
             return SyntaxFactory.ArrayCreationExpression(
                 arrayType.WithRankSpecifiers(new SyntaxList<ArrayRankSpecifierSyntax>(newRankSpecifiers)), SyntaxFactory.InitializerExpression(SyntaxKind.ArrayInitializerExpression,
                     SyntaxFactory.SeparatedList(items)));
@@ -54,9 +53,8 @@ namespace LinqRewrite.Extensions
         {
             var rankSpecifiers = arrayType.RankSpecifiers;
             var newRankSpecifiers = rankSpecifiers.Select((x, i) 
-                => i == 0
-                    ? SyntaxFactory.ArrayRankSpecifier(SyntaxFactoryHelper.CreateSeparatedList((ExpressionSyntax) size))
-                    : x);
+                => i == 0 ? SyntaxFactory.ArrayRankSpecifier(SyntaxFactoryHelper.CreateSeparatedList((ExpressionSyntax) size)) : x);
+            
             return SyntaxFactory.ArrayCreationExpression(
                 arrayType.WithRankSpecifiers(new SyntaxList<ArrayRankSpecifierSyntax>(newRankSpecifiers)));
         }
@@ -65,9 +63,8 @@ namespace LinqRewrite.Extensions
         {
             var rankSpecifiers = arrayType.RankSpecifiers;
             var newRankSpecifiers = rankSpecifiers.Select((x, i) 
-                => i == 0
-                    ? SyntaxFactory.ArrayRankSpecifier(SyntaxFactoryHelper.CreateSeparatedList((ExpressionSyntax) size))
-                    : x);
+                => i == 0 ? SyntaxFactory.ArrayRankSpecifier(SyntaxFactoryHelper.CreateSeparatedList((ExpressionSyntax) size)) : x);
+            
             return SyntaxFactory.ArrayCreationExpression(
                 arrayType.WithRankSpecifiers(new SyntaxList<ArrayRankSpecifierSyntax>(newRankSpecifiers)));
         }

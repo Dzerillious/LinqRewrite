@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using LinqRewrite.Core;
-using MathNet.Symbolics;
 using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -31,7 +30,13 @@ namespace LinqRewrite.Services
                 if (args.First().EndsWith(".sln"))
                     CompileSolution(args[0]);
                 else if (args.First().EndsWith(".csproj"))
-                    CompileProject(args[0]);
+                {
+                    MSBuildLocator.RegisterDefaults();
+                    var msWorkspace = MSBuildWorkspace.Create();
+                    var project = msWorkspace.OpenProjectAsync(args[0]).Result;
+                    if (Directory.Exists(Path.GetDirectoryName(project.OutputFilePath))) Directory.Delete(Path.GetDirectoryName(project.OutputFilePath), true);
+                    CompileProject(msWorkspace, project, project.OutputFilePath);
+                }
                 else CompileFile(args[0]);
             }
             catch (ProcessException ex)
@@ -49,7 +54,13 @@ namespace LinqRewrite.Services
                 if (args.First().EndsWith(".sln"))
                     RewriteSolution(args[0], dstDir);
                 else if (args.First().EndsWith(".csproj"))
-                    RewriteProject(args[0], dstDir);
+                {
+                    MSBuildLocator.RegisterDefaults();
+                    var msWorkspace = MSBuildWorkspace.Create();
+                    var project = msWorkspace.OpenProjectAsync(args[0]).Result;
+                    if (Directory.Exists(dstDir)) Directory.Delete(dstDir, true);
+                    RewriteProject(msWorkspace, project, dstDir);
+                }
                 else RewriteFile(args[0], dstDir);
             }
             catch (ProcessException ex)
@@ -64,25 +75,24 @@ namespace LinqRewrite.Services
             MSBuildLocator.RegisterDefaults();
             var msWorkspace = MSBuildWorkspace.Create();
             var solution = msWorkspace.OpenSolutionAsync(path).Result;
-            solution.Projects.ForEach(x => RewriteProject(x, dstDir));
+            solution.Projects.ForEach(x => RewriteProject(msWorkspace, x, dstDir));
         }
 
         public void CompileSolution(string path)
         {
-            throw new NotImplementedException("Not implemented solution compilation");
+            PrintService.Instance.PrintLine("You cannot compile solution. Compile result project.");
         }
 
-        public void RewriteProject(string path, string dstDir)
+        public void RewriteProject(MSBuildWorkspace workspace, Project project, string dstDir)
         {
-            MSBuildLocator.RegisterDefaults();
-            var msWorkspace = MSBuildWorkspace.Create();
-            var project = msWorkspace.OpenProjectAsync(path).Result;
-            Directory.Delete(dstDir, true);
-            RewriteProject(project, dstDir);
-        }
-
-        public void RewriteProject(Project project, string dstDir)
-        {
+            foreach (var referencedProject in project.AllProjectReferences)
+            {
+                var projectToCompile = workspace.CurrentSolution.GetProject(referencedProject.ProjectId);
+                Directory.Delete(Path.GetDirectoryName(projectToCompile.OutputFilePath), true);
+                CompileProject(workspace, projectToCompile, projectToCompile.OutputFilePath);
+                project = project.AddMetadataReferences(projectToCompile.MetadataReferences);
+                project = project.AddMetadataReference(MetadataReference.CreateFromFile(projectToCompile.OutputFilePath));
+            }
             var documents = project.Documents.ToArray();
             var syntaxTrees = project.Documents.Select(document => CSharpSyntaxTree.ParseText(File.ReadAllText(document.FilePath))).ToList();
 
@@ -101,11 +111,16 @@ namespace LinqRewrite.Services
                 CopyFile(document.FilePath, projectDir, dstDir);
         }
 
-        public void CompileProject(string path)
+        public void CompileProject(MSBuildWorkspace workspace, Project project, string dstPath)
         {
-            var msWorkspace = MSBuildWorkspace.Create();
-            var p = msWorkspace.OpenProjectAsync(path);
-            var project = p.Result;
+            foreach (var referencedProject in project.AllProjectReferences)
+            {
+                var projectToCompile = workspace.CurrentSolution.GetProject(referencedProject.ProjectId);
+                Directory.Delete(Path.GetDirectoryName(projectToCompile.OutputFilePath), true);
+                CompileProject(workspace, projectToCompile, projectToCompile.OutputFilePath);
+                project = project.AddMetadataReferences(projectToCompile.MetadataReferences);
+                project = project.AddMetadataReference(MetadataReference.CreateFromFile(projectToCompile.OutputFilePath));
+            }
             var syntaxTrees = project.Documents.Select(document => CSharpSyntaxTree.ParseText(File.ReadAllText(document.FilePath))).ToList();
 
             var compilation = CompileRelease(project, syntaxTrees);
@@ -115,12 +130,11 @@ namespace LinqRewrite.Services
             compilation = CompileRelease(project, syntaxTrees);
             if(PrintDiagnostics(compilation)) return;
 
-            var outputDirectory = Path.GetDirectoryName(project.OutputFilePath);
-            Directory.Delete(outputDirectory, true);
-            Directory.CreateDirectory(outputDirectory);
+            var dstDir = Path.GetDirectoryName(dstPath);
+            Directory.CreateDirectory(dstDir);
             foreach (var reference in project.MetadataReferences)
-                File.Copy(reference.Display, Path.Combine(outputDirectory, Path.GetFileName(reference.Display)), true);
-            compilation.Emit(project.OutputFilePath);
+                File.Copy(reference.Display, Path.Combine(dstDir, Path.GetFileName(reference.Display)), true);
+            compilation.Emit(dstPath);
         }
 
         public void RewriteFile(string path, string dstDir)
@@ -192,12 +206,13 @@ namespace LinqRewrite.Services
 
         private bool PrintDiagnostics(Compilation compilation)
         {
+            var error = false;
             foreach (var item in compilation.GetDiagnostics())
             {
                 _printService.PrintDiagnostic(item);
-                if (item.Severity == DiagnosticSeverity.Error) return true;
+                if (item.Severity == DiagnosticSeverity.Error) error = true;
             }
-            return false;
+            return error;
         }
 
         private static void WriteFile(string fileName, string content, string projectDir, string dstDir)

@@ -63,7 +63,6 @@ namespace LinqRewrite.DataStructures
         public List<LocalVariable> Variables { get; } = new List<LocalVariable>();
         
         public bool WrapWithTry { get; set; }
-        public bool IsReversed { get; set; }
         public bool HasResultMethod { get; set; }
         public bool NotRewrite { get; set; }
         public bool Unchecked { get; set; }
@@ -231,7 +230,6 @@ namespace LinqRewrite.DataStructures
 
             HasResultMethod = false;
             NotRewrite = false;
-            IsReversed = false;
             SimpleEnumeration = true;
             CurrentIndexer = null;
             NotRewrite = false;
@@ -249,10 +247,17 @@ namespace LinqRewrite.DataStructures
         public void PreUseAdd(StatementBridge _)
         {
             if (ResultIterators.Count == 0) _initialStatements.Add(_);
-            else ResultIterators.First(x => !x.Complete).PreFor.Add(_);
+            else if (ResultIterators.Any(x => !x.Complete)) ResultIterators.First(x => !x.Complete).PreFor.Add(_);
+            else InitialAdd(_);
         }
 
-        public void PreForAdd(StatementBridge _) => CurrentIterator.PreFor.Add(_);
+        public void PreForAdd(StatementBridge _)
+        {
+            if (CurrentIterator.PreFor == null)
+                InitialAdd(_);
+            else CurrentIterator.PreFor.Add(_);
+        }
+
         public void ForAdd(StatementBridge _)
         {
             IncompleteIterators.ForEach(x => x.ForBody.Add(_));
@@ -305,22 +310,12 @@ namespace LinqRewrite.DataStructures
         {
             if (Iterators.Count == 0) return _initialStatements.Concat(_finalStatements).Concat(_resultStatements);
             var result = new List<StatementSyntax>();
-            if (IsReversed)
+            foreach (var iterator in ResultIterators)
             {
-                for (var i = ResultIterators.Count - 1; i >= 0; i--)
-                {
-                    var statement = ResultIterators[i].GetStatementSyntax(this);
-                    result.AddRange(ResultIterators[i].PreFor);
-                    if (statement != null) result.Add(statement);
-                    result.AddRange(ResultIterators[i].PostFor);
-                }
-            }
-            else for (var i = 0; i < ResultIterators.Count; i++)
-            {
-                var statement = ResultIterators[i].GetStatementSyntax(this);
-                result.AddRange(ResultIterators[i].PreFor);
+                var statement = iterator.GetStatementSyntax(this);
+                result.AddRange(iterator.PreFor);
                 if (statement != null) result.Add(statement);
-                result.AddRange(ResultIterators[i].PostFor);
+                result.AddRange(iterator.PostFor);
             }
 
             if (WrapWithTry)
@@ -340,7 +335,7 @@ namespace LinqRewrite.DataStructures
         
         public LocalVariable SuperGlobalVariable(TypeSyntax type, ValueBridge initial)
         {
-            var variable = "v" + _variableIndex++;
+            var variable = "v" + _variableIndex++ % 1_000_000;
             var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
             Variables.Add(created);
             
@@ -352,7 +347,7 @@ namespace LinqRewrite.DataStructures
         
         public LocalVariable GlobalVariable(TypeSyntax type)
         {
-            var variable = "v" + _variableIndex++;
+            var variable = "v" + _variableIndex++ % 1_000_000;
             var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
             Variables.Add(created);
             
@@ -361,9 +356,21 @@ namespace LinqRewrite.DataStructures
             return created;
         }
         
+        public LocalVariable GlobalVariable(TypeSyntax type, ValueBridge initial, IteratorParameters iterator)
+        {
+            var variable = "v" + _variableIndex++ % 1_000_000;
+            var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
+            Variables.Add(created);
+            
+            InitialAdd(LocalVariableCreation(variable, type));
+            iterator.PreFor.Add((StatementBridge)((ValueBridge)variable).Assign(initial));
+            SimpleEnumeration = false;
+            return created;
+        }
+        
         public LocalVariable GlobalVariable(TypeSyntax type, ValueBridge initial)
         {
-            var variable = "v" + _variableIndex++;
+            var variable = "v" + _variableIndex++ % 1_000_000;
             var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
             Variables.Add(created);
             
@@ -375,7 +382,7 @@ namespace LinqRewrite.DataStructures
         
         public LocalVariable LocalVariable(TypedValueBridge value)
         {
-            var variable = "v" + _variableIndex++;
+            var variable = "v" + _variableIndex++ % 1_000_000;
             var found = Variables.FirstOrDefault(x => x.Type.Equals(value.Type) && !x.IsGlobal && !x.IsUsed);
             if (found != null)
             {
@@ -393,7 +400,7 @@ namespace LinqRewrite.DataStructures
         
         public LocalVariable LocalVariable(TypeBridge type, ValueBridge initial)
         {
-            var variable = "v" + _variableIndex++;
+            var variable = "v" + _variableIndex++ % 1_000_000;
             var found = Variables.FirstOrDefault(x => x.Type.Equals(type) && !x.IsGlobal && !x.IsUsed);
             if (found != null)
             {
@@ -417,7 +424,7 @@ namespace LinqRewrite.DataStructures
                 found.IsUsed = true;
                 return found;
             }
-            var variable = "v" + _variableIndex++;
+            var variable = "v" + _variableIndex++ % 1_000_000;
             var created = new LocalVariable(variable, type);
             Variables.Add(created);
 
@@ -428,7 +435,7 @@ namespace LinqRewrite.DataStructures
 
         public LocalVariable AddParameter(TypeBridge type, ExpressionSyntax value)
         {
-            var variable = "v" + _variableIndex++;
+            var variable = "v" + _variableIndex++ % 1_000_000;
             var created = new LocalVariable(variable, type);
             Variables.Add(created);
             
@@ -472,7 +479,7 @@ namespace LinqRewrite.DataStructures
                 return false;
             }
             if (preCheck) return true;
-            if (initialCheck) InitialAdd(If(smaller > bigger, Throw("System.InvalidOperationException", "Index out of range")));
+            if (initialCheck) PreUseAdd(If(smaller > bigger, Throw("System.InvalidOperationException", "Index out of range")));
             else FinalAdd(If(smaller > bigger, Throw("System.InvalidOperationException", "Index out of range")));
             return true;
         }
@@ -491,7 +498,7 @@ namespace LinqRewrite.DataStructures
                 return false;
             }
             if (preCheck) return true;
-            if (initialCheck) InitialAdd(If(smaller >= bigger, Throw("System.InvalidOperationException", "Index out of range")));
+            if (initialCheck) PreUseAdd(If(smaller >= bigger, Throw("System.InvalidOperationException", "Index out of range")));
             else FinalAdd(If(smaller >= bigger, Throw("System.InvalidOperationException", "Index out of range")));
             return true;
         }
@@ -506,7 +513,7 @@ namespace LinqRewrite.DataStructures
                 return false;
             }
             if (preCheck) return true;
-            InitialAdd(If(notNull.IsEqual(null), Throw("System.InvalidOperationException", "Invalid null object")));
+            PreUseAdd(If(notNull.IsEqual(null), Throw("System.InvalidOperationException", "Invalid null object")));
             return true;
         }
 
@@ -519,13 +526,20 @@ namespace LinqRewrite.DataStructures
             return Variables.FirstOrDefault(x => x.Name == expression.ToString());
         }
 
+        public void SwitchIsReversed()
+        {
+            if (Iterators.Count <= 0) throw new InvalidOperationException("Reversing not existing iterator");
+            var iterator = Iterators.Last(x => !x.Complete);
+            iterator.IsReversed = !iterator.IsReversed;
+        }
+
         public ValueBridge CurrentMin => Iterators.FirstOrDefault() == null
-            ? 0 : IsReversed
+            ? 0 : Iterators.First().IsReversed
                 ? CurrentIterator.ForReverseMax
                 : CurrentIterator.ForMin;
 
         public ValueBridge CurrentMax => Iterators.FirstOrDefault() == null
-            ? CurrentCollection[CurrentCollection.Count - 1] : IsReversed
+            ? CurrentCollection[CurrentCollection.Count - 1] : Iterators.First().IsReversed
                 ? CurrentIterator.ForReverseMin - 1
                 : CurrentIterator.ForMax - 1;
     }

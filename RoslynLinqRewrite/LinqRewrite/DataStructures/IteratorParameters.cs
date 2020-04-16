@@ -17,6 +17,7 @@ namespace LinqRewrite.DataStructures
         public ValueBridge ForReverseMax { get; set; }
         public RewrittenValueBridge Collection { get; }
 
+        public bool IsReversed { get; set; }
         public bool Complete { get; set; }
         
         public List<StatementSyntax> PreFor { get; } = new List<StatementSyntax>();
@@ -62,9 +63,9 @@ namespace LinqRewrite.DataStructures
             });
             if (ForMin == null)
             {
-                p.InitialAdd(EnumeratorVariable.Assign(Collection.Access("GetEnumerator").Invoke()));
+                PreFor.Add((StatementBridge)EnumeratorVariable.Assign(Collection.Access("GetEnumerator").Invoke()));
             }
-            else if (p.IsReversed)
+            else if (IsReversed)
             {
                 PreFor.Add((StatementBridge)ForIndexer.Assign(ForReverseMax));
             }
@@ -85,9 +86,9 @@ namespace LinqRewrite.DataStructures
             
             if (ForMin == null)
                 return RewriteService.GetForEachStatement(p, EnumeratorVariable, content);
-            else if (p.IsReversed)
-                return RewriteService.GetReverseForStatement(p, ForIndexer, ForReverseMin.ReusableConst(_parameters, Int), ForIncrement, content);
-            else return RewriteService.GetForStatement(p, ForIndexer, ForMax.ReusableConst(_parameters, Int), ForIncrement, content);
+            if (IsReversed)
+                return RewriteService.GetReverseForStatement(p, ForIndexer, ForReverseMin.ReusableForConst(_parameters, Int, this), ForIncrement, content);
+            return RewriteService.GetForStatement(p, ForIndexer, ForMax.ReusableForConst(_parameters, Int, this), ForIncrement, content);
         }
     }
 }

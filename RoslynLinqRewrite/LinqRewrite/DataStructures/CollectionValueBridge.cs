@@ -19,14 +19,32 @@ namespace LinqRewrite.DataStructures
         public CollectionType CollectionType { get; set; }
         public ValueBridge Count { get; set; }
         public TypeSyntax ItemType { get; set; }
-        public ITypeSymbol CollectionTypeSymbol { get; set; }
         
         public new TypedValueBridge this[ValueBridge i] => new TypedValueBridge(ItemType, this.ArrayAccess(i));
+            
+        public CollectionValueBridge(RewriteParameters p, TypeBridge collectionType, TypeBridge itemType, ValueBridge name, bool reuse) : base(collectionType, name)
+        {
+            ItemType = itemType;
+            if (collectionType.Type is ArrayTypeSyntax) CollectionType = CollectionType.Array;
+            else
+            {
+                var displayString = collectionType.Type.ToString();
+                if (displayString.StartsWith("LinqRewrite.Core.SimpleList.SimpleList<int>"))
+                    CollectionType = CollectionType.SimpleList;
+                else if (displayString.StartsWith("System.Collections.Generic.IList<"))
+                    CollectionType = CollectionType.List;
+                else CollectionType = CollectionType.Enumerable;
+            }
+            Count = CodeCreationService.CreateCollectionCount(Value, CollectionType);
+
+            if (CollectionType == CollectionType.Enumerable) return;
+            if (reuse) Value = name.ReusableConst(p, Type, CollectionType == CollectionType.SimpleList ? true : (bool?)null);
+            if (reuse) Count = Count.ReusableConst(p, Int);
+        }
             
         public CollectionValueBridge(RewriteParameters p, ITypeSymbol type, ValueBridge name, bool reuse) : base(null as TypeSyntax, name)
         {
             ItemType = SyntaxFactory.ParseTypeName(SymbolExtensions.GetItemType(type).ToDisplayString());
-            CollectionTypeSymbol = type;
             Type = SyntaxFactory.ParseTypeName(type.ToDisplayString());
             
             if (type is IArrayTypeSymbol) CollectionType = CollectionType.Array;

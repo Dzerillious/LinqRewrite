@@ -21,7 +21,7 @@ namespace LinqRewrite.RewriteRules
             else
             {
                 itemVariable = p.GlobalVariable(p.LastValue.Type);
-                p.CurrentForAdd(itemVariable.Assign(p.LastValue));
+                p.ForAdd(itemVariable.Assign(p.LastValue));
                 p.LastValue = new TypedValueBridge(p.LastValue.Type, itemVariable);
             }
             itemVariable.IsGlobal = true;

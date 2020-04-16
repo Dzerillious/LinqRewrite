@@ -1,4 +1,7 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Collections.Generic;
+using System.Linq;
+using LinqRewrite.Core;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -12,56 +15,43 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             var innerValue = args[0];
-            var outerKeySelector = (LambdaExpressionSyntax)args[1];
-            var innerKeySelector = (LambdaExpressionSyntax)args[2];
+            RewrittenValueBridge outerKeySelector = args[1];
+            TypeSyntax outerReturnType = ((LambdaExpressionSyntax) outerKeySelector.Old).ReturnType(p).Type;
+            
+            RewrittenValueBridge innerKeySelector = args[2];
+            TypeSyntax innerReturnType = ((LambdaExpressionSyntax) innerKeySelector.Old).ReturnType(p).Type;
+            
             var resultSelectorValue = args[3];
             var comparerValue = args.Length == 5 ? args[4] : null;
 
-            var lookupType = ParseTypeName($"SimpleLookup<{innerValue.ItemType(p).Type},{innerKeySelector.ReturnType(p).Type}>");
+            var lookupType = ParseTypeName($"SimpleLookup<{innerValue.ItemType(p).Type},{innerReturnType}>");
             var lookupVariable = p.GlobalVariable(lookupType, lookupType.Access("CreateForJoin")
                 .Invoke(innerValue, innerKeySelector, comparerValue));
 
             var itemValue = p.LastValue;
-            var groupingType = ParseTypeName($"SimpleLookup<{innerValue.ItemType(p).Type},{outerKeySelector.ReturnType(p).Type}>.Grouping");
+            var groupingType = ParseTypeName($"SimpleLookup<{innerValue.ItemType(p).Type},{outerReturnType}>.Grouping");
             var groupingVariable = p.GlobalVariable(groupingType);
             p.ForAdd(groupingVariable.Assign(lookupVariable.Access("GetGrouping")
                 .Invoke(outerKeySelector.Inline(p, itemValue), false)));
             
             p.ForAdd(If(groupingVariable.IsEqual(null), Continue()));
             
-            var rewritten = new RewrittenValueBridge(innerKeySelector.ExpressionBody, groupingVariable);
+            var rewritten = new RewrittenValueBridge(((LambdaExpressionSyntax) innerKeySelector.Old).ExpressionBody, groupingVariable);
 
-            var newIterator = new IteratorParameters(p, rewritten);
-            p.CurrentIterator.ForBody.Add(newIterator);
-            p.Iterators.Add(newIterator);
-            p.Iterators.Remove(p.CurrentIterator);
-            p.CurrentIterator = newIterator;
-                
-            var collectionType = p.Data.GetTypeInfo(rewritten).Type;
-            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, rewritten, true));
-            
+            var iterator = p.GlobalVariable(innerReturnType);
+            p.Iterators.Where(x => !x.Complete).ToArray().ForEach(x =>
+            {
+                var newIterator = new IteratorParameters(p, rewritten);
+                x.ForBody.Add(newIterator);
+                p.Iterators.Add(newIterator);
+                p.Iterators.Remove(x);
+                p.CurrentIterator = newIterator;
+                RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, groupingType, innerReturnType, rewritten, true), iterator);
+            });
+
+            p.CurrentIterator = p.Iterators.Last();
             p.LastValue = resultSelectorValue.Inline(p, itemValue, p.LastValue);
             p.ModifiedEnumeration = true;
-        }
-
-        public static void GroupingEnumeration(RewriteParameters p, CollectionValueBridge collection)
-        {
-            p.ForMin = p.ForReMin = 0;
-            p.ForMax = collection.Count;
-            p.ForReMax = collection.Count - 1;
-
-            p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
-            if (p.CurrentIndexer == null)
-            {
-                p.CurrentIterator.CurrentIndexer = p.CurrentIterator.ForIndexer;
-                p.CurrentIterator.CurrentIndexer.IsGlobal = true;
-            }
-            
-            p.LastValue = new TypedValueBridge(collection.ItemType, ((ValueBridge)collection.Access("elements"))[p.Indexer]);
-
-            p.ResultSize = null;
-            p.SourceSize *= collection.Count;
-            p.SimpleEnumeration = true;
         }
     }
 }

@@ -54,6 +54,11 @@ namespace TestsLibrary
             new ToSimpleListTests().RunTests();
             new ToDictionaryTests().RunTests();
             new ToLookupTests().RunTests();
+            
+            new JoinTests().RunTests();
+            new GroupByTests().RunTests();
+            new GroupJoinTests().RunTests();
+            new ReverseTests().RunTests();
         }
     }
 }

@@ -57,7 +57,6 @@ namespace LinqRewrite.RewriteRules
             p.ForMin = p.ForReMin = null;
             p.ForMax = p.ForReMax = null;
 
-            p.IsReversed = false;
             p.CurrentIterator.EnumeratorVariable = p.GlobalVariable(p.WrappedItemType("IEnumerator<", collection, ">"));
             if (variable != null)
             {
