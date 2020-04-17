@@ -17,8 +17,9 @@ namespace LinqRewrite.RewriteRules
 
             var items = Enumerable.Range(0, intSize).Select(x
                 => new TypedValueBridge(p.LastValue.Type, SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x)));
-            var simple = args.Length == 1 ? items.Aggregate((x, y) => args[0].Inline(p, x, y))
-            : items.Aggregate(new TypedValueBridge(args[0].GetType(p), args[0]), (x, y) => args[1].Inline(p, x, y));
+            var simple = args.Length == 1 
+                ? items.Aggregate((x, y) => args[0].Inline(p, x, y))
+                : items.Aggregate(new TypedValueBridge(args[0].GetType(p), args[0]), (x, y) => args[1].Inline(p, x, y));
 
             return args.Length == 3
                 ? Simplify(args[2].Inline(p, simple))
@@ -28,7 +29,6 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (args.Length == 1 && !p.AssertResultSizeGreaterEqual(1, true)) return;
-            
             var aggregationValue = args.Length switch
             {
                 1 => args[0],
@@ -53,11 +53,10 @@ namespace LinqRewrite.RewriteRules
                 1 => p.CurrentCollection[0],
                 _ => new TypedValueBridge(p, args[0])
             };
-            
             if (args.Length == 1) p.ForMin = p.ForReMin += 1;
+            
             var resultVariable = p.GlobalVariable(p.ReturnType, resultValue);
             p.ForAdd(resultVariable.Assign(aggregationValue.Inline(p, resultVariable, p.LastValue)));
-
             return resultVariable;
         }
         

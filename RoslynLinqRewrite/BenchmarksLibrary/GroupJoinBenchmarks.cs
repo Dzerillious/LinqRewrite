@@ -5,7 +5,7 @@ using LinqRewrite.Core;
 
 namespace BenchmarkLibrary
 {
-    public class GroupByBenchmarks
+    public class GroupJoinBenchmarks
     {
         private int[] ArraySource;
         private IEnumerable<int> EnumerableSource;
@@ -19,28 +19,28 @@ namespace BenchmarkLibrary
         
         [NoRewrite]
         [Benchmark]
-        public void ArrayGroupBy()
+        public void ArrayGroupJoin()
         {
-            ArraySource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
+            ArraySource.GroupJoin(ArraySource, x => x % 100, x => x % 100, (x, y) => y.Sum()).ToArray();
         }
         
         [Benchmark]
-        public void ArrayGroupByRewritten()
+        public void ArrayGroupJoinRewritten()
         {
-            ArraySource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
+            ArraySource.GroupJoin(ArraySource, x => x % 100, x => x % 100, (x, y) => y.Sum()).ToArray();
         }
         
         [NoRewrite]
         [Benchmark]
-        public void EnumerableGroupBy()
+        public void EnumerableGroupJoin()
         {
-            EnumerableSource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
+            EnumerableSource.GroupJoin(EnumerableSource, x => x % 100, x => x % 100, (x, y) => y.Sum()).ToArray();
         }
         
         [Benchmark]
-        public void EnumerableGroupByRewritten()
+        public void EnumerableGroupJoinRewritten()
         {
-            EnumerableSource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
+            EnumerableSource.GroupJoin(EnumerableSource, x => x % 100, x => x % 100, (x, y) => y.Sum()).ToArray();
         }
     }
 }

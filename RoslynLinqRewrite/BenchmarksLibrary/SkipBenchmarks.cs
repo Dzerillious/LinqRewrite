@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
 using LinqRewrite.Core;
@@ -19,262 +19,262 @@ namespace BenchmarkLibrary
 
 
         [NoRewrite, Benchmark]
-        public void SkipTakeToArrayUnchecked()
+        public void SkipToArrayUnchecked()
         {
-            var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).Take(0).ToArray();
+            var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void SkipTakeToArrayUncheckedRewritten()
+        public void SkipToArrayUncheckedRewritten()
         {
-            var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).Take(0).ToArray();
+            var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void SkipTakeToArray()
+        public void SkipToArray()
         {
-            var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).Take(0).ToArray();
+            var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void SkipTakeToArrayRewritten()
+        public void SkipToArrayRewritten()
         {
-            var res = ArraySource.Select(x => x + 2).Skip(900).Take(0).ToArray();
+            var res = ArraySource.Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void SkipTakeToArrayUnchecked1()
+        public void SkipToArrayUnchecked1()
         {
-            var res = ArraySource.Unchecked().Select(x => x + 2).Take(1).ToArray();
+            var res = ArraySource.Unchecked().Select(x => x + 2).ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void SkipTakeToArrayUncheckedRewritten1()
+        public void SkipToArrayUncheckedRewritten1()
         {
-            var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).Take(1).ToArray();
+            var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void SkipTakeToArray1()
+        public void SkipToArray1()
         {
-            var res = ArraySource.Select(x => x + 2).Skip(900).Take(1).ToArray();
+            var res = ArraySource.Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void SkipTakeToArrayRewritten1()
+        public void SkipToArrayRewritten1()
         {
-            var res = ArraySource.Select(x => x + 2).Skip(900).Take(1).ToArray();
+            var res = ArraySource.Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void SkipTakeToArrayUnchecked10()
+        public void SkipToArrayUnchecked10()
         {
-            var res = ArraySource.Skip(900).Unchecked().Take(10).ToArray();
+            var res = ArraySource.Skip(900).Unchecked().ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void SkipTakeToArrayUncheckedRewritten10()
+        public void SkipToArrayUncheckedRewritten10()
         {
-            var res = ArraySource.Skip(900).Unchecked().Take(10).ToArray();
+            var res = ArraySource.Skip(900).Unchecked().ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void SkipTakeToArray10()
+        public void SkipToArray10()
         {
-            var res = ArraySource.Skip(900).Take(10).ToArray();
+            var res = ArraySource.Skip(900).ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void SkipTakeToArrayRewritten10()
+        public void SkipToArrayRewritten10()
         {
-            var res = ArraySource.Skip(900).Take(10).ToArray();
+            var res = ArraySource.Skip(900).ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void SkipTakeToArrayUnchecked20()
+        public void SkipToArrayUnchecked20()
         {
-            var res = ArraySource.Skip(900).Unchecked().Take(20).ToArray();
+            var res = ArraySource.Skip(900).Unchecked().ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void SkipTakeToArrayUncheckedRewritten20()
+        public void SkipToArrayUncheckedRewritten20()
         {
-            var res = ArraySource.Skip(900).Unchecked().Take(20).ToArray();
+            var res = ArraySource.Skip(900).Unchecked().ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void SkipTakeToArray20()
+        public void SkipToArray20()
         {
-            var res = ArraySource.Select(x => x + 2).Skip(900).Take(20).ToArray();
+            var res = ArraySource.Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void SkipTakeToArrayRewritten20()
+        public void SkipToArrayRewritten20()
         {
-            var res = ArraySource.Select(x => x + 2).Skip(900).Take(20).ToArray();
+            var res = ArraySource.Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void SkipTakeToArrayUnchecked100()
+        public void SkipToArrayUnchecked100()
         {
-            var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).Take(100).ToArray();
+            var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void SkipTakeToArrayUncheckedRewritten100()
+        public void SkipToArrayUncheckedRewritten100()
         {
-            var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).Take(100).ToArray();
+            var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void SkipTakeToArray100()
+        public void SkipToArray100()
         {
-            var res = ArraySource.Unchecked().Skip(900).Take(100).ToArray();
+            var res = ArraySource.Unchecked().Skip(900).ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void SkipTakeToArrayRewritten100()
+        public void SkipToArrayRewritten100()
         {
-            var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).Take(100).ToArray();
+            var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void EnumerableSkipTakeToArrayUnchecked()
+        public void EnumerableSkipToArrayUnchecked()
         {
-            var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).Take(0).ToArray();
+            var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void EnumerableSkipTakeToArrayUncheckedRewritten()
+        public void EnumerableSkipToArrayUncheckedRewritten()
         {
-            var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).Take(0).ToArray();
+            var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void EnumerableSkipTakeToArray()
+        public void EnumerableSkipToArray()
         {
-            var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).Take(0).ToArray();
+            var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void EnumerableSkipTakeToArrayRewritten()
+        public void EnumerableSkipToArrayRewritten()
         {
-            var res = EnumerableSource.Select(x => x + 2).Skip(900).Take(0).ToArray();
+            var res = EnumerableSource.Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void EnumerableSkipTakeToArrayUnchecked1()
+        public void EnumerableSkipToArrayUnchecked1()
         {
-            var res = EnumerableSource.Select(x => x + 2).Skip(900).Take(0).ToArray();
+            var res = EnumerableSource.Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void EnumerableSkipTakeToArrayUncheckedRewritten1()
+        public void EnumerableSkipToArrayUncheckedRewritten1()
         {
-            var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).Take(1).ToArray();
+            var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void EnumerableSkipTakeToArray1()
+        public void EnumerableSkipToArray1()
         {
-            var res = EnumerableSource.Select(x => x + 2).Skip(900).Take(1).ToArray();
+            var res = EnumerableSource.Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void EnumerableSkipTakeToArrayRewritten1()
+        public void EnumerableSkipToArrayRewritten1()
         {
-            var res = EnumerableSource.Select(x => x + 2).Skip(900).Take(1).ToArray();
+            var res = EnumerableSource.Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void EnumerableSkipTakeToArrayUnchecked10()
+        public void EnumerableSkipToArrayUnchecked10()
         {
-            var res = EnumerableSource.Skip(900).Unchecked().Take(10).ToArray();
+            var res = EnumerableSource.Skip(900).Unchecked().ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void EnumerableSkipTakeToArrayUncheckedRewritten10()
+        public void EnumerableSkipToArrayUncheckedRewritten10()
         {
-            var res = EnumerableSource.Skip(900).Unchecked().Take(10).ToArray();
+            var res = EnumerableSource.Skip(900).Unchecked().ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void EnumerableSkipTakeToArray10()
+        public void EnumerableSkipToArray10()
         {
-            var res = EnumerableSource.Skip(900).Take(10).ToArray();
+            var res = EnumerableSource.Skip(900).ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void EnumerableSkipTakeToArrayRewritten10()
+        public void EnumerableSkipToArrayRewritten10()
         {
-            var res = EnumerableSource.Skip(900).Take(10).ToArray();
+            var res = EnumerableSource.Skip(900).ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void EnumerableSkipTakeToArrayUnchecked20()
+        public void EnumerableSkipToArrayUnchecked20()
         {
-            var res = EnumerableSource.Skip(900).Unchecked().Take(20).ToArray();
+            var res = EnumerableSource.Skip(900).Unchecked().ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void EnumerableSkipTakeToArrayUncheckedRewritten20()
+        public void EnumerableSkipToArrayUncheckedRewritten20()
         {
-            var res = EnumerableSource.Skip(900).Unchecked().Take(20).ToArray();
+            var res = EnumerableSource.Skip(900).Unchecked().ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void EnumerableSkipTakeToArray20()
+        public void EnumerableSkipToArray20()
         {
-            var res = EnumerableSource.Select(x => x + 2).Skip(900).Take(20).ToArray();
+            var res = EnumerableSource.Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void EnumerableSkipTakeToArrayRewritten20()
+        public void EnumerableSkipToArrayRewritten20()
         {
-            var res = EnumerableSource.Select(x => x + 2).Skip(900).Take(20).ToArray();
+            var res = EnumerableSource.Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void EnumerableSkipTakeToArrayUnchecked100()
+        public void EnumerableSkipToArrayUnchecked100()
         {
-            var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).Take(100).ToArray();
+            var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void EnumerableSkipTakeToArrayUncheckedRewritten100()
+        public void EnumerableSkipToArrayUncheckedRewritten100()
         {
-            var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).Take(100).ToArray();
+            var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
 
         [NoRewrite, Benchmark]
-        public void EnumerableSkipTakeToArray100()
+        public void EnumerableSkipToArray100()
         {
-            var res = EnumerableSource.Unchecked().Skip(900).Take(100).ToArray();
+            var res = EnumerableSource.Unchecked().Skip(900).ToArray();
         } //EndMethod
 
         [Benchmark]
-        public void EnumerableSkipTakeToArrayRewritten100()
+        public void EnumerableSkipToArrayRewritten100()
         {
-            var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).Take(100).ToArray();
+            var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
     }

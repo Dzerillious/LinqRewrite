@@ -23,12 +23,12 @@ namespace LinqRewrite
             "First", "FirstOrDefault", "ForEach", "Last", "LastOrDefault",
             "LongCount", "Max", "Min", "SequenceEqual",
             "Single", "SingleOrDefault", "Sum", "ToArray",
-            "ToDictionary", "ToList", "ToLookup", "ToSimpleList"
+            "ToDictionary", "ToList", /*"ToLookup",*/ "ToSimpleList"
         };
 
         public static readonly HashSet<string> RewritableMethods = new HashSet<string>
         {
-            "ToDictionary", "ToArray", "ToList", "ToSimpleList",
+            "ToDictionary", "ToArray", "ToList", "ToSimpleList", /*"ToLookup",*/
             
             "First", "FirstOrDefault", "Last", "LastOrDefault",
             "Single", "SingleOrDefault", "ElementAt", "ElementAtOrDefault",

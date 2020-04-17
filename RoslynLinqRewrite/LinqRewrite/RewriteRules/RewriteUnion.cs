@@ -33,7 +33,6 @@ namespace LinqRewrite.RewriteRules
                 p.LastValue = new TypedValueBridge(p.LastValue.Type, itemVariable);
             }
             itemVariable.IsGlobal = true;
-            
             p.AddIterator(collectionValue);
                 
             var collectionType = p.Data.GetTypeInfo(collectionValue).Type;
@@ -44,7 +43,6 @@ namespace LinqRewrite.RewriteRules
 
             if (sourceSizeValue != null && p.SourceSize != null) p.SourceSize += sourceSizeValue;
             else p.SourceSize = null;
-            
             p.ModifiedEnumeration = true;
         }
     }

@@ -15,7 +15,6 @@ namespace LinqRewrite.RewriteRules
                 1 when args[0].OldVal.InvokableWith1Param(p) => args[0].Inline(p, p.LastValue),
                 1 => args[0].Inline(p, p.LastValue, p.Indexer)
             };
-            
             p.ForAdd(If(Not(conditionValue), Continue()));
             p.ModifiedEnumeration = true;
         }

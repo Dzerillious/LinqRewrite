@@ -15,7 +15,6 @@ namespace LinqRewrite.RewriteRules
                 _ => p.LastValue
             };
             var keyValue = args[0].Inline(p, p.LastValue);
-
             var dictionaryVariable = args.Length switch
             {
                 2 when !(args[1].OldVal.IsInvokable(p)) => p.GlobalVariable(p.ReturnType, New(p.ReturnType, args[1])),

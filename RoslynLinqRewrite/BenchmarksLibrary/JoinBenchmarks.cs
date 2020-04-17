@@ -5,7 +5,7 @@ using LinqRewrite.Core;
 
 namespace BenchmarkLibrary
 {
-    public class GroupByBenchmarks
+    public class JoinBenchmarks
     {
         private int[] ArraySource;
         private IEnumerable<int> EnumerableSource;
@@ -19,28 +19,28 @@ namespace BenchmarkLibrary
         
         [NoRewrite]
         [Benchmark]
-        public void ArrayGroupBy()
+        public void ArrayJoin()
         {
-            ArraySource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
+            ArraySource.Join(ArraySource, x => x % 100, x => x % 100, (x, y) => x + y).ToArray();
         }
         
         [Benchmark]
-        public void ArrayGroupByRewritten()
+        public void ArrayJoinRewritten()
         {
-            ArraySource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
+            ArraySource.Join(ArraySource, x => x % 100, x => x % 100, (x, y) => x + y).ToArray();
         }
         
         [NoRewrite]
         [Benchmark]
-        public void EnumerableGroupBy()
+        public void EnumerableJoin()
         {
-            EnumerableSource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
+            EnumerableSource.Join(EnumerableSource, x => x % 100, x => x % 100, (x, y) => x + y).ToArray();
         }
         
         [Benchmark]
-        public void EnumerableGroupByRewritten()
+        public void EnumerableJoinRewritten()
         {
-            EnumerableSource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
+            EnumerableSource.Join(EnumerableSource, x => x % 100, x => x % 100, (x, y) => x + y).ToArray();
         }
     }
 }

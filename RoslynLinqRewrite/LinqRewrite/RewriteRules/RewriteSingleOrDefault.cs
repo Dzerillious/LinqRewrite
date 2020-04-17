@@ -16,8 +16,7 @@ namespace LinqRewrite.RewriteRules
                 SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin),
                 ConditionalExpression(p.ResultSize.IsEqual(0),
                     Default(p.ReturnType),
-                    ThrowExpression("System.InvalidOperationException",
-                        "The sequence contains more than one element.")));
+                    ThrowExpression("System.InvalidOperationException", "The sequence contains more than one element.")));
         }
 
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)

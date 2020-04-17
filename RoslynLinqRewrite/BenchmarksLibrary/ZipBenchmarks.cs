@@ -5,7 +5,7 @@ using LinqRewrite.Core;
 
 namespace BenchmarkLibrary
 {
-    public class GroupByBenchmarks
+    public class ZipBenchmarks
     {
         private int[] ArraySource;
         private IEnumerable<int> EnumerableSource;
@@ -19,28 +19,28 @@ namespace BenchmarkLibrary
         
         [NoRewrite]
         [Benchmark]
-        public void ArrayGroupBy()
+        public void ArrayZip()
         {
-            ArraySource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
+            ArraySource.Zip(ArraySource, (x, y) => x + y).ToArray();
         }
         
         [Benchmark]
-        public void ArrayGroupByRewritten()
+        public void ArrayZipRewritten()
         {
-            ArraySource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
+            ArraySource.Zip(ArraySource, (x, y) => x + y).ToArray();
         }
         
         [NoRewrite]
         [Benchmark]
-        public void EnumerableGroupBy()
+        public void EnumerableZip()
         {
-            EnumerableSource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
+            EnumerableSource.Zip(EnumerableSource, (x, y) => x + y).ToArray();
         }
         
         [Benchmark]
-        public void EnumerableGroupByRewritten()
+        public void EnumerableZipRewritten()
         {
-            EnumerableSource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
+            EnumerableSource.Zip(EnumerableSource, (x, y) => x + y).ToArray();
         }
     }
 }

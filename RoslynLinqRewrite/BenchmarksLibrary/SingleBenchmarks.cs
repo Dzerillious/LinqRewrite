@@ -7,15 +7,12 @@ namespace BenchmarkLibrary
 {
     public class SingleBenchmarks
     {
-        public static int[] StaticArraySource;
         public int[] ArraySource;
         public IEnumerable<int> EnumerableSource;
-        public int Selector(int a) => a + 3;
 
         [GlobalSetup]
         public void GlobalSetup()
         {
-            StaticArraySource = Enumerable.Range(0, 1000).ToArray();
             ArraySource = Enumerable.Range(0, 1000).ToArray();
             EnumerableSource = Enumerable.Range(0, 1000);
         }
