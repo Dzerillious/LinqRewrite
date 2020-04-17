@@ -36,7 +36,7 @@ namespace LinqRewrite.RewriteRules
             {
                 value = value.Reusable(p);
                 p.ForAdd(If(value.NotEqual(null),
-                            sumVariable.AddAssign(value)));
+                            sumVariable.AddAssign(value.Cast(elementType))));
             }
             else p.ForAdd(sumVariable.AddAssign(value));
             

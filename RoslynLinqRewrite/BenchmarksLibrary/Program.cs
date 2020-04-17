@@ -6,7 +6,7 @@ namespace BenchmarkLibrary
     {
         public static void Main(string[] args)
         {
-            var summary = BenchmarkRunner.Run<GroupByBenchmarks>();
+            var summary = BenchmarkRunner.Run<SumBenchmarks>();
         }
     }
 }

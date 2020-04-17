@@ -42,6 +42,22 @@ namespace BenchmarkLibrary
         }
         
         [NoRewrite, Benchmark]
+        public int ArrayCompositeSum()
+        {
+            var sum = ExtendedLinq.Range(0, ArraySource.Length / 10, 10).Sum(x => ArraySource.Unchecked().Skip(x).Take(10).Sum());
+            sum += ArraySource.Unchecked().Skip(ArraySource.Length / 10 * 10).Take(ArraySource.Length % 10).Sum();
+            return sum;
+        }
+        
+        [Benchmark]
+        public int ArrayCompositeSumRewritten()
+        {
+            var sum = ExtendedLinq.Range(0, ArraySource.Length / 10, 10).Sum(x => ArraySource.Unchecked().Skip(x).Take(10).Sum());
+            sum += ArraySource.Unchecked().Skip(ArraySource.Length / 10 * 10).Take(ArraySource.Length % 10).Sum();
+            return sum;
+        }
+        
+        [NoRewrite, Benchmark]
         public int ArrayWhereSum()
         {
             return ArraySource.Where(x => x > 700).Sum();
