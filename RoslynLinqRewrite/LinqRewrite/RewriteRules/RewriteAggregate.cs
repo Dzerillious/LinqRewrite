@@ -2,6 +2,7 @@
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Extensions.ExpressionSimplifier;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
 
@@ -11,17 +12,17 @@ namespace LinqRewrite.RewriteRules
     {
         public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (!ExpressionSimplifier.TryGetInt(p.ResultSize, out var intSize) || intSize > 10)
+            if (!TryGetInt(p.ResultSize, out var intSize) || intSize > 10)
                 return null;
 
             var items = Enumerable.Range(0, intSize).Select(x
-                => new TypedValueBridge(p.LastValue.Type, ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x)));
+                => new TypedValueBridge(p.LastValue.Type, SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x)));
             var simple = args.Length == 1 ? items.Aggregate((x, y) => args[0].Inline(p, x, y))
             : items.Aggregate(new TypedValueBridge(args[0].GetType(p), args[0]), (x, y) => args[1].Inline(p, x, y));
 
             return args.Length == 3
-                ? ExpressionSimplifier.Simplify(args[2].Inline(p, simple))
-                : ExpressionSimplifier.Simplify(simple);
+                ? Simplify(args[2].Inline(p, simple))
+                : Simplify(simple);
         }
         
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)

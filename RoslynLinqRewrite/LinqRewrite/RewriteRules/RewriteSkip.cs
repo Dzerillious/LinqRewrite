@@ -1,5 +1,6 @@
 ﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using static LinqRewrite.Extensions.ExpressionSimplifier;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
@@ -11,7 +12,7 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             var skippedValue = args[0];
-            if (ExpressionSimplifier.TryGetInt(skippedValue, out var skippedInt))
+            if (TryGetInt(skippedValue, out var skippedInt))
             {
                 if (skippedInt < 0) return;
             }

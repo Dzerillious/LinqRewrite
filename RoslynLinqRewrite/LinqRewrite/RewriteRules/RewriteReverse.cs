@@ -43,7 +43,7 @@ namespace LinqRewrite.RewriteRules
                 
             p.PreUseAdd(logVariable.SubAssign(logVariable % 2));
             var currentLengthVariable = p.LocalVariable(Int, 8);
-            var resultVariable = p.GlobalVariable(p.LastValue.Type.ArrayType(), CreateArray(p.LastValue.Type.ArrayType(), 8));
+            var resultVariable = p.GlobalVariable(p.LastValue.ArrayType(), CreateArray(p.LastValue.ArrayType(), 8));
 
             var tmpSize = p.LocalVariable(Int);
             p.ForAdd(reverseIndexerVariable.PreDecrement());
@@ -80,7 +80,7 @@ namespace LinqRewrite.RewriteRules
             p.Indexer = null;
             var reverseIndexerVariable = p.LocalVariable(Int, 8);
             var currentLengthVariable = p.LocalVariable(Int, 8);
-            var resultVariable = p.GlobalVariable(p.LastValue.Type.ArrayType(), CreateArray(p.LastValue.Type.ArrayType(), 8));
+            var resultVariable = p.GlobalVariable(p.LastValue.ArrayType(), CreateArray(p.LastValue.ArrayType(), 8));
 
             var tmpSize = p.LocalVariable(Int);
             p.ForAdd(reverseIndexerVariable.PreDecrement());

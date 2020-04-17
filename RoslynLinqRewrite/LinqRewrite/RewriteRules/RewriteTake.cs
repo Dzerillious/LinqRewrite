@@ -1,5 +1,6 @@
 ﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using static LinqRewrite.Extensions.ExpressionSimplifier;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
 
@@ -26,8 +27,8 @@ namespace LinqRewrite.RewriteRules
         private static void CheckBounds(RewriteParameters p, ref RewrittenValueBridge takeValue)
         {
             if (p.Unchecked) return;
-            var takeIntPass = ExpressionSimplifier.TryGetInt(takeValue, out var takeInt);
-            var resultIntPass = ExpressionSimplifier.TryGetInt(p.ResultSize, out var resultInt);
+            var takeIntPass = TryGetInt(takeValue, out var takeInt);
+            var resultIntPass = TryGetInt(p.ResultSize, out var resultInt);
             
             if (takeIntPass)
             {

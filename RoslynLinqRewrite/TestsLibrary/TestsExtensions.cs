@@ -104,6 +104,29 @@ namespace TestsLibrary
         }
         
         [NoRewrite]
+        public static void TestEquals<T>(string name, Func<IEnumerable<IEnumerable<T>>> first, Func<IEnumerable<IEnumerable<T>>> second)
+        {
+            var (ex1, val1, ex2, val2) = GetValues(first, second);
+            if (ex1 && ex2 || !ex1 && !ex2 && val1.SequenceEqual(val2)) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            
+            (ex1, val1, ex2, val2) = GetValues(first, second);
+            if (ex1 && ex2 || !ex1 && !ex2 && val1.SequenceEqual(val2)) Console.WriteLine($"[{++_valid}/{++_tests}] {name} is valid");
+            else
+            {
+                Console.WriteLine("\n-------------------------------------------------------------\n");
+                Console.Write($"[{_valid}/{++_tests}] {name} is invalid\n\nCollection 1: ");
+                if (ex1) Console.Write("Error");
+                val1?.ForEach(x => Console.Write(x + " "));
+                
+                Console.Write("\n\nCollection 2: ");
+                if (ex2) Console.Write("Error");
+                val2?.ForEach(x => Console.Write(x + " "));
+                
+                Console.WriteLine("\n\n-------------------------------------------------------------\n");
+            }
+        }
+        
+        [NoRewrite]
         public static void TestEquals<T>(string name, Func<IEnumerable<T>> first, Func<IEnumerable<T>> second)
         {
             var (ex1, val1, ex2, val2) = GetValues(first, second);

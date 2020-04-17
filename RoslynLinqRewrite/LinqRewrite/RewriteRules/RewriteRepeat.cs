@@ -33,7 +33,6 @@ namespace LinqRewrite.RewriteRules
                 p.CurrentIterator.CurrentIndexer.IsGlobal = true;
             }
             p.LastValue = new TypedValueBridge(itemValue.GetType(p), itemValue);
-            
             p.FirstCollection = p.CurrentCollection = null;
         }
     }

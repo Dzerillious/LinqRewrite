@@ -1,6 +1,7 @@
 ﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Extensions.ExpressionSimplifier;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
@@ -12,7 +13,7 @@ namespace LinqRewrite.RewriteRules
         {
             if (args.Length != 0) return null;
             return ConditionalExpression(p.CurrentCollection.Count.IsEqual(1),
-                ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin),
+                SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin),
                 ConditionalExpression(p.ResultSize.IsEqual(0),
                     Default(p.ReturnType),
                     ThrowExpression("System.InvalidOperationException",

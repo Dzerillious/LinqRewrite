@@ -54,8 +54,12 @@ namespace LinqRewrite.DataStructures
                 ForBody = new List<IStatementSyntax>(ForBody),
             };
 
+        private bool _preAddCalculated;
         public void CalculatePreAdd(RewriteParameters p)
         {
+            if (_preAddCalculated) return;
+            _preAddCalculated = true;
+            
             ForBody.ForEach(x =>
             {
                 if (x is IteratorParameters iteratorParameters)

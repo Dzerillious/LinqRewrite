@@ -2,6 +2,7 @@
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Extensions.ExpressionSimplifier;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
 namespace LinqRewrite.RewriteRules
@@ -11,13 +12,13 @@ namespace LinqRewrite.RewriteRules
         public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             if (args.Length != 0) return null;
-            if (!ExpressionSimplifier.TryGetInt(p.ResultSize, out var intSize) || intSize > 10)
+            if (!TryGetInt(p.ResultSize, out var intSize) || intSize > 10)
                 return null;
 
             var items = Enumerable.Range(0, intSize).Select(x
-                => new TypedValueBridge(p.LastValue.Type, ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x)));
+                => new TypedValueBridge(p.LastValue.Type, SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x)));
             var simple = items.Aggregate((x, y) => new TypedValueBridge(p.LastValue.Type, x + y));  
-            return ExpressionSimplifier.Simplify(simple);
+            return Simplify(simple);
         }
         
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)

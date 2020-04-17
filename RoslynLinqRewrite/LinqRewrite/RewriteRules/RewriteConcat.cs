@@ -28,7 +28,7 @@ namespace LinqRewrite.RewriteRules
             
             p.AddIterator(collectionValue);
             var collectionType = p.Data.GetTypeInfo(collectionValue).Type;
-            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, collectionValue.Old, true), itemVariable, true);
+            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, collectionValue, true), itemVariable, true);
 
             if (sourceSizeValue != null && p.SourceSize != null) p.SourceSize += sourceSizeValue;
             else p.SourceSize = null;

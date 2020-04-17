@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using LinqRewrite.DataStructures;
+using LinqRewrite.Services;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -51,6 +52,14 @@ namespace LinqRewrite.Extensions
             var itemString = collection.Old.GetItemTypeSymbol(p).ToDisplayString();
             return SyntaxFactory.ParseTypeName(itemString);
         }
+        
+        public static TypeBridge ReturnItemType(this RewrittenValueBridge rewritten, RewriteParameters p)
+        {
+            var old = (LambdaExpressionSyntax) rewritten.OldVal;
+            var itemString = CodeCreationService.GetLastLambdaExpression(old).GetItemTypeSymbol(p).ToDisplayString();
+            return SyntaxFactory.ParseTypeName(itemString);
+        }
+
 
         public static TypeBridge ItemType(this TypeBridge collection, RewriteParameters p)
         {

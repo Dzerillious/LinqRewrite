@@ -79,11 +79,12 @@ namespace LinqRewrite.Services
                 ReturnStatementSyntax returnStatementSyntax => returnStatementSyntax.Expression,
                 _ => null
             };
+        
+        public static ValueBridge GetLastLambdaExpression(LambdaExpressionSyntax lambdaExpression)
+            => lambdaExpression.ExpressionBody ?? GetStatementExpression(lambdaExpression.Block.Statements.Last());
 
         public static TypeSyntax GetLambdaReturnType(SemanticModel semantic, LambdaExpressionSyntax lambdaExpression) 
-            => lambdaExpression.ExpressionBody == null 
-                ? semantic.GetTypeFromExpression(GetStatementExpression(lambdaExpression.Block.Statements.Last()))
-                : semantic.GetTypeFromExpression(lambdaExpression.ExpressionBody);
+            => semantic.GetTypeFromExpression(GetLastLambdaExpression(lambdaExpression));
 
         public ExpressionSyntax InlineOrCreateMethod(RewriteParameters p, DataFlowAnalysis currentFlow, Lambda lambda, TypeSyntax returnType,
             IEnumerable<VariableCapture> captures, TypedValueBridge[] replaceParameters)

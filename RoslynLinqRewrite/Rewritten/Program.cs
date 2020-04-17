@@ -59,6 +59,7 @@ namespace TestsLibrary
             new GroupByTests().RunTests();
             new GroupJoinTests().RunTests();
             new ReverseTests().RunTests();
+            new SelectManyTests().RunTests();
         }
     }
 }

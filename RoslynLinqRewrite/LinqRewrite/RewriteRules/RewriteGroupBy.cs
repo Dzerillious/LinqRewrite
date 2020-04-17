@@ -11,7 +11,6 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             RewrittenValueBridge keySelector = args[0];
-            TypeSyntax keySelectorReturn = ((LambdaExpressionSyntax) args[0].OldVal).ReturnType(p).Type;
             var elementSelectorValue = args.Length switch
             {
                 1 => p.LastValue,
@@ -19,13 +18,13 @@ namespace LinqRewrite.RewriteRules
                 _ => p.LastValue
             };
 
-            var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{keySelectorReturn},{elementSelectorValue.Type}>");
+            var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{keySelector.ReturnType(p)},{elementSelectorValue.Type}>");
             var lookupVariable = p.GlobalVariable(lookupType, args.Length switch
             {
                 2 when !(args[1].OldVal.IsInvokable(p)) => New(lookupType, args[1]),
                 3 when !(args[2].OldVal.IsInvokable(p)) => New(lookupType, args[2]),
                 4 when !(args[3].OldVal.IsInvokable(p)) => New(lookupType, args[3]),
-                _ => New(lookupType, ParseTypeName($"System.Collections.Generic.EqualityComparer<{keySelectorReturn}>").Access("Default"))
+                _ => New(lookupType, ParseTypeName($"System.Collections.Generic.EqualityComparer<{keySelector.ReturnType(p)}>").Access("Default"))
             });
 
             p.ForAdd(lookupVariable.Access("GetGrouping").Invoke(keySelector.Inline(p, p.LastValue), true)
@@ -35,14 +34,14 @@ namespace LinqRewrite.RewriteRules
 
             var rewritten = new RewrittenValueBridge(((LambdaExpressionSyntax)keySelector).ExpressionBody, lookupVariable);
             p.AddIterator(rewritten);
-            var iGroupingType = ParseTypeName($"System.Linq.IGrouping<{keySelectorReturn},{elementSelectorValue.Type}>");
+            var iGroupingType = ParseTypeName($"System.Linq.IGrouping<{keySelector.ReturnType(p)},{elementSelectorValue.Type}>");
             RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, lookupType, iGroupingType, lookupVariable, true));
             var elementsType = ParseTypeName($"System.Collections.IEnumerable<{elementSelectorValue.Type}>");
             
-            var groupingType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{keySelectorReturn},{elementSelectorValue.Type}>.Grouping");
+            var groupingType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{keySelector.ReturnType(p)},{elementSelectorValue.Type}>.Grouping");
             p.LastValue = new TypedValueBridge(groupingType, p.LastValue.Cast(groupingType));
             
-            var key = new TypedValueBridge(keySelectorReturn, p.LastValue.Access("key"));
+            var key = new TypedValueBridge(keySelector.ReturnType(p), p.LastValue.Access("key"));
             var elements = new TypedValueBridge(elementsType, p.LastValue.Access("elements"));
             p.LastValue = args.Length switch
             {

@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using LinqRewrite.DataStructures;
+﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LinqRewrite.RewriteRules
@@ -17,11 +14,11 @@ namespace LinqRewrite.RewriteRules
             RewrittenValueBridge resultSelector = args[3];
             RewrittenValueBridge comparer = args.Length == 5 ? args[4] : null;
 
-            var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{inner.Old.ItemType(p).Type},{((LambdaExpressionSyntax)innerKeySelector.Old).ReturnType(p).Type}>");
+            var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{inner.ItemType(p)},{innerKeySelector.ReturnType(p)}>");
             var lookupVariable = p.GlobalVariable(lookupType, lookupType.Access("CreateForJoin")
                 .Invoke(inner, innerKeySelector, comparer));
 
-            var lookupItemType = ParseTypeName($"System.Collections.IEnumerable<{inner.Old.ItemType(p).Type}>");
+            var lookupItemType = ParseTypeName($"System.Collections.IEnumerable<{inner.ItemType(p)}>");
             p.LastValue = resultSelector.Inline(p, p.LastValue, new TypedValueBridge(lookupItemType, lookupVariable[outerKeySelector.Inline(p, p.LastValue)]));
             
             p.ModifiedEnumeration = true;

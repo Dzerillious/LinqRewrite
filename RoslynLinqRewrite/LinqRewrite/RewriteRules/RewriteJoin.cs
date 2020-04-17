@@ -14,20 +14,17 @@ namespace LinqRewrite.RewriteRules
         {
             var innerValue = args[0];
             RewrittenValueBridge outerKeySelector = args[1];
-            TypeSyntax outerReturnType = ((LambdaExpressionSyntax) outerKeySelector.Old).ReturnType(p).Type;
-            
             RewrittenValueBridge innerKeySelector = args[2];
-            TypeSyntax innerReturnType = ((LambdaExpressionSyntax) innerKeySelector.Old).ReturnType(p).Type;
             
             var resultSelectorValue = args[3];
             var comparerValue = args.Length == 5 ? args[4] : null;
 
-            var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{innerValue.ItemType(p).Type},{innerReturnType}>");
+            var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{innerValue.ItemType(p)},{innerKeySelector.ReturnType(p)}>");
             var lookupVariable = p.GlobalVariable(lookupType, lookupType.Access("CreateForJoin")
                 .Invoke(innerValue, innerKeySelector, comparerValue));
 
             var itemValue = p.LastValue;
-            var groupingType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{innerValue.ItemType(p).Type},{outerReturnType}>.Grouping");
+            var groupingType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{innerValue.ItemType(p)},{outerKeySelector.ReturnType(p)}>.Grouping");
             var groupingVariable = p.GlobalVariable(groupingType);
             p.ForAdd(groupingVariable.Assign(lookupVariable.Access("GetGrouping")
                 .Invoke(outerKeySelector.Inline(p, itemValue), false)));
@@ -35,7 +32,7 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(If(groupingVariable.IsEqual(null), Continue()));
             var rewritten = new RewrittenValueBridge(((LambdaExpressionSyntax) innerKeySelector.Old).ExpressionBody, groupingVariable);
 
-            var iterator = p.GlobalVariable(innerReturnType);
+            var iterator = p.GlobalVariable(innerKeySelector.ReturnType(p));
             p.Iterators.Where(x => !x.Complete).ToArray().ForEach(x =>
             {
                 var newIterator = new IteratorParameters(p, rewritten);
@@ -43,7 +40,7 @@ namespace LinqRewrite.RewriteRules
                 p.Iterators.Add(newIterator);
                 p.Iterators.Remove(x);
                 p.CurrentIterator = newIterator;
-                RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, groupingType, innerReturnType, rewritten, true), iterator);
+                RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, groupingType, innerKeySelector.ReturnType(p), rewritten, true), iterator);
             });
 
             p.CurrentIterator = p.Iterators.Last();

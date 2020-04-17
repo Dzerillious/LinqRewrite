@@ -3,7 +3,9 @@ using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Extensions.ExpressionSimplifier;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -11,13 +13,13 @@ namespace LinqRewrite.RewriteRules
     {
         public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (!ExpressionSimplifier.TryGetInt(p.ResultSize, out var intSize) || intSize > 20)
+            if (!TryGetInt(p.ResultSize, out var intSize) || intSize > 20)
                 return null;
 
             var items = Enumerable.Range(0, intSize).Select(x
-                => (ExpressionSyntax) ExpressionSimplifier.SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x));
-            return SyntaxFactory.ObjectCreationExpression(p.ReturnType, SyntaxFactory.ArgumentList(CreateSeparatedList(new ArgumentSyntax[0])), 
-                SyntaxFactory.InitializerExpression( SyntaxKind.ArrayInitializerExpression, SyntaxFactory.SeparatedList(items)));
+                => (ExpressionSyntax) SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x));
+            return ObjectCreationExpression(p.ReturnType, ArgumentList(CreateSeparatedList(new ArgumentSyntax[0])), 
+                InitializerExpression( SyntaxKind.ArrayInitializerExpression, SeparatedList(items)));
         }
         
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)

@@ -2,6 +2,7 @@
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -13,7 +14,7 @@ namespace LinqRewrite.RewriteRules
             var collectionValue = args[0];
             if (!p.AssertNotNull(collectionValue)) return;
 
-            var hashsetType = p.WrappedType("System.Collections.Generic.HashSet<", p.LastValue.Type, ">");
+            var hashsetType = ParseTypeName($"System.Collections.Generic.HashSet<{p.LastValue.Type}>");
             var hashsetCreation = args.Length switch
             {
                 1 => New(hashsetType),

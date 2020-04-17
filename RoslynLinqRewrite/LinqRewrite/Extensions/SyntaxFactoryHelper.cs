@@ -259,11 +259,23 @@ namespace LinqRewrite.Extensions
         public static BlockSyntax Block(IList<StatementSyntax> statements)
             => SyntaxFactory.Block(statements);
 
+        public static ArrayTypeSyntax ArrayType(this TypedValueBridge value)
+            => SyntaxFactory.ArrayType(value.Type, new SyntaxList<ArrayRankSpecifierSyntax>(ArrayRankSpecifier(CreateSeparatedExpressionList(OmittedArraySizeExpression(Token(SyntaxKind.OmittedArraySizeExpressionToken))))));
+
+        public static ArrayTypeSyntax ArrayType(this TypeBridge type)
+            => SyntaxFactory.ArrayType(type, new SyntaxList<ArrayRankSpecifierSyntax>(ArrayRankSpecifier(CreateSeparatedExpressionList(OmittedArraySizeExpression(Token(SyntaxKind.OmittedArraySizeExpressionToken))))));
+
         public static ArrayTypeSyntax ArrayType(this TypeSyntax type)
-            => SyntaxFactory.ArrayType(type, new SyntaxList<ArrayRankSpecifierSyntax>(ArrayRankSpecifier(CreateSeparatedExpressionList(SyntaxFactory.OmittedArraySizeExpression(Token(SyntaxKind.OmittedArraySizeExpressionToken))))));
+            => SyntaxFactory.ArrayType(type, new SyntaxList<ArrayRankSpecifierSyntax>(ArrayRankSpecifier(CreateSeparatedExpressionList(OmittedArraySizeExpression(Token(SyntaxKind.OmittedArraySizeExpressionToken))))));
 
         public static TypeBridge ReturnType(this LambdaExpressionSyntax lambda, RewriteParameters p)
             => CodeCreationService.GetLambdaReturnType(p.Semantic, lambda);
+        
+        public static TypeBridge ReturnType(this RewrittenValueBridge rewritten, RewriteParameters p)
+        {
+            var old = (LambdaExpressionSyntax) rewritten.OldVal;
+            return CodeCreationService.GetLambdaReturnType(p.Semantic, old);
+        }
 
         public static ValueBridge Parenthesize(ExpressionSyntax expression)
             => ParenthesizedExpression(expression);
