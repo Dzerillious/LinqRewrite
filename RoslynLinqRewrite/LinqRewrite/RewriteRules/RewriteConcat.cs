@@ -26,19 +26,17 @@ namespace LinqRewrite.RewriteRules
             }
             itemVariable.IsGlobal = true;
             
-            p.AddIterator(collectionValue);
             var collectionType = p.Data.GetTypeInfo(collectionValue).Type;
-            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, collectionValue, true), itemVariable, true);
+            p.AddIterator(new CollectionValueBridge(p, collectionType, collectionValue, true));
+            RewriteCollectionEnumeration.RewriteOther(p, p.CurrentIterator.Collection, itemVariable, true);
 
             if (sourceSizeValue != null && p.SourceSize != null) p.SourceSize += sourceSizeValue;
             else p.SourceSize = null;
-            
+
             if (resultSizeValue != null && p.ResultSize != null) p.ResultSize += resultSizeValue;
             else p.ResultSize = null;
 
-            var resSize = p.ResultSize;
-            p.ModifiedEnumeration = true;
-            p.ResultSize = resSize;
+            (p.ModifiedEnumeration, p.ResultSize) = (true, p.ResultSize);
         }
     }
 }

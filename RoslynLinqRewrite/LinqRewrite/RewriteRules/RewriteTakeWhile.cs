@@ -18,6 +18,7 @@ namespace LinqRewrite.RewriteRules
             };
             
             p.ForAdd(If(Not(value), Break()));
+            p.ListEnumeration = false;
             p.ModifiedEnumeration = true;
         }
     }

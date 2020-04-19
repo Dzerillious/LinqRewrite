@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
@@ -30,40 +31,30 @@ namespace LinqRewrite.RewriteRules
                 "EnlargingCoefficient.By8" => 3,
                 _ => 2
             };
-            if (p.IncompleteIterators.Count() <= 1)
-            {
-                var simplified = RewriteSimplified(p, p.LastValue.Type);
-                if (simplified != null)
-                {
-                    p.ResultAdd(Return(simplified));
-                    p.CurrentIterator.IgnoreIterator = true;
-                    return;
-                }
-            }
+
+            var (currentLength, currentResult) = GetResultVariable(p, p.LastValue.Type);
+            SimplifyPart(p, currentResult);
+            RewriteOther(p, currentLength, currentResult, enlarging);
             
-            var resultVariable = RewriteOther(p, enlarging);
             if (p.ResultSize == null) p.ResultAdd(Return("LinqRewrite".Access("Core", "SimpleArrayExtensions", "EnsureFullArray")
-                .Invoke(resultVariable, p.Indexer)));
-            else p.ResultAdd(Return(resultVariable));
-        }
-        
-        public static VariableBridge RewriteOther(RewriteParameters p, int enlarging, TypeSyntax itemType = null)
-        {
-            if (p.ResultSize != null) return KnownSize(p, itemType);
-            else if (p.SourceSize != null) return KnownSourceSize(p, enlarging, itemType);
-            else return UnknownSourceSize(p, enlarging, itemType);
+                .Invoke(currentResult, p.Indexer)));
+            else p.ResultAdd(Return(currentResult));
         }
 
-        private static VariableBridge KnownSize(RewriteParameters p, TypeSyntax itemType = null)
+        public static VariableBridge RewriteOther(RewriteParameters p, ValueBridge currentLength, VariableBridge resultVariable, int enlarging)
         {
-            var arrayType = itemType == null ? (ArrayTypeSyntax) p.ReturnType : itemType.ArrayType();
-            var resultVariable = p.GlobalVariable(arrayType, CreateArray(arrayType, p.ResultSize));
+            if (p.ResultSize != null) return KnownSize(p, resultVariable);
+            else if (p.SourceSize != null) return KnownSourceSize(p, currentLength, resultVariable, enlarging);
+            else return UnknownSourceSize(p, currentLength, resultVariable, enlarging);
+        }
 
+        private static VariableBridge KnownSize(RewriteParameters p, VariableBridge resultVariable)
+        {
             p.ForAdd(resultVariable[p.Indexer].Assign(p.LastValue));
             return resultVariable;
         }
 
-        private static VariableBridge KnownSourceSize(RewriteParameters p, int enlarging, TypeSyntax itemType = null)
+        private static VariableBridge KnownSourceSize(RewriteParameters p, ValueBridge currentLength, VariableBridge resultVariable, int enlarging)
         {
             var indexerVariable = p.Indexer;
                 
@@ -72,10 +63,7 @@ namespace LinqRewrite.RewriteRules
                     .Invoke(Parenthesize(p.SourceSize).Cast(SyntaxKind.UIntKeyword)) - 3);
                 
             if (enlarging != 1) p.PreUseAdd(logVariable.SubAssign(logVariable % enlarging));
-            var currentLengthVariable = p.GlobalVariable(Int, 8);
-
-            var resultType = itemType == null ? (ArrayTypeSyntax) p.ReturnType : itemType.ArrayType();
-            var resultVariable = p.GlobalVariable(resultType, CreateArray(resultType, 8));
+            var currentLengthVariable = p.GlobalVariable(Int, currentLength);
 
             p.ForAdd(If(p.Indexer >= currentLengthVariable,
                         "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeArray")
@@ -89,14 +77,11 @@ namespace LinqRewrite.RewriteRules
             return resultVariable;
         }
 
-        private static VariableBridge UnknownSourceSize(RewriteParameters p, int enlarging, TypeSyntax itemType = null)
+        private static VariableBridge UnknownSourceSize(RewriteParameters p, ValueBridge currentLength, VariableBridge resultVariable, int enlarging)
         {
             var indexerVariable = p.Indexer;
             
-            var currentLengthVariable = p.GlobalVariable(Int, 8);
-            var resultType = itemType == null ? (ArrayTypeSyntax) p.ReturnType : itemType.ArrayType();
-            var resultVariable = p.GlobalVariable(resultType, CreateArray(resultType, 8));
-                
+            var currentLengthVariable = p.GlobalVariable(Int, currentLength);
             p.ForAdd(If(p.Indexer >= currentLengthVariable,
                             "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeArray")
                                     .Invoke(enlarging, RefArg(resultVariable), RefArg(currentLengthVariable))));
@@ -105,32 +90,64 @@ namespace LinqRewrite.RewriteRules
             return resultVariable;
         }
 
-        public static LocalVariable RewriteSimplified(RewriteParameters p, TypeSyntax itemType)
+        public static (ValueBridge currentLength, VariableBridge result) GetResultVariable(RewriteParameters p, TypeSyntax itemType)
         {
-            var minValue = p.CurrentMin;
-            if (!p.ListEnumeration || p.CurrentCollection == null) return null;
-            if (p.CurrentCollection.CollectionType == CollectionType.Array)
+            var arrayType = itemType == null ? (ArrayTypeSyntax) p.ReturnType : itemType.ArrayType();
+            if (p.ResultSize != null)
+                return (p.ResultSize, p.GlobalVariable(arrayType, CreateArray(arrayType, p.ResultSize)));
+            
+            var currentResult = p.IncompleteIterators.TakeWhile(x =>
             {
-                var resultVariable = p.GlobalVariable(itemType.ArrayType(), CreateArray(itemType.ArrayType(), p.ResultSize));
-                p.ResultAdd("System".Access("Array", "Copy")
-                    .Invoke(p.CurrentCollection, minValue, resultVariable, 0, p.ResultSize));
-                return resultVariable;
-            }
-            else if (p.CurrentCollection.CollectionType == CollectionType.SimpleList)
+                if (!TryGetInt(x.ForInc, out var inc)) return false;
+                return x.Collection != null && !x.IsReversed && x.ListEnumeration && x.ForFrom != null
+                       && x.ForTo != null && inc == 1;
+            }).Aggregate((ValueBridge)0, (x, y) 
+                => x + (y.IsReversed ? (y.ForFrom - y.ForTo + 1) : (y.ForTo - y.ForFrom + 1)), 
+                x => x.Simplify());
+            
+            if (TryGetInt(currentResult, out var currentResultInt) && currentResultInt <= 8)
+                currentResult = 8;
+            
+            return (currentResult, p.GlobalVariable(arrayType, CreateArray(arrayType, currentResult)));
+        }
+
+        public static void SimplifyPart(RewriteParameters p, VariableBridge resultVariable)
+        {
+            var hadInvalid = false;
+            p.IncompleteIterators.ForEach(x =>
             {
-                var resultVariable = p.GlobalVariable(itemType.ArrayType(), CreateArray(itemType.ArrayType(), p.ResultSize));
-                p.ResultAdd("System".Access("Array", "Copy")
-                    .Invoke(p.CurrentCollection.Access("Items"), minValue, resultVariable, 0, p.ResultSize));
-                return resultVariable;
-            }
-            else if (p.CurrentCollection.CollectionType == CollectionType.List)
-            {
-                var resultVariable = p.GlobalVariable(itemType.ArrayType(), CreateArray(itemType.ArrayType(), p.ResultSize));
-                p.ResultAdd(p.CurrentCollection.Access("CopyTo").Invoke(resultVariable));
-                return resultVariable;
-            }
-            p.NotRewrite = true;
-            return null;
+                if (!TryGetInt(x.ForInc, out var inc) || x.Collection == null || x.IsReversed
+                    || !x.ListEnumeration || x.ForFrom == null || x.ForTo == null || inc != 1
+                    || (p.ResultSize == null && hadInvalid))
+                {
+                    hadInvalid = true;
+                    return;
+                }
+                if (x.Collection.CollectionType == CollectionType.Array)
+                {
+                    var count = (x.IsReversed ? (x.ForFrom - x.ForTo + 1) : (x.ForTo - x.ForFrom + 1)).Simplify();
+                    x.PreFor.Add((StatementBridge)"System".Access("Array", "Copy")
+                        .Invoke(x.Collection, x.ForFrom, resultVariable, p.Indexer, count));
+                    x.PreFor.Add((StatementBridge)p.Indexer.AddAssign(count));
+                    x.IgnoreIterator = true;
+                }
+                else if (x.Collection.CollectionType == CollectionType.SimpleList)
+                {
+                    var count = (x.IsReversed ? (x.ForFrom - x.ForTo + 1) : (x.ForTo - x.ForFrom + 1)).Simplify();
+                    x.PreFor.Add((StatementBridge)"System".Access("Array", "Copy")
+                        .Invoke(x.Collection.Access("Items"), x.ForFrom, resultVariable, p.Indexer, count));
+                    x.PreFor.Add((StatementBridge)p.Indexer.AddAssign(count));
+                    x.IgnoreIterator = true;
+                }
+                else if (p.CurrentCollection.CollectionType == CollectionType.List)
+                {
+                    var count = (x.IsReversed ? (x.ForFrom - x.ForTo + 1) : (x.ForTo - x.ForFrom + 1)).Simplify();
+                    x.PreFor.Add((StatementBridge) p.CurrentCollection.Access("CopyTo")
+                        .Invoke(x.ForFrom, resultVariable, p.Indexer, count));
+                    x.PreFor.Add((StatementBridge)p.Indexer.AddAssign(count));
+                    x.IgnoreIterator = true;
+                }
+            });
         }
     }
 }

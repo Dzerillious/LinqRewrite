@@ -10,25 +10,24 @@ namespace LinqRewrite.DataStructures
     public class IteratorParameters : IStatementSyntax
     {
         private readonly RewriteParameters _parameters;
-        public ValueBridge ForMin { get; set; }
-        public ValueBridge ForMax { get; set; }
-        public ValueBridge ForIncrement { get; set; } = 1;
-        public ValueBridge ForReverseMin { get; set; }
-        public ValueBridge ForReverseMax { get; set; }
-        public RewrittenValueBridge Collection { get; }
+        public ValueBridge ForFrom { get; set; }
+        public ValueBridge ForTo { get; set; }
+        public ValueBridge ForInc { get; set; } = 1;
+        
+        public CollectionValueBridge Collection { get; }
+        public LocalVariable Indexer { get; set; }
+        public LocalVariable ForIndexer { get; set; }
+        public LocalVariable Enumerator { get; set; }
 
         public bool IsReversed { get; set; }
         public bool Complete { get; set; }
+        public bool ListEnumeration { get; set; } = true;
+        public bool IgnoreIterator { get; set; }
         
         public List<StatementSyntax> PreFor { get; } = new List<StatementSyntax>();
-        public List<IStatementSyntax> ForBody { get; private set; } = new List<IStatementSyntax>();
-        public List<IStatementSyntax> ForEnd { get; private set; } = new List<IStatementSyntax>();
+        public List<IStatementSyntax> ForBody { get; } = new List<IStatementSyntax>();
+        public List<IStatementSyntax> ForEnd { get; } = new List<IStatementSyntax>();
         public List<StatementSyntax> PostFor { get; } = new List<StatementSyntax>();
-        
-        public LocalVariable CurrentIndexer { get; set; }
-        public LocalVariable ForIndexer { get; set; }
-        public LocalVariable EnumeratorVariable { get; set; }
-        public bool IgnoreIterator { get; set; }
 
         public void BodyAdd(StatementBridge _) => ForBody.Add(_);
         
@@ -37,7 +36,7 @@ namespace LinqRewrite.DataStructures
             _parameters = parameters;
         }
         
-        public IteratorParameters(RewriteParameters parameters, RewrittenValueBridge collection)
+        public IteratorParameters(RewriteParameters parameters, CollectionValueBridge collection)
         {
             _parameters = parameters;
             Collection = collection;
@@ -46,7 +45,6 @@ namespace LinqRewrite.DataStructures
         private bool _preAddCalculated;
         public void CalculatePreAdd(RewriteParameters p)
         {
-            if (IgnoreIterator) return;
             if (_preAddCalculated) return;
             _preAddCalculated = true;
             
@@ -55,27 +53,31 @@ namespace LinqRewrite.DataStructures
                 if (x is IteratorParameters iteratorParameters)
                     iteratorParameters.CalculatePreAdd(p);
             });
-            if (ForMin == null)
-                PreFor.Add((StatementBridge)EnumeratorVariable.Assign(Collection.Access("GetEnumerator").Invoke()));
+            if (ForFrom == null) PreFor.Insert(0, (StatementBridge)Enumerator.Assign(Collection.Access("GetEnumerator").Invoke()));
             else if (IsReversed)
-                PreFor.Add((StatementBridge)ForIndexer.Assign(ForReverseMax));
-            else PreFor.Add((StatementBridge)ForIndexer.Assign(ForMin));
+            {
+                PreFor.Insert(0, (StatementBridge)ForIndexer.Assign(ForFrom.Simplify()));
+                ForTo = ForTo.Simplify().ReusableForConst(_parameters, Int, this);
+            }
+            else
+            {
+                PreFor.Insert(0, (StatementBridge)ForIndexer.Assign(ForFrom.Simplify()));
+                ForTo = (ForTo + 1).Simplify().ReusableForConst(_parameters, Int, this);
+            }
         }
 
         public StatementSyntax[] GetStatementSyntax(RewriteParameters p)
         {
-            if (IgnoreIterator) return null;
             CalculatePreAdd(p);
+            if (IgnoreIterator) return null;
             var content = ForBody.SelectMany(x => 
                 x is IteratorParameters parameters
                     ? parameters.PreFor.Select(x => (StatementBridge)x).Concat(new[] {x})
                     : new[] {x}).Concat(ForEnd).ToList();
             
-            if (ForMin == null)
-                return RewriteService.GetForEachStatement(p, EnumeratorVariable, content);
-            if (IsReversed)
-                return new StatementSyntax[]{RewriteService.GetReverseForStatement(p, ForIndexer, ForReverseMin.ReusableForConst(_parameters, Int, this), ForIncrement, content)};
-            return new StatementSyntax[]{RewriteService.GetForStatement(p, ForIndexer, ForMax.ReusableForConst(_parameters, Int, this), ForIncrement, content)};
+            if (ForFrom == null) return RewriteService.GetForEachStatement(p, Enumerator, content);
+            if (IsReversed) return new StatementSyntax[]{RewriteService.GetReverseForStatement(p, ForIndexer, ForTo, ForInc.Simplify(), content)};
+            return new StatementSyntax[]{RewriteService.GetForStatement(p, ForIndexer, ForTo, ForInc.Simplify(), content)};
         }
     }
 }

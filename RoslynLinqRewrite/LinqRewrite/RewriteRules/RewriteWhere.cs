@@ -16,6 +16,7 @@ namespace LinqRewrite.RewriteRules
                 1 => args[0].Inline(p, p.LastValue, p.Indexer)
             };
             p.ForAdd(If(Not(conditionValue), Continue()));
+            p.ListEnumeration = false;
             p.ModifiedEnumeration = true;
         }
     }

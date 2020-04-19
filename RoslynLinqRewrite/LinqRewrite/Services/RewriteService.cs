@@ -70,7 +70,7 @@ namespace LinqRewrite.Services
                 null,
                 default,
                 indexerVariable.GeThan(min),
-                CreateSeparatedExpressionList(indexerVariable.SubAssign(increment)), 
+                CreateSeparatedExpressionList(indexerVariable.AddAssign(increment)), 
                 GetBody(p, loopContent));
 
         public static StatementSyntax[] GetForEachStatement(RewriteParameters p, LocalVariable enumeratorVariable, List<IStatementSyntax> loopContent)

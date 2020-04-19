@@ -15,9 +15,9 @@ namespace LinqRewrite.RewriteRules
             if (!p.AssertNotNull(collectionValue)) return;
 
             var oldLast = p.LastValue;
-            var oldIterator = p.InsertIterator(collectionValue);
             var collectionType = p.Data.GetTypeInfo(collectionValue).Type;
-            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, collectionValue, true));
+            var oldIterator = p.InsertIterator(new CollectionValueBridge(p, collectionType, collectionValue, true));
+            RewriteCollectionEnumeration.RewriteOther(p, p.CurrentIterator.Collection);
 
             var hashsetType = SyntaxFactory.ParseTypeName($"System.Collections.Generic.HashSet<{p.LastValue.Type}>");
             var hashsetCreation = args.Length switch
@@ -40,6 +40,7 @@ namespace LinqRewrite.RewriteRules
             if (sourceSizeValue != null && p.SourceSize != null) p.SourceSize += sourceSizeValue;
             else p.SourceSize = null;
             
+            p.ListEnumeration = false;
             p.ModifiedEnumeration = true;
         }
     }

@@ -17,19 +17,17 @@ namespace LinqRewrite.RewriteRules
 
             p.FirstCollection = p.CurrentCollection = null;
             p.AddIterator();
-            p.ForMin = p.ForReMin = 0;
-            p.ForMax = countValue * increment;
-            p.ForReMax = countValue * increment - 1;
-            p.ForIncrement = increment;
+            p.CurrentIterator.ForFrom = 0;
+            p.CurrentIterator.ForTo = countValue * increment - increment;
+            p.CurrentIterator.ForInc = increment;
+            p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
             
             p.ListEnumeration = false;
             p.SimpleEnumeration = true;
-            
-            p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
             if (p.CurrentIndexer == null)
             {
-                p.CurrentIterator.CurrentIndexer = p.CurrentIterator.ForIndexer;
-                p.CurrentIterator.CurrentIndexer.IsGlobal = true;
+                p.CurrentIterator.Indexer = p.CurrentIterator.ForIndexer;
+                p.CurrentIterator.Indexer.IsGlobal = true;
             }
             p.LastValue = new TypedValueBridge(Int, p.Indexer + fromValue);
                         

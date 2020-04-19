@@ -16,21 +16,19 @@ namespace LinqRewrite.RewriteRules
             if (!p.AssertGreaterEqual(countValue, 0)) return;
             
             p.AddIterator();
-            p.ForMin = p.ForReMin = 0;
-            p.ForMax = countValue;
-            p.ForReMax = countValue - 1;
+            p.CurrentIterator.ForFrom = 0;
+            p.CurrentIterator.ForTo = countValue - 1;
+            p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
             
             p.ResultSize = countValue;
             p.SourceSize = countValue;
-                
             p.ListEnumeration = false;
             p.SimpleEnumeration = true;
             
-            p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
             if (p.CurrentIndexer == null)
             {
-                p.CurrentIterator.CurrentIndexer = p.CurrentIterator.ForIndexer;
-                p.CurrentIterator.CurrentIndexer.IsGlobal = true;
+                p.CurrentIterator.Indexer = p.CurrentIterator.ForIndexer;
+                p.CurrentIterator.Indexer.IsGlobal = true;
             }
             p.LastValue = new TypedValueBridge(itemValue.GetType(p), itemValue);
             p.FirstCollection = p.CurrentCollection = null;

@@ -33,16 +33,17 @@ namespace LinqRewrite.RewriteRules
                 p.LastValue = new TypedValueBridge(p.LastValue.Type, itemVariable);
             }
             itemVariable.IsGlobal = true;
-            p.AddIterator(collectionValue);
-                
+            
             var collectionType = p.Data.GetTypeInfo(collectionValue).Type;
-            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, collectionValue, true), itemVariable, true);
+            p.AddIterator(new CollectionValueBridge(p, collectionType, collectionValue, true));
+            RewriteCollectionEnumeration.RewriteOther(p, p.CurrentIterator.Collection, itemVariable, true);
 
             p.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue)),
                 Continue()));
 
             if (sourceSizeValue != null && p.SourceSize != null) p.SourceSize += sourceSizeValue;
             else p.SourceSize = null;
+            p.ListEnumeration = false;
             p.ModifiedEnumeration = true;
         }
     }

@@ -3,7 +3,6 @@ using LinqRewrite.Services;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Linq;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.DataStructures
@@ -15,9 +14,9 @@ namespace LinqRewrite.DataStructures
     
     public class CollectionValueBridge : TypedValueBridge
     {
-        public CollectionType CollectionType { get; set; }
-        public ValueBridge Count { get; set; }
-        public TypeSyntax ItemType { get; set; }
+        public CollectionType CollectionType { get; }
+        public ValueBridge Count { get; }
+        public TypeSyntax ItemType { get; }
         
         public new TypedValueBridge this[ValueBridge i] => new TypedValueBridge(ItemType, this.ArrayAccess(i));
             
@@ -28,9 +27,9 @@ namespace LinqRewrite.DataStructures
             else
             {
                 var displayString = collectionType.Type.ToString();
-                if (displayString.StartsWith("LinqRewrite.Core.SimpleList.SimpleList<int>"))
+                if (displayString.StartsWith("LinqRewrite.Core.SimpleList.SimpleList<"))
                     CollectionType = CollectionType.SimpleList;
-                else if (displayString.StartsWith("System.Collections.Generic.IList<"))
+                else if (displayString.StartsWith("System.Collections.Generic.List<"))
                     CollectionType = CollectionType.List;
                 else CollectionType = CollectionType.Enumerable;
             }
@@ -50,9 +49,9 @@ namespace LinqRewrite.DataStructures
             else
             {
                 var displayString = type.ToDisplayString();
-                if (displayString.StartsWith("LinqRewrite.Core.SimpleList.SimpleList<int>"))
+                if (displayString.StartsWith("LinqRewrite.Core.SimpleList.SimpleList<"))
                     CollectionType = CollectionType.SimpleList;
-                else if (displayString.StartsWith("System.Collections.Generic.IList<") || type.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.IList<")))
+                else if (displayString.StartsWith("System.Collections.Generic.List<"))
                     CollectionType = CollectionType.List;
                 else CollectionType = CollectionType.Enumerable;
             }

@@ -16,16 +16,19 @@ namespace LinqRewrite.RewriteRules
             {
                 if (skippedInt < 0) return;
             }
-            else if (!p.Unchecked && !p.ModifiedEnumeration)
+            else if (!p.Unchecked && p.ModifiedEnumeration)
             {
                 var skippedVariable = p.GlobalVariable(Int, skippedValue);
                 p.InitialAdd(skippedVariable.Assign(ConditionalExpression(
                     skippedValue < 0, skippedValue, IntValue(0))));
                 skippedValue = new RewrittenValueBridge(skippedVariable);
             }
-                
+
             if (!p.ModifiedEnumeration)
-                p.ForMin = p.ForReMin += skippedValue;
+            {
+                p.CurrentIterator.ForFrom += skippedValue * p.CurrentIterator.ForInc;
+                p.CurrentIterator.ForFrom = p.CurrentIterator.ForFrom.Simplify();
+            }
             else 
             {
                 p.ForAdd(If(p.Indexer < skippedValue, 

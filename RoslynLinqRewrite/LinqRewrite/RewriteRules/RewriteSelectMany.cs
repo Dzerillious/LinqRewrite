@@ -23,12 +23,12 @@ namespace LinqRewrite.RewriteRules
             var iterator = p.GlobalVariable(method.ReturnItemType(p));
             p.Iterators.Where(x => !x.Complete).ToArray().ForEach(x =>
             {
-                var newIterator = new IteratorParameters(p, rewritten);
+                var newIterator = new IteratorParameters(p, new CollectionValueBridge(p, method.ReturnType(p), method.ReturnItemType(p), rewritten, true));
                 x.ForBody.Add(newIterator);
                 p.Iterators.Add(newIterator);
                 p.Iterators.Remove(x);
                 p.CurrentIterator = newIterator;
-                RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, method.ReturnType(p), method.ReturnItemType(p), rewritten, true), iterator);
+                RewriteCollectionEnumeration.RewriteOther(p, p.CurrentIterator.Collection, iterator);
             });
             
             p.CurrentIterator = p.Iterators.Last();
@@ -37,6 +37,7 @@ namespace LinqRewrite.RewriteRules
                 1 => p.LastValue,
                 2 => args[1].Inline(p, p.LastValue, p.Indexer)
             };
+            p.ListEnumeration = false;
             p.ModifiedEnumeration = true;
             p.SourceSize = null;
         }

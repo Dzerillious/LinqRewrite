@@ -24,9 +24,9 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(hashsetVariable.Access("Add").Invoke(p.LastValue));
             p.Iterators.ForEach(x => x.Complete = true);
             
-            p.AddIterator(collectionValue);
             var collectionType = p.Data.GetTypeInfo(collectionValue).Type;
-            RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, collectionValue, true));
+            p.AddIterator(new CollectionValueBridge(p, collectionType, collectionValue, true));
+            RewriteCollectionEnumeration.RewriteOther(p, p.CurrentIterator.Collection);
 
             p.LastValue = p.LastValue.Reusable(p);
             p.CurrentForAdd(If(Not(hashsetVariable.Access("Remove").Invoke(p.LastValue)),
@@ -35,6 +35,7 @@ namespace LinqRewrite.RewriteRules
             if (sourceSizeValue != null && p.SourceSize != null) p.SourceSize += sourceSizeValue;
             else p.SourceSize = null;
             
+            p.ListEnumeration = false;
             p.ModifiedEnumeration = true;
         }
     }

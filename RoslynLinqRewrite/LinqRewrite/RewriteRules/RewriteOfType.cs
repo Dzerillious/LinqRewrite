@@ -34,6 +34,7 @@ namespace LinqRewrite.RewriteRules
             }
 
             p.ResultSize = null;
+            p.ListEnumeration = false;
             p.ModifiedEnumeration = true;
         }
     }

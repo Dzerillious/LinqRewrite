@@ -21,6 +21,7 @@ namespace LinqRewrite.RewriteRules
             var lookupItemType = ParseTypeName($"System.Collections.IEnumerable<{inner.ItemType(p)}>");
             p.LastValue = resultSelector.Inline(p, p.LastValue, new TypedValueBridge(lookupItemType, lookupVariable[outerKeySelector.Inline(p, p.LastValue)]));
             
+            p.ListEnumeration = false;
             p.ModifiedEnumeration = true;
         }
     }

@@ -76,7 +76,13 @@ namespace LinqRewrite.Extensions
             return SyntaxFactory.ParseExpression(str);
         }
 
-        public static ValueBridge Simplify(ValueBridge expression)
+        public static ValueBridge Simplify(this TypedValueBridge expression)
+        {
+            if (expression == null) return null;
+            return SyntaxFactory.ParenthesizedExpression(SyntaxFactory.ParseExpression(SimplifyString(expression)));
+        }
+
+        public static ValueBridge Simplify(this ValueBridge expression)
         {
             if (expression == null) return null;
             return SyntaxFactory.ParenthesizedExpression(SyntaxFactory.ParseExpression(SimplifyString(expression)));

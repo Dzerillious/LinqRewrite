@@ -1,4 +1,6 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Linq;
+using LinqRewrite.Core;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.VariableExtensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
@@ -10,7 +12,7 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args, bool? reuseVariables = null)
         {
             if (!p.AssertNotNull(p.CurrentCollection)) return;
-            p.AddIterator(new RewrittenValueBridge(p.CurrentCollection));
+            p.AddIterator(p.CurrentCollection);
             RewriteOther(p, p.CurrentCollection, null, false, reuseVariables);
         }
         
@@ -21,20 +23,19 @@ namespace LinqRewrite.RewriteRules
                 || collection.CollectionType == CollectionType.SimpleList) ArrayEnumeration(p, collection.ItemType, collection.Count, collection, variable);
             else if (collection.CollectionType == CollectionType.Enumerable) EnumerableEnumeration(p, collection, variable);
 
-            if (otherIndexer) p.CurrentIterator.CurrentIndexer = null;
+            if (otherIndexer) p.CurrentIterator.Indexer = null;
         }
 
         public static void ArrayEnumeration(RewriteParameters p, TypeBridge itemType, ValueBridge count, ValueBridge collection, LocalVariable variable = null)
         {
-            p.ForMin = p.ForReMin = 0;
-            p.ForMax = count;
-            p.ForReMax = count - 1;
-
+            p.CurrentIterator.ForFrom = 0;
+            p.CurrentIterator.ForTo = count - 1;
             p.CurrentIterator.ForIndexer = p.GlobalVariable(Int);
+            
             if (p.CurrentIndexer == null)
             {
-                p.CurrentIterator.CurrentIndexer = p.CurrentIterator.ForIndexer;
-                p.CurrentIterator.CurrentIndexer.IsGlobal = true;
+                p.CurrentIterator.Indexer = p.CurrentIterator.ForIndexer;
+                p.CurrentIterator.Indexer.IsGlobal = true;
             }
             
             if (variable == null)
@@ -55,18 +56,22 @@ namespace LinqRewrite.RewriteRules
 
         public static void EnumerableEnumeration(RewriteParameters p, CollectionValueBridge collection, LocalVariable variable = null)
         {
-            p.ForMin = p.ForReMin = null;
-            p.ForMax = p.ForReMax = null;
-
-            p.CurrentIterator.EnumeratorVariable = p.GlobalVariable(ParseTypeName($"System.Collections.Generic.IEnumerator<{collection.ItemType}>"));
+            p.CurrentIterator.ForFrom = null;
+            p.CurrentIterator.ForTo = null;
+            p.CurrentIterator.Enumerator = p.GlobalVariable(ParseTypeName($"System.Collections.Generic.IEnumerator<{collection.ItemType}>"));
+            p.CurrentIterator.ListEnumeration = false;
+            
             if (variable != null)
             {
-                p.CurrentForAdd(variable.Assign(p.CurrentIterator.EnumeratorVariable.Access("Current")));
+                p.CurrentForAdd(variable.Assign(p.CurrentIterator.Enumerator.Access("Current")));
                 p.LastValue = new TypedValueBridge(collection.ItemType, variable);
             }
-            else p.LastValue = new TypedValueBridge(collection.ItemType, p.CurrentIterator.EnumeratorVariable.Access("Current"));
+            else p.LastValue = new TypedValueBridge(collection.ItemType, p.CurrentIterator.Enumerator.Access("Current"));
 
             p.SourceSize = null;
+            var listEnumerations = p.Iterators.Select(x => x.ListEnumeration).ToArray();
+            p.ListEnumeration = false;
+            listEnumerations.Select((x, i) => (x, i)).ForEach(x => p.Iterators[x.i].ListEnumeration = x.x);
             p.ModifiedEnumeration = true;
         }
     }

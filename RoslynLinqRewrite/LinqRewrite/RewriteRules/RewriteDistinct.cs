@@ -21,6 +21,7 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue)),
                         Continue()));
             
+            p.ListEnumeration = false;
             p.ModifiedEnumeration = true;
         }
     }

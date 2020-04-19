@@ -12,11 +12,11 @@ namespace LinqRewrite.RewriteRules
         {
             var takeValue = args[0];
             CheckBounds(p, ref takeValue);
-                
+
             if (!p.ModifiedEnumeration)
             {
-                p.ForReMin = p.ForMax - takeValue;
-                p.ForMax = takeValue;
+                p.CurrentIterator.ForTo = p.CurrentIterator.ForFrom + p.CurrentIterator.ForInc * takeValue - p.CurrentIterator.ForInc;
+                p.CurrentIterator.ForTo = p.CurrentIterator.ForTo.Simplify();
             }
             else p.ForAdd(If(p.Indexer >= takeValue, Break()));
             

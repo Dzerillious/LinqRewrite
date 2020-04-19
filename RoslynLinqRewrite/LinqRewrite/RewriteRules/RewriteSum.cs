@@ -18,7 +18,7 @@ namespace LinqRewrite.RewriteRules
             var items = Enumerable.Range(0, intSize).Select(x
                 => new TypedValueBridge(p.LastValue.Type, SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x)));
             var simple = items.Aggregate((x, y) => new TypedValueBridge(p.LastValue.Type, x + y));  
-            return Simplify(simple);
+            return simple.Simplify();
         }
         
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
@@ -39,7 +39,6 @@ namespace LinqRewrite.RewriteRules
                             sumVariable.AddAssign(value.Cast(elementType))));
             }
             else p.ForAdd(sumVariable.AddAssign(value));
-            
             p.ResultAdd(Return(sumVariable));
         }
     }

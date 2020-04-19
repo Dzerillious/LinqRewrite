@@ -21,19 +21,19 @@ namespace BenchmarkLibrary
             ArraySource2 = Enumerable.Range(500, 1000).ToArray();
             EnumerableSource2 = Enumerable.Range(500, 1000);
         }
-
+        
         [NoRewrite, Benchmark]
         public void ArrayConcatArrayToArray()
         {
             var res = ArraySource.Concat(ArraySource2).ToArray();
         }//EndMethod
-
+        
         [Benchmark]
         public void ArrayConcatArrayToArrayRewritten()
         {
             var res = ArraySource.Concat(ArraySource2).ToArray();
         }//EndMethod
-
+        
         [NoRewrite, Benchmark]
         public void ArrayWhereConcatArrayWhereToArray()
         {
@@ -51,79 +51,79 @@ namespace BenchmarkLibrary
         {
             var res = ArraySource.Concat(EnumerableSource2).ToArray();
         }//EndMethod
-
+        
         [Benchmark]
         public void ArrayConcatEnumerableToArrayRewritten()
         {
             var res = ArraySource.Concat(EnumerableSource2).ToArray();
         }//EndMethod
-
+        
         [NoRewrite, Benchmark]
         public void ArrayWhereConcatEnumerableWhereToArray()
         {
             var res = ArraySource.Concat(EnumerableSource2).ToArray();
         }//EndMethod
-
+        
         [Benchmark]
         public void ArrayWhereConcatEnumerableWhereToArrayRewritten()
         {
             var res = ArraySource.Concat(EnumerableSource2).ToArray();
         }//EndMethod
-
+        
         [NoRewrite, Benchmark]
         public void EnumerableConcatArrayToArray()
         {
             var res = EnumerableSource.Concat(ArraySource2).ToArray();
         }//EndMethod
-
+        
         [Benchmark]
         public void EnumerableConcatArrayToArrayRewritten()
         {
             var res = EnumerableSource.Concat(ArraySource2).ToArray();
         }//EndMethod
-
+        
         [NoRewrite, Benchmark]
         public void EnumerableWhereConcatArrayWhereToArray()
         {
             var res = EnumerableSource.Concat(ArraySource2).ToArray();
         }//EndMethod
-
+        
         [Benchmark]
         public void EnumerableWhereConcatArrayWhereToArrayRewritten()
         {
             var res = EnumerableSource.Concat(ArraySource2).ToArray();
         }//EndMethod
-
+        
         [NoRewrite, Benchmark]
         public void EnumerableConcatEnumerableToArray()
         {
             var res = EnumerableSource.Concat(EnumerableSource2).ToArray();
         }//EndMethod
-
+        
         [Benchmark]
         public void EnumerableConcatEnumerableToArrayRewritten()
         {
             var res = EnumerableSource.Concat(EnumerableSource2).ToArray();
         }//EndMethod
-
+        
         [NoRewrite, Benchmark]
         public void EnumerableWhereConcatEnumerableWhereToArray()
         {
             var res = EnumerableSource.Concat(EnumerableSource2).ToArray();
         }//EndMethod
-
+        
         [Benchmark]
         public void EnumerableWhereConcatEnumerableWhereToArrayRewritten()
         {
             var res = EnumerableSource.Concat(EnumerableSource2).ToArray();
         }//EndMethod
-
+        
         [NoRewrite, Benchmark]
         public void ArrayConcatArrayToSimpleList()
         {
             var res = ArraySource.Concat(ArraySource2).ToSimpleList();
         }//EndMethod
-
+        
         [Benchmark]
         public void ArrayConcatArrayToSimpleListRewritten()
         {
@@ -135,31 +135,31 @@ namespace BenchmarkLibrary
         {
             var res = ArraySource.Concat(ArraySource2).ToSimpleList();
         }//EndMethod
-
+        
         [Benchmark]
         public void ArrayWhereConcatArrayWhereToSimpleListRewritten()
         {
             var res = ArraySource.Concat(ArraySource2).ToSimpleList();
         }//EndMethod
-
+        
         [NoRewrite, Benchmark]
         public void EnumerableConcatEnumerableToSimpleList()
         {
             var res = EnumerableSource.Concat(EnumerableSource2).ToSimpleList();
         }//EndMethod
-
+        
         [Benchmark]
         public void EnumerableConcatEnumerableToSimpleListRewritten()
         {
             var res = EnumerableSource.Concat(EnumerableSource2).ToSimpleList();
         }//EndMethod
-
+        
         [NoRewrite, Benchmark]
         public void EnumerableWhereConcatEnumerableWhereToSimpleList()
         {
             var res = EnumerableSource.Concat(EnumerableSource2).ToSimpleList();
         }//EndMethod
-
+        
         [Benchmark]
         public void EnumerableWhereConcatEnumerableWhereToSimpleListRewritten()
         {

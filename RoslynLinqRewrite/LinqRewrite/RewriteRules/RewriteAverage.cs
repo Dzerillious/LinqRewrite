@@ -55,7 +55,7 @@ namespace LinqRewrite.RewriteRules
         {
             if (!p.AssertResultSizeGreaterEqual(1)) return;
             p.ForAdd(sumVariable.AddAssign(selectionValue));
-            p.ResultAdd(Return(sumVariable / p.CalculatedResultsSize));
+            p.ResultAdd(Return(sumVariable / p.GetResultSize()));
         }
     }
 }

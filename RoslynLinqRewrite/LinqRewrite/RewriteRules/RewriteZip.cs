@@ -1,5 +1,6 @@
 ﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis.CSharp;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
@@ -20,12 +21,8 @@ namespace LinqRewrite.RewriteRules
             p.InitialAdd(enumeratorVariable.Assign(Parenthesize(collectionValue.Cast(ParseTypeName($"IEnumerable<{itemType}>")))
                 .Access("GetEnumerator").Invoke()));
             
-            p.ForAdd(If(Not(enumeratorVariable.Access("MoveNext").Invoke()),
-                Throw("System.InvalidOperationException", "Invalid sizes of sources")));
-
+            p.ForAdd(If(Not(enumeratorVariable.Access("MoveNext").Invoke()), Break()));
             p.LastValue = methodValue.Inline(p, p.LastValue, new TypedValueBridge(collectionValue.ItemType(p), enumeratorVariable.Access("Current")));
-            p.ResultAdd(If(enumeratorVariable.Access("MoveNext").Invoke(),
-                Throw("System.InvalidOperationException", "Invalid sizes of sources")));
 
             p.FinalAdd(enumeratorVariable.Access("Dispose").Invoke());
             p.SimpleEnumeration = false;

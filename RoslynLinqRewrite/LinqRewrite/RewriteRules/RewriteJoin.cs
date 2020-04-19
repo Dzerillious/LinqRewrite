@@ -35,16 +35,17 @@ namespace LinqRewrite.RewriteRules
             var iterator = p.GlobalVariable(innerKeySelector.ReturnType(p));
             p.Iterators.Where(x => !x.Complete).ToArray().ForEach(x =>
             {
-                var newIterator = new IteratorParameters(p, rewritten);
+                var newIterator = new IteratorParameters(p, new CollectionValueBridge(p, groupingType, innerKeySelector.ReturnType(p), rewritten, true));
                 x.ForBody.Add(newIterator);
                 p.Iterators.Add(newIterator);
                 p.Iterators.Remove(x);
                 p.CurrentIterator = newIterator;
-                RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, groupingType, innerKeySelector.ReturnType(p), rewritten, true), iterator);
+                RewriteCollectionEnumeration.RewriteOther(p, p.CurrentIterator.Collection, iterator);
             });
 
             p.CurrentIterator = p.Iterators.Last();
             p.LastValue = resultSelectorValue.Inline(p, itemValue, p.LastValue);
+            p.ListEnumeration = false;
             p.ModifiedEnumeration = true;
             p.SourceSize = null;
         }

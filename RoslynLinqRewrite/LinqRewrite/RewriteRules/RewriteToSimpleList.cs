@@ -31,15 +31,10 @@ namespace LinqRewrite.RewriteRules
                 "EnlargingCoefficient.By8" => 3,
                 _ => 2
             };
-            VariableBridge result;
-            if (p.IncompleteIterators.Count() <= 1)
-            {
-                result = RewriteToArray.RewriteSimplified(p, p.LastValue.Type);
-                if (result != null)
-                    p.CurrentIterator.IgnoreIterator = true;
-                else result = RewriteToArray.RewriteOther(p, enlarging, p.LastValue.Type);
-            }
-            else result = RewriteToArray.RewriteOther(p, enlarging, p.LastValue.Type);
+            
+            var (currentLength, currentResult) = RewriteToArray.GetResultVariable(p, p.LastValue.Type);
+            VariableBridge result = RewriteToArray.RewriteOther(p, currentLength, currentResult, enlarging);
+            RewriteToArray.SimplifyPart(p, result);
             
             var listResultType = ParseTypeName($"LinqRewrite.Core.SimpleList.SimpleList<{p.LastValue.Type}>");
             var finalResult = p.GlobalVariable(listResultType);

@@ -154,7 +154,7 @@ namespace LinqRewrite.Extensions
             }
 
             var tmpVariable = p.SuperGlobalVariable(type, e);
-            return new TypedValueBridge(Int, IdentifierName(tmpVariable));
+            return new TypedValueBridge(type.Type, IdentifierName(tmpVariable));
         }
 
         public static TypedValueBridge ReusableForConst(this ValueBridge e, RewriteParameters p, TypeBridge type, IteratorParameters iterator, bool? reuse = null)
@@ -168,7 +168,7 @@ namespace LinqRewrite.Extensions
             }
 
             var tmpVariable = p.GlobalVariable(type, e, iterator);
-            return new TypedValueBridge(Int, IdentifierName(tmpVariable));
+            return new TypedValueBridge(type.Type, IdentifierName(tmpVariable));
         }
 
         public static TypedValueBridge Reusable(this ValueBridge e, RewriteParameters p, TypeBridge type, bool? reuse = null)
@@ -184,7 +184,7 @@ namespace LinqRewrite.Extensions
             var tmpVariable = p.LocalVariable(type);
             p.ForAdd(tmpVariable.Assign(e));
             tmpVariable.IsUsed = true;
-            return new TypedValueBridge(Int, IdentifierName(tmpVariable));
+            return new TypedValueBridge(type.Type, IdentifierName(tmpVariable));
         }
 
         public static TypedValueBridge Reusable(this TypedValueBridge e, RewriteParameters p, bool? reuse = null)
@@ -291,7 +291,7 @@ namespace LinqRewrite.Extensions
                 default:
                     try
                     {
-                        return (((INamedTypeSymbol) p.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.Parameters.Length < 2);
+                        return ((INamedTypeSymbol) p.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.Parameters.Length < 2;
                     }
                     catch (Exception)
                     {

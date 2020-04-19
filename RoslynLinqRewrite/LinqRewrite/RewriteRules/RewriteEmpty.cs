@@ -24,23 +24,21 @@ namespace LinqRewrite.RewriteRules
 
             p.FirstCollection = p.CurrentCollection = null;
             p.AddIterator();
-            p.CurrentIterator.IgnoreIterator = true;
             
-            p.ForMin = p.ForReMin = 0;
-            p.ForMax = 0;
-            p.ForReMax = -1;
+            p.CurrentIterator.IgnoreIterator = true;
+            p.CurrentIterator.ForFrom = 0;
+            p.CurrentIterator.ForTo = 0;
+            p.CurrentIterator.ForIndexer = p.LocalVariable(Int, 0);
             
             p.ResultSize = 0;
             p.SourceSize = 0;
-            
             p.ListEnumeration = true;
             p.SimpleEnumeration = true;
             
-            p.CurrentIterator.ForIndexer = p.LocalVariable(Int, 0);
             if (p.CurrentIndexer == null)
             {
-                p.CurrentIterator.CurrentIndexer = p.CurrentIterator.ForIndexer;
-                p.CurrentIterator.CurrentIndexer.IsGlobal = true;
+                p.CurrentIterator.Indexer = p.CurrentIterator.ForIndexer;
+                p.CurrentIterator.Indexer.IsGlobal = true;
             }
             p.LastValue = new TypedValueBridge(type, Default(type));
             p.CurrentCollection = null;
