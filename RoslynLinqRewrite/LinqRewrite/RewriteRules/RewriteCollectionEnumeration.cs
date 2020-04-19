@@ -1,6 +1,7 @@
 ﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.VariableExtensions;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -57,7 +58,7 @@ namespace LinqRewrite.RewriteRules
             p.ForMin = p.ForReMin = null;
             p.ForMax = p.ForReMax = null;
 
-            p.CurrentIterator.EnumeratorVariable = p.GlobalVariable(p.WrappedItemType("System.Collections.Generic.IEnumerator<", collection, ">"));
+            p.CurrentIterator.EnumeratorVariable = p.GlobalVariable(ParseTypeName($"System.Collections.Generic.IEnumerator<{collection.ItemType}>"));
             if (variable != null)
             {
                 p.CurrentForAdd(variable.Assign(p.CurrentIterator.EnumeratorVariable.Access("Current")));

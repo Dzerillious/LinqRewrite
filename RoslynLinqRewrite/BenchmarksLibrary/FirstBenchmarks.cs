@@ -18,99 +18,99 @@ namespace BenchmarkLibrary
         }
 
         [NoRewrite, Benchmark]
-        public void ArrayFirst()
+        public int ArrayFirst()
         {
-            var res = ArraySource.First();
+            return ArraySource.First();
         }//EndMethod
 
 		[Benchmark]
-        public void ArrayFirstRewritten()
+        public int ArrayFirstRewritten()
         {
-            var res = ArraySource.First();
+            return ArraySource.First();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayFirstCondition()
+        public int ArrayFirstCondition()
         {
-            var res = ArraySource.First(x => x > 3);
+            return ArraySource.First(x => x > 3);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayFirstConditionRewritten()
+        public int ArrayFirstConditionRewritten()
         {
-            var res = ArraySource.First(x => x > 3);
+            return ArraySource.First(x => x > 3);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArraySelectFirst()
+        public int ArraySelectFirst()
         {
-            var res = ArraySource.Select(x => x + 3).First();
+            return ArraySource.Select(x => x + 3).First();
         }//EndMethod
 
         [Benchmark]
-        public void ArraySelectFirstRewritten()
+        public int ArraySelectFirstRewritten()
         {
-            var res = ArraySource.Select(x => x + 3).First();
+            return ArraySource.Select(x => x + 3).First();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayWhereFirst()
+        public int ArrayWhereFirst()
         {
-            var res = ArraySource.Where(x => x > 100).First();
+            return ArraySource.Where(x => x > 100).First();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereFirstRewritten()
+        public int ArrayWhereFirstRewritten()
         {
-            var res = ArraySource.Where(x => x > 100).First();
+            return ArraySource.Where(x => x > 100).First();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayWhereFirstCondition()
+        public int ArrayWhereFirstCondition()
         {
-            var res = ArraySource.Where(x => x > 100).First(x => x > 200);
+            return ArraySource.Where(x => x > 100).First(x => x > 200);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereFirstConditionRewritten()
+        public int ArrayWhereFirstConditionRewritten()
         {
-            var res = ArraySource.Where(x => x > 100).First(x => x > 200);
+            return ArraySource.Where(x => x > 100).First(x => x > 200);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableFirstCondition()
+        public int EnumerableFirstCondition()
         {
-            var res = EnumerableSource.First(x => x > 3);
+            return EnumerableSource.First(x => x > 3);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableFirstConditionRewritten()
+        public int EnumerableFirstConditionRewritten()
         {
-            var res = EnumerableSource.First(x => x > 3);
+            return EnumerableSource.First(x => x > 3);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableFirstNotCondition()
+        public int EnumerableFirstNotCondition()
         {
-            var res = EnumerableSource.First(x => x > 10_000);
+            return EnumerableSource.First(x => x > 10_000);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableFirstNotConditionRewritten()
+        public int EnumerableFirstNotConditionRewritten()
         {
-            var res = EnumerableSource.First(x => x > 10_000);
+            return EnumerableSource.First(x => x > 10_000);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableFirstAllCondition()
+        public int EnumerableFirstAllCondition()
         {
-            var res = EnumerableSource.First(x => x > 0);
+            return EnumerableSource.First(x => x > 0);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableFirstAllConditionRewritten()
+        public int EnumerableFirstAllConditionRewritten()
         {
-            var res = EnumerableSource.First(x => x > 0);
+            return EnumerableSource.First(x => x > 0);
         }//EndMethod
     }
 }

@@ -5,7 +5,7 @@ namespace LinqRewrite.DataStructures
 {
     public interface IStatementSyntax
     {
-        StatementSyntax GetStatementSyntax(RewriteParameters p);
+        StatementSyntax[] GetStatementSyntax(RewriteParameters p);
     }
     
     public class StatementBridge : IStatementSyntax
@@ -36,7 +36,7 @@ namespace LinqRewrite.DataStructures
         public static implicit operator StatementBridge(VariableBridge value)
             => new StatementBridge(SyntaxFactory.ExpressionStatement(value));
         
-        public StatementSyntax GetStatementSyntax(RewriteParameters p)
-            => _statement;
+        public StatementSyntax[] GetStatementSyntax(RewriteParameters p)
+            => new []{_statement};
     }
 }

@@ -28,25 +28,6 @@ namespace LinqRewrite.Extensions
         public static ParameterSyntax GetLambdaParameter(Lambda lambda, int index)
             => lambda.Parameters[index];
 
-        public static TypeSyntax WrappedItemType(this RewriteParameters p, string pre, CollectionValueBridge collection,
-            string post)
-        {
-            var itemString = pre + collection.ItemType + post;
-            return SyntaxFactory.ParseTypeName(itemString);
-        }
-
-        public static TypeSyntax WrappedType(this RewriteParameters p, string pre, TypeSyntax type, string post)
-        {
-            var itemString = pre + type + post;
-            return SyntaxFactory.ParseTypeName(itemString);
-        }
-
-        public static TypeSyntax WrappedType(this RewriteParameters p, string pre, TypeBridge type, string post)
-        {
-            var itemString = pre + type + post;
-            return SyntaxFactory.ParseTypeName(itemString);
-        }
-
         public static TypeBridge ItemType(this RewrittenValueBridge collection, RewriteParameters p)
         {
             var itemString = collection.Old.GetItemTypeSymbol(p).ToDisplayString();
@@ -100,5 +81,21 @@ namespace LinqRewrite.Extensions
                     .OfType<INamedTypeSymbol>()
                     .FirstOrDefault(x => x.IsGenericType && x.ConstructUnboundGenericType().ToString() == "System.Collections.Generic.IEnumerable<>")?
                     .TypeArguments.First();
+
+        public static bool IsSameType(ITypeSymbol symbol, TypeBridge type) 
+            => symbol.ToDisplayString() == type.ToString();
+
+        public static bool HasCommonAncestor(ITypeSymbol symbol, TypeBridge type)
+        {
+            var checkedType = type.ToString();
+            if (symbol.AllInterfaces.Any(x => x.ToDisplayString() == checkedType)) return true;
+            
+            while (symbol.BaseType != null)
+            {
+                if (symbol.ToDisplayString() == checkedType) return true;
+                symbol = symbol.BaseType;
+            }
+            return false;
+        }
     }
 }

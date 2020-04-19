@@ -56,7 +56,7 @@ namespace LinqRewrite.Services
         }
 
         private static StatementSyntax GetBody(RewriteParameters p, List<IStatementSyntax> body) 
-            => AggregateStatementSyntax(body.Select(x => x.GetStatementSyntax(p)).Where(x => x != null).ToArray());
+            => AggregateStatementSyntax(body.SelectMany(x => x.GetStatementSyntax(p)).Where(x => x != null).ToArray());
         public static ForStatementSyntax GetForStatement(RewriteParameters p, LocalVariable indexerVariable, ValueBridge max, ValueBridge increment, List<IStatementSyntax> loopContent)
             => ForStatement(
                 null,
@@ -73,16 +73,27 @@ namespace LinqRewrite.Services
                 CreateSeparatedExpressionList(indexerVariable.SubAssign(increment)), 
                 GetBody(p, loopContent));
 
-        public static StatementSyntax GetForEachStatement(RewriteParameters p, LocalVariable enumeratorVariable, List<IStatementSyntax> loopContent) 
-            => TryF(Block(
-                    (StatementBridge)While(enumeratorVariable.Access("MoveNext").Invoke(),
+        public static StatementSyntax[] GetForEachStatement(RewriteParameters p, LocalVariable enumeratorVariable, List<IStatementSyntax> loopContent)
+        {
+            if (p.Unchecked)
+                return new StatementSyntax[]
+                {
+                    While(enumeratorVariable.Access("MoveNext").Invoke(),
+                        GetBody(p, loopContent)
+                    ),
+                    (StatementBridge) enumeratorVariable.Access("Dispose").Invoke()
+                };
+            return new StatementSyntax[]{
+                TryF(Block(
+                    (StatementBridge) While(enumeratorVariable.Access("MoveNext").Invoke(),
                         GetBody(p, loopContent)
                     )
                 ),
                 Block(
-                    (StatementBridge)enumeratorVariable.Access("Dispose").Invoke()
-                ));
-        
+                    (StatementBridge) enumeratorVariable.Access("Dispose").Invoke()
+                ))};
+        }
+
         public MethodDeclarationSyntax GetCoreMethod(TypeSyntax returnType, 
             string functionName, 
             IEnumerable<ParameterSyntax> parameters,

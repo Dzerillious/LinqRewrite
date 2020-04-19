@@ -38,6 +38,7 @@ namespace LinqRewrite.RewriteRules
                 2 => args[1].Inline(p, p.LastValue, p.Indexer)
             };
             p.ModifiedEnumeration = true;
+            p.SourceSize = null;
         }
     }
 }

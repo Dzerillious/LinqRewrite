@@ -9,12 +9,6 @@ namespace LinqRewrite.DataStructures
         public new ValueBridge Value { get; protected set; }
         public TypeSyntax Type { get; protected set; }
 
-        public void SetValue(ValueBridge value)
-        {
-            Value = value;
-            base.Value = value;
-        }
-
         public TypedValueBridge(RewriteParameters p, ValueBridge value) : base(value)
         {
             Type = value.GetType(p);

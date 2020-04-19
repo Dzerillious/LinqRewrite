@@ -1,5 +1,6 @@
 ﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis.CSharp;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
@@ -18,7 +19,7 @@ namespace LinqRewrite.RewriteRules
             var collectionType = p.Data.GetTypeInfo(collectionValue).Type;
             RewriteCollectionEnumeration.RewriteOther(p, new CollectionValueBridge(p, collectionType, collectionValue, true));
 
-            var hashsetType = p.WrappedType("System.Collections.Generic.HashSet<", p.LastValue.Type, ">");
+            var hashsetType = SyntaxFactory.ParseTypeName($"System.Collections.Generic.HashSet<{p.LastValue.Type}>");
             var hashsetCreation = args.Length switch
             {
                 1 => New(hashsetType),

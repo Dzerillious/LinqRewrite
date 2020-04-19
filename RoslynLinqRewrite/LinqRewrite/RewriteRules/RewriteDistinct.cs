@@ -2,6 +2,7 @@
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -9,7 +10,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            var hashsetType = p.WrappedType("System.Collections.Generic.HashSet<", p.LastValue.Type, ">");
+            var hashsetType = ParseTypeName($"System.Collections.Generic.HashSet<{p.LastValue.Type}>");
             var hashsetVariable = p.GlobalVariable(hashsetType, args.Length switch
             {
                 0 => New(hashsetType),

@@ -30,10 +30,15 @@ namespace LinqRewrite.RewriteRules
                 "EnlargingCoefficient.By8" => 3,
                 _ => 2
             };
-            if (p.IncompleteIterators.Count() <= 1 && RewriteSimplified(p))
+            if (p.IncompleteIterators.Count() <= 1)
             {
-                p.CurrentIterator.IgnoreIterator = true;
-                return;
+                var simplified = RewriteSimplified(p, p.LastValue.Type);
+                if (simplified != null)
+                {
+                    p.ResultAdd(Return(simplified));
+                    p.CurrentIterator.IgnoreIterator = true;
+                    return;
+                }
             }
             
             var resultVariable = RewriteOther(p, enlarging);
@@ -99,37 +104,33 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(resultVariable[indexerVariable].Assign(p.LastValue));
             return resultVariable;
         }
-        
-        private static bool RewriteSimplified(RewriteParameters p)
+
+        public static LocalVariable RewriteSimplified(RewriteParameters p, TypeSyntax itemType)
         {
             var minValue = p.CurrentMin;
-            if (!p.ListEnumeration || p.CurrentCollection == null) return false;
+            if (!p.ListEnumeration || p.CurrentCollection == null) return null;
             if (p.CurrentCollection.CollectionType == CollectionType.Array)
             {
-                var resultVariable = p.GlobalVariable(p.ReturnType, CreateArray((ArrayTypeSyntax) p.ReturnType, p.ResultSize));
+                var resultVariable = p.GlobalVariable(itemType.ArrayType(), CreateArray(itemType.ArrayType(), p.ResultSize));
                 p.ResultAdd("System".Access("Array", "Copy")
                     .Invoke(p.CurrentCollection, minValue, resultVariable, 0, p.ResultSize));
-                p.ResultAdd(Return(resultVariable));
-                return true;
+                return resultVariable;
             }
             else if (p.CurrentCollection.CollectionType == CollectionType.SimpleList)
             {
-                var resultVariable = p.GlobalVariable(p.ReturnType, CreateArray((ArrayTypeSyntax) p.ReturnType, p.ResultSize));
+                var resultVariable = p.GlobalVariable(itemType.ArrayType(), CreateArray(itemType.ArrayType(), p.ResultSize));
                 p.ResultAdd("System".Access("Array", "Copy")
                     .Invoke(p.CurrentCollection.Access("Items"), minValue, resultVariable, 0, p.ResultSize));
-                p.ResultAdd(Return(resultVariable));
-                return true;
+                return resultVariable;
             }
             else if (p.CurrentCollection.CollectionType == CollectionType.List)
             {
-                var resultVariable = p.GlobalVariable(p.ReturnType,
-                    CreateArray((ArrayTypeSyntax) p.ReturnType, p.ResultSize));
+                var resultVariable = p.GlobalVariable(itemType.ArrayType(), CreateArray(itemType.ArrayType(), p.ResultSize));
                 p.ResultAdd(p.CurrentCollection.Access("CopyTo").Invoke(resultVariable));
-                p.ResultAdd(Return(resultVariable));
-                return true;
+                return resultVariable;
             }
             p.NotRewrite = true;
-            return true;
+            return null;
         }
     }
 }

@@ -66,6 +66,7 @@ namespace LinqRewrite.DataStructures
         public bool HasResultMethod { get; set; }
         public bool NotRewrite { get; set; }
         public bool Unchecked { get; set; }
+        public bool Error { get; set; }
 
         private bool _listEnumeration;
         public bool ListEnumeration
@@ -235,6 +236,7 @@ namespace LinqRewrite.DataStructures
             NotRewrite = false;
             WrapWithTry = false;
             Unchecked = false;
+            Error = false;
 
             LastValue = null;
         }
@@ -312,13 +314,13 @@ namespace LinqRewrite.DataStructures
             var result = new List<StatementSyntax>();
             foreach (var iterator in ResultIterators)
             {
-                var statement = iterator.GetStatementSyntax(this);
+                var statements = iterator.GetStatementSyntax(this);
                 result.AddRange(iterator.PreFor);
-                if (statement != null) result.Add(statement);
+                if (statements != null && statements.Length > 0) result.AddRange(statements);
                 result.AddRange(iterator.PostFor);
             }
 
-            if (WrapWithTry)
+            if (!Unchecked && WrapWithTry)
             {
                 result = _initialStatements.Concat(new []{TryF(Block(result), Block(_finalStatements))}).Concat(_resultStatements).ToList();
             }
@@ -370,7 +372,7 @@ namespace LinqRewrite.DataStructures
         
         public LocalVariable GlobalVariable(TypeSyntax type, ValueBridge initial)
         {
-            var variable = "v" + _variableIndex++ % 1_000_000;
+            var variable = "v" + _variableIndex++ % 10_000;
             var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
             Variables.Add(created);
             
@@ -379,28 +381,13 @@ namespace LinqRewrite.DataStructures
             SimpleEnumeration = false;
             return created;
         }
-        
+
         public LocalVariable LocalVariable(TypedValueBridge value)
-        {
-            var variable = "v" + _variableIndex++ % 1_000_000;
-            var found = Variables.FirstOrDefault(x => x.Type.Equals(value.Type) && !x.IsGlobal && !x.IsUsed);
-            if (found != null)
-            {
-                found.IsUsed = true;
-                return found;
-            }
-            var created = new LocalVariable(variable, value.Type);
-            Variables.Add(created);
-            
-            InitialAdd(LocalVariableCreation(variable, value.Type));
-            PreUseAdd(((ValueBridge)variable).Assign(value));
-            SimpleEnumeration = false;
-            return created;
-        }
+            => LocalVariable(value.Type, value);
         
         public LocalVariable LocalVariable(TypeBridge type, ValueBridge initial)
         {
-            var variable = "v" + _variableIndex++ % 1_000_000;
+            var variable = "v" + _variableIndex++ % 10_000;
             var found = Variables.FirstOrDefault(x => x.Type.Equals(type) && !x.IsGlobal && !x.IsUsed);
             if (found != null)
             {
@@ -410,7 +397,7 @@ namespace LinqRewrite.DataStructures
             var created = new LocalVariable(variable, type);
             Variables.Add(created);
             
-            InitialAdd(LocalVariableCreation(variable, type));
+            PreUseAdd(LocalVariableCreation(variable, type));
             PreUseAdd(((ValueBridge)variable).Assign(initial));
             SimpleEnumeration = false;
             return created;
@@ -424,18 +411,18 @@ namespace LinqRewrite.DataStructures
                 found.IsUsed = true;
                 return found;
             }
-            var variable = "v" + _variableIndex++ % 1_000_000;
+            var variable = "v" + _variableIndex++ % 10_000;
             var created = new LocalVariable(variable, type);
             Variables.Add(created);
 
-            InitialAdd(LocalVariableCreation(variable, type));
+            PreUseAdd(LocalVariableCreation(variable, type));
             SimpleEnumeration = false;
             return created;
         }
 
         public LocalVariable AddParameter(TypeBridge type, ExpressionSyntax value)
         {
-            var variable = "v" + _variableIndex++ % 1_000_000;
+            var variable = "v" + _variableIndex++ % 10_000;
             var created = new LocalVariable(variable, type);
             Variables.Add(created);
             
@@ -465,6 +452,16 @@ namespace LinqRewrite.DataStructures
         public bool AssertGreater(ValueBridge bigger, ValueBridge smaller, bool initialCheck = true, bool preCheck = false)
             => AssertLesser(smaller, bigger, initialCheck, preCheck);
 
+        public void InitialError(string type, string message)
+        {
+            _initialStatements.Clear();
+            _initialStatements.Add(Throw(type, message));
+            _finalStatements.Clear();
+            _resultStatements.Clear();
+            ResultIterators.Clear();
+            Error = true;
+        }
+
         public bool AssertLesserEqual(ValueBridge smaller, ValueBridge bigger, bool initialCheck = true, bool preCheck = false)
         {
             if (Unchecked) return true;
@@ -474,8 +471,7 @@ namespace LinqRewrite.DataStructures
             if (biggerPass && smallerPass)
             {
                 if (smallerD <= biggerD) return true;
-                InitialAdd(Throw("System.InvalidOperationException", "Index out of range"));
-                Iterators.ForEach(x => x.IgnoreIterator = true);
+                InitialError("System.InvalidOperationException", "Index out of range");
                 return false;
             }
             if (preCheck) return true;
@@ -493,8 +489,7 @@ namespace LinqRewrite.DataStructures
             if (biggerPass && smallerPass)
             {
                 if (smallerD < biggerD) return true;
-                InitialAdd(Throw("System.InvalidOperationException", "Index out of range"));
-                Iterators.ForEach(x => x.IgnoreIterator = true);
+                InitialError("System.InvalidOperationException", "Index out of range");
                 return false;
             }
             if (preCheck) return true;
@@ -508,8 +503,7 @@ namespace LinqRewrite.DataStructures
             if (Unchecked) return true;
             if (notNull.ToString() == "null")
             {
-                InitialAdd(Throw("System.InvalidOperationException", "Invalid null object"));
-                Iterators.ForEach(x => x.IgnoreIterator = true);
+                InitialError("System.InvalidOperationException", "Invalid null object");
                 return false;
             }
             if (preCheck) return true;

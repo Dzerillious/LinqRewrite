@@ -20,18 +20,6 @@ namespace BenchmarkLibrary
             EnumerableSource = Enumerable.Range(0, 1000);
         }
 
-        [NoRewrite, Benchmark]
-        public void ArrayOfType()
-        {
-            ArraySource.OfType<int>();
-        }//EndMethod
-
-		[Benchmark]
-        public void ArrayOfTypeRewritten()
-        {
-            ArraySource.OfType<int>();
-        }//EndMethod
-
 
         [NoRewrite, Benchmark]
         public void ArrayOfTypeToArray()
@@ -44,20 +32,6 @@ namespace BenchmarkLibrary
         {
             ArraySource.OfType<int>().ToArray();
         }//EndMethod
-
-        
-        [NoRewrite, Benchmark]
-        public void ArrayOfTypeArrayToArray()
-        {
-            ArraySource.OfType<int>().ToArray();
-        }//EndMethod
-
-		[Benchmark]
-        public void ArrayOfTypeArrayToArrayRewritten()
-        {
-            ArraySource.OfType<int>().ToArray();
-        }//EndMethod
-
         
         [NoRewrite, Benchmark]
         public void EnumerableOfTypeToArray()
@@ -67,19 +41,6 @@ namespace BenchmarkLibrary
 
 		[Benchmark]
         public void EnumerableOfTypeToArrayRewritten()
-        {
-            EnumerableSource.OfType<int>().ToArray();
-        }//EndMethod
-
-        
-        [NoRewrite, Benchmark]
-        public void EnumerableOfTypeArrayToArray()
-        {
-            EnumerableSource.OfType<int>().ToArray();
-        }//EndMethod
-
-		[Benchmark]
-        public void EnumerableOfTypeArrayToArrayRewritten()
         {
             EnumerableSource.OfType<int>().ToArray();
         }//EndMethod

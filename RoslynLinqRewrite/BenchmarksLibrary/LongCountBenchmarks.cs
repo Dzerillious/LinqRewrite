@@ -21,99 +21,99 @@ namespace BenchmarkLibrary
         }
 
         [NoRewrite, Benchmark]
-        public void ArrayLongCount()
+        public long ArrayLongCount()
         {
-            var res = ArraySource.LongCount();
+            return ArraySource.LongCount();
         }//EndMethod
 
 		[Benchmark]
-        public void ArrayLongCountRewritten()
+        public long ArrayLongCountRewritten()
         {
-            var res = ArraySource.LongCount();
+            return ArraySource.LongCount();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayLongCountCondition()
+        public long ArrayLongCountCondition()
         {
-            var res = ArraySource.LongCount(x => x > 3);
+            return ArraySource.LongCount(x => x > 3);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayLongCountConditionRewritten()
+        public long ArrayLongCountConditionRewritten()
         {
-            var res = ArraySource.LongCount(x => x > 3);
+            return ArraySource.LongCount(x => x > 3);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArraySelectLongCount()
+        public long ArraySelectLongCount()
         {
-            var res = ArraySource.Select(x => x + 3).LongCount();
+            return ArraySource.Select(x => x + 3).LongCount();
         }//EndMethod
 
         [Benchmark]
-        public void ArraySelectLongCountRewritten()
+        public long ArraySelectLongCountRewritten()
         {
-            var res = ArraySource.Select(x => x + 3).LongCount();
+            return ArraySource.Select(x => x + 3).LongCount();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayWhereLongCount()
+        public long ArrayWhereLongCount()
         {
-            var res = ArraySource.Where(x => x > 100).LongCount();
+            return ArraySource.Where(x => x > 100).LongCount();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereLongCountRewritten()
+        public long ArrayWhereLongCountRewritten()
         {
-            var res = ArraySource.Where(x => x > 100).LongCount();
+            return ArraySource.Where(x => x > 100).LongCount();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayWhereLongCountCondition()
+        public long ArrayWhereLongCountCondition()
         {
-            var res = ArraySource.Where(x => x > 100).LongCount(x => x > 200);
+            return ArraySource.Where(x => x > 100).LongCount(x => x > 200);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereLongCountConditionRewritten()
+        public long ArrayWhereLongCountConditionRewritten()
         {
-            var res = ArraySource.Where(x => x > 100).LongCount(x => x > 200);
+            return ArraySource.Where(x => x > 100).LongCount(x => x > 200);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableLongCountCondition()
+        public long EnumerableLongCountCondition()
         {
-            var res = EnumerableSource.LongCount(x => x > 3);
+            return EnumerableSource.LongCount(x => x > 3);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableLongCountConditionRewritten()
+        public long EnumerableLongCountConditionRewritten()
         {
-            var res = EnumerableSource.LongCount(x => x > 3);
+            return EnumerableSource.LongCount(x => x > 3);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableLongCountNotCondition()
+        public long EnumerableLongCountNotCondition()
         {
-            var res = EnumerableSource.LongCount(x => x > 10_000);
+            return EnumerableSource.LongCount(x => x > 10_000);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableLongCountNotConditionRewritten()
+        public long EnumerableLongCountNotConditionRewritten()
         {
-            var res = EnumerableSource.LongCount(x => x > 10_000);
+            return EnumerableSource.LongCount(x => x > 10_000);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableLongCountAllCondition()
+        public long EnumerableLongCountAllCondition()
         {
-            var res = EnumerableSource.LongCount(x => x > 0);
+            return EnumerableSource.LongCount(x => x > 0);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableLongCountAllConditionRewritten()
+        public long EnumerableLongCountAllConditionRewritten()
         {
-            var res = EnumerableSource.LongCount(x => x > 0);
+            return EnumerableSource.LongCount(x => x > 0);
         }//EndMethod
     }
 }

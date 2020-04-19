@@ -18,39 +18,39 @@ namespace BenchmarkLibrary
         }
         
         [NoRewrite, Benchmark]
-        public void ArrayElementAt()
+        public int ArrayElementAt()
         {
-            var res = ArraySource.ElementAt(50);
+            return ArraySource.ElementAt(50);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayElementAtRewritten()
+        public int ArrayElementAtRewritten()
         {
-            var res = ArraySource.ElementAt(50);
+            return ArraySource.ElementAt(50);
         }//EndMethod
         
         [NoRewrite, Benchmark]
-        public void ArrayWhereElementAt()
+        public int ArrayWhereElementAt()
         {
-            var res = ArraySource.Where(x => x > 25).ElementAt(50);
+            return ArraySource.Where(x => x > 25).ElementAt(50);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereElementAtRewritten()
+        public int ArrayWhereElementAtRewritten()
         {
-            var res = ArraySource.Where(x => x > 25).ElementAt(50);
+            return ArraySource.Where(x => x > 25).ElementAt(50);
         }//EndMethod
         
         [NoRewrite, Benchmark]
-        public void EnumerableElementAt()
+        public int EnumerableElementAt()
         {
-            var res = EnumerableSource.ElementAt(50);
+            return EnumerableSource.ElementAt(50);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableElementAtRewritten()
+        public int EnumerableElementAtRewritten()
         {
-            var res = EnumerableSource.ElementAt(50);
+            return EnumerableSource.ElementAt(50);
         }//EndMethod
     }
 }

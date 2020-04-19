@@ -18,99 +18,99 @@ namespace BenchmarkLibrary
         }
 
         [NoRewrite, Benchmark]
-        public void ArrayLast()
+        public int ArrayLast()
         {
-            var res = ArraySource.Last();
+            return ArraySource.Last();
         }//EndMethod
 
 		[Benchmark]
-        public void ArrayLastRewritten()
+        public int ArrayLastRewritten()
         {
-            var res = ArraySource.Last();
+            return ArraySource.Last();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayLastCondition()
+        public int ArrayLastCondition()
         {
-            var res = ArraySource.Last(x => x > 3);
+            return ArraySource.Last(x => x > 3);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayLastConditionRewritten()
+        public int ArrayLastConditionRewritten()
         {
-            var res = ArraySource.Last(x => x > 3);
+            return ArraySource.Last(x => x > 3);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArraySelectLast()
+        public int ArraySelectLast()
         {
-            var res = ArraySource.Select(x => x + 3).Last();
+            return ArraySource.Select(x => x + 3).Last();
         }//EndMethod
 
         [Benchmark]
-        public void ArraySelectLastRewritten()
+        public int ArraySelectLastRewritten()
         {
-            var res = ArraySource.Select(x => x + 3).Last();
+            return ArraySource.Select(x => x + 3).Last();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayWhereLast()
+        public int ArrayWhereLast()
         {
-            var res = ArraySource.Where(x => x > 100).Last();
+            return ArraySource.Where(x => x > 100).Last();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereLastRewritten()
+        public int ArrayWhereLastRewritten()
         {
-            var res = ArraySource.Where(x => x > 100).Last();
+            return ArraySource.Where(x => x > 100).Last();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayWhereLastCondition()
+        public int ArrayWhereLastCondition()
         {
-            var res = ArraySource.Where(x => x > 100).Last(x => x > 200);
+            return ArraySource.Where(x => x > 100).Last(x => x > 200);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereLastConditionRewritten()
+        public int ArrayWhereLastConditionRewritten()
         {
-            var res = ArraySource.Where(x => x > 100).Last(x => x > 200);
+            return ArraySource.Where(x => x > 100).Last(x => x > 200);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableLastCondition()
+        public int EnumerableLastCondition()
         {
-            var res = EnumerableSource.Last(x => x > 3);
+            return EnumerableSource.Last(x => x > 3);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableLastConditionRewritten()
+        public int EnumerableLastConditionRewritten()
         {
-            var res = EnumerableSource.Last(x => x > 3);
+            return EnumerableSource.Last(x => x > 3);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableLastNotCondition()
+        public int EnumerableLastNotCondition()
         {
-            var res = EnumerableSource.Last(x => x > 10_000);
+            return EnumerableSource.Last(x => x > 10_000);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableLastNotConditionRewritten()
+        public int EnumerableLastNotConditionRewritten()
         {
-            var res = EnumerableSource.Last(x => x > 10_000);
+            return EnumerableSource.Last(x => x > 10_000);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableLastAllCondition()
+        public int EnumerableLastAllCondition()
         {
-            var res = EnumerableSource.Last(x => x > 0);
+            return EnumerableSource.Last(x => x > 0);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableLastAllConditionRewritten()
+        public int EnumerableLastAllConditionRewritten()
         {
-            var res = EnumerableSource.Last(x => x > 0);
+            return EnumerableSource.Last(x => x > 0);
         }//EndMethod
     }
 }

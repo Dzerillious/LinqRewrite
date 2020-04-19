@@ -21,99 +21,99 @@ namespace BenchmarkLibrary
         }
 
         [NoRewrite, Benchmark]
-        public void ArrayAny()
+        public bool ArrayAny()
         {
-            var res = ArraySource.Any();
+            return ArraySource.Any();
         }//EndMethod
 
 		[Benchmark]
-        public void ArrayAnyRewritten()
+        public bool ArrayAnyRewritten()
         {
-            var res = ArraySource.Any();
+            return ArraySource.Any();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayAnyCondition()
+        public bool ArrayAnyCondition()
         {
-            var res = ArraySource.Any(x => x > 3);
+            return ArraySource.Any(x => x > 3);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayAnyConditionRewritten()
+        public bool ArrayAnyConditionRewritten()
         {
-            var res = ArraySource.Any(x => x > 3);
+            return ArraySource.Any(x => x > 3);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArraySelectAny()
+        public bool ArraySelectAny()
         {
-            var res = ArraySource.Select(x => x + 3).Any();
+            return ArraySource.Select(x => x + 3).Any();
         }//EndMethod
 
         [Benchmark]
-        public void ArraySelectAnyRewritten()
+        public bool ArraySelectAnyRewritten()
         {
-            var res = ArraySource.Select(x => x + 3).Any();
+            return ArraySource.Select(x => x + 3).Any();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayWhereAny()
+        public bool ArrayWhereAny()
         {
-            var res = ArraySource.Where(x => x > 100).Any();
+            return ArraySource.Where(x => x > 100).Any();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereAnyRewritten()
+        public bool ArrayWhereAnyRewritten()
         {
-            var res = ArraySource.Where(x => x > 100).Any();
+            return ArraySource.Where(x => x > 100).Any();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayWhereAnyCondition()
+        public bool ArrayWhereAnyCondition()
         {
-            var res = ArraySource.Where(x => x > 100).Any(x => x > 200);
+            return ArraySource.Where(x => x > 100).Any(x => x > 200);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereAnyConditionRewritten()
+        public bool ArrayWhereAnyConditionRewritten()
         {
-            var res = ArraySource.Where(x => x > 100).Any(x => x > 200);
+            return ArraySource.Where(x => x > 100).Any(x => x > 200);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableAnyCondition()
+        public bool EnumerableAnyCondition()
         {
-            var res = EnumerableSource.Any(x => x > 3);
+            return EnumerableSource.Any(x => x > 3);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableAnyConditionRewritten()
+        public bool EnumerableAnyConditionRewritten()
         {
-            var res = EnumerableSource.Any(x => x > 3);
+            return EnumerableSource.Any(x => x > 3);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableAnyNotCondition()
+        public bool EnumerableAnyNotCondition()
         {
-            var res = EnumerableSource.Any(x => x > 10_000);
+            return EnumerableSource.Any(x => x > 10_000);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableAnyNotConditionRewritten()
+        public bool EnumerableAnyNotConditionRewritten()
         {
-            var res = EnumerableSource.Any(x => x > 10_000);
+            return EnumerableSource.Any(x => x > 10_000);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableAnyAllCondition()
+        public bool EnumerableAnyAllCondition()
         {
-            var res = EnumerableSource.Any(x => x > 0);
+            return EnumerableSource.Any(x => x > 0);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableAnyAllConditionRewritten()
+        public bool EnumerableAnyAllConditionRewritten()
         {
-            var res = EnumerableSource.Any(x => x > 0);
+            return EnumerableSource.Any(x => x > 0);
         }//EndMethod
     }
 }

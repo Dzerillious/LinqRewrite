@@ -18,99 +18,99 @@ namespace BenchmarkLibrary
         }
 
         [NoRewrite, Benchmark]
-        public void ArrayLastOrDefault()
+        public int ArrayLastOrDefault()
         {
-            var res = ArraySource.LastOrDefault();
+            return ArraySource.LastOrDefault();
         }//EndMethod
 
 		[Benchmark]
-        public void ArrayLastOrDefaultRewritten()
+        public int ArrayLastOrDefaultRewritten()
         {
-            var res = ArraySource.LastOrDefault();
+            return ArraySource.LastOrDefault();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayLastOrDefaultCondition()
+        public int ArrayLastOrDefaultCondition()
         {
-            var res = ArraySource.LastOrDefault(x => x > 3);
+            return ArraySource.LastOrDefault(x => x > 3);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayLastOrDefaultConditionRewritten()
+        public int ArrayLastOrDefaultConditionRewritten()
         {
-            var res = ArraySource.LastOrDefault(x => x > 3);
+            return ArraySource.LastOrDefault(x => x > 3);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArraySelectLastOrDefault()
+        public int ArraySelectLastOrDefault()
         {
-            var res = ArraySource.Select(x => x + 3).LastOrDefault();
+            return ArraySource.Select(x => x + 3).LastOrDefault();
         }//EndMethod
 
         [Benchmark]
-        public void ArraySelectLastOrDefaultRewritten()
+        public int ArraySelectLastOrDefaultRewritten()
         {
-            var res = ArraySource.Select(x => x + 3).LastOrDefault();
+            return ArraySource.Select(x => x + 3).LastOrDefault();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayWhereLastOrDefault()
+        public int ArrayWhereLastOrDefault()
         {
-            var res = ArraySource.Where(x => x > 100).LastOrDefault();
+            return ArraySource.Where(x => x > 100).LastOrDefault();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereLastOrDefaultRewritten()
+        public int ArrayWhereLastOrDefaultRewritten()
         {
-            var res = ArraySource.Where(x => x > 100).LastOrDefault();
+            return ArraySource.Where(x => x > 100).LastOrDefault();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayWhereLastOrDefaultCondition()
+        public int ArrayWhereLastOrDefaultCondition()
         {
-            var res = ArraySource.Where(x => x > 100).LastOrDefault(x => x > 200);
+            return ArraySource.Where(x => x > 100).LastOrDefault(x => x > 200);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereLastOrDefaultConditionRewritten()
+        public int ArrayWhereLastOrDefaultConditionRewritten()
         {
-            var res = ArraySource.Where(x => x > 100).LastOrDefault(x => x > 200);
+            return ArraySource.Where(x => x > 100).LastOrDefault(x => x > 200);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableLastOrDefaultCondition()
+        public int EnumerableLastOrDefaultCondition()
         {
-            var res = EnumerableSource.LastOrDefault(x => x > 3);
+            return EnumerableSource.LastOrDefault(x => x > 3);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableLastOrDefaultConditionRewritten()
+        public int EnumerableLastOrDefaultConditionRewritten()
         {
-            var res = EnumerableSource.LastOrDefault(x => x > 3);
+            return EnumerableSource.LastOrDefault(x => x > 3);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableLastOrDefaultNotCondition()
+        public int EnumerableLastOrDefaultNotCondition()
         {
-            var res = EnumerableSource.LastOrDefault(x => x > 10_000);
+            return EnumerableSource.LastOrDefault(x => x > 10_000);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableLastOrDefaultNotConditionRewritten()
+        public int EnumerableLastOrDefaultNotConditionRewritten()
         {
-            var res = EnumerableSource.LastOrDefault(x => x > 10_000);
+            return EnumerableSource.LastOrDefault(x => x > 10_000);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableLastOrDefaultAllCondition()
+        public int EnumerableLastOrDefaultAllCondition()
         {
-            var res = EnumerableSource.LastOrDefault(x => x > 0);
+            return EnumerableSource.LastOrDefault(x => x > 0);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableLastOrDefaultAllConditionRewritten()
+        public int EnumerableLastOrDefaultAllConditionRewritten()
         {
-            var res = EnumerableSource.LastOrDefault(x => x > 0);
+            return EnumerableSource.LastOrDefault(x => x > 0);
         }//EndMethod
     }
 }

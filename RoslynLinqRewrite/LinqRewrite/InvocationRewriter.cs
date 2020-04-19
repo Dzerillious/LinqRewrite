@@ -47,6 +47,7 @@ namespace LinqRewrite
             {
                 parameters.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
                 RewritePart(names[i], parameters, i);
+                if (parameters.Error) break;
             }
 
             if (parameters.HasResultMethod) return;
@@ -64,6 +65,7 @@ namespace LinqRewrite
             for (var i = 0; i < names.Length; i++)
             {
                 var res = RewriteSimplePart(names[i], parameters, i);
+                if (parameters.Error) return (true, null);
                 if (!parameters.SimpleEnumeration) return (true, null);
                 if (res != null) return (true, res);
             }

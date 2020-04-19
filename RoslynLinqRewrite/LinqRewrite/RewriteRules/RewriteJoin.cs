@@ -46,6 +46,7 @@ namespace LinqRewrite.RewriteRules
             p.CurrentIterator = p.Iterators.Last();
             p.LastValue = resultSelectorValue.Inline(p, itemValue, p.LastValue);
             p.ModifiedEnumeration = true;
+            p.SourceSize = null;
         }
     }
 }

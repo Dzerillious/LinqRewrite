@@ -18,99 +18,99 @@ namespace BenchmarkLibrary
         }
 
         [NoRewrite, Benchmark]
-        public void ArraySingle()
+        public int ArraySingle()
         {
-            var res = ArraySource.Single();
+            return ArraySource.Single();
         }//EndMethod
 
 		[Benchmark]
-        public void ArraySingleRewritten()
+        public int ArraySingleRewritten()
         {
-            var res = ArraySource.Single();
+            return ArraySource.Single();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArraySingleCondition()
+        public int ArraySingleCondition()
         {
-            var res = ArraySource.Single(x => x > 3);
+            return ArraySource.Single(x => x > 3);
         }//EndMethod
 
         [Benchmark]
-        public void ArraySingleConditionRewritten()
+        public int ArraySingleConditionRewritten()
         {
-            var res = ArraySource.Single(x => x > 3);
+            return ArraySource.Single(x => x > 3);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArraySelectSingle()
+        public int ArraySelectSingle()
         {
-            var res = ArraySource.Select(x => x + 3).Single();
+            return ArraySource.Select(x => x + 3).Single();
         }//EndMethod
 
         [Benchmark]
-        public void ArraySelectSingleRewritten()
+        public int ArraySelectSingleRewritten()
         {
-            var res = ArraySource.Select(x => x + 3).Single();
+            return ArraySource.Select(x => x + 3).Single();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayWhereSingle()
+        public int ArrayWhereSingle()
         {
-            var res = ArraySource.Where(x => x > 100).Single();
+            return ArraySource.Where(x => x > 100).Single();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereSingleRewritten()
+        public int ArrayWhereSingleRewritten()
         {
-            var res = ArraySource.Where(x => x > 100).Single();
+            return ArraySource.Where(x => x > 100).Single();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayWhereSingleCondition()
+        public int ArrayWhereSingleCondition()
         {
-            var res = ArraySource.Where(x => x > 100).Single(x => x > 200);
+            return ArraySource.Where(x => x > 100).Single(x => x > 200);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereSingleConditionRewritten()
+        public int ArrayWhereSingleConditionRewritten()
         {
-            var res = ArraySource.Where(x => x > 100).Single(x => x > 200);
+            return ArraySource.Where(x => x > 100).Single(x => x > 200);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableSingleCondition()
+        public int EnumerableSingleCondition()
         {
-            var res = EnumerableSource.Single(x => x > 3);
+            return EnumerableSource.Single(x => x > 3);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableSingleConditionRewritten()
+        public int EnumerableSingleConditionRewritten()
         {
-            var res = EnumerableSource.Single(x => x > 3);
+            return EnumerableSource.Single(x => x > 3);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableSingleNotCondition()
+        public int EnumerableSingleNotCondition()
         {
-            var res = EnumerableSource.Single(x => x > 10_000);
+            return EnumerableSource.Single(x => x > 10_000);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableSingleNotConditionRewritten()
+        public int EnumerableSingleNotConditionRewritten()
         {
-            var res = EnumerableSource.Single(x => x > 10_000);
+            return EnumerableSource.Single(x => x > 10_000);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableSingleAllCondition()
+        public int EnumerableSingleAllCondition()
         {
-            var res = EnumerableSource.Single(x => x > 0);
+            return EnumerableSource.Single(x => x > 0);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableSingleAllConditionRewritten()
+        public int EnumerableSingleAllConditionRewritten()
         {
-            var res = EnumerableSource.Single(x => x > 0);
+            return EnumerableSource.Single(x => x > 0);
         }//EndMethod
     }
 }

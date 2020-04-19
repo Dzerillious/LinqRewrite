@@ -43,20 +43,10 @@ namespace LinqRewrite.DataStructures
             Collection = collection;
         }
 
-        public IteratorParameters Copy() =>
-            new IteratorParameters(_parameters, Collection)
-            {
-                ForMin = ForMin,
-                ForMax = ForMax,
-                ForReverseMin = ForReverseMin,
-                ForReverseMax = ForReverseMax,
-                CurrentIndexer = ForIndexer = ForIndexer,
-                ForBody = new List<IStatementSyntax>(ForBody),
-            };
-
         private bool _preAddCalculated;
         public void CalculatePreAdd(RewriteParameters p)
         {
+            if (IgnoreIterator) return;
             if (_preAddCalculated) return;
             _preAddCalculated = true;
             
@@ -66,20 +56,13 @@ namespace LinqRewrite.DataStructures
                     iteratorParameters.CalculatePreAdd(p);
             });
             if (ForMin == null)
-            {
                 PreFor.Add((StatementBridge)EnumeratorVariable.Assign(Collection.Access("GetEnumerator").Invoke()));
-            }
             else if (IsReversed)
-            {
                 PreFor.Add((StatementBridge)ForIndexer.Assign(ForReverseMax));
-            }
-            else
-            {
-                PreFor.Add((StatementBridge)ForIndexer.Assign(ForMin));
-            }
+            else PreFor.Add((StatementBridge)ForIndexer.Assign(ForMin));
         }
 
-        public StatementSyntax GetStatementSyntax(RewriteParameters p)
+        public StatementSyntax[] GetStatementSyntax(RewriteParameters p)
         {
             if (IgnoreIterator) return null;
             CalculatePreAdd(p);
@@ -91,8 +74,8 @@ namespace LinqRewrite.DataStructures
             if (ForMin == null)
                 return RewriteService.GetForEachStatement(p, EnumeratorVariable, content);
             if (IsReversed)
-                return RewriteService.GetReverseForStatement(p, ForIndexer, ForReverseMin.ReusableForConst(_parameters, Int, this), ForIncrement, content);
-            return RewriteService.GetForStatement(p, ForIndexer, ForMax.ReusableForConst(_parameters, Int, this), ForIncrement, content);
+                return new StatementSyntax[]{RewriteService.GetReverseForStatement(p, ForIndexer, ForReverseMin.ReusableForConst(_parameters, Int, this), ForIncrement, content)};
+            return new StatementSyntax[]{RewriteService.GetForStatement(p, ForIndexer, ForMax.ReusableForConst(_parameters, Int, this), ForIncrement, content)};
         }
     }
 }

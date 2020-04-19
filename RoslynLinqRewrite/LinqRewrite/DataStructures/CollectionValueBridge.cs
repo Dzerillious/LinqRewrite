@@ -10,8 +10,7 @@ namespace LinqRewrite.DataStructures
 {
     public enum CollectionType
     {
-        Array, List, Enumerable,
-        SimpleList
+        Array, List, Enumerable, SimpleList
     }
     
     public class CollectionValueBridge : TypedValueBridge

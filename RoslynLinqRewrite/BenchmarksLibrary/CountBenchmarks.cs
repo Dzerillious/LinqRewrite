@@ -21,99 +21,99 @@ namespace BenchmarkLibrary
         }
 
         [NoRewrite, Benchmark]
-        public void ArrayCount()
+        public int ArrayCount()
         {
-            var res = ArraySource.Count();
+            return ArraySource.Count();
         }//EndMethod
 
 		[Benchmark]
-        public void ArrayCountRewritten()
+        public int ArrayCountRewritten()
         {
-            var res = ArraySource.Count();
+            return ArraySource.Count();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayCountCondition()
+        public int ArrayCountCondition()
         {
-            var res = ArraySource.Count(x => x > 3);
+            return ArraySource.Count(x => x > 3);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayCountConditionRewritten()
+        public int ArrayCountConditionRewritten()
         {
-            var res = ArraySource.Count(x => x > 3);
+            return ArraySource.Count(x => x > 3);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArraySelectCount()
+        public int ArraySelectCount()
         {
-            var res = ArraySource.Select(x => x + 3).Count();
+            return ArraySource.Select(x => x + 3).Count();
         }//EndMethod
 
         [Benchmark]
-        public void ArraySelectCountRewritten()
+        public int ArraySelectCountRewritten()
         {
-            var res = ArraySource.Select(x => x + 3).Count();
+            return ArraySource.Select(x => x + 3).Count();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayWhereCount()
+        public int ArrayWhereCount()
         {
-            var res = ArraySource.Where(x => x > 100).Count();
+            return ArraySource.Where(x => x > 100).Count();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereCountRewritten()
+        public int ArrayWhereCountRewritten()
         {
-            var res = ArraySource.Where(x => x > 100).Count();
+            return ArraySource.Where(x => x > 100).Count();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ArrayWhereCountCondition()
+        public int ArrayWhereCountCondition()
         {
-            var res = ArraySource.Where(x => x > 100).Count(x => x > 200);
+            return ArraySource.Where(x => x > 100).Count(x => x > 200);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereCountConditionRewritten()
+        public int ArrayWhereCountConditionRewritten()
         {
-            var res = ArraySource.Where(x => x > 100).Count(x => x > 200);
+            return ArraySource.Where(x => x > 100).Count(x => x > 200);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableCountCondition()
+        public int EnumerableCountCondition()
         {
-            var res = EnumerableSource.Count(x => x > 3);
+            return EnumerableSource.Count(x => x > 3);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableCountConditionRewritten()
+        public int EnumerableCountConditionRewritten()
         {
-            var res = EnumerableSource.Count(x => x > 3);
+            return EnumerableSource.Count(x => x > 3);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableCountNotCondition()
+        public int EnumerableCountNotCondition()
         {
-            var res = EnumerableSource.Count(x => x > 10_000);
+            return EnumerableSource.Count(x => x > 10_000);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableCountNotConditionRewritten()
+        public int EnumerableCountNotConditionRewritten()
         {
-            var res = EnumerableSource.Count(x => x > 10_000);
+            return EnumerableSource.Count(x => x > 10_000);
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void EnumerableCountAllCondition()
+        public int EnumerableCountAllCondition()
         {
-            var res = EnumerableSource.Count(x => x > 0);
+            return EnumerableSource.Count(x => x > 0);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableCountAllConditionRewritten()
+        public int EnumerableCountAllConditionRewritten()
         {
-            var res = EnumerableSource.Count(x => x > 0);
+            return EnumerableSource.Count(x => x > 0);
         }//EndMethod
     }
 }

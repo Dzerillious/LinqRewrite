@@ -81,5 +81,18 @@ namespace BenchmarkLibrary
         {
             return EnumerableSource.Average();
         }
+        
+        [NoRewrite]
+        [Benchmark]
+        public double EnumerableUncheckedAverage()
+        {
+            return EnumerableSource.Unchecked().Average();
+        }
+        
+        [Benchmark]
+        public double EnumerableUncheckedAverageRewritten()
+        {
+            return EnumerableSource.Unchecked().Average();
+        }
     }
 }

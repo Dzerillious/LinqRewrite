@@ -18,39 +18,39 @@ namespace BenchmarkLibrary
         }
         
         [NoRewrite, Benchmark]
-        public void ArrayElementAtOrDefault()
+        public int ArrayElementAtOrDefault()
         {
-            var res = ArraySource.ElementAtOrDefault(50);
+            return ArraySource.ElementAtOrDefault(50);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayElementAtOrDefaultRewritten()
+        public int ArrayElementAtOrDefaultRewritten()
         {
-            var res = ArraySource.ElementAtOrDefault(50);
+            return ArraySource.ElementAtOrDefault(50);
         }//EndMethod
         
         [NoRewrite, Benchmark]
-        public void ArrayWhereElementAtOrDefault()
+        public int ArrayWhereElementAtOrDefault()
         {
-            var res = ArraySource.Where(x => x > 25).ElementAtOrDefault(50);
+            return ArraySource.Where(x => x > 25).ElementAtOrDefault(50);
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereElementAtOrDefaultRewritten()
+        public int ArrayWhereElementAtOrDefaultRewritten()
         {
-            var res = ArraySource.Where(x => x > 25).ElementAtOrDefault(50);
+            return ArraySource.Where(x => x > 25).ElementAtOrDefault(50);
         }//EndMethod
         
         [NoRewrite, Benchmark]
-        public void EnumerableElementAtOrDefault()
+        public int EnumerableElementAtOrDefault()
         {
-            var res = EnumerableSource.ElementAtOrDefault(50);
+            return EnumerableSource.ElementAtOrDefault(50);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableElementAtOrDefaultRewritten()
+        public int EnumerableElementAtOrDefaultRewritten()
         {
-            var res = EnumerableSource.ElementAtOrDefault(50);
+            return EnumerableSource.ElementAtOrDefault(50);
         }//EndMethod
     }
 }

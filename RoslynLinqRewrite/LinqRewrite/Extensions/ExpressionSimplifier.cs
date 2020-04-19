@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace LinqRewrite.Extensions
 {
-    public class ExpressionSimplifier
+    public static class ExpressionSimplifier
     {
         public static string StringSimplify(string expression)
         {

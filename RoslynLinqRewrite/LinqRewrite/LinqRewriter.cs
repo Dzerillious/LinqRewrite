@@ -166,7 +166,7 @@ namespace LinqRewrite
 
                 if (invocationExpression.Expression is MemberAccessExpressionSyntax access)
                 {
-                    chain.Insert(0, new LinqStep(access.Name.ToString(), arguments, invocationExpression));
+                    chain.Insert(0, new LinqStep(GetMethodName(access.Name.ToString()), arguments, invocationExpression));
                     lastNode = access.Expression;
                     if (lastNode is InvocationExpressionSyntax invocation)
                         invocationExpression = invocation;
@@ -174,7 +174,7 @@ namespace LinqRewrite
                 }
                 else if (invocationExpression.Expression is MemberBindingExpressionSyntax binding)
                 {
-                    chain.Insert(0, new LinqStep(binding.Name.ToString(), arguments, invocationExpression));
+                    chain.Insert(0, new LinqStep(GetMethodName(binding.Name.ToString()), arguments, invocationExpression));
                     var conditional = (ConditionalAccessExpressionSyntax) node.Parent;
                     lastNode = conditional.Expression;
                     break;
@@ -262,11 +262,17 @@ namespace LinqRewrite
                 });
         }
 
+        private static string GetMethodName(string name)
+        {
+            var index = name.IndexOf('<');
+            return index == -1 ? name : name.Substring(0, index);
+        }
+
         private static bool IsSupportedMethod(InvocationExpressionSyntax invocation) 
             => invocation.Expression switch
             {
-                MemberAccessExpressionSyntax access => Constants.RewritableMethods.Contains(access.Name.ToString()),
-                MemberBindingExpressionSyntax binding => Constants.RewritableMethods.Contains(binding.Name.ToString()),
+                MemberAccessExpressionSyntax access => Constants.RewritableMethods.Contains(GetMethodName(access.Name.ToString())),
+                MemberBindingExpressionSyntax binding => Constants.RewritableMethods.Contains(GetMethodName(binding.Name.ToString())),
                 _ => false
             };
 

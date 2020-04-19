@@ -23,10 +23,6 @@ namespace LinqRewrite
             {
                 return program.ArgsProcessing(args);
             }
-            catch (ExitException ex)
-            {
-                return ex.Code;
-            }
             catch (Exception ex)
             {
                 program.OnException(ex);

@@ -20,18 +20,6 @@ namespace BenchmarkLibrary
             EnumerableSource = Enumerable.Range(0, 1000);
         }
 
-        [NoRewrite, Benchmark]
-        public void ArrayCast()
-        {
-            ArraySource.Cast<int>();
-        }//EndMethod
-
-		[Benchmark]
-        public void ArrayCastRewritten()
-        {
-            ArraySource.Cast<int>();
-        }//EndMethod
-
 
         [NoRewrite, Benchmark]
         public void ArrayCastToArray()
@@ -47,19 +35,6 @@ namespace BenchmarkLibrary
 
         
         [NoRewrite, Benchmark]
-        public void ArrayCastArrayToArray()
-        {
-            ArraySource.Cast<int>().ToArray();
-        }//EndMethod
-
-		[Benchmark]
-        public void ArrayCastArrayToArrayRewritten()
-        {
-            ArraySource.Cast<int>().ToArray();
-        }//EndMethod
-
-        
-        [NoRewrite, Benchmark]
         public void EnumerableCastToArray()
         {
             EnumerableSource.Cast<int>().ToArray();
@@ -67,19 +42,6 @@ namespace BenchmarkLibrary
 
 		[Benchmark]
         public void EnumerableCastToArrayRewritten()
-        {
-            EnumerableSource.Cast<int>().ToArray();
-        }//EndMethod
-
-        
-        [NoRewrite, Benchmark]
-        public void EnumerableCastArrayToArray()
-        {
-            EnumerableSource.Cast<int>().ToArray();
-        }//EndMethod
-
-		[Benchmark]
-        public void EnumerableCastArrayToArrayRewritten()
         {
             EnumerableSource.Cast<int>().ToArray();
         }//EndMethod
@@ -121,6 +83,19 @@ namespace BenchmarkLibrary
         public void ArrayUncheckedCastToArrayRewritten()
         {
             ArraySource.Unchecked().Cast<int>().ToArray();
+        }//EndMethod
+
+        
+        [NoRewrite, Benchmark]
+        public void EnumerableUncheckedCastToSimpleList()
+        {
+            EnumerableSource.Cast<int>().ToArray();
+        }//EndMethod
+
+        [Benchmark]
+        public void EnumerableUncheckedToSimpleListRewritten()
+        {
+            EnumerableSource.Cast<int>().ToArray();
         }//EndMethod
     }
 }

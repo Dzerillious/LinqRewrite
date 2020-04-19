@@ -254,6 +254,18 @@
     </ItemGroup>
     <ItemGroup>
       <Content Include="CreateRewrittenRegex.md" />
+      <Content Include="Results\AggregateResults.md" />
+      <Content Include="Results\AllResults.md" />
+      <Content Include="Results\AnyResults.md" />
+      <Content Include="Results\AverageResults.md" />
+      <Content Include="Results\CastResults.md" />
+      <Content Include="Results\ConcatResults.md" />
+      <Content Include="Results\CountResults.md" />
+      <Content Include="Results\DistinctResults.md" />
+      <Content Include="Results\ElementAt.md" />
+      <Content Include="Results\ElementAtOrDefault.md" />
+      <Content Include="Results\EmptyResults.md" />
+      <Content Include="Results\SelectManyResults.md" />
       <Content Include="Results\SelectResults.md" />
       <Content Include="Results\SkipResults.md" />
       <Content Include="Results\SumResults.md" />
