@@ -260,13 +260,27 @@ namespace LinqRewrite.Extensions
             => SyntaxFactory.Block(statements);
 
         public static ArrayTypeSyntax ArrayType(this TypedValueBridge value)
-            => SyntaxFactory.ArrayType(value.Type, new SyntaxList<ArrayRankSpecifierSyntax>(ArrayRankSpecifier(CreateSeparatedExpressionList(OmittedArraySizeExpression(Token(SyntaxKind.OmittedArraySizeExpressionToken))))));
+            => ArrayType(value.Type);
 
         public static ArrayTypeSyntax ArrayType(this TypeBridge type)
-            => SyntaxFactory.ArrayType(type, new SyntaxList<ArrayRankSpecifierSyntax>(ArrayRankSpecifier(CreateSeparatedExpressionList(OmittedArraySizeExpression(Token(SyntaxKind.OmittedArraySizeExpressionToken))))));
+            => ArrayType(type.Type);
 
         public static ArrayTypeSyntax ArrayType(this TypeSyntax type)
-            => SyntaxFactory.ArrayType(type, new SyntaxList<ArrayRankSpecifierSyntax>(ArrayRankSpecifier(CreateSeparatedExpressionList(OmittedArraySizeExpression(Token(SyntaxKind.OmittedArraySizeExpressionToken))))));
+        {
+            if (type is ArrayTypeSyntax arrayType)
+            {
+                return arrayType.WithRankSpecifiers(new SyntaxList<ArrayRankSpecifierSyntax>(arrayType.RankSpecifiers.Concat(new []
+                {
+                    ArrayRankSpecifier(
+                        CreateSeparatedExpressionList(
+                            OmittedArraySizeExpression(Token(SyntaxKind.OmittedArraySizeExpressionToken))))
+                })));
+            }
+            return SyntaxFactory.ArrayType(type,
+                new SyntaxList<ArrayRankSpecifierSyntax>(ArrayRankSpecifier(
+                    CreateSeparatedExpressionList(
+                        OmittedArraySizeExpression(Token(SyntaxKind.OmittedArraySizeExpressionToken))))));
+        }
 
         public static TypeBridge ReturnType(this LambdaExpressionSyntax lambda, RewriteParameters p)
             => CodeCreationService.GetLambdaReturnType(p.Semantic, lambda);
@@ -280,7 +294,7 @@ namespace LinqRewrite.Extensions
         public static ValueBridge Parenthesize(ExpressionSyntax expression)
             => ParenthesizedExpression(expression);
 
-        public static bool InvokableWith1Param(this ExpressionSyntax e, RewriteParameters p)
+        public static bool Invokable1Param(this ExpressionSyntax e, RewriteParameters p)
         {
             switch (e)
             {

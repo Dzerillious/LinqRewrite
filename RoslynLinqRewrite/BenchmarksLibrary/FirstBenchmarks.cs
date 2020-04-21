@@ -5,6 +5,7 @@ using LinqRewrite.Core;
 
 namespace BenchmarkLibrary
 {
+    [MemoryDiagnoser]
     public class FirstBenchmarks
     {
         public int[] ArraySource;

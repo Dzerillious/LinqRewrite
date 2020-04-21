@@ -4,6 +4,7 @@ using LinqRewrite.Core;
 
 namespace BenchmarkLibrary
 {
+    [MemoryDiagnoser]
     public class EmptyBenchmarks
     {
         [NoRewrite, Benchmark]

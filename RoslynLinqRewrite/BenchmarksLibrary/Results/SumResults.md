@@ -1,14 +1,14 @@
-|                     Method |         Mean |       Error |      StdDev |
-|--------------------------- |-------------:|------------:|------------:|
-|                   RangeSum |   4,179.4 ns |    16.29 ns |    15.24 ns |
-|          RangeSumRewritten |     801.8 ns |     5.78 ns |     5.41 ns | x5
-|                   ArraySum |   3,776.5 ns |    41.32 ns |    38.65 ns |
-|          ArraySumRewritten |     365.4 ns |     3.80 ns |     3.56 ns | x10
-|          ArrayCompositeSum | 135,608.9 ns | 1,084.51 ns | 1,014.45 ns |
-| ArrayCompositeSumRewritten |     307.1 ns |     2.36 ns |     2.09 ns | x400
-|              ArrayWhereSum |   3,317.8 ns |    36.68 ns |    34.31 ns |
-|     ArrayWhereSumRewritten |     578.9 ns |     6.02 ns |     5.63 ns | x6
-|           ArrayNullableSum |   7,956.5 ns |    45.77 ns |    42.81 ns |
-|  ArrayNullableSumRewritten |   1,217.7 ns |     9.71 ns |     9.08 ns | x6
-|              EnumerableSum |   4,690.2 ns |    43.37 ns |    40.57 ns |
-|     EnumerableSumRewritten |   4,168.8 ns |    60.54 ns |    56.63 ns | x1.1
+|                     Method |         Mean |       Error |      StdDev |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|--------------------------- |-------------:|------------:|------------:|-------:|------:|------:|----------:|
+|                   RangeSum |   4,208.0 ns |    53.53 ns |    50.07 ns | 0.0076 |     - |     - |      40 B |
+|          RangeSumRewritten |     804.6 ns |     5.87 ns |     5.49 ns |      - |     - |     - |         - |
+|                   ArraySum |   3,797.0 ns |    43.86 ns |    41.03 ns |      - |     - |     - |      20 B |
+|          ArraySumRewritten |     561.4 ns |     5.49 ns |     5.13 ns |      - |     - |     - |         - |
+|          ArrayCompositeSum | 136,779.0 ns | 1,476.27 ns | 1,380.90 ns | 2.4414 |     - |     - |   10332 B |
+| ArrayCompositeSumRewritten |     306.2 ns |     3.54 ns |     3.31 ns |      - |     - |     - |         - |
+|              ArrayWhereSum |   3,308.5 ns |    31.38 ns |    29.35 ns | 0.0076 |     - |     - |      32 B |
+|     ArrayWhereSumRewritten |     807.7 ns |    10.65 ns |     9.97 ns |      - |     - |     - |         - |
+|           ArrayNullableSum |   8,014.9 ns |    54.59 ns |    51.06 ns |      - |     - |     - |      40 B |
+|  ArrayNullableSumRewritten |   1,225.5 ns |    11.44 ns |    10.70 ns |      - |     - |     - |         - |
+|              EnumerableSum |   4,735.9 ns |    39.19 ns |    36.66 ns |      - |     - |     - |      24 B |
+|     EnumerableSumRewritten |   4,172.5 ns |    51.90 ns |    48.55 ns |      - |     - |     - |      24 B |

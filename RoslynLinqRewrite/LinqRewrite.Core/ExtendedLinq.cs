@@ -21,6 +21,13 @@ namespace LinqRewrite.Core
             foreach (var item in collection)
                 action(item);
         }
+        
+        public static void ForEach<T>(this IEnumerable<T> collection, Action<T, int> action)
+        {
+            var indexer = 0;
+            foreach (var item in collection)
+                action(item, indexer++);
+        }
 
         public static T[] ToArray<T>(this IEnumerable<T> collection, EnlargingCoefficient coefficient)
         {

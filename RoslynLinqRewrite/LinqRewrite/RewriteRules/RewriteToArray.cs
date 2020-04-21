@@ -56,8 +56,6 @@ namespace LinqRewrite.RewriteRules
 
         private static VariableBridge KnownSourceSize(RewriteParameters p, ValueBridge currentLength, VariableBridge resultVariable, int enlarging)
         {
-            var indexerVariable = p.Indexer;
-                
             var logVariable = p.GlobalVariable(Int, 
                 "LinqRewrite".Access("Core", "IntExtensions", "Log2")
                     .Invoke(Parenthesize(p.SourceSize).Cast(SyntaxKind.UIntKeyword)) - 3);
@@ -73,36 +71,33 @@ namespace LinqRewrite.RewriteRules
                                     RefArg(logVariable),
                                     OutArg(currentLengthVariable))));
                 
-            p.ForAdd(resultVariable[indexerVariable].Assign(p.LastValue));
+            p.ForAdd(resultVariable[p.Indexer].Assign(p.LastValue));
             return resultVariable;
         }
 
         private static VariableBridge UnknownSourceSize(RewriteParameters p, ValueBridge currentLength, VariableBridge resultVariable, int enlarging)
         {
-            var indexerVariable = p.Indexer;
-            
             var currentLengthVariable = p.GlobalVariable(Int, currentLength);
             p.ForAdd(If(p.Indexer >= currentLengthVariable,
                             "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeArray")
                                     .Invoke(enlarging, RefArg(resultVariable), RefArg(currentLengthVariable))));
                 
-            p.ForAdd(resultVariable[indexerVariable].Assign(p.LastValue));
+            p.ForAdd(resultVariable[p.Indexer].Assign(p.LastValue));
             return resultVariable;
         }
 
         public static (ValueBridge currentLength, VariableBridge result) GetResultVariable(RewriteParameters p, TypeSyntax itemType)
         {
-            var arrayType = itemType == null ? (ArrayTypeSyntax) p.ReturnType : itemType.ArrayType();
-            if (p.ResultSize != null)
-                return (p.ResultSize, p.GlobalVariable(arrayType, CreateArray(arrayType, p.ResultSize)));
+            var arrayType = itemType.ArrayType();
+            if (p.ResultSize != null) return (p.ResultSize, p.GlobalVariable(arrayType, CreateArray(arrayType, p.ResultSize)));
             
             var currentResult = p.IncompleteIterators.TakeWhile(x =>
             {
                 if (!TryGetInt(x.ForInc, out var inc)) return false;
                 return x.Collection != null && !x.IsReversed && x.ListEnumeration && x.ForFrom != null
                        && x.ForTo != null && inc == 1;
-            }).Aggregate((ValueBridge)0, (x, y) 
-                => x + (y.IsReversed ? (y.ForFrom - y.ForTo + 1) : (y.ForTo - y.ForFrom + 1)), 
+            }).Aggregate((ValueBridge)0, 
+                (x, y) => x + (y.IsReversed ? (y.ForFrom - y.ForTo + 1) : (y.ForTo - y.ForFrom + 1)), 
                 x => x.Simplify());
             
             if (TryGetInt(currentResult, out var currentResultInt) && currentResultInt <= 8)

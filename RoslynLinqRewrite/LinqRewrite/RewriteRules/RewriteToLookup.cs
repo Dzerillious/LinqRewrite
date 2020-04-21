@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System;
+using LinqRewrite.DataStructures;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -6,7 +7,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            p.NotRewrite = true;
+            throw new NotImplementedException("Not implemented because Lookup is internal class");
         }
     }
 }

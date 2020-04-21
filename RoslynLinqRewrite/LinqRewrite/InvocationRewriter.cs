@@ -21,9 +21,9 @@ namespace LinqRewrite
             parameters.SetData(collection, returnType, chain, node, false);
             var names = chain.Select(x => x.MethodName).ToArray();
             
-            var (simpleSuccess, simpleResult) = TryRewriteSimple(parameters, names);
-            if (simpleSuccess && simpleResult != null) return simpleResult;
-            parameters.SetData(collection, returnType, chain, node, true);
+            var (simplePrecheck, simpleResult) = TryRewriteSimple(parameters, names);
+            if (simplePrecheck && simpleResult != null) return simpleResult;
+            if (simplePrecheck) parameters.SetData(collection, returnType, chain, node, true);
 
             parameters.HasResultMethod = MethodsWithResult.Contains(names.Last());
             RewriteComposite(parameters, names);
@@ -55,9 +55,9 @@ namespace LinqRewrite
             parameters.ResultAdd(YieldStatement(SyntaxKind.YieldBreakStatement));
         }
 
-        private static (bool success, ExpressionSyntax result) TryRewriteSimple(RewriteParameters parameters, string[] names)
+        private static (bool preCheck, ExpressionSyntax result) TryRewriteSimple(RewriteParameters parameters, string[] names)
         {
-            if (parameters.CurrentCollection?.CollectionType == CollectionType.Enumerable) return (false, null);
+            if (parameters.CurrentCollection?.CollectionType == CollectionType.IEnumerable) return (false, null);
             if (names.Any(x => MethodsModifyingEnumeration.Contains(x))) return (false, null);
             if (parameters.Data.CurrentMethodParams.Any(x => x.Modifiers.Any())) return (false, null);
 

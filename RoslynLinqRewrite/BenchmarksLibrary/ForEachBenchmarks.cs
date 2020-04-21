@@ -5,6 +5,7 @@ using LinqRewrite.Core;
 
 namespace BenchmarkLibrary
 {
+    [MemoryDiagnoser]
     public class ForEachBenchmarks
     {
         public int[] ArraySource;
@@ -54,7 +55,9 @@ namespace BenchmarkLibrary
         {
             var sum = 0;
             foreach (var i in EnumerableSource.Where(x => x > 3))
+            {
                 sum += i;
+            }
             return sum;
         }//EndMethod
 
@@ -63,7 +66,9 @@ namespace BenchmarkLibrary
         {
             var sum = 0;
             foreach (var i in ArraySource.Where(x => x > 3))
+            {
                 sum += i;
+            }
             return sum;
         }//EndMethod
 
@@ -72,7 +77,9 @@ namespace BenchmarkLibrary
         {
             var sum = 0;
             foreach (var i in EnumerableSource.Where(x => x > 3))
+            {
                 sum += i;
+            }
             return sum;
         }//EndMethod
 
@@ -81,7 +88,9 @@ namespace BenchmarkLibrary
         {
             var sum = 0;
             foreach (var i in EnumerableSource.Where(x => x > 3))
+            {
                 sum += i;
+            }
             return sum;
         }//EndMethod
     }

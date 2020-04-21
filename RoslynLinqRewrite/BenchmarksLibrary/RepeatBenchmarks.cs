@@ -4,7 +4,8 @@ using LinqRewrite.Core;
 
 namespace BenchmarkLibrary
 {
-    public class RepeatTests
+    [MemoryDiagnoser]
+    public class RepeatBenchmarks
     {
         [NoRewrite, Benchmark]
         public void RepeatElementAt()

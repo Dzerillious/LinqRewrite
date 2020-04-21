@@ -1,8 +1,8 @@
-|                       Method |        Mean |     Error |    StdDev |
-|----------------------------- |------------:|----------:|----------:|
-|               ArrayElementAt |  34.3646 ns | 0.1781 ns | 0.1579 ns |
-|      ArrayElementAtRewritten |   0.0208 ns | 0.0139 ns | 0.0130 ns | x1500
-|          ArrayWhereElementAt | 369.3647 ns | 2.5993 ns | 2.0293 ns |
-| ArrayWhereElementAtRewritten |  73.0300 ns | 0.4852 ns | 0.4538 ns | x5
-|          EnumerableElementAt | 215.5690 ns | 0.8717 ns | 0.8154 ns |
-| EnumerableElementAtRewritten | 184.8089 ns | 1.5025 ns | 1.4054 ns | x1.15
+|                                Method |        Mean |     Error |    StdDev |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|-------------------------------------- |------------:|----------:|----------:|-------:|------:|------:|----------:|
+|               ArrayElementAtOrDefault |  35.5207 ns | 0.6911 ns | 0.6788 ns |      - |     - |     - |         - |
+|      ArrayElementAtOrDefaultRewritten |   0.1906 ns | 0.0216 ns | 0.0180 ns |      - |     - |     - |         - |
+|          ArrayWhereElementAtOrDefault | 298.6211 ns | 5.9176 ns | 5.5353 ns | 0.0076 |     - |     - |      32 B |
+| ArrayWhereElementAtOrDefaultRewritten |  95.6353 ns | 0.8149 ns | 0.7622 ns |      - |     - |     - |         - |
+|          EnumerableElementAtOrDefault | 210.9681 ns | 3.2400 ns | 3.0307 ns | 0.0057 |     - |     - |      24 B |
+| EnumerableElementAtOrDefaultRewritten | 194.4773 ns | 3.0759 ns | 2.8772 ns | 0.0057 |     - |     - |      24 B |

@@ -13,7 +13,7 @@ namespace LinqRewrite.RewriteRules
             var elementSelectorValue = args.Length switch
             {
                 1 => p.LastValue,
-                _ when args[1].OldVal.InvokableWith1Param(p) => args[1].Inline(p, p.LastValue),
+                _ when args[1].OldVal.Invokable1Param(p) => args[1].Inline(p, p.LastValue),
                 _ => p.LastValue
             };
 
@@ -43,7 +43,7 @@ namespace LinqRewrite.RewriteRules
             p.LastValue = args.Length switch
             {
                 1 => p.LastValue,
-                _ when !args[1].OldVal.InvokableWith1Param(p) => args[1].Inline(p, key, elements),
+                _ when !args[1].OldVal.Invokable1Param(p) => args[1].Inline(p, key, elements),
                 2 => p.LastValue,
                 _ => args[2].Inline(p, key, elements)
             };

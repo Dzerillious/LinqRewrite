@@ -4,7 +4,8 @@ using LinqRewrite.Core;
 
 namespace BenchmarkLibrary
 {
-    public class RangeTests
+    [MemoryDiagnoser]
+    public class RangeBenchmarks
     {
         [NoRewrite, Benchmark]
         public void RangeElementAt()

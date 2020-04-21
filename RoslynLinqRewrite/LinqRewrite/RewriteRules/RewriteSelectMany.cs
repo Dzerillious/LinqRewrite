@@ -15,7 +15,7 @@ namespace LinqRewrite.RewriteRules
 
             var collectionValue = args.Length switch
             {
-                _ when newExpression.InvokableWith1Param(p)=> method.Inline(p, p.LastValue),
+                _ when newExpression.Invokable1Param(p)=> method.Inline(p, p.LastValue),
                 _ => method.Inline(p, p.LastValue, p.Indexer)
             };
             var rewritten = new RewrittenValueBridge(newExpression.ExpressionBody, collectionValue);

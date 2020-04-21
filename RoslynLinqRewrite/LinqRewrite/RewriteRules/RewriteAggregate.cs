@@ -36,7 +36,7 @@ namespace LinqRewrite.RewriteRules
                 _ => args[1]
             };
 
-            var resultValue = p.ListEnumeration && p.Iterators.Count == 1
+            var resultValue = p.ListEnumeration
                 ? ListAggregate(p, aggregationValue, args)
                 : EnumerableAggregate(p, aggregationValue, args);
             

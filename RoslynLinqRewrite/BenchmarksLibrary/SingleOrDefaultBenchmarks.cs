@@ -5,6 +5,7 @@ using LinqRewrite.Core;
 
 namespace BenchmarkLibrary
 {
+    [MemoryDiagnoser]
     public class SingleOrDefaultBenchmarks
     {
         public int[] ArraySource;
@@ -13,8 +14,8 @@ namespace BenchmarkLibrary
         [GlobalSetup]
         public void GlobalSetup()
         {
-            ArraySource = Enumerable.Range(0, 1000).ToArray();
-            EnumerableSource = Enumerable.Range(0, 1000);
+            ArraySource = Enumerable.Range(0, 1).ToArray();
+            EnumerableSource = Enumerable.Range(0, 1);
         }
 
         [NoRewrite, Benchmark]
@@ -32,13 +33,13 @@ namespace BenchmarkLibrary
         [NoRewrite, Benchmark]
         public int ArraySingleOrDefaultCondition()
         {
-            return ArraySource.SingleOrDefault(x => x > 3);
+            return ArraySource.SingleOrDefault(x => x >= 0);
         }//EndMethod
 
         [Benchmark]
         public int ArraySingleOrDefaultConditionRewritten()
         {
-            return ArraySource.SingleOrDefault(x => x > 3);
+            return ArraySource.SingleOrDefault(x => x >= 0);
         }//EndMethod
 
         [NoRewrite, Benchmark]
@@ -56,61 +57,49 @@ namespace BenchmarkLibrary
         [NoRewrite, Benchmark]
         public int ArrayWhereSingleOrDefault()
         {
-            return ArraySource.Where(x => x > 100).SingleOrDefault();
+            return ArraySource.Where(x => x >= 0).SingleOrDefault();
         }//EndMethod
 
         [Benchmark]
         public int ArrayWhereSingleOrDefaultRewritten()
         {
-            return ArraySource.Where(x => x > 100).SingleOrDefault();
+            return ArraySource.Where(x => x >= 0).SingleOrDefault();
         }//EndMethod
 
         [NoRewrite, Benchmark]
         public int ArrayWhereSingleOrDefaultCondition()
         {
-            return ArraySource.Where(x => x > 100).SingleOrDefault(x => x > 200);
+            return ArraySource.Where(x => x >= 0).SingleOrDefault(x => x >= 0);
         }//EndMethod
 
         [Benchmark]
         public int ArrayWhereSingleOrDefaultConditionRewritten()
         {
-            return ArraySource.Where(x => x > 100).SingleOrDefault(x => x > 200);
+            return ArraySource.Where(x => x >= 0).SingleOrDefault(x => x >= 0);
         }//EndMethod
 
         [NoRewrite, Benchmark]
         public int EnumerableSingleOrDefaultCondition()
         {
-            return EnumerableSource.SingleOrDefault(x => x > 3);
+            return EnumerableSource.SingleOrDefault(x => x >= 0);
         }//EndMethod
 
         [Benchmark]
         public int EnumerableSingleOrDefaultConditionRewritten()
         {
-            return EnumerableSource.SingleOrDefault(x => x > 3);
+            return EnumerableSource.SingleOrDefault(x => x >= 0);
         }//EndMethod
 
         [NoRewrite, Benchmark]
         public int EnumerableSingleOrDefaultNotCondition()
         {
-            return EnumerableSource.SingleOrDefault(x => x > 10_000);
+            return EnumerableSource.SingleOrDefault(x => x >= 10);
         }//EndMethod
 
         [Benchmark]
         public int EnumerableSingleOrDefaultNotConditionRewritten()
         {
-            return EnumerableSource.SingleOrDefault(x => x > 10_000);
-        }//EndMethod
-
-        [NoRewrite, Benchmark]
-        public int EnumerableSingleOrDefaultAllCondition()
-        {
-            return EnumerableSource.SingleOrDefault(x => x > 0);
-        }//EndMethod
-
-        [Benchmark]
-        public int EnumerableSingleOrDefaultAllConditionRewritten()
-        {
-            return EnumerableSource.SingleOrDefault(x => x > 0);
+            return EnumerableSource.SingleOrDefault(x => x >= 10);
         }//EndMethod
     }
 }

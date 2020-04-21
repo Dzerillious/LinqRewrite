@@ -6,82 +6,100 @@ using LinqRewrite.Core.SimpleList;
 
 namespace BenchmarkLibrary
 {
+    [MemoryDiagnoser]
     public class OfTypeBenchmarks
     {
-        public static int[] StaticArraySource;
-        public int[] ArraySource;
-        public IEnumerable<int> EnumerableSource;
+        public class A {}
+        public class B : A {}
+        
+        public static A[] StaticArraySource;
+        public A[] ArraySource;
+        public IEnumerable<A> EnumerableSource;
 
         [GlobalSetup]
         public void GlobalSetup()
         {
-            StaticArraySource = Enumerable.Range(0, 1000).ToArray();
-            ArraySource = Enumerable.Range(0, 1000).ToArray();
-            EnumerableSource = Enumerable.Range(0, 1000);
+            StaticArraySource = Enumerable.Repeat(new B(), 1000).ToArray();
+            ArraySource = Enumerable.Repeat(new B(), 1000).ToArray();
+            EnumerableSource = Enumerable.Repeat(new B(), 1000);
         }
 
 
         [NoRewrite, Benchmark]
         public void ArrayOfTypeToArray()
         {
-            ArraySource.OfType<int>().ToArray();
+            ArraySource.OfType<B>().ToArray();
         }//EndMethod
 
 		[Benchmark]
         public void ArrayOfTypeToArrayRewritten()
         {
-            ArraySource.OfType<int>().ToArray();
+            ArraySource.OfType<B>().ToArray();
         }//EndMethod
+
         
         [NoRewrite, Benchmark]
         public void EnumerableOfTypeToArray()
         {
-            EnumerableSource.OfType<int>().ToArray();
+            EnumerableSource.OfType<B>().ToArray();
         }//EndMethod
 
 		[Benchmark]
         public void EnumerableOfTypeToArrayRewritten()
         {
-            EnumerableSource.OfType<int>().ToArray();
+            EnumerableSource.OfType<B>().ToArray();
         }//EndMethod
 
         
         [NoRewrite, Benchmark]
         public void ArrayOfTypeToSimpleList()
         {
-            ArraySource.OfType<int>().ToSimpleList();
+            ArraySource.OfType<B>().ToSimpleList();
         }//EndMethod
 
 		[Benchmark]
         public void ArrayOfTypeToSimpleListRewritten()
         {
-            ArraySource.OfType<int>().ToSimpleList();
+            ArraySource.OfType<B>().ToSimpleList();
         }//EndMethod
 
 
         [NoRewrite, Benchmark]
         public void StaticArrayOfTypeToArray()
         {
-            StaticArraySource.OfType<int>().ToArray();
+            StaticArraySource.OfType<B>().ToArray();
         }//EndMethod
 
 		[Benchmark]
         public void StaticArrayOfTypeToArrayRewritten()
         {
-            StaticArraySource.OfType<int>().ToArray();
+            StaticArraySource.OfType<B>().ToArray();
         }//EndMethod
 
 
         [NoRewrite, Benchmark]
         public void ArrayUncheckedOfTypeToArray()
         {
-            ArraySource.Unchecked().OfType<int>().ToArray();
+            ArraySource.Unchecked().OfType<B>().ToArray();
         }//EndMethod
 
         [Benchmark]
         public void ArrayUncheckedOfTypeToArrayRewritten()
         {
-            ArraySource.Unchecked().OfType<int>().ToArray();
+            ArraySource.Unchecked().OfType<B>().ToArray();
+        }//EndMethod
+
+        
+        [NoRewrite, Benchmark]
+        public void EnumerableUncheckedOfTypeToSimpleList()
+        {
+            EnumerableSource.OfType<B>().ToArray();
+        }//EndMethod
+
+        [Benchmark]
+        public void EnumerableUncheckedToSimpleListRewritten()
+        {
+            EnumerableSource.OfType<B>().ToArray();
         }//EndMethod
     }
 }

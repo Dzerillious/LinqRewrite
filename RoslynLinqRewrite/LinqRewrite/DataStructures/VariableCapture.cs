@@ -13,5 +13,6 @@ namespace LinqRewrite.DataStructures
         public ISymbol Symbol { get; }
         public bool Changes { get; }
         public string Name => Symbol.Name;
+        public string OriginalName => Symbol.IsStatic ? Symbol.ToString() : Symbol.Name;
     }
 }

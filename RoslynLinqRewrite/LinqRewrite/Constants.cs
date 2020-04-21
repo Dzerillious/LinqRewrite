@@ -23,7 +23,8 @@ namespace LinqRewrite
             "First", "FirstOrDefault", "ForEach", "Last", "LastOrDefault",
             "LongCount", "Max", "Min", "SequenceEqual",
             "Single", "SingleOrDefault", "Sum", "ToArray",
-            "ToDictionary", "ToList", /*"ToLookup",*/ "ToSimpleList"
+            "ToDictionary", "ToList", /*"ToLookup",*/ "ToSimpleList",
+            /*"OrderBy",*//*"OrderByDescending"*//*"ThenByDescending"*//*"ThenByDescending"*/
         };
 
         public static readonly HashSet<string> RewritableMethods = new HashSet<string>
@@ -41,7 +42,6 @@ namespace LinqRewrite
             "ForEach",
             
             "Select", "Where", "Cast", "OfType", "SelectMany",
-            
             "Skip", "SkipWhile", "Take", "TakeWhile", "Reverse",
             
             "Concat", "Union", "Except", "Intersect", "Distinct",
@@ -52,7 +52,9 @@ namespace LinqRewrite
             
             "Range", "Repeat", "Empty",
             
-            "Unchecked", "WithMaxSize", "WithResultSize"
+            "Unchecked", "WithMaxSize", 
+            
+            /*"OrderBy",*//*"OrderByDescending"*//*"ThenByDescending"*//*"ThenByDescending"*/
         };
 
         public const int MaximumSizeForByValStruct = 128 / 8; // eg. two longs, or two references

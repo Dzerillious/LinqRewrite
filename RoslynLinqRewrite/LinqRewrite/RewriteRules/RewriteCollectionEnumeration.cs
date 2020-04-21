@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
@@ -20,8 +21,9 @@ namespace LinqRewrite.RewriteRules
         {
             if (collection.CollectionType == CollectionType.Array
                 || collection.CollectionType == CollectionType.List
+                || collection.CollectionType == CollectionType.IList
                 || collection.CollectionType == CollectionType.SimpleList) ArrayEnumeration(p, collection.ItemType, collection.Count, collection, variable);
-            else if (collection.CollectionType == CollectionType.Enumerable) EnumerableEnumeration(p, collection, variable);
+            else if (collection.CollectionType == CollectionType.IEnumerable) EnumerableEnumeration(p, collection, variable);
 
             if (otherIndexer) p.CurrentIterator.Indexer = null;
         }
@@ -39,9 +41,7 @@ namespace LinqRewrite.RewriteRules
             }
             
             if (variable == null)
-            {
                 p.LastValue = new TypedValueBridge(itemType, collection[p.CurrentIterator.ForIndexer]);
-            }
             else
             {
                 p.CurrentIterator.BodyAdd(variable.Assign(collection[p.CurrentIterator.ForIndexer]));
@@ -60,13 +60,14 @@ namespace LinqRewrite.RewriteRules
             p.CurrentIterator.ForTo = null;
             p.CurrentIterator.Enumerator = p.GlobalVariable(ParseTypeName($"System.Collections.Generic.IEnumerator<{collection.ItemType}>"));
             p.CurrentIterator.ListEnumeration = false;
-            
-            if (variable != null)
+
+            if (variable == null)
+                p.LastValue = new TypedValueBridge(collection.ItemType, p.CurrentIterator.Enumerator.Access("Current"));
+            else
             {
                 p.CurrentForAdd(variable.Assign(p.CurrentIterator.Enumerator.Access("Current")));
                 p.LastValue = new TypedValueBridge(collection.ItemType, variable);
             }
-            else p.LastValue = new TypedValueBridge(collection.ItemType, p.CurrentIterator.Enumerator.Access("Current"));
 
             p.SourceSize = null;
             var listEnumerations = p.Iterators.Select(x => x.ListEnumeration).ToArray();

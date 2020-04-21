@@ -12,7 +12,7 @@ namespace LinqRewrite.RewriteRules
             p.LastValue = p.LastValue.Reusable(p);
             var conditionValue = args.Length switch
             {
-                1 when args[0].OldVal.InvokableWith1Param(p) => args[0].Inline(p, p.LastValue),
+                1 when args[0].OldVal.Invokable1Param(p) => args[0].Inline(p, p.LastValue),
                 1 => args[0].Inline(p, p.LastValue, p.Indexer)
             };
             p.ForAdd(If(Not(conditionValue), Continue()));

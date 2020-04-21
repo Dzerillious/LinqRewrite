@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
-        <PackageVersion>0.6.1-preview</PackageVersion>
+        <PackageVersion>0.6.2-preview</PackageVersion>
         <Title>LinqRewrite.Core</Title>
         <Authors>Daniel Šerý</Authors>
         <Description>Core of LinqRewrite NuGet for rewriting of Linq queries</Description>

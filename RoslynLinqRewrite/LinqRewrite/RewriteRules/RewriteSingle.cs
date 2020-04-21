@@ -33,7 +33,6 @@ namespace LinqRewrite.RewriteRules
                                 foundVariable.Assign(p.LastValue),
                                 Throw("System.InvalidOperationException", "The sequence contains more than single matching element."))));
             }
-            
             p.ResultAdd(If(foundVariable.IsEqual(null),
                             Throw("System.InvalidOperationException", "The sequence did not contain any elements."), 
                             Return(foundVariable.Cast(p.ReturnType))));

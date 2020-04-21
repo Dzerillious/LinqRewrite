@@ -1,4 +1,5 @@
-﻿using LinqRewrite.Extensions;
+﻿using System.Linq;
+using LinqRewrite.Extensions;
 using LinqRewrite.Services;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -9,7 +10,7 @@ namespace LinqRewrite.DataStructures
 {
     public enum CollectionType
     {
-        Array, List, Enumerable, SimpleList
+        Array, List, IList, IEnumerable, SimpleList
     }
     
     public class CollectionValueBridge : TypedValueBridge
@@ -31,11 +32,13 @@ namespace LinqRewrite.DataStructures
                     CollectionType = CollectionType.SimpleList;
                 else if (displayString.StartsWith("System.Collections.Generic.List<"))
                     CollectionType = CollectionType.List;
-                else CollectionType = CollectionType.Enumerable;
+                else if (displayString.StartsWith("System.Collections.Generic.IList<"))
+                    CollectionType = CollectionType.IList;
+                else CollectionType = CollectionType.IEnumerable;
             }
             Count = CodeCreationService.CreateCollectionCount(Value, CollectionType);
 
-            if (CollectionType == CollectionType.Enumerable) return;
+            if (CollectionType == CollectionType.IEnumerable) return;
             if (reuse) Value = name.ReusableConst(p, Type, CollectionType == CollectionType.SimpleList ? true : (bool?)null);
             if (reuse) Count = Count.ReusableConst(p, Int);
         }
@@ -53,11 +56,13 @@ namespace LinqRewrite.DataStructures
                     CollectionType = CollectionType.SimpleList;
                 else if (displayString.StartsWith("System.Collections.Generic.List<"))
                     CollectionType = CollectionType.List;
-                else CollectionType = CollectionType.Enumerable;
+                else if (displayString.StartsWith("System.Collections.Generic.IList<") || type.AllInterfaces.Any(x => x.ToDisplayString().StartsWith("System.Collections.Generic.IList<")))
+                    CollectionType = CollectionType.IList;
+                else CollectionType = CollectionType.IEnumerable;
             }
             Count = CodeCreationService.CreateCollectionCount(Value, CollectionType);
 
-            if (CollectionType == CollectionType.Enumerable) return;
+            if (CollectionType == CollectionType.IEnumerable) return;
             if (reuse) Value = name.ReusableConst(p, Type, CollectionType == CollectionType.SimpleList ? true : (bool?)null);
             if (reuse) Count = Count.ReusableConst(p, Int);
         }

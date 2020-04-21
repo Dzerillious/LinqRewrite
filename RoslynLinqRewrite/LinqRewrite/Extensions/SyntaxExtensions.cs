@@ -26,8 +26,5 @@ namespace LinqRewrite.Extensions
 
         public static TypeSyntax GetTypeFromExpression(this SemanticModel model, ExpressionSyntax syntax)
             => SyntaxFactory.ParseTypeName(model.GetTypeInfo(syntax).Type.ToDisplayString());
-        
-        public static TypeSyntax GetTypeSyntaxFromExpression(this ITypeSymbol type)
-            => SyntaxFactory.ParseTypeName(type.ToDisplayString());
     }
 }

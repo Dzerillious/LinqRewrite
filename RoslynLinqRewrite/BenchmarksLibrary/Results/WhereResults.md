@@ -1,54 +1,54 @@
-﻿|                          Method | Offset |       Mean |     Error |   StdDev |
-|-------------------------------- |------- |-----------:|----------:|---------:|
-|               ArrayWhereToArray |     -1 | 2,312.5 ns |  28.11 ns | 26.30 ns |
-|      ArrayWhereToArrayRewritten |     -1 |   596.7 ns |  10.97 ns | 10.26 ns |
-|          ArrayWhereToSimpleList |     -1 | 2,287.5 ns |  30.39 ns | 28.43 ns |
-| ArrayWhereToSimpleListRewritten |     -1 |   586.1 ns |   8.23 ns |  7.70 ns |
-|               ArrayWhereToArray |      0 | 2,303.7 ns |  28.06 ns | 24.88 ns |
-|      ArrayWhereToArrayRewritten |      0 |   588.2 ns |   6.46 ns |  6.05 ns |
-|          ArrayWhereToSimpleList |      0 | 2,297.5 ns |  32.39 ns | 30.30 ns |
-| ArrayWhereToSimpleListRewritten |      0 |   585.1 ns |   7.04 ns |  6.59 ns |
-|               ArrayWhereToArray |      1 | 2,299.1 ns |  21.82 ns | 19.35 ns |
-|      ArrayWhereToArrayRewritten |      1 |   595.4 ns |   5.32 ns |  4.98 ns |
-|          ArrayWhereToSimpleList |      1 | 2,294.1 ns |  30.84 ns | 28.84 ns |
-| ArrayWhereToSimpleListRewritten |      1 |   585.0 ns |   6.06 ns |  5.67 ns |
-|               ArrayWhereToArray |      2 | 2,298.6 ns |  25.94 ns | 24.26 ns |
-|      ArrayWhereToArrayRewritten |      2 |   594.1 ns |   8.41 ns |  7.87 ns |
-|          ArrayWhereToSimpleList |      2 | 2,306.6 ns |  25.33 ns | 23.69 ns |
-| ArrayWhereToSimpleListRewritten |      2 |   605.8 ns |  11.85 ns | 18.44 ns |
-|               ArrayWhereToArray |      5 | 2,434.6 ns |  46.50 ns | 51.69 ns |
-|      ArrayWhereToArrayRewritten |      5 |   629.2 ns |  11.76 ns | 12.58 ns |
-|          ArrayWhereToSimpleList |      5 | 2,338.9 ns |  26.31 ns | 24.61 ns |
-| ArrayWhereToSimpleListRewritten |      5 |   594.8 ns |  11.16 ns | 10.44 ns |
-|               ArrayWhereToArray |     10 | 2,383.0 ns |  21.95 ns | 20.54 ns |
-|      ArrayWhereToArrayRewritten |     10 |   629.0 ns |   6.86 ns |  6.41 ns |
-|          ArrayWhereToSimpleList |     10 | 2,352.5 ns |  25.98 ns | 24.30 ns |
-| ArrayWhereToSimpleListRewritten |     10 |   618.9 ns |   5.35 ns |  4.74 ns |
-|               ArrayWhereToArray |     20 | 2,473.8 ns |  33.59 ns | 31.42 ns |
-|      ArrayWhereToArrayRewritten |     20 |   648.5 ns |   7.65 ns |  7.15 ns |
-|          ArrayWhereToSimpleList |     20 | 2,440.6 ns |  33.85 ns | 31.67 ns |
-| ArrayWhereToSimpleListRewritten |     20 |   620.9 ns |   8.18 ns |  7.65 ns |
-|               ArrayWhereToArray |     50 | 2,635.3 ns |  14.45 ns | 12.07 ns |
-|      ArrayWhereToArrayRewritten |     50 |   703.1 ns |   6.79 ns |  6.35 ns |
-|          ArrayWhereToSimpleList |     50 | 2,658.7 ns |  37.30 ns | 34.89 ns |
-| ArrayWhereToSimpleListRewritten |     50 |   636.3 ns |   6.80 ns |  6.36 ns |
-|               ArrayWhereToArray |    100 | 2,959.1 ns |  38.93 ns | 36.41 ns |
-|      ArrayWhereToArrayRewritten |    100 |   849.1 ns |   7.67 ns |  7.17 ns |
-|          ArrayWhereToSimpleList |    100 | 2,956.5 ns |  37.82 ns | 35.38 ns |
-| ArrayWhereToSimpleListRewritten |    100 |   743.6 ns |   6.57 ns |  6.14 ns |
-|               ArrayWhereToArray |    200 | 3,517.2 ns |  39.75 ns | 37.18 ns |
-|      ArrayWhereToArrayRewritten |    200 | 1,021.5 ns |  14.59 ns | 13.65 ns |
-|          ArrayWhereToSimpleList |    200 | 3,503.4 ns |  39.14 ns | 36.62 ns |
-| ArrayWhereToSimpleListRewritten |    200 |   815.1 ns |   6.44 ns |  6.03 ns |
-|               ArrayWhereToArray |    500 | 5,018.6 ns |  76.32 ns | 71.39 ns |
-|      ArrayWhereToArrayRewritten |    500 | 1,710.0 ns |  11.29 ns | 10.01 ns |
-|          ArrayWhereToSimpleList |    500 | 5,037.2 ns |  45.53 ns | 40.36 ns |
-| ArrayWhereToSimpleListRewritten |    500 | 1,195.0 ns |  13.11 ns | 11.63 ns |
-|               ArrayWhereToArray |   1000 | 7,603.0 ns |  65.62 ns | 61.38 ns |
-|      ArrayWhereToArrayRewritten |   1000 | 2,335.2 ns |  20.68 ns | 18.33 ns |
-|          ArrayWhereToSimpleList |   1000 | 7,651.7 ns |  70.12 ns | 62.16 ns |
-| ArrayWhereToSimpleListRewritten |   1000 | 1,469.9 ns |  16.36 ns | 15.30 ns |
-|               ArrayWhereToArray |   2000 | 7,666.0 ns |  26.88 ns | 22.44 ns |
-|      ArrayWhereToArrayRewritten |   2000 | 2,344.1 ns |  36.02 ns | 33.70 ns |
-|          ArrayWhereToSimpleList |   2000 | 7,640.3 ns | 102.77 ns | 91.11 ns |
-| ArrayWhereToSimpleListRewritten |   2000 | 1,467.7 ns |   3.88 ns |  3.44 ns |
+﻿|                          Method | Offset |       Mean |    Error |   StdDev |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|-------------------------------- |------- |-----------:|---------:|---------:|-------:|------:|------:|----------:|
+|               ArrayWhereToArray |     -1 | 3,105.5 ns | 33.28 ns | 31.13 ns | 0.0153 |     - |     - |      76 B |
+|      ArrayWhereToArrayRewritten |     -1 |   614.8 ns |  5.64 ns |  5.27 ns | 0.0134 |     - |     - |      56 B |
+|          ArrayWhereToSimpleList |     -1 | 2,338.9 ns | 22.88 ns | 21.40 ns | 0.0267 |     - |     - |     124 B |
+| ArrayWhereToSimpleListRewritten |     -1 |   862.2 ns |  2.45 ns |  2.17 ns | 0.0143 |     - |     - |      60 B |
+|               ArrayWhereToArray |      0 | 3,078.2 ns | 30.04 ns | 28.10 ns | 0.0153 |     - |     - |      76 B |
+|      ArrayWhereToArrayRewritten |      0 |   614.1 ns |  6.90 ns |  6.45 ns | 0.0134 |     - |     - |      56 B |
+|          ArrayWhereToSimpleList |      0 | 2,329.9 ns | 17.81 ns | 16.66 ns | 0.0267 |     - |     - |     124 B |
+| ArrayWhereToSimpleListRewritten |      0 |   859.6 ns |  8.93 ns |  8.35 ns | 0.0143 |     - |     - |      60 B |
+|               ArrayWhereToArray |      1 | 2,904.1 ns | 26.88 ns | 23.83 ns | 0.0229 |     - |     - |     108 B |
+|      ArrayWhereToArrayRewritten |      1 |   623.0 ns |  5.86 ns |  5.48 ns | 0.0143 |     - |     - |      60 B |
+|          ArrayWhereToSimpleList |      1 | 2,337.9 ns | 26.25 ns | 24.55 ns | 0.0267 |     - |     - |     124 B |
+| ArrayWhereToSimpleListRewritten |      1 |   854.2 ns |  7.12 ns |  5.95 ns | 0.0143 |     - |     - |      60 B |
+|               ArrayWhereToArray |      2 | 2,941.2 ns | 39.29 ns | 34.83 ns | 0.0267 |     - |     - |     112 B |
+|      ArrayWhereToArrayRewritten |      2 |   623.8 ns |  8.49 ns |  7.94 ns | 0.0153 |     - |     - |      64 B |
+|          ArrayWhereToSimpleList |      2 | 2,335.8 ns | 27.63 ns | 25.84 ns | 0.0267 |     - |     - |     124 B |
+| ArrayWhereToSimpleListRewritten |      2 |   860.6 ns |  7.51 ns |  7.03 ns | 0.0143 |     - |     - |      60 B |
+|               ArrayWhereToArray |      5 | 2,971.0 ns | 41.40 ns | 38.72 ns | 0.0381 |     - |     - |     168 B |
+|      ArrayWhereToArrayRewritten |      5 |   624.5 ns |  6.47 ns |  6.05 ns | 0.0181 |     - |     - |      76 B |
+|          ArrayWhereToSimpleList |      5 | 2,440.7 ns | 28.63 ns | 26.78 ns | 0.0267 |     - |     - |     124 B |
+| ArrayWhereToSimpleListRewritten |      5 |   863.0 ns |  7.12 ns |  6.66 ns | 0.0143 |     - |     - |      60 B |
+|               ArrayWhereToArray |     10 | 3,010.8 ns | 26.76 ns | 23.72 ns | 0.0610 |     - |     - |     264 B |
+|      ArrayWhereToArrayRewritten |     10 |   678.5 ns |  6.33 ns |  5.92 ns | 0.0849 |     - |     - |     357 B |
+|          ArrayWhereToSimpleList |     10 | 2,686.8 ns | 31.76 ns | 29.71 ns | 0.0610 |     - |     - |     264 B |
+| ArrayWhereToSimpleListRewritten |     10 |   924.0 ns |  3.54 ns |  3.14 ns | 0.0763 |     - |     - |     320 B |
+|               ArrayWhereToArray |     20 | 3,105.4 ns | 26.12 ns | 24.44 ns | 0.1030 |     - |     - |     445 B |
+|      ArrayWhereToArrayRewritten |     20 |   695.3 ns |  7.15 ns |  6.69 ns | 0.0944 |     - |     - |     397 B |
+|          ArrayWhereToSimpleList |     20 | 2,915.3 ns | 29.35 ns | 27.46 ns | 0.0610 |     - |     - |     264 B |
+| ArrayWhereToSimpleListRewritten |     20 |   927.8 ns |  8.40 ns |  7.86 ns | 0.0763 |     - |     - |     320 B |
+|               ArrayWhereToArray |     50 | 3,279.7 ns | 26.64 ns | 24.92 ns | 0.1984 |     - |     - |     833 B |
+|      ArrayWhereToArrayRewritten |     50 |   752.3 ns |  7.61 ns |  7.12 ns | 0.1230 |     - |     - |     517 B |
+|          ArrayWhereToSimpleList |     50 | 3,116.2 ns | 28.89 ns | 27.03 ns | 0.1869 |     - |     - |     789 B |
+| ArrayWhereToSimpleListRewritten |     50 |   959.6 ns | 10.79 ns | 10.09 ns | 0.0763 |     - |     - |     320 B |
+|               ArrayWhereToArray |    100 | 3,523.8 ns | 27.82 ns | 26.03 ns | 0.3700 |     - |     - |    1558 B |
+|      ArrayWhereToArrayRewritten |    100 |   927.4 ns |  8.23 ns |  7.70 ns | 0.4120 |     - |     - |    1731 B |
+|          ArrayWhereToSimpleList |    100 | 3,249.5 ns | 49.51 ns | 46.32 ns | 0.1869 |     - |     - |     789 B |
+| ArrayWhereToSimpleListRewritten |    100 | 1,114.7 ns | 11.62 ns | 10.87 ns | 0.3166 |     - |     - |    1334 B |
+|               ArrayWhereToArray |    200 | 3,997.4 ns | 39.66 ns | 37.10 ns | 0.7095 |     - |     - |    2997 B |
+|      ArrayWhereToArrayRewritten |    200 | 1,093.9 ns | 14.99 ns | 14.02 ns | 0.5074 |     - |     - |    2131 B |
+|          ArrayWhereToSimpleList |    200 | 3,768.0 ns | 33.25 ns | 31.10 ns | 0.6790 |     - |     - |    2853 B |
+| ArrayWhereToSimpleListRewritten |    200 | 1,243.8 ns | 11.18 ns | 10.46 ns | 0.3166 |     - |     - |    1334 B |
+|               ArrayWhereToArray |    500 | 5,261.0 ns | 64.77 ns | 60.59 ns | 1.4877 |     - |     - |    6262 B |
+|      ArrayWhereToArrayRewritten |    500 | 1,837.6 ns | 10.40 ns |  9.73 ns | 1.7509 |     - |     - |    7351 B |
+|          ArrayWhereToSimpleList |    500 | 4,746.2 ns | 43.70 ns | 38.74 ns | 0.6790 |     - |     - |    2853 B |
+| ArrayWhereToSimpleListRewritten |    500 | 1,848.1 ns | 30.15 ns | 28.20 ns | 1.2741 |     - |     - |    5355 B |
+|               ArrayWhereToArray |   1000 | 7,323.4 ns | 52.97 ns | 46.95 ns | 2.9449 |     - |     - |   12379 B |
+|      ArrayWhereToArrayRewritten |   1000 | 2,380.3 ns | 27.49 ns | 25.72 ns | 1.2703 |     - |     - |    5336 B |
+|          ArrayWhereToSimpleList |   1000 | 6,944.9 ns | 57.70 ns | 53.98 ns | 2.6321 |     - |     - |   11069 B |
+| ArrayWhereToSimpleListRewritten |   1000 | 2,411.7 ns | 19.98 ns | 17.71 ns | 1.2741 |     - |     - |    5355 B |
+|               ArrayWhereToArray |   2000 | 7,402.2 ns | 58.45 ns | 48.81 ns | 2.9449 |     - |     - |   12379 B |
+|      ArrayWhereToArrayRewritten |   2000 | 2,369.9 ns | 23.43 ns | 20.77 ns | 1.2703 |     - |     - |    5336 B |
+|          ArrayWhereToSimpleList |   2000 | 6,926.5 ns | 64.69 ns | 57.35 ns | 2.6321 |     - |     - |   11069 B |
+| ArrayWhereToSimpleListRewritten |   2000 | 2,427.6 ns | 32.12 ns | 26.82 ns | 1.2741 |     - |     - |    5355 B |

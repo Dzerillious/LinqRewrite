@@ -1,14 +1,14 @@
-|                                   Method |       Mean |    Error |   StdDev |
-|----------------------------------------- |-----------:|---------:|---------:|
-|                         ArrayCastToArray |   334.9 ns |  4.66 ns |  3.89 ns |
-|                ArrayCastToArrayRewritten |   242.2 ns |  4.03 ns |  3.77 ns |
-|                    EnumerableCastToArray | 5,491.9 ns | 88.05 ns | 82.36 ns |
-|           EnumerableCastToArrayRewritten | 5,405.6 ns | 67.84 ns | 60.14 ns |
-|                    ArrayCastToSimpleList | 5,584.2 ns | 83.99 ns | 78.57 ns |
-|           ArrayCastToSimpleListRewritten |   749.3 ns |  9.44 ns |  8.83 ns |
-|                   StaticArrayCastToArray |   330.4 ns |  6.37 ns |  6.26 ns |
-|          StaticArrayCastToArrayRewritten |   250.7 ns |  3.27 ns |  2.90 ns |
-|                ArrayUncheckedCastToArray |   339.5 ns |  2.66 ns |  2.49 ns |
-|       ArrayUncheckedCastToArrayRewritten |   241.6 ns |  4.59 ns |  4.29 ns |
-|      EnumerableUncheckedCastToSimpleList | 5,514.2 ns | 73.96 ns | 69.19 ns |
-| EnumerableUncheckedToSimpleListRewritten | 5,449.3 ns | 92.50 ns | 82.00 ns |
+|                                   Method |        Mean |     Error |    StdDev |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|----------------------------------------- |------------:|----------:|----------:|-------:|------:|------:|----------:|
+|                         ArrayCastToArray |    608.3 ns |   3.20 ns |   3.00 ns | 0.9575 |     - |     - |   3.93 KB |
+|                ArrayCastToArrayRewritten |  4,200.4 ns |  35.94 ns |  31.86 ns | 0.9537 |     - |     - |   3.93 KB |
+|                    EnumerableCastToArray | 19,486.2 ns | 195.44 ns | 173.25 ns | 5.7983 |     - |     - |  23.79 KB |
+|           EnumerableCastToArrayRewritten | 13,671.6 ns | 224.79 ns | 210.27 ns | 6.4392 |     - |     - |  26.41 KB |
+|                    ArrayCastToSimpleList |  9,095.5 ns |  96.83 ns |  90.57 ns | 2.6245 |     - |     - |  10.77 KB |
+|           ArrayCastToSimpleListRewritten |  4,399.6 ns |  44.19 ns |  41.34 ns | 0.9613 |     - |     - |   3.94 KB |
+|                   StaticArrayCastToArray |    600.2 ns |   9.83 ns |   8.72 ns | 0.9575 |     - |     - |   3.93 KB |
+|          StaticArrayCastToArrayRewritten |  4,180.6 ns |  78.53 ns |  73.46 ns | 0.9537 |     - |     - |   3.93 KB |
+|                ArrayUncheckedCastToArray |    602.8 ns |   6.76 ns |   6.32 ns | 0.9575 |     - |     - |   3.93 KB |
+|       ArrayUncheckedCastToArrayRewritten |  4,166.3 ns |  62.25 ns |  58.23 ns | 0.9537 |     - |     - |   3.93 KB |
+|      EnumerableUncheckedCastToSimpleList | 18,666.5 ns | 210.02 ns | 196.45 ns | 5.7983 |     - |     - |  23.79 KB |
+| EnumerableUncheckedToSimpleListRewritten | 13,702.0 ns | 238.27 ns | 222.88 ns | 6.4392 |     - |     - |  26.41 KB |

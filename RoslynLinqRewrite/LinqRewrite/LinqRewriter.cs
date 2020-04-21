@@ -49,9 +49,6 @@ namespace LinqRewrite
         public override SyntaxNode VisitStructDeclaration(StructDeclarationSyntax node)
             => VisitTypeDeclaration(node);
 
-        public override SyntaxNode VisitForEachStatement(ForEachStatementSyntax node)
-            => TryVisitForEachStatement(node) ?? base.VisitForEachStatement(node);
-
         public override SyntaxNode VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
             if (HasNoRewriteAttribute(node.AttributeLists)) return node;
@@ -98,7 +95,6 @@ namespace LinqRewrite
 
             if (!IsSupportedMethod(node)) return node;
             var chain = GetInvocationStepChain(node, out var lastNode);
-            if (containingForEach != null) InvocationChainInsertForEach(chain, containingForEach);
             
             var (rewrite, collection) = CheckIfRewriteInvocation(node, lastNode);
             if (!rewrite) return null;
@@ -231,7 +227,7 @@ namespace LinqRewrite
                 .Distinct(new RewriteService.ParameterComparer()).ToList();
             _data.CurrentMethodArguments = currentFlow
                 .GroupBy(x => x.Symbol, (x, y) => new VariableCapture(x, y.Any(z => z.Changes)))
-                .Select(x => Argument(x.Name).WithRef(x.Changes)).ToList();
+                .Select(x => Argument(x.OriginalName).WithRef(x.Changes)).ToList();
 
             if (SyntaxExtensions.IsAnonymousType(_data.Semantic.GetTypeInfo(lastNode).Type)) return (false, null);
 
@@ -241,25 +237,6 @@ namespace LinqRewrite
                 return (false, null);
 
             return (true, lastNode);
-        }
-
-        private void InvocationChainInsertForEach(List<LinqStep> chain, ForEachStatementSyntax forEach)
-        {
-            var identifiers = new[]
-            {
-                new RewrittenValueBridge(SyntaxFactory.SimpleLambdaExpression(
-                    SyntaxFactory.Parameter(forEach.Identifier), forEach.Statement)), 
-            };
-            chain.Insert(0,
-                new LinqStep("System.Collections.Generic.IEnumerable<T>.ForEach<T>(System.Action<T>)", identifiers)
-                {
-                    Lambda = new Lambda(forEach.Statement,
-                        new[]
-                        {
-                            CreateParameter(forEach.Identifier,
-                                _data.Semantic.GetTypeInfo(forEach.Type).ConvertedType)
-                        })
-                });
         }
 
         private static string GetMethodName(string name)

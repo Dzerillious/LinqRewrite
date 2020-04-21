@@ -41,26 +41,6 @@ namespace LinqRewrite.Extensions
             return SyntaxFactory.ParseTypeName(itemString);
         }
 
-
-        public static TypeBridge ItemType(this TypeBridge collection, RewriteParameters p)
-        {
-            var itemString = collection.GetItemTypeSymbol(p).ToDisplayString();
-            return SyntaxFactory.ParseTypeName(itemString);
-        }
-
-        public static TypeBridge ItemType(this ValueBridge collection, RewriteParameters p)
-        {
-            try
-            {
-                var itemString = collection.GetItemTypeSymbol(p).ToDisplayString();
-                return SyntaxFactory.ParseTypeName(itemString);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
         public static ITypeSymbol GetItemTypeSymbol(this TypeBridge collection, RewriteParameters p)
         {
             var collectionType = ModelExtensions.GetTypeInfo(p.Semantic, collection).Type;
@@ -85,7 +65,7 @@ namespace LinqRewrite.Extensions
         public static bool IsSameType(ITypeSymbol symbol, TypeBridge type) 
             => symbol.ToDisplayString() == type.ToString();
 
-        public static bool HasCommonAncestor(ITypeSymbol symbol, TypeBridge type)
+        public static bool IsDescendantType(ITypeSymbol symbol, TypeBridge type)
         {
             var checkedType = type.ToString();
             if (symbol.AllInterfaces.Any(x => x.ToDisplayString() == checkedType)) return true;

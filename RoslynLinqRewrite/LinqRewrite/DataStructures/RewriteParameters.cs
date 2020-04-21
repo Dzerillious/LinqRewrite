@@ -51,12 +51,10 @@ namespace LinqRewrite.DataStructures
         private readonly List<StatementSyntax> _initialStatements = new List<StatementSyntax>();
         private readonly List<StatementSyntax> _finalStatements = new List<StatementSyntax>();
         private readonly List<StatementSyntax> _resultStatements = new List<StatementSyntax>();
-        
         public readonly List<IteratorParameters> ResultIterators = new List<IteratorParameters>();
         public List<IteratorParameters> Iterators { get; } = new List<IteratorParameters>();
         public IEnumerable<IteratorParameters> IncompleteIterators => Iterators.Where(x => !x.Complete);
         public IteratorParameters CurrentIterator { get; set; }
-        
         public List<LocalVariable> Variables { get; } = new List<LocalVariable>();
         
         public bool WrapWithTry { get; set; }

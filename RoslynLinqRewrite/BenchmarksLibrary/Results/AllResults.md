@@ -1,12 +1,12 @@
-|                             Method |       Mean |     Error |    StdDev |
-|----------------------------------- |-----------:|----------:|----------:|
-|                  ArrayAllCondition |  21.269 ns | 0.2532 ns | 0.2369 ns |
-|         ArrayAllConditionRewritten |   1.133 ns | 0.0180 ns | 0.0160 ns | x20
-|             ArrayWhereAllCondition | 337.049 ns | 4.7284 ns | 4.4229 ns |
-|    ArrayWhereAllConditionRewritten |  69.409 ns | 0.5233 ns | 0.4639 ns | x5
-|             EnumerableAllCondition |  21.002 ns | 0.1494 ns | 0.1247 ns |
-|    EnumerableAllConditionRewritten |  19.096 ns | 0.1202 ns | 0.1066 ns | x1.1
-|          EnumerableAllNotCondition |  21.048 ns | 0.1558 ns | 0.1381 ns |
-| EnumerableAllNotConditionRewritten |  19.103 ns | 0.1050 ns | 0.0982 ns | x1.1
-|          EnumerableAllAllCondition |  20.899 ns | 0.1810 ns | 0.1605 ns |
-| EnumerableAllAllConditionRewritten |  18.942 ns | 0.1860 ns | 0.1649 ns | x1.1
+|                             Method |       Mean |     Error |    StdDev |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|----------------------------------- |-----------:|----------:|----------:|-------:|------:|------:|----------:|
+|                  ArrayAllCondition |  19.920 ns | 0.3619 ns | 0.3385 ns | 0.0048 |     - |     - |      20 B |
+|         ArrayAllConditionRewritten |   1.121 ns | 0.0145 ns | 0.0136 ns |      - |     - |     - |         - |
+|             ArrayWhereAllCondition | 318.050 ns | 4.7879 ns | 4.4786 ns | 0.0076 |     - |     - |      32 B |
+|    ArrayWhereAllConditionRewritten |  65.222 ns | 1.1171 ns | 1.0450 ns |      - |     - |     - |         - |
+|             EnumerableAllCondition |  20.046 ns | 0.2090 ns | 0.1853 ns | 0.0057 |     - |     - |      24 B |
+|    EnumerableAllConditionRewritten |  18.019 ns | 0.3249 ns | 0.3039 ns | 0.0057 |     - |     - |      24 B |
+|          EnumerableAllNotCondition |  19.596 ns | 0.3561 ns | 0.3331 ns | 0.0057 |     - |     - |      24 B |
+| EnumerableAllNotConditionRewritten |  18.040 ns | 0.3072 ns | 0.2723 ns | 0.0057 |     - |     - |      24 B |
+|          EnumerableAllAllCondition |  19.886 ns | 0.2942 ns | 0.2608 ns | 0.0057 |     - |     - |      24 B |
+| EnumerableAllAllConditionRewritten |  17.867 ns | 0.3246 ns | 0.3037 ns | 0.0057 |     - |     - |      24 B |

@@ -18,7 +18,7 @@ namespace LinqRewrite.RewriteRules
             var typeSymbol = p.Semantic.GetTypeInfo(type).Type;
             
             if (SymbolExtensions.IsSameType(typeSymbol, p.LastValue.Type)) {}
-            else if (p.Unchecked || SymbolExtensions.HasCommonAncestor(typeSymbol, p.LastValue.Type))
+            else if (p.Unchecked || SymbolExtensions.IsDescendantType(typeSymbol, p.LastValue.Type))
             {
                 p.LastValue = p.LastValue.Reusable(p);
                 p.ForAdd(If(Not(p.LastValue.Is(type)),

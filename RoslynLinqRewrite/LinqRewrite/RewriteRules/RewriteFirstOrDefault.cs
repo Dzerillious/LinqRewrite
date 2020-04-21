@@ -26,7 +26,6 @@ namespace LinqRewrite.RewriteRules
                 p.ForAdd(If(args[0].Inline(p, p.LastValue),
                             Return(p.LastValue)));
             }
-            
             p.ResultAdd(Return(Default(p.ReturnType)));
         }
     }

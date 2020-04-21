@@ -6,6 +6,7 @@ using LinqRewrite.Core.SimpleList;
 
 namespace BenchmarkLibrary
 {
+    [MemoryDiagnoser]
     public class SelectBenchmarks
     {
         public static int[] StaticArraySource;

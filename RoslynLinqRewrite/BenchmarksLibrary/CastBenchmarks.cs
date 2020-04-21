@@ -6,96 +6,100 @@ using LinqRewrite.Core.SimpleList;
 
 namespace BenchmarkLibrary
 {
+    [MemoryDiagnoser]
     public class CastBenchmarks
     {
-        public static int[] StaticArraySource;
-        public int[] ArraySource;
-        public IEnumerable<int> EnumerableSource;
+        public class A {}
+        public class B : A {}
+        
+        public static A[] StaticArraySource;
+        public A[] ArraySource;
+        public IEnumerable<A> EnumerableSource;
 
         [GlobalSetup]
         public void GlobalSetup()
         {
-            StaticArraySource = Enumerable.Range(0, 1000).ToArray();
-            ArraySource = Enumerable.Range(0, 1000).ToArray();
-            EnumerableSource = Enumerable.Range(0, 1000);
+            StaticArraySource = Enumerable.Repeat(new B(), 1000).ToArray();
+            ArraySource = Enumerable.Repeat(new B(), 1000).ToArray();
+            EnumerableSource = Enumerable.Repeat(new B(), 1000);
         }
 
 
         [NoRewrite, Benchmark]
         public void ArrayCastToArray()
         {
-            ArraySource.Cast<int>().ToArray();
+            ArraySource.Cast<B>().ToArray();
         }//EndMethod
 
 		[Benchmark]
         public void ArrayCastToArrayRewritten()
         {
-            ArraySource.Cast<int>().ToArray();
+            ArraySource.Cast<B>().ToArray();
         }//EndMethod
 
         
         [NoRewrite, Benchmark]
         public void EnumerableCastToArray()
         {
-            EnumerableSource.Cast<int>().ToArray();
+            EnumerableSource.Cast<B>().ToArray();
         }//EndMethod
 
 		[Benchmark]
         public void EnumerableCastToArrayRewritten()
         {
-            EnumerableSource.Cast<int>().ToArray();
+            EnumerableSource.Cast<B>().ToArray();
         }//EndMethod
 
         
         [NoRewrite, Benchmark]
         public void ArrayCastToSimpleList()
         {
-            ArraySource.Cast<int>().ToSimpleList();
+            ArraySource.Cast<B>().ToSimpleList();
         }//EndMethod
 
 		[Benchmark]
         public void ArrayCastToSimpleListRewritten()
         {
-            ArraySource.Cast<int>().ToSimpleList();
+            ArraySource.Cast<B>().ToSimpleList();
         }//EndMethod
 
 
         [NoRewrite, Benchmark]
         public void StaticArrayCastToArray()
         {
-            StaticArraySource.Cast<int>().ToArray();
+            StaticArraySource.Cast<B>().ToArray();
         }//EndMethod
 
 		[Benchmark]
         public void StaticArrayCastToArrayRewritten()
         {
-            StaticArraySource.Cast<int>().ToArray();
+            StaticArraySource.Cast<B>().ToArray();
         }//EndMethod
 
 
         [NoRewrite, Benchmark]
         public void ArrayUncheckedCastToArray()
         {
-            ArraySource.Unchecked().Cast<int>().ToArray();
+            ArraySource.Unchecked().Cast<B>().ToArray();
         }//EndMethod
 
         [Benchmark]
         public void ArrayUncheckedCastToArrayRewritten()
         {
-            ArraySource.Unchecked().Cast<int>().ToArray();
+            ArraySource.Unchecked().Cast<B>().ToArray();
         }//EndMethod
 
         
         [NoRewrite, Benchmark]
         public void EnumerableUncheckedCastToSimpleList()
         {
-            EnumerableSource.Cast<int>().ToArray();
+            EnumerableSource.Cast<B>().ToArray();
         }//EndMethod
 
         [Benchmark]
         public void EnumerableUncheckedToSimpleListRewritten()
         {
-            EnumerableSource.Cast<int>().ToArray();
+            EnumerableSource.Cast<B>().ToArray();
         }//EndMethod
     }
 }

@@ -1,6 +1,6 @@
-|                      Method |     Mean |    Error |   StdDev |
-|---------------------------- |---------:|---------:|---------:|
-|               ArrayDistinct | 27.30 us | 0.151 us | 0.134 us |
-|      ArrayDistinctRewritten | 24.06 us | 0.163 us | 0.144 us |
-|          EnumerableDistinct | 26.89 us | 0.208 us | 0.195 us |
-| EnumerableDistinctRewritten | 27.34 us | 0.180 us | 0.169 us |
+|                      Method |     Mean |    Error |   StdDev |   Gen 0 | Gen 1 | Gen 2 | Allocated |
+|---------------------------- |---------:|---------:|---------:|--------:|------:|------:|----------:|
+|               ArrayDistinct | 25.21 us | 0.403 us | 0.377 us | 10.7422 |     - |     - |   44.1 KB |
+|      ArrayDistinctRewritten | 22.40 us | 0.387 us | 0.362 us | 15.1367 |     - |     - |  62.29 KB |
+|          EnumerableDistinct | 24.78 us | 0.445 us | 0.416 us | 10.7422 |     - |     - |  44.13 KB |
+| EnumerableDistinctRewritten | 25.32 us | 0.395 us | 0.370 us | 17.4866 |     - |     - |  71.75 KB |

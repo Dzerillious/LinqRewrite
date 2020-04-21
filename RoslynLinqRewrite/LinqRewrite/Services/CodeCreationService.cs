@@ -114,7 +114,7 @@ namespace LinqRewrite.Services
             return ParenthesizedExpression(InvocationExpression(
                 CreateMethod(fn),
                 CreateArguments(replaceParams.Select(x => SyntaxFactory.Argument(IdentifierName(x.Identifier.ValueText)))
-                    .Union(captures.Select(x =>  SyntaxFactory.Argument(IdentifierName(x.Name)).WithRef(x.Changes))))));
+                    .Union(captures.Select(x =>  SyntaxFactory.Argument(IdentifierName(x.OriginalName)).WithRef(x.Changes))))));
         }
 
         private static ParameterSyntax[] UpdateParameters(RewriteParameters p, DataFlowAnalysis currentFlow, Lambda oldLambda, TypedValueBridge[] replaceParameters)

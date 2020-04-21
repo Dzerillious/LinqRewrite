@@ -1,44 +1,44 @@
-﻿|                                          Method |          Mean |          Error |         StdDev |        Median |
-|------------------------------------------------ |--------------:|---------------:|---------------:|--------------:|
-|                                     ArraySelect |     17.120 ns |      0.2149 ns |      0.2010 ns |     17.057 ns |
-|                            ArraySelectRewritten |      6.695 ns |      0.1069 ns |      0.1000 ns |      6.688 ns | x3
-|                              ArraySelectToArray |  8,815.234 ns |    118.4145 ns |    110.7650 ns |  8,862.946 ns |
-|                     ArraySelectToArrayRewritten |    710.201 ns |     11.5635 ns |     10.8165 ns |    709.424 ns | x13
-|                               ArraySelectMethod |     23.201 ns |      0.3996 ns |      0.3738 ns |     23.222 ns |
-|                      ArraySelectMethodRewritten |      8.932 ns |      0.1811 ns |      0.1605 ns |      8.896 ns | x2.3
-|                        ArraySelectMethodToArray |  8,847.712 ns |     52.8179 ns |     46.8217 ns |  8,844.841 ns |
-|               ArraySelectMethodToArrayRewritten |    711.747 ns |     14.3076 ns |     13.3833 ns |    710.223 ns | x13
-|                                ArraySelectArray |     18.442 ns |      0.1786 ns |      0.1671 ns |     18.496 ns |
-|                       ArraySelectArrayRewritten |      6.964 ns |      0.1005 ns |      0.0940 ns |      6.937 ns | x3
-|                         ArraySelectArrayToArray | 29,943.380 ns |    224.4146 ns |    209.9176 ns | 29,997.740 ns |
-|                ArraySelectArrayToArrayRewritten | 12,763.323 ns |    109.1541 ns |     91.1486 ns | 12,775.567 ns | x2
-|                             ArraySelectMultiple |    460.433 ns |      9.2002 ns |     21.3229 ns |    461.128 ns |
-|                    ArraySelectMultipleRewritten |      6.733 ns |      0.1807 ns |      0.2285 ns |      6.696 ns | x70
-|                      ArraySelectMultipleToArray | 40,321.530 ns |    835.0098 ns |  1,170.5671 ns | 39,937.170 ns |
-|             ArraySelectMultipleToArrayRewritten |    703.484 ns |      9.2259 ns |      8.6299 ns |    702.946 ns | x560
-|                      ArraySelectComplexMultiple |    420.001 ns |      4.5264 ns |      4.2340 ns |    421.628 ns |
-|             ArraySelectComplexMultipleRewritten |      6.279 ns |      0.0739 ns |      0.0692 ns |      6.291 ns | x70
-|               ArraySelectComplexMultipleToArray | 39,291.255 ns |    504.4996 ns |    471.9093 ns | 39,445.847 ns |
-|      ArraySelectComplexMultipleToArrayRewritten |  1,402.750 ns |     13.6845 ns |     12.8005 ns |  1,403.863 ns | x30
-|                       ArraySelectMethodMultiple |    497.653 ns |      4.7251 ns |      4.4198 ns |    495.376 ns |
-|              ArraySelectMethodMultipleRewritten |      9.066 ns |      0.1389 ns |      0.1299 ns |      9.062 ns | x50
-|                ArraySelectMethodMultipleToArray | 38,158.866 ns |    386.9621 ns |    343.0318 ns | 38,228.491 ns |
-|       ArraySelectMethodMultipleToArrayRewritten |    699.415 ns |      6.9083 ns |      6.1240 ns |    700.556 ns | x50
-|                         EnumerableSelectToArray | 13,719.663 ns |    148.2839 ns |    131.4498 ns | 13,738.519 ns |
-|                EnumerableSelectToArrayRewritten |  5,928.829 ns |     75.2822 ns |     66.7357 ns |  5,948.785 ns | x2.5
-|                   EnumerableSelectMethodToArray | 12,455.604 ns |     85.7081 ns |     71.5702 ns | 12,483.632 ns |
-|          EnumerableSelectMethodToArrayRewritten |  5,902.731 ns |     63.1258 ns |     52.7129 ns |  5,928.750 ns | x2
-|                    EnumerableSelectArrayToArray | 35,710.449 ns |    371.3700 ns |    347.3797 ns | 35,786.865 ns |
-|           EnumerableSelectArrayToArrayRewritten | 17,751.482 ns |     85.0198 ns |     75.3679 ns | 17,765.666 ns | x2
-|                 EnumerableSelectMultipleToArray | 43,021.796 ns |    534.9961 ns |    500.4356 ns | 43,146.936 ns |
-|        EnumerableSelectMultipleToArrayRewritten |  5,918.534 ns |     82.6225 ns |     77.2851 ns |  5,935.986 ns | x8
-|          EnumerableSelectComplexMultipleToArray | 59,684.385 ns | 22,718.8380 ns | 30,328.9962 ns | 43,178.946 ns |
-| EnumerableSelectComplexMultipleToArrayRewritten |  6,920.568 ns |     69.5895 ns |     65.0941 ns |  6,933.302 ns | x10
-|           EnumerableSelectMethodMultipleToArray | 38,126.190 ns |    648.1736 ns |    506.0513 ns | 38,219.012 ns |
-|  EnumerableSelectMethodMultipleToArrayRewritten |    708.256 ns |      4.2203 ns |      3.9477 ns |    709.303 ns | x50
-|                         ArraySelectToSimpleList |  7,362.374 ns |     82.4050 ns |     73.0499 ns |  7,377.127 ns |
-|                ArraySelectToSimpleListRewritten |    582.259 ns |      9.3649 ns |      8.7600 ns |    578.774 ns | x16
-|                        StaticArraySelectToArray |  8,901.797 ns |     93.4421 ns |     87.4058 ns |  8,931.834 ns |
-|               StaticArraySelectToArrayRewritten |    702.007 ns |      8.0653 ns |      7.5443 ns |    699.718 ns | x14
-|                   StaticClassArraySelectToArray |  1,046.038 ns |     14.7819 ns |     13.8270 ns |  1,041.298 ns |
-|          StaticClassArraySelectToArrayRewritten |     78.963 ns |      0.7906 ns |      0.7395 ns |     79.177 ns | x15
+﻿|                                          Method |          Mean |         Error |         StdDev |   Gen 0 |  Gen 1 | Gen 2 | Allocated |
+|------------------------------------------------ |--------------:|--------------:|---------------:|--------:|-------:|------:|----------:|
+|                                     ArraySelect |     17.201 ns |     0.3639 ns |      0.5335 ns |  0.0086 |      - |     - |      36 B |
+|                            ArraySelectRewritten |      5.976 ns |     0.1098 ns |      0.0973 ns |  0.0076 |      - |     - |      32 B |
+|                              ArraySelectToArray |  8,255.731 ns |   137.6767 ns |    128.7829 ns |  2.9297 |      - |     - |   12354 B |
+|                     ArraySelectToArrayRewritten |    741.599 ns |     9.4243 ns |      8.8155 ns |  0.9575 |      - |     - |    4021 B |
+|                               ArraySelectMethod |     20.837 ns |     0.5694 ns |      0.7601 ns |  0.0162 |      - |     - |      68 B |
+|                      ArraySelectMethodRewritten |      9.220 ns |     0.2391 ns |      0.2455 ns |  0.0086 |      - |     - |      36 B |
+|                        ArraySelectMethodToArray |  8,322.690 ns |   156.9862 ns |    161.2132 ns |  2.9449 |      - |     - |   12384 B |
+|               ArraySelectMethodToArrayRewritten |    781.018 ns |    14.0994 ns |     13.1886 ns |  0.9575 |      - |     - |    4021 B |
+|                                ArraySelectArray |     18.277 ns |     0.3754 ns |      0.3855 ns |  0.0086 |      - |     - |      36 B |
+|                       ArraySelectArrayRewritten |      6.405 ns |     0.1588 ns |      0.2008 ns |  0.0076 |      - |     - |      32 B |
+|                         ArraySelectArrayToArray | 34,373.219 ns |   709.6799 ns |    788.8073 ns | 15.3198 | 0.0610 |     - |   64427 B |
+|                ArraySelectArrayToArrayRewritten | 15,952.939 ns |   225.8220 ns |    188.5716 ns | 13.3667 |      - |     - |   56095 B |
+|                             ArraySelectMultiple |    401.192 ns |     7.9970 ns |      9.5198 ns |  0.1888 |      - |     - |     793 B |
+|                    ArraySelectMultipleRewritten |      6.167 ns |     0.0490 ns |      0.0435 ns |  0.0076 |      - |     - |      32 B |
+|                      ArraySelectMultipleToArray | 45,867.274 ns |   883.4116 ns |  1,148.6847 ns |  3.1128 |      - |     - |   13111 B |
+|             ArraySelectMultipleToArrayRewritten |    722.594 ns |    13.5658 ns |     13.9311 ns |  0.9575 |      - |     - |    4021 B |
+|                      ArraySelectComplexMultiple |    383.137 ns |     7.6038 ns |      7.4679 ns |  0.1888 |      - |     - |     793 B |
+|             ArraySelectComplexMultipleRewritten |      5.923 ns |     0.1163 ns |      0.1088 ns |  0.0076 |      - |     - |      32 B |
+|               ArraySelectComplexMultipleToArray | 45,333.350 ns |   863.0119 ns |    847.5931 ns |  3.0518 |      - |     - |   13111 B |
+|      ArraySelectComplexMultipleToArrayRewritten |    728.021 ns |     9.5608 ns |      8.9432 ns |  0.9575 |      - |     - |    4021 B |
+|                       ArraySelectMethodMultiple |    445.066 ns |     4.4461 ns |      4.1589 ns |  0.2651 |      - |     - |    1114 B |
+|              ArraySelectMethodMultipleRewritten |      9.574 ns |     0.1297 ns |      0.1083 ns |  0.0086 |      - |     - |      36 B |
+|                ArraySelectMethodMultipleToArray | 43,476.311 ns | 2,191.2457 ns |  2,999.4019 ns |  3.1738 |      - |     - |   13429 B |
+|       ArraySelectMethodMultipleToArrayRewritten |  1,469.188 ns |    18.4123 ns |     17.2229 ns |  0.9575 |      - |     - |    4021 B |
+|                         EnumerableSelectToArray | 13,446.264 ns |   134.0215 ns |    125.3638 ns |  2.9449 |      - |     - |   12376 B |
+|                EnumerableSelectToArrayRewritten |  5,725.463 ns |    48.9254 ns |     43.3711 ns |  3.5782 |      - |     - |   15035 B |
+|                   EnumerableSelectMethodToArray | 13,445.839 ns |    99.3671 ns |     92.9481 ns |  2.9449 |      - |     - |   12408 B |
+|          EnumerableSelectMethodToArrayRewritten |  5,703.137 ns |    87.1253 ns |     81.4970 ns |  3.5782 |      - |     - |   15035 B |
+|                    EnumerableSelectArrayToArray | 36,925.360 ns |   355.8089 ns |    315.4153 ns | 15.3198 |      - |     - |   64451 B |
+|           EnumerableSelectArrayToArrayRewritten | 19,917.077 ns |   262.4071 ns |    245.4558 ns | 15.9912 | 0.0305 |     - |   67107 B |
+|                 EnumerableSelectMultipleToArray | 48,629.367 ns |   819.2832 ns |    766.3580 ns |  3.1128 |      - |     - |   13135 B |
+|        EnumerableSelectMultipleToArrayRewritten |  5,724.490 ns |    59.3991 ns |     55.5619 ns |  3.5782 |      - |     - |   15035 B |
+|          EnumerableSelectComplexMultipleToArray | 50,928.339 ns | 5,398.6271 ns | 10,006.7015 ns |  3.0518 |      - |     - |   13135 B |
+| EnumerableSelectComplexMultipleToArrayRewritten |  5,727.782 ns |    42.8106 ns |     40.0451 ns |  3.5782 |      - |     - |   15035 B |
+|           EnumerableSelectMethodMultipleToArray | 42,681.878 ns |   650.4630 ns |    576.6185 ns |  3.1738 |      - |     - |   13429 B |
+|  EnumerableSelectMethodMultipleToArrayRewritten |  1,453.716 ns |    16.7197 ns |     15.6396 ns |  0.9575 |      - |     - |    4021 B |
+|                         ArraySelectToSimpleList |  6,710.904 ns |    91.2585 ns |     85.3633 ns |  2.6245 |      - |     - |   11043 B |
+|                ArraySelectToSimpleListRewritten |    784.971 ns |     7.1004 ns |      6.6417 ns |  0.9613 |      - |     - |    4037 B |
+|                        StaticArraySelectToArray |  8,603.862 ns |   105.1267 ns |     98.3356 ns |  2.9297 |      - |     - |   12354 B |
+|               StaticArraySelectToArrayRewritten |    777.204 ns |     7.5500 ns |      7.0623 ns |  0.9575 |      - |     - |    4021 B |
+|                   StaticClassArraySelectToArray |  1,116.873 ns |     8.5922 ns |      8.0371 ns |  0.3643 |      - |     - |    1530 B |
+|          StaticClassArraySelectToArrayRewritten |     88.652 ns |     0.7864 ns |      0.7356 ns |  0.0983 |      - |     - |     413 B |
