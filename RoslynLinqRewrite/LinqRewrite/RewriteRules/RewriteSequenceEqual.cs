@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using LinqRewrite.Core;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -12,6 +13,14 @@ namespace LinqRewrite.RewriteRules
         {
             var collectionValue = args[0];
             if (!p.AssertNotNull(collectionValue)) return;
+            if (ExpressionSimplifier.TryGetInt(p.ResultSize, out var resultSizeInt))
+            {
+                if (resultSizeInt == 0)
+                {
+                    p.InitialErrorAdd(Return((collectionValue.Access("Count").Invoke()).IsEqual(0)));
+                    return;
+                }
+            }
 
             p.WrapWithTry = true;
             var itemType = collectionValue.ItemType(p);
@@ -26,8 +35,8 @@ namespace LinqRewrite.RewriteRules
             };
             p.ForAdd(If(Not(enumeratorVariable.Access("MoveNext").Invoke().And(equalityTestValue)), 
                         Return(false)));
-            
-            p.CurrentIterator.PostFor.Add(If(enumeratorVariable.Access("MoveNext").Invoke(),
+
+            p.ResultAdd(If(enumeratorVariable.Access("MoveNext").Invoke(),
                                             Return(false)));
 
             p.FinalAdd(enumeratorVariable.Access("Dispose").Invoke());

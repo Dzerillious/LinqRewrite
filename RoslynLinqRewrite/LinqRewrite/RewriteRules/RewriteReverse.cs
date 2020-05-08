@@ -60,7 +60,7 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(resultVariable[reverseIndexerVariable].Assign(p.LastValue));
             
             p.Indexer = null;
-            p.Iterators.ForEach(x => x.Complete = true);
+            p.Iterators.All.ForEach(x => x.Complete = true);
             p.AddIterator(new CollectionValueBridge(p, resultVariable.Type, p.LastValue.Type, resultVariable, true));
             p.CurrentCollection = p.CurrentIterator.Collection;
             RewriteCollectionEnumeration.RewriteOther(p, p.CurrentCollection);
@@ -89,7 +89,7 @@ namespace LinqRewrite.RewriteRules
             p.ForAdd(resultVariable[reverseIndexerVariable].Assign(p.LastValue));
             
             p.Indexer = null;
-            p.Iterators.ForEach(x => x.Complete = true);
+            p.Iterators.All.ForEach(x => x.Complete = true);
             
             p.AddIterator(new CollectionValueBridge(p, resultVariable.Type, p.LastValue.Type, resultVariable, true));
             p.CurrentCollection = p.CurrentIterator.Collection;

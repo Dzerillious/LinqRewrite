@@ -28,7 +28,7 @@ namespace LinqRewrite
             parameters.HasResultMethod = MethodsWithResult.Contains(names.Last());
             RewriteComposite(parameters, names);
                     
-            var body = parameters.GetMethodBody();
+            var body = parameters.Error ? new []{parameters.InitialStatements[0]} : parameters.GetMethodBody();
             if (parameters.NotRewrite) throw new NotSupportedException("Not good for rewrite");
 
             if (parameters.Data.CurrentMethodIsConditional && parameters.ReturnType.Type.ToString() != "void")
@@ -47,7 +47,6 @@ namespace LinqRewrite
             {
                 parameters.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
                 RewritePart(names[i], parameters, i);
-                if (parameters.Error) break;
             }
 
             if (parameters.HasResultMethod) return;

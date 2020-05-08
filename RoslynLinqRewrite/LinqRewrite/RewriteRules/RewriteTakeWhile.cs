@@ -1,8 +1,10 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Linq;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -16,8 +18,15 @@ namespace LinqRewrite.RewriteRules
                 1 when args[0].OldVal is SimpleLambdaExpressionSyntax => args[0].Inline(p, p.LastValue),
                 1 => args[0].Inline(p, p.LastValue, p.Indexer)
             };
-            
-            p.ForAdd(If(Not(value), Break()));
+            if (p.Iterators.All.Count > 1)
+            {
+                var lastTakeWhile = p.GlobalVariable(Bool, false);
+                p.ForAdd(If(Not(value).Or(lastTakeWhile), Block(
+                    lastTakeWhile.Assign(true),
+                    Break()))
+                );
+            }
+            else p.ForAdd(If(Not(value), Break()));
             p.ListEnumeration = false;
             p.ModifiedEnumeration = true;
         }

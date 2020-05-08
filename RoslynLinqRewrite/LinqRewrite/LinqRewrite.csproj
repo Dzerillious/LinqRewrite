@@ -15,14 +15,14 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DisableMSBuildAssemblyCopyCheck>true</DisableMSBuildAssemblyCopyCheck>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
     <Title>LinqRewrite</Title>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="LinqRewrite.Core">
-      <Version>0.6.1-preview</Version>
+      <Version>0.6.5-preview</Version>
     </PackageReference>
     <PackageReference Include="MathNet.Symbolics">
       <Version>0.20.0</Version>
@@ -62,6 +62,9 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="NuGet.ProjectModel">
+      <Version>5.5.1</Version>
     </PackageReference>
     <PackageReference Include="Roslyn.MSBuild.Util">
       <Version>0.9.1</Version>

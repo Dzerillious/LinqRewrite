@@ -32,7 +32,7 @@ namespace LinqRewrite.RewriteRules
             
             p.ResultSize = 0;
             p.SourceSize = 0;
-            p.ListEnumeration = true;
+            p.ListEnumeration = false;
             p.SimpleEnumeration = true;
             
             if (p.CurrentIndexer == null)

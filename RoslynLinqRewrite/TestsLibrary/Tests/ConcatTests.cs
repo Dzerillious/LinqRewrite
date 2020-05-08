@@ -713,12 +713,12 @@ namespace TestsLibrary.Tests
         [NoRewrite]
         public double ArrayConcatArrayAverage()
         {
-            return ArrayItems.Concat(ArrayItems2).Average();
+            return Enumerable.Range(5, 10).Concat(ArrayItems2).Aggregate((x, y) => x + y);
         } //EndMethod
 
         public double ArrayConcatArrayAverageRewritten()
         {
-            return ArrayItems.Concat(ArrayItems2).Average();
+            return Enumerable.Range(5, 10).Concat(ArrayItems2).Aggregate((x, y) => x + y);
         } //EndMethod
 
 

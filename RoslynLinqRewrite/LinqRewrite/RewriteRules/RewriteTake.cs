@@ -10,15 +10,18 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
+            if (p.Iterators.Count > 1) p.ListEnumeration = false;
+            
             var takeValue = args[0];
             CheckBounds(p, ref takeValue);
+            var takeIndexer = p.GlobalVariable(Int, 0);
 
             if (!p.ModifiedEnumeration)
             {
                 p.CurrentIterator.ForTo = p.CurrentIterator.ForFrom + p.CurrentIterator.ForInc * takeValue - p.CurrentIterator.ForInc;
                 p.CurrentIterator.ForTo = p.CurrentIterator.ForTo.Simplify();
             }
-            else p.ForAdd(If(p.Indexer >= takeValue, Break()));
+            else p.ForAdd(If(takeIndexer.PostIncrement() >= takeValue, Break()));
             
             if (p.ResultSize != null) p.ResultSize = takeValue;
             p.Indexer = null;
@@ -37,7 +40,7 @@ namespace LinqRewrite.RewriteRules
                 {
                     if (p.ResultSize == null) return;
                     var takeVariable = p.GlobalVariable(Int);
-                    p.InitialAdd(If(takeValue > p.ResultSize, 
+                    p.PreUseAdd(If(takeValue > p.ResultSize, 
                                      takeVariable.Assign(p.ResultSize),
                                     takeVariable.Assign(takeValue)));
                     takeValue = new RewrittenValueBridge(takeVariable);
@@ -47,7 +50,7 @@ namespace LinqRewrite.RewriteRules
             else if (p.ResultSize != null)
             {
                 var takeVariable = p.GlobalVariable(Int);
-                p.InitialAdd(If(takeValue < 0, takeVariable.Assign(IntValue(0)),
+                p.PreUseAdd(If(takeValue < 0, takeVariable.Assign(IntValue(0)),
                                     If(takeValue > p.ResultSize, takeVariable.Assign(p.ResultSize),
                                         takeVariable.Assign(takeValue))));
                 takeValue = new RewrittenValueBridge(takeVariable);
@@ -55,7 +58,7 @@ namespace LinqRewrite.RewriteRules
             else
             {
                 var takeVariable = p.GlobalVariable(Int);
-                p.InitialAdd(If(takeValue < 0, takeVariable.Assign(IntValue(0)),
+                p.PreUseAdd(If(takeValue < 0, takeVariable.Assign(IntValue(0)),
                                 takeVariable.Assign(takeValue)));
                 takeValue = new RewrittenValueBridge(takeVariable);
             }

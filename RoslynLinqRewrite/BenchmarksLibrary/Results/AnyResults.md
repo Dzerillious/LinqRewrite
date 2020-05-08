@@ -1,18 +1,49 @@
-|                             Method |          Mean |       Error |      StdDev |        Median |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|----------------------------------- |--------------:|------------:|------------:|--------------:|-------:|------:|------:|----------:|
-|                           ArrayAny |    16.9141 ns |   0.2112 ns |   0.1976 ns |    16.9359 ns | 0.0048 |     - |     - |      20 B |
-|                  ArrayAnyRewritten |     0.0034 ns |   0.0051 ns |   0.0045 ns |     0.0013 ns |      - |     - |     - |         - |
-|                  ArrayAnyCondition |    42.0673 ns |   0.7236 ns |   0.6769 ns |    42.3674 ns | 0.0048 |     - |     - |      20 B |
-|         ArrayAnyConditionRewritten |     3.5589 ns |   0.0906 ns |   0.0847 ns |     3.6021 ns |      - |     - |     - |         - |
-|                     ArraySelectAny |    34.3967 ns |   0.7191 ns |   0.7063 ns |    34.5222 ns | 0.0086 |     - |     - |      36 B |
-|            ArraySelectAnyRewritten |     0.0000 ns |   0.0000 ns |   0.0000 ns |     0.0000 ns |      - |     - |     - |         - |
-|                      ArrayWhereAny |   281.9452 ns |   5.5784 ns |   7.2534 ns |   285.8863 ns | 0.0076 |     - |     - |      32 B |
-|             ArrayWhereAnyRewritten |    67.3179 ns |   1.0885 ns |   0.9649 ns |    67.6527 ns |      - |     - |     - |         - |
-|             ArrayWhereAnyCondition | 1,016.1013 ns |  19.3851 ns |  19.0388 ns | 1,006.3563 ns | 0.0076 |     - |     - |      32 B |
-|    ArrayWhereAnyConditionRewritten |   165.2055 ns |   1.6901 ns |   1.4982 ns |   165.6926 ns |      - |     - |     - |         - |
-|             EnumerableAnyCondition |    43.4569 ns |   0.7915 ns |   0.7404 ns |    43.8155 ns | 0.0057 |     - |     - |      24 B |
-|    EnumerableAnyConditionRewritten |    35.7233 ns |   0.7304 ns |   0.6833 ns |    36.0458 ns | 0.0057 |     - |     - |      24 B |
-|          EnumerableAnyNotCondition | 5,242.7982 ns | 101.0011 ns | 120.2347 ns | 5,250.2865 ns |      - |     - |     - |      24 B |
-| EnumerableAnyNotConditionRewritten | 3,978.9423 ns |  66.3776 ns |  62.0896 ns | 4,002.0958 ns |      - |     - |     - |      24 B |
-|          EnumerableAnyAllCondition |    26.8917 ns |   0.4731 ns |   0.4425 ns |    27.1768 ns | 0.0057 |     - |     - |      24 B |
-| EnumerableAnyAllConditionRewritten |    23.2151 ns |   0.4871 ns |   0.5002 ns |    22.8780 ns | 0.0057 |     - |     - |      24 B |
+|                             Method |        Job |       Runtime |    Toolchain |          Mean |       Error |      StdDev |        Median | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|----------------------------------- |----------- |-------------- |------------- |--------------:|------------:|------------:|--------------:|------:|--------:|-------:|------:|------:|----------:|
+|                           ArrayAny | Job-NQVCFF |      .NET 4.8 |        net48 |    12.1272 ns |   0.2315 ns |   0.2165 ns |    12.2385 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|                           ArrayAny | Job-LXAWHQ | .NET Core 3.1 | netcoreapp31 |    11.5433 ns |   0.2464 ns |   0.2304 ns |    11.4370 ns |  0.95 |    0.03 | 0.0076 |     - |     - |      32 B |
+|                                    |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|                  ArrayAnyRewritten | Job-NQVCFF |      .NET 4.8 |        net48 |     0.0028 ns |   0.0032 ns |   0.0028 ns |     0.0019 ns |     ? |       ? |      - |     - |     - |         - |
+|                  ArrayAnyRewritten | Job-LXAWHQ | .NET Core 3.1 | netcoreapp31 |     0.0000 ns |   0.0000 ns |   0.0000 ns |     0.0000 ns |     ? |       ? |      - |     - |     - |         - |
+|                                    |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|                  ArrayAnyCondition | Job-NQVCFF |      .NET 4.8 |        net48 |    44.7046 ns |   0.9072 ns |   0.8910 ns |    45.0981 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|                  ArrayAnyCondition | Job-LXAWHQ | .NET Core 3.1 | netcoreapp31 |    37.6026 ns |   0.6674 ns |   0.6243 ns |    37.8196 ns |  0.84 |    0.02 | 0.0076 |     - |     - |      32 B |
+|                                    |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|         ArrayAnyConditionRewritten | Job-NQVCFF |      .NET 4.8 |        net48 |     3.3897 ns |   0.0161 ns |   0.0143 ns |     3.3904 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|         ArrayAnyConditionRewritten | Job-LXAWHQ | .NET Core 3.1 | netcoreapp31 |     3.9191 ns |   0.0659 ns |   0.0617 ns |     3.9364 ns |  1.16 |    0.02 |      - |     - |     - |         - |
+|                                    |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|                     ArraySelectAny | Job-NQVCFF |      .NET 4.8 |        net48 |    29.3640 ns |   0.6036 ns |   1.0411 ns |    29.2281 ns |  1.00 |    0.00 | 0.0134 |     - |     - |      56 B |
+|                     ArraySelectAny | Job-LXAWHQ | .NET Core 3.1 | netcoreapp31 |    51.4905 ns |   0.8571 ns |   0.8017 ns |    51.8198 ns |  1.72 |    0.08 | 0.0114 |     - |     - |      48 B |
+|                                    |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|            ArraySelectAnyRewritten | Job-NQVCFF |      .NET 4.8 |        net48 |     0.0005 ns |   0.0015 ns |   0.0013 ns |     0.0000 ns |     ? |       ? |      - |     - |     - |         - |
+|            ArraySelectAnyRewritten | Job-LXAWHQ | .NET Core 3.1 | netcoreapp31 |     0.3921 ns |   0.0319 ns |   0.0267 ns |     0.4048 ns |     ? |       ? |      - |     - |     - |         - |
+|                                    |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|                      ArrayWhereAny | Job-NQVCFF |      .NET 4.8 |        net48 |   253.3475 ns |   4.1263 ns |   3.8598 ns |   254.9135 ns |  1.00 |    0.00 | 0.0114 |     - |     - |      48 B |
+|                      ArrayWhereAny | Job-LXAWHQ | .NET Core 3.1 | netcoreapp31 |   204.9733 ns |   3.4397 ns |   3.2175 ns |   206.6076 ns |  0.81 |    0.02 | 0.0114 |     - |     - |      48 B |
+|                                    |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|             ArrayWhereAnyRewritten | Job-NQVCFF |      .NET 4.8 |        net48 |    54.9993 ns |   0.9191 ns |   0.8597 ns |    55.3405 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|             ArrayWhereAnyRewritten | Job-LXAWHQ | .NET Core 3.1 | netcoreapp31 |    54.3580 ns |   0.8587 ns |   0.8032 ns |    54.7660 ns |  0.99 |    0.02 |      - |     - |     - |         - |
+|                                    |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|             ArrayWhereAnyCondition | Job-NQVCFF |      .NET 4.8 |        net48 | 1,025.7417 ns |  18.0203 ns |  16.8562 ns | 1,016.8859 ns |  1.00 |    0.00 | 0.0114 |     - |     - |      48 B |
+|             ArrayWhereAnyCondition | Job-LXAWHQ | .NET Core 3.1 | netcoreapp31 |   905.5657 ns |  16.7682 ns |  15.6850 ns |   916.7543 ns |  0.88 |    0.02 | 0.0114 |     - |     - |      48 B |
+|                                    |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|    ArrayWhereAnyConditionRewritten | Job-NQVCFF |      .NET 4.8 |        net48 |   171.1661 ns |   3.3733 ns |   4.0157 ns |   171.2873 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|    ArrayWhereAnyConditionRewritten | Job-LXAWHQ | .NET Core 3.1 | netcoreapp31 |   163.3122 ns |   2.7784 ns |   2.5989 ns |   164.5051 ns |  0.96 |    0.03 |      - |     - |     - |         - |
+|                                    |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|             EnumerableAnyCondition | Job-NQVCFF |      .NET 4.8 |        net48 |    43.3024 ns |   0.7334 ns |   0.8446 ns |    43.0957 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|             EnumerableAnyCondition | Job-LXAWHQ | .NET Core 3.1 | netcoreapp31 |    44.9165 ns |   0.9311 ns |   0.8709 ns |    45.2225 ns |  1.04 |    0.03 | 0.0076 |     - |     - |      32 B |
+|                                    |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|    EnumerableAnyConditionRewritten | Job-NQVCFF |      .NET 4.8 |        net48 |    34.1679 ns |   0.5761 ns |   0.4498 ns |    34.0037 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|    EnumerableAnyConditionRewritten | Job-LXAWHQ | .NET Core 3.1 | netcoreapp31 |    40.6084 ns |   0.7402 ns |   0.6924 ns |    41.0174 ns |  1.19 |    0.03 | 0.0076 |     - |     - |      32 B |
+|                                    |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|          EnumerableAnyNotCondition | Job-NQVCFF |      .NET 4.8 |        net48 | 6,283.9834 ns |  96.1056 ns |  89.8972 ns | 6,324.7368 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|          EnumerableAnyNotCondition | Job-LXAWHQ | .NET Core 3.1 | netcoreapp31 | 6,046.6700 ns | 114.1980 ns | 106.8208 ns | 6,114.3631 ns |  0.96 |    0.03 | 0.0076 |     - |     - |      32 B |
+|                                    |            |               |              |               |             |             |               |       |         |        |       |       |           |
+| EnumerableAnyNotConditionRewritten | Job-NQVCFF |      .NET 4.8 |        net48 | 4,809.8074 ns |  48.5564 ns |  43.0440 ns | 4,825.9212 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+| EnumerableAnyNotConditionRewritten | Job-LXAWHQ | .NET Core 3.1 | netcoreapp31 | 4,277.4946 ns |  55.8176 ns |  49.4808 ns | 4,294.5820 ns |  0.89 |    0.01 | 0.0076 |     - |     - |      32 B |
+|                                    |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|          EnumerableAnyAllCondition | Job-NQVCFF |      .NET 4.8 |        net48 |    25.2755 ns |   0.4106 ns |   0.3640 ns |    25.4483 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|          EnumerableAnyAllCondition | Job-LXAWHQ | .NET Core 3.1 | netcoreapp31 |    27.4247 ns |   0.4639 ns |   0.4339 ns |    27.6457 ns |  1.08 |    0.02 | 0.0076 |     - |     - |      32 B |
+|                                    |            |               |              |               |             |             |               |       |         |        |       |       |           |
+| EnumerableAnyAllConditionRewritten | Job-NQVCFF |      .NET 4.8 |        net48 |    20.9273 ns |   0.1010 ns |   0.0944 ns |    20.8998 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+| EnumerableAnyAllConditionRewritten | Job-LXAWHQ | .NET Core 3.1 | netcoreapp31 |    23.8149 ns |   0.1120 ns |   0.1047 ns |    23.7928 ns |  1.14 |    0.01 | 0.0076 |     - |     - |      32 B |

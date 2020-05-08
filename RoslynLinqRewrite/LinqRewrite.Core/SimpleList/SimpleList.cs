@@ -7,11 +7,13 @@ using System.Runtime.CompilerServices;
 namespace LinqRewrite.Core.SimpleList
 {
     [Serializable]
-    public partial class SimpleList<T> : IEnumerable<T>
+    public partial class SimpleList<T> : IList<T>, IEnumerable<T>
     {
         private static readonly T[] Empty = new T[0];
         public T[] Items;
-        public int Count;
+
+        public int Count { get; set; }
+        public bool IsReadOnly => false;
 
         public T this[int index]
         {
@@ -43,6 +45,26 @@ namespace LinqRewrite.Core.SimpleList
             var item = Items[oldIndex];
             RemoveAt(oldIndex);
             Insert(newIndex, item);
+        }
+        
+        public bool Contains(T item)
+        {
+            var count = Count;
+            var array = Items;
+            for (var i = 0; i < count; i++)
+                if (array[i].Equals(item))
+                    return true;
+            return false;
+        }
+
+        public int IndexOf(T item)
+        {
+            var count = Count;
+            var array = Items;
+            for (var i = 0; i < count; i++)
+                if (array[i].Equals(item))
+                    return i;
+            return -1;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

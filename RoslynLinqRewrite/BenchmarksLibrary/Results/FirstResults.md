@@ -1,18 +1,49 @@
-|                               Method |          Mean |      Error |    StdDev |        Median |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------------------------- |--------------:|-----------:|----------:|--------------:|-------:|------:|------:|----------:|
-|                           ArrayFirst |    35.4141 ns |  0.4222 ns | 0.3949 ns |    35.4706 ns |      - |     - |     - |         - |
-|                  ArrayFirstRewritten |     0.0100 ns |  0.0056 ns | 0.0047 ns |     0.0086 ns |      - |     - |     - |         - |
-|                  ArrayFirstCondition |    46.1100 ns |  0.4155 ns | 0.3886 ns |    46.1798 ns | 0.0048 |     - |     - |      20 B |
-|         ArrayFirstConditionRewritten |     4.9004 ns |  0.0420 ns | 0.0393 ns |     4.8919 ns |      - |     - |     - |         - |
-|                     ArraySelectFirst |    42.5719 ns |  0.4006 ns | 0.3747 ns |    42.6635 ns | 0.0086 |     - |     - |      36 B |
-|            ArraySelectFirstRewritten |     0.0023 ns |  0.0038 ns | 0.0035 ns |     0.0000 ns |      - |     - |     - |         - |
-|                      ArrayWhereFirst |   304.8009 ns |  2.4474 ns | 2.2893 ns |   303.9936 ns | 0.0076 |     - |     - |      32 B |
-|             ArrayWhereFirstRewritten |    91.9108 ns |  0.9268 ns | 0.8670 ns |    92.0767 ns |      - |     - |     - |         - |
-|             ArrayWhereFirstCondition | 1,044.9438 ns | 10.1209 ns | 9.4671 ns | 1,046.5311 ns | 0.0076 |     - |     - |      32 B |
-|    ArrayWhereFirstConditionRewritten |   204.9888 ns |  3.9849 ns | 3.9137 ns |   205.2108 ns |      - |     - |     - |         - |
-|             EnumerableFirstCondition |    48.0865 ns |  0.4257 ns | 0.3982 ns |    48.2290 ns | 0.0057 |     - |     - |      24 B |
-|    EnumerableFirstConditionRewritten |    39.4829 ns |  0.3455 ns | 0.3232 ns |    39.4861 ns | 0.0057 |     - |     - |      24 B |
-|          EnumerableFirstNotCondition |            NA |         NA |        NA |            NA |      - |     - |     - |         - |
-| EnumerableFirstNotConditionRewritten |            NA |         NA |        NA |            NA |      - |     - |     - |         - |
-|          EnumerableFirstAllCondition |    29.2819 ns |  0.2712 ns | 0.2537 ns |    29.3207 ns | 0.0057 |     - |     - |      24 B |
-| EnumerableFirstAllConditionRewritten |    26.4992 ns |  0.2120 ns | 0.1983 ns |    26.5280 ns | 0.0057 |     - |     - |      24 B |
+|                               Method |        Job |       Runtime |    Toolchain |          Mean |     Error |    StdDev |        Median | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------------------------------- |----------- |-------------- |------------- |--------------:|----------:|----------:|--------------:|------:|--------:|-------:|------:|------:|----------:|
+|                           ArrayFirst | Job-SDOYUN |      .NET 4.8 |        net48 |    27.3578 ns | 0.1700 ns | 0.1590 ns |    27.3613 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|                           ArrayFirst | Job-VSYIQS | .NET Core 3.1 | netcoreapp31 |    30.6282 ns | 0.1276 ns | 0.1193 ns |    30.5975 ns |  1.12 |    0.01 |      - |     - |     - |         - |
+|                                      |            |               |              |               |           |           |               |       |         |        |       |       |           |
+|                  ArrayFirstRewritten | Job-SDOYUN |      .NET 4.8 |        net48 |     0.0261 ns | 0.0068 ns | 0.0060 ns |     0.0266 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|                  ArrayFirstRewritten | Job-VSYIQS | .NET Core 3.1 | netcoreapp31 |     0.0346 ns | 0.0058 ns | 0.0054 ns |     0.0348 ns |  1.36 |    0.35 |      - |     - |     - |         - |
+|                                      |            |               |              |               |           |           |               |       |         |        |       |       |           |
+|                  ArrayFirstCondition | Job-SDOYUN |      .NET 4.8 |        net48 |    46.5312 ns | 0.2110 ns | 0.1974 ns |    46.5166 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|                  ArrayFirstCondition | Job-VSYIQS | .NET Core 3.1 | netcoreapp31 |    49.2545 ns | 0.3214 ns | 0.3006 ns |    49.2284 ns |  1.06 |    0.01 | 0.0076 |     - |     - |      32 B |
+|                                      |            |               |              |               |           |           |               |       |         |        |       |       |           |
+|         ArrayFirstConditionRewritten | Job-SDOYUN |      .NET 4.8 |        net48 |     3.9792 ns | 0.0672 ns | 0.0629 ns |     3.9898 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|         ArrayFirstConditionRewritten | Job-VSYIQS | .NET Core 3.1 | netcoreapp31 |     4.2357 ns | 0.1161 ns | 0.1086 ns |     4.2460 ns |  1.06 |    0.03 |      - |     - |     - |         - |
+|                                      |            |               |              |               |           |           |               |       |         |        |       |       |           |
+|                     ArraySelectFirst | Job-SDOYUN |      .NET 4.8 |        net48 |    39.4820 ns | 0.1297 ns | 0.1213 ns |    39.4704 ns |  1.00 |    0.00 | 0.0134 |     - |     - |      56 B |
+|                     ArraySelectFirst | Job-VSYIQS | .NET Core 3.1 | netcoreapp31 |    40.6320 ns | 0.2043 ns | 0.1911 ns |    40.6518 ns |  1.03 |    0.01 | 0.0114 |     - |     - |      48 B |
+|                                      |            |               |              |               |           |           |               |       |         |        |       |       |           |
+|            ArraySelectFirstRewritten | Job-SDOYUN |      .NET 4.8 |        net48 |     0.0205 ns | 0.0060 ns | 0.0054 ns |     0.0204 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|            ArraySelectFirstRewritten | Job-VSYIQS | .NET Core 3.1 | netcoreapp31 |     0.0009 ns | 0.0021 ns | 0.0019 ns |     0.0000 ns |  0.04 |    0.08 |      - |     - |     - |         - |
+|                                      |            |               |              |               |           |           |               |       |         |        |       |       |           |
+|                      ArrayWhereFirst | Job-SDOYUN |      .NET 4.8 |        net48 |   284.7633 ns | 1.0644 ns | 0.9957 ns |   284.6668 ns |  1.00 |    0.00 | 0.0114 |     - |     - |      48 B |
+|                      ArrayWhereFirst | Job-VSYIQS | .NET Core 3.1 | netcoreapp31 |   261.6559 ns | 1.2711 ns | 1.1890 ns |   261.6125 ns |  0.92 |    0.00 | 0.0114 |     - |     - |      48 B |
+|                                      |            |               |              |               |           |           |               |       |         |        |       |       |           |
+|             ArrayWhereFirstRewritten | Job-SDOYUN |      .NET 4.8 |        net48 |    55.0793 ns | 0.3170 ns | 0.2811 ns |    55.1863 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|             ArrayWhereFirstRewritten | Job-VSYIQS | .NET Core 3.1 | netcoreapp31 |    53.4456 ns | 0.1274 ns | 0.1130 ns |    53.4786 ns |  0.97 |    0.01 |      - |     - |     - |         - |
+|                                      |            |               |              |               |           |           |               |       |         |        |       |       |           |
+|             ArrayWhereFirstCondition | Job-SDOYUN |      .NET 4.8 |        net48 | 1,111.4118 ns | 4.3322 ns | 4.0523 ns | 1,111.0365 ns |  1.00 |    0.00 | 0.0114 |     - |     - |      48 B |
+|             ArrayWhereFirstCondition | Job-VSYIQS | .NET Core 3.1 | netcoreapp31 |   978.4486 ns | 4.3684 ns | 4.0862 ns |   978.5365 ns |  0.88 |    0.00 | 0.0114 |     - |     - |      48 B |
+|                                      |            |               |              |               |           |           |               |       |         |        |       |       |           |
+|    ArrayWhereFirstConditionRewritten | Job-SDOYUN |      .NET 4.8 |        net48 |   142.7324 ns | 0.3851 ns | 0.3216 ns |   142.7381 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|    ArrayWhereFirstConditionRewritten | Job-VSYIQS | .NET Core 3.1 | netcoreapp31 |   137.5630 ns | 0.7320 ns | 0.6847 ns |   137.4738 ns |  0.96 |    0.00 |      - |     - |     - |         - |
+|                                      |            |               |              |               |           |           |               |       |         |        |       |       |           |
+|             EnumerableFirstCondition | Job-SDOYUN |      .NET 4.8 |        net48 |    47.0561 ns | 0.2111 ns | 0.1975 ns |    47.0719 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|             EnumerableFirstCondition | Job-VSYIQS | .NET Core 3.1 | netcoreapp31 |    56.4504 ns | 0.3022 ns | 0.2826 ns |    56.3764 ns |  1.20 |    0.01 | 0.0076 |     - |     - |      32 B |
+|                                      |            |               |              |               |           |           |               |       |         |        |       |       |           |
+|    EnumerableFirstConditionRewritten | Job-SDOYUN |      .NET 4.8 |        net48 |    42.4252 ns | 0.2695 ns | 0.2251 ns |    42.4327 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|    EnumerableFirstConditionRewritten | Job-VSYIQS | .NET Core 3.1 | netcoreapp31 |    43.0130 ns | 0.1561 ns | 0.1460 ns |    42.9915 ns |  1.01 |    0.01 | 0.0076 |     - |     - |      32 B |
+|                                      |            |               |              |               |           |           |               |       |         |        |       |       |           |
+|          EnumerableFirstNotCondition | Job-SDOYUN |      .NET 4.8 |        net48 |            NA |        NA |        NA |            NA |     ? |       ? |      - |     - |     - |         - |
+|          EnumerableFirstNotCondition | Job-VSYIQS | .NET Core 3.1 | netcoreapp31 |            NA |        NA |        NA |            NA |     ? |       ? |      - |     - |     - |         - |
+|                                      |            |               |              |               |           |           |               |       |         |        |       |       |           |
+| EnumerableFirstNotConditionRewritten | Job-SDOYUN |      .NET 4.8 |        net48 |            NA |        NA |        NA |            NA |     ? |       ? |      - |     - |     - |         - |
+| EnumerableFirstNotConditionRewritten | Job-VSYIQS | .NET Core 3.1 | netcoreapp31 |            NA |        NA |        NA |            NA |     ? |       ? |      - |     - |     - |         - |
+|                                      |            |               |              |               |           |           |               |       |         |        |       |       |           |
+|          EnumerableFirstAllCondition | Job-SDOYUN |      .NET 4.8 |        net48 |    26.8361 ns | 0.1492 ns | 0.1396 ns |    26.8250 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|          EnumerableFirstAllCondition | Job-VSYIQS | .NET Core 3.1 | netcoreapp31 |    35.1692 ns | 0.2998 ns | 0.5482 ns |    35.0962 ns |  1.31 |    0.03 | 0.0076 |     - |     - |      32 B |
+|                                      |            |               |              |               |           |           |               |       |         |        |       |       |           |
+| EnumerableFirstAllConditionRewritten | Job-SDOYUN |      .NET 4.8 |        net48 |    24.3152 ns | 0.1027 ns | 0.0960 ns |    24.3027 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+| EnumerableFirstAllConditionRewritten | Job-VSYIQS | .NET Core 3.1 | netcoreapp31 |    27.5712 ns | 0.1503 ns | 0.1332 ns |    27.5941 ns |  1.13 |    0.01 | 0.0076 |     - |     - |      32 B |

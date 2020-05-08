@@ -134,6 +134,16 @@ namespace LinqRewrite.Services
             Directory.CreateDirectory(dstDir);
             foreach (var reference in project.MetadataReferences)
                 File.Copy(reference.Display, Path.Combine(dstDir, Path.GetFileName(reference.Display)), true);
+
+            dstPath = project.CompilationOptions.OutputKind switch
+            {
+                OutputKind.ConsoleApplication => Path.ChangeExtension(dstPath, "exe"),
+                OutputKind.WindowsApplication => Path.ChangeExtension(dstPath, "exe"),
+                OutputKind.WindowsRuntimeApplication => Path.ChangeExtension(dstPath, "exe"),
+                OutputKind.DynamicallyLinkedLibrary => Path.ChangeExtension(dstPath, "dll"),
+                _ => null
+            };
+            if (dstPath == null) return;
             compilation.Emit(dstPath);
         }
 

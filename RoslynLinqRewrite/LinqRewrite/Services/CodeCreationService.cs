@@ -162,15 +162,6 @@ namespace LinqRewrite.Services
             return new Lambda(syntax);
         }
 
-        public string GetUniqueName(string v)
-        {
-            for (var i = 1;; i++)
-            {
-                var name = v + i;
-                if (_data.MethodsToAddToCurrentType.Any(x => x.Item2.Identifier.ValueText == name)) 
-                    continue;
-                return name;
-            }
-        }
+        public string GetUniqueName(string v) => v + "_" + Guid.NewGuid().ToString().Replace("-", "");
     }
 }

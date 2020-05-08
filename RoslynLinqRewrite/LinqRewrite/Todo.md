@@ -1,5 +1,9 @@
-﻿Fix new project style
-rewrite lambda methods in rewritten
+﻿Possible simple rewrites
+
+Improve math optimization (For accepting division, for optimizing for program calculation, not for being nice)
+Implement SIMD
+Implement SelectMany ArrayCopy
+Implement ArrayCopy with fixed pointer
 
 Range(.Skip|.Take|.Distinct|.Reverse)*.Sum              -> (min + max) * count / 2
 Range(.Skip|.Take|.Distinct|.Reverse)*.Average          -> (min + max) / 2

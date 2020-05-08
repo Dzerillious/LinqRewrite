@@ -12,6 +12,7 @@ namespace LinqRewrite.RewriteRules
         {
             var method = args[0];
             var newExpression = (LambdaExpressionSyntax) method.NewVal;
+            if (p.CurrentIterator.IgnoreIterator) return;
 
             var collectionValue = args.Length switch
             {
@@ -21,7 +22,7 @@ namespace LinqRewrite.RewriteRules
             var rewritten = new RewrittenValueBridge(newExpression.ExpressionBody, collectionValue);
 
             var iterator = p.GlobalVariable(method.ReturnItemType(p));
-            p.Iterators.Where(x => !x.Complete).ToArray().ForEach(x =>
+            p.IncompleteIterators.ToArray().ForEach(x =>
             {
                 var newIterator = new IteratorParameters(p, new CollectionValueBridge(p, method.ReturnType(p), method.ReturnItemType(p), rewritten, true));
                 x.ForBody.Add(newIterator);
@@ -37,8 +38,8 @@ namespace LinqRewrite.RewriteRules
                 1 => p.LastValue,
                 2 => args[1].Inline(p, p.LastValue, p.Indexer)
             };
-            p.ListEnumeration = false;
             p.ModifiedEnumeration = true;
+            p.ListEnumeration = false;
             p.SourceSize = null;
         }
     }

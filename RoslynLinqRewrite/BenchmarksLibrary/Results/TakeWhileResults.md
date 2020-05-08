@@ -1,54 +1,157 @@
-|                              Method | Offset |         Mean |      Error |     StdDev |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------------------------ |------- |-------------:|-----------:|-----------:|-------:|------:|------:|----------:|
-|               ArrayTakeWhileToArray |     -1 |     72.72 ns |   0.584 ns |   0.546 ns | 0.0248 |     - |     - |     104 B |
-|      ArrayTakeWhileToArrayRewritten |     -1 |     39.50 ns |   0.506 ns |   0.474 ns | 0.0134 |     - |     - |      56 B |
-|          ArrayTakeWhileToSimpleList |     -1 |     61.08 ns |   0.910 ns |   0.760 ns | 0.0362 |     - |     - |     152 B |
-| ArrayTakeWhileToSimpleListRewritten |     -1 |     22.22 ns |   0.244 ns |   0.229 ns | 0.0143 |     - |     - |      60 B |
-|               ArrayTakeWhileToArray |      0 |     72.05 ns |   0.490 ns |   0.435 ns | 0.0248 |     - |     - |     104 B |
-|      ArrayTakeWhileToArrayRewritten |      0 |     39.30 ns |   0.536 ns |   0.475 ns | 0.0134 |     - |     - |      56 B |
-|          ArrayTakeWhileToSimpleList |      0 |     60.59 ns |   0.418 ns |   0.391 ns | 0.0362 |     - |     - |     152 B |
-| ArrayTakeWhileToSimpleListRewritten |      0 |     22.35 ns |   0.233 ns |   0.218 ns | 0.0143 |     - |     - |      60 B |
-|               ArrayTakeWhileToArray |      1 |    109.40 ns |   0.982 ns |   0.871 ns | 0.0324 |     - |     - |     136 B |
-|      ArrayTakeWhileToArrayRewritten |      1 |     45.83 ns |   0.342 ns |   0.320 ns | 0.0143 |     - |     - |      60 B |
-|          ArrayTakeWhileToSimpleList |      1 |     73.60 ns |   0.764 ns |   0.715 ns | 0.0362 |     - |     - |     152 B |
-| ArrayTakeWhileToSimpleListRewritten |      1 |     23.21 ns |   0.262 ns |   0.245 ns | 0.0143 |     - |     - |      60 B |
-|               ArrayTakeWhileToArray |      2 |    122.64 ns |   1.401 ns |   1.310 ns | 0.0334 |     - |     - |     140 B |
-|      ArrayTakeWhileToArrayRewritten |      2 |     47.83 ns |   0.487 ns |   0.455 ns | 0.0153 |     - |     - |      64 B |
-|          ArrayTakeWhileToSimpleList |      2 |     83.36 ns |   0.809 ns |   0.757 ns | 0.0362 |     - |     - |     152 B |
-| ArrayTakeWhileToSimpleListRewritten |      2 |     24.20 ns |   0.296 ns |   0.277 ns | 0.0143 |     - |     - |      60 B |
-|               ArrayTakeWhileToArray |      5 |    180.76 ns |   1.629 ns |   1.524 ns | 0.0467 |     - |     - |     196 B |
-|      ArrayTakeWhileToArrayRewritten |      5 |     57.79 ns |   0.537 ns |   0.502 ns | 0.0181 |     - |     - |      76 B |
-|          ArrayTakeWhileToSimpleList |      5 |    116.08 ns |   1.134 ns |   1.061 ns | 0.0362 |     - |     - |     152 B |
-| ArrayTakeWhileToSimpleListRewritten |      5 |     26.61 ns |   0.242 ns |   0.227 ns | 0.0143 |     - |     - |      60 B |
-|               ArrayTakeWhileToArray |     10 |    266.06 ns |   3.786 ns |   3.541 ns | 0.0696 |     - |     - |     292 B |
-|      ArrayTakeWhileToArrayRewritten |     10 |    107.83 ns |   1.159 ns |   1.084 ns | 0.0850 |     - |     - |     357 B |
-|          ArrayTakeWhileToSimpleList |     10 |    212.07 ns |   2.028 ns |   1.897 ns | 0.0696 |     - |     - |     292 B |
-| ArrayTakeWhileToSimpleListRewritten |     10 |     74.08 ns |   0.644 ns |   0.603 ns | 0.0763 |     - |     - |     320 B |
-|               ArrayTakeWhileToArray |     20 |    422.59 ns |   4.340 ns |   4.060 ns | 0.1125 |     - |     - |     473 B |
-|      ArrayTakeWhileToArrayRewritten |     20 |    129.07 ns |   1.405 ns |   1.245 ns | 0.0944 |     - |     - |     397 B |
-|          ArrayTakeWhileToSimpleList |     20 |    335.78 ns |   2.683 ns |   2.378 ns | 0.0696 |     - |     - |     292 B |
-| ArrayTakeWhileToSimpleListRewritten |     20 |     88.06 ns |   0.854 ns |   0.799 ns | 0.0763 |     - |     - |     320 B |
-|               ArrayTakeWhileToArray |     50 |    843.53 ns |   8.828 ns |   8.258 ns | 0.2050 |     - |     - |     861 B |
-|      ArrayTakeWhileToArrayRewritten |     50 |    202.57 ns |   2.459 ns |   2.301 ns | 0.1230 |     - |     - |     517 B |
-|          ArrayTakeWhileToSimpleList |     50 |    742.34 ns |   5.542 ns |   4.913 ns | 0.1945 |     - |     - |     817 B |
-| ArrayTakeWhileToSimpleListRewritten |     50 |    131.94 ns |   1.446 ns |   1.353 ns | 0.0763 |     - |     - |     320 B |
-|               ArrayTakeWhileToArray |    100 |  1,460.89 ns |  11.651 ns |   9.729 ns | 0.3777 |     - |     - |    1586 B |
-|      ArrayTakeWhileToArrayRewritten |    100 |    405.46 ns |   6.155 ns |   5.757 ns | 0.4125 |     - |     - |    1731 B |
-|          ArrayTakeWhileToSimpleList |    100 |  1,286.77 ns |  12.829 ns |  11.372 ns | 0.1945 |     - |     - |     817 B |
-| ArrayTakeWhileToSimpleListRewritten |    100 |    298.05 ns |   3.175 ns |   2.969 ns | 0.3176 |     - |     - |    1334 B |
-|               ArrayTakeWhileToArray |    200 |  2,700.75 ns |  28.041 ns |  24.857 ns | 0.7210 |     - |     - |    3025 B |
-|      ArrayTakeWhileToArrayRewritten |    200 |    624.63 ns |   6.591 ns |   6.165 ns | 0.5074 |     - |     - |    2131 B |
-|          ArrayTakeWhileToSimpleList |    200 |  2,499.12 ns |  23.360 ns |  21.851 ns | 0.6828 |     - |     - |    2880 B |
-| ArrayTakeWhileToSimpleListRewritten |    200 |    453.05 ns |   3.520 ns |   3.293 ns | 0.3176 |     - |     - |    1334 B |
-|               ArrayTakeWhileToArray |    500 |  6,227.05 ns |  60.252 ns |  56.360 ns | 1.4954 |     - |     - |    6289 B |
-|      ArrayTakeWhileToArrayRewritten |    500 |  1,532.34 ns |  17.131 ns |  16.025 ns | 1.7509 |     - |     - |    7351 B |
-|          ArrayTakeWhileToSimpleList |    500 |  5,757.07 ns |  67.484 ns |  63.125 ns | 0.6790 |     - |     - |    2880 B |
-| ArrayTakeWhileToSimpleListRewritten |    500 |  1,130.05 ns |  10.811 ns |  10.112 ns | 1.2741 |     - |     - |    5355 B |
-|               ArrayTakeWhileToArray |   1000 | 12,152.59 ns | 141.674 ns | 132.522 ns | 2.9449 |     - |     - |   12408 B |
-|      ArrayTakeWhileToArrayRewritten |   1000 |  2,362.51 ns |  29.887 ns |  27.956 ns | 1.2703 |     - |     - |    5336 B |
-|          ArrayTakeWhileToSimpleList |   1000 | 11,570.17 ns | 121.506 ns | 113.657 ns | 2.6398 |     - |     - |   11098 B |
-| ArrayTakeWhileToSimpleListRewritten |   1000 |  1,834.20 ns |  22.389 ns |  20.942 ns | 1.2741 |     - |     - |    5355 B |
-|               ArrayTakeWhileToArray |   2000 | 12,165.25 ns |  77.950 ns |  72.914 ns | 2.9449 |     - |     - |   12408 B |
-|      ArrayTakeWhileToArrayRewritten |   2000 |  2,368.47 ns |  25.002 ns |  23.387 ns | 1.2703 |     - |     - |    5336 B |
-|          ArrayTakeWhileToSimpleList |   2000 | 11,536.30 ns | 125.790 ns | 111.510 ns | 2.6398 |     - |     - |   11098 B |
-| ArrayTakeWhileToSimpleListRewritten |   2000 |  1,842.19 ns |  13.222 ns |  12.368 ns | 1.2741 |     - |     - |    5355 B |
+|                              Method |        Job |       Runtime |    Toolchain | Offset |         Mean |      Error |     StdDev |       Median | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------------------------------ |----------- |-------------- |------------- |------- |-------------:|-----------:|-----------:|-------------:|------:|--------:|-------:|------:|------:|----------:|
+|               ArrayTakeWhileToArray | Job-LWLLMI |      .NET 4.8 |        net48 |     -1 |     64.52 ns |   0.819 ns |   0.767 ns |     64.39 ns |  0.90 |    0.01 | 0.0459 |     - |     - |     193 B |
+|               ArrayTakeWhileToArray | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |     -1 |     71.46 ns |   0.336 ns |   0.298 ns |     71.53 ns |  1.00 |    0.00 | 0.0401 |     - |     - |     168 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|      ArrayTakeWhileToArrayRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |     -1 |     22.35 ns |   0.063 ns |   0.053 ns |     22.37 ns |  0.86 |    0.01 | 0.0191 |     - |     - |      80 B |
+|      ArrayTakeWhileToArrayRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |     -1 |     25.84 ns |   0.200 ns |   0.177 ns |     25.81 ns |  1.00 |    0.00 | 0.0191 |     - |     - |      80 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|          ArrayTakeWhileToSimpleList | Job-LWLLMI |      .NET 4.8 |        net48 |     -1 |     61.98 ns |   0.344 ns |   0.287 ns |     61.87 ns |  1.01 |    0.01 | 0.0612 |     - |     - |     257 B |
+|          ArrayTakeWhileToSimpleList | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |     -1 |     61.54 ns |   0.229 ns |   0.214 ns |     61.53 ns |  1.00 |    0.00 | 0.0612 |     - |     - |     256 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+| ArrayTakeWhileToSimpleListRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |     -1 |     18.16 ns |   0.062 ns |   0.058 ns |     18.15 ns |  1.32 |    0.01 | 0.0210 |     - |     - |      88 B |
+| ArrayTakeWhileToSimpleListRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |     -1 |     13.76 ns |   0.130 ns |   0.122 ns |     13.78 ns |  1.00 |    0.00 | 0.0210 |     - |     - |      88 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|               ArrayTakeWhileToArray | Job-LWLLMI |      .NET 4.8 |        net48 |      0 |     63.12 ns |   0.503 ns |   0.420 ns |     62.98 ns |  0.90 |    0.01 | 0.0459 |     - |     - |     193 B |
+|               ArrayTakeWhileToArray | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |      0 |     70.38 ns |   0.316 ns |   0.296 ns |     70.30 ns |  1.00 |    0.00 | 0.0401 |     - |     - |     168 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|      ArrayTakeWhileToArrayRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |      0 |     23.21 ns |   0.103 ns |   0.091 ns |     23.19 ns |  0.90 |    0.00 | 0.0191 |     - |     - |      80 B |
+|      ArrayTakeWhileToArrayRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |      0 |     25.87 ns |   0.106 ns |   0.089 ns |     25.87 ns |  1.00 |    0.00 | 0.0191 |     - |     - |      80 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|          ArrayTakeWhileToSimpleList | Job-LWLLMI |      .NET 4.8 |        net48 |      0 |     61.89 ns |   0.284 ns |   0.265 ns |     61.82 ns |  0.91 |    0.06 | 0.0612 |     - |     - |     257 B |
+|          ArrayTakeWhileToSimpleList | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |      0 |     70.41 ns |   1.429 ns |   3.766 ns |     69.79 ns |  1.00 |    0.00 | 0.0612 |     - |     - |     256 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+| ArrayTakeWhileToSimpleListRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |      0 |     18.14 ns |   0.229 ns |   0.245 ns |     18.08 ns |  1.33 |    0.02 | 0.0210 |     - |     - |      88 B |
+| ArrayTakeWhileToSimpleListRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |      0 |     13.69 ns |   0.084 ns |   0.079 ns |     13.71 ns |  1.00 |    0.00 | 0.0210 |     - |     - |      88 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|               ArrayTakeWhileToArray | Job-LWLLMI |      .NET 4.8 |        net48 |      1 |     90.60 ns |   1.332 ns |   1.246 ns |     89.93 ns |  0.77 |    0.01 | 0.0573 |     - |     - |     241 B |
+|               ArrayTakeWhileToArray | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |      1 |    118.41 ns |   1.419 ns |   1.327 ns |    118.56 ns |  1.00 |    0.00 | 0.0573 |     - |     - |     240 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|      ArrayTakeWhileToArrayRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |      1 |     27.84 ns |   0.067 ns |   0.063 ns |     27.81 ns |  0.97 |    0.01 | 0.0210 |     - |     - |      88 B |
+|      ArrayTakeWhileToArrayRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |      1 |     28.76 ns |   0.218 ns |   0.204 ns |     28.71 ns |  1.00 |    0.00 | 0.0210 |     - |     - |      88 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|          ArrayTakeWhileToSimpleList | Job-LWLLMI |      .NET 4.8 |        net48 |      1 |     72.97 ns |   0.727 ns |   0.680 ns |     73.21 ns |  1.02 |    0.01 | 0.0612 |     - |     - |     257 B |
+|          ArrayTakeWhileToSimpleList | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |      1 |     71.74 ns |   0.230 ns |   0.203 ns |     71.70 ns |  1.00 |    0.00 | 0.0612 |     - |     - |     256 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+| ArrayTakeWhileToSimpleListRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |      1 |     21.30 ns |   0.034 ns |   0.027 ns |     21.30 ns |  1.46 |    0.02 | 0.0210 |     - |     - |      88 B |
+| ArrayTakeWhileToSimpleListRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |      1 |     14.60 ns |   0.226 ns |   0.200 ns |     14.56 ns |  1.00 |    0.00 | 0.0210 |     - |     - |      88 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|               ArrayTakeWhileToArray | Job-LWLLMI |      .NET 4.8 |        net48 |      2 |    101.05 ns |   0.289 ns |   0.256 ns |    101.00 ns |  0.78 |    0.00 | 0.0573 |     - |     - |     241 B |
+|               ArrayTakeWhileToArray | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |      2 |    129.09 ns |   0.614 ns |   0.544 ns |    129.01 ns |  1.00 |    0.00 | 0.0572 |     - |     - |     240 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|      ArrayTakeWhileToArrayRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |      2 |     28.81 ns |   0.112 ns |   0.105 ns |     28.77 ns |  0.95 |    0.00 | 0.0210 |     - |     - |      88 B |
+|      ArrayTakeWhileToArrayRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |      2 |     30.41 ns |   0.151 ns |   0.126 ns |     30.44 ns |  1.00 |    0.00 | 0.0210 |     - |     - |      88 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|          ArrayTakeWhileToSimpleList | Job-LWLLMI |      .NET 4.8 |        net48 |      2 |     83.39 ns |   0.383 ns |   0.320 ns |     83.31 ns |  1.03 |    0.01 | 0.0612 |     - |     - |     257 B |
+|          ArrayTakeWhileToSimpleList | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |      2 |     80.92 ns |   0.380 ns |   0.355 ns |     81.03 ns |  1.00 |    0.00 | 0.0612 |     - |     - |     256 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+| ArrayTakeWhileToSimpleListRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |      2 |     20.02 ns |   0.063 ns |   0.056 ns |     20.03 ns |  1.30 |    0.01 | 0.0210 |     - |     - |      88 B |
+| ArrayTakeWhileToSimpleListRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |      2 |     15.37 ns |   0.168 ns |   0.157 ns |     15.42 ns |  1.00 |    0.00 | 0.0210 |     - |     - |      88 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|               ArrayTakeWhileToArray | Job-LWLLMI |      .NET 4.8 |        net48 |      5 |    150.69 ns |   0.621 ns |   0.550 ns |    150.70 ns |  0.82 |    0.01 | 0.0744 |     - |     - |     313 B |
+|               ArrayTakeWhileToArray | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |      5 |    182.74 ns |   2.164 ns |   2.024 ns |    181.72 ns |  1.00 |    0.00 | 0.0744 |     - |     - |     312 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|      ArrayTakeWhileToArrayRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |      5 |     33.03 ns |   0.134 ns |   0.112 ns |     33.02 ns |  0.94 |    0.01 | 0.0249 |     - |     - |     104 B |
+|      ArrayTakeWhileToArrayRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |      5 |     35.25 ns |   0.367 ns |   0.343 ns |     35.18 ns |  1.00 |    0.00 | 0.0249 |     - |     - |     104 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|          ArrayTakeWhileToSimpleList | Job-LWLLMI |      .NET 4.8 |        net48 |      5 |    115.78 ns |   1.164 ns |   1.089 ns |    115.13 ns |  1.03 |    0.01 | 0.0610 |     - |     - |     257 B |
+|          ArrayTakeWhileToSimpleList | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |      5 |    112.65 ns |   0.425 ns |   0.377 ns |    112.65 ns |  1.00 |    0.00 | 0.0612 |     - |     - |     256 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+| ArrayTakeWhileToSimpleListRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |      5 |     23.03 ns |   0.052 ns |   0.046 ns |     23.03 ns |  1.27 |    0.01 | 0.0210 |     - |     - |      88 B |
+| ArrayTakeWhileToSimpleListRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |      5 |     18.13 ns |   0.096 ns |   0.080 ns |     18.17 ns |  1.00 |    0.00 | 0.0210 |     - |     - |      88 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|               ArrayTakeWhileToArray | Job-LWLLMI |      .NET 4.8 |        net48 |     10 |    219.60 ns |   0.590 ns |   0.523 ns |    219.48 ns |  0.79 |    0.01 | 0.0994 |     - |     - |     417 B |
+|               ArrayTakeWhileToArray | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |     10 |    278.43 ns |   3.983 ns |   3.110 ns |    277.28 ns |  1.00 |    0.00 | 0.0916 |     - |     - |     384 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|      ArrayTakeWhileToArrayRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |     10 |     64.36 ns |   0.286 ns |   0.267 ns |     64.29 ns |  0.94 |    0.01 | 0.0937 |     - |     - |     393 B |
+|      ArrayTakeWhileToArrayRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |     10 |     68.19 ns |   0.710 ns |   0.629 ns |     68.22 ns |  1.00 |    0.00 | 0.0937 |     - |     - |     392 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|          ArrayTakeWhileToSimpleList | Job-LWLLMI |      .NET 4.8 |        net48 |     10 |    195.05 ns |   0.394 ns |   0.368 ns |    195.09 ns |  0.97 |    0.00 | 0.0975 |     - |     - |     409 B |
+|          ArrayTakeWhileToSimpleList | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |     10 |    201.69 ns |   0.730 ns |   0.570 ns |    201.69 ns |  1.00 |    0.00 | 0.0975 |     - |     - |     408 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+| ArrayTakeWhileToSimpleListRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |     10 |     51.34 ns |   0.182 ns |   0.170 ns |     51.31 ns |  1.08 |    0.01 | 0.0861 |     - |     - |     361 B |
+| ArrayTakeWhileToSimpleListRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |     10 |     47.48 ns |   0.435 ns |   0.385 ns |     47.42 ns |  1.00 |    0.00 | 0.0861 |     - |     - |     360 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|               ArrayTakeWhileToArray | Job-LWLLMI |      .NET 4.8 |        net48 |     20 |    355.91 ns |   1.024 ns |   0.907 ns |    356.19 ns |  0.83 |    0.00 | 0.1450 |     - |     - |     610 B |
+|               ArrayTakeWhileToArray | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |     20 |    430.87 ns |   1.487 ns |   1.242 ns |    430.57 ns |  1.00 |    0.00 | 0.1354 |     - |     - |     568 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|      ArrayTakeWhileToArrayRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |     20 |     85.01 ns |   0.318 ns |   0.266 ns |     84.97 ns |  0.96 |    0.01 | 0.1032 |     - |     - |     433 B |
+|      ArrayTakeWhileToArrayRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |     20 |     88.46 ns |   0.683 ns |   0.639 ns |     88.40 ns |  1.00 |    0.00 | 0.1032 |     - |     - |     432 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|          ArrayTakeWhileToSimpleList | Job-LWLLMI |      .NET 4.8 |        net48 |     20 |    309.85 ns |   0.631 ns |   0.493 ns |    309.60 ns |  0.98 |    0.00 | 0.0973 |     - |     - |     409 B |
+|          ArrayTakeWhileToSimpleList | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |     20 |    317.46 ns |   0.969 ns |   0.809 ns |    317.23 ns |  1.00 |    0.00 | 0.0973 |     - |     - |     408 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+| ArrayTakeWhileToSimpleListRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |     20 |     58.80 ns |   0.273 ns |   0.242 ns |     58.73 ns |  1.01 |    0.01 | 0.0861 |     - |     - |     361 B |
+| ArrayTakeWhileToSimpleListRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |     20 |     58.08 ns |   0.242 ns |   0.226 ns |     58.10 ns |  1.00 |    0.00 | 0.0861 |     - |     - |     360 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|               ArrayTakeWhileToArray | Job-LWLLMI |      .NET 4.8 |        net48 |     50 |    733.79 ns |   1.012 ns |   0.845 ns |    733.96 ns |  0.89 |    0.01 | 0.2403 |     - |     - |    1011 B |
+|               ArrayTakeWhileToArray | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |     50 |    821.21 ns |  10.335 ns |   8.630 ns |    818.74 ns |  1.00 |    0.00 | 0.2003 |     - |     - |     840 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|      ArrayTakeWhileToArrayRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |     50 |    145.35 ns |   0.487 ns |   0.431 ns |    145.28 ns |  0.93 |    0.01 | 0.1318 |     - |     - |     554 B |
+|      ArrayTakeWhileToArrayRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |     50 |    155.92 ns |   0.903 ns |   0.801 ns |    155.60 ns |  1.00 |    0.00 | 0.1318 |     - |     - |     552 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|          ArrayTakeWhileToSimpleList | Job-LWLLMI |      .NET 4.8 |        net48 |     50 |    675.55 ns |   2.400 ns |   2.004 ns |    674.86 ns |  0.97 |    0.00 | 0.2251 |     - |     - |     947 B |
+|          ArrayTakeWhileToSimpleList | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |     50 |    698.62 ns |   2.513 ns |   2.098 ns |    698.31 ns |  1.00 |    0.00 | 0.2251 |     - |     - |     944 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+| ArrayTakeWhileToSimpleListRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |     50 |     88.61 ns |   0.149 ns |   0.125 ns |     88.59 ns |  0.97 |    0.00 | 0.0861 |     - |     - |     361 B |
+| ArrayTakeWhileToSimpleListRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |     50 |     91.73 ns |   0.489 ns |   0.408 ns |     91.72 ns |  1.00 |    0.00 | 0.0861 |     - |     - |     360 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|               ArrayTakeWhileToArray | Job-LWLLMI |      .NET 4.8 |        net48 |    100 |  1,324.40 ns |   4.224 ns |   3.527 ns |  1,325.52 ns |  0.93 |    0.00 | 0.4158 |     - |     - |    1749 B |
+|               ArrayTakeWhileToArray | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |    100 |  1,427.61 ns |   4.793 ns |   4.002 ns |  1,425.32 ns |  1.00 |    0.00 | 0.3147 |     - |     - |    1320 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|      ArrayTakeWhileToArrayRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |    100 |    303.38 ns |   1.255 ns |   1.174 ns |    302.85 ns |  0.96 |    0.00 | 0.4244 |     - |     - |    1781 B |
+|      ArrayTakeWhileToArrayRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |    100 |    317.39 ns |   0.546 ns |   0.484 ns |    317.42 ns |  1.00 |    0.00 | 0.4244 |     - |     - |    1776 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|          ArrayTakeWhileToSimpleList | Job-LWLLMI |      .NET 4.8 |        net48 |    100 |  1,195.13 ns |   3.925 ns |   3.480 ns |  1,194.46 ns |  0.93 |    0.01 | 0.2251 |     - |     - |     947 B |
+|          ArrayTakeWhileToSimpleList | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |    100 |  1,285.69 ns |  11.205 ns |  10.481 ns |  1,283.25 ns |  1.00 |    0.00 | 0.2251 |     - |     - |     944 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+| ArrayTakeWhileToSimpleListRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |    100 |    206.91 ns |   0.441 ns |   0.412 ns |    207.14 ns |  1.00 |    0.00 | 0.3307 |     - |     - |    1388 B |
+| ArrayTakeWhileToSimpleListRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |    100 |    207.08 ns |   0.801 ns |   0.710 ns |    207.25 ns |  1.00 |    0.00 | 0.3307 |     - |     - |    1384 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|               ArrayTakeWhileToArray | Job-LWLLMI |      .NET 4.8 |        net48 |    200 |  2,466.94 ns |  18.022 ns |  15.049 ns |  2,467.68 ns |  0.94 |    0.02 | 0.7629 |     - |     - |    3202 B |
+|               ArrayTakeWhileToArray | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |    200 |  2,618.83 ns |  41.106 ns |  38.450 ns |  2,624.62 ns |  1.00 |    0.00 | 0.5379 |     - |     - |    2256 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|      ArrayTakeWhileToArrayRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |    200 |    506.89 ns |   1.798 ns |   1.594 ns |    506.75 ns |  0.98 |    0.00 | 0.5198 |     - |     - |    2182 B |
+|      ArrayTakeWhileToArrayRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |    200 |    519.27 ns |   2.239 ns |   1.869 ns |    519.22 ns |  1.00 |    0.00 | 0.5198 |     - |     - |    2176 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|          ArrayTakeWhileToSimpleList | Job-LWLLMI |      .NET 4.8 |        net48 |    200 |  2,362.05 ns |   6.514 ns |   5.439 ns |  2,362.32 ns |  0.92 |    0.02 | 0.7210 |     - |     - |    3026 B |
+|          ArrayTakeWhileToSimpleList | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |    200 |  2,510.21 ns |  49.157 ns |  80.766 ns |  2,458.39 ns |  1.00 |    0.00 | 0.7210 |     - |     - |    3016 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+| ArrayTakeWhileToSimpleListRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |    200 |    326.92 ns |   6.107 ns |   5.414 ns |    327.36 ns |  1.01 |    0.02 | 0.3304 |     - |     - |    1388 B |
+| ArrayTakeWhileToSimpleListRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |    200 |    324.01 ns |   1.075 ns |   1.006 ns |    323.72 ns |  1.00 |    0.00 | 0.3304 |     - |     - |    1384 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|               ArrayTakeWhileToArray | Job-LWLLMI |      .NET 4.8 |        net48 |    500 |  5,801.35 ns |  56.006 ns |  49.648 ns |  5,785.71 ns |  0.98 |    0.01 | 1.5411 |     - |     - |    6484 B |
+|               ArrayTakeWhileToArray | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |    500 |  5,913.12 ns |  15.391 ns |  14.397 ns |  5,916.39 ns |  1.00 |    0.00 | 1.0910 |     - |     - |    4592 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|      ArrayTakeWhileToArrayRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |    500 |  1,289.87 ns |   3.331 ns |   2.953 ns |  1,288.34 ns |  0.99 |    0.00 | 1.7681 |     - |     - |    7423 B |
+|      ArrayTakeWhileToArrayRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |    500 |  1,308.30 ns |   4.607 ns |   4.309 ns |  1,309.12 ns |  1.00 |    0.00 | 1.7681 |     - |     - |    7400 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|          ArrayTakeWhileToSimpleList | Job-LWLLMI |      .NET 4.8 |        net48 |    500 |  5,471.18 ns |  26.463 ns |  24.754 ns |  5,459.18 ns |  0.98 |    0.01 | 0.7172 |     - |     - |    3026 B |
+|          ArrayTakeWhileToSimpleList | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |    500 |  5,599.12 ns |  69.753 ns |  65.247 ns |  5,563.66 ns |  1.00 |    0.00 | 0.7172 |     - |     - |    3016 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+| ArrayTakeWhileToSimpleListRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |    500 |    803.51 ns |   2.055 ns |   1.922 ns |    803.78 ns |  0.99 |    0.00 | 1.2913 |     - |     - |    5424 B |
+| ArrayTakeWhileToSimpleListRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |    500 |    808.90 ns |   3.915 ns |   3.470 ns |    809.13 ns |  1.00 |    0.00 | 1.2913 |     - |     - |    5408 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|               ArrayTakeWhileToArray | Job-LWLLMI |      .NET 4.8 |        net48 |   1000 | 11,283.69 ns |  41.315 ns |  38.646 ns | 11,271.11 ns |  0.98 |    0.00 | 3.0060 |     - |     - |   12624 B |
+|               ArrayTakeWhileToArray | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |   1000 | 11,555.79 ns |  47.265 ns |  36.902 ns | 11,546.01 ns |  1.00 |    0.00 | 2.0599 |     - |     - |    8664 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|      ArrayTakeWhileToArrayRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |   1000 |  2,110.04 ns |   5.376 ns |   4.766 ns |  2,108.47 ns |  1.00 |    0.00 | 1.2817 |     - |     - |    5393 B |
+|      ArrayTakeWhileToArrayRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |   1000 |  2,115.99 ns |   4.616 ns |   4.092 ns |  2,115.11 ns |  1.00 |    0.00 | 1.2817 |     - |     - |    5376 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|          ArrayTakeWhileToSimpleList | Job-LWLLMI |      .NET 4.8 |        net48 |   1000 | 10,994.43 ns |  27.935 ns |  24.764 ns | 10,998.06 ns |  0.96 |    0.00 | 2.6703 |     - |     - |   11267 B |
+|          ArrayTakeWhileToSimpleList | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |   1000 | 11,458.71 ns |  30.388 ns |  26.938 ns | 11,452.74 ns |  1.00 |    0.00 | 2.6703 |     - |     - |   11232 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+| ArrayTakeWhileToSimpleListRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |   1000 |  1,307.30 ns |   4.218 ns |   3.522 ns |  1,306.03 ns |  0.99 |    0.00 | 1.2913 |     - |     - |    5424 B |
+| ArrayTakeWhileToSimpleListRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |   1000 |  1,320.96 ns |   4.799 ns |   3.746 ns |  1,321.59 ns |  1.00 |    0.00 | 1.2913 |     - |     - |    5408 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|               ArrayTakeWhileToArray | Job-LWLLMI |      .NET 4.8 |        net48 |   2000 | 11,276.55 ns |  30.944 ns |  28.945 ns | 11,274.96 ns |  0.98 |    0.01 | 3.0060 |     - |     - |   12624 B |
+|               ArrayTakeWhileToArray | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |   2000 | 11,561.62 ns |  78.148 ns |  65.257 ns | 11,545.40 ns |  1.00 |    0.00 | 2.0599 |     - |     - |    8664 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|      ArrayTakeWhileToArrayRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |   2000 |  2,109.36 ns |   3.772 ns |   3.344 ns |  2,108.70 ns |  0.99 |    0.00 | 1.2817 |     - |     - |    5393 B |
+|      ArrayTakeWhileToArrayRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |   2000 |  2,132.69 ns |   8.880 ns |   8.307 ns |  2,130.98 ns |  1.00 |    0.00 | 1.2817 |     - |     - |    5376 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+|          ArrayTakeWhileToSimpleList | Job-LWLLMI |      .NET 4.8 |        net48 |   2000 | 10,992.51 ns |  31.303 ns |  27.749 ns | 10,987.42 ns |  0.97 |    0.01 | 2.6703 |     - |     - |   11267 B |
+|          ArrayTakeWhileToSimpleList | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |   2000 | 11,275.81 ns | 139.084 ns | 130.099 ns | 11,197.02 ns |  1.00 |    0.00 | 2.6703 |     - |     - |   11232 B |
+|                                     |            |               |              |        |              |            |            |              |       |         |        |       |       |           |
+| ArrayTakeWhileToSimpleListRewritten | Job-LWLLMI |      .NET 4.8 |        net48 |   2000 |  1,309.36 ns |   3.824 ns |   3.390 ns |  1,308.15 ns |  0.99 |    0.00 | 1.2913 |     - |     - |    5424 B |
+| ArrayTakeWhileToSimpleListRewritten | Job-BSSXBG | .NET Core 3.1 | netcoreapp31 |   2000 |  1,321.75 ns |   5.636 ns |   4.997 ns |  1,320.98 ns |  1.00 |    0.00 | 1.2913 |     - |     - |    5408 B |

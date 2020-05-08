@@ -1,16 +1,43 @@
-|                                  Method |        Mean |      Error |    StdDev |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|---------------------------------------- |------------:|-----------:|----------:|-------:|------:|------:|----------:|
-|                         ArrayContains50 |    64.26 ns |   0.997 ns |  0.933 ns |      - |     - |     - |         - |
-|                ArrayContains50Rewritten |    41.98 ns |   0.545 ns |  0.455 ns |      - |     - |     - |         - |
-|               ArrayContains900Condition |   427.03 ns |   2.948 ns |  2.462 ns |      - |     - |     - |         - |
-|      ArrayContains900ConditionRewritten |   507.72 ns |   5.385 ns |  5.037 ns |      - |     - |     - |         - |
-|                     ArraySelectContains | 1,522.52 ns |  12.894 ns | 12.061 ns | 0.0076 |     - |     - |      36 B |
-|            ArraySelectContainsRewritten |   121.22 ns |   1.699 ns |  1.590 ns |      - |     - |     - |         - |
-|                      ArrayWhereContains | 6,498.42 ns | 100.829 ns | 94.315 ns | 0.0076 |     - |     - |      32 B |
-|             ArrayWhereContainsRewritten |   580.57 ns |   6.883 ns |  6.102 ns |      - |     - |     - |         - |
-|                   ArrayWhereContains900 | 5,868.33 ns |  74.496 ns | 62.207 ns | 0.0076 |     - |     - |      32 B |
-|          ArrayWhereContains900Rewritten |   956.04 ns |  20.991 ns | 19.635 ns |      - |     - |     - |         - |
-|          EnumerableContainsNotCondition | 6,819.05 ns |  95.973 ns | 89.773 ns |      - |     - |     - |      24 B |
-| EnumerableContainsNotConditionRewritten | 4,136.36 ns |  67.178 ns | 62.839 ns |      - |     - |     - |      24 B |
-|          EnumerableContainsAllCondition |   385.52 ns |   6.028 ns |  5.344 ns | 0.0057 |     - |     - |      24 B |
-| EnumerableContainsAllConditionRewritten |   233.53 ns |   3.844 ns |  3.408 ns | 0.0057 |     - |     - |      24 B |
+|                                  Method |        Job |       Runtime |    Toolchain |        Mean |      Error |     StdDev |      Median | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|---------------------------------------- |----------- |-------------- |------------- |------------:|-----------:|-----------:|------------:|------:|--------:|-------:|------:|------:|----------:|
+|                         ArrayContains50 | Job-UDMBNP |      .NET 4.8 |        net48 |    61.84 ns |   0.940 ns |   0.879 ns |    62.35 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|                         ArrayContains50 | Job-QUMKGC | .NET Core 3.1 | netcoreapp31 |    25.86 ns |   0.490 ns |   0.458 ns |    26.05 ns |  0.42 |    0.01 |      - |     - |     - |         - |
+|                                         |            |               |              |             |            |            |             |       |         |        |       |       |           |
+|                ArrayContains50Rewritten | Job-UDMBNP |      .NET 4.8 |        net48 |    23.17 ns |   0.477 ns |   0.490 ns |    23.26 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|                ArrayContains50Rewritten | Job-QUMKGC | .NET Core 3.1 | netcoreapp31 |    28.20 ns |   0.414 ns |   0.388 ns |    28.36 ns |  1.22 |    0.03 |      - |     - |     - |         - |
+|                                         |            |               |              |             |            |            |             |       |         |        |       |       |           |
+|               ArrayContains900Condition | Job-UDMBNP |      .NET 4.8 |        net48 |   519.55 ns |   6.016 ns |   5.627 ns |   522.19 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|               ArrayContains900Condition | Job-QUMKGC | .NET Core 3.1 | netcoreapp31 |   217.44 ns |   3.605 ns |   3.372 ns |   219.03 ns |  0.42 |    0.01 |      - |     - |     - |         - |
+|                                         |            |               |              |             |            |            |             |       |         |        |       |       |           |
+|      ArrayContains900ConditionRewritten | Job-UDMBNP |      .NET 4.8 |        net48 |   405.29 ns |   6.027 ns |   5.638 ns |   407.73 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|      ArrayContains900ConditionRewritten | Job-QUMKGC | .NET Core 3.1 | netcoreapp31 |   484.73 ns |   7.366 ns |   6.890 ns |   488.04 ns |  1.20 |    0.02 |      - |     - |     - |         - |
+|                                         |            |               |              |             |            |            |             |       |         |        |       |       |           |
+|                     ArraySelectContains | Job-UDMBNP |      .NET 4.8 |        net48 | 1,556.25 ns |  30.172 ns |  28.223 ns | 1,573.34 ns |  1.00 |    0.00 | 0.0134 |     - |     - |      56 B |
+|                     ArraySelectContains | Job-QUMKGC | .NET Core 3.1 | netcoreapp31 | 1,169.35 ns |  12.019 ns |  10.655 ns | 1,171.62 ns |  0.75 |    0.01 | 0.0114 |     - |     - |      48 B |
+|                                         |            |               |              |             |            |            |             |       |         |        |       |       |           |
+|            ArraySelectContainsRewritten | Job-UDMBNP |      .NET 4.8 |        net48 |    96.65 ns |   1.607 ns |   1.503 ns |    97.46 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|            ArraySelectContainsRewritten | Job-QUMKGC | .NET Core 3.1 | netcoreapp31 |    93.54 ns |   0.337 ns |   0.263 ns |    93.49 ns |  0.97 |    0.02 |      - |     - |     - |         - |
+|                                         |            |               |              |             |            |            |             |       |         |        |       |       |           |
+|                      ArrayWhereContains | Job-UDMBNP |      .NET 4.8 |        net48 | 6,943.03 ns | 105.146 ns |  98.353 ns | 6,993.59 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      48 B |
+|                      ArrayWhereContains | Job-QUMKGC | .NET Core 3.1 | netcoreapp31 | 5,478.74 ns |  99.457 ns |  93.032 ns | 5,531.17 ns |  0.79 |    0.02 | 0.0076 |     - |     - |      48 B |
+|                                         |            |               |              |             |            |            |             |       |         |        |       |       |           |
+|             ArrayWhereContainsRewritten | Job-UDMBNP |      .NET 4.8 |        net48 |   580.68 ns |  10.198 ns |   9.539 ns |   588.28 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|             ArrayWhereContainsRewritten | Job-QUMKGC | .NET Core 3.1 | netcoreapp31 |   574.57 ns |   9.170 ns |   8.578 ns |   578.52 ns |  0.99 |    0.02 |      - |     - |     - |         - |
+|                                         |            |               |              |             |            |            |             |       |         |        |       |       |           |
+|                   ArrayWhereContains900 | Job-UDMBNP |      .NET 4.8 |        net48 | 6,091.22 ns | 110.076 ns | 102.965 ns | 6,035.09 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      48 B |
+|                   ArrayWhereContains900 | Job-QUMKGC | .NET Core 3.1 | netcoreapp31 | 4,909.76 ns |  54.621 ns |  51.093 ns | 4,927.21 ns |  0.81 |    0.01 | 0.0076 |     - |     - |      48 B |
+|                                         |            |               |              |             |            |            |             |       |         |        |       |       |           |
+|          ArrayWhereContains900Rewritten | Job-UDMBNP |      .NET 4.8 |        net48 |   534.75 ns |   7.074 ns |   6.617 ns |   537.22 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|          ArrayWhereContains900Rewritten | Job-QUMKGC | .NET Core 3.1 | netcoreapp31 |   519.61 ns |   9.585 ns |   8.966 ns |   525.00 ns |  0.97 |    0.02 |      - |     - |     - |         - |
+|                                         |            |               |              |             |            |            |             |       |         |        |       |       |           |
+|          EnumerableContainsNotCondition | Job-UDMBNP |      .NET 4.8 |        net48 | 6,127.99 ns |  94.242 ns |  88.154 ns | 6,165.62 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|          EnumerableContainsNotCondition | Job-QUMKGC | .NET Core 3.1 | netcoreapp31 | 4,530.90 ns |  64.638 ns |  57.300 ns | 4,546.19 ns |  0.74 |    0.02 | 0.0076 |     - |     - |      32 B |
+|                                         |            |               |              |             |            |            |             |       |         |        |       |       |           |
+| EnumerableContainsNotConditionRewritten | Job-UDMBNP |      .NET 4.8 |        net48 | 4,764.89 ns |  72.978 ns |  64.693 ns | 4,796.68 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+| EnumerableContainsNotConditionRewritten | Job-QUMKGC | .NET Core 3.1 | netcoreapp31 | 4,496.63 ns |  80.045 ns |  74.874 ns | 4,544.01 ns |  0.94 |    0.02 | 0.0076 |     - |     - |      32 B |
+|                                         |            |               |              |             |            |            |             |       |         |        |       |       |           |
+|          EnumerableContainsAllCondition | Job-UDMBNP |      .NET 4.8 |        net48 |   341.33 ns |   5.992 ns |   5.605 ns |   344.56 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|          EnumerableContainsAllCondition | Job-QUMKGC | .NET Core 3.1 | netcoreapp31 |   255.13 ns |   4.777 ns |   4.469 ns |   252.79 ns |  0.75 |    0.02 | 0.0076 |     - |     - |      32 B |
+|                                         |            |               |              |             |            |            |             |       |         |        |       |       |           |
+| EnumerableContainsAllConditionRewritten | Job-UDMBNP |      .NET 4.8 |        net48 |   259.06 ns |   5.005 ns |   4.682 ns |   256.19 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+| EnumerableContainsAllConditionRewritten | Job-QUMKGC | .NET Core 3.1 | netcoreapp31 |   256.66 ns |   3.161 ns |   2.957 ns |   257.24 ns |  0.99 |    0.02 | 0.0076 |     - |     - |      32 B |

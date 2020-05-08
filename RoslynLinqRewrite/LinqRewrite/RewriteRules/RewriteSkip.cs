@@ -11,6 +11,8 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
+            if (p.Iterators.Count > 1) p.ListEnumeration = false;
+            
             var skippedValue = args[0];
             if (TryGetInt(skippedValue, out var skippedInt))
             {
@@ -39,6 +41,9 @@ namespace LinqRewrite.RewriteRules
             }
             
             if (p.ResultSize != null) p.ResultSize -= skippedValue;
+            if (TryGetInt(p.ResultSize, out var resultInt) && resultInt < 0)
+                p.ResultSize = 0;
+            
             p.Indexer = null;
         }
     }

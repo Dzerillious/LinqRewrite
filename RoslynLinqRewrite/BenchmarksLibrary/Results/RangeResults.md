@@ -1,8 +1,19 @@
-|                  Method |        Mean |     Error |    StdDev |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------------ |------------:|----------:|----------:|-------:|------:|------:|----------:|
-|          RangeElementAt |   165.88 ns |  1.896 ns |  1.681 ns | 0.0095 |     - |     - |      40 B |
-| RangeElementAtRewritten |    57.05 ns |  0.509 ns |  0.476 ns |      - |     - |     - |         - |
-|                RangeSum | 4,104.15 ns | 52.592 ns | 49.194 ns | 0.0076 |     - |     - |      40 B |
-|       RangeSumRewritten |   797.35 ns |  2.268 ns |  2.122 ns |      - |     - |     - |         - |
-|            RangeToArray | 5,885.41 ns | 65.787 ns | 61.537 ns | 2.9373 |     - |     - |   12358 B |
-|   RangeToArrayRewritten |   695.33 ns |  6.919 ns |  6.133 ns | 0.9575 |     - |     - |    4021 B |
+|                  Method |        Job |       Runtime |    Toolchain |        Mean |     Error |    StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------------------ |----------- |-------------- |------------- |------------:|----------:|----------:|------:|-------:|------:|------:|----------:|
+|          RangeElementAt | Job-XIDZQI |      .NET 4.8 |        net48 |   195.14 ns |  1.086 ns |  1.015 ns |  1.00 | 0.0114 |     - |     - |      48 B |
+|          RangeElementAt | Job-ASVANJ | .NET Core 3.1 | netcoreapp31 |    17.66 ns |  0.216 ns |  0.192 ns |  0.09 | 0.0095 |     - |     - |      40 B |
+|                         |            |               |              |             |           |           |       |        |       |       |           |
+| RangeElementAtRewritten | Job-XIDZQI |      .NET 4.8 |        net48 |    31.82 ns |  0.163 ns |  0.153 ns |  1.00 |      - |     - |     - |         - |
+| RangeElementAtRewritten | Job-ASVANJ | .NET Core 3.1 | netcoreapp31 |    18.53 ns |  0.083 ns |  0.065 ns |  0.58 |      - |     - |     - |         - |
+|                         |            |               |              |             |           |           |       |        |       |       |           |
+|                RangeSum | Job-XIDZQI |      .NET 4.8 |        net48 | 5,553.51 ns | 27.851 ns | 24.689 ns |  1.00 | 0.0076 |     - |     - |      48 B |
+|                RangeSum | Job-ASVANJ | .NET Core 3.1 | netcoreapp31 | 4,410.31 ns | 21.009 ns | 17.543 ns |  0.79 | 0.0076 |     - |     - |      40 B |
+|                         |            |               |              |             |           |           |       |        |       |       |           |
+|       RangeSumRewritten | Job-XIDZQI |      .NET 4.8 |        net48 |   840.65 ns |  2.306 ns |  1.926 ns |  1.00 |      - |     - |     - |         - |
+|       RangeSumRewritten | Job-ASVANJ | .NET Core 3.1 | netcoreapp31 |   840.55 ns |  3.948 ns |  3.297 ns |  1.00 |      - |     - |     - |         - |
+|                         |            |               |              |             |           |           |       |        |       |       |           |
+|            RangeToArray | Job-XIDZQI |      .NET 4.8 |        net48 | 6,869.08 ns | 28.485 ns | 25.252 ns |  1.00 | 2.9755 |     - |     - |   12503 B |
+|            RangeToArray | Job-ASVANJ | .NET Core 3.1 | netcoreapp31 |   630.21 ns |  4.881 ns |  4.566 ns |  0.09 | 0.9708 |     - |     - |    4064 B |
+|                         |            |               |              |             |           |           |       |        |       |       |           |
+|   RangeToArrayRewritten | Job-XIDZQI |      .NET 4.8 |        net48 |   621.38 ns |  2.553 ns |  2.263 ns |  1.00 | 0.9613 |     - |     - |    4037 B |
+|   RangeToArrayRewritten | Job-ASVANJ | .NET Core 3.1 | netcoreapp31 |   746.75 ns |  6.884 ns |  5.749 ns |  1.20 | 0.9613 |     - |     - |    4024 B |

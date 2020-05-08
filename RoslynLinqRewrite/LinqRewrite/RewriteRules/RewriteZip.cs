@@ -25,8 +25,8 @@ namespace LinqRewrite.RewriteRules
             p.LastValue = methodValue.Inline(p, p.LastValue, new TypedValueBridge(collectionValue.ItemType(p), enumeratorVariable.Access("Current")));
 
             p.FinalAdd(enumeratorVariable.Access("Dispose").Invoke());
-            p.SimpleEnumeration = false;
             p.ListEnumeration = false;
+            p.ModifiedEnumeration = true;
         }
     }
 }

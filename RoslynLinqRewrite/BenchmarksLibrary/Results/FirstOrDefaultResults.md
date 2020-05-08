@@ -1,18 +1,49 @@
-|                                        Method |          Mean |      Error |     StdDev |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|---------------------------------------------- |--------------:|-----------:|-----------:|-------:|------:|------:|----------:|
-|                           ArrayFirstOrDefault |    36.0484 ns |  0.4412 ns |  0.4127 ns |      - |     - |     - |         - |
-|                  ArrayFirstOrDefaultRewritten |     0.1258 ns |  0.0238 ns |  0.0222 ns |      - |     - |     - |         - |
-|                  ArrayFirstOrDefaultCondition |    46.4658 ns |  0.5000 ns |  0.4677 ns | 0.0048 |     - |     - |      20 B |
-|         ArrayFirstOrDefaultConditionRewritten |     4.9037 ns |  0.0727 ns |  0.0680 ns |      - |     - |     - |         - |
-|                     ArraySelectFirstOrDefault |    42.4575 ns |  0.8396 ns |  0.7853 ns | 0.0086 |     - |     - |      36 B |
-|            ArraySelectFirstOrDefaultRewritten |     0.1035 ns |  0.0171 ns |  0.0152 ns |      - |     - |     - |         - |
-|                      ArrayWhereFirstOrDefault |   334.7900 ns |  4.4881 ns |  4.1981 ns | 0.0076 |     - |     - |      32 B |
-|             ArrayWhereFirstOrDefaultRewritten |    91.9534 ns |  1.3320 ns |  1.2460 ns |      - |     - |     - |         - |
-|             ArrayWhereFirstOrDefaultCondition | 1,085.5587 ns | 15.6336 ns | 14.6237 ns | 0.0076 |     - |     - |      32 B |
-|    ArrayWhereFirstOrDefaultConditionRewritten |   172.1460 ns |  2.5529 ns |  3.4944 ns |      - |     - |     - |         - |
-|             EnumerableFirstOrDefaultCondition |    46.0420 ns |  0.4961 ns |  0.4640 ns | 0.0057 |     - |     - |      24 B |
-|    EnumerableFirstOrDefaultConditionRewritten |    42.8853 ns |  0.2342 ns |  0.2076 ns | 0.0057 |     - |     - |      24 B |
-|          EnumerableFirstOrDefaultNotCondition | 5,470.1039 ns | 62.5557 ns | 58.5146 ns |      - |     - |     - |      24 B |
-| EnumerableFirstOrDefaultNotConditionRewritten | 4,978.0935 ns | 61.9138 ns | 57.9142 ns |      - |     - |     - |      24 B |
-|          EnumerableFirstOrDefaultAllCondition |    28.8711 ns |  0.2690 ns |  0.2246 ns | 0.0057 |     - |     - |      24 B |
-| EnumerableFirstOrDefaultAllConditionRewritten |    26.4180 ns |  0.2264 ns |  0.2118 ns | 0.0057 |     - |     - |      24 B |
+|                                        Method |        Job |       Runtime |    Toolchain |          Mean |      Error |     StdDev |        Median | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|---------------------------------------------- |----------- |-------------- |------------- |--------------:|-----------:|-----------:|--------------:|------:|--------:|-------:|------:|------:|----------:|
+|                           ArrayFirstOrDefault | Job-ZHTIBD |      .NET 4.8 |        net48 |    24.8692 ns |  0.1416 ns |  0.1182 ns |    24.8764 ns |  0.98 |    0.00 |      - |     - |     - |         - |
+|                           ArrayFirstOrDefault | Job-QQALDA | .NET Core 3.1 | netcoreapp31 |    25.2560 ns |  0.0877 ns |  0.0777 ns |    25.2363 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|                                               |            |               |              |               |            |            |               |       |         |        |       |       |           |
+|                  ArrayFirstOrDefaultRewritten | Job-ZHTIBD |      .NET 4.8 |        net48 |     0.0644 ns |  0.0106 ns |  0.0099 ns |     0.0631 ns |     ? |       ? |      - |     - |     - |         - |
+|                  ArrayFirstOrDefaultRewritten | Job-QQALDA | .NET Core 3.1 | netcoreapp31 |     0.0011 ns |  0.0017 ns |  0.0015 ns |     0.0004 ns |     ? |       ? |      - |     - |     - |         - |
+|                                               |            |               |              |               |            |            |               |       |         |        |       |       |           |
+|                  ArrayFirstOrDefaultCondition | Job-ZHTIBD |      .NET 4.8 |        net48 |    40.8293 ns |  0.2416 ns |  0.2142 ns |    40.8182 ns |  1.02 |    0.01 | 0.0076 |     - |     - |      32 B |
+|                  ArrayFirstOrDefaultCondition | Job-QQALDA | .NET Core 3.1 | netcoreapp31 |    39.8756 ns |  0.3453 ns |  0.3230 ns |    39.7852 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|                                               |            |               |              |               |            |            |               |       |         |        |       |       |           |
+|         ArrayFirstOrDefaultConditionRewritten | Job-ZHTIBD |      .NET 4.8 |        net48 |     3.7257 ns |  0.0293 ns |  0.0245 ns |     3.7341 ns |  0.98 |    0.01 |      - |     - |     - |         - |
+|         ArrayFirstOrDefaultConditionRewritten | Job-QQALDA | .NET Core 3.1 | netcoreapp31 |     3.8034 ns |  0.0237 ns |  0.0222 ns |     3.7984 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|                                               |            |               |              |               |            |            |               |       |         |        |       |       |           |
+|                     ArraySelectFirstOrDefault | Job-ZHTIBD |      .NET 4.8 |        net48 |    35.6657 ns |  0.3170 ns |  0.2965 ns |    35.4895 ns |  0.91 |    0.02 | 0.0134 |     - |     - |      56 B |
+|                     ArraySelectFirstOrDefault | Job-QQALDA | .NET Core 3.1 | netcoreapp31 |    39.0050 ns |  0.6958 ns |  0.6508 ns |    38.6991 ns |  1.00 |    0.00 | 0.0114 |     - |     - |      48 B |
+|                                               |            |               |              |               |            |            |               |       |         |        |       |       |           |
+|            ArraySelectFirstOrDefaultRewritten | Job-ZHTIBD |      .NET 4.8 |        net48 |     0.0548 ns |  0.0075 ns |  0.0063 ns |     0.0554 ns |  0.20 |    0.02 |      - |     - |     - |         - |
+|            ArraySelectFirstOrDefaultRewritten | Job-QQALDA | .NET Core 3.1 | netcoreapp31 |     0.2751 ns |  0.0058 ns |  0.0052 ns |     0.2750 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|                                               |            |               |              |               |            |            |               |       |         |        |       |       |           |
+|                      ArrayWhereFirstOrDefault | Job-ZHTIBD |      .NET 4.8 |        net48 |   250.7382 ns |  2.4162 ns |  2.2601 ns |   250.1324 ns |  1.20 |    0.02 | 0.0114 |     - |     - |      48 B |
+|                      ArrayWhereFirstOrDefault | Job-QQALDA | .NET Core 3.1 | netcoreapp31 |   208.2993 ns |  2.7012 ns |  2.5267 ns |   207.6132 ns |  1.00 |    0.00 | 0.0114 |     - |     - |      48 B |
+|                                               |            |               |              |               |            |            |               |       |         |        |       |       |           |
+|             ArrayWhereFirstOrDefaultRewritten | Job-ZHTIBD |      .NET 4.8 |        net48 |    51.7806 ns |  0.3354 ns |  0.2801 ns |    51.7007 ns |  1.00 |    0.01 |      - |     - |     - |         - |
+|             ArrayWhereFirstOrDefaultRewritten | Job-QQALDA | .NET Core 3.1 | netcoreapp31 |    51.8919 ns |  0.1861 ns |  0.1649 ns |    51.9088 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|                                               |            |               |              |               |            |            |               |       |         |        |       |       |           |
+|             ArrayWhereFirstOrDefaultCondition | Job-ZHTIBD |      .NET 4.8 |        net48 |   928.7131 ns |  9.9441 ns |  8.3038 ns |   927.2689 ns |  1.05 |    0.01 | 0.0114 |     - |     - |      48 B |
+|             ArrayWhereFirstOrDefaultCondition | Job-QQALDA | .NET Core 3.1 | netcoreapp31 |   880.4009 ns |  5.0650 ns |  4.2295 ns |   880.6707 ns |  1.00 |    0.00 | 0.0114 |     - |     - |      48 B |
+|                                               |            |               |              |               |            |            |               |       |         |        |       |       |           |
+|    ArrayWhereFirstOrDefaultConditionRewritten | Job-ZHTIBD |      .NET 4.8 |        net48 |   158.1530 ns |  0.6222 ns |  0.5196 ns |   157.9617 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|    ArrayWhereFirstOrDefaultConditionRewritten | Job-QQALDA | .NET Core 3.1 | netcoreapp31 |   157.5463 ns |  0.4296 ns |  0.3588 ns |   157.4613 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|                                               |            |               |              |               |            |            |               |       |         |        |       |       |           |
+|             EnumerableFirstOrDefaultCondition | Job-ZHTIBD |      .NET 4.8 |        net48 |    39.2919 ns |  0.2340 ns |  0.2074 ns |    39.2169 ns |  0.84 |    0.01 | 0.0076 |     - |     - |      32 B |
+|             EnumerableFirstOrDefaultCondition | Job-QQALDA | .NET Core 3.1 | netcoreapp31 |    46.5912 ns |  0.4581 ns |  0.3825 ns |    46.4704 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|                                               |            |               |              |               |            |            |               |       |         |        |       |       |           |
+|    EnumerableFirstOrDefaultConditionRewritten | Job-ZHTIBD |      .NET 4.8 |        net48 |    33.2970 ns |  0.2306 ns |  0.2157 ns |    33.2594 ns |  0.90 |    0.01 | 0.0076 |     - |     - |      32 B |
+|    EnumerableFirstOrDefaultConditionRewritten | Job-QQALDA | .NET Core 3.1 | netcoreapp31 |    36.8962 ns |  0.2279 ns |  0.1903 ns |    36.9220 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|                                               |            |               |              |               |            |            |               |       |         |        |       |       |           |
+|          EnumerableFirstOrDefaultNotCondition | Job-ZHTIBD |      .NET 4.8 |        net48 | 5,382.1177 ns | 31.9681 ns | 28.3389 ns | 5,371.3058 ns |  1.00 |    0.01 | 0.0076 |     - |     - |      32 B |
+|          EnumerableFirstOrDefaultNotCondition | Job-QQALDA | .NET Core 3.1 | netcoreapp31 | 5,393.8290 ns | 39.8299 ns | 37.2569 ns | 5,378.5633 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|                                               |            |               |              |               |            |            |               |       |         |        |       |       |           |
+| EnumerableFirstOrDefaultNotConditionRewritten | Job-ZHTIBD |      .NET 4.8 |        net48 | 4,106.5206 ns | 34.6377 ns | 30.7054 ns | 4,098.2582 ns |  0.94 |    0.01 | 0.0076 |     - |     - |      32 B |
+| EnumerableFirstOrDefaultNotConditionRewritten | Job-QQALDA | .NET Core 3.1 | netcoreapp31 | 4,363.4248 ns | 37.9961 ns | 35.5416 ns | 4,355.2238 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|                                               |            |               |              |               |            |            |               |       |         |        |       |       |           |
+|          EnumerableFirstOrDefaultAllCondition | Job-ZHTIBD |      .NET 4.8 |        net48 |    23.1058 ns |  0.0828 ns |  0.0734 ns |    23.0939 ns |  0.85 |    0.00 | 0.0076 |     - |     - |      32 B |
+|          EnumerableFirstOrDefaultAllCondition | Job-QQALDA | .NET Core 3.1 | netcoreapp31 |    27.2167 ns |  0.1070 ns |  0.0894 ns |    27.2311 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|                                               |            |               |              |               |            |            |               |       |         |        |       |       |           |
+| EnumerableFirstOrDefaultAllConditionRewritten | Job-ZHTIBD |      .NET 4.8 |        net48 |    21.3309 ns |  0.1867 ns |  0.1747 ns |    21.2741 ns |  0.90 |    0.01 | 0.0076 |     - |     - |      32 B |
+| EnumerableFirstOrDefaultAllConditionRewritten | Job-QQALDA | .NET Core 3.1 | netcoreapp31 |    23.7247 ns |  0.1839 ns |  0.1535 ns |    23.6953 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |

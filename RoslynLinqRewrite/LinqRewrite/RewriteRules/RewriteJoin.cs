@@ -15,6 +15,7 @@ namespace LinqRewrite.RewriteRules
             var innerValue = args[0];
             RewrittenValueBridge outerKeySelector = args[1];
             RewrittenValueBridge innerKeySelector = args[2];
+            if (p.CurrentIterator.IgnoreIterator) return;
             
             var resultSelectorValue = args[3];
             var comparerValue = args.Length == 5 ? args[4] : null;
@@ -33,7 +34,7 @@ namespace LinqRewrite.RewriteRules
             var rewritten = new RewrittenValueBridge(((LambdaExpressionSyntax) innerKeySelector.Old).ExpressionBody, groupingVariable);
 
             var iterator = p.GlobalVariable(innerKeySelector.ReturnType(p));
-            p.Iterators.Where(x => !x.Complete).ToArray().ForEach(x =>
+            p.IncompleteIterators.ToArray().ForEach(x =>
             {
                 var newIterator = new IteratorParameters(p, new CollectionValueBridge(p, groupingType, innerKeySelector.ReturnType(p), rewritten, true));
                 x.ForBody.Add(newIterator);
@@ -45,8 +46,8 @@ namespace LinqRewrite.RewriteRules
 
             p.CurrentIterator = p.Iterators.Last();
             p.LastValue = resultSelectorValue.Inline(p, itemValue, p.LastValue);
-            p.ListEnumeration = false;
             p.ModifiedEnumeration = true;
+            p.ListEnumeration = false;
             p.SourceSize = null;
         }
     }

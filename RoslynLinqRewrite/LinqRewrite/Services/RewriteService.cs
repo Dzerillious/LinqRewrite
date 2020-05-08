@@ -103,7 +103,6 @@ namespace LinqRewrite.Services
                 .WithBody(Block(body))
                 .WithStatic(_data.CurrentMethodIsStatic)
                 .WithTypeParameterList(_data.CurrentMethodTypeParameters)
-                .WithConstraintClauses(_data.CurrentMethodConstraintClauses)
-                .NormalizeWhitespace();
+                .WithConstraintClauses(_data.CurrentMethodConstraintClauses);
     }
 }

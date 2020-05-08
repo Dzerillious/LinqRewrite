@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Linq;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 
 namespace LinqRewrite.RewriteRules
@@ -29,6 +30,7 @@ namespace LinqRewrite.RewriteRules
             var collectionType = p.Data.GetTypeInfo(collectionValue).Type;
             p.AddIterator(new CollectionValueBridge(p, collectionType, collectionValue, true));
             RewriteCollectionEnumeration.RewriteOther(p, p.CurrentIterator.Collection, itemVariable, true);
+            p.ListEnumeration = p.IncompleteIterators.All(x => x.ListEnumeration);
 
             if (sourceSizeValue != null && p.SourceSize != null) p.SourceSize += sourceSizeValue;
             else p.SourceSize = null;

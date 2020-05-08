@@ -24,9 +24,13 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(MultipleSelectWhereToSimpleList), MultipleSelectWhereToSimpleList, MultipleSelectWhereToSimpleListRewritten);
             TestsExtensions.TestEquals(nameof(SelectWhereToArray), SelectWhereToArray, SelectWhereToArrayRewritten);
             TestsExtensions.TestEquals(nameof(MultipleSelectWhereToArray), MultipleSelectWhereToArray, MultipleSelectWhereToArrayRewritten);
-            
+
             for (int i = -2; i < 1002; i++)
+            {
                 TestsExtensions.TestEquals(nameof(ParametrizedWhere) + i, () => ParametrizedWhere(i), () => ParametrizedWhereRewritten(i));
+                TestsExtensions.TestEquals(nameof(ParametrizedWhereToArray) + i, () => ParametrizedWhereToArray(i), () => ParametrizedWhereToArrayRewritten(i));
+                TestsExtensions.TestEquals(nameof(ParametrizedWhereToSimpleList) + i, () => ParametrizedWhereToSimpleList(i), () => ParametrizedWhereToSimpleListRewritten(i));
+            }
             
             TestsExtensions.TestEquals(nameof(WhereChangingParam), WhereChangingParam, WhereChangingParamRewritten);
             TestsExtensions.TestEquals(nameof(WhereChangingParamToArray), WhereChangingParamToArray, WhereChangingParamToArrayRewritten);
@@ -186,6 +190,13 @@ namespace TestsLibrary.Tests
 
         [NoRewrite]
         public IEnumerable<int> ParametrizedWhereToSimpleList(int offset)
+        {
+            return ArrayItems.Where(x => x > offset)
+                .ToSimpleList();
+        } //EndMethod
+
+
+        public IEnumerable<int> ParametrizedWhereToSimpleListRewritten(int offset)
         {
             return ArrayItems.Where(x => x > offset)
                 .ToSimpleList();

@@ -1,18 +1,49 @@
-|                               Method |          Mean |       Error |      StdDev |        Median |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------------------------- |--------------:|------------:|------------:|--------------:|-------:|------:|------:|----------:|
-|                           ArrayCount |    33.0144 ns |   0.6708 ns |   0.6589 ns |    33.2190 ns |      - |     - |     - |         - |
-|                  ArrayCountRewritten |     0.0040 ns |   0.0059 ns |   0.0056 ns |     0.0014 ns |      - |     - |     - |         - |
-|                  ArrayCountCondition | 5,398.7331 ns |  99.0791 ns |  92.6786 ns | 5,436.6032 ns |      - |     - |     - |      20 B |
-|         ArrayCountConditionRewritten |   540.8117 ns |   6.6805 ns |   6.2489 ns |   543.3935 ns |      - |     - |     - |         - |
-|                     ArraySelectCount | 3,991.6409 ns |  71.5784 ns |  66.9544 ns | 3,950.4944 ns | 0.0076 |     - |     - |      36 B |
-|            ArraySelectCountRewritten |     0.0034 ns |   0.0055 ns |   0.0052 ns |     0.0000 ns |      - |     - |     - |         - |
-|                      ArrayWhereCount | 3,920.9424 ns |  69.5276 ns |  65.0362 ns | 3,952.0847 ns | 0.0076 |     - |     - |      32 B |
-|             ArrayWhereCountRewritten |   590.4720 ns |  11.3845 ns |  11.1811 ns |   590.7279 ns |      - |     - |     - |         - |
-|             ArrayWhereCountCondition | 6,379.6579 ns | 126.4031 ns | 145.5660 ns | 6,391.3761 ns | 0.0076 |     - |     - |      32 B |
-|    ArrayWhereCountConditionRewritten |   800.8579 ns |  11.3082 ns |  10.5777 ns |   807.3773 ns |      - |     - |     - |         - |
-|             EnumerableCountCondition | 5,340.9522 ns |  88.6681 ns |  78.6020 ns | 5,369.8528 ns |      - |     - |     - |      24 B |
-|    EnumerableCountConditionRewritten | 4,235.6914 ns |  83.1275 ns |  77.7575 ns | 4,224.0906 ns |      - |     - |     - |      24 B |
-|          EnumerableCountNotCondition | 5,813.6725 ns |  94.7817 ns |  88.6589 ns | 5,860.4736 ns |      - |     - |     - |      24 B |
-| EnumerableCountNotConditionRewritten | 4,967.3271 ns |  73.8149 ns |  69.0465 ns | 4,927.1103 ns |      - |     - |     - |      24 B |
-|          EnumerableCountAllCondition | 5,318.1973 ns |  81.9439 ns |  76.6504 ns | 5,337.9967 ns |      - |     - |     - |      24 B |
-| EnumerableCountAllConditionRewritten | 4,249.5113 ns |  76.8207 ns |  71.8582 ns | 4,265.5354 ns |      - |     - |     - |      24 B |
+|                               Method |        Job |       Runtime |    Toolchain |          Mean |       Error |      StdDev |        Median | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------------------------------- |----------- |-------------- |------------- |--------------:|------------:|------------:|--------------:|------:|--------:|-------:|------:|------:|----------:|
+|                           ArrayCount | Job-OETKIZ |      .NET 4.8 |        net48 |    24.5946 ns |   0.3273 ns |   0.3061 ns |    24.7181 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|                           ArrayCount | Job-OUOUZJ | .NET Core 3.1 | netcoreapp31 |    13.6242 ns |   0.2183 ns |   0.2042 ns |    13.7113 ns |  0.55 |    0.01 |      - |     - |     - |         - |
+|                                      |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|                  ArrayCountRewritten | Job-OETKIZ |      .NET 4.8 |        net48 |     0.0011 ns |   0.0034 ns |   0.0031 ns |     0.0000 ns |     ? |       ? |      - |     - |     - |         - |
+|                  ArrayCountRewritten | Job-OUOUZJ | .NET Core 3.1 | netcoreapp31 |     0.0144 ns |   0.0132 ns |   0.0123 ns |     0.0199 ns |     ? |       ? |      - |     - |     - |         - |
+|                                      |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|                  ArrayCountCondition | Job-OETKIZ |      .NET 4.8 |        net48 | 5,758.5999 ns |  88.7845 ns |  83.0491 ns | 5,724.8291 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|                  ArrayCountCondition | Job-OUOUZJ | .NET Core 3.1 | netcoreapp31 | 5,291.0517 ns |  85.4257 ns |  79.9073 ns | 5,340.9973 ns |  0.92 |    0.02 | 0.0076 |     - |     - |      32 B |
+|                                      |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|         ArrayCountConditionRewritten | Job-OETKIZ |      .NET 4.8 |        net48 |   537.2116 ns |   7.5837 ns |   7.0938 ns |   539.9809 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|         ArrayCountConditionRewritten | Job-OUOUZJ | .NET Core 3.1 | netcoreapp31 |   534.2435 ns |   8.9785 ns |   8.3985 ns |   538.7371 ns |  0.99 |    0.03 |      - |     - |     - |         - |
+|                                      |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|                     ArraySelectCount | Job-OETKIZ |      .NET 4.8 |        net48 | 4,391.3769 ns |  80.9159 ns |  75.6888 ns | 4,413.6600 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      56 B |
+|                     ArraySelectCount | Job-OUOUZJ | .NET Core 3.1 | netcoreapp31 | 1,647.3713 ns |  15.3129 ns |  14.3237 ns | 1,648.7886 ns |  0.38 |    0.01 | 0.0114 |     - |     - |      48 B |
+|                                      |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|            ArraySelectCountRewritten | Job-OETKIZ |      .NET 4.8 |        net48 |     0.0115 ns |   0.0087 ns |   0.0081 ns |     0.0136 ns |     ? |       ? |      - |     - |     - |         - |
+|            ArraySelectCountRewritten | Job-OUOUZJ | .NET Core 3.1 | netcoreapp31 |     0.0236 ns |   0.0136 ns |   0.0127 ns |     0.0275 ns |     ? |       ? |      - |     - |     - |         - |
+|                                      |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|                      ArrayWhereCount | Job-OETKIZ |      .NET 4.8 |        net48 | 4,374.7683 ns |  66.3849 ns |  62.0964 ns | 4,409.4833 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      48 B |
+|                      ArrayWhereCount | Job-OUOUZJ | .NET Core 3.1 | netcoreapp31 | 1,931.3013 ns |  24.1186 ns |  22.5606 ns | 1,937.8252 ns |  0.44 |    0.01 | 0.0114 |     - |     - |      48 B |
+|                                      |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|             ArrayWhereCountRewritten | Job-OETKIZ |      .NET 4.8 |        net48 |   596.4164 ns |  11.9260 ns |  12.2471 ns |   592.0647 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|             ArrayWhereCountRewritten | Job-OUOUZJ | .NET Core 3.1 | netcoreapp31 |   585.2154 ns |   8.0677 ns |   7.5466 ns |   589.2979 ns |  0.98 |    0.02 |      - |     - |     - |         - |
+|                                      |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|             ArrayWhereCountCondition | Job-OETKIZ |      .NET 4.8 |        net48 | 6,450.8773 ns | 121.4313 ns | 113.5869 ns | 6,533.0624 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      48 B |
+|             ArrayWhereCountCondition | Job-OUOUZJ | .NET Core 3.1 | netcoreapp31 | 6,930.4291 ns |  52.7132 ns |  49.3080 ns | 6,918.3552 ns |  1.07 |    0.02 | 0.0076 |     - |     - |      48 B |
+|                                      |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|    ArrayWhereCountConditionRewritten | Job-OETKIZ |      .NET 4.8 |        net48 |   627.5271 ns |  10.6666 ns |   9.9775 ns |   621.7983 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|    ArrayWhereCountConditionRewritten | Job-OUOUZJ | .NET Core 3.1 | netcoreapp31 |   564.1829 ns |  10.9178 ns |  11.2118 ns |   563.0772 ns |  0.90 |    0.02 |      - |     - |     - |         - |
+|                                      |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|             EnumerableCountCondition | Job-OETKIZ |      .NET 4.8 |        net48 | 5,814.0249 ns |  98.9708 ns |  92.5773 ns | 5,866.1575 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|             EnumerableCountCondition | Job-OUOUZJ | .NET Core 3.1 | netcoreapp31 | 6,361.9567 ns | 114.3668 ns | 106.9788 ns | 6,383.3847 ns |  1.09 |    0.03 | 0.0076 |     - |     - |      32 B |
+|                                      |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|    EnumerableCountConditionRewritten | Job-OETKIZ |      .NET 4.8 |        net48 | 5,098.0846 ns |  46.4724 ns |  41.1966 ns | 5,087.0682 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|    EnumerableCountConditionRewritten | Job-OUOUZJ | .NET Core 3.1 | netcoreapp31 | 4,251.8486 ns |  76.7125 ns |  71.7569 ns | 4,290.6178 ns |  0.84 |    0.02 | 0.0076 |     - |     - |      32 B |
+|                                      |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|          EnumerableCountNotCondition | Job-OETKIZ |      .NET 4.8 |        net48 | 6,342.5554 ns | 104.6756 ns |  97.9137 ns | 6,393.4391 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|          EnumerableCountNotCondition | Job-OUOUZJ | .NET Core 3.1 | netcoreapp31 | 6,334.9809 ns | 105.4293 ns |  98.6186 ns | 6,396.6202 ns |  1.00 |    0.01 | 0.0076 |     - |     - |      32 B |
+|                                      |            |               |              |               |             |             |               |       |         |        |       |       |           |
+| EnumerableCountNotConditionRewritten | Job-OETKIZ |      .NET 4.8 |        net48 | 4,977.3574 ns |  81.6973 ns |  76.4197 ns | 4,940.9111 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+| EnumerableCountNotConditionRewritten | Job-OUOUZJ | .NET Core 3.1 | netcoreapp31 | 4,751.4346 ns |  88.6073 ns |  82.8833 ns | 4,691.4204 ns |  0.95 |    0.02 | 0.0076 |     - |     - |      32 B |
+|                                      |            |               |              |               |             |             |               |       |         |        |       |       |           |
+|          EnumerableCountAllCondition | Job-OETKIZ |      .NET 4.8 |        net48 | 6,015.7187 ns | 116.0920 ns | 114.0179 ns | 5,956.1924 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+|          EnumerableCountAllCondition | Job-OUOUZJ | .NET Core 3.1 | netcoreapp31 | 6,175.8393 ns | 104.2507 ns |  97.5161 ns | 6,151.7380 ns |  1.03 |    0.02 | 0.0076 |     - |     - |      32 B |
+|                                      |            |               |              |               |             |             |               |       |         |        |       |       |           |
+| EnumerableCountAllConditionRewritten | Job-OETKIZ |      .NET 4.8 |        net48 | 5,005.8076 ns |  91.2823 ns |  85.3855 ns | 5,053.9028 ns |  1.00 |    0.00 | 0.0076 |     - |     - |      32 B |
+| EnumerableCountAllConditionRewritten | Job-OUOUZJ | .NET Core 3.1 | netcoreapp31 | 4,490.4182 ns |  84.4609 ns |  79.0048 ns | 4,542.1001 ns |  0.90 |    0.02 | 0.0076 |     - |     - |      32 B |

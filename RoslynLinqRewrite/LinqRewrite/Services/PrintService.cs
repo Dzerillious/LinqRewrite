@@ -12,7 +12,7 @@ namespace LinqRewrite.Services
         public int PrintHelp()
         {
             PrintLine($"roslyn-linq-rewrite {typeof(Program).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion}");
-            PrintLine($@"https://gitlab.nesad.fit.vutbr.cz/xseryd00/roslyn-linq-rewrite
+            PrintLine(@"https://gitlab.nesad.fit.vutbr.cz/xseryd00/roslyn-linq-rewrite
 
 Usage:
   roslyn-linq-rewrite <path-to-csproj>

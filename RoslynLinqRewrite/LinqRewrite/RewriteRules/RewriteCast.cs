@@ -19,7 +19,7 @@ namespace LinqRewrite.RewriteRules
             else if (p.Unchecked || SymbolExtensions.IsDescendantType(typeSymbol, p.LastValue.Type))
             {
                 p.LastValue = new TypedValueBridge(type, p.LastValue.Cast(type));
-                p.ListEnumeration = false;
+                if (!p.Unchecked) p.ListEnumeration = false;
             }
             else
             {

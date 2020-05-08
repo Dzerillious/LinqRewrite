@@ -68,11 +68,11 @@ namespace LinqRewrite.Extensions
         public static ArgumentSyntax OutArg(VariableBridge name)
             => SyntaxFactory.Argument(null, Token(SyntaxKind.OutKeyword), name);
 
-        public static InvocationExpressionSyntax Invoke(this string identifier)
+        public static ValueBridge Invoke(this string identifier)
             => InvocationExpression(IdentifierName(identifier));
-        public static InvocationExpressionSyntax Invoke(this VariableBridge source)
+        public static ValueBridge Invoke(this VariableBridge source)
             => InvocationExpression(source);
-        public static InvocationExpressionSyntax Invoke(this ExpressionSyntax source)
+        public static ValueBridge Invoke(this ExpressionSyntax source)
             => InvocationExpression(source);
 
         public static ValueBridge Invoke(this ExpressionSyntax invoked, params ArgumentBridge[] args)

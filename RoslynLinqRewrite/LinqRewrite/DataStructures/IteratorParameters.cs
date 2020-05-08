@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using LinqRewrite.Extensions;
 using LinqRewrite.Services;
@@ -56,12 +57,12 @@ namespace LinqRewrite.DataStructures
             if (ForFrom == null) PreFor.Insert(0, (StatementBridge)Enumerator.Assign(Collection.Access("GetEnumerator").Invoke()));
             else if (IsReversed)
             {
-                PreFor.Insert(0, (StatementBridge)ForIndexer.Assign(ForFrom.Simplify()));
+                PreFor.Add((StatementBridge)ForIndexer.Assign(ForFrom.Simplify()));
                 ForTo = ForTo.Simplify().ReusableForConst(_parameters, Int, this);
             }
             else
             {
-                PreFor.Insert(0, (StatementBridge)ForIndexer.Assign(ForFrom.Simplify()));
+                PreFor.Add((StatementBridge)ForIndexer.Assign(ForFrom.Simplify()));
                 ForTo = (ForTo + 1).Simplify().ReusableForConst(_parameters, Int, this);
             }
         }
@@ -69,10 +70,11 @@ namespace LinqRewrite.DataStructures
         public StatementSyntax[] GetStatementSyntax(RewriteParameters p)
         {
             CalculatePreAdd(p);
-            if (IgnoreIterator) return null;
+            if (IgnoreIterator) return Array.Empty<StatementSyntax>();
             var content = ForBody.SelectMany(x => 
                 x is IteratorParameters parameters
                     ? parameters.PreFor.Select(x => (StatementBridge)x).Concat(new[] {x})
+                        .Concat(parameters.PostFor.Select(x => (StatementBridge)x))
                     : new[] {x}).Concat(ForEnd).ToList();
             
             if (ForFrom == null) return RewriteService.GetForEachStatement(p, Enumerator, content);

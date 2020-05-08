@@ -36,7 +36,7 @@ namespace LinqRewrite.RewriteRules
                 _ => args[1]
             };
 
-            var resultValue = p.ListEnumeration
+            var resultValue = p.ListEnumeration 
                 ? ListAggregate(p, aggregationValue, args)
                 : EnumerableAggregate(p, aggregationValue, args);
             
@@ -51,7 +51,7 @@ namespace LinqRewrite.RewriteRules
         {
             var resultValue = args.Length switch
             {
-                1 => p.CurrentCollection[0],
+                1 => p.CurrentCollection[p.CurrentIterator.ForFrom],
                 _ => new TypedValueBridge(p, args[0])
             };
             if (args.Length == 1) p.CurrentIterator.ForFrom += p.CurrentIterator.ForInc;

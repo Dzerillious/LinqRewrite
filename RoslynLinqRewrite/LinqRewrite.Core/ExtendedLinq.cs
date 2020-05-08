@@ -36,7 +36,7 @@ namespace LinqRewrite.Core
                 EnlargingCoefficient.By2 => 1,
                 EnlargingCoefficient.By4 => 2,
                 EnlargingCoefficient.By8 => 3,
-                _ => 0
+                _ => 1
             };
             
             using var enumerator = collection.GetEnumerator();

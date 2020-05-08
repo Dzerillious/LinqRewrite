@@ -1,6 +1,6 @@
 using BenchmarkDotNet.Running;
 
-namespace BenchmarkLibrary
+namespace BenchmarksLibrary
 {
     internal class Program
     {

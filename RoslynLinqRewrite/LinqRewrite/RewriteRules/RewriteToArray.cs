@@ -29,7 +29,8 @@ namespace LinqRewrite.RewriteRules
                 "EnlargingCoefficient.By2" => 1,
                 "EnlargingCoefficient.By4" => 2,
                 "EnlargingCoefficient.By8" => 3,
-                _ => 2
+                _ when p.SourceSize != null => 2,
+                _ => 1
             };
 
             var (currentLength, currentResult) = GetResultVariable(p, p.LastValue.Type);
@@ -50,6 +51,8 @@ namespace LinqRewrite.RewriteRules
 
         private static VariableBridge KnownSize(RewriteParameters p, VariableBridge resultVariable)
         {
+            if (TryGetInt(p.ResultSize, out var resultInt) && resultInt < 0)
+                p.InitialErrorAdd(Return("System".Access("Array", $"Empty<{p.LastValue.Type}>").Invoke()));
             p.ForAdd(resultVariable[p.Indexer].Assign(p.LastValue));
             return resultVariable;
         }
@@ -121,25 +124,25 @@ namespace LinqRewrite.RewriteRules
                 if (x.Collection.CollectionType == CollectionType.Array)
                 {
                     var count = (x.IsReversed ? (x.ForFrom - x.ForTo + 1) : (x.ForTo - x.ForFrom + 1)).Simplify();
-                    x.PreFor.Add((StatementBridge)"System".Access("Array", "Copy")
+                    x.PostFor.Add((StatementBridge)"System".Access("Array", "Copy")
                         .Invoke(x.Collection, x.ForFrom, resultVariable, p.Indexer, count));
-                    x.PreFor.Add((StatementBridge)p.Indexer.AddAssign(count));
+                    x.PostFor.Add((StatementBridge)p.Indexer.AddAssign(count));
                     x.IgnoreIterator = true;
                 }
                 else if (x.Collection.CollectionType == CollectionType.SimpleList)
                 {
                     var count = (x.IsReversed ? (x.ForFrom - x.ForTo + 1) : (x.ForTo - x.ForFrom + 1)).Simplify();
-                    x.PreFor.Add((StatementBridge)"System".Access("Array", "Copy")
+                    x.PostFor.Add((StatementBridge)"System".Access("Array", "Copy")
                         .Invoke(x.Collection.Access("Items"), x.ForFrom, resultVariable, p.Indexer, count));
-                    x.PreFor.Add((StatementBridge)p.Indexer.AddAssign(count));
+                    x.PostFor.Add((StatementBridge)p.Indexer.AddAssign(count));
                     x.IgnoreIterator = true;
                 }
                 else if (p.CurrentCollection.CollectionType == CollectionType.List)
                 {
                     var count = (x.IsReversed ? (x.ForFrom - x.ForTo + 1) : (x.ForTo - x.ForFrom + 1)).Simplify();
-                    x.PreFor.Add((StatementBridge) p.CurrentCollection.Access("CopyTo")
+                    x.PostFor.Add((StatementBridge) p.CurrentCollection.Access("CopyTo")
                         .Invoke(x.ForFrom, resultVariable, p.Indexer, count));
-                    x.PreFor.Add((StatementBridge)p.Indexer.AddAssign(count));
+                    x.PostFor.Add((StatementBridge)p.Indexer.AddAssign(count));
                     x.IgnoreIterator = true;
                 }
             });

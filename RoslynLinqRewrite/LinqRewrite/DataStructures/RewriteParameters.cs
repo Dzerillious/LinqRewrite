@@ -48,11 +48,11 @@ namespace LinqRewrite.DataStructures
             set => _lastValue = value?.Value == null ? null : new TypedValueBridge(value.Type, value.Simplify());
         }
 
-        private readonly List<StatementSyntax> _initialStatements = new List<StatementSyntax>();
+        public readonly List<StatementSyntax> InitialStatements = new List<StatementSyntax>();
         private readonly List<StatementSyntax> _finalStatements = new List<StatementSyntax>();
         private readonly List<StatementSyntax> _resultStatements = new List<StatementSyntax>();
         public readonly List<IteratorParameters> ResultIterators = new List<IteratorParameters>();
-        public List<IteratorParameters> Iterators { get; } = new List<IteratorParameters>();
+        public IteratorCollection Iterators { get; } = new IteratorCollection();
         public IEnumerable<IteratorParameters> IncompleteIterators => Iterators.Where(x => !x.Complete);
         public IteratorParameters CurrentIterator { get; set; }
         public List<LocalVariable> Variables { get; } = new List<LocalVariable>();
@@ -123,7 +123,7 @@ namespace LinqRewrite.DataStructures
                     return CurrentIndexer = indexer;
                 }
 
-                var indexerVariable = GlobalVariable(Int, 0);
+                var indexerVariable = SuperGlobalVariable(Int, 0);
                 indexerVariable.IsGlobal = true;
                     
                 IncompleteIterators.ForEach(x => x.Indexer = indexerVariable);
@@ -176,7 +176,7 @@ namespace LinqRewrite.DataStructures
         
         public void SetData(ValueBridge collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node, bool reuse)
         {
-            _initialStatements.Clear();
+            InitialStatements.Clear();
             _finalStatements.Clear();
             _resultStatements.Clear();
             Iterators.Clear();
@@ -206,12 +206,12 @@ namespace LinqRewrite.DataStructures
 
         public void InitialAdd(StatementBridge _)
         {
-            _initialStatements.Add(_);
+            InitialStatements.Add(_);
         }
 
         public void PreUseAdd(StatementBridge _)
         {
-            if (ResultIterators.Count == 0) _initialStatements.Add(_);
+            if (ResultIterators.Count == 0) InitialStatements.Add(_);
             else if (ResultIterators.Any(x => !x.Complete)) ResultIterators.First(x => !x.Complete).PreFor.Add(_);
             else InitialAdd(_);
         }
@@ -221,6 +221,11 @@ namespace LinqRewrite.DataStructures
             if (CurrentIterator.PreFor == null)
                 InitialAdd(_);
             else CurrentIterator.PreFor.Add(_);
+        }
+
+        public void PostForAdd(StatementBridge _)
+        {
+            IncompleteIterators.ForEach(x => x.PostFor.Add(_));
         }
 
         public void ForAdd(StatementBridge _)
@@ -273,23 +278,23 @@ namespace LinqRewrite.DataStructures
 
         public IEnumerable<StatementSyntax> GetMethodBody()
         {
-            if (Iterators.Count == 0) return _initialStatements.Concat(_finalStatements).Concat(_resultStatements);
+            if (Iterators.Count == 0) return InitialStatements.Concat(_finalStatements).Concat(_resultStatements);
             var result = new List<StatementSyntax>();
             foreach (var iterator in ResultIterators)
             {
                 var statements = iterator.GetStatementSyntax(this);
                 result.AddRange(iterator.PreFor);
-                if (statements != null && statements.Length > 0) result.AddRange(statements);
+                if (statements.Length > 0) result.AddRange(statements);
                 result.AddRange(iterator.PostFor);
             }
 
             if (!Unchecked && WrapWithTry)
             {
-                result = _initialStatements.Concat(new []{TryF(Block(result), Block(_finalStatements))}).Concat(_resultStatements).ToList();
+                result = InitialStatements.Concat(new []{TryF(Block(result), Block(_finalStatements))}).Concat(_resultStatements).ToList();
             }
             else
             {
-                result.InsertRange(0, _initialStatements);
+                result.InsertRange(0, InitialStatements);
                 result.AddRange(_finalStatements);
                 result.AddRange(_resultStatements);
             }
@@ -300,7 +305,7 @@ namespace LinqRewrite.DataStructures
         
         public LocalVariable SuperGlobalVariable(TypeSyntax type, ValueBridge initial)
         {
-            var variable = "v" + _variableIndex++ % 1_000_000;
+            var variable = "v" + _variableIndex++ % 10_000;
             var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
             Variables.Add(created);
             
@@ -312,7 +317,7 @@ namespace LinqRewrite.DataStructures
         
         public LocalVariable GlobalVariable(TypeSyntax type)
         {
-            var variable = "v" + _variableIndex++ % 1_000_000;
+            var variable = "v" + _variableIndex++ % 10_000;
             var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
             Variables.Add(created);
             
@@ -323,7 +328,7 @@ namespace LinqRewrite.DataStructures
         
         public LocalVariable GlobalVariable(TypeSyntax type, ValueBridge initial, IteratorParameters iterator)
         {
-            var variable = "v" + _variableIndex++ % 1_000_000;
+            var variable = "v" + _variableIndex++ % 10_000;
             var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
             Variables.Add(created);
             
@@ -419,8 +424,20 @@ namespace LinqRewrite.DataStructures
 
         public void InitialError(string type, string message)
         {
-            _initialStatements.Clear();
-            _initialStatements.Add(Throw(type, message));
+            if (Error) return;
+            InitialStatements.Clear();
+            InitialStatements.Add(Throw(type, message));
+            _finalStatements.Clear();
+            _resultStatements.Clear();
+            ResultIterators.Clear();
+            Error = true;
+        }
+
+        public void InitialErrorAdd(StatementSyntax statement)
+        {
+            if (Error) return;
+            InitialStatements.Clear();
+            InitialStatements.Add(statement);
             _finalStatements.Clear();
             _resultStatements.Clear();
             ResultIterators.Clear();

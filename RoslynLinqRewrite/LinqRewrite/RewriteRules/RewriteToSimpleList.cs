@@ -29,7 +29,8 @@ namespace LinqRewrite.RewriteRules
                 "EnlargingCoefficient.By2" => 1,
                 "EnlargingCoefficient.By4" => 2,
                 "EnlargingCoefficient.By8" => 3,
-                _ => 2
+                _ when p.SourceSize != null => 2,
+                _ => 1
             };
             
             var (currentLength, currentResult) = RewriteToArray.GetResultVariable(p, p.LastValue.Type);

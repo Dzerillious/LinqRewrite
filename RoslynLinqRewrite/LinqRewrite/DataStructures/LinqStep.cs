@@ -4,7 +4,6 @@ namespace LinqRewrite.DataStructures
 {
     public class LinqStep
     {
-        public Lambda Lambda { get; set; }
         public string MethodName { get; }
         public RewrittenValueBridge[] Arguments { get; }
         public InvocationExpressionSyntax Invocation { get; }
