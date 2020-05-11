@@ -6,7 +6,9 @@ namespace LinqRewrite.Core.SimpleList
 {
     public partial class SimpleList<T>
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void Add(T item)
         {
             var count = Count + 1;
@@ -16,7 +18,9 @@ namespace LinqRewrite.Core.SimpleList
             Count = count;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void AddUnchecked(T item) => Items[Count++] = item;
 
         public void AddRange(T[] items)
@@ -36,7 +40,9 @@ namespace LinqRewrite.Core.SimpleList
             Count = count;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void AddRangeUnchecked(T[] items)
         {
             Array.Copy(items, 0, Items, Count, items.Length);
@@ -60,7 +66,9 @@ namespace LinqRewrite.Core.SimpleList
             Count = count;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void AddRangeUnchecked(SimpleList<T> simpleList)
         {
             Array.Copy(simpleList.Items, 0, Items, Count, simpleList.Count);
@@ -84,7 +92,9 @@ namespace LinqRewrite.Core.SimpleList
             Count = count;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void AddRangeUnchecked(IList<T> list)
             => CopyFrom(list, 0, Count, list.Count);
 
@@ -105,7 +115,9 @@ namespace LinqRewrite.Core.SimpleList
             Count = count;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void AddRangeUnchecked(ICollection<T> list)
             => CopyFrom(list, 0, Count, list.Count);
 

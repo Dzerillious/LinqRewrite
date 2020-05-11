@@ -12,7 +12,9 @@ namespace LinqRewrite.Core
     
     public static class ExtendedLinq
     {
+#if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public static IEnumerable<int> Range(int min, int size, int step)
             => Enumerable.Range(min, size).Select(x => x * step);
         
@@ -52,15 +54,21 @@ namespace LinqRewrite.Core
             return SimpleArrayExtensions.EnsureFullArray(result, current);
         }
 
+#if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public static IEnumerable<T> Unchecked<T>(this IEnumerable<T> collection)
             => collection;
 
+#if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public static IEnumerable<T> WithResultSize<T>(this IEnumerable<T> collection, int size)
             => collection;
 
+#if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public static IEnumerable<T> WithMaxSize<T>(this IEnumerable<T> collection, int size)
             => collection;
     }

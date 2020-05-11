@@ -6,13 +6,21 @@ namespace LinqRewrite.Core.SimpleList
 {
     public partial class SimpleList<T>
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public SimpleList()
         {
+#if (NET40 || NET45)
             Items = Empty;
+#else
+            Items = Array.Empty<T>();
+#endif
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public SimpleList(int capacity)
         {
             Items = new T[capacity];
@@ -85,7 +93,9 @@ namespace LinqRewrite.Core.SimpleList
             Count = count;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public static SimpleList<T> FromParams(params T[] array) =>
             new SimpleList<T>
             {

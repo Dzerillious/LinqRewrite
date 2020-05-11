@@ -5,14 +5,18 @@ namespace LinqRewrite.Core.SimpleList
 {
     public partial class SimpleList<T>
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void Take(T[] array)
         {
             Items = array;
             Count = array.Length;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void Take(SimpleList<T> simpleList)
         {
             Items = simpleList.Items;
@@ -54,7 +58,9 @@ namespace LinqRewrite.Core.SimpleList
             Count = count;
         }
         
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void Take(IEnumerable<T> enumerable)
         {
             Count = 0;

@@ -6,7 +6,9 @@ namespace LinqRewrite.Core.SimpleList
 {
     public partial class SimpleList<T>
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void CopyFrom(Array srcArray, int srcIndex, int dstIndex, int length)
         {
             Array.Copy(srcArray, srcIndex, Items, dstIndex, length);
@@ -14,7 +16,9 @@ namespace LinqRewrite.Core.SimpleList
             Count = Count >= count ? Count : count;
         }
         
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void CopyFrom(SimpleList<T> srcList, int srcIndex, int dstIndex, int length)
         {
             Array.Copy(srcList.Items, srcIndex, Items, dstIndex, length);
@@ -22,7 +26,9 @@ namespace LinqRewrite.Core.SimpleList
             Count = Count >= count ? Count : count;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void CopyFrom(IList<T> srcList, int dstIndex)
         {
             srcList.CopyTo(Items, dstIndex);
@@ -40,7 +46,9 @@ namespace LinqRewrite.Core.SimpleList
             Count = Count >= count ? Count : count;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void CopyFrom(ICollection<T> srcCollection, int dstIndex)
         {
             srcCollection.CopyTo(Items, dstIndex);
@@ -66,7 +74,9 @@ namespace LinqRewrite.Core.SimpleList
             Count = Count >= count ? Count : count;
         }
         
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void CopyFrom(IEnumerable<T> enumerable, int dstIndex = 0)
         {
             Count = dstIndex;
@@ -95,15 +105,21 @@ namespace LinqRewrite.Core.SimpleList
             enumerator.Dispose();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void CopyTo(Array array, int index)
             => Array.Copy(Items, 0, array, index, Count);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void CopyTo(T[] array, int index)
             => Array.Copy(Items, 0, array, index, Count);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void CopyTo(int srcIndex, Array dstArray, int dstIndex, int length)
             => Array.Copy(Items, srcIndex, dstArray, dstIndex, length);
     }

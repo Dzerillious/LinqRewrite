@@ -6,7 +6,9 @@ namespace LinqRewrite.Core.SimpleList
 {
     public static class ToSimpleListExtensions
     {
+#if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static SimpleList<T> TakeSimpleList<T>(this T[] array) 
             => new SimpleList<T>
             {
@@ -14,7 +16,9 @@ namespace LinqRewrite.Core.SimpleList
                 Count = array.Length
             };
 
+#if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static SimpleList<T> TakeSimpleList<T>(this T[] array, int count)
             => new SimpleList<T>
             {
@@ -22,7 +26,9 @@ namespace LinqRewrite.Core.SimpleList
                 Count = count
             };
         
+#if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static SimpleList<T> TakeSimpleList<T>(this SimpleList<T> list) 
             => new SimpleList<T>
             {
@@ -30,15 +36,21 @@ namespace LinqRewrite.Core.SimpleList
                 Count = list.Count
             };
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public static SimpleList<T> ToSimpleList<T>(this T[] array)
             => new SimpleList<T>(array);
         
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public static SimpleList<T> ToSimpleList<T>(this ICollection<T> list)
             => new SimpleList<T>(list);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public static SimpleList<T> ToSimpleList<T>(this IEnumerable<T> enumerable, EnlargingCoefficient coefficient = EnlargingCoefficient.By4)
         {
             var shift = coefficient switch
@@ -65,7 +77,9 @@ namespace LinqRewrite.Core.SimpleList
             return simpleList;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public static TSource[] ToArray<TSource>(this SimpleList<TSource> source)
         {
             var array = new TSource[source.Count];

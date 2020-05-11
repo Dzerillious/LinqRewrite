@@ -5,7 +5,9 @@ namespace LinqRewrite.Core
 {
     public static class EnlargeExtensions
     {
+#if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public static void InitializeLogEnlarge<T>(int pow, int length, out int log, out int currentLength, out T[] result)
         {
             log = IntExtensions.Log2((uint)length) - 3;
@@ -15,7 +17,9 @@ namespace LinqRewrite.Core
             result = new T[8];
         }
 
+#if !NET40
         [MethodImpl(MethodImplOptions.NoInlining)]
+#endif 
         public static void LogEnlargeArray<T>(int logConst, int length, ref T[] result, ref int log, out int currentLength)
         {
             log -= logConst;
@@ -26,7 +30,9 @@ namespace LinqRewrite.Core
             result = newArray;
         }
 
+#if !NET40
         [MethodImpl(MethodImplOptions.NoInlining)]
+#endif 
         public static void LogEnlargeReverseArray<T>(int logConst, int length, ref T[] result, ref int log, out int currentLength)
         {
             log -= logConst;
@@ -37,14 +43,18 @@ namespace LinqRewrite.Core
             result = newArray;
         }
 
+#if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public static void InitializeLogEnlarge<T>(out int currentLength, out T[] result)
         {
             currentLength = 8;
             result = new T[8];
         }
 
+#if !NET40
         [MethodImpl(MethodImplOptions.NoInlining)]
+#endif 
         public static void LogEnlargeArray<T>(int logConst, ref T[] result, ref int currentLength)
         {
             currentLength <<= logConst;
@@ -54,7 +64,9 @@ namespace LinqRewrite.Core
             result = newArray;
         }
 
+#if !NET40
         [MethodImpl(MethodImplOptions.NoInlining)]
+#endif 
         public static void LogEnlargeReverseArray<T>(int logConst, ref T[] result, ref int currentLength)
         {
             currentLength <<= logConst;

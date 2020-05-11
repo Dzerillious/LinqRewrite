@@ -5,7 +5,9 @@ namespace LinqRewrite.Core.SimpleList
 {
     public partial class SimpleList<T>
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void Reduce(int count) => Count = count;
 
         public void Enlarge(int desiredCount)
@@ -17,7 +19,9 @@ namespace LinqRewrite.Core.SimpleList
             Count = desiredCount;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void EnlargeCapacity(int desiredCapacity)
         {
             var items = new T[desiredCapacity];
@@ -54,10 +58,14 @@ namespace LinqRewrite.Core.SimpleList
             return true;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void RemoveLast() => Count--;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void RemoveAt(int index)
         {
             if (index == 0) Array.Copy(Items, 1, Items, 0, Count - 1);
@@ -65,7 +73,9 @@ namespace LinqRewrite.Core.SimpleList
             Count--;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void RemoveRange(int index, int count)
         {
             Array.Copy(Items, index, Items, index - count, Count - index - count);
@@ -94,7 +104,9 @@ namespace LinqRewrite.Core.SimpleList
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void MakeEmptyAt(int index)
         {
             Array.Copy(Items, index, Items, index - 1, Count - index - 1);
@@ -126,35 +138,49 @@ namespace LinqRewrite.Core.SimpleList
                 items[Count - i] = default;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void MakeDefault()
         {
             Items = new T[8];
             Count = 0;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void MakeEmpty()
         {
+#if (NET40 || NET45)
+            Items = Empty;
+#else
             Items = Array.Empty<T>();
+#endif
             Count = 0;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void MakeEmptyWithCount(int count)
         {
             Items = new T[count];
             Count = count;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void MakeEmptyWithCapacity(int capacity)
         {
             Items = new T[capacity];
             Count = 0;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public void Clear() => Count = 0;
     }
 }

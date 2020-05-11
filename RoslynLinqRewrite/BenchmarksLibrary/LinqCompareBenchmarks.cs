@@ -12,79 +12,56 @@ namespace BenchmarksLibrary
     [MemoryDiagnoser]
     public class LinqCompareBenchmarks
     {
-        [Params(-1, 0, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000)]
-        public int ToValue { get; set; } = 10;
-        
         public int[] ArraySource;
-        private Func<IEnumerable<bool>> _linqOptimizerQuery;
+        private Func<int> _linqOptimizerSumQuery;
 
         [GlobalSetup]
         public void GlobalSetup()
         {
-            ArraySource.Select(x => x + 3).ToArray().GetEnumerator();
             ArraySource = Enumerable.Range(0, 1000).ToArray();
-            _linqOptimizerQuery = ArraySource.Where(x => x <= ToValue).Select(x => x > 10).AsQueryExpr().Compile();
+            _linqOptimizerSumQuery = ArraySource.AsQueryExpr().Sum().Compile();
         }
 
         [NoRewrite, Benchmark]
-        public void SystemLinq()
+        public int SystemLinqSum()
         {
-            ArraySource = Enumerable.Range(0, 1000).ToArray();
-            ArraySource.Where(x => x <= ToValue).Select(x => x > 10).ToArray();
+            return ArraySource.Sum();
         }//EndMethod
 
         [Benchmark]
-        public void OptimizedLinqRewrite()
+        public int OptimizedLinqRewriteSum()
         {
-            ArraySource.Where(x => x <= ToValue).Select(x => x > 10).ToSimpleList();
+            return ArraySource.Sum();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void ShamanLinqRewrite()
+        public void LinqOptimizerWithoutOverheadSum()
         {
-            ShamanLinqRewrite_ProceduralLinq1(ArraySource);
+            _linqOptimizerSumQuery();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void LinqOptimizer()
+        public void LinqFasterChainedSum()
         {
-            ArraySource.Where(x => x <= ToValue).Select(x => x > 10).AsQueryExpr().Compile()();
+            ArraySource.SumF();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void LinqOptimizerWithoutOverhead()
+        public int SystemLinqFirst()
         {
-            _linqOptimizerQuery();
+            return ArraySource.First();
+        }//EndMethod
+
+        [Benchmark]
+        public int OptimizedLinqRewriteFirst()
+        {
+            return ArraySource.First();
         }//EndMethod
 
         [NoRewrite, Benchmark]
-        public void LinqFasterChained()
+        public void LinqFasterChainedFirst()
         {
-            ArraySource.WhereF(x => x <= ToValue).SelectF(x => x + 10);
+            ArraySource.FirstF();
         }//EndMethod
-
-        [NoRewrite, Benchmark]
-        public void LinqFasterOptimized()
-        {
-            ArraySource.WhereSelectF(x => x <= ToValue, x => x + 10);
-        }//EndMethod
-
-        [NoRewrite]
-        int[] ShamanLinqRewrite_ProceduralLinq1(int[] _linqitems)
-        {
-            if (_linqitems == null)
-                throw new System.ArgumentNullException();
-            var _list = new System.Collections.Generic.List<int>();
-            for (int _index = 0; _index < _linqitems.Length; _index++)
-            {
-                var _linqitem = _linqitems[_index];
-                if (_linqitem >= ToValue)
-                {
-                    var _linqitem1 = _linqitem + 10;
-                    _list.Add(_linqitem1);
-                }
-            }
-            return _list.ToArray();
-        }
     }
 }

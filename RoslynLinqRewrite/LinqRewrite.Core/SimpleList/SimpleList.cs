@@ -9,7 +9,9 @@ namespace LinqRewrite.Core.SimpleList
     [Serializable]
     public partial class SimpleList<T> : IList<T>, IEnumerable<T>
     {
+#if (NET40 || NET45)
         private static readonly T[] Empty = new T[0];
+#endif
         public T[] Items;
 
         public int Count { get; set; }
@@ -17,11 +19,18 @@ namespace LinqRewrite.Core.SimpleList
 
         public T this[int index]
         {
+#if !NET40
             [MethodImpl(MethodImplOptions.AggressiveInlining)] get => Items[index]; 
             [MethodImpl(MethodImplOptions.AggressiveInlining)] set => Items[index] = value;
+#else
+            get => Items[index]; 
+            set => Items[index] = value;
+#endif
         }
-
-        [MethodImpl(MethodImplOptions.NoInlining)] 
+        
+#if !NET40
+        [MethodImpl(MethodImplOptions.NoInlining)]
+#endif 
         public void IncreaseCapacity()
         {
             var newSize = Items.Length * 2;
@@ -67,14 +76,18 @@ namespace LinqRewrite.Core.SimpleList
             return -1;
         }
 
+#if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public SimpleList<T> WithCount(int count)
         {
             Count = count;
             return this;
         }
 
+#if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public static implicit operator SimpleList<T>(T[] array) 
           => new SimpleList<T> {Items = array, Count = array.Length};
 
@@ -117,8 +130,10 @@ namespace LinqRewrite.Core.SimpleList
               _index = -1;
               _endIndex = count - 1;
           }
-
-          [MethodImpl(MethodImplOptions.AggressiveInlining)]
+          
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
           public object Clone() => MemberwiseClone();
 
           public bool MoveNext()
@@ -130,11 +145,15 @@ namespace LinqRewrite.Core.SimpleList
 
           public object Current
           {
-              [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
               get => _current;
           }
 
-          [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
           public void Reset()
           {
               _index = -1;
@@ -143,11 +162,15 @@ namespace LinqRewrite.Core.SimpleList
 
           T IEnumerator<T>.Current
           {
-              [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
               get => _current;
           }
 
-          [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
           public void Dispose() => _array = null;
       }
     }

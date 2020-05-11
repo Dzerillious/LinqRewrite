@@ -9,7 +9,7 @@ namespace BenchmarkLibrary
     [MemoryDiagnoser]
     public class SkipWhileBenchmarks
     {
-        [Params(-1, 0, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000)]
+        [Params(0, 500, 800, 900, 950, 980, 990, 995, 998, 999, 1000)]
         public int Offset { get; set; } = 10;
         
         public static int[] StaticArraySource;

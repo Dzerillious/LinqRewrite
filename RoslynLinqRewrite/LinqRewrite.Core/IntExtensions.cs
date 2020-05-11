@@ -12,7 +12,9 @@ namespace LinqRewrite.Core
             [FieldOffset(0)] public float asFloat;
         }
 
+#if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public static int Log2(uint val)
         {
             ConverterStruct a;  a.asInt = 0; a.asFloat = val;
