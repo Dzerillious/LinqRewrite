@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
 using LinqRewrite.Core;
-using LinqRewrite.Core.SimpleList;
 using Nessos.LinqOptimizer.CSharp;
 
 namespace BenchmarksLibrary

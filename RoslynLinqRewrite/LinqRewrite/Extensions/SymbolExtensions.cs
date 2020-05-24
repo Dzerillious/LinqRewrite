@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Services;
 using Microsoft.CodeAnalysis;

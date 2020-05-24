@@ -14,17 +14,7 @@ namespace LinqRewrite.RewriteRules
             if (p.Iterators.Count > 1) p.ListEnumeration = false;
             
             var skippedValue = args[0];
-            if (TryGetInt(skippedValue, out var skippedInt))
-            {
-                if (skippedInt < 0) return;
-            }
-            else if (!p.Unchecked && p.ModifiedEnumeration)
-            {
-                var skippedVariable = p.GlobalVariable(Int, skippedValue);
-                p.InitialAdd(skippedVariable.Assign(ConditionalExpression(
-                    skippedValue < 0, skippedValue, IntValue(0))));
-                skippedValue = new RewrittenValueBridge(skippedVariable);
-            }
+            CheckBounds(p, ref skippedValue);
 
             if (!p.ModifiedEnumeration)
             {
@@ -45,6 +35,31 @@ namespace LinqRewrite.RewriteRules
                 p.ResultSize = 0;
             
             p.Indexer = null;
+        }
+
+        private static void CheckBounds(RewriteParameters p, ref RewrittenValueBridge skippedValue)
+        {
+            if (TryGetInt(skippedValue, out var skippedInt))
+            {
+                if (skippedInt < 0) return;
+                if (TryGetInt(p.ResultSize, out var resultSizeInt) && skippedInt > resultSizeInt)
+                    skippedValue = new RewrittenValueBridge(p.ResultSize);
+                else if (!p.Unchecked)
+                {
+                    var skippedVariable = p.GlobalVariable(Int);
+                    skippedVariable.Assign(ConditionalExpression(skippedValue > p.ResultSize, p.ResultSize,
+                        skippedValue));
+                    skippedValue = new RewrittenValueBridge(skippedVariable);
+                }
+            }
+            else if (!p.Unchecked && !p.ModifiedEnumeration)
+            {
+                var skippedVariable = p.GlobalVariable(Int);
+                p.InitialAdd(If(skippedValue < 0, skippedVariable.Assign(0),
+                    If (skippedValue > p.ResultSize, skippedVariable.Assign(p.ResultSize),
+                        skippedVariable.Assign(skippedValue))));
+                skippedValue = new RewrittenValueBridge(skippedVariable);
+            }
         }
     }
 }

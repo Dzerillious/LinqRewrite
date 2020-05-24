@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
 using LinqRewrite.Core;
-using LinqRewrite.Core.SimpleList;
 
 namespace BenchmarkLibrary
 {

@@ -7,10 +7,10 @@ using System.Runtime.CompilerServices;
 namespace LinqRewrite.Core.SimpleList
 {
     [Serializable]
-    public partial class SimpleList<T> : IList<T>, IEnumerable<T>
+    public partial class SimpleList<T> : IList<T>
     {
 #if (NET40 || NET45)
-        private static readonly T[] Empty = new T[0];
+        public static readonly T[] Empty = new T[0];
 #endif
         public T[] Items;
 
@@ -31,7 +31,7 @@ namespace LinqRewrite.Core.SimpleList
 #if !NET40
         [MethodImpl(MethodImplOptions.NoInlining)]
 #endif 
-        public void IncreaseCapacity()
+        private void IncreaseCapacity()
         {
             var newSize = Items.Length * 2;
             if (newSize < 8) newSize = 8;
@@ -47,13 +47,6 @@ namespace LinqRewrite.Core.SimpleList
             var item = Items[secondIndex];
             Items[secondIndex] = Items[firstIndex];
             Items[firstIndex] = item;
-        }
-        
-        public void MoveItem(int oldIndex, int newIndex)
-        {
-            var item = Items[oldIndex];
-            RemoveAt(oldIndex);
-            Insert(newIndex, item);
         }
         
         public bool Contains(T item)
@@ -74,15 +67,6 @@ namespace LinqRewrite.Core.SimpleList
                 if (array[i].Equals(item))
                     return i;
             return -1;
-        }
-
-#if !NET40
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif 
-        public SimpleList<T> WithCount(int count)
-        {
-            Count = count;
-            return this;
         }
 
 #if !NET40

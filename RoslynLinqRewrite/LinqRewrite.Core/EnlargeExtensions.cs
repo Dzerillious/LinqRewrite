@@ -8,6 +8,50 @@ namespace LinqRewrite.Core
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif 
+        public static void ArrayCopy<T>(T[] source, int sourceIndex, T[] result, int resultIndex, int count)
+        {
+            if (count >= 32)
+                Array.Copy(source, sourceIndex, result, resultIndex, count);
+            else for (int i = 0; i < count; i++)
+                result[i + resultIndex] = source[i + sourceIndex];
+        }
+        
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
+        public static void ArrayCopy<T>(T[] source, T[] result, int resultIndex, int count)
+        {
+            if (count >= 32)
+                Array.Copy(source, 0, result, resultIndex, count);
+            else for (int i = 0; i < count; i++)
+                result[i + resultIndex] = source[i];
+        }
+        
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
+        public static void ArrayCopy<T>(T[] source, int sourceIndex, T[] result, int count)
+        {
+            if (count >= 32)
+                Array.Copy(source, sourceIndex, result, 0, count);
+            else for (int i = 0; i < count; i++)
+                result[i] = source[i + sourceIndex];
+        }
+        
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
+        public static void ArrayCopy<T>(T[] source, T[] result, int count)
+        {
+            if (count >= 32)
+                Array.Copy(source, 0, result, 0, count);
+            else for (int i = 0; i < count; i++)
+                result[i] = source[i];
+        }
+        
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
         public static void InitializeLogEnlarge<T>(int pow, int length, out int log, out int currentLength, out T[] result)
         {
             log = IntExtensions.Log2((uint)length) - 3;
@@ -26,7 +70,7 @@ namespace LinqRewrite.Core
             currentLength = length >> log;
             
             var newArray = new T[currentLength];
-            Array.Copy(result, 0, newArray, 0, result.Length);
+            ArrayCopy(result, 0, newArray, 0, result.Length);
             result = newArray;
         }
 
@@ -39,7 +83,7 @@ namespace LinqRewrite.Core
             currentLength = length >> log;
             
             var newArray = new T[currentLength];
-            Array.Copy(result, 0, newArray, currentLength - result.Length, result.Length);
+            ArrayCopy(result, 0, newArray, currentLength - result.Length, result.Length);
             result = newArray;
         }
 
@@ -60,7 +104,7 @@ namespace LinqRewrite.Core
             currentLength <<= logConst;
             
             var newArray = new T[currentLength];
-            Array.Copy(result, 0, newArray, 0, result.Length);
+            ArrayCopy(result, 0, newArray, 0, result.Length);
             result = newArray;
         }
 
@@ -72,7 +116,7 @@ namespace LinqRewrite.Core
             currentLength <<= logConst;
             
             var newArray = new T[currentLength];
-            Array.Copy(result, 0, newArray, currentLength - result.Length, result.Length);
+            ArrayCopy(result, 0, newArray, currentLength - result.Length, result.Length);
             result = newArray;
         }
     }

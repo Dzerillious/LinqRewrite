@@ -13,62 +13,66 @@ namespace BenchmarkLibrary
         
         public static int[] StaticArraySource;
         public int[] ArraySource;
-        public IEnumerable<int> EnumerableSource;
+
+        public IEnumerable<int> EnumerableSource()
+        {
+            for (int i = 0; i < Offset; i++)
+                yield return i;
+        }
 
         [IterationSetup]
         public void IterationSetup()
         {
             StaticArraySource = Enumerable.Range(0, Offset).ToArray();
             ArraySource = Enumerable.Range(0, Offset).ToArray();
-            EnumerableSource = Enumerable.Range(0, Offset);
         }
 
-        [NoRewrite, Benchmark]
-        public void ArrayToArray()
-        {
-            ArraySource.ToArray();
-        }//EndMethod
-
-        [Benchmark]
-        public void ArrayToArrayRewritten()
-        {
-            ArraySource.ToArray(EnlargingCoefficient.By2);
-        }//EndMethod
-
-        [NoRewrite, Benchmark]
-        public void RangeToArray()
-        {
-            Enumerable.Range(0, Offset).ToArray();
-        }//EndMethod
-
-        [Benchmark]
-        public void RangeToArrayRewritten()
-        {
-            Enumerable.Range(0, Offset).ToArray(EnlargingCoefficient.By2);
-        }//EndMethod
+        // [NoRewrite, Benchmark]
+        // public void ArrayToArray()
+        // {
+        //     ArraySource.ToArray();
+        // }//EndMethod
+        //
+        // [Benchmark]
+        // public void ArrayToArrayRewritten()
+        // {
+        //     ArraySource.ToArray(EnlargingCoefficient.By2);
+        // }//EndMethod
+        //
+        // [NoRewrite, Benchmark]
+        // public void RangeToArray()
+        // {
+        //     Enumerable.Range(0, Offset).ToArray();
+        // }//EndMethod
+        //
+        // [Benchmark]
+        // public void RangeToArrayRewritten()
+        // {
+        //     Enumerable.Range(0, Offset).ToArray(EnlargingCoefficient.By2);
+        // }//EndMethod
 
         [NoRewrite, Benchmark]
         public void EnumerableToArray()
         {
-            EnumerableSource.ToArray();
+            EnumerableSource().ToArray();
         }//EndMethod
 
         [Benchmark]
         public void EnumerableToArrayBy2Rewritten()
         {
-            EnumerableSource.ToArray(EnlargingCoefficient.By2);
+            EnumerableSource().ToArray(EnlargingCoefficient.By2);
         }//EndMethod
 
         [Benchmark]
         public void EnumerableToArrayBy4Rewritten()
         {
-            EnumerableSource.ToArray(EnlargingCoefficient.By4);
+            EnumerableSource().ToArray(EnlargingCoefficient.By4);
         }//EndMethod
 
         [Benchmark]
         public void EnumerableToArrayBy8Rewritten()
         {
-            EnumerableSource.ToArray(EnlargingCoefficient.By8);
+            EnumerableSource().ToArray(EnlargingCoefficient.By8);
         }//EndMethod
     }
 }

@@ -11,11 +11,8 @@ namespace LinqRewrite.Core.SimpleList
 #endif 
         public void Add(T item)
         {
-            var count = Count + 1;
-            if (count >= Items.Length) IncreaseCapacity();
-            
-            Items[Count] = item;
-            Count = count;
+            if (Count >= Items.Length) IncreaseCapacity();
+            Items[Count++] = item;
         }
 
 #if !NET40
@@ -75,40 +72,17 @@ namespace LinqRewrite.Core.SimpleList
             Count += simpleList.Count;
         }
 
-        public void AddRange(IList<T> items)
-        {
-            var count = Count + items.Count;
-            if (count <= Items.Length)
-                CopyFrom(items, 0, count, items.Count);
-            else
-            {
-                var newItems = new T[count];
-
-                Array.Copy(Items, 0, newItems, 0, Count);
-                CopyFrom(items, 0, count, items.Count);
-
-                Items = newItems;
-            }
-            Count = count;
-        }
-
-#if !NET40
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif 
-        public void AddRangeUnchecked(IList<T> list)
-            => CopyFrom(list, 0, Count, list.Count);
-
         public void AddRange(ICollection<T> items)
         {
             var count = Count + items.Count;
             if (count <= Items.Length)
-                CopyFrom(items, 0, count, items.Count);
+                items.CopyTo(Items, Count);
             else
             {
                 var newItems = new T[count];
 
                 Array.Copy(Items, 0, newItems, 0, Count);
-                CopyFrom(items, 0, count, items.Count);
+                items.CopyTo(newItems, Count);
 
                 Items = newItems;
             }
@@ -119,34 +93,7 @@ namespace LinqRewrite.Core.SimpleList
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif 
         public void AddRangeUnchecked(ICollection<T> list)
-            => CopyFrom(list, 0, Count, list.Count);
-
-        public void AddRange(IEnumerable<T> enumerable, int addCount)
-        {
-            var count = Count + addCount;
-            if (count <= Items.Length)
-                CopyFrom(enumerable, count);
-            else
-            {
-                var newItems = new T[count];
-
-                Array.Copy(Items, 0, newItems, 0, Count);
-                CopyFrom(enumerable, count);
-
-                Items = newItems;
-            }
-            Count = count;
-        }
-
-        public void AddRangeUnchecked(IEnumerable<T> enumerable, int addCount)
-        {
-            var j = Count;
-            var items = Items;
-            
-            foreach (var item in enumerable)
-                items[j++] = item;
-            Count += addCount;
-        }
+            => list.CopyTo(Items, 0);
 
         public void AddRange(IEnumerable<T> enumerable)
         {

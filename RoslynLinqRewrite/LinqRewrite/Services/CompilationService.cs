@@ -8,7 +8,6 @@ using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.MSBuild;
-using Shaman.Runtime;
 
 namespace LinqRewrite.Services
 {
@@ -39,9 +38,9 @@ namespace LinqRewrite.Services
                 }
                 else CompileFile(args[0]);
             }
-            catch (ProcessException ex)
+            catch (Exception ex)
             {
-                return ex.ExitCode;
+                return ex.HResult;
             }
             return 0;
         }
@@ -63,9 +62,9 @@ namespace LinqRewrite.Services
                 }
                 else RewriteFile(args[0], dstDir);
             }
-            catch (ProcessException ex)
+            catch (Exception ex)
             {
-                return ex.ExitCode;
+                return ex.HResult;
             }
             return 0;
         }

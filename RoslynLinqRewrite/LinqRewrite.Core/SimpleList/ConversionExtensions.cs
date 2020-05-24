@@ -45,13 +45,19 @@ namespace LinqRewrite.Core.SimpleList
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif 
-        public static SimpleList<T> ToSimpleList<T>(this ICollection<T> list)
+        public static SimpleList<T> ToSimpleList<T>(this SimpleList<T> list)
+            => new SimpleList<T>(list);
+        
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif 
+        public static SimpleList<T> ToSimpleList<T>(this IList<T> list)
             => new SimpleList<T>(list);
 
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif 
-        public static SimpleList<T> ToSimpleList<T>(this IEnumerable<T> enumerable, EnlargingCoefficient coefficient = EnlargingCoefficient.By4)
+        public static SimpleList<T> ToSimpleList<T>(this IEnumerable<T> enumerable, EnlargingCoefficient coefficient = EnlargingCoefficient.By2)
         {
             var shift = coefficient switch
             {

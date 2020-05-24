@@ -17,18 +17,19 @@ namespace BenchmarkLibrary
             ArraySource = Enumerable.Range(0, 1000).ToArray();
             EnumerableSource = Enumerable.Range(0, 1000);
         }
-
-
+        
         [NoRewrite, Benchmark]
         public void SkipToArrayUnchecked()
         {
-            var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
+            var a = 5;
+            var res = ArraySource.Skip(a).ToArray();
         } //EndMethod
 
         [Benchmark]
         public void SkipToArrayUncheckedRewritten()
         {
-            var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
+            var a = 5;
+            var res = ArraySource.Skip(a).ToArray();
         } //EndMethod
 
 

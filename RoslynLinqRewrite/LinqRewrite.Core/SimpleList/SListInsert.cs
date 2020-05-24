@@ -126,8 +126,7 @@ namespace LinqRewrite.Core.SimpleList
             {
                 if (continueCount > 0)
                     Array.Copy(items, index, items, continueIndex, continueCount);
-                for (var i = 0; i < index; i++)
-                    items[i + index] = list[i];
+                list.CopyTo(items, index);
             }
             else
             {
@@ -136,8 +135,7 @@ namespace LinqRewrite.Core.SimpleList
                 Array.Copy(items, 0, newItems, 0, index);
                 if (continueCount > 0)
                     Array.Copy(items, index, newItems, continueIndex, continueCount);
-                for (var i = 0; i < index; i++)
-                    items[i + index] = list[i];
+                list.CopyTo(items, index);
 
                 Items = newItems;
             }
@@ -152,8 +150,7 @@ namespace LinqRewrite.Core.SimpleList
             
             if (continueCount > 0)
                 Array.Copy(items, index, items, continueIndex, continueCount);
-            for (var i = 0; i < index; i++)
-                items[i + index] = list[i];
+            list.CopyTo(items, index);
             Count += list.Count;
         }
 
@@ -203,6 +200,20 @@ namespace LinqRewrite.Core.SimpleList
             foreach (var value in enumerable)
                 items[j++] = value;
             Count += count;
+        }
+
+        public void InsertRange(int index, IEnumerable<T> enumerable)
+        {
+            if (index > Count) throw new IndexOutOfRangeException();
+            var inserted = enumerable.ToArray();
+            InsertRange(index, inserted);
+        }
+
+        public void InsertRangeUnchecked(int index, IEnumerable<T> enumerable)
+        {
+            if (index > Count) throw new IndexOutOfRangeException();
+            var inserted = enumerable.ToArray();
+            InsertRangeUnchecked(index, inserted);
         }
     }
 }

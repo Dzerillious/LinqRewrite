@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using LinqRewrite.DataStructures;
+﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
