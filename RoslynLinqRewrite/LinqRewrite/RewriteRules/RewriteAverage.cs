@@ -32,7 +32,7 @@ namespace LinqRewrite.RewriteRules
             
             var elementType = selectionValue.Type is NullableTypeSyntax nullable2
                 ? (TypeBridge)nullable2.ElementType : p.ReturnType;;
-            var sumVariable = p.GlobalVariable(elementType, 0);
+            var sumVariable = VariableCreator.GlobalVariable(p, elementType, 0);
 
             if (p.ReturnType.Type is NullableTypeSyntax) CalculateNullableAverage(p, elementType, selectionValue, sumVariable);
             else CalculateSimpleAverage(p, selectionValue, sumVariable);
@@ -53,7 +53,7 @@ namespace LinqRewrite.RewriteRules
 
         private static void CalculateSimpleAverage(RewriteParameters p, TypedValueBridge selectionValue, LocalVariable sumVariable)
         {
-            if (!p.AssertResultSizeGreaterEqual(1)) return;
+            if (!AssertionExtension.AssertResultSizeGreaterEqual(p, 1)) return;
             p.ForAdd(sumVariable.AddAssign(selectionValue));
             p.ResultAdd(Return(sumVariable / p.GetResultSize()));
         }

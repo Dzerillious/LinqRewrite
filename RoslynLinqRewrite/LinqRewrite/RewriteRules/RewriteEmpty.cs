@@ -3,6 +3,7 @@ using LinqRewrite.DataStructures;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using LinqRewrite.Core;
+using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
@@ -28,7 +29,7 @@ namespace LinqRewrite.RewriteRules
             p.CurrentIterator.IgnoreIterator = true;
             p.CurrentIterator.ForFrom = 0;
             p.CurrentIterator.ForTo = 0;
-            p.CurrentIterator.ForIndexer = p.LocalVariable(Int, 0);
+            p.CurrentIterator.ForIndexer = VariableCreator.LocalVariable(p, Int, 0);
             
             p.ResultSize = 0;
             p.SourceSize = 0;

@@ -11,19 +11,19 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
             var collectionValue = args[0];
-            if (!p.AssertNotNull(collectionValue)) return;
+            if (!AssertionExtension.AssertNotNull(p, collectionValue)) return;
             if (ExpressionSimplifier.TryGetInt(p.ResultSize, out var resultSizeInt))
             {
                 if (resultSizeInt == 0)
                 {
-                    p.InitialErrorAdd(Return((collectionValue.Access("Count").Invoke()).IsEqual(0)));
+                    AssertionExtension.InitialErrorAdd(p, Return((collectionValue.Access("Count").Invoke()).IsEqual(0)));
                     return;
                 }
             }
 
             p.WrapWithTry = true;
             var itemType = collectionValue.ItemType(p);
-            var enumeratorVariable = p.GlobalVariable(ParseTypeName($"System.Collections.Generic.IEnumerator<{itemType}>"));
+            var enumeratorVariable = VariableCreator.GlobalVariable(p, ParseTypeName($"System.Collections.Generic.IEnumerator<{itemType}>"));
             p.InitialAdd(enumeratorVariable.Assign(Parenthesize(collectionValue.Cast(ParseTypeName($"IEnumerable<{itemType}>")))
                 .Access("GetEnumerator").Invoke()));
 

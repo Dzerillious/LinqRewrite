@@ -17,7 +17,7 @@
     <OutputType>Exe</OutputType>
     <Title>LinqRewrite</Title>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

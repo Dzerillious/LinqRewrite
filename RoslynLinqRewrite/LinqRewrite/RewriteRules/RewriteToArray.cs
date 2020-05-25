@@ -52,19 +52,19 @@ namespace LinqRewrite.RewriteRules
         private static VariableBridge KnownSize(RewriteParameters p, VariableBridge resultVariable)
         {
             if (TryGetInt(p.ResultSize, out var resultInt) && resultInt < 0)
-                p.InitialErrorAdd(Return("System".Access("Array", $"Empty<{p.LastValue.Type}>").Invoke()));
+                AssertionExtension.InitialErrorAdd(p, Return("System".Access("Array", $"Empty<{p.LastValue.Type}>").Invoke()));
             p.ForAdd(resultVariable[p.Indexer].Assign(p.LastValue));
             return resultVariable;
         }
 
         private static VariableBridge KnownSourceSize(RewriteParameters p, ValueBridge currentLength, VariableBridge resultVariable, int enlarging)
         {
-            var logVariable = p.GlobalVariable(Int, 
+            var logVariable = VariableCreator.GlobalVariable(p, Int, 
                 "LinqRewrite".Access("Core", "IntExtensions", "Log2")
                     .Invoke(Parenthesize(p.SourceSize).Cast(SyntaxKind.UIntKeyword)) - 3);
                 
             if (enlarging != 1) p.PreUseAdd(logVariable.SubAssign(logVariable % enlarging));
-            var currentLengthVariable = p.GlobalVariable(Int, currentLength);
+            var currentLengthVariable = VariableCreator.GlobalVariable(p, Int, currentLength);
 
             p.ForAdd(If(p.Indexer >= currentLengthVariable,
                         "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeArray")
@@ -80,7 +80,7 @@ namespace LinqRewrite.RewriteRules
 
         private static VariableBridge UnknownSourceSize(RewriteParameters p, ValueBridge currentLength, VariableBridge resultVariable, int enlarging)
         {
-            var currentLengthVariable = p.GlobalVariable(Int, currentLength);
+            var currentLengthVariable = VariableCreator.GlobalVariable(p, Int, currentLength);
             p.ForAdd(If(p.Indexer >= currentLengthVariable,
                             "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeArray")
                                     .Invoke(enlarging, RefArg(resultVariable), RefArg(currentLengthVariable))));
@@ -92,13 +92,14 @@ namespace LinqRewrite.RewriteRules
         public static (ValueBridge currentLength, VariableBridge result) GetResultVariable(RewriteParameters p, TypeSyntax itemType)
         {
             var arrayType = itemType.ArrayType();
-            if (p.ResultSize != null) return (p.ResultSize, p.GlobalVariable(arrayType, CreateArray(arrayType, p.ResultSize)));
+            if (p.ResultSize != null) return (p.ResultSize, VariableCreator.GlobalVariable(p, arrayType, CreateArray(arrayType, p.ResultSize)));
             
             var currentResult = p.IncompleteIterators.TakeWhile(x =>
             {
                 if (!TryGetInt(x.ForInc, out var inc)) return false;
-                return x.Collection != null && !x.IsReversed && x.ListEnumeration && x.ForFrom != null
-                       && x.ForTo != null && inc == 1;
+                return x.Collection != null && !x.IsReversed 
+                                            && x.ListEnumeration && x.ForFrom != null
+                                            && x.ForTo != null && inc == 1;
             }).Aggregate((ValueBridge)0, 
                 (x, y) => x + (y.IsReversed ? (y.ForFrom - y.ForTo + 1) : (y.ForTo - y.ForFrom + 1)), 
                 x => x.Simplify());
@@ -106,7 +107,7 @@ namespace LinqRewrite.RewriteRules
             if (TryGetInt(currentResult, out var currentResultInt) && currentResultInt <= 8)
                 currentResult = 8;
             
-            return (currentResult, p.GlobalVariable(arrayType, CreateArray(arrayType, currentResult)));
+            return (currentResult, VariableCreator.GlobalVariable(p, arrayType, CreateArray(arrayType, currentResult)));
         }
 
         public static void SimplifyPart(RewriteParameters p, VariableBridge resultVariable)
@@ -124,7 +125,7 @@ namespace LinqRewrite.RewriteRules
                 if (x.Collection.CollectionType == CollectionType.Array)
                 {
                     var count = (x.IsReversed ? (x.ForFrom - x.ForTo + 1) : (x.ForTo - x.ForFrom + 1)).Simplify();
-                    x.PostFor.Add((StatementBridge)"System".Access("Array", "Copy")
+                    x.PostFor.Add((StatementBridge)"LinqRewrite".Access("Core", "EnlargeExtensions", "ArrayCopy")
                         .Invoke(x.Collection, x.ForFrom, resultVariable, p.Indexer, count));
                     x.PostFor.Add((StatementBridge)p.Indexer.AddAssign(count));
                     x.IgnoreIterator = true;
@@ -132,7 +133,7 @@ namespace LinqRewrite.RewriteRules
                 else if (x.Collection.CollectionType == CollectionType.SimpleList)
                 {
                     var count = (x.IsReversed ? (x.ForFrom - x.ForTo + 1) : (x.ForTo - x.ForFrom + 1)).Simplify();
-                    x.PostFor.Add((StatementBridge)"System".Access("Array", "Copy")
+                    x.PostFor.Add((StatementBridge)"LinqRewrite".Access("Core", "EnlargeExtensions", "ArrayCopy")
                         .Invoke(x.Collection.Access("Items"), x.ForFrom, resultVariable, p.Indexer, count));
                     x.PostFor.Add((StatementBridge)p.Indexer.AddAssign(count));
                     x.IgnoreIterator = true;

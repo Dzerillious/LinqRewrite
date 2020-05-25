@@ -13,12 +13,12 @@ namespace LinqRewrite.RewriteRules
             p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
             var itemValue = args[0];
             var countValue = args[1];
-            if (!p.AssertGreaterEqual(countValue, 0)) return;
+            if (!AssertionExtension.AssertGreaterEqual(p, countValue, 0)) return;
             
             p.AddIterator();
             p.CurrentIterator.ForFrom = 0;
             p.CurrentIterator.ForTo = countValue - 1;
-            p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
+            p.CurrentIterator.ForIndexer = VariableCreator.LocalVariable(p, Int);
             
             p.ResultSize = countValue;
             p.SourceSize = countValue;

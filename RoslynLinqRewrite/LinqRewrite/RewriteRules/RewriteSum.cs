@@ -25,7 +25,7 @@ namespace LinqRewrite.RewriteRules
         {
             var elementType = p.ReturnType.Type is NullableTypeSyntax nullable
                 ? (TypeBridge)nullable.ElementType : p.ReturnType;
-            var sumVariable = p.GlobalVariable(elementType, 0);
+            var sumVariable = VariableCreator.GlobalVariable(p, elementType, 0);
             
             var value = args.Length switch
             {

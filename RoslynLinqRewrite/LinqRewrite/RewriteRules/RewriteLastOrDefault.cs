@@ -19,7 +19,7 @@ namespace LinqRewrite.RewriteRules
 
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
+            var foundVariable = VariableCreator.GlobalVariable(p, NullableType(p.ReturnType), null);
             
             if (args.Length == 0)
                 p.ForAdd(foundVariable.Assign(p.LastValue));

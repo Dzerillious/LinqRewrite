@@ -28,13 +28,38 @@ namespace LinqRewrite
             parameters.HasResultMethod = MethodsWithResult.Contains(names.Last());
             RewriteComposite(parameters, names);
                     
-            var body = parameters.Error ? new []{parameters.InitialStatements[0]} : parameters.GetMethodBody();
+            var body = parameters.Error ? new []{parameters.InitialStatements[0]} : GetMethodBody(parameters);
             if (parameters.NotRewrite) throw new NotSupportedException("Not good for rewrite");
 
             if (parameters.Data.CurrentMethodIsConditional && parameters.ReturnType.Type.ToString() != "void")
                 return ConditionalExpression(parameters.CurrentCollection.IsEqual(null),
                 Default(parameters.ReturnType), parameters.Rewrite.GetMethodInvocationExpression(parameters, body));
             else return parameters.Rewrite.GetMethodInvocationExpression(parameters, body);
+        }
+
+        public static IEnumerable<StatementSyntax> GetMethodBody(RewriteParameters p)
+        {
+            if (p.Iterators.Count == 0) return p.InitialStatements.Concat(p.FinalStatements).Concat(p.ResultStatements);
+            var result = new List<StatementSyntax>();
+            foreach (var iterator in p.ResultIterators)
+            {
+                StatementSyntax[] statements = iterator.GetStatementSyntax(p);
+                result.AddRange(iterator.PreFor);
+                if (statements.Length > 0) result.AddRange(statements);
+                result.AddRange(iterator.PostFor);
+            }
+
+            if (!p.Unchecked && p.WrapWithTry)
+            {
+                result = p.InitialStatements.Concat(new []{TryF(Block(result), Block(p.FinalStatements))}).Concat(p.ResultStatements).ToList();
+            }
+            else
+            {
+                result.InsertRange(0, p.InitialStatements);
+                result.AddRange(p.FinalStatements);
+                result.AddRange(p.ResultStatements);
+            }
+            return result;
         }
 
         private static void RewriteComposite(RewriteParameters parameters, string[] names)
@@ -117,8 +142,8 @@ namespace LinqRewrite
                 case "ToSimpleList": return RewriteToSimpleList.SimpleRewrite(parameters, args);
                 
                 case "Unchecked": RewriteUnchecked.Rewrite(parameters, args); return null;
-                case "WithResultSize": RewriteResultSize.Rewrite(parameters, args); return null;
-                case "WithMaxSize": RewriteSourceSize.Rewrite(parameters, args); return null;
+                case "WithResultSize": parameters.ResultSize = args[0]; return null;
+                case "WithMaxSize": parameters.SourceSize = args[0]; return null;
                 default: return null;
             }
         }
@@ -187,8 +212,8 @@ namespace LinqRewrite
                 case "ToLookup": RewriteToLookup.Rewrite(parameters, args); return;
                 
                 case "Unchecked": RewriteUnchecked.Rewrite(parameters, args); return;
-                case "WithResultSize": RewriteResultSize.Rewrite(parameters, args); return;
-                case "WithMaxSize": RewriteSourceSize.Rewrite(parameters, args); return;
+                case "WithResultSize": parameters.ResultSize = args[0]; return;
+                case "WithMaxSize": parameters.SourceSize = args[0]; return;
                 default: throw new NotImplementedException($"Rewrite of {last} not implemented");
             }
         }

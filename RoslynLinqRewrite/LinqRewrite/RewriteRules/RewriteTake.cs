@@ -14,7 +14,7 @@ namespace LinqRewrite.RewriteRules
             
             var takeValue = args[0];
             CheckBounds(p, ref takeValue);
-            var takeIndexer = p.GlobalVariable(Int, 0);
+            var takeIndexer = VariableCreator.GlobalVariable(p, Int, 0);
 
             if (!p.ModifiedEnumeration)
             {
@@ -39,7 +39,7 @@ namespace LinqRewrite.RewriteRules
                 if (!resultIntPass)
                 {
                     if (p.ResultSize == null) return;
-                    var takeVariable = p.GlobalVariable(Int);
+                    var takeVariable = VariableCreator.GlobalVariable(p, Int);
                     p.PreUseAdd(If(takeValue > p.ResultSize, 
                                      takeVariable.Assign(p.ResultSize),
                                     takeVariable.Assign(takeValue)));
@@ -49,7 +49,7 @@ namespace LinqRewrite.RewriteRules
             }
             else if (p.ResultSize != null)
             {
-                var takeVariable = p.GlobalVariable(Int);
+                var takeVariable = VariableCreator.GlobalVariable(p, Int);
                 p.PreUseAdd(If(takeValue < 0, takeVariable.Assign(IntValue(0)),
                                     If(takeValue > p.ResultSize, takeVariable.Assign(p.ResultSize),
                                         takeVariable.Assign(takeValue))));
@@ -57,7 +57,7 @@ namespace LinqRewrite.RewriteRules
             }
             else
             {
-                var takeVariable = p.GlobalVariable(Int);
+                var takeVariable = VariableCreator.GlobalVariable(p, Int);
                 p.PreUseAdd(If(takeValue < 0, takeVariable.Assign(IntValue(0)),
                                 takeVariable.Assign(takeValue)));
                 takeValue = new RewrittenValueBridge(takeVariable);

@@ -11,7 +11,7 @@ namespace LinqRewrite.RewriteRules
             var sourceSizeValue = p.SourceSize;
             var resultSizeValue = p.ResultSize;
             var collectionValue = args[0];
-            if (!p.AssertNotNull(collectionValue)) return;
+            if (!AssertionExtension.AssertNotNull(p, collectionValue)) return;
 
             LocalVariable itemVariable;
             var lastVariable = p.TryGetVariable(p.LastValue);
@@ -21,7 +21,7 @@ namespace LinqRewrite.RewriteRules
             }
             else
             {
-                itemVariable = p.GlobalVariable(p.LastValue.Type);
+                itemVariable = VariableCreator.GlobalVariable(p, p.LastValue.Type);
                 p.ForAdd(itemVariable.Assign(p.LastValue));
                 p.LastValue = new TypedValueBridge(p.LastValue.Type, itemVariable);
             }

@@ -35,16 +35,16 @@ namespace LinqRewrite.RewriteRules
         private static void KnownSourceSize(RewriteParameters p)
         {
             p.Indexer = null;
-            var reverseIndexerVariable = p.GlobalVariable(Int, 8);
-            var logVariable = p.GlobalVariable(Int,
+            var reverseIndexerVariable = VariableCreator.GlobalVariable(p, Int, 8);
+            var logVariable = VariableCreator.GlobalVariable(p, Int,
                 "LinqRewrite".Access("Core", "IntExtensions", "Log2")
                     .Invoke(p.SourceSize.Cast(SyntaxKind.UIntKeyword)) - 3);
                 
             p.PreUseAdd(logVariable.SubAssign(logVariable % 2));
-            var currentLengthVariable = p.GlobalVariable(Int, 8);
-            var resultVariable = p.GlobalVariable(p.LastValue.ArrayType(), CreateArray(p.LastValue.ArrayType(), 8));
+            var currentLengthVariable = VariableCreator.GlobalVariable(p, Int, 8);
+            var resultVariable = VariableCreator.GlobalVariable(p, p.LastValue.ArrayType(), CreateArray(p.LastValue.ArrayType(), 8));
 
-            var tmpSize = p.GlobalVariable(Int);
+            var tmpSize = VariableCreator.GlobalVariable(p, Int);
             p.ForAdd(reverseIndexerVariable.PreDecrement());
             p.ForAdd(If(reverseIndexerVariable < 0,
                 Block(
@@ -74,11 +74,11 @@ namespace LinqRewrite.RewriteRules
         private static void UnknownSourceSize(RewriteParameters p)
         {
             p.Indexer = null;
-            var reverseIndexerVariable = p.GlobalVariable(Int, 8);
-            var currentLengthVariable = p.GlobalVariable(Int, 8);
-            var resultVariable = p.GlobalVariable(p.LastValue.ArrayType(), CreateArray(p.LastValue.ArrayType(), 8));
+            var reverseIndexerVariable = VariableCreator.GlobalVariable(p, Int, 8);
+            var currentLengthVariable = VariableCreator.GlobalVariable(p, Int, 8);
+            var resultVariable = VariableCreator.GlobalVariable(p, p.LastValue.ArrayType(), CreateArray(p.LastValue.ArrayType(), 8));
 
-            var tmpSize = p.GlobalVariable(Int);
+            var tmpSize = VariableCreator.GlobalVariable(p, Int);
             p.ForAdd(reverseIndexerVariable.PreDecrement());
             p.ForAdd(If(reverseIndexerVariable < 0,
                         Block(

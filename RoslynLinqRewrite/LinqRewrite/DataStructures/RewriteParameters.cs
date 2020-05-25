@@ -1,21 +1,23 @@
 ﻿using System;
-using LinqRewrite.Core;
 using System.Collections.Generic;
 using System.Linq;
+using LinqRewrite.Core;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using LinqRewrite.Services;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax; 
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
 
-namespace LinqRewrite.DataStructures
+namespace LinqRewrite
 {
     public class RewriteParameters : IDisposable
     {
         public RewriteService Rewrite { get; }
         public CodeCreationService Code { get; }
         public RewriteDataService Data { get; }
+        public SemanticModel Semantic => Data.Semantic;
 
 
         public InvocationExpressionSyntax Node { get; private set; }
@@ -49,8 +51,8 @@ namespace LinqRewrite.DataStructures
         }
 
         public readonly List<StatementSyntax> InitialStatements = new List<StatementSyntax>();
-        private readonly List<StatementSyntax> _finalStatements = new List<StatementSyntax>();
-        private readonly List<StatementSyntax> _resultStatements = new List<StatementSyntax>();
+        public readonly List<StatementSyntax> FinalStatements = new List<StatementSyntax>();
+        public readonly List<StatementSyntax> ResultStatements = new List<StatementSyntax>();
         public readonly List<IteratorParameters> ResultIterators = new List<IteratorParameters>();
         public IteratorCollection Iterators { get; } = new IteratorCollection();
         public IEnumerable<IteratorParameters> IncompleteIterators => Iterators.Where(x => !x.Complete);
@@ -123,7 +125,7 @@ namespace LinqRewrite.DataStructures
                     return CurrentIndexer = indexer;
                 }
 
-                var indexerVariable = SuperGlobalVariable(Int, 0);
+                var indexerVariable = VariableCreator.SuperGlobalVariable(this, Int, 0);
                 indexerVariable.IsGlobal = true;
                     
                 IncompleteIterators.ForEach(x => x.Indexer = indexerVariable);
@@ -156,7 +158,7 @@ namespace LinqRewrite.DataStructures
                 return CurrentIndexer = indexer;
             }
 
-            var indexerVariable = GlobalVariable(type, 0);
+            var indexerVariable = VariableCreator.GlobalVariable(this, type, 0);
             indexerVariable.IsGlobal = true;
                     
             IncompleteIterators.ForEach(x => x.Indexer = indexerVariable);
@@ -164,8 +166,6 @@ namespace LinqRewrite.DataStructures
 
             return CurrentIndexer = indexerVariable;
         }
-        
-        public SemanticModel Semantic => Data.Semantic;
         
         public RewriteParameters()
         {
@@ -177,8 +177,8 @@ namespace LinqRewrite.DataStructures
         public void SetData(ValueBridge collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node, bool reuse)
         {
             InitialStatements.Clear();
-            _finalStatements.Clear();
-            _resultStatements.Clear();
+            FinalStatements.Clear();
+            ResultStatements.Clear();
             Iterators.Clear();
             Variables.Clear();
             ResultIterators.Clear();
@@ -208,26 +208,22 @@ namespace LinqRewrite.DataStructures
         {
             InitialStatements.Add(_);
         }
-
         public void PreUseAdd(StatementBridge _)
         {
             if (ResultIterators.Count == 0) InitialStatements.Add(_);
             else if (ResultIterators.Any(x => !x.Complete)) ResultIterators.First(x => !x.Complete).PreFor.Add(_);
             else InitialAdd(_);
         }
-
         public void PreForAdd(StatementBridge _)
         {
             if (CurrentIterator.PreFor == null)
                 InitialAdd(_);
             else CurrentIterator.PreFor.Add(_);
         }
-
         public void PostForAdd(StatementBridge _)
         {
             IncompleteIterators.ForEach(x => x.PostFor.Add(_));
         }
-
         public void ForAdd(StatementBridge _)
         {
             IncompleteIterators.ForEach(x => x.ForBody.Add(_));
@@ -237,19 +233,10 @@ namespace LinqRewrite.DataStructures
             IncompleteIterators.ForEach(x => x.ForEnd.Add(_));
         }
         public void CurrentForAdd(StatementBridge _) => CurrentIterator.BodyAdd(_);
-        public void FinalAdd(StatementBridge _) => _finalStatements.Add(_);
-        public void ResultAdd(StatementBridge _) => _resultStatements.Add(_);
+        public void FinalAdd(StatementBridge _) => FinalStatements.Add(_);
+        public void ResultAdd(StatementBridge _) => ResultStatements.Add(_);
         
-        public IteratorParameters AddIterator()
-        {
-            var oldBody = CurrentIterator;
-            CurrentIterator = new IteratorParameters(this);
-            Iterators.Add(CurrentIterator);
-            ResultIterators.Add(CurrentIterator);
-            return oldBody;
-        }
-        
-        public IteratorParameters AddIterator(CollectionValueBridge collection)
+        public IteratorParameters AddIterator(CollectionValueBridge collection = null)
         {
             var oldBody = CurrentIterator;
             CurrentIterator = new IteratorParameters(this, collection);
@@ -258,141 +245,18 @@ namespace LinqRewrite.DataStructures
             return oldBody;
         }
         
-        public IteratorParameters InsertIterator()
-        {
-            var oldBody = CurrentIterator;
-            CurrentIterator = new IteratorParameters(this);
-            Iterators.Insert(0, CurrentIterator);
-            ResultIterators.Insert(0, CurrentIterator);
-            return oldBody;
-        }
-        
-        public IteratorParameters InsertIterator(CollectionValueBridge collection)
+        public IteratorParameters InsertIterator(CollectionValueBridge collection = null)
         {
             var oldBody = CurrentIterator;
             CurrentIterator = new IteratorParameters(this, collection);
             Iterators.Insert(0, CurrentIterator);
             ResultIterators.Insert(0, CurrentIterator);
             return oldBody;
-        }
-
-        public IEnumerable<StatementSyntax> GetMethodBody()
-        {
-            if (Iterators.Count == 0) return InitialStatements.Concat(_finalStatements).Concat(_resultStatements);
-            var result = new List<StatementSyntax>();
-            foreach (var iterator in ResultIterators)
-            {
-                var statements = iterator.GetStatementSyntax(this);
-                result.AddRange(iterator.PreFor);
-                if (statements.Length > 0) result.AddRange(statements);
-                result.AddRange(iterator.PostFor);
-            }
-
-            if (!Unchecked && WrapWithTry)
-            {
-                result = InitialStatements.Concat(new []{TryF(Block(result), Block(_finalStatements))}).Concat(_resultStatements).ToList();
-            }
-            else
-            {
-                result.InsertRange(0, InitialStatements);
-                result.AddRange(_finalStatements);
-                result.AddRange(_resultStatements);
-            }
-            return result;
-        }
-
-        private int _variableIndex;
-        
-        public LocalVariable SuperGlobalVariable(TypeSyntax type, ValueBridge initial)
-        {
-            var variable = "v" + _variableIndex++ % 10_000;
-            var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
-            Variables.Add(created);
-            
-            InitialAdd(LocalVariableCreation(variable, type));
-            InitialAdd(((ValueBridge)variable).Assign(initial));
-            SimpleEnumeration = false;
-            return created;
-        }
-        
-        public LocalVariable GlobalVariable(TypeSyntax type)
-        {
-            var variable = "v" + _variableIndex++ % 10_000;
-            var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
-            Variables.Add(created);
-            
-            InitialAdd(LocalVariableCreation(variable, type));
-            SimpleEnumeration = false;
-            return created;
-        }
-        
-        public LocalVariable GlobalVariable(TypeSyntax type, ValueBridge initial, IteratorParameters iterator)
-        {
-            var variable = "v" + _variableIndex++ % 10_000;
-            var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
-            Variables.Add(created);
-            
-            InitialAdd(LocalVariableCreation(variable, type));
-            iterator.PreFor.Add((StatementBridge)((ValueBridge)variable).Assign(initial));
-            SimpleEnumeration = false;
-            return created;
-        }
-        
-        public LocalVariable GlobalVariable(TypeSyntax type, ValueBridge initial)
-        {
-            var variable = "v" + _variableIndex++ % 10_000;
-            var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
-            Variables.Add(created);
-            
-            InitialAdd(LocalVariableCreation(variable, type));
-            PreUseAdd(((ValueBridge)variable).Assign(initial));
-            SimpleEnumeration = false;
-            return created;
-        }
-
-        public LocalVariable LocalVariable(TypedValueBridge value)
-            => LocalVariable(value.Type, value);
-        
-        public LocalVariable LocalVariable(TypeBridge type, ValueBridge initial)
-        {
-            var variable = "v" + _variableIndex++ % 10_000;
-            var stringType = type.ToString();
-            var found = Variables.FirstOrDefault(x => stringType == x.Type.ToString() && !x.IsGlobal && !x.IsUsed);
-            if (found != null)
-            {
-                found.IsUsed = true;
-                return found;
-            }
-            var created = new LocalVariable(variable, type);
-            Variables.Add(created);
-            
-            InitialAdd(LocalVariableCreation(variable, type));
-            PreUseAdd(((ValueBridge)variable).Assign(initial));
-            SimpleEnumeration = false;
-            return created;
-        }
-        
-        public LocalVariable LocalVariable(TypeBridge type)
-        {
-            var stringType = type.ToString();
-            var found = Variables.FirstOrDefault(x => stringType == x.Type.ToString() && !x.IsGlobal && !x.IsUsed);
-            if (found != null)
-            {
-                found.IsUsed = true;
-                return found;
-            }
-            var variable = "v" + _variableIndex++ % 10_000;
-            var created = new LocalVariable(variable, type);
-            Variables.Add(created);
-
-            InitialAdd(LocalVariableCreation(variable, type));
-            SimpleEnumeration = false;
-            return created;
         }
 
         public LocalVariable AddParameter(TypeBridge type, ExpressionSyntax value)
         {
-            var variable = "v" + _variableIndex++ % 10_000;
+            var variable = "v" + VariableCreator.VariableIndex++ % 10_000;
             var created = new LocalVariable(variable, type);
             Variables.Add(created);
             
@@ -403,95 +267,6 @@ namespace LinqRewrite.DataStructures
         }
 
         public void Dispose() => RewriteParametersFactory.ReturnParameters(this);
-        
-        public bool AssertResultSizeGreaterEqual(ValueBridge smaller, bool preCheck = false)
-            => AssertLesserEqual(smaller, GetResultSize(), ResultSize != null, preCheck);
-        
-        public bool AssertResultSizeGreater(ValueBridge smaller, bool preCheck = false)
-            => AssertLesser(smaller, GetResultSize(), ResultSize != null, preCheck);
-        
-        public bool AssertResultSizeLesserEqual(ValueBridge bigger, bool preCheck = false)
-            => AssertLesserEqual(GetResultSize(), bigger, ResultSize != null, preCheck);
-        
-        public bool AssertResultSizeLesser(ValueBridge bigger, bool preCheck = false)
-            => AssertLesser(GetResultSize(), bigger, ResultSize != null, preCheck);
-
-        public bool AssertGreaterEqual(ValueBridge bigger, ValueBridge smaller, bool initialCheck = true, bool preCheck = false)
-            => AssertLesserEqual(smaller, bigger, initialCheck, preCheck);
-
-        public bool AssertGreater(ValueBridge bigger, ValueBridge smaller, bool initialCheck = true, bool preCheck = false)
-            => AssertLesser(smaller, bigger, initialCheck, preCheck);
-
-        public void InitialError(string type, string message)
-        {
-            if (Error) return;
-            InitialStatements.Clear();
-            InitialStatements.Add(Throw(type, message));
-            _finalStatements.Clear();
-            _resultStatements.Clear();
-            ResultIterators.Clear();
-            Error = true;
-        }
-
-        public void InitialErrorAdd(StatementSyntax statement)
-        {
-            if (Error) return;
-            InitialStatements.Clear();
-            InitialStatements.Add(statement);
-            _finalStatements.Clear();
-            _resultStatements.Clear();
-            ResultIterators.Clear();
-            Error = true;
-        }
-
-        public bool AssertLesserEqual(ValueBridge smaller, ValueBridge bigger, bool initialCheck = true, bool preCheck = false)
-        {
-            if (Unchecked) return true;
-            var biggerPass = ExpressionSimplifier.TryGetDouble(bigger, out var biggerD);
-            var smallerPass = ExpressionSimplifier.TryGetDouble(smaller, out var smallerD);
-            
-            if (biggerPass && smallerPass)
-            {
-                if (smallerD <= biggerD) return true;
-                InitialError("System.InvalidOperationException", "Index out of range");
-                return false;
-            }
-            if (preCheck) return true;
-            if (initialCheck) PreUseAdd(If(smaller > bigger, Throw("System.InvalidOperationException", "Index out of range")));
-            else FinalAdd(If(smaller > bigger, Throw("System.InvalidOperationException", "Index out of range")));
-            return true;
-        }
-
-        public bool AssertLesser(ValueBridge smaller, ValueBridge bigger, bool initialCheck = true, bool preCheck = false)
-        {
-            if (Unchecked) return true;
-            var biggerPass = ExpressionSimplifier.TryGetDouble(bigger, out var biggerD);
-            var smallerPass = ExpressionSimplifier.TryGetDouble(smaller, out var smallerD);
-            
-            if (biggerPass && smallerPass)
-            {
-                if (smallerD < biggerD) return true;
-                InitialError("System.InvalidOperationException", "Index out of range");
-                return false;
-            }
-            if (preCheck) return true;
-            if (initialCheck) PreUseAdd(If(smaller >= bigger, Throw("System.InvalidOperationException", "Index out of range")));
-            else FinalAdd(If(smaller >= bigger, Throw("System.InvalidOperationException", "Index out of range")));
-            return true;
-        }
-
-        public bool AssertNotNull(ValueBridge notNull, bool preCheck = false)
-        {
-            if (Unchecked) return true;
-            if (notNull.ToString() == "null")
-            {
-                InitialError("System.InvalidOperationException", "Invalid null object");
-                return false;
-            }
-            if (preCheck) return true;
-            PreUseAdd(If(notNull.IsEqual(null), Throw("System.InvalidOperationException", "Invalid null object")));
-            return true;
-        }
 
         public LocalVariable TryGetVariable(TypedValueBridge value)
         {

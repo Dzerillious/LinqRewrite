@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LinqRewrite.Core
 {
-  public class Set<TElement>
+  public class SimpleSet<TElement>
   {
     private int[] _buckets;
     private Slot[] _slots;
@@ -11,12 +11,12 @@ namespace LinqRewrite.Core
     private int _freeList;
     private IEqualityComparer<TElement> _comparer;
 
-    public Set()
+    public SimpleSet()
       : this(null)
     {
     }
 
-    public Set(IEqualityComparer<TElement> comparer)
+    public SimpleSet(IEqualityComparer<TElement> comparer)
     {
       if (comparer == null)
         comparer = EqualityComparer<TElement>.Default;

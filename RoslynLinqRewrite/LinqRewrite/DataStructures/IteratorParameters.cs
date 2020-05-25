@@ -32,11 +32,6 @@ namespace LinqRewrite.DataStructures
 
         public void BodyAdd(StatementBridge _) => ForBody.Add(_);
         
-        public IteratorParameters(RewriteParameters parameters)
-        {
-            _parameters = parameters;
-        }
-        
         public IteratorParameters(RewriteParameters parameters, CollectionValueBridge collection)
         {
             _parameters = parameters;

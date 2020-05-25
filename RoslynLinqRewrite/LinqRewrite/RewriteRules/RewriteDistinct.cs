@@ -10,8 +10,8 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            var hashsetType = ParseTypeName($"System.Collections.Generic.HashSet<{p.LastValue.Type}>");
-            var hashsetVariable = p.GlobalVariable(hashsetType, args.Length switch
+            var hashsetType = ParseTypeName($"LinqRewrite.Core.SimpleSet<{p.LastValue.Type}>");
+            var hashsetVariable = VariableCreator.GlobalVariable(p, hashsetType, args.Length switch
             {
                 0 => New(hashsetType),
                 1 => New(hashsetType, args[0])

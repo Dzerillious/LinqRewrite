@@ -10,17 +10,17 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (!p.AssertResultSizeGreaterEqual(1)) return;
+            if (!AssertionExtension.AssertResultSizeGreaterEqual(p, 1)) return;
             var elementType = p.ReturnType.Type is NullableTypeSyntax nullable
                 ? (TypeBridge)nullable.ElementType : p.ReturnType;
 
             var minVariable = elementType.ToString() switch
             {
-                "int" => p.GlobalVariable(Int, int.MaxValue),
-                "long" => p.GlobalVariable(Long, long.MaxValue),
-                "float" => p.GlobalVariable(Float, float.MaxValue),
-                "double" => p.GlobalVariable(Double, double.MaxValue),
-                "decimal" => p.GlobalVariable(Decimal, decimal.MaxValue),
+                "int" => VariableCreator.GlobalVariable(p, Int, int.MaxValue),
+                "long" => VariableCreator.GlobalVariable(p, Long, long.MaxValue),
+                "float" => VariableCreator.GlobalVariable(p, Float, float.MaxValue),
+                "double" => VariableCreator.GlobalVariable(p, Double, double.MaxValue),
+                "decimal" => VariableCreator.GlobalVariable(p, Decimal, decimal.MaxValue),
                 _ => null
             };
             

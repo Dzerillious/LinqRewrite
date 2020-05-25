@@ -18,7 +18,7 @@ namespace LinqRewrite.RewriteRules
             };
 
             var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{keySelector.ReturnType(p)},{elementSelectorValue.Type}>");
-            var lookupVariable = p.GlobalVariable(lookupType, args.Length switch
+            var lookupVariable = VariableCreator.GlobalVariable(p, lookupType, args.Length switch
             {
                 2 when !args[1].OldVal.IsInvokable(p) => New(lookupType, args[1]),
                 3 when !args[2].OldVal.IsInvokable(p) => New(lookupType, args[2]),

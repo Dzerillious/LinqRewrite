@@ -21,19 +21,19 @@ namespace LinqRewrite.RewriteRules
             var comparerValue = args.Length == 5 ? args[4] : null;
 
             var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{innerValue.ItemType(p)},{innerKeySelector.ReturnType(p)}>");
-            var lookupVariable = p.GlobalVariable(lookupType, lookupType.Access("CreateForJoin")
+            var lookupVariable = VariableCreator.GlobalVariable(p, lookupType, lookupType.Access("CreateForJoin")
                 .Invoke(innerValue, innerKeySelector, comparerValue));
 
             var itemValue = p.LastValue;
             var groupingType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{innerValue.ItemType(p)},{outerKeySelector.ReturnType(p)}>.Grouping");
-            var groupingVariable = p.GlobalVariable(groupingType);
+            var groupingVariable = VariableCreator.GlobalVariable(p, groupingType);
             p.ForAdd(groupingVariable.Assign(lookupVariable.Access("GetGrouping")
                 .Invoke(outerKeySelector.Inline(p, itemValue), false)));
             
             p.ForAdd(If(groupingVariable.IsEqual(null), Continue()));
             var rewritten = new RewrittenValueBridge(((LambdaExpressionSyntax) innerKeySelector.Old).ExpressionBody, groupingVariable);
 
-            var iterator = p.GlobalVariable(innerKeySelector.ReturnType(p));
+            var iterator = VariableCreator.GlobalVariable(p, innerKeySelector.ReturnType(p));
             p.IncompleteIterators.ToArray().ForEach(x =>
             {
                 var newIterator = new IteratorParameters(p, new CollectionValueBridge(p, groupingType, innerKeySelector.ReturnType(p), rewritten, true));

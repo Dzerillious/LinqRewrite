@@ -16,7 +16,7 @@ namespace LinqRewrite.RewriteRules
                 1 => args[0].Inline(p, p.LastValue, p.Indexer)
             };
 
-            var skippingVariable = p.LocalVariable(Bool, true);
+            var skippingVariable = VariableCreator.LocalVariable(p, Bool, true);
             p.ForAdd(If(skippingVariable.And(conditionValue), Continue()));
             p.ForAdd(skippingVariable.Assign(false));
             p.ListEnumeration = false;

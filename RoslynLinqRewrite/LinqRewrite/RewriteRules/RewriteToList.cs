@@ -24,7 +24,7 @@ namespace LinqRewrite.RewriteRules
         
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            var listVariable = p.GlobalVariable(p.ReturnType, New(p.ReturnType));
+            var listVariable = VariableCreator.GlobalVariable(p, p.ReturnType, New(p.ReturnType));
             p.ForAdd(listVariable.Access("Add").Invoke(p.LastValue));
             p.ResultAdd(Return(listVariable));
         }

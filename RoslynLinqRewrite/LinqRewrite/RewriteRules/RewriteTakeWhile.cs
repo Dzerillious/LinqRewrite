@@ -19,7 +19,7 @@ namespace LinqRewrite.RewriteRules
             };
             if (p.Iterators.All.Count > 1)
             {
-                var lastTakeWhile = p.GlobalVariable(Bool, false);
+                var lastTakeWhile = VariableCreator.GlobalVariable(p, Bool, false);
                 p.ForAdd(If(Not(value).Or(lastTakeWhile), Block(
                     lastTakeWhile.Assign(true),
                     Break()))

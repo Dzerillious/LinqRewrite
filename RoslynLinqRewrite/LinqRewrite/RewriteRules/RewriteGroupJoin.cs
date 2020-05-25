@@ -15,7 +15,7 @@ namespace LinqRewrite.RewriteRules
             RewrittenValueBridge comparer = args.Length == 5 ? args[4] : null;
 
             var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{inner.ItemType(p)},{innerKeySelector.ReturnType(p)}>");
-            var lookupVariable = p.GlobalVariable(lookupType, lookupType.Access("CreateForJoin")
+            var lookupVariable = VariableCreator.GlobalVariable(p, lookupType, lookupType.Access("CreateForJoin")
                 .Invoke(inner, innerKeySelector, comparer));
 
             var lookupItemType = ParseTypeName($"System.Collections.IEnumerable<{inner.ItemType(p)}>");

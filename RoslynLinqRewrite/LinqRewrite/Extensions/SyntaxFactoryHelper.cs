@@ -152,7 +152,7 @@ namespace LinqRewrite.Extensions
                 return new TypedValueBridge(type, e);
             }
 
-            var tmpVariable = p.SuperGlobalVariable(type, e);
+            var tmpVariable = VariableCreator.SuperGlobalVariable(p, type, e);
             return new TypedValueBridge(type.Type, IdentifierName(tmpVariable));
         }
 
@@ -166,7 +166,7 @@ namespace LinqRewrite.Extensions
                 return new TypedValueBridge(type, e);
             }
 
-            var tmpVariable = p.GlobalVariable(type, e, iterator);
+            var tmpVariable = VariableCreator.GlobalVariable(p, type, e, iterator);
             return new TypedValueBridge(type.Type, IdentifierName(tmpVariable));
         }
 
@@ -180,7 +180,7 @@ namespace LinqRewrite.Extensions
                 return new TypedValueBridge(type, e);
             }
 
-            var tmpVariable = p.LocalVariable(type);
+            var tmpVariable = VariableCreator.LocalVariable(p, type);
             p.ForAdd(tmpVariable.Assign(e));
             tmpVariable.IsUsed = true;
             return new TypedValueBridge(type.Type, IdentifierName(tmpVariable));
@@ -207,7 +207,7 @@ namespace LinqRewrite.Extensions
             var val = values.Select(x =>
             {
                 if (IsReusable(x)) return x;
-                var inlineVariable = p.LocalVariable(x.Type);
+                var inlineVariable = VariableCreator.LocalVariable(p, x.Type);
                 p.ForAdd(inlineVariable.Assign(x));
                 return new TypedValueBridge(x.Type, inlineVariable);
             }).ToArray();

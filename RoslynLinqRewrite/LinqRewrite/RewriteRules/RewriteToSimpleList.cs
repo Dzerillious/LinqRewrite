@@ -38,7 +38,7 @@ namespace LinqRewrite.RewriteRules
             RewriteToArray.SimplifyPart(p, result);
             
             var listResultType = ParseTypeName($"LinqRewrite.Core.SimpleList.SimpleList<{p.LastValue.Type}>");
-            var finalResult = p.GlobalVariable(listResultType);
+            LocalVariable finalResult = VariableCreator.GlobalVariable(p, listResultType);
             p.ResultAdd(finalResult.Assign(New(listResultType)));
             p.ResultAdd(finalResult.Access("Items").Assign(result));
             p.ResultAdd(finalResult.Access("Count").Assign(p.ResultSize ?? p.Indexer));

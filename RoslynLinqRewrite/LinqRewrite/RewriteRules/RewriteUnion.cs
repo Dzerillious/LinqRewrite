@@ -12,15 +12,15 @@ namespace LinqRewrite.RewriteRules
         {
             var sourceSizeValue = p.SourceSize;
             var collectionValue = args[0];
-            if (!p.AssertNotNull(collectionValue)) return;
+            if (!AssertionExtension.AssertNotNull(p, collectionValue)) return;
 
-            var hashsetType = ParseTypeName($"System.Collections.Generic.HashSet<{p.LastValue.Type}>");
+            var hashsetType = ParseTypeName($"LinqRewrite.Core.SimpleSet<{p.LastValue.Type}>");
             var hashsetCreation = args.Length switch
             {
                 1 => New(hashsetType),
                 2 => New(hashsetType, args[1])
             };
-            var hashsetVariable = p.GlobalVariable(hashsetType, hashsetCreation);
+            var hashsetVariable = VariableCreator.GlobalVariable(p, hashsetType, hashsetCreation);
 
             LocalVariable itemVariable;
             var lastVariable = p.TryGetVariable(p.LastValue);
@@ -28,7 +28,7 @@ namespace LinqRewrite.RewriteRules
                 itemVariable = lastVariable;
             else
             {
-                itemVariable = p.LocalVariable(p.LastValue.Type);
+                itemVariable = VariableCreator.LocalVariable(p, p.LastValue.Type);
                 p.ForAdd(itemVariable.Assign(p.LastValue));
                 p.LastValue = new TypedValueBridge(p.LastValue.Type, itemVariable);
             }

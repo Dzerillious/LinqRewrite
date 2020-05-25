@@ -29,7 +29,7 @@ namespace LinqRewrite.RewriteRules
         
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (args.Length == 1 && !p.AssertResultSizeGreaterEqual(1, true)) return;
+            if (args.Length == 1 && !AssertionExtension.AssertResultSizeGreaterEqual(p, 1, true)) return;
             var aggregationValue = args.Length switch
             {
                 1 => args[0],
@@ -56,7 +56,7 @@ namespace LinqRewrite.RewriteRules
             };
             if (args.Length == 1) p.CurrentIterator.ForFrom += p.CurrentIterator.ForInc;
             
-            var resultVariable = p.GlobalVariable(p.ReturnType, resultValue);
+            var resultVariable = VariableCreator.GlobalVariable(p, p.ReturnType, resultValue);
             p.ForAdd(resultVariable.Assign(aggregationValue.Inline(p, resultVariable, p.LastValue)));
             return resultVariable;
         }
@@ -68,8 +68,8 @@ namespace LinqRewrite.RewriteRules
                 1 => new TypedValueBridge(p.LastValue.Type, Default(p.LastValue.Type)),
                 _ => new TypedValueBridge(p, args[0])
             };
-            var resultVariable = p.GlobalVariable(p.ReturnType, resultValue);
-            var firstVariable = p.GlobalVariable(Bool, true);
+            var resultVariable = VariableCreator.GlobalVariable(p, p.ReturnType, resultValue);
+            var firstVariable = VariableCreator.GlobalVariable(p, Bool, true);
             
             p.ForAdd(If(firstVariable,
                         Block(

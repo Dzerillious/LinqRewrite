@@ -31,7 +31,7 @@ namespace LinqRewrite.Core
                 action(item, indexer++);
         }
 
-        public static T[] ToArray<T>(this IEnumerable<T> collection, EnlargingCoefficient coefficient = EnlargingCoefficient.By2)
+        public static T[] ToArray<T>(this IEnumerable<T> collection, EnlargingCoefficient coefficient)
         {
             var shift = coefficient switch
             {
@@ -58,12 +58,6 @@ namespace LinqRewrite.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif 
         public static IEnumerable<T> Unchecked<T>(this IEnumerable<T> collection)
-            => collection;
-
-#if !NET40
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif 
-        public static IEnumerable<T> WithResultMinSize<T>(this IEnumerable<T> collection, int count)
             => collection;
 
 #if !NET40

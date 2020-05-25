@@ -75,14 +75,6 @@ namespace LinqRewrite.Core.SimpleList
         public static implicit operator SimpleList<T>(T[] array) 
           => new SimpleList<T> {Items = array, Count = array.Length};
 
-        public static SimpleList<T> TakeWithCount(T[] array, int count)
-        {
-          var simpleList = new SimpleList<T>();
-          simpleList.Items = array;
-          simpleList.Count = count;
-          return simpleList;
-        }
-
 #if NETCORE
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

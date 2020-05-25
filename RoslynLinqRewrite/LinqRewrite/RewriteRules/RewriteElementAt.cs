@@ -13,8 +13,8 @@ namespace LinqRewrite.RewriteRules
         
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (!p.AssertGreaterEqual(args[0], 0, true, true)) return;
-            if (!p.AssertLesser(args[0], p.ResultSize, true, true)) return;
+            if (!AssertionExtension.AssertGreaterEqual(p, args[0], 0, true, true)) return;
+            if (!AssertionExtension.AssertLesser(p, args[0], p.ResultSize, true, true)) return;
             
             var positionValue = args[0].ReusableConst(p);
             p.ForAdd(If(p.Indexer.IsEqual(positionValue),

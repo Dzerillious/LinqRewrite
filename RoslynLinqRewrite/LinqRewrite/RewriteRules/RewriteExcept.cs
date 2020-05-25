@@ -12,20 +12,20 @@ namespace LinqRewrite.RewriteRules
         {
             var sourceSizeValue = p.SourceSize;
             var collectionValue = args[0];
-            if (!p.AssertNotNull(collectionValue)) return;
+            if (!AssertionExtension.AssertNotNull(p, collectionValue)) return;
 
             var oldLast = p.LastValue;
             var collectionType = p.Data.GetTypeInfo(collectionValue).Type;
             var oldIterator = p.InsertIterator(new CollectionValueBridge(p, collectionType, collectionValue, true));
             RewriteCollectionEnumeration.RewriteOther(p, p.CurrentIterator.Collection);
 
-            var hashsetType = SyntaxFactory.ParseTypeName($"System.Collections.Generic.HashSet<{p.LastValue.Type}>");
+            var hashsetType = SyntaxFactory.ParseTypeName($"LinqRewrite.Core.SimpleSet<{p.LastValue.Type}>");
             var hashsetCreation = args.Length switch
             {
                 1 => New(hashsetType),
                 2 => New(hashsetType, args[1])
             };
-            var hashsetVariable = p.GlobalVariable(hashsetType, hashsetCreation);
+            var hashsetVariable = VariableCreator.GlobalVariable(p, hashsetType, hashsetCreation);
             
             p.CurrentForAdd(hashsetVariable.Access("Add").Invoke(p.LastValue));
             p.CurrentIterator.Complete = true;

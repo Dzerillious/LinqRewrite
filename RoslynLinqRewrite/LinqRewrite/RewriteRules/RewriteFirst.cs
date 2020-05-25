@@ -16,7 +16,7 @@ namespace LinqRewrite.RewriteRules
 
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (!p.AssertResultSizeGreaterEqual(0, true)) return;
+            if (!AssertionExtension.AssertResultSizeGreaterEqual(p, 0, true)) return;
             
             if (args.Length == 0)
                 p.ForAdd(Return(p.LastValue));

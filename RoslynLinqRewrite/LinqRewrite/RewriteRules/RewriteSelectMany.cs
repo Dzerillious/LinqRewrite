@@ -21,7 +21,7 @@ namespace LinqRewrite.RewriteRules
             };
             var rewritten = new RewrittenValueBridge(newExpression.ExpressionBody, collectionValue);
 
-            var iterator = p.GlobalVariable(method.ReturnItemType(p));
+            LocalVariable iterator = VariableCreator.GlobalVariable(p, method.ReturnItemType(p));
             p.IncompleteIterators.ToArray().ForEach(x =>
             {
                 var newIterator = new IteratorParameters(p, new CollectionValueBridge(p, method.ReturnType(p), method.ReturnItemType(p), rewritten, true));

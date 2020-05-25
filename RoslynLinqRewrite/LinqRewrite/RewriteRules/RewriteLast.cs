@@ -17,8 +17,8 @@ namespace LinqRewrite.RewriteRules
 
         public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
         {
-            if (!p.AssertResultSizeGreaterEqual(0, true)) return;
-            var foundVariable = p.GlobalVariable(NullableType(p.ReturnType), null);
+            if (!AssertionExtension.AssertResultSizeGreaterEqual(p, 0, true)) return;
+            var foundVariable = VariableCreator.GlobalVariable(p, NullableType(p.ReturnType), null);
             
             if (args.Length == 0)
                 p.ForAdd(foundVariable.Assign(p.LastValue));

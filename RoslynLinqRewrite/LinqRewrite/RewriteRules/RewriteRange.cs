@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
+using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
@@ -13,14 +14,14 @@ namespace LinqRewrite.RewriteRules
             var fromValue = args[0];
             var countValue = args[1];
             var increment = args.Length == 3 ? args[2].New : 1;
-            if (!p.AssertGreaterEqual(countValue, 0)) return;
+            if (!AssertionExtension.AssertGreaterEqual(p, countValue, 0)) return;
 
             p.FirstCollection = p.CurrentCollection = null;
             p.AddIterator();
             p.CurrentIterator.ForFrom = 0;
             p.CurrentIterator.ForTo = countValue * increment - increment;
             p.CurrentIterator.ForInc = increment;
-            p.CurrentIterator.ForIndexer = p.LocalVariable(Int);
+            p.CurrentIterator.ForIndexer = VariableCreator.LocalVariable(p, Int);
             
             p.ListEnumeration = false;
             p.SimpleEnumeration = true;
