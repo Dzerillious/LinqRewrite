@@ -6,13 +6,13 @@ namespace LinqRewrite
     public static class RewriteParametersFactory
     {
         private static readonly object Lock = new object();
-        private static readonly List<RewriteParameters> Capital = new List<RewriteParameters>();
+        private static readonly List<RewriteDesign> Capital = new List<RewriteDesign>();
 
-        public static RewriteParameters BorrowParameters()
+        public static RewriteDesign BorrowParameters()
         {
             lock (Lock)
             {
-                if (Capital.Count == 0) return new RewriteParameters();
+                if (Capital.Count == 0) return new RewriteDesign();
 
                 var count = Capital.Count;
                 var last = Capital[count - 1];
@@ -21,9 +21,9 @@ namespace LinqRewrite
             }
         }
 
-        public static void ReturnParameters(RewriteParameters parameters)
+        public static void ReturnParameters(RewriteDesign design)
         {
-            lock (Lock) Capital.Add(parameters);
+            lock (Lock) Capital.Add(design);
         }
     }
 }

@@ -8,19 +8,19 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteElementAt
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
-            => SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + args[0]);
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
+            => SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + args[0]);
         
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            if (!AssertionExtension.AssertGreaterEqual(p, args[0], 0, true, true)) return;
-            if (!AssertionExtension.AssertLesser(p, args[0], p.ResultSize, true, true)) return;
+            if (!AssertionExtension.AssertGreaterEqual(design, args[0], 0, true, true)) return;
+            if (!AssertionExtension.AssertLesser(design, args[0], design.ResultSize, true, true)) return;
             
-            var positionValue = args[0].ReusableConst(p);
-            p.ForAdd(If(p.Indexer.IsEqual(positionValue),
-                        Return(p.LastValue)));
+            var positionValue = args[0].ReusableConst(design);
+            design.ForAdd(If(design.Indexer.IsEqual(positionValue),
+                        Return(design.LastValue)));
             
-            if (!p.Unchecked) p.ResultAdd(Throw("System.InvalidOperationException", "The sequence did not contain enough elements."));
+            if (!design.Unchecked) design.ResultAdd(Throw("System.InvalidOperationException", "The sequence did not contain enough elements."));
         }
     }
 }

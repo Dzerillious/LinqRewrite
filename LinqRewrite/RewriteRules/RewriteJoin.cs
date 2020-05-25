@@ -10,45 +10,45 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteJoin
     {
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             var innerValue = args[0];
             RewrittenValueBridge outerKeySelector = args[1];
             RewrittenValueBridge innerKeySelector = args[2];
-            if (p.CurrentIterator.IgnoreIterator) return;
+            if (design.CurrentIterator.IgnoreIterator) return;
             
             var resultSelectorValue = args[3];
             var comparerValue = args.Length == 5 ? args[4] : null;
 
-            var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{innerValue.ItemType(p)},{innerKeySelector.ReturnType(p)}>");
-            var lookupVariable = VariableCreator.GlobalVariable(p, lookupType, lookupType.Access("CreateForJoin")
+            var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{innerValue.ItemType(design)},{innerKeySelector.ReturnType(design)}>");
+            var lookupVariable = VariableCreator.GlobalVariable(design, lookupType, lookupType.Access("CreateForJoin")
                 .Invoke(innerValue, innerKeySelector, comparerValue));
 
-            var itemValue = p.LastValue;
-            var groupingType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{innerValue.ItemType(p)},{outerKeySelector.ReturnType(p)}>.Grouping");
-            var groupingVariable = VariableCreator.GlobalVariable(p, groupingType);
-            p.ForAdd(groupingVariable.Assign(lookupVariable.Access("GetGrouping")
-                .Invoke(outerKeySelector.Inline(p, itemValue), false)));
+            var itemValue = design.LastValue;
+            var groupingType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{innerValue.ItemType(design)},{outerKeySelector.ReturnType(design)}>.Grouping");
+            var groupingVariable = VariableCreator.GlobalVariable(design, groupingType);
+            design.ForAdd(groupingVariable.Assign(lookupVariable.Access("GetGrouping")
+                .Invoke(outerKeySelector.Inline(design, itemValue), false)));
             
-            p.ForAdd(If(groupingVariable.IsEqual(null), Continue()));
+            design.ForAdd(If(groupingVariable.IsEqual(null), Continue()));
             var rewritten = new RewrittenValueBridge(((LambdaExpressionSyntax) innerKeySelector.Old).ExpressionBody, groupingVariable);
 
-            var iterator = VariableCreator.GlobalVariable(p, innerKeySelector.ReturnType(p));
-            p.IncompleteIterators.ToArray().ForEach(x =>
+            var iterator = VariableCreator.GlobalVariable(design, innerKeySelector.ReturnType(design));
+            design.IncompleteIterators.ToArray().ForEach(x =>
             {
-                var newIterator = new IteratorParameters(p, new CollectionValueBridge(p, groupingType, innerKeySelector.ReturnType(p), rewritten, true));
+                var newIterator = new IteratorDesign(design, new CollectionValueBridge(design, groupingType, innerKeySelector.ReturnType(design), rewritten, true));
                 x.ForBody.Add(newIterator);
-                p.Iterators.Add(newIterator);
-                p.Iterators.Remove(x);
-                p.CurrentIterator = newIterator;
-                RewriteCollectionEnumeration.RewriteOther(p, p.CurrentIterator.Collection, iterator);
+                design.Iterators.Add(newIterator);
+                design.Iterators.Remove(x);
+                design.CurrentIterator = newIterator;
+                RewriteCollectionEnumeration.RewriteOther(design, design.CurrentIterator.Collection, iterator);
             });
 
-            p.CurrentIterator = p.Iterators.Last();
-            p.LastValue = resultSelectorValue.Inline(p, itemValue, p.LastValue);
-            p.ModifiedEnumeration = true;
-            p.ListEnumeration = false;
-            p.SourceSize = null;
+            design.CurrentIterator = design.Iterators.Last();
+            design.LastValue = resultSelectorValue.Inline(design, itemValue, design.LastValue);
+            design.ModifiedEnumeration = true;
+            design.ListEnumeration = false;
+            design.SourceSize = null;
         }
     }
 }

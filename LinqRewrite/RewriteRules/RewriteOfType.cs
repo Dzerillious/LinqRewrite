@@ -10,32 +10,32 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteOfType
     {
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args, InvocationExpressionSyntax invocation)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args, InvocationExpressionSyntax invocation)
         {
             var access = (MemberAccessExpressionSyntax) invocation.Expression;
             var name = (GenericNameSyntax) access.Name;
             var type = name.TypeArgumentList.Arguments[0];
-            var typeSymbol = p.Semantic.GetTypeInfo(type).Type;
+            var typeSymbol = design.Semantic.GetTypeInfo(type).Type;
             
-            if (SymbolExtensions.IsSameType(typeSymbol, p.LastValue.Type)) {}
-            else if (p.Unchecked || SymbolExtensions.IsDescendantType(typeSymbol, p.LastValue.Type))
+            if (SymbolExtensions.IsSameType(typeSymbol, design.LastValue.Type)) {}
+            else if (design.Unchecked || SymbolExtensions.IsDescendantType(typeSymbol, design.LastValue.Type))
             {
-                p.LastValue = p.LastValue.Reusable(p);
-                p.ForAdd(If(Not(p.LastValue.Is(type)),
+                design.LastValue = design.LastValue.Reusable(design);
+                design.ForAdd(If(Not(design.LastValue.Is(type)),
                     Continue()));
-                p.LastValue = new TypedValueBridge(type, p.LastValue.Cast(type));
+                design.LastValue = new TypedValueBridge(type, design.LastValue.Cast(type));
             }
             else
             {
-                p.LastValue = p.LastValue.Reusable(p);
-                p.ForAdd(If(Not(p.LastValue.Is(type)),
+                design.LastValue = design.LastValue.Reusable(design);
+                design.ForAdd(If(Not(design.LastValue.Is(type)),
                     Continue()));
-                p.LastValue = new TypedValueBridge(type, p.LastValue.Cast(ParseTypeName("object")).Cast(type));
+                design.LastValue = new TypedValueBridge(type, design.LastValue.Cast(ParseTypeName("object")).Cast(type));
             }
 
-            p.ResultSize = null;
-            p.ListEnumeration = false;
-            p.ModifiedEnumeration = true;
+            design.ResultSize = null;
+            design.ListEnumeration = false;
+            design.ModifiedEnumeration = true;
         }
     }
 }

@@ -8,39 +8,39 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteMax
     {
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            if (!AssertionExtension.AssertResultSizeGreaterEqual(p, 1)) return;
-            var elementType = p.ReturnType.Type is NullableTypeSyntax nullable
-                ? (TypeBridge)nullable.ElementType : p.ReturnType;
+            if (!AssertionExtension.AssertResultSizeGreaterEqual(design, 1)) return;
+            var elementType = design.ReturnType.Type is NullableTypeSyntax nullable
+                ? (TypeBridge)nullable.ElementType : design.ReturnType;
 
             var maxVariable = elementType.ToString() switch
             {
-                "int" => VariableCreator.GlobalVariable(p, Int, int.MinValue),
-                "long" => VariableCreator.GlobalVariable(p, Long, long.MinValue),
-                "float" => VariableCreator.GlobalVariable(p, Float, float.MinValue),
-                "double" => VariableCreator.GlobalVariable(p, Double, double.MinValue),
-                "decimal" => VariableCreator.GlobalVariable(p, Decimal, decimal.MinValue),
+                "int" => VariableCreator.GlobalVariable(design, Int, int.MinValue),
+                "long" => VariableCreator.GlobalVariable(design, Long, long.MinValue),
+                "float" => VariableCreator.GlobalVariable(design, Float, float.MinValue),
+                "double" => VariableCreator.GlobalVariable(design, Double, double.MinValue),
+                "decimal" => VariableCreator.GlobalVariable(design, Decimal, decimal.MinValue),
                 _ => null
             };
             
             var value = args.Length switch
             {
-                0 => p.LastValue.Reusable(p),
-                1 => args[0].Inline(p, p.LastValue).Reusable(p)
+                0 => design.LastValue.Reusable(design),
+                1 => args[0].Inline(design, design.LastValue).Reusable(design)
             };
-            if (p.ReturnType.Type is NullableTypeSyntax)
+            if (design.ReturnType.Type is NullableTypeSyntax)
             {
-                p.ForAdd(If(value.IsEqual(null).Or(value <= maxVariable), Continue()));
-                p.ForAdd(maxVariable.Assign(value.Cast(elementType)));
+                design.ForAdd(If(value.IsEqual(null).Or(value <= maxVariable), Continue()));
+                design.ForAdd(maxVariable.Assign(value.Cast(elementType)));
             }
             else
             {
-                p.ForAdd(If(value <= maxVariable, Continue()));
-                p.ForAdd(maxVariable.Assign(value));
+                design.ForAdd(If(value <= maxVariable, Continue()));
+                design.ForAdd(maxVariable.Assign(value));
             }
             
-            p.ResultAdd(Return(maxVariable));
+            design.ResultAdd(Return(maxVariable));
         }
     }
 }

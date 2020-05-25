@@ -2,13 +2,13 @@ using System.Collections.Generic;
 
 namespace LinqRewrite.DataStructures
 {
-    public class IteratorCollection : List<IteratorParameters>
+    public class IteratorCollection : List<IteratorDesign>
     {
-        public List<IteratorParameters> All { get; } = new List<IteratorParameters>();
-        public new void Add(IteratorParameters iteratorParameters)
+        public List<IteratorDesign> All { get; } = new List<IteratorDesign>();
+        public new void Add(IteratorDesign iteratorDesign)
         {
-            base.Add(iteratorParameters);
-            All.Add(iteratorParameters);
+            base.Add(iteratorDesign);
+            All.Add(iteratorDesign);
         }
 
         public new void Clear()

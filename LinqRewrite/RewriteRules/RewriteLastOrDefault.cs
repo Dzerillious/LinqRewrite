@@ -9,29 +9,29 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteLastOrDefault
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             if (args.Length != 0) return null;
-            return ConditionalExpression(p.ResultSize.IsEqual(0),
-                Default(p.ReturnType),
-                SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMax));
+            return ConditionalExpression(design.ResultSize.IsEqual(0),
+                Default(design.ReturnType),
+                SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMax));
         }
 
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            var foundVariable = VariableCreator.GlobalVariable(p, NullableType(p.ReturnType), null);
+            var foundVariable = VariableCreator.GlobalVariable(design, NullableType(design.ReturnType), null);
             
             if (args.Length == 0)
-                p.ForAdd(foundVariable.Assign(p.LastValue));
+                design.ForAdd(foundVariable.Assign(design.LastValue));
             else
             {
-                p.ForAdd(If(args[0].Inline(p, p.LastValue),
-                            foundVariable.Assign(p.LastValue)));
+                design.ForAdd(If(args[0].Inline(design, design.LastValue),
+                            foundVariable.Assign(design.LastValue)));
             }
             
-            p.ResultAdd(If(foundVariable.IsEqual(null),
-                            Return(Default(p.ReturnType)), 
-                            Return(foundVariable.Cast(p.ReturnType))));
+            design.ResultAdd(If(foundVariable.IsEqual(null),
+                            Return(Default(design.ReturnType)), 
+                            Return(foundVariable.Cast(design.ReturnType))));
         }
     }
 }

@@ -8,23 +8,23 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteCast
     {
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args, InvocationExpressionSyntax invocation)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args, InvocationExpressionSyntax invocation)
         {
             var access = (MemberAccessExpressionSyntax) invocation.Expression;
             var name = (GenericNameSyntax) access.Name;
             var type = name.TypeArgumentList.Arguments[0];
-            var typeSymbol = p.Semantic.GetTypeInfo(type).Type;
+            var typeSymbol = design.Semantic.GetTypeInfo(type).Type;
 
-            if (SymbolExtensions.IsSameType(typeSymbol, p.LastValue.Type)) ;
-            else if (p.Unchecked || SymbolExtensions.IsDescendantType(typeSymbol, p.LastValue.Type))
+            if (SymbolExtensions.IsSameType(typeSymbol, design.LastValue.Type)) ;
+            else if (design.Unchecked || SymbolExtensions.IsDescendantType(typeSymbol, design.LastValue.Type))
             {
-                p.LastValue = new TypedValueBridge(type, p.LastValue.Cast(type));
-                if (!p.Unchecked) p.ListEnumeration = false;
+                design.LastValue = new TypedValueBridge(type, design.LastValue.Cast(type));
+                if (!design.Unchecked) design.ListEnumeration = false;
             }
             else
             {
-                p.LastValue = new TypedValueBridge(type, p.LastValue.Cast(ParseTypeName("object")).Cast(type));
-                p.ListEnumeration = false;
+                design.LastValue = new TypedValueBridge(type, design.LastValue.Cast(ParseTypeName("object")).Cast(type));
+                design.ListEnumeration = false;
             }
         }
     }

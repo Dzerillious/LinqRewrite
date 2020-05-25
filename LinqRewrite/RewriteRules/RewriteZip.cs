@@ -8,24 +8,24 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteZip
     {
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             var collectionValue = args[0];
-            if (!AssertionExtension.AssertNotNull(p, collectionValue)) return;
+            if (!AssertionExtension.AssertNotNull(design, collectionValue)) return;
             var methodValue = args[1];
-            p.WrapWithTry = true;
+            design.WrapWithTry = true;
 
-            var itemType = collectionValue.ItemType(p);
-            var enumeratorVariable = VariableCreator.GlobalVariable(p, ParseTypeName($"System.Collections.Generic.IEnumerator<{itemType}>"));
-            p.InitialAdd(enumeratorVariable.Assign(Parenthesize(collectionValue.Cast(ParseTypeName($"IEnumerable<{itemType}>")))
+            var itemType = collectionValue.ItemType(design);
+            var enumeratorVariable = VariableCreator.GlobalVariable(design, ParseTypeName($"System.Collections.Generic.IEnumerator<{itemType}>"));
+            design.InitialAdd(enumeratorVariable.Assign(Parenthesize(collectionValue.Cast(ParseTypeName($"IEnumerable<{itemType}>")))
                 .Access("GetEnumerator").Invoke()));
             
-            p.ForAdd(If(Not(enumeratorVariable.Access("MoveNext").Invoke()), Break()));
-            p.LastValue = methodValue.Inline(p, p.LastValue, new TypedValueBridge(collectionValue.ItemType(p), enumeratorVariable.Access("Current")));
+            design.ForAdd(If(Not(enumeratorVariable.Access("MoveNext").Invoke()), Break()));
+            design.LastValue = methodValue.Inline(design, design.LastValue, new TypedValueBridge(collectionValue.ItemType(design), enumeratorVariable.Access("Current")));
 
-            p.FinalAdd(enumeratorVariable.Access("Dispose").Invoke());
-            p.ListEnumeration = false;
-            p.ModifiedEnumeration = true;
+            design.FinalAdd(enumeratorVariable.Access("Dispose").Invoke());
+            design.ListEnumeration = false;
+            design.ModifiedEnumeration = true;
         }
     }
 }

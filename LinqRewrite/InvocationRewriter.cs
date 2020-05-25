@@ -17,203 +17,202 @@ namespace LinqRewrite
     {
         public static ExpressionSyntax TryRewrite(ValueBridge collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node) 
         {
-            using var parameters = RewriteParametersFactory.BorrowParameters();
-            parameters.SetData(collection, returnType, chain, node, false);
+            using var design = RewriteParametersFactory.BorrowParameters();
+            design.SetData(collection, returnType, chain, node, false);
             var names = chain.Select(x => x.MethodName).ToArray();
             
-            var (simplePrecheck, simpleResult) = TryRewriteSimple(parameters, names);
+            var (simplePrecheck, simpleResult) = TryRewriteSimple(design, names);
             if (simplePrecheck && simpleResult != null) return simpleResult;
-            if (simplePrecheck) parameters.SetData(collection, returnType, chain, node, true);
+            if (simplePrecheck) design.SetData(collection, returnType, chain, node, true);
 
-            parameters.HasResultMethod = MethodsWithResult.Contains(names.Last());
-            RewriteComposite(parameters, names);
+            design.HasResultMethod = MethodsWithResult.Contains(names.Last());
+            RewriteComposite(design, names);
                     
-            var body = parameters.Error ? new []{parameters.InitialStatements[0]} : GetMethodBody(parameters);
-            if (parameters.NotRewrite) throw new NotSupportedException("Not good for rewrite");
+            var body = design.Error ? new []{design.InitialStatements[0]} : GetMethodBody(design);
+            if (design.NotRewrite) throw new NotSupportedException("Not good for rewrite");
 
-            if (parameters.Data.CurrentMethodIsConditional && parameters.ReturnType.Type.ToString() != "void")
-                return ConditionalExpression(parameters.CurrentCollection.IsEqual(null),
-                Default(parameters.ReturnType), parameters.Rewrite.GetMethodInvocationExpression(parameters, body));
-            else return parameters.Rewrite.GetMethodInvocationExpression(parameters, body);
+            if (design.Data.CurrentMethodIsConditional && design.ReturnType.Type.ToString() != "void")
+                return ConditionalExpression(design.CurrentCollection.IsEqual(null),
+                Default(design.ReturnType), design.Rewrite.GetMethodInvocationExpression(design, body));
+            else return design.Rewrite.GetMethodInvocationExpression(design, body);
         }
 
-        public static IEnumerable<StatementSyntax> GetMethodBody(RewriteParameters p)
+        public static IEnumerable<StatementSyntax> GetMethodBody(RewriteDesign design)
         {
-            if (p.Iterators.Count == 0) return p.InitialStatements.Concat(p.FinalStatements).Concat(p.ResultStatements);
+            if (design.Iterators.Count == 0) return design.InitialStatements.Concat(design.FinalStatements).Concat(design.ResultStatements);
             var result = new List<StatementSyntax>();
-            foreach (var iterator in p.ResultIterators)
+            foreach (var iterator in design.ResultIterators)
             {
-                StatementSyntax[] statements = iterator.GetStatementSyntax(p);
+                StatementSyntax[] statements = iterator.GetStatementSyntax(design);
                 result.AddRange(iterator.PreFor);
                 if (statements.Length > 0) result.AddRange(statements);
                 result.AddRange(iterator.PostFor);
             }
 
-            if (!p.Unchecked && p.WrapWithTry)
+            if (!design.Unchecked && design.WrapWithTry)
             {
-                result = p.InitialStatements.Concat(new []{TryF(Block(result), Block(p.FinalStatements))}).Concat(p.ResultStatements).ToList();
+                result = design.InitialStatements.Concat(new []{TryF(Block(result), Block(design.FinalStatements))}).Concat(design.ResultStatements).ToList();
             }
             else
             {
-                result.InsertRange(0, p.InitialStatements);
-                result.AddRange(p.FinalStatements);
-                result.AddRange(p.ResultStatements);
+                result.InsertRange(0, design.InitialStatements);
+                result.AddRange(design.FinalStatements);
+                result.AddRange(design.ResultStatements);
             }
             return result;
         }
 
-        private static void RewriteComposite(RewriteParameters parameters, string[] names)
+        private static void RewriteComposite(RewriteDesign design, string[] names)
         {
-            if (parameters.Data.CurrentMethodIsConditional && parameters.ReturnType.Type.ToString() == "void")
-                parameters.InitialAdd(If(parameters.CurrentCollection.IsEqual(null), ReturnStatement()));
+            if (design.Data.CurrentMethodIsConditional && design.ReturnType.Type.ToString() == "void")
+                design.InitialAdd(If(design.CurrentCollection.IsEqual(null), ReturnStatement()));
             
-            if (!MethodsCreateArray.Contains(names.First())) RewriteCollectionEnumeration.Rewrite(parameters, Array.Empty<RewrittenValueBridge>(), true);
+            if (!MethodsCreateArray.Contains(names.First())) RewriteCollectionEnumeration.Rewrite(design, Array.Empty<RewrittenValueBridge>(), true);
             for (var i = 0; i < names.Length; i++)
             {
-                parameters.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
-                RewritePart(names[i], parameters, i);
+                design.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
+                RewritePart(names[i], design, i);
             }
 
-            if (parameters.HasResultMethod) return;
-            parameters.ForAdd(YieldStatement(SyntaxKind.YieldReturnStatement, parameters.LastValue));
-            parameters.ResultAdd(YieldStatement(SyntaxKind.YieldBreakStatement));
+            if (design.HasResultMethod) return;
+            design.ForAdd(YieldStatement(SyntaxKind.YieldReturnStatement, design.LastValue));
+            design.ResultAdd(YieldStatement(SyntaxKind.YieldBreakStatement));
         }
 
-        private static (bool preCheck, ExpressionSyntax result) TryRewriteSimple(RewriteParameters parameters, string[] names)
+        private static (bool preCheck, ExpressionSyntax result) TryRewriteSimple(RewriteDesign design, string[] names)
         {
-            if (parameters.CurrentCollection?.CollectionType == CollectionType.IEnumerable) return (false, null);
+            if (design.CurrentCollection?.CollectionType == CollectionType.IEnumerable) return (false, null);
             if (names.Any(x => MethodsModifyingEnumeration.Contains(x))) return (false, null);
-            if (parameters.Data.CurrentMethodParams.Any(x => x.Modifiers.Any())) return (false, null);
+            if (design.Data.CurrentMethodParams.Any(x => x.Modifiers.Any())) return (false, null);
 
-            if (!MethodsCreateArray.Contains(names.First())) RewriteCollectionEnumeration.Rewrite(parameters, Array.Empty<RewrittenValueBridge>(), false);
+            if (!MethodsCreateArray.Contains(names.First())) RewriteCollectionEnumeration.Rewrite(design, Array.Empty<RewrittenValueBridge>(), false);
             for (var i = 0; i < names.Length; i++)
             {
-                var res = RewriteSimplePart(names[i], parameters, i);
-                if (parameters.Error) return (true, null);
-                if (!parameters.SimpleEnumeration) return (true, null);
+                var res = RewriteSimplePart(names[i], design, i);
+                if (design.Error) return (true, null);
+                if (!design.SimpleEnumeration) return (true, null);
                 if (res != null) return (true, res);
             }
 
             if (!MethodsWithResult.Contains(names.Last()))
             {
-                var res = RewriteToArray.SimpleRewrite(parameters, Array.Empty<RewrittenValueBridge>());
-                if (!parameters.SimpleEnumeration) return (true, null);
+                var res = RewriteToArray.SimpleRewrite(design, Array.Empty<RewrittenValueBridge>());
+                if (!design.SimpleEnumeration) return (true, null);
                 if (res != null) return (true, res);
             }
             
             return (true, null);
         }
 
-        private static ExpressionSyntax RewriteSimplePart(string last, RewriteParameters parameters, int i)
+        private static ExpressionSyntax RewriteSimplePart(string last, RewriteDesign design, int i)
         {
-            var args = parameters.RewriteChain[i].Arguments;
+            var args = design.RewriteChain[i].Arguments;
             switch (last)
             {
-                case "Aggregate": return RewriteAggregate.SimpleRewrite(parameters, args);
-                case "All": return RewriteAll.SimpleRewrite(parameters, args);
-                case "Any": return RewriteAny.SimpleRewrite(parameters, args);
-                case "Average": return RewriteAverage.SimpleRewrite(parameters, args);
-                case "Sum": return RewriteSum.SimpleRewrite(parameters, args);
+                case "Aggregate": return RewriteAggregate.SimpleRewrite(design, args);
+                case "All": return RewriteAll.SimpleRewrite(design, args);
+                case "Any": return RewriteAny.SimpleRewrite(design, args);
+                case "Average": return RewriteAverage.SimpleRewrite(design, args);
+                case "Sum": return RewriteSum.SimpleRewrite(design, args);
                 
-                case "Count": return RewriteCount.SimpleRewrite(parameters, args);
-                case "LongCount": return RewriteLongCount.SimpleRewrite(parameters, args);
+                case "Count": return RewriteCount.SimpleRewrite(design, args);
+                case "LongCount": return RewriteLongCount.SimpleRewrite(design, args);
                 
-                case "First": return RewriteFirst.SimpleRewrite(parameters, args);
-                case "FirstOrDefault": return RewriteFirstOrDefault.SimpleRewrite(parameters, args);
-                case "Last": return RewriteLast.SimpleRewrite(parameters, args);
-                case "LastOrDefault": return RewriteLastOrDefault.SimpleRewrite(parameters, args);
-                case "Single": return RewriteSingle.SimpleRewrite(parameters, args);
-                case "SingleOrDefault": return RewriteSingleOrDefault.SimpleRewrite(parameters, args);
-                case "ElementAt": return RewriteElementAt.SimpleRewrite(parameters, args);
-                case "ElementAtOrDefault": return RewriteElementAtOrDefault.SimpleRewrite(parameters, args);
+                case "First": return RewriteFirst.SimpleRewrite(design, args);
+                case "FirstOrDefault": return RewriteFirstOrDefault.SimpleRewrite(design, args);
+                case "Last": return RewriteLast.SimpleRewrite(design, args);
+                case "LastOrDefault": return RewriteLastOrDefault.SimpleRewrite(design, args);
+                case "Single": return RewriteSingle.SimpleRewrite(design, args);
+                case "SingleOrDefault": return RewriteSingleOrDefault.SimpleRewrite(design, args);
+                case "ElementAt": return RewriteElementAt.SimpleRewrite(design, args);
+                case "ElementAtOrDefault": return RewriteElementAtOrDefault.SimpleRewrite(design, args);
                 
-                case "Range": RewriteRange.Rewrite(parameters, args); return null;
-                case "Repeat": RewriteRepeat.Rewrite(parameters, args); return null;
-                case "Empty": RewriteEmpty.Rewrite(parameters, args,  parameters.RewriteChain[i].Invocation); return null;
+                case "Range": RewriteRange.Rewrite(design, args); return null;
+                case "Repeat": RewriteRepeat.Rewrite(design, args); return null;
+                case "Empty": RewriteEmpty.Rewrite(design, args,  design.RewriteChain[i].Invocation); return null;
                 
-                case "Skip": RewriteSkip.Rewrite(parameters, args); return null;
-                case "Take": RewriteTake.Rewrite(parameters, args); return null;
-                case "Reverse": RewriteReverse.Rewrite(parameters, args); return null;
-                case "Select": RewriteSelect.Rewrite(parameters, args); return null;
-                case "Cast": RewriteCast.Rewrite(parameters, args, parameters.RewriteChain[i].Invocation); return null;
+                case "Skip": RewriteSkip.Rewrite(design, args); return null;
+                case "Take": RewriteTake.Rewrite(design, args); return null;
+                case "Reverse": RewriteReverse.Rewrite(design, args); return null;
+                case "Select": RewriteSelect.Rewrite(design, args); return null;
+                case "Cast": RewriteCast.Rewrite(design, args, design.RewriteChain[i].Invocation); return null;
                 
-                case "ToArray": return RewriteToArray.SimpleRewrite(parameters, args);
-                case "ToList": return RewriteToList.SimpleRewrite(parameters, args);
-                case "ToSimpleList": return RewriteToSimpleList.SimpleRewrite(parameters, args);
+                case "ToArray": return RewriteToArray.SimpleRewrite(design, args);
+                case "ToList": return RewriteToList.SimpleRewrite(design, args);
+                case "ToSimpleList": return RewriteToSimpleList.SimpleRewrite(design, args);
                 
-                case "Unchecked": RewriteUnchecked.Rewrite(parameters, args); return null;
-                case "WithResultSize": parameters.ResultSize = args[0]; return null;
-                case "WithMaxSize": parameters.SourceSize = args[0]; return null;
+                case "Unchecked": design.Unchecked = true; return null;
+                case "WithResultSize": design.ResultSize = args[0]; return null;
+                case "WithMaxSize": design.SourceSize = args[0]; return null;
                 default: return null;
             }
         }
 
-        private static void RewritePart(string last, RewriteParameters parameters, int i)
+        private static void RewritePart(string last, RewriteDesign design, int i)
         {
-            var args = parameters.RewriteChain[i].Arguments;
+            var args = design.RewriteChain[i].Arguments;
             switch (last)
             {
-                case "All": RewriteAll.Rewrite(parameters, args); return;
-                case "Any": RewriteAny.Rewrite(parameters, args); return;
-                case "Contains": RewriteContains.Rewrite(parameters, args); return;
-                case "Count": RewriteCount.Rewrite(parameters, args); return;
-                case "LongCount": RewriteLongCount.Rewrite(parameters, args); return;
+                case "All": RewriteAll.Rewrite(design, args); return;
+                case "Any": RewriteAny.Rewrite(design, args); return;
+                case "Contains": RewriteContains.Rewrite(design, args); return;
+                case "Count": RewriteCount.Rewrite(design, args); return;
+                case "LongCount": RewriteLongCount.Rewrite(design, args); return;
 
-                case "Min": RewriteMin.Rewrite(parameters, args); return;
-                case "Max": RewriteMax.Rewrite(parameters, args); return;
-                case "Average": RewriteAverage.Rewrite(parameters, args); return;
-                case "Aggregate": RewriteAggregate.Rewrite(parameters, args); return;
-                case "Sum": RewriteSum.Rewrite(parameters, args); return;
+                case "Min": RewriteMin.Rewrite(design, args); return;
+                case "Max": RewriteMax.Rewrite(design, args); return;
+                case "Average": RewriteAverage.Rewrite(design, args); return;
+                case "Aggregate": RewriteAggregate.Rewrite(design, args); return;
+                case "Sum": RewriteSum.Rewrite(design, args); return;
                 
-                case "ForEach": RewriteForEach.Rewrite(parameters, args); return;
+                case "ForEach": RewriteForEach.Rewrite(design, args); return;
                 
-                case "First": RewriteFirst.Rewrite(parameters, args); return;
-                case "FirstOrDefault": RewriteFirstOrDefault.Rewrite(parameters, args); return;
-                case "Last": RewriteLast.Rewrite(parameters, args); return;
-                case "LastOrDefault": RewriteLastOrDefault.Rewrite(parameters, args); return;
-                case "Single": RewriteSingle.Rewrite(parameters, args); return;
-                case "SingleOrDefault": RewriteSingleOrDefault.Rewrite(parameters, args); return;
-                case "ElementAt": RewriteElementAt.Rewrite(parameters, args); return;
-                case "ElementAtOrDefault": RewriteElementAtOrDefault.Rewrite(parameters, args); return;
+                case "First": RewriteFirst.Rewrite(design, args); return;
+                case "FirstOrDefault": RewriteFirstOrDefault.Rewrite(design, args); return;
+                case "Last": RewriteLast.Rewrite(design, args); return;
+                case "LastOrDefault": RewriteLastOrDefault.Rewrite(design, args); return;
+                case "Single": RewriteSingle.Rewrite(design, args); return;
+                case "SingleOrDefault": RewriteSingleOrDefault.Rewrite(design, args); return;
+                case "ElementAt": RewriteElementAt.Rewrite(design, args); return;
+                case "ElementAtOrDefault": RewriteElementAtOrDefault.Rewrite(design, args); return;
                 
-                case "Range": RewriteRange.Rewrite(parameters, args); return;
-                case "Repeat": RewriteRepeat.Rewrite(parameters, args); return;
-                case "Empty": RewriteEmpty.Rewrite(parameters, args,  parameters.RewriteChain[i].Invocation); return;
+                case "Range": RewriteRange.Rewrite(design, args); return;
+                case "Repeat": RewriteRepeat.Rewrite(design, args); return;
+                case "Empty": RewriteEmpty.Rewrite(design, args,  design.RewriteChain[i].Invocation); return;
                 
-                case "Skip": RewriteSkip.Rewrite(parameters, args); return;
-                case "SkipWhile": RewriteSkipWhile.Rewrite(parameters, args); return;
-                case "Take": RewriteTake.Rewrite(parameters, args); return;
-                case "TakeWhile": RewriteTakeWhile.Rewrite(parameters, args); return;
+                case "Skip": RewriteSkip.Rewrite(design, args); return;
+                case "SkipWhile": RewriteSkipWhile.Rewrite(design, args); return;
+                case "Take": RewriteTake.Rewrite(design, args); return;
+                case "TakeWhile": RewriteTakeWhile.Rewrite(design, args); return;
                 
-                case "Reverse": RewriteReverse.Rewrite(parameters, args); return;
-                case "Select": RewriteSelect.Rewrite(parameters, args); return;
-                case "SelectMany": RewriteSelectMany.Rewrite(parameters, args); return;
-                case "Where": RewriteWhere.Rewrite(parameters, args); return;
-                case "Cast": RewriteCast.Rewrite(parameters, args, parameters.RewriteChain[i].Invocation); return;
-                case "OfType": RewriteOfType.Rewrite(parameters, args, parameters.RewriteChain[i].Invocation); return;
+                case "Reverse": RewriteReverse.Rewrite(design, args); return;
+                case "Select": RewriteSelect.Rewrite(design, args); return;
+                case "SelectMany": RewriteSelectMany.Rewrite(design, args); return;
+                case "Where": RewriteWhere.Rewrite(design, args); return;
+                case "Cast": RewriteCast.Rewrite(design, args, design.RewriteChain[i].Invocation); return;
+                case "OfType": RewriteOfType.Rewrite(design, args, design.RewriteChain[i].Invocation); return;
                 
-                case "Concat": RewriteConcat.Rewrite(parameters, args); return;
-                case "Union": RewriteUnion.Rewrite(parameters, args); return;
-                case "Intersect": RewriteIntersect.Rewrite(parameters, args); return;
-                case "Except": RewriteExcept.Rewrite(parameters, args); return;
-                case "Distinct": RewriteDistinct.Rewrite(parameters, args); return;
+                case "Concat": RewriteConcat.Rewrite(design, args); return;
+                case "Union": RewriteUnion.Rewrite(design, args); return;
+                case "Intersect": RewriteIntersect.Rewrite(design, args); return;
+                case "Except": RewriteExcept.Rewrite(design, args); return;
+                case "Distinct": RewriteDistinct.Rewrite(design, args); return;
                 
-                case "SequenceEqual": RewriteSequenceEqual.Rewrite(parameters, args); return;
-                case "Zip": RewriteZip.Rewrite(parameters, args); return;
+                case "SequenceEqual": RewriteSequenceEqual.Rewrite(design, args); return;
+                case "Zip": RewriteZip.Rewrite(design, args); return;
                 
-                case "Join": RewriteJoin.Rewrite(parameters, args); return;
-                case "GroupBy": RewriteGroupBy.Rewrite(parameters, args); return;
-                case "GroupJoin": RewriteGroupJoin.Rewrite(parameters, args); return;
+                case "Join": RewriteJoin.Rewrite(design, args); return;
+                case "GroupBy": RewriteGroupBy.Rewrite(design, args); return;
+                case "GroupJoin": RewriteGroupJoin.Rewrite(design, args); return;
                 
-                case "ToArray": RewriteToArray.Rewrite(parameters, args); return;
-                case "ToList": RewriteToList.Rewrite(parameters, args); return;
-                case "ToSimpleList": RewriteToSimpleList.Rewrite(parameters, args); return;
-                case "ToDictionary": RewriteToDictionary.Rewrite(parameters, args); return;
-                case "ToLookup": RewriteToLookup.Rewrite(parameters, args); return;
+                case "ToArray": RewriteToArray.Rewrite(design, args); return;
+                case "ToList": RewriteToList.Rewrite(design, args); return;
+                case "ToSimpleList": RewriteToSimpleList.Rewrite(design, args); return;
+                case "ToDictionary": RewriteToDictionary.Rewrite(design, args); return;
                 
-                case "Unchecked": RewriteUnchecked.Rewrite(parameters, args); return;
-                case "WithResultSize": parameters.ResultSize = args[0]; return;
-                case "WithMaxSize": parameters.SourceSize = args[0]; return;
+                case "Unchecked": design.Unchecked = true; return;
+                case "WithResultSize": design.ResultSize = args[0]; return;
+                case "WithMaxSize": design.SourceSize = args[0]; return;
                 default: throw new NotImplementedException($"Rewrite of {last} not implemented");
             }
         }

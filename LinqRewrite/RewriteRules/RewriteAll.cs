@@ -10,22 +10,22 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteAll
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            if (!TryGetInt(p.ResultSize, out var intSize) || intSize > 10)
+            if (!TryGetInt(design.ResultSize, out var intSize) || intSize > 10)
                 return null;
 
             var items = Enumerable.Range(0, intSize).Select(x
-                => (ExpressionSyntax) SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x));
+                => (ExpressionSyntax) SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x));
             return items.Aggregate((x, y) => x.And(y));
         }
 
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            p.ForAdd(If(Not(args[0].Inline(p, p.LastValue)),
+            design.ForAdd(If(Not(args[0].Inline(design, design.LastValue)),
                         Return(false)));
 
-            p.ResultAdd(Return(true));
+            design.ResultAdd(Return(true));
         }
     }
 }

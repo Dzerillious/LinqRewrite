@@ -10,76 +10,76 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteAggregate
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            if (!TryGetInt(p.ResultSize, out var intSize) || intSize > 10)
+            if (!TryGetInt(design.ResultSize, out var intSize) || intSize > 10)
                 return null;
 
             var items = Enumerable.Range(0, intSize).Select(x
-                => new TypedValueBridge(p.LastValue.Type, SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x)));
+                => new TypedValueBridge(design.LastValue.Type, SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x)));
             
             var simple = args.Length == 1 
-                ? items.Aggregate((x, y) => args[0].Inline(p, x, y))
-                : items.Aggregate(new TypedValueBridge(args[0].GetType(p), args[0]), (x, y) => args[1].Inline(p, x, y));
+                ? items.Aggregate((x, y) => args[0].Inline(design, x, y))
+                : items.Aggregate(new TypedValueBridge(args[0].GetType(design), args[0]), (x, y) => args[1].Inline(design, x, y));
 
             return args.Length == 3
-                ? args[2].Inline(p, simple).Simplify()
+                ? args[2].Inline(design, simple).Simplify()
                 : simple.Simplify();
         }
         
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            if (args.Length == 1 && !AssertionExtension.AssertResultSizeGreaterEqual(p, 1, true)) return;
+            if (args.Length == 1 && !AssertionExtension.AssertResultSizeGreaterEqual(design, 1, true)) return;
             var aggregationValue = args.Length switch
             {
                 1 => args[0],
                 _ => args[1]
             };
 
-            var resultValue = p.ListEnumeration 
-                ? ListAggregate(p, aggregationValue, args)
-                : EnumerableAggregate(p, aggregationValue, args);
+            var resultValue = design.ListEnumeration 
+                ? ListAggregate(design, aggregationValue, args)
+                : EnumerableAggregate(design, aggregationValue, args);
             
-            p.ResultAdd(Return(args.Length switch
+            design.ResultAdd(Return(args.Length switch
             {
-                3 => args[2].Inline(p, resultValue),
+                3 => args[2].Inline(design, resultValue),
                 _ => resultValue
             }));
         }
 
-        private static TypedValueBridge ListAggregate(RewriteParameters p, RewrittenValueBridge aggregationValue,  RewrittenValueBridge[] args)
+        private static TypedValueBridge ListAggregate(RewriteDesign design, RewrittenValueBridge aggregationValue,  RewrittenValueBridge[] args)
         {
             var resultValue = args.Length switch
             {
-                1 => p.CurrentCollection[p.CurrentIterator.ForFrom],
-                _ => new TypedValueBridge(p, args[0])
+                1 => design.CurrentCollection[design.CurrentIterator.ForFrom],
+                _ => new TypedValueBridge(design, args[0])
             };
-            if (args.Length == 1) p.CurrentIterator.ForFrom += p.CurrentIterator.ForInc;
+            if (args.Length == 1) design.CurrentIterator.ForFrom += design.CurrentIterator.ForInc;
             
-            var resultVariable = VariableCreator.GlobalVariable(p, p.ReturnType, resultValue);
-            p.ForAdd(resultVariable.Assign(aggregationValue.Inline(p, resultVariable, p.LastValue)));
+            var resultVariable = VariableCreator.GlobalVariable(design, design.ReturnType, resultValue);
+            design.ForAdd(resultVariable.Assign(aggregationValue.Inline(design, resultVariable, design.LastValue)));
             return resultVariable;
         }
         
-        private static TypedValueBridge EnumerableAggregate(RewriteParameters p, RewrittenValueBridge aggregationValue,  RewrittenValueBridge[] args)
+        private static TypedValueBridge EnumerableAggregate(RewriteDesign design, RewrittenValueBridge aggregationValue,  RewrittenValueBridge[] args)
         {
             var resultValue = args.Length switch
             {
-                1 => new TypedValueBridge(p.LastValue.Type, Default(p.LastValue.Type)),
-                _ => new TypedValueBridge(p, args[0])
+                1 => new TypedValueBridge(design.LastValue.Type, Default(design.LastValue.Type)),
+                _ => new TypedValueBridge(design, args[0])
             };
-            var resultVariable = VariableCreator.GlobalVariable(p, p.ReturnType, resultValue);
-            var firstVariable = VariableCreator.GlobalVariable(p, Bool, true);
+            var resultVariable = VariableCreator.GlobalVariable(design, design.ReturnType, resultValue);
+            var firstVariable = VariableCreator.GlobalVariable(design, Bool, true);
             
-            p.ForAdd(If(firstVariable,
+            design.ForAdd(If(firstVariable,
                         Block(
-                    resultVariable.Assign(p.LastValue),
+                    resultVariable.Assign(design.LastValue),
                                     firstVariable.Assign(false),
                                     Continue()
                             ),
-                       resultVariable.Assign(aggregationValue.Inline(p, resultVariable, p.LastValue))));
+                       resultVariable.Assign(aggregationValue.Inline(design, resultVariable, design.LastValue))));
 
-            if (args.Length == 1 && !p.Unchecked) p.ResultAdd(If(firstVariable, Throw("System.InvalidOperationException", "The sequence did not contain enough elements.")));
+            if (args.Length == 1 && !design.Unchecked) design.ResultAdd(If(firstVariable, Throw("System.InvalidOperationException", "The sequence did not contain enough elements.")));
             return resultVariable;
         }
     }

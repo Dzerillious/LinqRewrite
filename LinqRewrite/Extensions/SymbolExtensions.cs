@@ -27,28 +27,28 @@ namespace LinqRewrite.Extensions
         public static ParameterSyntax GetLambdaParameter(Lambda lambda, int index)
             => lambda.Parameters[index];
 
-        public static TypeBridge ItemType(this RewrittenValueBridge collection, RewriteParameters p)
+        public static TypeBridge ItemType(this RewrittenValueBridge collection, RewriteDesign design)
         {
-            var itemString = collection.Old.GetItemTypeSymbol(p).ToDisplayString();
+            var itemString = collection.Old.GetItemTypeSymbol(design).ToDisplayString();
             return SyntaxFactory.ParseTypeName(itemString);
         }
         
-        public static TypeBridge ReturnItemType(this RewrittenValueBridge rewritten, RewriteParameters p)
+        public static TypeBridge ReturnItemType(this RewrittenValueBridge rewritten, RewriteDesign design)
         {
             var old = (LambdaExpressionSyntax) rewritten.OldVal;
-            var itemString = CodeCreationService.GetLastLambdaExpression(old).GetItemTypeSymbol(p).ToDisplayString();
+            var itemString = CodeCreationService.GetLastLambdaExpression(old).GetItemTypeSymbol(design).ToDisplayString();
             return SyntaxFactory.ParseTypeName(itemString);
         }
 
-        public static ITypeSymbol GetItemTypeSymbol(this TypeBridge collection, RewriteParameters p)
+        public static ITypeSymbol GetItemTypeSymbol(this TypeBridge collection, RewriteDesign design)
         {
-            var collectionType = ModelExtensions.GetTypeInfo(p.Semantic, collection).Type;
+            var collectionType = ModelExtensions.GetTypeInfo(design.Semantic, collection).Type;
             return GetItemType(collectionType);
         }
 
-        public static ITypeSymbol GetItemTypeSymbol(this ValueBridge collection, RewriteParameters p)
+        public static ITypeSymbol GetItemTypeSymbol(this ValueBridge collection, RewriteDesign design)
         {
-            var collectionType = ModelExtensions.GetTypeInfo(p.Semantic, collection.Value).Type;
+            var collectionType = ModelExtensions.GetTypeInfo(design.Semantic, collection.Value).Type;
             return GetItemType(collectionType);
         }
 

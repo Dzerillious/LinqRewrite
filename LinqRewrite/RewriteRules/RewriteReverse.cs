@@ -9,96 +9,96 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteReverse
     {
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            if (!p.ModifiedEnumeration)
+            if (!design.ModifiedEnumeration)
             {
-                p.SwitchIsReversed();
-                p.ListEnumeration = false;
-                p.Indexer = null;
+                design.SwitchIsReversed();
+                design.ListEnumeration = false;
+                design.Indexer = null;
             }
-            else if (p.SourceSize != null)
+            else if (design.SourceSize != null)
             {
-                KnownSourceSize(p);
-                p.ListEnumeration = true;
-                p.ModifiedEnumeration = false;
+                KnownSourceSize(design);
+                design.ListEnumeration = true;
+                design.ModifiedEnumeration = false;
             }
             else
             {
-                UnknownSourceSize(p);
-                p.ListEnumeration = true;
-                p.ModifiedEnumeration = false;
+                UnknownSourceSize(design);
+                design.ListEnumeration = true;
+                design.ModifiedEnumeration = false;
             }
-            p.SimpleEnumeration = false;
+            design.SimpleEnumeration = false;
         }
 
-        private static void KnownSourceSize(RewriteParameters p)
+        private static void KnownSourceSize(RewriteDesign design)
         {
-            p.Indexer = null;
-            var reverseIndexerVariable = VariableCreator.GlobalVariable(p, Int, 8);
-            var logVariable = VariableCreator.GlobalVariable(p, Int,
+            design.Indexer = null;
+            var reverseIndexerVariable = VariableCreator.GlobalVariable(design, Int, 8);
+            var logVariable = VariableCreator.GlobalVariable(design, Int,
                 "LinqRewrite".Access("Core", "IntExtensions", "Log2")
-                    .Invoke(p.SourceSize.Cast(SyntaxKind.UIntKeyword)) - 3);
+                    .Invoke(design.SourceSize.Cast(SyntaxKind.UIntKeyword)) - 3);
                 
-            p.PreUseAdd(logVariable.SubAssign(logVariable % 2));
-            var currentLengthVariable = VariableCreator.GlobalVariable(p, Int, 8);
-            var resultVariable = VariableCreator.GlobalVariable(p, p.LastValue.ArrayType(), CreateArray(p.LastValue.ArrayType(), 8));
+            design.PreUseAdd(logVariable.SubAssign(logVariable % 2));
+            var currentLengthVariable = VariableCreator.GlobalVariable(design, Int, 8);
+            var resultVariable = VariableCreator.GlobalVariable(design, design.LastValue.ArrayType(), CreateArray(design.LastValue.ArrayType(), 8));
 
-            var tmpSize = VariableCreator.GlobalVariable(p, Int);
-            p.ForAdd(reverseIndexerVariable.PreDecrement());
-            p.ForAdd(If(reverseIndexerVariable < 0,
+            var tmpSize = VariableCreator.GlobalVariable(design, Int);
+            design.ForAdd(reverseIndexerVariable.PreDecrement());
+            design.ForAdd(If(reverseIndexerVariable < 0,
                 Block(
                     tmpSize.Assign(currentLengthVariable),
                                     "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeReverseArray")
                                         .Invoke(2, 
-                                            p.SourceSize, 
+                                            design.SourceSize, 
                                             RefArg(resultVariable), 
                                             RefArg(logVariable),
                                             OutArg(currentLengthVariable)),
                     reverseIndexerVariable.Assign(currentLengthVariable - tmpSize - 1 ))));
             
-            p.ForAdd(resultVariable[reverseIndexerVariable].Assign(p.LastValue));
+            design.ForAdd(resultVariable[reverseIndexerVariable].Assign(design.LastValue));
             
-            p.Indexer = null;
-            p.Iterators.All.ForEach(x => x.Complete = true);
-            p.AddIterator(new CollectionValueBridge(p, resultVariable.Type, p.LastValue.Type, resultVariable, true));
-            p.CurrentCollection = p.CurrentIterator.Collection;
-            RewriteCollectionEnumeration.RewriteOther(p, p.CurrentCollection);
+            design.Indexer = null;
+            design.Iterators.All.ForEach(x => x.Complete = true);
+            design.AddIterator(new CollectionValueBridge(design, resultVariable.Type, design.LastValue.Type, resultVariable, true));
+            design.CurrentCollection = design.CurrentIterator.Collection;
+            RewriteCollectionEnumeration.RewriteOther(design, design.CurrentCollection);
             
-            p.ResultSize = p.SourceSize = currentLengthVariable - reverseIndexerVariable;
-            p.CurrentIterator.ForFrom = reverseIndexerVariable;
-            p.CurrentIterator.ForTo = currentLengthVariable - 1;
-            p.Indexer = null;
+            design.ResultSize = design.SourceSize = currentLengthVariable - reverseIndexerVariable;
+            design.CurrentIterator.ForFrom = reverseIndexerVariable;
+            design.CurrentIterator.ForTo = currentLengthVariable - 1;
+            design.Indexer = null;
         }
 
-        private static void UnknownSourceSize(RewriteParameters p)
+        private static void UnknownSourceSize(RewriteDesign design)
         {
-            p.Indexer = null;
-            var reverseIndexerVariable = VariableCreator.GlobalVariable(p, Int, 8);
-            var currentLengthVariable = VariableCreator.GlobalVariable(p, Int, 8);
-            var resultVariable = VariableCreator.GlobalVariable(p, p.LastValue.ArrayType(), CreateArray(p.LastValue.ArrayType(), 8));
+            design.Indexer = null;
+            var reverseIndexerVariable = VariableCreator.GlobalVariable(design, Int, 8);
+            var currentLengthVariable = VariableCreator.GlobalVariable(design, Int, 8);
+            var resultVariable = VariableCreator.GlobalVariable(design, design.LastValue.ArrayType(), CreateArray(design.LastValue.ArrayType(), 8));
 
-            var tmpSize = VariableCreator.GlobalVariable(p, Int);
-            p.ForAdd(reverseIndexerVariable.PreDecrement());
-            p.ForAdd(If(reverseIndexerVariable < 0,
+            var tmpSize = VariableCreator.GlobalVariable(design, Int);
+            design.ForAdd(reverseIndexerVariable.PreDecrement());
+            design.ForAdd(If(reverseIndexerVariable < 0,
                         Block(
                     tmpSize.Assign(currentLengthVariable),
                                     "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeReverseArray")
                                         .Invoke(2, RefArg(resultVariable), RefArg(currentLengthVariable)),
                                             reverseIndexerVariable.Assign(currentLengthVariable - tmpSize - 1 ))));
-            p.ForAdd(resultVariable[reverseIndexerVariable].Assign(p.LastValue));
+            design.ForAdd(resultVariable[reverseIndexerVariable].Assign(design.LastValue));
             
-            p.Indexer = null;
-            p.Iterators.All.ForEach(x => x.Complete = true);
+            design.Indexer = null;
+            design.Iterators.All.ForEach(x => x.Complete = true);
             
-            p.AddIterator(new CollectionValueBridge(p, resultVariable.Type, p.LastValue.Type, resultVariable, true));
-            p.CurrentCollection = p.CurrentIterator.Collection;
-            RewriteCollectionEnumeration.RewriteOther(p, p.CurrentCollection);
+            design.AddIterator(new CollectionValueBridge(design, resultVariable.Type, design.LastValue.Type, resultVariable, true));
+            design.CurrentCollection = design.CurrentIterator.Collection;
+            RewriteCollectionEnumeration.RewriteOther(design, design.CurrentCollection);
             
-            p.ResultSize = p.SourceSize = currentLengthVariable - reverseIndexerVariable;
-            p.CurrentIterator.ForFrom = reverseIndexerVariable;
-            p.CurrentIterator.ForTo = currentLengthVariable - 1;
-            p.Indexer = null;
+            design.ResultSize = design.SourceSize = currentLengthVariable - reverseIndexerVariable;
+            design.CurrentIterator.ForFrom = reverseIndexerVariable;
+            design.CurrentIterator.ForTo = currentLengthVariable - 1;
+            design.Indexer = null;
         }
     }
 }

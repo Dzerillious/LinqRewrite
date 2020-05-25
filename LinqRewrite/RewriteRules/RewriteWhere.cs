@@ -7,17 +7,17 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteWhere
     {
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            p.LastValue = p.LastValue.Reusable(p);
+            design.LastValue = design.LastValue.Reusable(design);
             var conditionValue = args.Length switch
             {
-                1 when args[0].OldVal.Invokable1Param(p) => args[0].Inline(p, p.LastValue),
-                1 => args[0].Inline(p, p.LastValue, p.Indexer)
+                1 when args[0].OldVal.Invokable1Param(design) => args[0].Inline(design, design.LastValue),
+                1 => args[0].Inline(design, design.LastValue, design.Indexer)
             };
-            p.ForAdd(If(Not(conditionValue), Continue()));
-            p.ListEnumeration = false;
-            p.ModifiedEnumeration = true;
+            design.ForAdd(If(Not(conditionValue), Continue()));
+            design.ListEnumeration = false;
+            design.ModifiedEnumeration = true;
         }
     }
 }

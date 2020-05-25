@@ -8,79 +8,79 @@ namespace LinqRewrite.Extensions
     public static class VariableCreator
     {
         public static int VariableIndex;
-        public static LocalVariable SuperGlobalVariable(RewriteParameters p, TypeSyntax type, ValueBridge initial)
+        public static LocalVariable SuperGlobalVariable(RewriteDesign design, TypeSyntax type, ValueBridge initial)
         {
             var variable = "v" + VariableIndex++ % 10_000;
             var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
-            p.Variables.Add(created);
+            design.Variables.Add(created);
             
-            p.InitialAdd(LocalVariableCreation(variable, type));
-            p.InitialAdd(((ValueBridge)variable).Assign(initial));
-            p.SimpleEnumeration = false;
+            design.InitialAdd(LocalVariableCreation(variable, type));
+            design.InitialAdd(((ValueBridge)variable).Assign(initial));
+            design.SimpleEnumeration = false;
             return created;
         }
         
-        public static LocalVariable GlobalVariable(RewriteParameters p, TypeSyntax type)
+        public static LocalVariable GlobalVariable(RewriteDesign design, TypeSyntax type)
         {
             var variable = "v" + VariableIndex++ % 10_000;
             var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
-            p.Variables.Add(created);
+            design.Variables.Add(created);
             
-            p.InitialAdd(LocalVariableCreation(variable, type));
-            p.SimpleEnumeration = false;
+            design.InitialAdd(LocalVariableCreation(variable, type));
+            design.SimpleEnumeration = false;
             return created;
         }
         
-        public static LocalVariable GlobalVariable(RewriteParameters p, TypeSyntax type, ValueBridge initial, IteratorParameters iterator)
+        public static LocalVariable GlobalVariable(RewriteDesign design, TypeSyntax type, ValueBridge initial, IteratorDesign iterator)
         {
             var variable = "v" + VariableIndex++ % 10_000;
             var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
-            p.Variables.Add(created);
+            design.Variables.Add(created);
             
-            p.InitialAdd(LocalVariableCreation(variable, type));
+            design.InitialAdd(LocalVariableCreation(variable, type));
             iterator.PreFor.Add((StatementBridge)((ValueBridge)variable).Assign(initial));
-            p.SimpleEnumeration = false;
+            design.SimpleEnumeration = false;
             return created;
         }
         
-        public static LocalVariable GlobalVariable(RewriteParameters p, TypeSyntax type, ValueBridge initial)
+        public static LocalVariable GlobalVariable(RewriteDesign design, TypeSyntax type, ValueBridge initial)
         {
             var variable = "v" + VariableIndex++ % 10_000;
             var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
-            p.Variables.Add(created);
+            design.Variables.Add(created);
             
-            p.InitialAdd(LocalVariableCreation(variable, type));
-            p.PreUseAdd(((ValueBridge)variable).Assign(initial));
-            p.SimpleEnumeration = false;
+            design.InitialAdd(LocalVariableCreation(variable, type));
+            design.PreUseAdd(((ValueBridge)variable).Assign(initial));
+            design.SimpleEnumeration = false;
             return created;
         }
 
-        public static LocalVariable LocalVariable(RewriteParameters p, TypedValueBridge value)
-            => LocalVariable(p, value.Type, value);
+        public static LocalVariable LocalVariable(RewriteDesign design, TypedValueBridge value)
+            => LocalVariable(design, value.Type, value);
         
-        public static LocalVariable LocalVariable(RewriteParameters p, TypeBridge type, ValueBridge initial)
+        public static LocalVariable LocalVariable(RewriteDesign design, TypeBridge type, ValueBridge initial)
         {
             var variable = "v" + VariableIndex++ % 10_000;
             var stringType = type.ToString();
-            var found = p.Variables.FirstOrDefault(x => stringType == x.Type.ToString() && !x.IsGlobal && !x.IsUsed);
+            var found = design.Variables.FirstOrDefault(x => stringType == x.Type.ToString() && !x.IsGlobal && !x.IsUsed);
             if (found != null)
             {
                 found.IsUsed = true;
                 return found;
             }
             var created = new LocalVariable(variable, type);
-            p.Variables.Add(created);
+            design.Variables.Add(created);
             
-            p.InitialAdd(LocalVariableCreation(variable, type));
-            p.PreUseAdd(((ValueBridge)variable).Assign(initial));
-            p.SimpleEnumeration = false;
+            design.InitialAdd(LocalVariableCreation(variable, type));
+            design.PreUseAdd(((ValueBridge)variable).Assign(initial));
+            design.SimpleEnumeration = false;
             return created;
         }
         
-        public static LocalVariable LocalVariable(RewriteParameters p, TypeBridge type)
+        public static LocalVariable LocalVariable(RewriteDesign design, TypeBridge type)
         {
             var stringType = type.ToString();
-            var found = p.Variables.FirstOrDefault(x => stringType == x.Type.ToString() && !x.IsGlobal && !x.IsUsed);
+            var found = design.Variables.FirstOrDefault(x => stringType == x.Type.ToString() && !x.IsGlobal && !x.IsUsed);
             if (found != null)
             {
                 found.IsUsed = true;
@@ -88,10 +88,10 @@ namespace LinqRewrite.Extensions
             }
             var variable = "v" + VariableIndex++ % 10_000;
             var created = new LocalVariable(variable, type);
-            p.Variables.Add(created);
+            design.Variables.Add(created);
 
-            p.InitialAdd(LocalVariableCreation(variable, type));
-            p.SimpleEnumeration = false;
+            design.InitialAdd(LocalVariableCreation(variable, type));
+            design.SimpleEnumeration = false;
             return created;
         }
     }

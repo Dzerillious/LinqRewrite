@@ -136,13 +136,13 @@ namespace LinqRewrite.Extensions
         public static DefaultExpressionSyntax Default(TypeBridge @type)
             => DefaultExpression(@type);
 
-        public static TypedValueBridge ReusableConst(this RewrittenValueBridge e, RewriteParameters p, bool? reuse = null)
-            => ReusableConst(e.New, p, e.Old.GetType(p), reuse);
+        public static TypedValueBridge ReusableConst(this RewrittenValueBridge e, RewriteDesign design, bool? reuse = null)
+            => ReusableConst(e.New, design, e.Old.GetType(design), reuse);
 
-        public static TypedValueBridge ReusableConst(this TypedValueBridge e, RewriteParameters p, bool? reuse = null)
-            => ReusableConst(e.Value, p, e.Type, reuse);
+        public static TypedValueBridge ReusableConst(this TypedValueBridge e, RewriteDesign design, bool? reuse = null)
+            => ReusableConst(e.Value, design, e.Type, reuse);
 
-        public static TypedValueBridge ReusableConst(this ValueBridge e, RewriteParameters p, TypeBridge type, bool? reuse = null)
+        public static TypedValueBridge ReusableConst(this ValueBridge e, RewriteDesign design, TypeBridge type, bool? reuse = null)
         {
             if (reuse == false) return new TypedValueBridge(type, e);
             if (reuse == null && IsReusable(e))
@@ -152,11 +152,11 @@ namespace LinqRewrite.Extensions
                 return new TypedValueBridge(type, e);
             }
 
-            var tmpVariable = VariableCreator.SuperGlobalVariable(p, type, e);
+            var tmpVariable = VariableCreator.SuperGlobalVariable(design, type, e);
             return new TypedValueBridge(type.Type, IdentifierName(tmpVariable));
         }
 
-        public static TypedValueBridge ReusableForConst(this ValueBridge e, RewriteParameters p, TypeBridge type, IteratorParameters iterator, bool? reuse = null)
+        public static TypedValueBridge ReusableForConst(this ValueBridge e, RewriteDesign design, TypeBridge type, IteratorDesign iterator, bool? reuse = null)
         {
             if (reuse == false) return new TypedValueBridge(type, e);
             if (reuse == null && IsReusable(e))
@@ -166,11 +166,11 @@ namespace LinqRewrite.Extensions
                 return new TypedValueBridge(type, e);
             }
 
-            var tmpVariable = VariableCreator.GlobalVariable(p, type, e, iterator);
+            var tmpVariable = VariableCreator.GlobalVariable(design, type, e, iterator);
             return new TypedValueBridge(type.Type, IdentifierName(tmpVariable));
         }
 
-        public static TypedValueBridge Reusable(this ValueBridge e, RewriteParameters p, TypeBridge type, bool? reuse = null)
+        public static TypedValueBridge Reusable(this ValueBridge e, RewriteDesign design, TypeBridge type, bool? reuse = null)
         {
             if (reuse == false) return new TypedValueBridge(type, e);
             if (reuse == null && IsReusable(e))
@@ -180,38 +180,38 @@ namespace LinqRewrite.Extensions
                 return new TypedValueBridge(type, e);
             }
 
-            var tmpVariable = VariableCreator.LocalVariable(p, type);
-            p.ForAdd(tmpVariable.Assign(e));
+            var tmpVariable = VariableCreator.LocalVariable(design, type);
+            design.ForAdd(tmpVariable.Assign(e));
             tmpVariable.IsUsed = true;
             return new TypedValueBridge(type.Type, IdentifierName(tmpVariable));
         }
 
-        public static TypedValueBridge Reusable(this TypedValueBridge e, RewriteParameters p, bool? reuse = null)
-            => Reusable(e.Value, p, e.Type, reuse);
+        public static TypedValueBridge Reusable(this TypedValueBridge e, RewriteDesign design, bool? reuse = null)
+            => Reusable(e.Value, design, e.Type, reuse);
 
-        public static TypedValueBridge Inline(this ExpressionSyntax e, RewriteParameters p,
+        public static TypedValueBridge Inline(this ExpressionSyntax e, RewriteDesign design,
             params TypedValueBridge[] values)
-            => Inline(new RewrittenValueBridge(e), p, values);
+            => Inline(new RewrittenValueBridge(e), design, values);
 
-        public static TypedValueBridge Inline(this RewrittenValueBridge e, RewriteParameters p,
+        public static TypedValueBridge Inline(this RewrittenValueBridge e, RewriteDesign design,
             params TypedValueBridge[] values)
         {
             TypeBridge returnType;
             if (e.OldVal is LambdaExpressionSyntax lambda)
-                returnType = lambda.ReturnType(p);
-            else returnType = ParseTypeName(((INamedTypeSymbol)p.Semantic.GetTypeInfo(e.OldVal).ConvertedType).DelegateInvokeMethod.ReturnType.ToDisplayString());
+                returnType = lambda.ReturnType(design);
+            else returnType = ParseTypeName(((INamedTypeSymbol)design.Semantic.GetTypeInfo(e.OldVal).ConvertedType).DelegateInvokeMethod.ReturnType.ToDisplayString());
             
             if (IsLambdaSimple(e.OldVal))
-                return p.Code.InlineLambda(p, e, returnType, values);
+                return design.Code.InlineLambda(design, e, returnType, values);
 
             var val = values.Select(x =>
             {
                 if (IsReusable(x)) return x;
-                var inlineVariable = VariableCreator.LocalVariable(p, x.Type);
-                p.ForAdd(inlineVariable.Assign(x));
+                var inlineVariable = VariableCreator.LocalVariable(design, x.Type);
+                design.ForAdd(inlineVariable.Assign(x));
                 return new TypedValueBridge(x.Type, inlineVariable);
             }).ToArray();
-            return p.Code.InlineLambda(p, e, returnType, val);
+            return design.Code.InlineLambda(design, e, returnType, val);
         }
 
         public static bool IsLambdaSimple(ExpressionSyntax e)
@@ -246,11 +246,11 @@ namespace LinqRewrite.Extensions
                    || e is PrefixUnaryExpressionSyntax;
         }
 
-        public static TypeBridge GetType(this RewrittenValueBridge expression, RewriteParameters p)
-            => p.Semantic.GetTypeFromExpression(expression.Old);
+        public static TypeBridge GetType(this RewrittenValueBridge expression, RewriteDesign design)
+            => design.Semantic.GetTypeFromExpression(expression.Old);
 
-        public static TypeBridge GetType(this ValueBridge expression, RewriteParameters p)
-            => p.Semantic.GetTypeFromExpression(expression);
+        public static TypeBridge GetType(this ValueBridge expression, RewriteDesign design)
+            => design.Semantic.GetTypeFromExpression(expression);
 
         public static BlockSyntax Block(params StatementBridge[] statements)
             => SyntaxFactory.Block(statements.Select(x => (StatementSyntax) x));
@@ -281,19 +281,19 @@ namespace LinqRewrite.Extensions
                         OmittedArraySizeExpression(Token(SyntaxKind.OmittedArraySizeExpressionToken))))));
         }
 
-        public static TypeBridge ReturnType(this LambdaExpressionSyntax lambda, RewriteParameters p)
-            => CodeCreationService.GetLambdaReturnType(p.Semantic, lambda);
+        public static TypeBridge ReturnType(this LambdaExpressionSyntax lambda, RewriteDesign design)
+            => CodeCreationService.GetLambdaReturnType(design.Semantic, lambda);
         
-        public static TypeBridge ReturnType(this RewrittenValueBridge rewritten, RewriteParameters p)
+        public static TypeBridge ReturnType(this RewrittenValueBridge rewritten, RewriteDesign design)
         {
             var old = (LambdaExpressionSyntax) rewritten.OldVal;
-            return CodeCreationService.GetLambdaReturnType(p.Semantic, old);
+            return CodeCreationService.GetLambdaReturnType(design.Semantic, old);
         }
 
         public static ValueBridge Parenthesize(ExpressionSyntax expression)
             => ParenthesizedExpression(expression);
 
-        public static bool Invokable1Param(this ExpressionSyntax e, RewriteParameters p)
+        public static bool Invokable1Param(this ExpressionSyntax e, RewriteDesign design)
         {
             switch (e)
             {
@@ -304,7 +304,7 @@ namespace LinqRewrite.Extensions
                 default:
                     try
                     {
-                        return ((INamedTypeSymbol) p.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.Parameters.Length < 2;
+                        return ((INamedTypeSymbol) design.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.Parameters.Length < 2;
                     }
                     catch (Exception)
                     {
@@ -313,7 +313,7 @@ namespace LinqRewrite.Extensions
             }
         }
 
-        public static bool IsInvokable(this ExpressionSyntax e, RewriteParameters p)
+        public static bool IsInvokable(this ExpressionSyntax e, RewriteDesign design)
         {
             switch (e)
             {
@@ -323,7 +323,7 @@ namespace LinqRewrite.Extensions
                 default:
                     try
                     {
-                        var _ = ((INamedTypeSymbol) p.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.Parameters;
+                        var _ = ((INamedTypeSymbol) design.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.Parameters;
                         return true;
                     }
                     catch (Exception)

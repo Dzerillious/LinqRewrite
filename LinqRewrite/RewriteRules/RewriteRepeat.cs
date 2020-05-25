@@ -8,30 +8,30 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteRepeat
     {
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
+            design.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
             var itemValue = args[0];
             var countValue = args[1];
-            if (!AssertionExtension.AssertGreaterEqual(p, countValue, 0)) return;
+            if (!AssertionExtension.AssertGreaterEqual(design, countValue, 0)) return;
             
-            p.AddIterator();
-            p.CurrentIterator.ForFrom = 0;
-            p.CurrentIterator.ForTo = countValue - 1;
-            p.CurrentIterator.ForIndexer = VariableCreator.LocalVariable(p, Int);
+            design.AddIterator();
+            design.CurrentIterator.ForFrom = 0;
+            design.CurrentIterator.ForTo = countValue - 1;
+            design.CurrentIterator.ForIndexer = VariableCreator.LocalVariable(design, Int);
             
-            p.ResultSize = countValue;
-            p.SourceSize = countValue;
-            p.ListEnumeration = false;
-            p.SimpleEnumeration = true;
+            design.ResultSize = countValue;
+            design.SourceSize = countValue;
+            design.ListEnumeration = false;
+            design.SimpleEnumeration = true;
             
-            if (p.CurrentIndexer == null)
+            if (design.CurrentIndexer == null)
             {
-                p.CurrentIterator.Indexer = p.CurrentIterator.ForIndexer;
-                p.CurrentIterator.Indexer.IsGlobal = true;
+                design.CurrentIterator.Indexer = design.CurrentIterator.ForIndexer;
+                design.CurrentIterator.Indexer.IsGlobal = true;
             }
-            p.LastValue = new TypedValueBridge(itemValue.GetType(p), itemValue);
-            p.FirstCollection = p.CurrentCollection = null;
+            design.LastValue = new TypedValueBridge(itemValue.GetType(design), itemValue);
+            design.FirstCollection = design.CurrentCollection = null;
         }
     }
 }

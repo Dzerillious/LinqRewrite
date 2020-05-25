@@ -9,28 +9,28 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteLast
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             if (args.Length != 0) return null;
-            return SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMax);
+            return SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMax);
         }
 
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            if (!AssertionExtension.AssertResultSizeGreaterEqual(p, 0, true)) return;
-            var foundVariable = VariableCreator.GlobalVariable(p, NullableType(p.ReturnType), null);
+            if (!AssertionExtension.AssertResultSizeGreaterEqual(design, 0, true)) return;
+            var foundVariable = VariableCreator.GlobalVariable(design, NullableType(design.ReturnType), null);
             
             if (args.Length == 0)
-                p.ForAdd(foundVariable.Assign(p.LastValue));
+                design.ForAdd(foundVariable.Assign(design.LastValue));
             else
             {
-                p.ForAdd(If(args[0].Inline(p, p.LastValue),
-                            foundVariable.Assign(p.LastValue)));
+                design.ForAdd(If(args[0].Inline(design, design.LastValue),
+                            foundVariable.Assign(design.LastValue)));
             }
             
-            p.ResultAdd(If(foundVariable.IsEqual(null),
+            design.ResultAdd(If(foundVariable.IsEqual(null),
                             Throw("System.InvalidOperationException", "The sequence did not contain any elements."), 
-                            Return(foundVariable.Cast(p.ReturnType))));
+                            Return(foundVariable.Cast(design.ReturnType))));
         }
     }
 }

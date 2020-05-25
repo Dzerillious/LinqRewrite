@@ -8,9 +8,9 @@ using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.DataStructures
 {
-    public class IteratorParameters : IStatementSyntax
+    public class IteratorDesign : IStatementSyntax
     {
-        private readonly RewriteParameters _parameters;
+        private readonly RewriteDesign _design;
         public ValueBridge ForFrom { get; set; }
         public ValueBridge ForTo { get; set; }
         public ValueBridge ForInc { get; set; } = 1;
@@ -32,49 +32,49 @@ namespace LinqRewrite.DataStructures
 
         public void BodyAdd(StatementBridge _) => ForBody.Add(_);
         
-        public IteratorParameters(RewriteParameters parameters, CollectionValueBridge collection)
+        public IteratorDesign(RewriteDesign design, CollectionValueBridge collection)
         {
-            _parameters = parameters;
+            _design = design;
             Collection = collection;
         }
 
         private bool _preAddCalculated;
-        public void CalculatePreAdd(RewriteParameters p)
+        public void CalculatePreAdd(RewriteDesign design)
         {
             if (_preAddCalculated) return;
             _preAddCalculated = true;
             
             ForBody.ForEach(x =>
             {
-                if (x is IteratorParameters iteratorParameters)
-                    iteratorParameters.CalculatePreAdd(p);
+                if (x is IteratorDesign iteratorParameters)
+                    iteratorParameters.CalculatePreAdd(design);
             });
             if (ForFrom == null) PreFor.Insert(0, (StatementBridge)Enumerator.Assign(Collection.Access("GetEnumerator").Invoke()));
             else if (IsReversed)
             {
                 PreFor.Add((StatementBridge)ForIndexer.Assign(ForFrom.Simplify()));
-                ForTo = ForTo.Simplify().ReusableForConst(_parameters, Int, this);
+                ForTo = ForTo.Simplify().ReusableForConst(_design, Int, this);
             }
             else
             {
                 PreFor.Add((StatementBridge)ForIndexer.Assign(ForFrom.Simplify()));
-                ForTo = (ForTo + 1).Simplify().ReusableForConst(_parameters, Int, this);
+                ForTo = (ForTo + 1).Simplify().ReusableForConst(_design, Int, this);
             }
         }
 
-        public StatementSyntax[] GetStatementSyntax(RewriteParameters p)
+        public StatementSyntax[] GetStatementSyntax(RewriteDesign design)
         {
-            CalculatePreAdd(p);
+            CalculatePreAdd(design);
             if (IgnoreIterator) return Array.Empty<StatementSyntax>();
             var content = ForBody.SelectMany(x => 
-                x is IteratorParameters parameters
+                x is IteratorDesign parameters
                     ? parameters.PreFor.Select(x => (StatementBridge)x).Concat(new[] {x})
                         .Concat(parameters.PostFor.Select(x => (StatementBridge)x))
                     : new[] {x}).Concat(ForEnd).ToList();
             
-            if (ForFrom == null) return RewriteService.GetForEachStatement(p, Enumerator, content);
-            if (IsReversed) return new StatementSyntax[]{RewriteService.GetReverseForStatement(p, ForIndexer, ForTo, ForInc.Simplify(), content)};
-            return new StatementSyntax[]{RewriteService.GetForStatement(p, ForIndexer, ForTo, ForInc.Simplify(), content)};
+            if (ForFrom == null) return RewriteService.GetForEachStatement(design, Enumerator, content);
+            if (IsReversed) return new StatementSyntax[]{RewriteService.GetReverseForStatement(design, ForIndexer, ForTo, ForInc.Simplify(), content)};
+            return new StatementSyntax[]{RewriteService.GetForStatement(design, ForIndexer, ForTo, ForInc.Simplify(), content)};
         }
     }
 }

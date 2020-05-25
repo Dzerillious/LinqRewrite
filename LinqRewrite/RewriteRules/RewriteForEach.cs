@@ -6,15 +6,15 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteForEach
     {
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             var inlined = args.Length switch
             {
-                1 when args[0].OldVal.Invokable1Param(p) => args[0].Inline(p, p.LastValue),
-                1 => args[0].Inline(p, p.LastValue, p.Indexer),
-                _ => p.LastValue
+                1 when args[0].OldVal.Invokable1Param(design) => args[0].Inline(design, design.LastValue),
+                1 => args[0].Inline(design, design.LastValue, design.Indexer),
+                _ => design.LastValue
             };
-            p.ForAdd(GetExpression(inlined));
+            design.ForAdd(GetExpression(inlined));
         }
 
         private static ExpressionSyntax GetExpression(ExpressionSyntax expression)

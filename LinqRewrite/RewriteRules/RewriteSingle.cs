@@ -9,33 +9,33 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteSingle
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             if (args.Length != 0) return null;
-            return ConditionalExpression(p.ResultSize.IsEqual(1),
-                SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin),
+            return ConditionalExpression(design.ResultSize.IsEqual(1),
+                SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin),
                 ThrowExpression("System.InvalidOperationException", "The sequence does not contain one element."));
         }
 
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            var foundVariable = VariableCreator.GlobalVariable(p, NullableType(p.ReturnType), null);
+            var foundVariable = VariableCreator.GlobalVariable(design, NullableType(design.ReturnType), null);
             if (args.Length == 0)
             {
-                p.ForAdd(If(foundVariable.IsEqual(null),
-                            foundVariable.Assign(p.LastValue), 
+                design.ForAdd(If(foundVariable.IsEqual(null),
+                            foundVariable.Assign(design.LastValue), 
                             Throw("System.InvalidOperationException", "The sequence contains more than single matching element.")));
             }
             else
             {
-                p.ForAdd(If(args[0].Inline(p, p.LastValue),
+                design.ForAdd(If(args[0].Inline(design, design.LastValue),
                             If(foundVariable.IsEqual(null),
-                                foundVariable.Assign(p.LastValue),
+                                foundVariable.Assign(design.LastValue),
                                 Throw("System.InvalidOperationException", "The sequence contains more than single matching element."))));
             }
-            p.ResultAdd(If(foundVariable.IsEqual(null),
+            design.ResultAdd(If(foundVariable.IsEqual(null),
                             Throw("System.InvalidOperationException", "The sequence did not contain any elements."), 
-                            Return(foundVariable.Cast(p.ReturnType))));
+                            Return(foundVariable.Cast(design.ReturnType))));
         }
     }
 }

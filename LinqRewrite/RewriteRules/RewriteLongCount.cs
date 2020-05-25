@@ -9,21 +9,21 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteLongCount
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             if (args.Length != 0) return null;
-            return p.ResultSize.Cast(Long);
+            return design.ResultSize.Cast(Long);
         }
 
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             if (args.Length != 0)
             {
-                p.Indexer = null;
-                p.ForAdd(If(Not(args[0].Inline(p, p.LastValue)),
+                design.Indexer = null;
+                design.ForAdd(If(Not(args[0].Inline(design, design.LastValue)),
                             Continue()));
             }
-            p.ResultAdd(Return(p.GetIndexer(Long)));
+            design.ResultAdd(Return(design.GetIndexer(Long)));
         }
     }
 }

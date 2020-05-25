@@ -6,39 +6,39 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteConcat
     {
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            var sourceSizeValue = p.SourceSize;
-            var resultSizeValue = p.ResultSize;
+            var sourceSizeValue = design.SourceSize;
+            var resultSizeValue = design.ResultSize;
             var collectionValue = args[0];
-            if (!AssertionExtension.AssertNotNull(p, collectionValue)) return;
+            if (!AssertionExtension.AssertNotNull(design, collectionValue)) return;
 
             LocalVariable itemVariable;
-            var lastVariable = p.TryGetVariable(p.LastValue);
+            var lastVariable = design.TryGetVariable(design.LastValue);
             if (lastVariable != null)
             {
                 itemVariable = lastVariable;
             }
             else
             {
-                itemVariable = VariableCreator.GlobalVariable(p, p.LastValue.Type);
-                p.ForAdd(itemVariable.Assign(p.LastValue));
-                p.LastValue = new TypedValueBridge(p.LastValue.Type, itemVariable);
+                itemVariable = VariableCreator.GlobalVariable(design, design.LastValue.Type);
+                design.ForAdd(itemVariable.Assign(design.LastValue));
+                design.LastValue = new TypedValueBridge(design.LastValue.Type, itemVariable);
             }
             itemVariable.IsGlobal = true;
             
-            var collectionType = p.Data.GetTypeInfo(collectionValue).Type;
-            p.AddIterator(new CollectionValueBridge(p, collectionType, collectionValue, true));
-            RewriteCollectionEnumeration.RewriteOther(p, p.CurrentIterator.Collection, itemVariable, true);
-            p.ListEnumeration = p.IncompleteIterators.All(x => x.ListEnumeration);
+            var collectionType = design.Data.GetTypeInfo(collectionValue).Type;
+            design.AddIterator(new CollectionValueBridge(design, collectionType, collectionValue, true));
+            RewriteCollectionEnumeration.RewriteOther(design, design.CurrentIterator.Collection, itemVariable, true);
+            design.ListEnumeration = design.IncompleteIterators.All(x => x.ListEnumeration);
 
-            if (sourceSizeValue != null && p.SourceSize != null) p.SourceSize += sourceSizeValue;
-            else p.SourceSize = null;
+            if (sourceSizeValue != null && design.SourceSize != null) design.SourceSize += sourceSizeValue;
+            else design.SourceSize = null;
 
-            if (resultSizeValue != null && p.ResultSize != null) p.ResultSize += resultSizeValue;
-            else p.ResultSize = null;
+            if (resultSizeValue != null && design.ResultSize != null) design.ResultSize += resultSizeValue;
+            else design.ResultSize = null;
 
-            (p.ModifiedEnumeration, p.ResultSize) = (true, p.ResultSize);
+            (design.ModifiedEnumeration, design.ResultSize) = (true, design.ResultSize);
         }
     }
 }

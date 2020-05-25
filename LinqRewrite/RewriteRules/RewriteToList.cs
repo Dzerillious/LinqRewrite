@@ -11,22 +11,22 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteToList
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            if (!TryGetInt(p.ResultSize, out var intSize) || intSize > 20)
+            if (!TryGetInt(design.ResultSize, out var intSize) || intSize > 20)
                 return null;
 
             var items = Enumerable.Range(0, intSize).Select(x
-                => (ExpressionSyntax) SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x));
-            return ObjectCreationExpression(p.ReturnType, ArgumentList(CreateSeparatedList(new ArgumentSyntax[0])), 
+                => (ExpressionSyntax) SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x));
+            return ObjectCreationExpression(design.ReturnType, ArgumentList(CreateSeparatedList(new ArgumentSyntax[0])), 
                 InitializerExpression( SyntaxKind.ArrayInitializerExpression, SeparatedList(items)));
         }
         
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            var listVariable = VariableCreator.GlobalVariable(p, p.ReturnType, New(p.ReturnType));
-            p.ForAdd(listVariable.Access("Add").Invoke(p.LastValue));
-            p.ResultAdd(Return(listVariable));
+            var listVariable = VariableCreator.GlobalVariable(design, design.ReturnType, New(design.ReturnType));
+            design.ForAdd(listVariable.Access("Add").Invoke(design.LastValue));
+            design.ResultAdd(Return(listVariable));
         }
     }
 }

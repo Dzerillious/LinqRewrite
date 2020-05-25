@@ -10,39 +10,39 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteEmpty
     {
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args, InvocationExpressionSyntax invocation)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args, InvocationExpressionSyntax invocation)
         {
-            p.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
+            design.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
             var access = (MemberAccessExpressionSyntax) invocation.Expression;
             var name = (GenericNameSyntax) access.Name;
             var type = name.TypeArgumentList.Arguments[0];
             
-            if (p.RewriteChain.Count == 1)
+            if (design.RewriteChain.Count == 1)
             {
-                p.NotRewrite = true;
+                design.NotRewrite = true;
                 return;
             }
 
-            p.FirstCollection = p.CurrentCollection = null;
-            p.AddIterator();
+            design.FirstCollection = design.CurrentCollection = null;
+            design.AddIterator();
             
-            p.CurrentIterator.IgnoreIterator = true;
-            p.CurrentIterator.ForFrom = 0;
-            p.CurrentIterator.ForTo = 0;
-            p.CurrentIterator.ForIndexer = VariableCreator.LocalVariable(p, Int, 0);
+            design.CurrentIterator.IgnoreIterator = true;
+            design.CurrentIterator.ForFrom = 0;
+            design.CurrentIterator.ForTo = 0;
+            design.CurrentIterator.ForIndexer = VariableCreator.LocalVariable(design, Int, 0);
             
-            p.ResultSize = 0;
-            p.SourceSize = 0;
-            p.ListEnumeration = false;
-            p.SimpleEnumeration = true;
+            design.ResultSize = 0;
+            design.SourceSize = 0;
+            design.ListEnumeration = false;
+            design.SimpleEnumeration = true;
             
-            if (p.CurrentIndexer == null)
+            if (design.CurrentIndexer == null)
             {
-                p.CurrentIterator.Indexer = p.CurrentIterator.ForIndexer;
-                p.CurrentIterator.Indexer.IsGlobal = true;
+                design.CurrentIterator.Indexer = design.CurrentIterator.ForIndexer;
+                design.CurrentIterator.Indexer.IsGlobal = true;
             }
-            p.LastValue = new TypedValueBridge(type, Default(type));
-            p.CurrentCollection = null;
+            design.LastValue = new TypedValueBridge(type, Default(type));
+            design.CurrentCollection = null;
         }
     }
 }

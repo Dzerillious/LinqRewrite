@@ -9,24 +9,24 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteFirstOrDefault
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             if (args.Length != 0) return null;
-            return ConditionalExpression(p.FirstCollection.Count.IsEqual(0),
-                Default(p.ReturnType),
-                SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin));
+            return ConditionalExpression(design.FirstCollection.Count.IsEqual(0),
+                Default(design.ReturnType),
+                SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin));
         }
 
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             if (args.Length == 0)
-                p.ForAdd(Return(p.LastValue));
+                design.ForAdd(Return(design.LastValue));
             else
             {
-                p.ForAdd(If(args[0].Inline(p, p.LastValue),
-                            Return(p.LastValue)));
+                design.ForAdd(If(args[0].Inline(design, design.LastValue),
+                            Return(design.LastValue)));
             }
-            p.ResultAdd(Return(Default(p.ReturnType)));
+            design.ResultAdd(Return(Default(design.ReturnType)));
         }
     }
 }

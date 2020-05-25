@@ -8,21 +8,21 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteDistinct
     {
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            var hashsetType = ParseTypeName($"LinqRewrite.Core.SimpleSet<{p.LastValue.Type}>");
-            var hashsetVariable = VariableCreator.GlobalVariable(p, hashsetType, args.Length switch
+            var hashsetType = ParseTypeName($"LinqRewrite.Core.SimpleSet<{design.LastValue.Type}>");
+            var hashsetVariable = VariableCreator.GlobalVariable(design, hashsetType, args.Length switch
             {
                 0 => New(hashsetType),
                 1 => New(hashsetType, args[0])
             });
 
-            p.LastValue = p.LastValue.Reusable(p);
-            p.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(p.LastValue)),
+            design.LastValue = design.LastValue.Reusable(design);
+            design.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(design.LastValue)),
                         Continue()));
             
-            p.ListEnumeration = false;
-            p.ModifiedEnumeration = true;
+            design.ListEnumeration = false;
+            design.ModifiedEnumeration = true;
         }
     }
 }

@@ -38,54 +38,54 @@ namespace LinqRewrite.Services
             }
         }
 
-        internal ExpressionSyntax GetMethodInvocationExpression(RewriteParameters p, IEnumerable<StatementSyntax> body)
+        internal ExpressionSyntax GetMethodInvocationExpression(RewriteDesign design, IEnumerable<StatementSyntax> body)
         {
             var functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
-            var parameters = p.Data.CurrentMethodParams
-                .Where(x => p.HasResultMethod || !x.Modifiers.Any()).ToArray();
-            var coreFunction = GetCoreMethod(p.ReturnType, functionName, parameters, body);
+            var parameters = design.Data.CurrentMethodParams
+                .Where(x => design.HasResultMethod || !x.Modifiers.Any()).ToArray();
+            var coreFunction = GetCoreMethod(design.ReturnType, functionName, parameters, body);
 
             _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, coreFunction));
 
-            var args = _data.CurrentMethodArguments.Where(x => p.HasResultMethod || x.RefKindKeyword.Text != "ref")
+            var args = _data.CurrentMethodArguments.Where(x => design.HasResultMethod || x.RefKindKeyword.Text != "ref")
                 .Select(x => (ArgumentBridge)x).ToArray();
             var inv = _code.CreateMethod(functionName).Invoke(args);
 
             return inv;
         }
 
-        private static StatementSyntax GetBody(RewriteParameters p, List<IStatementSyntax> body) 
-            => AggregateStatementSyntax(body.SelectMany(x => x.GetStatementSyntax(p)).Where(x => x != null).ToArray());
-        public static ForStatementSyntax GetForStatement(RewriteParameters p, LocalVariable indexerVariable, ValueBridge max, ValueBridge increment, List<IStatementSyntax> loopContent)
+        private static StatementSyntax GetBody(RewriteDesign design, List<IStatementSyntax> body) 
+            => AggregateStatementSyntax(body.SelectMany(x => x.GetStatementSyntax(design)).Where(x => x != null).ToArray());
+        public static ForStatementSyntax GetForStatement(RewriteDesign design, LocalVariable indexerVariable, ValueBridge max, ValueBridge increment, List<IStatementSyntax> loopContent)
             => ForStatement(
                 null,
                 default,
                 indexerVariable.LThan(max),
                 CreateSeparatedExpressionList(indexerVariable.AddAssign(increment)), 
-                GetBody(p, loopContent));
+                GetBody(design, loopContent));
 
-        public static ForStatementSyntax GetReverseForStatement(RewriteParameters p, LocalVariable indexerVariable, ValueBridge min, ValueBridge increment, List<IStatementSyntax> loopContent)
+        public static ForStatementSyntax GetReverseForStatement(RewriteDesign design, LocalVariable indexerVariable, ValueBridge min, ValueBridge increment, List<IStatementSyntax> loopContent)
             => ForStatement(
                 null,
                 default,
                 indexerVariable.GeThan(min),
                 CreateSeparatedExpressionList(indexerVariable.AddAssign(increment)), 
-                GetBody(p, loopContent));
+                GetBody(design, loopContent));
 
-        public static StatementSyntax[] GetForEachStatement(RewriteParameters p, LocalVariable enumeratorVariable, List<IStatementSyntax> loopContent)
+        public static StatementSyntax[] GetForEachStatement(RewriteDesign design, LocalVariable enumeratorVariable, List<IStatementSyntax> loopContent)
         {
-            if (p.Unchecked)
+            if (design.Unchecked)
                 return new StatementSyntax[]
                 {
                     While(enumeratorVariable.Access("MoveNext").Invoke(),
-                        GetBody(p, loopContent)
+                        GetBody(design, loopContent)
                     ),
                     (StatementBridge) enumeratorVariable.Access("Dispose").Invoke()
                 };
             return new StatementSyntax[]{
                 TryF(Block(
                     (StatementBridge) While(enumeratorVariable.Access("MoveNext").Invoke(),
-                        GetBody(p, loopContent)
+                        GetBody(design, loopContent)
                     )
                 ),
                 Block(

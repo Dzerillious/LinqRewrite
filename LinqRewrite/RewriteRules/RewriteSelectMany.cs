@@ -8,39 +8,39 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteSelectMany
     {
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             var method = args[0];
             var newExpression = (LambdaExpressionSyntax) method.NewVal;
-            if (p.CurrentIterator.IgnoreIterator) return;
+            if (design.CurrentIterator.IgnoreIterator) return;
 
             var collectionValue = args.Length switch
             {
-                _ when newExpression.Invokable1Param(p)=> method.Inline(p, p.LastValue),
-                _ => method.Inline(p, p.LastValue, p.Indexer)
+                _ when newExpression.Invokable1Param(design)=> method.Inline(design, design.LastValue),
+                _ => method.Inline(design, design.LastValue, design.Indexer)
             };
             var rewritten = new RewrittenValueBridge(newExpression.ExpressionBody, collectionValue);
 
-            LocalVariable iterator = VariableCreator.GlobalVariable(p, method.ReturnItemType(p));
-            p.IncompleteIterators.ToArray().ForEach(x =>
+            LocalVariable iterator = VariableCreator.GlobalVariable(design, method.ReturnItemType(design));
+            design.IncompleteIterators.ToArray().ForEach(x =>
             {
-                var newIterator = new IteratorParameters(p, new CollectionValueBridge(p, method.ReturnType(p), method.ReturnItemType(p), rewritten, true));
+                var newIterator = new IteratorDesign(design, new CollectionValueBridge(design, method.ReturnType(design), method.ReturnItemType(design), rewritten, true));
                 x.ForBody.Add(newIterator);
-                p.Iterators.Add(newIterator);
-                p.Iterators.Remove(x);
-                p.CurrentIterator = newIterator;
-                RewriteCollectionEnumeration.RewriteOther(p, p.CurrentIterator.Collection, iterator);
+                design.Iterators.Add(newIterator);
+                design.Iterators.Remove(x);
+                design.CurrentIterator = newIterator;
+                RewriteCollectionEnumeration.RewriteOther(design, design.CurrentIterator.Collection, iterator);
             });
             
-            p.CurrentIterator = p.Iterators.Last();
-            p.LastValue = args.Length switch
+            design.CurrentIterator = design.Iterators.Last();
+            design.LastValue = args.Length switch
             {
-                1 => p.LastValue,
-                2 => args[1].Inline(p, p.LastValue, p.Indexer)
+                1 => design.LastValue,
+                2 => args[1].Inline(design, design.LastValue, design.Indexer)
             };
-            p.ModifiedEnumeration = true;
-            p.ListEnumeration = false;
-            p.SourceSize = null;
+            design.ModifiedEnumeration = true;
+            design.ListEnumeration = false;
+            design.SourceSize = null;
         }
     }
 }

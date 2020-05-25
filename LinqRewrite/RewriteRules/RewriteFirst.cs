@@ -8,25 +8,25 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteFirst
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             if (args.Length != 0) return null;
-            return SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin);
+            return SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin);
         }
 
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            if (!AssertionExtension.AssertResultSizeGreaterEqual(p, 0, true)) return;
+            if (!AssertionExtension.AssertResultSizeGreaterEqual(design, 0, true)) return;
             
             if (args.Length == 0)
-                p.ForAdd(Return(p.LastValue));
+                design.ForAdd(Return(design.LastValue));
             else
             {
-                p.ForAdd(If(args[0].Inline(p, p.LastValue),
-                            Return(p.LastValue)));
+                design.ForAdd(If(args[0].Inline(design, design.LastValue),
+                            Return(design.LastValue)));
             }
             
-            if (!p.Unchecked) p.ResultAdd(Throw("System.InvalidOperationException", "The sequence did not contain any elements."));
+            if (!design.Unchecked) design.ResultAdd(Throw("System.InvalidOperationException", "The sequence did not contain any elements."));
         }
     }
 }

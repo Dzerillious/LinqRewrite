@@ -12,7 +12,7 @@ using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite
 {
-    public class RewriteParameters : IDisposable
+    public class RewriteDesign : IDisposable
     {
         public RewriteService Rewrite { get; }
         public CodeCreationService Code { get; }
@@ -53,10 +53,10 @@ namespace LinqRewrite
         public readonly List<StatementSyntax> InitialStatements = new List<StatementSyntax>();
         public readonly List<StatementSyntax> FinalStatements = new List<StatementSyntax>();
         public readonly List<StatementSyntax> ResultStatements = new List<StatementSyntax>();
-        public readonly List<IteratorParameters> ResultIterators = new List<IteratorParameters>();
+        public readonly List<IteratorDesign> ResultIterators = new List<IteratorDesign>();
         public IteratorCollection Iterators { get; } = new IteratorCollection();
-        public IEnumerable<IteratorParameters> IncompleteIterators => Iterators.Where(x => !x.Complete);
-        public IteratorParameters CurrentIterator { get; set; }
+        public IEnumerable<IteratorDesign> IncompleteIterators => Iterators.Where(x => !x.Complete);
+        public IteratorDesign CurrentIterator { get; set; }
         public List<LocalVariable> Variables { get; } = new List<LocalVariable>();
         
         public bool WrapWithTry { get; set; }
@@ -167,7 +167,7 @@ namespace LinqRewrite
             return CurrentIndexer = indexerVariable;
         }
         
-        public RewriteParameters()
+        public RewriteDesign()
         {
             Rewrite = RewriteService.Instance;
             Code = CodeCreationService.Instance;
@@ -236,19 +236,19 @@ namespace LinqRewrite
         public void FinalAdd(StatementBridge _) => FinalStatements.Add(_);
         public void ResultAdd(StatementBridge _) => ResultStatements.Add(_);
         
-        public IteratorParameters AddIterator(CollectionValueBridge collection = null)
+        public IteratorDesign AddIterator(CollectionValueBridge collection = null)
         {
             var oldBody = CurrentIterator;
-            CurrentIterator = new IteratorParameters(this, collection);
+            CurrentIterator = new IteratorDesign(this, collection);
             Iterators.Add(CurrentIterator);
             ResultIterators.Add(CurrentIterator);
             return oldBody;
         }
         
-        public IteratorParameters InsertIterator(CollectionValueBridge collection = null)
+        public IteratorDesign InsertIterator(CollectionValueBridge collection = null)
         {
             var oldBody = CurrentIterator;
-            CurrentIterator = new IteratorParameters(this, collection);
+            CurrentIterator = new IteratorDesign(this, collection);
             Iterators.Insert(0, CurrentIterator);
             ResultIterators.Insert(0, CurrentIterator);
             return oldBody;

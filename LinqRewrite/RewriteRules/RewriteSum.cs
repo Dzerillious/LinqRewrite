@@ -9,37 +9,37 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteSum
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             if (args.Length != 0) return null;
-            if (!TryGetInt(p.ResultSize, out var intSize) || intSize > 10)
+            if (!TryGetInt(design.ResultSize, out var intSize) || intSize > 10)
                 return null;
 
             var items = Enumerable.Range(0, intSize).Select(x
-                => new TypedValueBridge(p.LastValue.Type, SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + x)));
-            var simple = items.Aggregate((x, y) => new TypedValueBridge(p.LastValue.Type, x + y));  
+                => new TypedValueBridge(design.LastValue.Type, SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x)));
+            var simple = items.Aggregate((x, y) => new TypedValueBridge(design.LastValue.Type, x + y));  
             return simple.Simplify();
         }
         
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            var elementType = p.ReturnType.Type is NullableTypeSyntax nullable
-                ? (TypeBridge)nullable.ElementType : p.ReturnType;
-            var sumVariable = VariableCreator.GlobalVariable(p, elementType, 0);
+            var elementType = design.ReturnType.Type is NullableTypeSyntax nullable
+                ? (TypeBridge)nullable.ElementType : design.ReturnType;
+            var sumVariable = VariableCreator.GlobalVariable(design, elementType, 0);
             
             var value = args.Length switch
             {
-                0 => p.LastValue,
-                1 => args[0].Inline(p, p.LastValue)
+                0 => design.LastValue,
+                1 => args[0].Inline(design, design.LastValue)
             };
-            if (p.ReturnType.Type is NullableTypeSyntax)
+            if (design.ReturnType.Type is NullableTypeSyntax)
             {
-                value = value.Reusable(p);
-                p.ForAdd(If(value.NotEqual(null),
+                value = value.Reusable(design);
+                design.ForAdd(If(value.NotEqual(null),
                             sumVariable.AddAssign(value.Cast(elementType))));
             }
-            else p.ForAdd(sumVariable.AddAssign(value));
-            p.ResultAdd(Return(sumVariable));
+            else design.ForAdd(sumVariable.AddAssign(value));
+            design.ResultAdd(Return(sumVariable));
         }
     }
 }

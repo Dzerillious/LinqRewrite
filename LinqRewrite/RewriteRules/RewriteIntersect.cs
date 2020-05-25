@@ -8,40 +8,40 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteIntersect
     {
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            var sourceSizeValue = p.SourceSize;
+            var sourceSizeValue = design.SourceSize;
             var collectionValue = args[0];
-            if (!AssertionExtension.AssertNotNull(p, collectionValue)) return;
+            if (!AssertionExtension.AssertNotNull(design, collectionValue)) return;
 
-            var oldLast = p.LastValue;
-            var collectionType = p.Data.GetTypeInfo(collectionValue).Type;
-            var oldIterator = p.InsertIterator(new CollectionValueBridge(p, collectionType, collectionValue, true));
-            RewriteCollectionEnumeration.RewriteOther(p, p.CurrentIterator.Collection);
+            var oldLast = design.LastValue;
+            var collectionType = design.Data.GetTypeInfo(collectionValue).Type;
+            var oldIterator = design.InsertIterator(new CollectionValueBridge(design, collectionType, collectionValue, true));
+            RewriteCollectionEnumeration.RewriteOther(design, design.CurrentIterator.Collection);
 
-            var hashsetType = ParseTypeName($"LinqRewrite.Core.SimpleSet<{p.LastValue.Type}>");
+            var hashsetType = ParseTypeName($"LinqRewrite.Core.SimpleSet<{design.LastValue.Type}>");
             var hashsetCreation = args.Length switch
             {
                 1 => New(hashsetType),
                 2 => New(hashsetType, args[1])
             };
-            var hashsetVariable = VariableCreator.GlobalVariable(p, hashsetType, hashsetCreation);
+            var hashsetVariable = VariableCreator.GlobalVariable(design, hashsetType, hashsetCreation);
             
-            p.CurrentForAdd(hashsetVariable.Access("Add").Invoke(p.LastValue));
-            p.CurrentIterator.Complete = true;
+            design.CurrentForAdd(hashsetVariable.Access("Add").Invoke(design.LastValue));
+            design.CurrentIterator.Complete = true;
             
-            p.CurrentIterator = oldIterator;
-            p.LastValue = oldLast;
+            design.CurrentIterator = oldIterator;
+            design.LastValue = oldLast;
             
-            p.LastValue = p.LastValue.Reusable(p);
-            p.ForAdd(If(Not(hashsetVariable.Access("Remove").Invoke(p.LastValue)),
+            design.LastValue = design.LastValue.Reusable(design);
+            design.ForAdd(If(Not(hashsetVariable.Access("Remove").Invoke(design.LastValue)),
                 Continue()));
 
-            if (sourceSizeValue != null && p.SourceSize != null) p.SourceSize += sourceSizeValue;
-            else p.SourceSize = null;
+            if (sourceSizeValue != null && design.SourceSize != null) design.SourceSize += sourceSizeValue;
+            else design.SourceSize = null;
             
-            p.ListEnumeration = false;
-            p.ModifiedEnumeration = true;
+            design.ListEnumeration = false;
+            design.ModifiedEnumeration = true;
         }
     }
 }

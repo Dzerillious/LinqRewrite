@@ -9,18 +9,18 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteElementAtOrDefault
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteParameters p, RewrittenValueBridge[] args)
-            => ConditionalExpression(p.ResultSize > args[0],
-                SimplifySubstitute(p.LastValue, p.CurrentIterator.ForIndexer, p.CurrentMin + args[0]),
-                Default(p.ReturnType));
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
+            => ConditionalExpression(design.ResultSize > args[0],
+                SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + args[0]),
+                Default(design.ReturnType));
         
-        public static void Rewrite(RewriteParameters p, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            var positionValue = args[0].ReusableConst(p);
-            p.ForAdd(If(p.Indexer.IsEqual(positionValue),
-                        Return(p.LastValue)));
+            var positionValue = args[0].ReusableConst(design);
+            design.ForAdd(If(design.Indexer.IsEqual(positionValue),
+                        Return(design.LastValue)));
             
-            p.ResultAdd(Return(Default(p.ReturnType)));
+            design.ResultAdd(Return(Default(design.ReturnType)));
         }
     }
 }
