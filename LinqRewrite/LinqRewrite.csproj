@@ -1,22 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>LinqRewrite</PackageId>
     <Version>1.0.2</Version>
     <AssemblyVersion>0.5.0</AssemblyVersion>
     <FileVersion>0.5.0</FileVersion>
     <LangVersion>latest</LangVersion>
-    <PackageReleaseNotes>Testing nuget</PackageReleaseNotes>
     <Authors>Daniel Šerý</Authors>
     <Product>Turing ecosystem</Product>
     <Description>Optimized Linq queries by rewriting to procedural code</Description>
-    <PackageTags>collection;utils;fast</PackageTags>
-    <PackageVersion>0.5.0</PackageVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DisableMSBuildAssemblyCopyCheck>true</DisableMSBuildAssemblyCopyCheck>
     <OutputType>Exe</OutputType>
     <Title>LinqRewrite</Title>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
