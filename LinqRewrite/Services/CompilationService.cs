@@ -40,6 +40,7 @@ namespace LinqRewrite.Services
             }
             catch (Exception ex)
             {
+                _printService.PrintLine(ex.Message);
                 return ex.HResult;
             }
             return 0;
@@ -64,6 +65,7 @@ namespace LinqRewrite.Services
             }
             catch (Exception ex)
             {
+                _printService.PrintLine(ex.Message);
                 return ex.HResult;
             }
             return 0;

@@ -14,7 +14,7 @@ namespace LinqRewrite.Services
             PrintLine($"LinqRewrite {typeof(Program).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion}");
             PrintLine(@"https://gitlab.nesad.fit.vutbr.cz/xseryd00/roslyn-linq-rewrite
 
-LINQ queries rewriter for increasing speed of LINQ queries. It goes through the given code and rewrites LINQ queries to procedural code. It reduces memory allocation, closures count and increases speed of queries. For use please add reference to NuGet LinqRewrite.Core in rewritten project.
+Improved version of roslyn-linq-rewrite (https://github.com/antiufo/roslyn-linq-rewrite). This tool rewrites LINQ queries in C# code using plain procedural code, minimizing allocations and dynamic dispatch, inlining lambdas, optimizing simple math expressions and using known information for optimization. It has two run modes. First to compile rewritten code into .dll or .exe, second to rewrite the code and save it into a specified folder. For proper behavior install NuGet package LinqRewrite.Core into project which you are rewriting.
 
 Usage:
   roslyn-linq-rewrite --help

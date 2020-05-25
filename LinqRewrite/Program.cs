@@ -20,11 +20,14 @@ namespace LinqRewrite
             var program = new Program();
             try
             {
-                return program.ArgsProcessing(args);
+                var ret = program.ArgsProcessing(args);
+                Console.ReadKey();
+                return ret;
             }
             catch (Exception ex)
             {
                 program.OnException(ex);
+                Console.ReadKey();
                 return 1;
             }
         }
