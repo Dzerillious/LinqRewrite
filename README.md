@@ -1,5 +1,25 @@
 # LinqRewrite
-Improved version of roslyn-linq-rewrite (https://github.com/antiufo/roslyn-linq-rewrite). This tool rewrites LINQ queries in C# code using plain procedural code, minimizing allocations and dynamic dispatch, inlining lambdas, optimizing simple math expressions and using known information for optimization. It has two run modes. First to compile rewritten code into .dll or .exe, second to rewrite the code and save it into a specified folder. For proper behavior install NuGet package LinqRewrite.Core into project which you are rewriting.
+Improved version of roslyn-linq-rewrite (https://github.com/antiufo/roslyn-linq-rewrite). 
+This tool rewrites LINQ queries in C# code using plain procedural code, minimizing allocations and dynamic dispatch, 
+inlining lambdas, optimizing simple math expressions and using known information for optimization. 
+It has two run modes. First to compile rewritten code into .dll or .exe, second to rewrite the code and save it into a specified folder. 
+For proper behavior install NuGet package LinqRewrite.Core into project which you are rewriting.
+
+# Use
+```bash
+roslyn-linq-rewrite --help
+
+roslyn-linq-rewrite <path-to-csproj>
+roslyn-linq-rewrite <path-to-sln>
+roslyn-linq-rewrite <path-to-cs>
+roslyn-linq-rewrite <path-to-csx>
+
+roslyn-linq-rewrite <path-to-csproj> --rewriteDst=""Folder where to rewrite""
+roslyn-linq-rewrite <path-to-sln> --rewriteDst=""Folder where to rewrite""
+roslyn-linq-rewrite <path-to-cs> --rewriteDst=""Folder where to rewrite""
+roslyn-linq-rewrite <path-to-csx> --rewriteDst=""Folder where to rewrite""
+```
+
 
 ## Example input code
 ```csharp
@@ -36,10 +56,13 @@ private int Method1_ProceduralLinq1(int[] arr, int q)
 ```
 **Allocations**: input array.
 
-It is based on https://github.com/antiufo/roslyn-linq-rewrite. But improves performance of not optimal ways (as using lists when not needed). Also implements a lot more operators and uses a lot more generic approach.
-For not known result sizes implemented SimpleList<T> which is in the halfway between .Net Core Span<T> and List<T>. (But compatible with both .Net Core and .Net Framework).
-
 ## Rewriting of not known result size
+
+In roslyn-linq-rewrite are used high end methods and it lowers performance. 
+In LinqRewrite was created new collection Array based but allows enlarging and
+reducing size of collection to provide best performance. Also there was developed
+new enlarging algorithm for reducing of allocations and increasing of speed.
+
 ```csharp
 public void Method1()
 {
@@ -111,14 +134,17 @@ LinqRewrite.Core.SimpleList.SimpleList<int> Method1_ProceduralLinq1(int[] arr, i
 ```
 **New rewrite way based on array enlarging
 
-*Note: in this example, the optimizing compiler has generated code using arrays, because the type was known at compile time. When this is not the case, the generated code will instead use a `foreach` and `IEnumerable<>`.*
+Also there were added a lot of optimizations as lambda inlining, math simplifier, 
+algoritm choosing according to input, expression simplifier or assertion disabling.
+
+*Note: in this example, the optimizing compiler has generated code using arrays, because the type was known at compile time. When this is not the case, the generated code will instead use iteration method according to collection type.*
 *Non-optimizable call chains and `IQueryable<>` are left intact.*
-## Supported LINQ methods
+# Supported LINQ methods
 * All except of `DefaultIfEmpty`, 
 * `OrderBy`, `OrderByDescending`, `ThenBy`, `ThenbyDescending`
 * `ToLookup`
 
-## Additional
+# Additional
 * If you need to exclude a specific method, class or struct, apply a `[NoRewrite]` attribute to that method, class or struct
 ```csharp
 [NoRewrite]
@@ -129,7 +155,7 @@ public void Method1()
     var res = arr.Where(x => x > q).Select(x => x + 3).ToList();
 }
 ```
-* If you want to further optimize if you ensure conditions you can use Unchecked()
+* If you want to further optimize if you ensure conditions of operators you can use Unchecked()
 * for example for sum of groups
 ```csharp
 public double ArrayAverageRewritten2()
@@ -175,31 +201,46 @@ int ArrayAverageRewritten2_ProceduralLinq2(int[] Items)
 }
 ```
 
-* Which is more performant 
+* Which is more performant then Items.Sum()
 
-## Comparison to LinqOptimizer
-* Code is optimized at build time (as opposed to run time)
+# Comparison to System.Linq
+* Uses external program for rewriting
+* No allocations for iterators and reduces closures
+* New algorithm for array enlarging
+* Using more information for optimization
+* Some assertions calculated when rewriting
+* More constants calculated when rewriting
+* Do not implement all operators
+* No support for F#
+* Only method LINQ
+
+# Comparison to LinqOptimizer
+* Code is optimized at build time (as opposed to run time), so no 30us overhead
 * Uses existing LINQ syntax, no need for `AsQueryExpr().Run()`
 * No allocations for `Expression<>` trees and enumerator boxing
 * Parallel LINQ is not supported (i.e. left intact)
-* Using a lot more information for optimization (For example different collection enumeration for different sources)
+* Using a lot more information for optimization (for example different collection enumeration for different sources)
 * More operators
 * No support for F#
 
-## Comparsion to old roslyn-linq-rewrite
+# Comparsion to old roslyn-linq-rewrite
 * More operators (Old could rewrite only simple operators)
 * Math optimization (Without optimization of division because of different int and double division)
-* Using a lot more information for optimization (For example different collection enumeration for different sources)
+* Using a lot more information for optimization (for example different collection enumeration for different sources)
 * Using more low end code (Using arrays for enlarging, not List<T>)
 * Working on new project types
-* Created over 1000 of tests
+* Simple expressions rewrite
+* Better enlarging algorithm
+* Created over 145000 of tests
 
-## Comparsion to LinqFaster
-* Rewriting chained operators
+# Comparsion to LinqFaster
+* Rewriting of chained operators
 * When chaining operators, fewer allocations in rewritten
 * LinqFaster only on arrays
 * LinqFaster implements parallel and SIMD operations
 * LinqFaster not lazily evaluated
-* Rewritten linq does not alloc any arrays in Source.Select(x => x + 3).ToArray()
-* Rewritten linq uses enlarging for filling array of unknown size
+* LinqFaster must change from System.Linq
+* LinqRewriter inlines lambda methods and reduces closures
+* LinqRewriter does not allocate any arrays in Source.Select(x => x + 3).Sum()
+* LinqRewriter uses enlarging for filling array of unknown size
 
