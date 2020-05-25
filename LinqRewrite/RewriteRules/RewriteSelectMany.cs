@@ -3,6 +3,7 @@ using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -10,7 +11,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            var method = args[0];
+            RewrittenValueBridge method = args[0];
             var newExpression = (LambdaExpressionSyntax) method.NewVal;
             if (design.CurrentIterator.IgnoreIterator) return;
 
@@ -21,7 +22,7 @@ namespace LinqRewrite.RewriteRules
             };
             var rewritten = new RewrittenValueBridge(newExpression.ExpressionBody, collectionValue);
 
-            LocalVariable iterator = VariableCreator.GlobalVariable(design, method.ReturnItemType(design));
+            var iteratorVariable = CreateGlobalVariable(design, method.ReturnItemType(design));
             design.IncompleteIterators.ToArray().ForEach(x =>
             {
                 var newIterator = new IteratorDesign(design, new CollectionValueBridge(design, method.ReturnType(design), method.ReturnItemType(design), rewritten, true));
@@ -29,7 +30,7 @@ namespace LinqRewrite.RewriteRules
                 design.Iterators.Add(newIterator);
                 design.Iterators.Remove(x);
                 design.CurrentIterator = newIterator;
-                RewriteCollectionEnumeration.RewriteOther(design, design.CurrentIterator.Collection, iterator);
+                RewriteCollectionEnumeration.RewriteOther(design, design.CurrentIterator.Collection, iteratorVariable);
             });
             
             design.CurrentIterator = design.Iterators.Last();

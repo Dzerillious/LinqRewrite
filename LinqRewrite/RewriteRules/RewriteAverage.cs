@@ -3,6 +3,7 @@ using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Extensions.AssertionExtension;
 using static LinqRewrite.Extensions.ExpressionSimplifier;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
@@ -14,11 +15,11 @@ namespace LinqRewrite.RewriteRules
         public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             if (args.Length != 0) return null;
-            if (!TryGetInt(design.ResultSize, out var intSize) || intSize > 10)
+            if (!TryGetInt(design.ResultSize, out var intSize) || intSize > Constants.SimpleRewriteMaxMediumElements)
                 return null;
 
-            var items = Enumerable.Range(0, intSize).Select(x
-                => new TypedValueBridge(design.LastValue.Type, SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x)));
+            var items = Enumerable.Range(0, intSize)
+                .Select(x => new TypedValueBridge(design.LastValue.Type, SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x)));
             return Parenthesize(items.Aggregate((x, y) => new TypedValueBridge(design.LastValue.Type, x + y))).Div(intSize);
         }
         
@@ -32,7 +33,7 @@ namespace LinqRewrite.RewriteRules
             
             var elementType = selectionValue.Type is NullableTypeSyntax nullable2
                 ? (TypeBridge)nullable2.ElementType : design.ReturnType;;
-            var sumVariable = VariableCreator.GlobalVariable(design, elementType, 0);
+            var sumVariable = CreateGlobalVariable(design, elementType, 0);
 
             if (design.ReturnType.Type is NullableTypeSyntax) CalculateNullableAverage(design, elementType, selectionValue, sumVariable);
             else CalculateSimpleAverage(design, selectionValue, sumVariable);
@@ -53,7 +54,7 @@ namespace LinqRewrite.RewriteRules
 
         private static void CalculateSimpleAverage(RewriteDesign design, TypedValueBridge selectionValue, LocalVariable sumVariable)
         {
-            if (!AssertionExtension.AssertResultSizeGreaterEqual(design, 1)) return;
+            if (!AssertResultSizeGreaterEqual(design, 1)) return;
             design.ForAdd(sumVariable.AddAssign(selectionValue));
             design.ResultAdd(Return(sumVariable / design.GetResultSize()));
         }

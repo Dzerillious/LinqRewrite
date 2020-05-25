@@ -35,16 +35,16 @@ namespace LinqRewrite.RewriteRules
         private static void KnownSourceSize(RewriteDesign design)
         {
             design.Indexer = null;
-            var reverseIndexerVariable = VariableCreator.GlobalVariable(design, Int, 8);
-            var logVariable = VariableCreator.GlobalVariable(design, Int,
+            var reverseIndexerVariable = CreateGlobalVariable(design, Int, 8);
+            var logVariable = CreateGlobalVariable(design, Int,
                 "LinqRewrite".Access("Core", "IntExtensions", "Log2")
                     .Invoke(design.SourceSize.Cast(SyntaxKind.UIntKeyword)) - 3);
                 
             design.PreUseAdd(logVariable.SubAssign(logVariable % 2));
-            var currentLengthVariable = VariableCreator.GlobalVariable(design, Int, 8);
-            var resultVariable = VariableCreator.GlobalVariable(design, design.LastValue.ArrayType(), CreateArray(design.LastValue.ArrayType(), 8));
+            var currentLengthVariable = CreateGlobalVariable(design, Int, 8);
+            var resultVariable = CreateGlobalVariable(design, design.LastValue.ArrayType(), CreateArray(design.LastValue.ArrayType(), 8));
 
-            var tmpSize = VariableCreator.GlobalVariable(design, Int);
+            var tmpSize = CreateGlobalVariable(design, Int);
             design.ForAdd(reverseIndexerVariable.PreDecrement());
             design.ForAdd(If(reverseIndexerVariable < 0,
                 Block(
@@ -74,18 +74,18 @@ namespace LinqRewrite.RewriteRules
         private static void UnknownSourceSize(RewriteDesign design)
         {
             design.Indexer = null;
-            var reverseIndexerVariable = VariableCreator.GlobalVariable(design, Int, 8);
-            var currentLengthVariable = VariableCreator.GlobalVariable(design, Int, 8);
-            var resultVariable = VariableCreator.GlobalVariable(design, design.LastValue.ArrayType(), CreateArray(design.LastValue.ArrayType(), 8));
+            var reverseIndexerVariable = CreateGlobalVariable(design, Int, 8);
+            var currentLengthVariable = CreateGlobalVariable(design, Int, 8);
+            var resultVariable = CreateGlobalVariable(design, design.LastValue.ArrayType(), CreateArray(design.LastValue.ArrayType(), 8));
 
-            var tmpSize = VariableCreator.GlobalVariable(design, Int);
+            var sizeVariable = CreateGlobalVariable(design, Int);
             design.ForAdd(reverseIndexerVariable.PreDecrement());
             design.ForAdd(If(reverseIndexerVariable < 0,
                         Block(
-                    tmpSize.Assign(currentLengthVariable),
+                    sizeVariable.Assign(currentLengthVariable),
                                     "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeReverseArray")
                                         .Invoke(2, RefArg(resultVariable), RefArg(currentLengthVariable)),
-                                            reverseIndexerVariable.Assign(currentLengthVariable - tmpSize - 1 ))));
+                                            reverseIndexerVariable.Assign(currentLengthVariable - sizeVariable - 1 ))));
             design.ForAdd(resultVariable[reverseIndexerVariable].Assign(design.LastValue));
             
             design.Indexer = null;

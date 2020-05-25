@@ -1,5 +1,4 @@
 ﻿using LinqRewrite.DataStructures;
-using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -19,7 +18,7 @@ namespace LinqRewrite.RewriteRules
             };
             if (design.Iterators.All.Count > 1)
             {
-                var lastTakeWhile = VariableCreator.GlobalVariable(design, Bool, false);
+                var lastTakeWhile = CreateGlobalVariable(design, Bool, false);
                 design.ForAdd(If(Not(value).Or(lastTakeWhile), Block(
                     lastTakeWhile.Assign(true),
                     Break()))

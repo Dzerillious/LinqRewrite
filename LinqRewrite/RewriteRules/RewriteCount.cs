@@ -1,5 +1,4 @@
 ﻿using LinqRewrite.DataStructures;
-using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -20,7 +19,7 @@ namespace LinqRewrite.RewriteRules
             {
                 design.Indexer = null;
                 design.ForAdd(If(Not(args[0].Inline(design, design.LastValue)),
-                        Continue()));
+                                Continue()));
             }
             design.ResultAdd(Return(design.Indexer));
         }

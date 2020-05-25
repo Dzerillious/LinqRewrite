@@ -7,8 +7,7 @@ namespace LinqRewrite.Extensions
     public static class SyntaxExtensions
     {
         public static MethodDeclarationSyntax WithStatic(this MethodDeclarationSyntax syntax, bool isStatic) 
-            => isStatic 
-                ? syntax.AddModifiers(SyntaxFactory.Token(SyntaxKind.StaticKeyword)) 
+            => isStatic  ? syntax.AddModifiers(SyntaxFactory.Token(SyntaxKind.StaticKeyword)) 
                 : syntax.WithModifiers(SyntaxFactory.TokenList());
 
         public static ParameterSyntax WithRef(this ParameterSyntax syntax, bool isRef) 

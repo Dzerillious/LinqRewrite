@@ -1,6 +1,7 @@
 ﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Extensions.AssertionExtension;
 using static LinqRewrite.Extensions.VariableExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
@@ -10,17 +11,17 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            if (!AssertionExtension.AssertResultSizeGreaterEqual(design, 1)) return;
+            if (!AssertResultSizeGreaterEqual(design, 1)) return;
             var elementType = design.ReturnType.Type is NullableTypeSyntax nullable
                 ? (TypeBridge)nullable.ElementType : design.ReturnType;
 
             var maxVariable = elementType.ToString() switch
             {
-                "int" => VariableCreator.GlobalVariable(design, Int, int.MinValue),
-                "long" => VariableCreator.GlobalVariable(design, Long, long.MinValue),
-                "float" => VariableCreator.GlobalVariable(design, Float, float.MinValue),
-                "double" => VariableCreator.GlobalVariable(design, Double, double.MinValue),
-                "decimal" => VariableCreator.GlobalVariable(design, Decimal, decimal.MinValue),
+                "int" => CreateGlobalVariable(design, Int, int.MinValue),
+                "long" => CreateGlobalVariable(design, Long, long.MinValue),
+                "float" => CreateGlobalVariable(design, Float, float.MinValue),
+                "double" => CreateGlobalVariable(design, Double, double.MinValue),
+                "decimal" => CreateGlobalVariable(design, Decimal, decimal.MinValue),
                 _ => null
             };
             

@@ -1,7 +1,8 @@
 ﻿using LinqRewrite.DataStructures;
-using LinqRewrite.Extensions;
+using static LinqRewrite.Extensions.AssertionExtension;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.Extensions.VariableExtensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LinqRewrite.RewriteRules
@@ -12,9 +13,9 @@ namespace LinqRewrite.RewriteRules
         {
             var sourceSizeValue = design.SourceSize;
             var collectionValue = args[0];
-            if (!AssertionExtension.AssertNotNull(design, collectionValue)) return;
+            if (!AssertNotNull(design, collectionValue)) return;
 
-            var oldLast = design.LastValue;
+            var oldLastValue = design.LastValue;
             var collectionType = design.Data.GetTypeInfo(collectionValue).Type;
             var oldIterator = design.InsertIterator(new CollectionValueBridge(design, collectionType, collectionValue, true));
             RewriteCollectionEnumeration.RewriteOther(design, design.CurrentIterator.Collection);
@@ -25,13 +26,13 @@ namespace LinqRewrite.RewriteRules
                 1 => New(hashsetType),
                 2 => New(hashsetType, args[1])
             };
-            var hashsetVariable = VariableCreator.GlobalVariable(design, hashsetType, hashsetCreation);
+            var hashsetVariable = CreateGlobalVariable(design, hashsetType, hashsetCreation);
             
             design.CurrentForAdd(hashsetVariable.Access("Add").Invoke(design.LastValue));
             design.CurrentIterator.Complete = true;
             
             design.CurrentIterator = oldIterator;
-            design.LastValue = oldLast;
+            design.LastValue = oldLastValue;
             
             design.LastValue = design.LastValue.Reusable(design);
             design.ForAdd(If(Not(hashsetVariable.Access("Remove").Invoke(design.LastValue)),

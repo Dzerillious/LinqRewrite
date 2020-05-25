@@ -1,9 +1,11 @@
 ﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Extensions.AssertionExtension;
 using static LinqRewrite.Extensions.ExpressionSimplifier;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -17,8 +19,8 @@ namespace LinqRewrite.RewriteRules
 
         public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            if (!AssertionExtension.AssertResultSizeGreaterEqual(design, 0, true)) return;
-            var foundVariable = VariableCreator.GlobalVariable(design, NullableType(design.ReturnType), null);
+            if (!AssertResultSizeGreaterEqual(design, 0, true)) return;
+            var foundVariable = CreateGlobalVariable(design, NullableType(design.ReturnType), null);
             
             if (args.Length == 0)
                 design.ForAdd(foundVariable.Assign(design.LastValue));

@@ -155,7 +155,7 @@ namespace LinqRewrite.Services
             var references = new[] {
                 MetadataReference.CreateFromFile(typeof(int).GetTypeInfo().Assembly.Location), // mscorlib
                 MetadataReference.CreateFromFile(typeof(Uri).GetTypeInfo().Assembly.Location), // System
-                MetadataReference.CreateFromFile(typeof(Enumerable).GetTypeInfo().Assembly.Location), // System.Core
+                MetadataReference.CreateFromFile(typeof(Enumerable).GetTypeInfo().Assembly.Location) // System.Core
                 };
             
             var compilation = isScript
@@ -180,7 +180,7 @@ namespace LinqRewrite.Services
             var references = new[] {
                 MetadataReference.CreateFromFile(typeof(int).GetTypeInfo().Assembly.Location), // mscorlib
                 MetadataReference.CreateFromFile(typeof(Uri).GetTypeInfo().Assembly.Location), // System
-                MetadataReference.CreateFromFile(typeof(Enumerable).GetTypeInfo().Assembly.Location), // System.Core
+                MetadataReference.CreateFromFile(typeof(Enumerable).GetTypeInfo().Assembly.Location) // System.Core
             };
             
             var compilation = isScript

@@ -125,7 +125,7 @@ namespace LinqRewrite
                     return CurrentIndexer = indexer;
                 }
 
-                var indexerVariable = VariableCreator.SuperGlobalVariable(this, Int, 0);
+                var indexerVariable = CreateSuperGlobalVariable(this, Int, 0);
                 indexerVariable.IsGlobal = true;
                     
                 IncompleteIterators.ForEach(x => x.Indexer = indexerVariable);
@@ -158,7 +158,7 @@ namespace LinqRewrite
                 return CurrentIndexer = indexer;
             }
 
-            var indexerVariable = VariableCreator.GlobalVariable(this, type, 0);
+            var indexerVariable = CreateGlobalVariable(this, type, 0);
             indexerVariable.IsGlobal = true;
                     
             IncompleteIterators.ForEach(x => x.Indexer = indexerVariable);
@@ -256,7 +256,7 @@ namespace LinqRewrite
 
         public LocalVariable AddParameter(TypeBridge type, ExpressionSyntax value)
         {
-            var variable = "v" + VariableCreator.VariableIndex++ % 10_000;
+            var variable = "v" + VariableIndex++ % Constants.VariablesPeek;
             var created = new LocalVariable(variable, type);
             Variables.Add(created);
             
@@ -267,15 +267,6 @@ namespace LinqRewrite
         }
 
         public void Dispose() => RewriteParametersFactory.ReturnParameters(this);
-
-        public LocalVariable TryGetVariable(TypedValueBridge value)
-        {
-            if (value?.Value?.Value == null) return null;
-            var expression = value.Expression;
-            while (expression is ParenthesizedExpressionSyntax parenthesizedExpressionSyntax)
-                expression = parenthesizedExpressionSyntax.Expression;
-            return Variables.FirstOrDefault(x => x.Name == expression.ToString());
-        }
 
         public void SwitchIsReversed()
         {

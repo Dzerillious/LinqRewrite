@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
-using LinqRewrite.Extensions;
+using static LinqRewrite.Extensions.AssertionExtension;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
@@ -13,15 +13,15 @@ namespace LinqRewrite.RewriteRules
             design.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
             var fromValue = args[0];
             var countValue = args[1];
-            var increment = args.Length == 3 ? args[2].New : 1;
-            if (!AssertionExtension.AssertGreaterEqual(design, countValue, 0)) return;
+            var incrementValue = args.Length == 3 ? args[2].New : 1;
+            if (!AssertGreaterEqual(design, countValue, 0)) return;
 
             design.FirstCollection = design.CurrentCollection = null;
             design.AddIterator();
             design.CurrentIterator.ForFrom = 0;
-            design.CurrentIterator.ForTo = countValue * increment - increment;
-            design.CurrentIterator.ForInc = increment;
-            design.CurrentIterator.ForIndexer = VariableCreator.LocalVariable(design, Int);
+            design.CurrentIterator.ForTo = countValue * incrementValue - incrementValue;
+            design.CurrentIterator.ForInc = incrementValue;
+            design.CurrentIterator.ForIndexer = CreateLocalVariable(design, Int);
             
             design.ListEnumeration = false;
             design.SimpleEnumeration = true;

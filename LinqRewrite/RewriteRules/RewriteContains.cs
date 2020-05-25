@@ -12,7 +12,7 @@ namespace LinqRewrite.RewriteRules
             var elementEqualityValue = args.Length switch
             {
                 1 => design.LastValue.IsEqual(elementSyntax),
-                2 => args[1].ReusableConst(design).Access("Equals").Invoke(design.LastValue.Value, elementSyntax),
+                2 => args[1].ReusableConst(design).Access("Equals").Invoke(design.LastValue.Value, elementSyntax)
             };
             
             design.ForAdd(If(elementEqualityValue, Return(true)));

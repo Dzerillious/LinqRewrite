@@ -2,6 +2,7 @@
 using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using static LinqRewrite.Extensions.AssertionExtension;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
@@ -13,12 +14,12 @@ namespace LinqRewrite.RewriteRules
             design.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
             var itemValue = args[0];
             var countValue = args[1];
-            if (!AssertionExtension.AssertGreaterEqual(design, countValue, 0)) return;
+            if (!AssertGreaterEqual(design, countValue, 0)) return;
             
             design.AddIterator();
             design.CurrentIterator.ForFrom = 0;
             design.CurrentIterator.ForTo = countValue - 1;
-            design.CurrentIterator.ForIndexer = VariableCreator.LocalVariable(design, Int);
+            design.CurrentIterator.ForIndexer = CreateLocalVariable(design, Int);
             
             design.ResultSize = countValue;
             design.SourceSize = countValue;

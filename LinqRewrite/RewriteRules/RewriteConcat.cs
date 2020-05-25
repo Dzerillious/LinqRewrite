@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using static LinqRewrite.Extensions.AssertionExtension;
+using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -11,17 +13,17 @@ namespace LinqRewrite.RewriteRules
             var sourceSizeValue = design.SourceSize;
             var resultSizeValue = design.ResultSize;
             var collectionValue = args[0];
-            if (!AssertionExtension.AssertNotNull(design, collectionValue)) return;
+            if (!AssertNotNull(design, collectionValue)) return;
 
             LocalVariable itemVariable;
-            var lastVariable = design.TryGetVariable(design.LastValue);
+            var lastVariable = TryGetVariable(design, design.LastValue);
             if (lastVariable != null)
             {
                 itemVariable = lastVariable;
             }
             else
             {
-                itemVariable = VariableCreator.GlobalVariable(design, design.LastValue.Type);
+                itemVariable = CreateGlobalVariable(design, design.LastValue.Type);
                 design.ForAdd(itemVariable.Assign(design.LastValue));
                 design.LastValue = new TypedValueBridge(design.LastValue.Type, itemVariable);
             }

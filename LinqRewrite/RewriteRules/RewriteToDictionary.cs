@@ -1,6 +1,7 @@
 ﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -15,7 +16,7 @@ namespace LinqRewrite.RewriteRules
                 _ => design.LastValue
             };
             var keyValue = args[0].Inline(design, design.LastValue);
-            var dictionaryVariable = VariableCreator.GlobalVariable(design, design.ReturnType, args.Length switch
+            var dictionaryVariable = CreateGlobalVariable(design, design.ReturnType, args.Length switch
             {
                 2 when !args[1].OldVal.IsInvokable(design) => New(design.ReturnType, args[1]),
                 3 => New(design.ReturnType, args[2]),

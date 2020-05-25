@@ -21,9 +21,9 @@ namespace LinqRewrite
             design.SetData(collection, returnType, chain, node, false);
             var names = chain.Select(x => x.MethodName).ToArray();
             
-            var (simplePrecheck, simpleResult) = TryRewriteSimple(design, names);
-            if (simplePrecheck && simpleResult != null) return simpleResult;
-            if (simplePrecheck) design.SetData(collection, returnType, chain, node, true);
+            var (simplePreCheck, simpleResult) = TryRewriteSimple(design, names);
+            if (simplePreCheck && simpleResult != null) return simpleResult;
+            if (simplePreCheck) design.SetData(collection, returnType, chain, node, true);
 
             design.HasResultMethod = MethodsWithResult.Contains(names.Last());
             RewriteComposite(design, names);
@@ -34,7 +34,7 @@ namespace LinqRewrite
             if (design.Data.CurrentMethodIsConditional && design.ReturnType.Type.ToString() != "void")
                 return ConditionalExpression(design.CurrentCollection.IsEqual(null),
                 Default(design.ReturnType), design.Rewrite.GetMethodInvocationExpression(design, body));
-            else return design.Rewrite.GetMethodInvocationExpression(design, body);
+            return design.Rewrite.GetMethodInvocationExpression(design, body);
         }
 
         public static IEnumerable<StatementSyntax> GetMethodBody(RewriteDesign design)

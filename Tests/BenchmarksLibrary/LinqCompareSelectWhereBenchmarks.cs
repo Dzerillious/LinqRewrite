@@ -71,8 +71,8 @@ namespace BenchmarksLibrary
         int[] ShamanLinqRewrite_ProceduralLinq1(int[] _linqitems)
         {
             if (_linqitems == null)
-                throw new System.ArgumentNullException();
-            var _list = new System.Collections.Generic.List<int>();
+                throw new ArgumentNullException();
+            var _list = new List<int>();
             for (int _index = 0; _index < _linqitems.Length; _index++)
             {
                 var _linqitem = _linqitems[_index];

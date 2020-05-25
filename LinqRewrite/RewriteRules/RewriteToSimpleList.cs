@@ -13,7 +13,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            if (!TryGetInt(design.ResultSize, out var intSize) || intSize > 20)
+            if (!TryGetInt(design.ResultSize, out var intSize) || intSize > Constants.SimpleRewriteMaxSimpleElements)
                 return null;
             
             return CreateArray(design.CurrentCollection.ItemType.ArrayType(), design.ResultSize,
@@ -38,7 +38,7 @@ namespace LinqRewrite.RewriteRules
             RewriteToArray.SimplifyPart(design, result);
             
             var listResultType = ParseTypeName($"LinqRewrite.Core.SimpleList.SimpleList<{design.LastValue.Type}>");
-            LocalVariable finalResult = VariableCreator.GlobalVariable(design, listResultType);
+            LocalVariable finalResult = CreateGlobalVariable(design, listResultType);
             design.ResultAdd(finalResult.Assign(New(listResultType)));
             design.ResultAdd(finalResult.Access("Items").Assign(result));
             design.ResultAdd(finalResult.Access("Count").Assign(design.ResultSize ?? design.Indexer));

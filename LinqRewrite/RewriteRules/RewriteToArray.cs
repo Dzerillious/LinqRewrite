@@ -4,6 +4,7 @@ using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static LinqRewrite.Extensions.AssertionExtension;
 using static LinqRewrite.Extensions.ExpressionSimplifier;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
@@ -14,7 +15,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            if (!TryGetInt(design.ResultSize, out var intSize) || intSize > 20)
+            if (!TryGetInt(design.ResultSize, out var intSize) || intSize > Constants.SimpleRewriteMaxSimpleElements)
                 return null;
 
             var items = Enumerable.Range(0, intSize).Select(x
@@ -45,26 +46,26 @@ namespace LinqRewrite.RewriteRules
         public static VariableBridge RewriteOther(RewriteDesign design, ValueBridge currentLength, VariableBridge resultVariable, int enlarging)
         {
             if (design.ResultSize != null) return KnownSize(design, resultVariable);
-            else if (design.SourceSize != null) return KnownSourceSize(design, currentLength, resultVariable, enlarging);
-            else return UnknownSourceSize(design, currentLength, resultVariable, enlarging);
+            if (design.SourceSize != null) return KnownSourceSize(design, currentLength, resultVariable, enlarging);
+            return UnknownSourceSize(design, currentLength, resultVariable, enlarging);
         }
 
         private static VariableBridge KnownSize(RewriteDesign design, VariableBridge resultVariable)
         {
             if (TryGetInt(design.ResultSize, out var resultInt) && resultInt < 0)
-                AssertionExtension.InitialErrorAdd(design, Return("System".Access("Array", $"Empty<{design.LastValue.Type}>").Invoke()));
+                InitialErrorAdd(design, Return("System".Access("Array", $"Empty<{design.LastValue.Type}>").Invoke()));
             design.ForAdd(resultVariable[design.Indexer].Assign(design.LastValue));
             return resultVariable;
         }
 
         private static VariableBridge KnownSourceSize(RewriteDesign design, ValueBridge currentLength, VariableBridge resultVariable, int enlarging)
         {
-            var logVariable = VariableCreator.GlobalVariable(design, Int, 
+            var logVariable = CreateGlobalVariable(design, Int, 
                 "LinqRewrite".Access("Core", "IntExtensions", "Log2")
-                    .Invoke(Parenthesize(design.SourceSize).Cast(SyntaxKind.UIntKeyword)) - 3);
+                    .Invoke(Parenthesize(design.SourceSize).Cast(SyntaxKind.UIntKeyword)) - Constants.MinArraySizeLog);
                 
             if (enlarging != 1) design.PreUseAdd(logVariable.SubAssign(logVariable % enlarging));
-            var currentLengthVariable = VariableCreator.GlobalVariable(design, Int, currentLength);
+            var currentLengthVariable = CreateGlobalVariable(design, Int, currentLength);
 
             design.ForAdd(If(design.Indexer >= currentLengthVariable,
                         "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeArray")
@@ -80,7 +81,7 @@ namespace LinqRewrite.RewriteRules
 
         private static VariableBridge UnknownSourceSize(RewriteDesign design, ValueBridge currentLength, VariableBridge resultVariable, int enlarging)
         {
-            var currentLengthVariable = VariableCreator.GlobalVariable(design, Int, currentLength);
+            var currentLengthVariable = CreateGlobalVariable(design, Int, currentLength);
             design.ForAdd(If(design.Indexer >= currentLengthVariable,
                             "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeArray")
                                     .Invoke(enlarging, RefArg(resultVariable), RefArg(currentLengthVariable))));
@@ -92,22 +93,21 @@ namespace LinqRewrite.RewriteRules
         public static (ValueBridge currentLength, VariableBridge result) GetResultVariable(RewriteDesign design, TypeSyntax itemType)
         {
             var arrayType = itemType.ArrayType();
-            if (design.ResultSize != null) return (design.ResultSize, VariableCreator.GlobalVariable(design, arrayType, CreateArray(arrayType, design.ResultSize)));
+            if (design.ResultSize != null) return (design.ResultSize, CreateGlobalVariable(design, arrayType, CreateArray(arrayType, design.ResultSize)));
             
             var currentResult = design.IncompleteIterators.TakeWhile(x =>
             {
                 if (!TryGetInt(x.ForInc, out var inc)) return false;
-                return x.Collection != null && !x.IsReversed 
-                                            && x.ListEnumeration && x.ForFrom != null
-                                            && x.ForTo != null && inc == 1;
-            }).Aggregate((ValueBridge)0, 
-                (x, y) => x + (y.IsReversed ? (y.ForFrom - y.ForTo + 1) : (y.ForTo - y.ForFrom + 1)), 
-                x => x.Simplify());
+                return x.Collection != null 
+                       && !x.IsReversed && x.ListEnumeration 
+                       && x.ForFrom != null && x.ForTo != null && inc == 1;
+            }).Aggregate((ValueBridge)0, (x, y) => x + (y.IsReversed ? y.ForFrom - y.ForTo + 1 : y.ForTo - y.ForFrom + 1));
             
-            if (TryGetInt(currentResult, out var currentResultInt) && currentResultInt <= 8)
-                currentResult = 8;
+            currentResult = currentResult.Simplify();
+            if (TryGetInt(currentResult, out var currentResultInt) && currentResultInt <= Constants.MinArraySize)
+                currentResult = Constants.MinArraySize;
             
-            return (currentResult, VariableCreator.GlobalVariable(design, arrayType, CreateArray(arrayType, currentResult)));
+            return (currentResult, CreateGlobalVariable(design, arrayType, CreateArray(arrayType, currentResult)));
         }
 
         public static void SimplifyPart(RewriteDesign design, VariableBridge resultVariable)
@@ -124,7 +124,7 @@ namespace LinqRewrite.RewriteRules
                 }
                 if (x.Collection.CollectionType == CollectionType.Array)
                 {
-                    var count = (x.IsReversed ? (x.ForFrom - x.ForTo + 1) : (x.ForTo - x.ForFrom + 1)).Simplify();
+                    var count = (x.IsReversed ? x.ForFrom - x.ForTo + 1 : x.ForTo - x.ForFrom + 1).Simplify();
                     x.PostFor.Add((StatementBridge)"LinqRewrite".Access("Core", "EnlargeExtensions", "ArrayCopy")
                         .Invoke(x.Collection, x.ForFrom, resultVariable, design.Indexer, count));
                     x.PostFor.Add((StatementBridge)design.Indexer.AddAssign(count));
@@ -132,7 +132,7 @@ namespace LinqRewrite.RewriteRules
                 }
                 else if (x.Collection.CollectionType == CollectionType.SimpleList)
                 {
-                    var count = (x.IsReversed ? (x.ForFrom - x.ForTo + 1) : (x.ForTo - x.ForFrom + 1)).Simplify();
+                    var count = (x.IsReversed ? x.ForFrom - x.ForTo + 1 : x.ForTo - x.ForFrom + 1).Simplify();
                     x.PostFor.Add((StatementBridge)"LinqRewrite".Access("Core", "EnlargeExtensions", "ArrayCopy")
                         .Invoke(x.Collection.Access("Items"), x.ForFrom, resultVariable, design.Indexer, count));
                     x.PostFor.Add((StatementBridge)design.Indexer.AddAssign(count));
@@ -140,7 +140,7 @@ namespace LinqRewrite.RewriteRules
                 }
                 else if (design.CurrentCollection.CollectionType == CollectionType.List)
                 {
-                    var count = (x.IsReversed ? (x.ForFrom - x.ForTo + 1) : (x.ForTo - x.ForFrom + 1)).Simplify();
+                    var count = (x.IsReversed ? x.ForFrom - x.ForTo + 1 : x.ForTo - x.ForFrom + 1).Simplify();
                     x.PostFor.Add((StatementBridge) design.CurrentCollection.Access("CopyTo")
                         .Invoke(x.ForFrom, resultVariable, design.Indexer, count));
                     x.PostFor.Add((StatementBridge)design.Indexer.AddAssign(count));

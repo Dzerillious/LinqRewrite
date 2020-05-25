@@ -2,6 +2,7 @@
 using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using static LinqRewrite.Extensions.AssertionExtension;
 using static LinqRewrite.Extensions.VariableExtensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
@@ -11,7 +12,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args, bool? reuseVariables = null)
         {
-            if (!AssertionExtension.AssertNotNull(design, design.CurrentCollection)) return;
+            if (!AssertNotNull(design, design.CurrentCollection)) return;
             design.AddIterator(design.CurrentCollection);
             RewriteOther(design, design.CurrentCollection, null, false, reuseVariables);
         }
@@ -31,7 +32,7 @@ namespace LinqRewrite.RewriteRules
         {
             design.CurrentIterator.ForFrom = 0;
             design.CurrentIterator.ForTo = count - 1;
-            design.CurrentIterator.ForIndexer = VariableCreator.GlobalVariable(design, Int);
+            design.CurrentIterator.ForIndexer = CreateGlobalVariable(design, Int);
             
             if (design.CurrentIndexer == null)
             {
@@ -57,7 +58,7 @@ namespace LinqRewrite.RewriteRules
         {
             design.CurrentIterator.ForFrom = null;
             design.CurrentIterator.ForTo = null;
-            design.CurrentIterator.Enumerator = VariableCreator.GlobalVariable(design, ParseTypeName($"System.Collections.Generic.IEnumerator<{collection.ItemType}>"));
+            design.CurrentIterator.Enumerator = CreateGlobalVariable(design, ParseTypeName($"System.Collections.Generic.IEnumerator<{collection.ItemType}>"));
             design.CurrentIterator.ListEnumeration = false;
 
             if (variable == null)

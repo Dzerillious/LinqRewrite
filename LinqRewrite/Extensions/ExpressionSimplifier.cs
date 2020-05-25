@@ -62,10 +62,10 @@ namespace LinqRewrite.Extensions
             return success;
         }
 
-        public static ValueBridge SimplifySubstitute(ValueBridge value, VariableBridge substituted, ValueBridge changedFor)
+        public static ValueBridge SimplifySubstitute(ValueBridge value, VariableBridge substituted, ValueBridge substitute)
         {
             var str = value.ToString();
-            str = StringSimplify(str.Replace(substituted.Name, SimplifyString(changedFor)));
+            str = StringSimplify(str.Replace(substituted.Name, SimplifyString(substitute)));
             return SyntaxFactory.ParseExpression(str);
         }
 

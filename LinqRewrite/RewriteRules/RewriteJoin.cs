@@ -4,6 +4,7 @@ using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.Extensions.VariableExtensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LinqRewrite.RewriteRules
@@ -21,19 +22,19 @@ namespace LinqRewrite.RewriteRules
             var comparerValue = args.Length == 5 ? args[4] : null;
 
             var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{innerValue.ItemType(design)},{innerKeySelector.ReturnType(design)}>");
-            var lookupVariable = VariableCreator.GlobalVariable(design, lookupType, lookupType.Access("CreateForJoin")
+            var lookupVariable = CreateGlobalVariable(design, lookupType, lookupType.Access("CreateForJoin")
                 .Invoke(innerValue, innerKeySelector, comparerValue));
 
             var itemValue = design.LastValue;
             var groupingType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{innerValue.ItemType(design)},{outerKeySelector.ReturnType(design)}>.Grouping");
-            var groupingVariable = VariableCreator.GlobalVariable(design, groupingType);
+            var groupingVariable = CreateGlobalVariable(design, groupingType);
             design.ForAdd(groupingVariable.Assign(lookupVariable.Access("GetGrouping")
                 .Invoke(outerKeySelector.Inline(design, itemValue), false)));
             
             design.ForAdd(If(groupingVariable.IsEqual(null), Continue()));
             var rewritten = new RewrittenValueBridge(((LambdaExpressionSyntax) innerKeySelector.Old).ExpressionBody, groupingVariable);
 
-            var iterator = VariableCreator.GlobalVariable(design, innerKeySelector.ReturnType(design));
+            var iterator = CreateGlobalVariable(design, innerKeySelector.ReturnType(design));
             design.IncompleteIterators.ToArray().ForEach(x =>
             {
                 var newIterator = new IteratorDesign(design, new CollectionValueBridge(design, groupingType, innerKeySelector.ReturnType(design), rewritten, true));

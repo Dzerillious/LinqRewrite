@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.ExpressionSimplifier;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -21,7 +22,7 @@ namespace LinqRewrite.RewriteRules
 
         public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            var foundVariable = VariableCreator.GlobalVariable(design, NullableType(design.ReturnType), null);
+            var foundVariable = CreateGlobalVariable(design, NullableType(design.ReturnType), null);
             if (args.Length == 0)
             {
                 design.ForAdd(If(foundVariable.IsEqual(null),

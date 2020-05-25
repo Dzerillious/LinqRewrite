@@ -133,8 +133,8 @@ namespace LinqRewrite.Extensions
         public static StatementBridge Return(ValueBridge _)
             => ReturnStatement(_);
 
-        public static DefaultExpressionSyntax Default(TypeBridge @type)
-            => DefaultExpression(@type);
+        public static DefaultExpressionSyntax Default(TypeBridge type)
+            => DefaultExpression(type);
 
         public static TypedValueBridge ReusableConst(this RewrittenValueBridge e, RewriteDesign design, bool? reuse = null)
             => ReusableConst(e.New, design, e.Old.GetType(design), reuse);
@@ -152,7 +152,7 @@ namespace LinqRewrite.Extensions
                 return new TypedValueBridge(type, e);
             }
 
-            var tmpVariable = VariableCreator.SuperGlobalVariable(design, type, e);
+            var tmpVariable = VariableExtensions.CreateSuperGlobalVariable(design, type, e);
             return new TypedValueBridge(type.Type, IdentifierName(tmpVariable));
         }
 
@@ -166,7 +166,7 @@ namespace LinqRewrite.Extensions
                 return new TypedValueBridge(type, e);
             }
 
-            var tmpVariable = VariableCreator.GlobalVariable(design, type, e, iterator);
+            var tmpVariable = VariableExtensions.CreateGlobalVariable(design, type, e, iterator);
             return new TypedValueBridge(type.Type, IdentifierName(tmpVariable));
         }
 
@@ -180,7 +180,7 @@ namespace LinqRewrite.Extensions
                 return new TypedValueBridge(type, e);
             }
 
-            var tmpVariable = VariableCreator.LocalVariable(design, type);
+            var tmpVariable = VariableExtensions.CreateLocalVariable(design, type);
             design.ForAdd(tmpVariable.Assign(e));
             tmpVariable.IsUsed = true;
             return new TypedValueBridge(type.Type, IdentifierName(tmpVariable));
@@ -207,7 +207,7 @@ namespace LinqRewrite.Extensions
             var val = values.Select(x =>
             {
                 if (IsReusable(x)) return x;
-                var inlineVariable = VariableCreator.LocalVariable(design, x.Type);
+                var inlineVariable = VariableExtensions.CreateLocalVariable(design, x.Type);
                 design.ForAdd(inlineVariable.Assign(x));
                 return new TypedValueBridge(x.Type, inlineVariable);
             }).ToArray();
@@ -332,5 +332,5 @@ namespace LinqRewrite.Extensions
                     };
             }
         }
-    };
+    }
 }

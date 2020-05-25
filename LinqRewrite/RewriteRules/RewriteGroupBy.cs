@@ -1,6 +1,7 @@
 ﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.Extensions.VariableExtensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LinqRewrite.RewriteRules
@@ -18,7 +19,7 @@ namespace LinqRewrite.RewriteRules
             };
 
             var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{keySelector.ReturnType(design)},{elementSelectorValue.Type}>");
-            var lookupVariable = VariableCreator.GlobalVariable(design, lookupType, args.Length switch
+            var lookupVariable = CreateGlobalVariable(design, lookupType, args.Length switch
             {
                 2 when !args[1].OldVal.IsInvokable(design) => New(lookupType, args[1]),
                 3 when !args[2].OldVal.IsInvokable(design) => New(lookupType, args[2]),
@@ -27,7 +28,7 @@ namespace LinqRewrite.RewriteRules
             });
 
             design.ForAdd(lookupVariable.Access("GetGrouping").Invoke(keySelector.Inline(design, design.LastValue), true)
-                            .Access("Add").Invoke(elementSelectorValue));
+                                .Access("Add").Invoke(elementSelectorValue));
             design.Iterators.All.ForEach(x => x.Complete = true);
 
             var iGroupingType = ParseTypeName($"System.Linq.IGrouping<{keySelector.ReturnType(design)},{elementSelectorValue.Type}>");

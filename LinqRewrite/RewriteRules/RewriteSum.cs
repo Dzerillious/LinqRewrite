@@ -4,6 +4,7 @@ using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.ExpressionSimplifier;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -12,20 +13,20 @@ namespace LinqRewrite.RewriteRules
         public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             if (args.Length != 0) return null;
-            if (!TryGetInt(design.ResultSize, out var intSize) || intSize > 10)
+            if (!TryGetInt(design.ResultSize, out var intSize) || intSize > Constants.SimpleRewriteMaxMediumElements)
                 return null;
 
             var items = Enumerable.Range(0, intSize).Select(x
                 => new TypedValueBridge(design.LastValue.Type, SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x)));
-            var simple = items.Aggregate((x, y) => new TypedValueBridge(design.LastValue.Type, x + y));  
-            return simple.Simplify();
+            var simpleValue = items.Aggregate((x, y) => new TypedValueBridge(design.LastValue.Type, x + y));  
+            return simpleValue.Simplify();
         }
         
         public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             var elementType = design.ReturnType.Type is NullableTypeSyntax nullable
                 ? (TypeBridge)nullable.ElementType : design.ReturnType;
-            var sumVariable = VariableCreator.GlobalVariable(design, elementType, 0);
+            var sumVariable = CreateGlobalVariable(design, elementType, 0);
             
             var value = args.Length switch
             {

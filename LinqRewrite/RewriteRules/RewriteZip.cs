@@ -1,7 +1,9 @@
 ﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using static LinqRewrite.Extensions.AssertionExtension;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.Extensions.VariableExtensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LinqRewrite.RewriteRules
@@ -11,12 +13,12 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             var collectionValue = args[0];
-            if (!AssertionExtension.AssertNotNull(design, collectionValue)) return;
+            if (!AssertNotNull(design, collectionValue)) return;
             var methodValue = args[1];
             design.WrapWithTry = true;
 
             var itemType = collectionValue.ItemType(design);
-            var enumeratorVariable = VariableCreator.GlobalVariable(design, ParseTypeName($"System.Collections.Generic.IEnumerator<{itemType}>"));
+            var enumeratorVariable = CreateGlobalVariable(design, ParseTypeName($"System.Collections.Generic.IEnumerator<{itemType}>"));
             design.InitialAdd(enumeratorVariable.Assign(Parenthesize(collectionValue.Cast(ParseTypeName($"IEnumerable<{itemType}>")))
                 .Access("GetEnumerator").Invoke()));
             

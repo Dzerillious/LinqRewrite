@@ -23,11 +23,10 @@ namespace LinqRewrite.RewriteRules
             }
             else 
             {
-                design.ForAdd(If(design.Indexer < skippedValue, 
-                            Block(
-                    design.Indexer.PostIncrement(),
-                                     Continue()
-                                )));
+                design.ForAdd(If(design.Indexer < skippedValue, Block(
+                        design.Indexer.PostIncrement(),
+                                         Continue()
+                                    )));
             }
             
             if (design.ResultSize != null) design.ResultSize -= skippedValue;
@@ -47,7 +46,7 @@ namespace LinqRewrite.RewriteRules
                     skippedValue = new RewrittenValueBridge(design.ResultSize);
                 else if (!design.Unchecked)
                 {
-                    var skippedVariable = VariableCreator.GlobalVariable(design, Int);
+                    var skippedVariable = CreateGlobalVariable(design, Int);
                     design.InitialAdd(skippedVariable.Assign(ConditionalExpression(skippedValue > design.ResultSize, design.ResultSize,
                         skippedValue)));
                     skippedValue = new RewrittenValueBridge(skippedVariable);
@@ -55,7 +54,7 @@ namespace LinqRewrite.RewriteRules
             }
             else if (!design.Unchecked && !design.ModifiedEnumeration)
             {
-                var skippedVariable = VariableCreator.GlobalVariable(design, Int);
+                var skippedVariable = CreateGlobalVariable(design, Int);
                 design.InitialAdd(If(skippedValue < 0, skippedVariable.Assign(0),
                     If (skippedValue > design.ResultSize, skippedVariable.Assign(design.ResultSize),
                         skippedVariable.Assign(skippedValue))));

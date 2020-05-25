@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using LinqRewrite.DataStructures;
-using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.ExpressionSimplifier;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
@@ -12,11 +11,11 @@ namespace LinqRewrite.RewriteRules
     {
         public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            if (!TryGetInt(design.ResultSize, out var intSize) || intSize > 10)
+            if (!TryGetInt(design.ResultSize, out var intSize) || intSize > Constants.SimpleRewriteMaxMediumElements)
                 return null;
 
-            var items = Enumerable.Range(0, intSize).Select(x
-                => (ExpressionSyntax) SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x));
+            var items = Enumerable.Range(0, intSize)
+                .Select(x=> (ExpressionSyntax) SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x));
             return items.Aggregate((x, y) => x.And(y));
         }
 

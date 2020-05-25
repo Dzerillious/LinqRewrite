@@ -11,10 +11,14 @@ namespace LinqRewrite.Services
 
         public int PrintHelp()
         {
-            PrintLine($"roslyn-linq-rewrite {typeof(Program).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion}");
+            PrintLine($"LinqRewrite {typeof(Program).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion}");
             PrintLine(@"https://gitlab.nesad.fit.vutbr.cz/xseryd00/roslyn-linq-rewrite
 
+LINQ queries rewriter for increasing speed of LINQ queries. It goes through the given code and rewrites LINQ queries to procedural code. It reduces memory allocation, closures count and increases speed of queries. For use please add reference to NuGet LinqRewrite.Core in rewritten project.
+
 Usage:
+  roslyn-linq-rewrite --help
+
   roslyn-linq-rewrite <path-to-csproj>
   roslyn-linq-rewrite <path-to-sln>
   roslyn-linq-rewrite <path-to-cs>
@@ -24,6 +28,8 @@ Usage:
   roslyn-linq-rewrite <path-to-sln> --rewriteDst=""Folder where to rewrite""
   roslyn-linq-rewrite <path-to-cs> --rewriteDst=""Folder where to rewrite""
   roslyn-linq-rewrite <path-to-csx> --rewriteDst=""Folder where to rewrite""
+
+
 ");
             return 0;
         }

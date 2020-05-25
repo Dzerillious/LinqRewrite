@@ -1,5 +1,6 @@
 ﻿using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using static LinqRewrite.Extensions.VariableExtensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LinqRewrite.RewriteRules
@@ -15,7 +16,7 @@ namespace LinqRewrite.RewriteRules
             RewrittenValueBridge comparer = args.Length == 5 ? args[4] : null;
 
             var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{inner.ItemType(design)},{innerKeySelector.ReturnType(design)}>");
-            var lookupVariable = VariableCreator.GlobalVariable(design, lookupType, lookupType.Access("CreateForJoin")
+            var lookupVariable = CreateGlobalVariable(design, lookupType, lookupType.Access("CreateForJoin")
                 .Invoke(inner, innerKeySelector, comparer));
 
             var lookupItemType = ParseTypeName($"System.Collections.IEnumerable<{inner.ItemType(design)}>");

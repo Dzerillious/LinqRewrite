@@ -36,7 +36,7 @@ namespace LinqRewrite
 
         private int ArgsProcessing(string[] args)
         {
-            if (args.Contains("-h") || args.Contains("--help") || args.Contains("/?"))
+            if (args.Length == 0 || args.Contains("-h") || args.Contains("--help") || args.Contains("/?"))
                 return _printService.PrintHelp();
 
             return args.Any(x => x.StartsWith("--rewriteDst")) 

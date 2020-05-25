@@ -1,9 +1,8 @@
 ﻿using System.Linq;
+using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
-using LinqRewrite.Core;
-using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
@@ -29,7 +28,7 @@ namespace LinqRewrite.RewriteRules
             design.CurrentIterator.IgnoreIterator = true;
             design.CurrentIterator.ForFrom = 0;
             design.CurrentIterator.ForTo = 0;
-            design.CurrentIterator.ForIndexer = VariableCreator.LocalVariable(design, Int, 0);
+            design.CurrentIterator.ForIndexer = CreateLocalVariable(design, Int, 0);
             
             design.ResultSize = 0;
             design.SourceSize = 0;

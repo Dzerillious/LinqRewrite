@@ -1,8 +1,9 @@
 ﻿using LinqRewrite.DataStructures;
-using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
+using static LinqRewrite.Extensions.AssertionExtension;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
+using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite.RewriteRules
 {
@@ -12,7 +13,7 @@ namespace LinqRewrite.RewriteRules
         {
             var sourceSizeValue = design.SourceSize;
             var collectionValue = args[0];
-            if (!AssertionExtension.AssertNotNull(design, collectionValue)) return;
+            if (!AssertNotNull(design, collectionValue)) return;
 
             var oldLast = design.LastValue;
             var collectionType = design.Data.GetTypeInfo(collectionValue).Type;
@@ -25,7 +26,7 @@ namespace LinqRewrite.RewriteRules
                 1 => New(hashsetType),
                 2 => New(hashsetType, args[1])
             };
-            var hashsetVariable = VariableCreator.GlobalVariable(design, hashsetType, hashsetCreation);
+            var hashsetVariable = CreateGlobalVariable(design, hashsetType, hashsetCreation);
             
             design.CurrentForAdd(hashsetVariable.Access("Add").Invoke(design.LastValue));
             design.CurrentIterator.Complete = true;
@@ -35,7 +36,7 @@ namespace LinqRewrite.RewriteRules
             
             design.LastValue = design.LastValue.Reusable(design);
             design.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(design.LastValue)),
-                        Continue()));
+                                Continue()));
 
             if (sourceSizeValue != null && design.SourceSize != null) design.SourceSize += sourceSizeValue;
             else design.SourceSize = null;
