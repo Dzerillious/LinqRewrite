@@ -162,51 +162,30 @@ public void Method1()
     var res = arr.Where(x => x > q).Select(x => x + 3).ToList();
 }
 ```
-* If you want to further optimize if you ensure conditions of operators you can use Unchecked()
+* If you want to further optimize if you ensure conditions of operators you can use Unchecked() operator or UncheckedLinq attribute
 * for example for sum of groups
 ```csharp
-public double ArrayAverageRewritten2()
-{
-    var sum = ExtendedLinq.Range(0, Items.Length / 10, 10).Sum(x => Items.Unchecked().Skip(x).Take(10).Sum());
-    sum += Items.Unchecked().Skip(Items.Length - Items.Length % 10).Take(Items.Length % 10).Sum();
-    return sum;
-}
+
+Defaultly grouped and SIMD operations are not implemented, but with LinqRewrite is easier to integrate them.
+
 ```
-
-* would be rewritten as
-
-```csharp
-public double ArrayAverageRewritten2()
+[Unchecked]
+public double ArrayGroupedSum(int[] source)
 {
-    var sum = ArrayAverageRewritten2_ProceduralLinq1();
-    sum += ArrayAverageRewritten2_ProceduralLinq2(Items);
-    return sum;
+    var sum = ExtendedLinq.Range(0, source.Length / 10, 10)
+        .Sum(x => source.Skip(x).Take(10).Sum());
+    return sum + source.Skip(source.Length / 10 * 10).Sum();
 }
 
-int ArrayAverageRewritten2_ProceduralLinq1()
+public double ArraySIMDSum(int[] source)
 {
-    if (0 > Items.Length / 10)
-        throw new System.InvalidOperationException("Index out of range");
-    int max = Items.Length / 10 * 10;
-    int sum = 0;
-    int i = 0;
-    for (; i < max; i += 10)
-        sum += Items[i] + Items[1 + i] + Items[2 + i] + Items[3 + i] + Items[4 + i] + Items[5 + i] + Items[6 + i] + Items[7 + i] + Items[8 + i] + Items[9 + i];
-    return sum;
+    var simdLength = Vector<int>.Count;
+    var vectorSum = ExtendedLinq.Range(0, ArraySource.Length / simdLength, simdLength)
+        .Aggregate(Vector<int>.Zero, (x, y) => Vector.Add(x, new Vector<int>(ArraySource, y)));
+        
+    return Enumerable.Range(0, simdLength).Sum(i => vectorSum[i])
+        + ArraySource.Skip(ArraySource.Length / simdLength * simdLength).Sum();
 }
-
-int ArrayAverageRewritten2_ProceduralLinq2(int[] Items)
-{
-    if (Items == null)
-        throw new System.InvalidOperationException("Invalid null object");
-    int max = (Items.Length % 10);
-    int sum = 0;
-    int indexer = Items.Length - Items.Length % 10;
-    for (; indexer < max; indexer += 1)
-        sum += (Items[indexer]);
-    return sum;
-}
-```
 
 * Which is more performant then Items.Sum()
 
