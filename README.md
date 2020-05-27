@@ -176,6 +176,7 @@ public double ArrayGroupedSum(int[] source)
     return sum + source.Skip(source.Length / 10 * 10).Sum();
 }
 
+[Unchecked]
 public double ArraySIMDSum(int[] source)
 {
     var simdLength = Vector<int>.Count;
