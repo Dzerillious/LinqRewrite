@@ -169,7 +169,7 @@ Defaultly grouped and SIMD operations are not implemented, but with LinqRewrite 
 
 ```csharp
 [Unchecked]
-public double ArrayGroupedSum(int[] source)
+public int ArrayGroupedSum(int[] source)
 {
     var sum = ExtendedLinq.Range(0, source.Length / 10, 10)
         .Sum(x => source.Skip(x).Take(10).Sum());
@@ -177,7 +177,7 @@ public double ArrayGroupedSum(int[] source)
 }
 
 [Unchecked]
-public double ArraySIMDSum(int[] source)
+public int ArraySIMDSum(int[] source)
 {
     var simdLength = Vector<int>.Count;
     var vectorSum = ExtendedLinq.Range(0, source.Length / simdLength, simdLength)
