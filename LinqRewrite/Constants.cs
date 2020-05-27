@@ -60,7 +60,7 @@ namespace LinqRewrite
             
             "Range", "Repeat", "Empty",
             
-            "Unchecked", "WithMaxSize" 
+            "Unchecked",
             
             /*"OrderBy",*//*"OrderByDescending"*//*"ThenByDescending"*//*"ThenByDescending"*//*"DefaultIfEmpty"*/
         };

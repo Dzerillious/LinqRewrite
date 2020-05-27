@@ -3,7 +3,7 @@ using System.Linq;
 using BenchmarkDotNet.Attributes;
 using LinqRewrite.Core;
 
-namespace BenchmarkLibrary
+namespace BenchmarksLibrary
 {
     [MemoryDiagnoser]
     public class ToArrayBenchmarks
@@ -27,29 +27,29 @@ namespace BenchmarkLibrary
             ArraySource = Enumerable.Range(0, Offset).ToArray();
         }
 
-        // [NoRewrite, Benchmark]
-        // public void ArrayToArray()
-        // {
-        //     ArraySource.ToArray();
-        // }//EndMethod
-        //
-        // [Benchmark]
-        // public void ArrayToArrayRewritten()
-        // {
-        //     ArraySource.ToArray(EnlargingCoefficient.By2);
-        // }//EndMethod
-        //
-        // [NoRewrite, Benchmark]
-        // public void RangeToArray()
-        // {
-        //     Enumerable.Range(0, Offset).ToArray();
-        // }//EndMethod
-        //
-        // [Benchmark]
-        // public void RangeToArrayRewritten()
-        // {
-        //     Enumerable.Range(0, Offset).ToArray(EnlargingCoefficient.By2);
-        // }//EndMethod
+        [NoRewrite, Benchmark]
+        public void ArrayToArray()
+        {
+            ArraySource.ToArray();
+        }//EndMethod
+        
+        [Benchmark]
+        public void ArrayToArrayRewritten()
+        {
+            ArraySource.ToArray(EnlargingCoefficient.By2);
+        }//EndMethod
+        
+        [NoRewrite, Benchmark]
+        public void RangeToArray()
+        {
+            Enumerable.Range(0, Offset).ToArray();
+        }//EndMethod
+        
+        [Benchmark]
+        public void RangeToArrayRewritten()
+        {
+            Enumerable.Range(0, Offset).ToArray(EnlargingCoefficient.By2);
+        }//EndMethod
 
         [NoRewrite, Benchmark]
         public void EnumerableToArray()

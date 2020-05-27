@@ -142,8 +142,6 @@ namespace LinqRewrite
                 case "ToSimpleList": return RewriteToSimpleList.SimpleRewrite(design, args);
                 
                 case "Unchecked": design.Unchecked = true; return null;
-                case "WithResultSize": design.ResultSize = args[0]; return null;
-                case "WithMaxSize": design.SourceSize = args[0]; return null;
                 default: return null;
             }
         }
@@ -211,8 +209,6 @@ namespace LinqRewrite
                 case "ToDictionary": RewriteToDictionary.Rewrite(design, args); return;
                 
                 case "Unchecked": design.Unchecked = true; return;
-                case "WithResultSize": design.ResultSize = args[0]; return;
-                case "WithMaxSize": design.SourceSize = args[0]; return;
                 default: throw new NotImplementedException($"Rewrite of {last} not implemented");
             }
         }

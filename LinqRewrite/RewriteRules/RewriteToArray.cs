@@ -64,7 +64,15 @@ namespace LinqRewrite.RewriteRules
                 "LinqRewrite".Access("Core", "IntExtensions", "Log2")
                     .Invoke(Parenthesize(design.SourceSize).Cast(SyntaxKind.UIntKeyword)) - Constants.MinArraySizeLog);
                 
-            if (enlarging != 1) design.PreUseAdd(logVariable.SubAssign(logVariable % enlarging));
+            if (enlarging != 1) design.PreUseAdd(logVariable.Assign(
+                SyntaxFactory.ConditionalExpression(logVariable.GThan(enlarging), 
+                    logVariable - logVariable % enlarging,
+                    IntValue(enlarging))));
+            else design.PreUseAdd(logVariable.Assign(
+                SyntaxFactory.ConditionalExpression(logVariable.GThan(1), 
+                    logVariable,
+                    IntValue(1))));
+            
             var currentLengthVariable = CreateGlobalVariable(design, Int, currentLength);
 
             design.ForAdd(If(design.Indexer >= currentLengthVariable,

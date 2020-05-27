@@ -22,8 +22,9 @@ namespace LinqRewrite.RewriteRules
                 design.CurrentIterator.ForTo = design.CurrentIterator.ForTo.Simplify();
             }
             else design.ForAdd(If(takeIndexer.PostIncrement() >= takeValue, Break()));
-            
+
             if (design.ResultSize != null) design.ResultSize = takeValue;
+            else design.SourceSize = takeValue;
             design.Indexer = null;
         }
 

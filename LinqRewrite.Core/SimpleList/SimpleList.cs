@@ -87,20 +87,20 @@ namespace LinqRewrite.Core.SimpleList
 #endif
       
       public IEnumerator<T> GetEnumerator()
-        => new SimpleListEnumerator(Items, Count);
+        => new Enumerator(Items, Count);
 
       IEnumerator IEnumerable.GetEnumerator()
-        => new SimpleListEnumerator(Items, Count);
+        => new Enumerator(Items, Count);
 
       [Serializable]
-      private sealed class SimpleListEnumerator : IEnumerator<T>, ICloneable
+      public sealed class Enumerator : IEnumerator<T>, ICloneable
       {
           private T[] _array;
           private int _index;
           private int _endIndex;
           private T _current;
 
-          internal SimpleListEnumerator(T[] array, int count)
+          internal Enumerator(T[] array, int count)
           {
               _array = array;
               _index = -1;

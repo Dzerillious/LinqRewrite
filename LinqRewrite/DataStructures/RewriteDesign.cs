@@ -198,7 +198,7 @@ namespace LinqRewrite
             CurrentIndexer = null;
             NotRewrite = false;
             WrapWithTry = false;
-            Unchecked = false;
+            Unchecked = Data.CurrentIsUnchecked;
             Error = false;
 
             LastValue = null;

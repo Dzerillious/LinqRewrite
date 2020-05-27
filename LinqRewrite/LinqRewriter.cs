@@ -51,9 +51,15 @@ namespace LinqRewrite
 
         public override SyntaxNode VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
-            if (HasNoRewriteAttribute(node.AttributeLists)) return node;
+            var (noRewrite, uncheckedLinq) = CheckAttributes(node.AttributeLists);
+            if (noRewrite) return node;
+            var oldUnchecked = _data.CurrentIsUnchecked;
+            _data.CurrentIsUnchecked = _data.CurrentIsUnchecked || uncheckedLinq;
+            
             var old = RewrittenLinqQueries;
             var syntaxNode = base.VisitMethodDeclaration(node);
+
+            _data.CurrentIsUnchecked = oldUnchecked;
             if (RewrittenLinqQueries != old) RewrittenMethods++;
             return syntaxNode;
         }
@@ -108,7 +114,10 @@ namespace LinqRewrite
 
         private SyntaxNode VisitTypeDeclaration(TypeDeclarationSyntax node)
         {
-            if (HasNoRewriteAttribute(node.AttributeLists)) return node;
+            var (noRewrite, uncheckedLinq) = CheckAttributes(node.AttributeLists);
+            if (noRewrite) return node;
+            var oldUnchecked = _data.CurrentIsUnchecked;
+            _data.CurrentIsUnchecked = _data.CurrentIsUnchecked || uncheckedLinq;
 
             var old = _data.CurrentType;
             _data.CurrentType = node;
@@ -129,9 +138,11 @@ namespace LinqRewrite
                 
                 _data.MethodsToAddToCurrentType.RemoveAll(x => x.Item1 == _data.CurrentType);
                 _data.CurrentType = old;
+                _data.CurrentIsUnchecked = oldUnchecked;
                 return withMethods.NormalizeWhitespace();
             }
             _data.CurrentType = old;
+            _data.CurrentIsUnchecked = oldUnchecked;
             return changed;
         }
 
@@ -253,12 +264,20 @@ namespace LinqRewrite
                 _ => false
             };
 
-        private bool HasNoRewriteAttribute(SyntaxList<AttributeListSyntax> attributeLists) =>
-            attributeLists.Any(x => 
-                x.Attributes.Any(y =>
+        private (bool noRewrite, bool uncheckedLinq) CheckAttributes(SyntaxList<AttributeListSyntax> attributeLists)
+        {
+            bool noRewrite = false;
+            bool uncheckedLinq = false;
+            foreach (var attributeListSyntax in attributeLists)
+            foreach (var attribute in attributeListSyntax.Attributes)
             {
-                var symbol = ((IMethodSymbol) _data.Semantic.GetSymbolInfo(y).Symbol).ContainingType;
-                return symbol.ToDisplayString() == "LinqRewrite.Core.NoRewriteAttribute";
-            }));
+                var symbol = ((IMethodSymbol) _data.Semantic.GetSymbolInfo(attribute).Symbol).ContainingType.ToDisplayString();
+                if (symbol == "LinqRewrite.Core.NoRewriteAttribute")
+                    noRewrite = true;
+                if (symbol == "LinqRewrite.Core.UncheckedLinqAttribute")
+                    uncheckedLinq = true;
+            }
+            return (noRewrite, uncheckedLinq);
+        }
     }
 }

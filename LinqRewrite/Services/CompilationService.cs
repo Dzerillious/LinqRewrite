@@ -30,13 +30,14 @@ namespace LinqRewrite.Services
                     CompileSolution(args[0]);
                 else if (args.First().EndsWith(".csproj"))
                 {
-                    MSBuildLocator.RegisterDefaults();
+                    if (MSBuildLocator.CanRegister) MSBuildLocator.RegisterDefaults();
                     var msWorkspace = MSBuildWorkspace.Create();
                     var project = msWorkspace.OpenProjectAsync(args[0]).Result;
                     if (Directory.Exists(Path.GetDirectoryName(project.OutputFilePath))) Directory.Delete(Path.GetDirectoryName(project.OutputFilePath), true);
                     CompileProject(msWorkspace, project, project.OutputFilePath);
                 }
                 else CompileFile(args[0]);
+                _printService.PrintLine("Compilation was successful.");
             }
             catch (Exception ex)
             {
@@ -55,13 +56,14 @@ namespace LinqRewrite.Services
                     RewriteSolution(args[0], dstDir);
                 else if (args.First().EndsWith(".csproj"))
                 {
-                    MSBuildLocator.RegisterDefaults();
+                    if (MSBuildLocator.CanRegister) MSBuildLocator.RegisterDefaults();
                     var msWorkspace = MSBuildWorkspace.Create();
                     var project = msWorkspace.OpenProjectAsync(args[0]).Result;
                     if (Directory.Exists(dstDir)) Directory.Delete(dstDir, true);
                     RewriteProject(msWorkspace, project, dstDir);
                 }
                 else RewriteFile(args[0], dstDir);
+                _printService.PrintLine("Rewrite was successful.");
             }
             catch (Exception ex)
             {
@@ -73,7 +75,7 @@ namespace LinqRewrite.Services
 
         public void RewriteSolution(string path, string dstDir)
         {
-            MSBuildLocator.RegisterDefaults();
+            if (MSBuildLocator.CanRegister) MSBuildLocator.RegisterDefaults();
             var msWorkspace = MSBuildWorkspace.Create();
             var solution = msWorkspace.OpenSolutionAsync(path).Result;
             solution.Projects.ForEach(x => RewriteProject(msWorkspace, x, dstDir));

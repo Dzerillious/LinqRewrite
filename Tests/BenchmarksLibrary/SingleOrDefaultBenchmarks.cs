@@ -3,7 +3,7 @@ using System.Linq;
 using BenchmarkDotNet.Attributes;
 using LinqRewrite.Core;
 
-namespace BenchmarkLibrary
+namespace BenchmarksLibrary
 {
     [MemoryDiagnoser]
     public class SingleOrDefaultBenchmarks

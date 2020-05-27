@@ -21,20 +21,22 @@ namespace LinqRewrite
             try
             {
                 var ret = program.ArgsProcessing(args);
+                program.PrintLine("Pres any key to continue.");
                 Console.ReadKey();
                 return ret;
             }
             catch (Exception ex)
             {
-                program.OnException(ex);
+                program.PrintLine(ex.ToString());
+                program.PrintLine("Pres any key to continue.");
                 Console.ReadKey();
                 return 1;
             }
         }
 
-        public void OnException(Exception ex)
+        public void PrintLine(string line)
         {
-            _printService.PrintLine(ex.ToString());
+            _printService.PrintLine(line);
         }
 
         private int ArgsProcessing(string[] args)

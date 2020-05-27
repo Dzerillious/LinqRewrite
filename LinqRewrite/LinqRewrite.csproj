@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.1.0</Version>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0</FileVersion>
+    <Version>1.1.1</Version>
+    <AssemblyVersion>1.1.1</AssemblyVersion>
+    <FileVersion>1.1.1</FileVersion>
     <LangVersion>latest</LangVersion>
     <Authors>Daniel Šerý</Authors>
     <Product>Turing ecosystem</Product>
@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="LinqRewrite.Core">
-      <Version>1.0.9</Version>
+      <Version>1.1.2</Version>
     </PackageReference>
     <PackageReference Include="MathNet.Symbolics">
       <Version>0.21.0</Version>
@@ -76,5 +76,9 @@
   
   <ItemGroup>
     <None Remove="icon.ico" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\LinqRewrite.Core\LinqRewrite.Core.csproj" />
   </ItemGroup>
 </Project>
