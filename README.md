@@ -164,11 +164,10 @@ public void Method1()
 ```
 * If you want to further optimize if you ensure conditions of operators you can use Unchecked() operator or UncheckedLinq attribute
 * for example for sum of groups
-```csharp
 
 Defaultly grouped and SIMD operations are not implemented, but with LinqRewrite is easier to integrate them.
 
-```
+```csharp
 [Unchecked]
 public double ArrayGroupedSum(int[] source)
 {
@@ -186,8 +185,9 @@ public double ArraySIMDSum(int[] source)
     return Enumerable.Range(0, simdLength).Sum(i => vectorSum[i])
         + ArraySource.Skip(ArraySource.Length / simdLength * simdLength).Sum();
 }
+```
 
-* Which is more performant then Items.Sum()
+* Which is much more performant then Items.Sum() for large arrays
 
 # Comparison to System.Linq
 * Uses external program for rewriting
