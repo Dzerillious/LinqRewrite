@@ -180,11 +180,11 @@ public double ArrayGroupedSum(int[] source)
 public double ArraySIMDSum(int[] source)
 {
     var simdLength = Vector<int>.Count;
-    var vectorSum = ExtendedLinq.Range(0, ArraySource.Length / simdLength, simdLength)
-        .Aggregate(Vector<int>.Zero, (x, y) => Vector.Add(x, new Vector<int>(ArraySource, y)));
+    var vectorSum = ExtendedLinq.Range(0, source.Length / simdLength, simdLength)
+        .Aggregate(Vector<int>.Zero, (x, y) => Vector.Add(x, new Vector<int>(source, y)));
         
     return Enumerable.Range(0, simdLength).Sum(i => vectorSum[i])
-        + ArraySource.Skip(ArraySource.Length / simdLength * simdLength).Sum();
+        + source.Skip(source.Length / simdLength * simdLength).Sum();
 }
 ```
 
