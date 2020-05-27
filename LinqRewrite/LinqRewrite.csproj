@@ -16,6 +16,14 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="LinqRewrite.Core">
       <Version>1.1.2</Version>
@@ -62,10 +70,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Reference Include="csc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=18bc04d2eb1e1518, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libs\csc.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -76,9 +80,5 @@
   
   <ItemGroup>
     <None Remove="icon.ico" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\LinqRewrite.Core\LinqRewrite.Core.csproj" />
   </ItemGroup>
 </Project>

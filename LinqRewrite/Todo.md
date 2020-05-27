@@ -1,9 +1,12 @@
-﻿Possible simple rewrites
+﻿Possible improvements
 
 Improve math optimization (For accepting division, for optimizing for program calculation, not for being nice)
 Implement SIMD
-Implement SelectMany ArrayCopy
+Implement SelectMany copying by ArrayCopy
 Implement ArrayCopy with fixed pointer
+Implement remaining operators
+
+Possible simple rewrites
 
 Range(.Skip|.Take|.Distinct|.Reverse)*.Sum              -> (min + max) * count / 2
 Range(.Skip|.Take|.Distinct|.Reverse)*.Average          -> (min + max) / 2

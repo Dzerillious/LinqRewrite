@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Forked and modified from https://github.com/antiufo/roslyn-linq-rewrite/tree/master/RoslynLinqRewrite
+
+using System;
 using System.Collections.Generic;
 using LinqRewrite.DataStructures;
 using Microsoft.CodeAnalysis;

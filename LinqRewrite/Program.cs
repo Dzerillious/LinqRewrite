@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Forked and modified from https://github.com/antiufo/roslyn-linq-rewrite/tree/master/RoslynLinqRewrite
+
+using System;
 using System.Linq;
 using LinqRewrite.Services;
 
@@ -21,15 +23,12 @@ namespace LinqRewrite
             try
             {
                 var ret = program.ArgsProcessing(args);
-                program.PrintLine("Pres any key to continue.");
-                Console.ReadKey();
-                return ret;
+                program.PrintLine(ret ? "Rewrite was successful." : "There was an error in rewrite.");
+                return ret ? 0 : 1;
             }
             catch (Exception ex)
             {
                 program.PrintLine(ex.ToString());
-                program.PrintLine("Pres any key to continue.");
-                Console.ReadKey();
                 return 1;
             }
         }
@@ -39,14 +38,12 @@ namespace LinqRewrite
             _printService.PrintLine(line);
         }
 
-        private int ArgsProcessing(string[] args)
+        private bool ArgsProcessing(string[] args)
         {
-            if (args.Length == 0 || args.Contains("-h") || args.Contains("--help") || args.Contains("/?"))
+            if (args.Length < 2 || args.Contains("-h") || args.Contains("--help"))
                 return _printService.PrintHelp();
 
-            return args.Any(x => x.StartsWith("--rewriteDst")) 
-                ? _compilationService.Rewrite(args) 
-                : _compilationService.Build(args);
+            return _compilationService.Rewrite(args);
         }
     }
 }
