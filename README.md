@@ -29,7 +29,7 @@ dotnet LinqRewrite.dll <path-to-csx> <path-to-rewrite>       # Rewrites csx file
 
 ## Example projects
 
-With release of LinqRewrite there are also included two example projects. The first one is BenchmarksLibrary (with set of benchmarks for LinqRewrite) and the second one is TestsLibrary.
+With release of LinqRewrite there are also included two example projects. The first one is BenchmarksLibrary (with set of benchmarks for LinqRewrite) and the second one is TestsLibrary. You can run prepared bat scripts for running of example project or run them manually from command line.
 
 For building and executing TestsLibrary you must run the following commands:
 ```bash
@@ -39,24 +39,10 @@ cd directory
 dotnet run
 ```
 
-When you are in Release directory of source you can insert following:
-```bash
-dotnet ./LinqRewrite.dll ../../../../Tests/TestsLibrary/TestsLibrary.csproj directory
-cd directory
-dotnet run
-```
-
 For building and executing BenchmarksLibrary you must run the following commands:
 ```bash
 cd LinqRewriteDir		# Full path to LinqRewrite
 dotnet ./LinqRewrite.dll BenchmarksDirectory/BenchmarksLibrary.csproj directory # Where BenchmarksDirectoryis path to directory where is BenchmarksLibrary.csproj located and directory is destination directory
-cd directory
-dotnet run
-```
-
-When you are in Release directory of source you can insert following:
-```bash
-dotnet ./LinqRewrite.dll ../../../../Tests/BenchmarksLibrary/BenchmarksLibrary.csproj directory
 cd directory
 dotnet run
 ```
