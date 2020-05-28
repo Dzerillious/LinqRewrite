@@ -29,7 +29,7 @@ dotnet LinqRewrite.dll <path-to-csx> <path-to-rewrite>       # Rewrites csx file
 
 ## Example projects
 
-With release of LinqRewrite there are also included two example projects. The first one is BenchmarksLibrary (with set of benchmarks for LinqRewrite) and the second one is TestsLibrary. You can run prepared bat scripts for running of example project or run them manually from command line.
+With release of LinqRewrite there are also included two example projects. The first one is BenchmarksLibrary (with set of benchmarks for LinqRewrite) and the second one is TestsLibrary. You can run prepared bat scripts (RunRewrittenBenchmarks.bat and RunRewrittenTests.bat) for running of example project or run them manually from command line.
 
 For building and executing TestsLibrary you must run the following commands:
 ```bash
