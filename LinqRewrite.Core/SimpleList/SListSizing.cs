@@ -66,8 +66,9 @@ namespace LinqRewrite.Core.SimpleList
 #endif 
         public void RemoveAt(int index)
         {
-            if (index != Count - 1)
-                Array.Copy(Items, index + 1, Items, index, Count - index);
+            if (index == Count - 1) ;
+            else if (index == 0) Array.Copy(Items, 1, Items, 0, Count - 1);
+            else Array.Copy(Items, index + 1, Items, index, Count - index);
             Count--;
         }
 
