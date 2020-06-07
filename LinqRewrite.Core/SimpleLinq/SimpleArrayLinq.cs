@@ -49,15 +49,16 @@ namespace LinqRewrite.Core.SimpleLinq
             var result = new T[8];
             var length = 8;
             var count = 0;
-            var log = IntExtensions.Log2((uint) source.Length) - 3;
-            log -= log % 2;
+            int log = IntExtensions.Log2((uint) source.Length) - 3;
+            log = log > 2 ? (log - (log % 2)) : 2;
             
             for (int i = 0; i < source.Length; i++)
             {
                 if (!predicate(source[i])) continue;
-                if (count++ > length)
+                if (count >= length)
                     EnlargeExtensions.LogEnlargeArray(2, source.Length, ref result, ref log, out length);
                 result[count] = source[i];
+                count++;
             }
             var final = new SimpleList<T>();
             final.Items = result;
@@ -72,15 +73,16 @@ namespace LinqRewrite.Core.SimpleLinq
             var result = new TResult[8];
             var length = 8;
             var count = 0;
-            var log = IntExtensions.Log2((uint) source.Length) - 3;
-            log -= log % 2;
+            int log = IntExtensions.Log2((uint) source.Length) - 3;
+            log = log > 2 ? (log - (log % 2)) : 2;
             
             for (int i = 0; i < source.Length; i++)
             {
                 if (!(source[i] is TResult retyped)) continue;
-                if (count++ > length)
+                if (count >= length)
                     EnlargeExtensions.LogEnlargeArray(2, source.Length, ref result, ref log, out length);
                 result[count] = retyped;
+                count++;
             }
             var final = new SimpleList<TResult>();
             final.Items = result;
@@ -95,15 +97,16 @@ namespace LinqRewrite.Core.SimpleLinq
             var result = new T[8];
             var length = 8;
             var count = 0;
-            var log = IntExtensions.Log2((uint) source.Length) - 3;
-            log -= log % 2;
+            int log = IntExtensions.Log2((uint) source.Length) - 3;
+            log = log > 2 ? (log - (log % 2)) : 2;
             
             for (int i = 0; i < source.Length; i++)
             {
                 if (!predicate(source[i])) break;
-                if (count++ > length)
+                if (count >= length)
                     EnlargeExtensions.LogEnlargeArray(2, source.Length, ref result, ref log, out length);
                 result[count] = source[i];
+                count++;
             }
             var final = new SimpleList<T>();
             final.Items = result;
@@ -123,7 +126,7 @@ namespace LinqRewrite.Core.SimpleLinq
 #endif
             
             var result = new T[source.Length - count];
-            Array.Copy(source, count, result, 0, result.Length);
+            EnlargeExtensions.ArrayCopy(source, count, result, 0, result.Length);
             return result;
         }
 
@@ -139,7 +142,7 @@ namespace LinqRewrite.Core.SimpleLinq
             if (count >= source.Length) return source;
             
             var result = new T[count];
-            Array.Copy(source, 0, result, 0, count);
+            EnlargeExtensions.ArrayCopy(source, 0, result, 0, count);
             return result;
         }
 
@@ -156,7 +159,7 @@ namespace LinqRewrite.Core.SimpleLinq
             if (skip + take >= source.Length) take = source.Length - skip;
             
             var result = new T[take];
-            Array.Copy(source, skip, result, 0, take);
+            EnlargeExtensions.ArrayCopy(source, skip, result, 0, take);
             return result;
         }
 
@@ -167,17 +170,18 @@ namespace LinqRewrite.Core.SimpleLinq
             var result = new T[8];
             var length = 8;
             var count = 0;
-            var log = IntExtensions.Log2((uint) source.Length) - 3;
-            log -= log % 2;
+            int log = IntExtensions.Log2((uint) source.Length) - 3;
+            log = log > 2 ? (log - (log % 2)) : 2;
             var i = 0;
             
             for (; i < source.Length; i++)
                 if (!predicate(source[i])) break;
             for (; i < source.Length; i++)
             {
-                if (count++ > length)
+                if (count >= length)
                     EnlargeExtensions.LogEnlargeArray(2, source.Length, ref result, ref log, out length);
                 result[count] = source[i];
+                count++;
             }
             var final = new SimpleList<T>();
             final.Items = result;
@@ -465,8 +469,8 @@ namespace LinqRewrite.Core.SimpleLinq
             if (source1 == null || source2 == null) throw new InvalidOperationException("Invalid null object");
 
             var result = new T[source1.Length + source2.Length];
-            Array.Copy(source1, 0, result, 0, source1.Length);
-            Array.Copy(source2, 0, result, source1.Length, source2.Length);
+            EnlargeExtensions.ArrayCopy(source1, 0, result, 0, source1.Length);
+            EnlargeExtensions.ArrayCopy(source2, 0, result, source1.Length, source2.Length);
             return result;
         }
         
@@ -726,5 +730,25 @@ namespace LinqRewrite.Core.SimpleLinq
                 if (!source1[i].Equals(source2[i])) return false;
             return true;
         }
+        
+        public static SimpleList<TResult> SimpleSelectMany<TSource, TResult>(this TSource[] source, Func<TSource, TResult[]> selector)
+        {
+            if (source == null || selector == null) throw new InvalidOperationException("Invalid null object");
+            var result = new SimpleList<TResult>();
+            int i = 0;
+            for (; i + 3 < source.Length; i += 4)
+            {
+                result.AddRange(selector(source[i]));
+                result.AddRange(selector(source[i+1]));
+                result.AddRange(selector(source[i+2]));
+                result.AddRange(selector(source[i+3]));
+            }
+            for (; i < source.Length; i++)
+                result.AddRange(selector(source[i]));
+            return result;
+        }
+
+        public static bool IsNullOrEmpty<T>(this T[] source)
+            => source == null || source.Length == 0;
     }
 }

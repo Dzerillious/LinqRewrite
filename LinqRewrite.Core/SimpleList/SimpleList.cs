@@ -37,7 +37,7 @@ namespace LinqRewrite.Core.SimpleList
             if (newSize < 8) newSize = 8;
             
             var items = new T[newSize];
-            Array.Copy(Items, 0, items, 0, Items.Length);
+            EnlargeExtensions.ArrayCopy(Items, 0, items, 0, Items.Length);
 
             Items = items;
         }

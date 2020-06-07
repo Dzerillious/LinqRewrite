@@ -8,7 +8,7 @@ namespace LinqRewrite.Core
         public static void EnlargeArray<T>(ref T[] array, int length)
         {
             var result = new T[length];
-            Array.Copy(array, 0, result, 0, array.Length);
+            EnlargeExtensions.ArrayCopy(array, 0, result, 0, array.Length);
             array = result;
         }
         
@@ -16,22 +16,22 @@ namespace LinqRewrite.Core
         {
             var length = array.Length >= 8 ? array.Length * 2 : 8;
             var result = new T[length];
-            Array.Copy(array, 0, result, 0, array.Length);
+            EnlargeExtensions.ArrayCopy(array, 0, result, 0, array.Length);
             array = result;
         }
         
         public static T[] AppendRange<T>(this T[] array, T[] appended)
         {
             var result = new T[array.Length + appended.Length];
-            Array.Copy(array, 0, result, 0, array.Length);
-            Array.Copy(appended, 0, result, array.Length, appended.Length);
+            EnlargeExtensions.ArrayCopy(array, 0, result, 0, array.Length);
+            EnlargeExtensions.ArrayCopy(appended, 0, result, array.Length, appended.Length);
             return result;
         }
 
         public static T[] AppendRange<T>(this T[] array, IEnumerable<T> appended, int count)
         {
             var result = new T[array.Length + count];
-            Array.Copy(array, 0, result, 0, array.Length);
+            EnlargeExtensions.ArrayCopy(array, 0, result, 0, array.Length);
 
             var enumerator = appended.GetEnumerator();
             var end = array.Length + count;
@@ -48,16 +48,16 @@ namespace LinqRewrite.Core
         public static T[] InsertRange<T>(this T[] array, int index, T[] inserted)
         {
             var result = new T[array.Length + inserted.Length];
-            Array.Copy(array, 0, result, 0, index);
-            Array.Copy(inserted, 0, result, index, inserted.Length);
-            Array.Copy(array, index, result, index + inserted.Length, array.Length - index);
+            EnlargeExtensions.ArrayCopy(array, 0, result, 0, index);
+            EnlargeExtensions.ArrayCopy(inserted, 0, result, index, inserted.Length);
+            EnlargeExtensions.ArrayCopy(array, index, result, index + inserted.Length, array.Length - index);
             return result;
         }
 
         public static T[] InsertRange<T>(this T[] array, int index, IEnumerable<T> inserted, int count)
         {
             var result = new T[array.Length + count];
-            Array.Copy(array, 0, result, count, index);
+            EnlargeExtensions.ArrayCopy(array, 0, result, count, index);
 
             var enumerator = inserted.GetEnumerator();
             var end = index + count;
@@ -68,7 +68,7 @@ namespace LinqRewrite.Core
             }
             enumerator.Dispose();
 
-            Array.Copy(array, end, result, count, array.Length - index);
+            EnlargeExtensions.ArrayCopy(array, end, result, count, array.Length - index);
             return result;
         }
 
@@ -85,7 +85,7 @@ namespace LinqRewrite.Core
         {
             if (result.Length == current) return result;
             var ret = new T[current];
-            Array.Copy(result, 0, ret, 0, current);
+            EnlargeExtensions.ArrayCopy(result, 0, ret, 0, current);
             return ret;
         }
 
@@ -93,7 +93,7 @@ namespace LinqRewrite.Core
         {
             if (result.Length == current) return result;
             var ret = new T[current];
-            Array.Copy(result, result.Length - current, ret, 0, current);
+            EnlargeExtensions.ArrayCopy(result, result.Length - current, ret, 0, current);
             return ret;
         }
     }

@@ -15,7 +15,7 @@ namespace LinqRewrite.Core.SimpleList
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif 
         public void CopyTo(T[] array, int index)
-            => Array.Copy(Items, 0, array, index, Count);
+            => EnlargeExtensions.ArrayCopy(Items, 0, array, index, Count);
 
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

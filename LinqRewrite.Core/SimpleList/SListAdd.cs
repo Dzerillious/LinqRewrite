@@ -24,13 +24,13 @@ namespace LinqRewrite.Core.SimpleList
         {
             var count = Count + items.Length;
             if (count <= Items.Length)
-                Array.Copy(items, 0, Items, Count, items.Length);
+                EnlargeExtensions.ArrayCopy(items, 0, Items, Count, items.Length);
             else
             {
                 var newItems = new T[count];
 
-                Array.Copy(Items, 0, newItems, 0, Count);
-                Array.Copy(items, 0, newItems, Count, items.Length);
+                EnlargeExtensions.ArrayCopy(Items, 0, newItems, 0, Count);
+                EnlargeExtensions.ArrayCopy(items, 0, newItems, Count, items.Length);
 
                 Items = newItems;
             }
@@ -42,7 +42,7 @@ namespace LinqRewrite.Core.SimpleList
 #endif 
         public void AddRangeUnchecked(T[] items)
         {
-            Array.Copy(items, 0, Items, Count, items.Length);
+            EnlargeExtensions.ArrayCopy(items, 0, Items, Count, items.Length);
             Count += items.Length;
         }
 
@@ -50,13 +50,13 @@ namespace LinqRewrite.Core.SimpleList
         {
             var count = Count + simpleList.Count;
             if (count <= Items.Length)
-                Array.Copy(simpleList.Items, 0, Items, Count, simpleList.Count);
+                EnlargeExtensions.ArrayCopy(simpleList.Items, 0, Items, Count, simpleList.Count);
             else
             {
                 var newItems = new T[count];
 
-                Array.Copy(Items, 0, newItems, 0, Count);
-                Array.Copy(simpleList.Items, 0, newItems, Count, simpleList.Count);
+                EnlargeExtensions.ArrayCopy(Items, 0, newItems, 0, Count);
+                EnlargeExtensions.ArrayCopy(simpleList.Items, 0, newItems, Count, simpleList.Count);
 
                 Items = newItems;
             }
@@ -68,7 +68,7 @@ namespace LinqRewrite.Core.SimpleList
 #endif 
         public void AddRangeUnchecked(SimpleList<T> simpleList)
         {
-            Array.Copy(simpleList.Items, 0, Items, Count, simpleList.Count);
+            EnlargeExtensions.ArrayCopy(simpleList.Items, 0, Items, Count, simpleList.Count);
             Count += simpleList.Count;
         }
 
@@ -81,7 +81,7 @@ namespace LinqRewrite.Core.SimpleList
             {
                 var newItems = new T[count];
 
-                Array.Copy(Items, 0, newItems, 0, Count);
+                EnlargeExtensions.ArrayCopy(Items, 0, newItems, 0, Count);
                 items.CopyTo(newItems, Count);
 
                 Items = newItems;
