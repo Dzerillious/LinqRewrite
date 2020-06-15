@@ -199,7 +199,7 @@ namespace LinqRewrite.Core
         => Array.IndexOf(elements, item, 0, count) >= 0;
 
       void ICollection<TElement>.CopyTo(TElement[] array, int arrayIndex)
-        => EnlargeExtensions.ArrayCopy(elements, 0, array, arrayIndex, count);
+        => Array.Copy(elements, 0, array, arrayIndex, count);
 
       bool ICollection<TElement>.Remove(TElement item)
         => throw new NotSupportedException();

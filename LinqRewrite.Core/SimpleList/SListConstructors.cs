@@ -29,7 +29,7 @@ namespace LinqRewrite.Core.SimpleList
         public SimpleList(T[] array)
         {
             var items = new T[array.Length];
-            EnlargeExtensions.ArrayCopy(array, 0, items, 0, array.Length);
+            Array.Copy(array, 0, items, 0, array.Length);
 
             Items = items;
             Count = array.Length;
@@ -38,7 +38,7 @@ namespace LinqRewrite.Core.SimpleList
         public SimpleList(T[] array, int count)
         {
             var items = new T[count];
-            EnlargeExtensions.ArrayCopy(array, 0, items, 0, count);
+            Array.Copy(array, 0, items, 0, count);
             
             Items = items;
             Count = array.Length;
@@ -47,7 +47,7 @@ namespace LinqRewrite.Core.SimpleList
         public SimpleList(SimpleList<T> simpleList)
         {
             var items = new T[simpleList.Count];
-            EnlargeExtensions.ArrayCopy(simpleList.Items, 0, items, 0, simpleList.Count);
+            Array.Copy(simpleList.Items, 0, items, 0, simpleList.Count);
             
             Items = items;
             Count = simpleList.Count;
@@ -56,7 +56,7 @@ namespace LinqRewrite.Core.SimpleList
         public SimpleList(SimpleList<T> simpleList, int count)
         {
             var items = new T[count];
-            EnlargeExtensions.ArrayCopy(simpleList.Items, 0, items, 0, simpleList.Count);
+            Array.Copy(simpleList.Items, 0, items, 0, simpleList.Count);
             
             Items = items;
             Count = count;

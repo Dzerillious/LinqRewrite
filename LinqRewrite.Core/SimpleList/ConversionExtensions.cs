@@ -89,7 +89,7 @@ namespace LinqRewrite.Core.SimpleList
         public static TSource[] ToArray<TSource>(this SimpleList<TSource> source)
         {
             var array = new TSource[source.Count];
-            EnlargeExtensions.ArrayCopy(source.Items, 0, array, 0, source.Count);
+            Array.Copy(source.Items, 0, array, 0, source.Count);
             return array;
         }
 

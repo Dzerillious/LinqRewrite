@@ -12,7 +12,7 @@ namespace LinqRewrite.Core.SimpleList
             if (Count + 1 <= Items.Length)
             {
                 if (index + 1 < Count)
-                    EnlargeExtensions.ArrayCopy(Items, index, Items, index + 1, Count - index);
+                    Array.Copy(Items, index, Items, index + 1, Count - index);
                 Items[index] = item;
             }
             else
@@ -20,9 +20,9 @@ namespace LinqRewrite.Core.SimpleList
                 var newSize = Items.Length * 2;
                 var newItems = new T[newSize];
 
-                EnlargeExtensions.ArrayCopy(Items, 0, newItems, 0, index);
+                Array.Copy(Items, 0, newItems, 0, index);
                 if (index + 1 < Items.Length)
-                    EnlargeExtensions.ArrayCopy(Items, index, newItems, index + 1, Count - index);
+                    Array.Copy(Items, index, newItems, index + 1, Count - index);
                 newItems[index] = item;
 
                 Items = newItems;
@@ -33,7 +33,7 @@ namespace LinqRewrite.Core.SimpleList
         public void InsertUnchecked(int index, T item)
         {
             if (index + 1 < Count)
-                EnlargeExtensions.ArrayCopy(Items, index, Items, index + 1, Count - index);
+                Array.Copy(Items, index, Items, index + 1, Count - index);
             Items[index] = item;
             Count++;
         }
@@ -48,17 +48,17 @@ namespace LinqRewrite.Core.SimpleList
             if (count <= Items.Length)
             {
                 if (continueCount > 0)
-                    EnlargeExtensions.ArrayCopy(Items, index, Items, continueIndex, continueCount);
-                EnlargeExtensions.ArrayCopy(items, 0, Items, index, items.Length);
+                    Array.Copy(Items, index, Items, continueIndex, continueCount);
+                Array.Copy(items, 0, Items, index, items.Length);
             }
             else
             {
                 var newItems = new T[count];
 
-                EnlargeExtensions.ArrayCopy(Items, 0, newItems, 0, index);
+                Array.Copy(Items, 0, newItems, 0, index);
                 if (continueCount > 0)
-                    EnlargeExtensions.ArrayCopy(Items, index, newItems, continueIndex, continueCount);
-                EnlargeExtensions.ArrayCopy(items, 0, newItems, index, items.Length);
+                    Array.Copy(Items, index, newItems, continueIndex, continueCount);
+                Array.Copy(items, 0, newItems, index, items.Length);
 
                 Items = newItems;
             }
@@ -71,8 +71,8 @@ namespace LinqRewrite.Core.SimpleList
             var continueCount = Count + items.Length - continueIndex;
                                 
             if (continueCount > 0)
-                EnlargeExtensions.ArrayCopy(Items, index, Items, continueIndex, continueCount);
-            EnlargeExtensions.ArrayCopy(items, 0, Items, index, items.Length);
+                Array.Copy(Items, index, Items, continueIndex, continueCount);
+            Array.Copy(items, 0, Items, index, items.Length);
             Count += items.Length;
         }
 
@@ -87,17 +87,17 @@ namespace LinqRewrite.Core.SimpleList
             if (count <= Items.Length)
             {
                 if (continueCount > 0)
-                    EnlargeExtensions.ArrayCopy(Items, index, Items, continueIndex, continueCount);
-                EnlargeExtensions.ArrayCopy(items, 0, Items, index, simpleList.Count);
+                    Array.Copy(Items, index, Items, continueIndex, continueCount);
+                Array.Copy(items, 0, Items, index, simpleList.Count);
             }
             else
             {
                 var newItems = new T[count];
 
-                EnlargeExtensions.ArrayCopy(Items, 0, newItems, 0, index);
+                Array.Copy(Items, 0, newItems, 0, index);
                 if (continueCount > 0)
-                    EnlargeExtensions.ArrayCopy(Items, index, newItems, continueIndex, continueCount);
-                EnlargeExtensions.ArrayCopy(items, 0, newItems, index, simpleList.Count);
+                    Array.Copy(Items, index, newItems, continueIndex, continueCount);
+                Array.Copy(items, 0, newItems, index, simpleList.Count);
 
                 Items = newItems;
             }
@@ -110,8 +110,8 @@ namespace LinqRewrite.Core.SimpleList
             var continueIndex = index + simpleList.Count;
             var continueCount = Count + simpleList.Count - continueIndex;
             if (continueCount > 0)
-                EnlargeExtensions.ArrayCopy(Items, index, Items, continueIndex, continueCount);
-            EnlargeExtensions.ArrayCopy(items, 0, Items, index, simpleList.Count);
+                Array.Copy(Items, index, Items, continueIndex, continueCount);
+            Array.Copy(items, 0, Items, index, simpleList.Count);
             Count += simpleList.Count;
         }
 
@@ -126,16 +126,16 @@ namespace LinqRewrite.Core.SimpleList
             if (count <= Items.Length)
             {
                 if (continueCount > 0)
-                    EnlargeExtensions.ArrayCopy(items, index, items, continueIndex, continueCount);
+                    Array.Copy(items, index, items, continueIndex, continueCount);
                 list.CopyTo(items, index);
             }
             else
             {
                 var newItems = new T[count];
 
-                EnlargeExtensions.ArrayCopy(items, 0, newItems, 0, index);
+                Array.Copy(items, 0, newItems, 0, index);
                 if (continueCount > 0)
-                    EnlargeExtensions.ArrayCopy(items, index, newItems, continueIndex, continueCount);
+                    Array.Copy(items, index, newItems, continueIndex, continueCount);
                 list.CopyTo(items, index);
 
                 Items = newItems;
@@ -150,7 +150,7 @@ namespace LinqRewrite.Core.SimpleList
             var items = Items;
             
             if (continueCount > 0)
-                EnlargeExtensions.ArrayCopy(items, index, items, continueIndex, continueCount);
+                Array.Copy(items, index, items, continueIndex, continueCount);
             list.CopyTo(items, index);
             Count += list.Count;
         }
@@ -166,7 +166,7 @@ namespace LinqRewrite.Core.SimpleList
             if (count <= Items.Length)
             {
                 if (continueCount > 0)
-                    EnlargeExtensions.ArrayCopy(items, index, items, continueIndex, continueCount);
+                    Array.Copy(items, index, items, continueIndex, continueCount);
 
                 var j = index;
                 foreach (var value in enumerable)
@@ -176,9 +176,9 @@ namespace LinqRewrite.Core.SimpleList
             {
                 var newItems = new T[count];
 
-                EnlargeExtensions.ArrayCopy(items, 0, newItems, 0, index);
+                Array.Copy(items, 0, newItems, 0, index);
                 if (continueCount > 0)
-                    EnlargeExtensions.ArrayCopy(items, index, newItems, continueIndex, continueCount);
+                    Array.Copy(items, index, newItems, continueIndex, continueCount);
 
                 var j = index;
                 foreach (var value in enumerable)
@@ -195,7 +195,7 @@ namespace LinqRewrite.Core.SimpleList
             var continueCount = Count + count - continueIndex;
             var items = Items;
             if (continueCount > 0)
-                EnlargeExtensions.ArrayCopy(items, index, items, continueIndex, continueCount);
+                Array.Copy(items, index, items, continueIndex, continueCount);
             
             var j = index;
             foreach (var value in enumerable)

@@ -96,7 +96,7 @@ namespace LinqRewrite.Core
       int length = checked (_count * 2 + 1);
       int[] numArray = new int[length];
       Slot[] slotArray = new Slot[length];
-      EnlargeExtensions.ArrayCopy(_slots, 0, slotArray, 0, _count);
+      Array.Copy(_slots, 0, slotArray, 0, _count);
       for (int index1 = 0; index1 < _count; ++index1)
       {
         int index2 = slotArray[index1].hashCode % length;

@@ -70,7 +70,7 @@ namespace LinqRewrite.Core
             currentLength = length >> log;
             
             var newArray = new T[currentLength];
-            ArrayCopy(result, 0, newArray, 0, result.Length);
+            Array.Copy(result, 0, newArray, 0, result.Length);
             result = newArray;
         }
 
@@ -83,7 +83,7 @@ namespace LinqRewrite.Core
             currentLength = length >> log;
             
             var newArray = new T[currentLength];
-            ArrayCopy(result, 0, newArray, currentLength - result.Length, result.Length);
+            Array.Copy(result, 0, newArray, currentLength - result.Length, result.Length);
             result = newArray;
         }
 
@@ -104,7 +104,7 @@ namespace LinqRewrite.Core
             currentLength <<= logConst;
             
             var newArray = new T[currentLength];
-            ArrayCopy(result, 0, newArray, 0, result.Length);
+            Array.Copy(result, 0, newArray, 0, result.Length);
             result = newArray;
         }
 
@@ -116,7 +116,7 @@ namespace LinqRewrite.Core
             currentLength <<= logConst;
             
             var newArray = new T[currentLength];
-            ArrayCopy(result, 0, newArray, currentLength - result.Length, result.Length);
+            Array.Copy(result, 0, newArray, currentLength - result.Length, result.Length);
             result = newArray;
         }
     }

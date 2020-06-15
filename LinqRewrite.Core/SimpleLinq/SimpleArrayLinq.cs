@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using LinqRewrite.Core.SimpleList;
 
 namespace LinqRewrite.Core.SimpleLinq
@@ -23,25 +24,6 @@ namespace LinqRewrite.Core.SimpleLinq
             return result;
         }
         
-        public static TResult[] SimpleCast<TSource, TResult>(this TSource[] source)
-            where TResult : TSource
-        {
-            if (source == null) throw new InvalidOperationException("Invalid null object");
-            
-            var result = new TResult[source.Length];
-            int i = 0;
-            for (; i + 3 < source.Length; i += 4)
-            {
-                result[i] = (TResult)source[i];
-                result[i+1] = (TResult)source[i+1];
-                result[i+2] = (TResult)source[i+2];
-                result[i+3] = (TResult)source[i+3];
-            }
-            for (; i < source.Length; i++)
-                result[i] = (TResult)source[i];
-            return result;
-        }
-        
         public static SimpleList<T> SimpleWhere<T>(this T[] source, Func<T, bool> predicate)
         {
             if (source == null) throw new InvalidOperationException("Invalid null object");
@@ -61,30 +43,6 @@ namespace LinqRewrite.Core.SimpleLinq
                 count++;
             }
             var final = new SimpleList<T>();
-            final.Items = result;
-            final.Count = count;
-            return final;
-        }
-        
-        public static SimpleList<TResult> SimpleOfType<TSource, TResult>(this TSource[] source)
-        {
-            if (source == null) throw new InvalidOperationException("Invalid null object");
-            
-            var result = new TResult[8];
-            var length = 8;
-            var count = 0;
-            int log = IntExtensions.Log2((uint) source.Length) - 3;
-            log = log > 2 ? (log - (log % 2)) : 2;
-            
-            for (int i = 0; i < source.Length; i++)
-            {
-                if (!(source[i] is TResult retyped)) continue;
-                if (count >= length)
-                    EnlargeExtensions.LogEnlargeArray(2, source.Length, ref result, ref log, out length);
-                result[count] = retyped;
-                count++;
-            }
-            var final = new SimpleList<TResult>();
             final.Items = result;
             final.Count = count;
             return final;
@@ -126,7 +84,7 @@ namespace LinqRewrite.Core.SimpleLinq
 #endif
             
             var result = new T[source.Length - count];
-            EnlargeExtensions.ArrayCopy(source, count, result, 0, result.Length);
+            Array.Copy(source, count, result, 0, result.Length);
             return result;
         }
 
@@ -142,7 +100,7 @@ namespace LinqRewrite.Core.SimpleLinq
             if (count >= source.Length) return source;
             
             var result = new T[count];
-            EnlargeExtensions.ArrayCopy(source, 0, result, 0, count);
+            Array.Copy(source, 0, result, 0, count);
             return result;
         }
 
@@ -159,7 +117,7 @@ namespace LinqRewrite.Core.SimpleLinq
             if (skip + take >= source.Length) take = source.Length - skip;
             
             var result = new T[take];
-            EnlargeExtensions.ArrayCopy(source, skip, result, 0, take);
+            Array.Copy(source, skip, result, 0, take);
             return result;
         }
 
@@ -469,8 +427,8 @@ namespace LinqRewrite.Core.SimpleLinq
             if (source1 == null || source2 == null) throw new InvalidOperationException("Invalid null object");
 
             var result = new T[source1.Length + source2.Length];
-            EnlargeExtensions.ArrayCopy(source1, 0, result, 0, source1.Length);
-            EnlargeExtensions.ArrayCopy(source2, 0, result, source1.Length, source2.Length);
+            Array.Copy(source1, 0, result, 0, source1.Length);
+            Array.Copy(source2, 0, result, source1.Length, source2.Length);
             return result;
         }
         
@@ -566,15 +524,14 @@ namespace LinqRewrite.Core.SimpleLinq
         {
             if (source == null) throw new InvalidOperationException("Invalid null object");
             
-            int i = source.Length;
-            for (; i >= 0; i -= 4)
+            int i = source.Length - 1;
+            for (; i - 3 >= 0; i -= 4)
             {
                 if (predicate(source[i])) return source[i];
                 if (predicate(source[i-1])) return source[i-1];
                 if (predicate(source[i-2])) return source[i-2];
                 if (predicate(source[i-3])) return source[i-3];
             }
-            i += 4;
             for (; i >= 0; i--)
                 if (predicate(source[i])) return source[i];
             throw new IndexOutOfRangeException("No matching element");
@@ -585,15 +542,14 @@ namespace LinqRewrite.Core.SimpleLinq
         {
             if (source == null) throw new InvalidOperationException("Invalid null object");
             
-            int i = source.Length;
-            for (; i >= 0; i -= 4)
+            int i = source.Length - 1;
+            for (; i - 3 >= 0; i -= 4)
             {
                 if (predicate(source[i])) return source[i];
                 if (predicate(source[i-1])) return source[i-1];
                 if (predicate(source[i-2])) return source[i-2];
                 if (predicate(source[i-3])) return source[i-3];
             }
-            i += 4;
             for (; i >= 0; i--)
                 if (predicate(source[i])) return source[i];
             return default;
@@ -731,20 +687,36 @@ namespace LinqRewrite.Core.SimpleLinq
             return true;
         }
         
-        public static SimpleList<TResult> SimpleSelectMany<TSource, TResult>(this TSource[] source, Func<TSource, TResult[]> selector)
+        public static TResult[] SimpleSelectMany<TSource, TResult>(this IList<TSource> source, Func<TSource, TResult[]> selector)
         {
             if (source == null || selector == null) throw new InvalidOperationException("Invalid null object");
-            var result = new SimpleList<TResult>();
+            int sourceCount = source.Count;
+            var tmpResult = new TResult[sourceCount][];
+            
+            int resultCount = 0;
             int i = 0;
-            for (; i + 3 < source.Length; i += 4)
+            for (; i + 3 < sourceCount; i += 4)
             {
-                result.AddRange(selector(source[i]));
-                result.AddRange(selector(source[i+1]));
-                result.AddRange(selector(source[i+2]));
-                result.AddRange(selector(source[i+3]));
+                tmpResult[i] = selector(source[i]);
+                tmpResult[i+1] = selector(source[i+1]);
+                tmpResult[i+2] = selector(source[i+2]);
+                tmpResult[i+3] = selector(source[i+3]);
+                resultCount += tmpResult[i].Length + tmpResult[i+1].Length + tmpResult[i+2].Length + tmpResult[i+3].Length;
             }
-            for (; i < source.Length; i++)
-                result.AddRange(selector(source[i]));
+
+            for (; i < sourceCount; i++)
+            {
+                tmpResult[i] = selector(source[i]);
+                resultCount += tmpResult[i].Length;
+            }
+            var result = new TResult[resultCount];
+            var copyIndex = 0;
+            for (var j = 0; j < tmpResult.Length; j++)
+            {
+                TResult[] array = tmpResult[j];
+                Array.Copy(array, 0, result, copyIndex, array.Length);
+                copyIndex += array.Length;
+            }
             return result;
         }
 

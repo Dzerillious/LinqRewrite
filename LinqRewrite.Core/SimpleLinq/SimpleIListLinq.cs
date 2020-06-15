@@ -1,12 +1,15 @@
+
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using LinqRewrite.Core.SimpleList;
 
 namespace LinqRewrite.Core.SimpleLinq
 {
     public static class SimpleIListLinq
     {
-        public static IList<TResult> SimpleSelect<TSource, TResult>(this IList<TSource> source, Func<TSource, TResult> selector)
+        public static TResult[] SimpleSelect<TSource, TResult>(this IList<TSource> source, Func<TSource, TResult> selector)
         {
             if (source == null) throw new InvalidOperationException("Invalid null object");
             var sourceCount = source.Count;
@@ -25,7 +28,7 @@ namespace LinqRewrite.Core.SimpleLinq
             return result;
         }
         
-        public static IList<TResult> SimpleCast<TSource, TResult>(this IList<TSource> source)
+        public static TResult[] SimpleCast<TSource, TResult>(this IList<TSource> source)
             where TResult : TSource
         {
             if (source == null) throw new InvalidOperationException("Invalid null object");
@@ -45,7 +48,7 @@ namespace LinqRewrite.Core.SimpleLinq
             return result;
         }
         
-        public static IList<T> SimpleWhere<T>(this IList<T> source, Func<T, bool> predicate)
+        public static SimpleList<T> SimpleWhere<T>(this IList<T> source, Func<T, bool> predicate)
         {
             if (source == null) throw new InvalidOperationException("Invalid null object");
             var sourceCount = source.Count;
@@ -64,10 +67,13 @@ namespace LinqRewrite.Core.SimpleLinq
                 result[count] = source[i];
                 count++;
             }
-            return SimpleArrayExtensions.EnsureFullArray(result, count);
+            var final = new SimpleList<T>();
+            final.Items = result;
+            final.Count = count;
+            return final;
         }
         
-        public static IList<TResult> SimpleOfType<TSource, TResult>(this IList<TSource> source)
+        public static SimpleList<TResult> SimpleOfType<TSource, TResult>(this IList<TSource> source)
         {
             if (source == null) throw new InvalidOperationException("Invalid null object");
             var sourceCount = source.Count;
@@ -86,10 +92,13 @@ namespace LinqRewrite.Core.SimpleLinq
                 result[count] = retyped;
                 count++;
             }
-            return SimpleArrayExtensions.EnsureFullArray(result, count);
+            var final = new SimpleList<TResult>();
+            final.Items = result;
+            final.Count = count;
+            return final;
         }
         
-        public static IList<T> SimpleTakeWhile<T>(this IList<T> source, Func<T, bool> predicate)
+        public static SimpleList<T> SimpleTakeWhile<T>(this IList<T> source, Func<T, bool> predicate)
         {
             if (source == null) throw new InvalidOperationException("Invalid null object");
             var sourceCount = source.Count;
@@ -108,16 +117,19 @@ namespace LinqRewrite.Core.SimpleLinq
                 result[count] = source[i];
                 count++;
             }
-            return SimpleArrayExtensions.EnsureFullArray(result, count);
+            var final = new SimpleList<T>();
+            final.Items = result;
+            final.Count = count;
+            return final;
         }
 
-        public static IList<T> SimpleSkip<T>(this IList<T> source, int count)
+        public static T[] SimpleSkip<T>(this IList<T> source, int count)
         {
             if (source == null) throw new InvalidOperationException("Invalid null object");
-            if (count <= 0) return source;
+            if (count <= 0) return source.ToArray();
             if (count >= source.Count) 
 #if (NET40 || NET45)
-            return SimpleList.SimpleList<T>.Empty;
+            return SimpleList<T>.Empty;
 #else
             return Array.Empty<T>();
 #endif
@@ -128,16 +140,16 @@ namespace LinqRewrite.Core.SimpleLinq
             return result;
         }
 
-        public static IList<T> SimpleTake<T>(this IList<T> source, int count)
+        public static T[] SimpleTake<T>(this IList<T> source, int count)
         {
             if (source == null) throw new InvalidOperationException("Invalid null object");
             if (count <= 0) 
 #if (NET40 || NET45)
-            return SimpleList.SimpleList<T>.Empty;
+            return SimpleList<T>.Empty;
 #else
             return Array.Empty<T>();
 #endif
-            if (count >= source.Count) return source;
+            if (count >= source.Count) return source.ToArray();
             
             var result = new T[count];
             for (var i = 0; i < count; i++)
@@ -145,13 +157,13 @@ namespace LinqRewrite.Core.SimpleLinq
             return result;
         }
 
-        public static IList<T> SimpleSkipTake<T>(this IList<T> source, int skip, int take)
+        public static T[] SimpleSkipTake<T>(this IList<T> source, int skip, int take)
         {
             if (source == null) throw new InvalidOperationException("Invalid null object");
             if (skip <= 0) return SimpleTake(source, take);
             if (skip >= source.Count || take <= 0) 
 #if (NET40 || NET45)
-            return SimpleList.SimpleList<T>.Empty;
+            return SimpleList<T>.Empty;
 #else
             return Array.Empty<T>();
 #endif
@@ -163,7 +175,7 @@ namespace LinqRewrite.Core.SimpleLinq
             return result;
         }
 
-        public static IList<T> SimpleSkipWhile<T>(this IList<T> source, Func<T, bool> predicate)
+        public static SimpleList<T> SimpleSkipWhile<T>(this IList<T> source, Func<T, bool> predicate)
         {
             if (source == null) throw new InvalidOperationException("Invalid null object");
             var sourceCount = source.Count;
@@ -184,7 +196,10 @@ namespace LinqRewrite.Core.SimpleLinq
                 result[count] = source[i];
                 count++;
             }
-            return SimpleArrayExtensions.EnsureFullArray(result, count);
+            var final = new SimpleList<T>();
+            final.Items = result;
+            final.Count = count;
+            return final;
         }
         
         public static int SimpleSum(this IList<int> source)
@@ -477,7 +492,7 @@ namespace LinqRewrite.Core.SimpleLinq
             return sum / sourceCount;
         }
         
-        public static IList<T> SimpleConcat<T>(this IList<T> source1, IList<T> source2)
+        public static T[] SimpleConcat<T>(this IList<T> source1, IList<T> source2)
         {
             if (source1 == null || source2 == null) throw new InvalidOperationException("Invalid null object");
 
@@ -585,15 +600,14 @@ namespace LinqRewrite.Core.SimpleLinq
             if (source == null) throw new InvalidOperationException("Invalid null object");
             var sourceCount = source.Count;
             
-            int i = sourceCount;
-            for (; i >= 0; i -= 4)
+            int i = sourceCount - 1;
+            for (; i - 3 >= 0; i -= 4)
             {
                 if (predicate(source[i])) return source[i];
                 if (predicate(source[i-1])) return source[i-1];
                 if (predicate(source[i-2])) return source[i-2];
                 if (predicate(source[i-3])) return source[i-3];
             }
-            i += 4;
             for (; i >= 0; i--)
                 if (predicate(source[i])) return source[i];
             throw new IndexOutOfRangeException("No matching element");
@@ -605,15 +619,14 @@ namespace LinqRewrite.Core.SimpleLinq
             if (source == null) throw new InvalidOperationException("Invalid null object");
             var sourceCount = source.Count;
             
-            int i = sourceCount;
-            for (; i >= 0; i -= 4)
+            int i = sourceCount - 1;
+            for (; i - 3 >= 0; i -= 4)
             {
                 if (predicate(source[i])) return source[i];
                 if (predicate(source[i-1])) return source[i-1];
                 if (predicate(source[i-2])) return source[i-2];
                 if (predicate(source[i-3])) return source[i-3];
             }
-            i += 4;
             for (; i >= 0; i--)
                 if (predicate(source[i])) return source[i];
             return default;
@@ -758,21 +771,34 @@ namespace LinqRewrite.Core.SimpleLinq
             return true;
         }
         
-        public static SimpleList<TResult> SimpleSelectMany<TSource, TResult>(this IList<TSource> source, Func<TSource, IList<TResult>> selector)
+        public static TResult[] SimpleSelectMany<TSource, TResult>(this IList<TSource> source, Func<TSource, IList<TResult>> selector)
         {
             if (source == null || selector == null) throw new InvalidOperationException("Invalid null object");
-            var result = new SimpleList<TResult>();
-            int count = source.Count;
+            int sourceCount = source.Count;
+            var tmpResult = new IList<TResult>[sourceCount];
+            int resultCount = 0;
             int i = 0;
-            for (; i + 3 < count; i += 4)
+            for (; i + 3 < sourceCount; i += 4)
             {
-                result.AddRange(selector(source[i]));
-                result.AddRange(selector(source[i+1]));
-                result.AddRange(selector(source[i+2]));
-                result.AddRange(selector(source[i+3]));
+                tmpResult[i] = selector(source[i]);
+                tmpResult[i+1] = selector(source[i+1]);
+                tmpResult[i+2] = selector(source[i+2]);
+                tmpResult[i+3] = selector(source[i+3]);
+                resultCount += tmpResult[i].Count + tmpResult[i+1].Count + tmpResult[i+2].Count + tmpResult[i+3].Count;
             }
-            for (; i < count; i++)
-                result.AddRange(selector(source[i]));
+
+            for (; i < sourceCount; i++)
+            {
+                tmpResult[i] = selector(source[i]);
+                resultCount += tmpResult[i].Count;
+            }
+            var result = new TResult[resultCount];
+            var copyIndex = 0;
+            for (var j = 0; j < tmpResult.Length; j++)
+            {
+                tmpResult[j].CopyTo(result, copyIndex);
+                copyIndex += tmpResult[j].Count;
+            }
             return result;
         }
 

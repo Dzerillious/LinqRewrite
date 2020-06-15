@@ -8,7 +8,7 @@ namespace LinqRewrite.Core.SimpleList
         public void Enlarge(int desiredCount)
         {
             var items = new T[desiredCount];
-            EnlargeExtensions.ArrayCopy(Items, 0, items, 0, Items.Length);
+            Array.Copy(Items, 0, items, 0, Items.Length);
 
             Items = items;
             Count = desiredCount;
@@ -20,7 +20,7 @@ namespace LinqRewrite.Core.SimpleList
         public void EnlargeCapacity(int desiredCapacity)
         {
             var items = new T[desiredCapacity];
-            EnlargeExtensions.ArrayCopy(Items, 0, items, 0, Items.Length);
+            Array.Copy(Items, 0, items, 0, Items.Length);
 
             Items = items;
         }
@@ -32,7 +32,7 @@ namespace LinqRewrite.Core.SimpleList
             else
             {
                 var items = new T[desiredSize];
-                EnlargeExtensions.ArrayCopy(Items, 0, items, 0, Items.Length);
+                Array.Copy(Items, 0, items, 0, Items.Length);
 
                 Items = items;
                 Count = desiredSize;
@@ -63,8 +63,8 @@ namespace LinqRewrite.Core.SimpleList
         public void RemoveAt(int index)
         {
             if (index == Count - 1) ;
-            else if (index == 0) EnlargeExtensions.ArrayCopy(Items, 1, Items, 0, Count - 1);
-            else EnlargeExtensions.ArrayCopy(Items, index + 1, Items, index, Count - index);
+            else if (index == 0) Array.Copy(Items, 1, Items, 0, Count - 1);
+            else Array.Copy(Items, index + 1, Items, index, Count - index);
             Count--;
         }
 
@@ -77,9 +77,9 @@ namespace LinqRewrite.Core.SimpleList
             else if (index + count - Count < count)
             {
                 var copied = index + count - Count;
-                EnlargeExtensions.ArrayCopy(Items, index + count, Items, index, copied);
+                Array.Copy(Items, index + count, Items, index, copied);
             }
-            else EnlargeExtensions.ArrayCopy(Items, index + count, Items, index, count);
+            else Array.Copy(Items, index + count, Items, index, count);
             Count -= count;
         }
 

@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <PackageVersion>1.1.4</PackageVersion>
+        <PackageVersion>1.1.8</PackageVersion>
         <Title>LinqRewrite.Core</Title>
         <Authors>Daniel Šerý</Authors>
         <Description>Core of LinqRewrite for rewriting of Linq queries</Description>
-        <PackageReleaseNotes>Fixed SimpleLinq unknown size operators, using inner ArrayCopy</PackageReleaseNotes>
+        <PackageReleaseNotes>Fixed SimpleSelectMany</PackageReleaseNotes>
         <LangVersion>Latest</LangVersion>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <TargetFrameworks>net40;net45;net462;netcoreapp2.1</TargetFrameworks>
