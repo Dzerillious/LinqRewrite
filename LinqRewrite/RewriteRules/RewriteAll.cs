@@ -15,7 +15,7 @@ namespace LinqRewrite.RewriteRules
                 return null;
 
             var items = Enumerable.Range(0, intSize)
-                .Select(x=> (ExpressionSyntax) SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x));
+                .Select(x=> (ExpressionSyntax) Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x));
             return items.Aggregate((x, y) => x.And(y));
         }
 

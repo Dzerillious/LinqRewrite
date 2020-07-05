@@ -19,7 +19,7 @@ namespace LinqRewrite.RewriteRules
                 return null;
 
             var items = Enumerable.Range(0, intSize)
-                .Select(x => new TypedValueBridge(design.LastValue.Type, SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x)));
+                .Select(x => new TypedValueBridge(design.LastValue.Type, Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x)));
             return Parenthesize(items.Aggregate((x, y) => new TypedValueBridge(design.LastValue.Type, x + y))).Div(intSize);
         }
         

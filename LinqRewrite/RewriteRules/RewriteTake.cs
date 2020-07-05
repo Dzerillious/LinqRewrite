@@ -19,7 +19,7 @@ namespace LinqRewrite.RewriteRules
             if (!design.ModifiedEnumeration)
             {
                 design.CurrentIterator.ForTo = design.CurrentIterator.ForFrom + design.CurrentIterator.ForInc * takeValue - design.CurrentIterator.ForInc;
-                design.CurrentIterator.ForTo = design.CurrentIterator.ForTo.Simplify();
+                design.CurrentIterator.ForTo = design.CurrentIterator.ForTo;
             }
             else design.ForAdd(If(takeIndexer.PostIncrement() >= takeValue, Break()));
 

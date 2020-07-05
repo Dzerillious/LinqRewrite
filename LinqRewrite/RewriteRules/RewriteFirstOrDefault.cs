@@ -14,7 +14,7 @@ namespace LinqRewrite.RewriteRules
             if (args.Length != 0) return null;
             return ConditionalExpression(design.FirstCollection.Count.IsEqual(0),
                 Default(design.ReturnType),
-                SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin));
+                Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin));
         }
 
         public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)

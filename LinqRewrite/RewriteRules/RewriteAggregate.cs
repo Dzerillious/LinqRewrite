@@ -17,15 +17,15 @@ namespace LinqRewrite.RewriteRules
                 return null;
 
             var items = Enumerable.Range(0, intSize)
-                .Select(x=> new TypedValueBridge(design.LastValue.Type, SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x)));
+                .Select(x=> new TypedValueBridge(design.LastValue.Type, Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x)));
             
             var simpleValue = args.Length == 1 
                 ? items.Aggregate((x, y) => args[0].Inline(design, x, y))
                 : items.Aggregate(new TypedValueBridge(args[0].GetType(design), args[0]), (x, y) => args[1].Inline(design, x, y));
 
             return args.Length == 3
-                ? args[2].Inline(design, simpleValue).Simplify()
-                : simpleValue.Simplify();
+                ? args[2].Inline(design, simpleValue)
+                : simpleValue;
         }
         
         public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)

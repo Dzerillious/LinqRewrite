@@ -19,7 +19,7 @@ namespace LinqRewrite.RewriteRules
                 return null;
 
             var items = Enumerable.Range(0, intSize).Select(x
-                => (ExpressionSyntax) SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x));
+                => (ExpressionSyntax) Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x));
             return CreateArray((ArrayTypeSyntax) design.ReturnType, design.ResultSize, items);
         }
         
@@ -103,7 +103,7 @@ namespace LinqRewrite.RewriteRules
             var arrayType = itemType.ArrayType();
             if (design.ResultSize != null) return (design.ResultSize, CreateGlobalVariable(design, arrayType, CreateArray(arrayType, design.ResultSize)));
             
-            var currentResult = design.IncompleteIterators.TakeWhile(x =>
+            var currentResultValue = design.IncompleteIterators.TakeWhile(x =>
             {
                 if (!TryGetInt(x.ForInc, out var inc)) return false;
                 return x.Collection != null 
@@ -111,11 +111,10 @@ namespace LinqRewrite.RewriteRules
                        && x.ForFrom != null && x.ForTo != null && inc == 1;
             }).Aggregate((ValueBridge)0, (x, y) => x + (y.IsReversed ? y.ForFrom - y.ForTo + 1 : y.ForTo - y.ForFrom + 1));
             
-            currentResult = currentResult.Simplify();
-            if (TryGetInt(currentResult, out var currentResultInt) && currentResultInt <= Constants.MinArraySize)
-                currentResult = Constants.MinArraySize;
+            if (TryGetInt(currentResultValue, out var currentResultInt) && currentResultInt <= Constants.MinArraySize)
+                currentResultValue = Constants.MinArraySize;
             
-            return (currentResult, CreateGlobalVariable(design, arrayType, CreateArray(arrayType, currentResult)));
+            return (currentResultValue, CreateGlobalVariable(design, arrayType, CreateArray(arrayType, currentResultValue)));
         }
 
         public static void SimplifyPart(RewriteDesign design, VariableBridge resultVariable)
@@ -132,26 +131,26 @@ namespace LinqRewrite.RewriteRules
                 }
                 if (x.Collection.CollectionType == CollectionType.Array)
                 {
-                    var count = (x.IsReversed ? x.ForFrom - x.ForTo + 1 : x.ForTo - x.ForFrom + 1).Simplify();
+                    var countValue = (x.IsReversed ? x.ForFrom - x.ForTo + 1 : x.ForTo - x.ForFrom + 1);
                     x.PostFor.Add((StatementBridge)"LinqRewrite".Access("Core", "EnlargeExtensions", "ArrayCopy")
-                        .Invoke(x.Collection, x.ForFrom, resultVariable, design.Indexer, count));
-                    x.PostFor.Add((StatementBridge)design.Indexer.AddAssign(count));
+                        .Invoke(x.Collection, x.ForFrom, resultVariable, design.Indexer, countValue));
+                    x.PostFor.Add((StatementBridge)design.Indexer.AddAssign(countValue));
                     x.IgnoreIterator = true;
                 }
                 else if (x.Collection.CollectionType == CollectionType.SimpleList)
                 {
-                    var count = (x.IsReversed ? x.ForFrom - x.ForTo + 1 : x.ForTo - x.ForFrom + 1).Simplify();
+                    var countValue = (x.IsReversed ? x.ForFrom - x.ForTo + 1 : x.ForTo - x.ForFrom + 1);
                     x.PostFor.Add((StatementBridge)"LinqRewrite".Access("Core", "EnlargeExtensions", "ArrayCopy")
-                        .Invoke(x.Collection.Access("Items"), x.ForFrom, resultVariable, design.Indexer, count));
-                    x.PostFor.Add((StatementBridge)design.Indexer.AddAssign(count));
+                        .Invoke(x.Collection.Access("Items"), x.ForFrom, resultVariable, design.Indexer, countValue));
+                    x.PostFor.Add((StatementBridge)design.Indexer.AddAssign(countValue));
                     x.IgnoreIterator = true;
                 }
                 else if (design.CurrentCollection.CollectionType == CollectionType.List)
                 {
-                    var count = (x.IsReversed ? x.ForFrom - x.ForTo + 1 : x.ForTo - x.ForFrom + 1).Simplify();
+                    var countValue = (x.IsReversed ? x.ForFrom - x.ForTo + 1 : x.ForTo - x.ForFrom + 1);
                     x.PostFor.Add((StatementBridge) design.CurrentCollection.Access("CopyTo")
-                        .Invoke(x.ForFrom, resultVariable, design.Indexer, count));
-                    x.PostFor.Add((StatementBridge)design.Indexer.AddAssign(count));
+                        .Invoke(x.ForFrom, resultVariable, design.Indexer, countValue));
+                    x.PostFor.Add((StatementBridge)design.Indexer.AddAssign(countValue));
                     x.IgnoreIterator = true;
                 }
             });

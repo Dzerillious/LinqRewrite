@@ -14,7 +14,7 @@ namespace LinqRewrite.RewriteRules
         {
             if (args.Length != 0) return null;
             return ConditionalExpression(design.CurrentCollection.Count.IsEqual(1),
-                SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin),
+                Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin),
                 ConditionalExpression(design.ResultSize.IsEqual(0),
                     Default(design.ReturnType),
                     ThrowExpression("System.InvalidOperationException", "The sequence contains more than one element.")));

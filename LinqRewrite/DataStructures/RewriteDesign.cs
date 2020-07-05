@@ -33,21 +33,21 @@ namespace LinqRewrite
         public ValueBridge ResultSize
         {
             get => _resultSize;
-            set => _resultSize = value?.Value == null ? null : value.Simplify();
+            set => _resultSize = value?.Value == null ? null : value;
         }
         
         private ValueBridge _sourceSize;
         public ValueBridge SourceSize
         {
             get => _sourceSize;
-            set => _sourceSize = value?.Value == null ? null : value.Simplify();
+            set => _sourceSize = value?.Value == null ? null : value;
         }
 
         private TypedValueBridge _lastValue;
         public TypedValueBridge LastValue
         {
             get => _lastValue;
-            set => _lastValue = value?.Value == null ? null : new TypedValueBridge(value.Type, value.Simplify());
+            set => _lastValue = value?.Value == null ? null : new TypedValueBridge(value.Type, value);
         }
 
         public readonly List<StatementSyntax> InitialStatements = new List<StatementSyntax>();

@@ -19,7 +19,7 @@ namespace LinqRewrite.RewriteRules
             if (!design.ModifiedEnumeration)
             {
                 design.CurrentIterator.ForFrom += skippedValue * design.CurrentIterator.ForInc;
-                design.CurrentIterator.ForFrom = design.CurrentIterator.ForFrom.Simplify();
+                design.CurrentIterator.ForFrom = design.CurrentIterator.ForFrom;
             }
             else 
             {

@@ -11,7 +11,7 @@ namespace LinqRewrite.RewriteRules
         public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
             if (args.Length != 0) return null;
-            return SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin);
+            return Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin);
         }
 
         public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)

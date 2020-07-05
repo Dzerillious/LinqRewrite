@@ -218,10 +218,10 @@ namespace LinqRewrite.Extensions
         {
             int maxParams;
             if (e is SimpleLambdaExpressionSyntax l)
-                maxParams = Regex.Matches(ExpressionSimplifier.Simplify(l.ExpressionBody).ToString(), l.Parameter.ToString()).Count;
+                maxParams = Regex.Matches(l.ExpressionBody.ToString(), l.Parameter.ToString()).Count;
             else if (e is ParenthesizedLambdaExpressionSyntax p)
                 maxParams = p.ParameterList.Parameters.Max(x => Regex.Matches(
-                    ExpressionSimplifier.Simplify(p.ExpressionBody).ToString(), x.ToString()).Count);
+                    p.ExpressionBody.ToString(), x.ToString()).Count);
             else return true;
 
             return maxParams <= 1;

@@ -14,7 +14,7 @@ namespace LinqRewrite.RewriteRules
         {
             if (args.Length != 0) return null;
             return ConditionalExpression(design.ResultSize.IsEqual(1),
-                SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin),
+                Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin),
                 ThrowExpression("System.InvalidOperationException", "The sequence does not contain one element."));
         }
 

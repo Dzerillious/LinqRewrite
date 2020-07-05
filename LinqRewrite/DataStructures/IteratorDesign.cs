@@ -52,13 +52,13 @@ namespace LinqRewrite.DataStructures
             if (ForFrom == null) PreFor.Insert(0, (StatementBridge)Enumerator.Assign(Collection.Access("GetEnumerator").Invoke()));
             else if (IsReversed)
             {
-                PreFor.Add((StatementBridge)ForIndexer.Assign(ForFrom.Simplify()));
-                ForTo = ForTo.Simplify().ReusableForConst(_design, Int, this);
+                PreFor.Add((StatementBridge)ForIndexer.Assign(ForFrom));
+                ForTo = ForTo.ReusableForConst(_design, Int, this);
             }
             else
             {
-                PreFor.Add((StatementBridge)ForIndexer.Assign(ForFrom.Simplify()));
-                ForTo = (ForTo + 1).Simplify().ReusableForConst(_design, Int, this);
+                PreFor.Add((StatementBridge)ForIndexer.Assign(ForFrom));
+                ForTo = (ForTo + 1).ReusableForConst(_design, Int, this);
             }
         }
 
@@ -73,8 +73,8 @@ namespace LinqRewrite.DataStructures
                     : new[] {x}).Concat(ForEnd).ToList();
             
             if (ForFrom == null) return RewriteService.GetForEachStatement(design, Enumerator, content);
-            if (IsReversed) return new StatementSyntax[]{RewriteService.GetReverseForStatement(design, ForIndexer, ForTo, ForInc.Simplify(), content)};
-            return new StatementSyntax[]{RewriteService.GetForStatement(design, ForIndexer, ForTo, ForInc.Simplify(), content)};
+            if (IsReversed) return new StatementSyntax[]{RewriteService.GetReverseForStatement(design, ForIndexer, ForTo, ForInc, content)};
+            return new StatementSyntax[]{RewriteService.GetForStatement(design, ForIndexer, ForTo, ForInc, content)};
         }
     }
 }

@@ -17,9 +17,8 @@ namespace LinqRewrite.RewriteRules
                 return null;
 
             var items = Enumerable.Range(0, intSize).Select(x
-                => new TypedValueBridge(design.LastValue.Type, SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x)));
-            var simpleValue = items.Aggregate((x, y) => new TypedValueBridge(design.LastValue.Type, x + y));  
-            return simpleValue.Simplify();
+                => new TypedValueBridge(design.LastValue.Type, Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x)));
+            return items.Aggregate((x, y) => new TypedValueBridge(design.LastValue.Type, x + y));
         }
         
         public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)

@@ -10,7 +10,7 @@ namespace LinqRewrite.RewriteRules
     public static class RewriteElementAt
     {
         public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
-            => SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + args[0]);
+            => Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + args[0]);
         
         public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {

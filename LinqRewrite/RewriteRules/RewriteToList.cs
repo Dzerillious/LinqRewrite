@@ -18,7 +18,7 @@ namespace LinqRewrite.RewriteRules
                 return null;
 
             var items = Enumerable.Range(0, intSize).Select(x
-                => (ExpressionSyntax) SimplifySubstitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x));
+                => (ExpressionSyntax) Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x));
             return ObjectCreationExpression(design.ReturnType, ArgumentList(CreateSeparatedList(new ArgumentSyntax[0])), 
                 InitializerExpression( SyntaxKind.ArrayInitializerExpression, SeparatedList(items)));
         }
