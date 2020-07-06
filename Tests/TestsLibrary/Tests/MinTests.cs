@@ -37,237 +37,237 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(EnumerableMin), EnumerableMin, EnumerableMinRewritten);
         }
 
-        [NoRewrite]
         public int Min1()
         {
             return ArrayItems.Min();
         } //EndMethod
 
-        public int Min1Rewritten()
+        [LinqRewrite]
+		public int Min1Rewritten()
         {
             return ArrayItems.Min();
         } //EndMethod
 
 
-        [NoRewrite]
         public int Min2()
         {
             return ArrayItems.Min(x => x + 2);
         } //EndMethod
 
-        public int Min2Rewritten()
+        [LinqRewrite]
+		public int Min2Rewritten()
         {
             return ArrayItems.Min(x => x + 2);
         } //EndMethod
 
 
-        [NoRewrite]
         public float Min3()
         {
             return ArrayItems.Min(x => x + 2f);
         } //EndMethod
 
-        public float Min3Rewritten()
+        [LinqRewrite]
+		public float Min3Rewritten()
         {
             return ArrayItems.Min(x => x + 2f);
         } //EndMethod
 
 
-        [NoRewrite]
         public double Min4()
         {
             return ArrayItems.Min(x => x + 2d);
         } //EndMethod
 
-        public double Min4Rewritten()
+        [LinqRewrite]
+		public double Min4Rewritten()
         {
             return ArrayItems.Min(x => x + 2d);
         } //EndMethod
 
 
-        [NoRewrite]
         public decimal Min5()
         {
             return ArrayItems.Min(x => x + 2m);
         } //EndMethod
 
-        public decimal Min5Rewritten()
+        [LinqRewrite]
+		public decimal Min5Rewritten()
         {
             return ArrayItems.Min(x => x + 2m);
         } //EndMethod
 
 
-        [NoRewrite]
         public int? Min6()
         {
             return ArrayItems.Min(x => x > 10 ? (int?)null : x + 2);
         } //EndMethod
 
-        public int? Min6Rewritten()
+        [LinqRewrite]
+		public int? Min6Rewritten()
         {
             return ArrayItems.Min(x => x > 10 ? (int?)null : x + 2);
         } //EndMethod
 
 
-        [NoRewrite]
         public float? Min7()
         {
             return ArrayItems.Min(x => x > 10 ? (float?)null : x + 2);
         } //EndMethod
 
-        public float? Min7Rewritten()
+        [LinqRewrite]
+		public float? Min7Rewritten()
         {
             return ArrayItems.Min(x => x > 10 ? (float?)null : x + 2);
         } //EndMethod
 
 
-        [NoRewrite]
         public double? Min8()
         {
             return ArrayItems.Min(x => x > 10 ? (double?)null : x + 2);
         } //EndMethod
 
-        public double? Min8Rewritten()
+        [LinqRewrite]
+		public double? Min8Rewritten()
         {
             return ArrayItems.Min(x => x > 10 ? (double?)null : x + 2);
         } //EndMethod
 
 
-        [NoRewrite]
         public decimal? Min9()
         {
             return ArrayItems.Min(x => x > 10 ? (decimal?)null : x + 2);
         } //EndMethod
 
-        public decimal? Min9Rewritten()
+        [LinqRewrite]
+		public decimal? Min9Rewritten()
         {
             return ArrayItems.Min(x => x > 10 ? (decimal?)null : x + 2);
         } //EndMethod
 
 
-        [NoRewrite]
         public long Min10()
         {
             return ArrayItems.Min(x => x + 2L);
         } //EndMethod
 
-        public long Min10Rewritten()
+        [LinqRewrite]
+		public long Min10Rewritten()
         {
             return ArrayItems.Min(x => x + 2L);
         } //EndMethod
 
 
-        [NoRewrite]
         public long? Min11()
         {
             return ArrayItems.Min(x => x > 10 ? (long?)null : x + 2);
         } //EndMethod
 
-        public long? Min11Rewritten()
+        [LinqRewrite]
+		public long? Min11Rewritten()
         {
             return ArrayItems.Min(x => x > 10 ? (long?)null : x + 2);
         } //EndMethod
 
 
-        [NoRewrite]
         public int? Min12()
         {
             return ArrayItems.Min(Selector);
         } //EndMethod
 
-        public int? Min12Rewritten()
+        [LinqRewrite]
+		public int? Min12Rewritten()
         {
             return ArrayItems.Min(Selector);
         } //EndMethod
 
 
-        [NoRewrite]
         public int? MinParam()
         {
             var a = 10;
             return ArrayItems.Min(x => x + a);
         } //EndMethod
 
-        public int? MinParamRewritten()
+        [LinqRewrite]
+		public int? MinParamRewritten()
         {
             var a = 10;
             return ArrayItems.Min(x => x + a);
         } //EndMethod
 
 
-        [NoRewrite]
         public int? MinChangingParam()
         {
             var a = 10;
             return ArrayItems.Min(x => x + a++);
         } //EndMethod
 
-        public int? MinChangingParamRewritten()
+        [LinqRewrite]
+		public int? MinChangingParamRewritten()
         {
             var a = 10;
             return ArrayItems.Min(x => x + a++);
         } //EndMethod
 
 
-        [NoRewrite]
         public int? MinChangingParam2()
         {
             var a = 10;
             return ArrayItems.Min(x => x + a--);
         } //EndMethod
 
-        public int? MinChangingParam2Rewritten()
+        [LinqRewrite]
+		public int? MinChangingParam2Rewritten()
         {
             var a = 10;
             return ArrayItems.Min(x => x + a--);
         } //EndMethod
 
 
-        [NoRewrite]
         public int? SelectMin()
         {
             var a = 10;
             return ArrayItems.Select(x => x + 3).Min();
         } //EndMethod
 
-        public int? SelectMinRewritten()
+        [LinqRewrite]
+		public int? SelectMinRewritten()
         {
             var a = 10;
             return ArrayItems.Select(x => x + 3).Min();
         } //EndMethod
 
 
-        [NoRewrite]
         public int? EmptyMin()
         {
             return Enumerable.Empty<int>().Min();
         } //EndMethod
 
-        public int? EmptyMinRewritten()
+        [LinqRewrite]
+		public int? EmptyMinRewritten()
         {
             return Enumerable.Empty<int>().Min();
         } //EndMethod
 
 
-        [NoRewrite]
         public int? EmptyMin2()
         {
             return ArrayItems.Where(x => false).Min();
         } //EndMethod
 
-        public int? EmptyMin2Rewritten()
+        [LinqRewrite]
+		public int? EmptyMin2Rewritten()
         {
             return ArrayItems.Where(x => false).Min();
         } //EndMethod
 
 
-        [NoRewrite]
         public int? EnumerableMin()
         {
             return EnumerableItems.Min();
         } //EndMethod
 
-        public int? EnumerableMinRewritten()
+        [LinqRewrite]
+		public int? EnumerableMinRewritten()
         {
             return EnumerableItems.Min();
         } //EndMethod

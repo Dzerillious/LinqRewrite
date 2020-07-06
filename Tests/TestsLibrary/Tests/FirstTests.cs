@@ -33,186 +33,186 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(ArrayFirstUsingFirst), ArrayFirstUsingFirst, ArrayFirstUsingFirstRewritten);
         }
 
-        [NoRewrite]
         public int First()
         {
             return ArrayItems.First();
         } //EndMethod
 
-        public int FirstRewritten()
+        [LinqRewrite]
+		public int FirstRewritten()
         {
             return ArrayItems.First();
         } //EndMethod
 
 
-        [NoRewrite]
         public int EnumerableFirst()
         {
             return EnumerableItems.First();
         } //EndMethod
 
-        public int EnumerableFirstRewritten()
+        [LinqRewrite]
+		public int EnumerableFirstRewritten()
         {
             return EnumerableItems.First();
         } //EndMethod
 
 
-        [NoRewrite]
         public int FirstCondition()
         {
             return ArrayItems.First(x => x > 30);
         } //EndMethod
 
-        public int FirstConditionRewritten()
+        [LinqRewrite]
+		public int FirstConditionRewritten()
         {
             return ArrayItems.First(x => x > 30);
         } //EndMethod
 
 
-        [NoRewrite]
         public int FirstFalseCondition()
         {
             return ArrayItems.First(x => x > 105);
         } //EndMethod
 
-        public int FirstFalseConditionRewritten()
+        [LinqRewrite]
+		public int FirstFalseConditionRewritten()
         {
             return ArrayItems.First(x => x > 105);
         } //EndMethod
 
 
-        [NoRewrite]
         public int FirstMethod()
         {
             return ArrayItems.First(Predicate);
         } //EndMethod
 
-        public int FirstMethodRewritten()
+        [LinqRewrite]
+		public int FirstMethodRewritten()
         {
             return ArrayItems.First(Predicate);
         } //EndMethod
 
 
-        [NoRewrite]
         public int FirstWhereMethod()
         {
             return ArrayItems.Where(x => x > 10).First();
         } //EndMethod
 
-        public int FirstWhereMethodRewritten()
+        [LinqRewrite]
+		public int FirstWhereMethodRewritten()
         {
             return ArrayItems.Where(x => x > 10).First();
         } //EndMethod
 
 
-        [NoRewrite]
         public int SelectFirstMethod()
         {
             return ArrayItems.Select(x => x + 10).First();
         } //EndMethod
 
-        public int SelectFirstMethodRewritten()
+        [LinqRewrite]
+		public int SelectFirstMethodRewritten()
         {
             return ArrayItems.Select(x => x + 10).First();
         } //EndMethod
 
 
-        [NoRewrite]
         public int RangeFirst()
         {
             return Enumerable.Range(0, 100).First();
         } //EndMethod
 
-        public int RangeFirstRewritten()
+        [LinqRewrite]
+		public int RangeFirstRewritten()
         {
             return Enumerable.Range(0, 100).First();
         } //EndMethod
 
 
-        [NoRewrite]
         public int Range1First()
         {
             return Enumerable.Range(0, 1).First();
         } //EndMethod
 
-        public int Range1FirstRewritten()
+        [LinqRewrite]
+		public int Range1FirstRewritten()
         {
             return Enumerable.Range(0, 1).First();
         } //EndMethod
 
 
-        [NoRewrite]
         public int RangeRepeat()
         {
             return Enumerable.Repeat(0, 100).First();
         } //EndMethod
 
-        public int RangeRepeatRewritten()
+        [LinqRewrite]
+		public int RangeRepeatRewritten()
         {
             return Enumerable.Repeat(0, 100).First();
         } //EndMethod
 
 
-        [NoRewrite]
         public int EmptyFirst()
         {
             return Enumerable.Empty<int>().First();
         } //EndMethod
 
-        public int EmptyFirstRewritten()
+        [LinqRewrite]
+		public int EmptyFirstRewritten()
         {
             return Enumerable.Empty<int>().First();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayDistinctFirst()
         {
             return ArrayItems.Distinct().First();
         } //EndMethod
 
-        public int ArrayDistinctFirstRewritten()
+        [LinqRewrite]
+		public int ArrayDistinctFirstRewritten()
         {
             return ArrayItems.Distinct().First();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayFirstParam()
         {
             var a = 50;
             return ArrayItems.First(x => x > a);
         } //EndMethod
 
-        public int ArrayFirstParamRewritten()
+        [LinqRewrite]
+		public int ArrayFirstParamRewritten()
         {
             var a = 50;
             return ArrayItems.First(x => x > a);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayFirstChangingParam()
         {
             var a = 100;
             return ArrayItems.First(x => x > a--);
         } //EndMethod
 
-        public int ArrayFirstChangingParamRewritten()
+        [LinqRewrite]
+		public int ArrayFirstChangingParamRewritten()
         {
             var a = 100;
             return ArrayItems.First(x => x > a--);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayFirstUsingFirst()
         {
             var a = 100;
             return ArrayItems.First(x => x > ArrayItems.First(y => y > x));
         } //EndMethod
 
-        public int ArrayFirstUsingFirstRewritten()
+        [LinqRewrite]
+		public int ArrayFirstUsingFirstRewritten()
         {
             var a = 100;
             return ArrayItems.First(x => x > ArrayItems.First(y => y > x));

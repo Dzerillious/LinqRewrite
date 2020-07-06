@@ -24,99 +24,99 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(ArrayElementAtWhereOut), ArrayElementAtWhereOut, ArrayElementAtWhereOutRewritten);
         }
 
-        [NoRewrite]
         public int ArrayElementAt()
         {
             return ArrayItems.ElementAt(23);
         } //EndMethod
 
-        public int ArrayElementAtRewritten()
+        [LinqRewrite]
+		public int ArrayElementAtRewritten()
         {
             return ArrayItems.ElementAt(23);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArraySelectElementAt()
         {
             return ArrayItems.Select(x => x + 20).ElementAt(23);
         } //EndMethod
 
-        public int ArraySelectElementAtRewritten()
+        [LinqRewrite]
+		public int ArraySelectElementAtRewritten()
         {
             return ArrayItems.Select(x => x + 20).ElementAt(23);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayWhereElementAt()
         {
             return ArrayItems.Where(x => x > 30).ElementAt(23);
         } //EndMethod
 
-        public int ArrayWhereElementAtRewritten()
+        [LinqRewrite]
+		public int ArrayWhereElementAtRewritten()
         {
             return ArrayItems.Where(x => x > 30).ElementAt(23);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArraySelectWhereElementAt()
         {
             return ArrayItems.Select(x => x + 30).Where(x => x > 30).ElementAt(23);
         } //EndMethod
 
-        public int ArraySelectWhereElementAtRewritten()
+        [LinqRewrite]
+		public int ArraySelectWhereElementAtRewritten()
         {
             return ArrayItems.Select(x => x + 30).Where(x => x > 30).ElementAt(23);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayElementAtParam()
         {
             var a = 23;
             return ArrayItems.ElementAt(a);
         } //EndMethod
 
-        public int ArrayElementAtParamRewritten()
+        [LinqRewrite]
+		public int ArrayElementAtParamRewritten()
         {
             var a = 23;
             return ArrayItems.ElementAt(a);
         } //EndMethod
 
 
-        [NoRewrite]
         public int EnumerableElementAt()
         {
             return EnumerableItems.ElementAt(23);
         } //EndMethod
 
-        public int EnumerableElementAtRewritten()
+        [LinqRewrite]
+		public int EnumerableElementAtRewritten()
         {
             return EnumerableItems.ElementAt(23);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayElementAtOut()
         {
             return ArrayItems.ElementAt(20000);
         } //EndMethod
 
-        public int ArrayElementAtOutRewritten()
+        [LinqRewrite]
+		public int ArrayElementAtOutRewritten()
         {
             return ArrayItems.ElementAt(20000);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayElementAtWhereOut()
         {
             return ArrayItems.Where(x => x > 10).ElementAt(20000);
         } //EndMethod
 
-        public int ArrayElementAtWhereOutRewritten()
+        [LinqRewrite]
+		public int ArrayElementAtWhereOutRewritten()
         {
             return ArrayItems.Where(x => x > 10).ElementAt(20000);
         } //EndMethod

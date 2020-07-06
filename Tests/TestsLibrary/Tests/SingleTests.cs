@@ -33,186 +33,186 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(ArraySingleUsingSingle), ArraySingleUsingSingle, ArraySingleUsingSingleRewritten);
         }
 
-        [NoRewrite]
         public int Single()
         {
             return ArrayItems.Single();
         } //EndMethod
 
-        public int SingleRewritten()
+        [LinqRewrite]
+		public int SingleRewritten()
         {
             return ArrayItems.Single();
         } //EndMethod
 
 
-        [NoRewrite]
         public int EnumerableSingle()
         {
             return EnumerableItems.Single();
         } //EndMethod
 
-        public int EnumerableSingleRewritten()
+        [LinqRewrite]
+		public int EnumerableSingleRewritten()
         {
             return EnumerableItems.Single();
         } //EndMethod
 
 
-        [NoRewrite]
         public int SingleCondition()
         {
             return ArrayItems.Single(x => x > 30);
         } //EndMethod
 
-        public int SingleConditionRewritten()
+        [LinqRewrite]
+		public int SingleConditionRewritten()
         {
             return ArrayItems.Single(x => x > 30);
         } //EndMethod
 
 
-        [NoRewrite]
         public int SingleFalseCondition()
         {
             return ArrayItems.Single(x => x > 105);
         } //EndMethod
 
-        public int SingleFalseConditionRewritten()
+        [LinqRewrite]
+		public int SingleFalseConditionRewritten()
         {
             return ArrayItems.Single(x => x > 105);
         } //EndMethod
 
 
-        [NoRewrite]
         public int SingleMethod()
         {
             return ArrayItems.Single(Predicate);
         } //EndMethod
 
-        public int SingleMethodRewritten()
+        [LinqRewrite]
+		public int SingleMethodRewritten()
         {
             return ArrayItems.Single(Predicate);
         } //EndMethod
 
 
-        [NoRewrite]
         public int SingleWhereMethod()
         {
             return ArrayItems.Where(x => x > 10).Single();
         } //EndMethod
 
-        public int SingleWhereMethodRewritten()
+        [LinqRewrite]
+		public int SingleWhereMethodRewritten()
         {
             return ArrayItems.Where(x => x > 10).Single();
         } //EndMethod
 
 
-        [NoRewrite]
         public int SelectSingleMethod()
         {
             return ArrayItems.Select(x => x + 10).Single();
         } //EndMethod
 
-        public int SelectSingleMethodRewritten()
+        [LinqRewrite]
+		public int SelectSingleMethodRewritten()
         {
             return ArrayItems.Select(x => x + 10).Single();
         } //EndMethod
 
 
-        [NoRewrite]
         public int RangeSingle()
         {
             return Enumerable.Range(0, 100).Single();
         } //EndMethod
 
-        public int RangeSingleRewritten()
+        [LinqRewrite]
+		public int RangeSingleRewritten()
         {
             return Enumerable.Range(0, 100).Single();
         } //EndMethod
 
 
-        [NoRewrite]
         public int Range1Single()
         {
             return Enumerable.Range(0, 1).Single();
         } //EndMethod
 
-        public int Range1SingleRewritten()
+        [LinqRewrite]
+		public int Range1SingleRewritten()
         {
             return Enumerable.Range(0, 1).Single();
         } //EndMethod
 
 
-        [NoRewrite]
         public int RangeRepeat()
         {
             return Enumerable.Repeat(0, 100).Single();
         } //EndMethod
 
-        public int RangeRepeatRewritten()
+        [LinqRewrite]
+		public int RangeRepeatRewritten()
         {
             return Enumerable.Repeat(0, 100).Single();
         } //EndMethod
 
 
-        [NoRewrite]
         public int EmptySingle()
         {
             return Enumerable.Empty<int>().Single();
         } //EndMethod
 
-        public int EmptySingleRewritten()
+        [LinqRewrite]
+		public int EmptySingleRewritten()
         {
             return Enumerable.Empty<int>().Single();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayDistinctSingle()
         {
             return ArrayItems.Distinct().Single();
         } //EndMethod
 
-        public int ArrayDistinctSingleRewritten()
+        [LinqRewrite]
+		public int ArrayDistinctSingleRewritten()
         {
             return ArrayItems.Distinct().Single();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArraySingleParam()
         {
             var a = 50;
             return ArrayItems.Single(x => x > a);
         } //EndMethod
 
-        public int ArraySingleParamRewritten()
+        [LinqRewrite]
+		public int ArraySingleParamRewritten()
         {
             var a = 50;
             return ArrayItems.Single(x => x > a);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArraySingleChangingParam()
         {
             var a = 100;
             return ArrayItems.Single(x => x > a--);
         } //EndMethod
 
-        public int ArraySingleChangingParamRewritten()
+        [LinqRewrite]
+		public int ArraySingleChangingParamRewritten()
         {
             var a = 100;
             return ArrayItems.Single(x => x > a--);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArraySingleUsingSingle()
         {
             var a = 100;
             return ArrayItems.Single(x => x > ArrayItems.Single(y => y > x));
         } //EndMethod
 
-        public int ArraySingleUsingSingleRewritten()
+        [LinqRewrite]
+		public int ArraySingleUsingSingleRewritten()
         {
             var a = 100;
             return ArrayItems.Single(x => x > ArrayItems.Single(y => y > x));

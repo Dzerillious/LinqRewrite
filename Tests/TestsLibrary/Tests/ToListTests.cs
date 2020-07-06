@@ -37,145 +37,145 @@ namespace TestsLibrary.Tests
             }
         }
 
-        [NoRewrite]
         public IEnumerable<int> ArrayToListTest()
         {
             return ArrayItems.ToList();
         } //EndMethod
 
-        public IEnumerable<int> ArrayToListTestRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayToListTestRewritten()
         {
             return ArrayItems.ToList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ListToListTest()
         {
             return ListItems.ToList();
         } //EndMethod
 
-        public IEnumerable<int> ListToListTestRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ListToListTestRewritten()
         {
             return ListItems.ToList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListToListTest()
         {
             return SimpleListItems.ToList();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListToListTestRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListToListTestRewritten()
         {
             return SimpleListItems.ToList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableToListTest()
         {
             return EnumerableItems.ToList();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableToListTestRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableToListTestRewritten()
         {
             return EnumerableItems.ToList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayWhereParamToListTest(int offset)
         {
             return ArrayItems.Where(x => x > offset).ToList();
         } //EndMethod
 
-        public IEnumerable<int> ArrayWhereParamToListTestRewritten(int offset)
+        [LinqRewrite]
+		public IEnumerable<int> ArrayWhereParamToListTestRewritten(int offset)
         {
             return ArrayItems.Where(x => x > offset).ToList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableWhereParamToListTest(int offset)
         {
             return EnumerableItems.Where(x => x > offset).ToList();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableWhereParamToListTestRewritten(int offset)
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableWhereParamToListTestRewritten(int offset)
         {
             return EnumerableItems.Where(x => x > offset).ToList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListWhereParamToListTest(int offset)
         {
             return SimpleListItems.Where(x => x > offset).ToList();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListWhereParamToListTestRewritten(int offset)
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListWhereParamToListTestRewritten(int offset)
         {
             return SimpleListItems.Where(x => x > offset).ToList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ListWhereParamToListTest(int offset)
         {
             return ListItems.Where(x => x > offset).ToList();
         } //EndMethod
 
-        public IEnumerable<int> ListWhereParamToListTestRewritten(int offset)
+        [LinqRewrite]
+		public IEnumerable<int> ListWhereParamToListTestRewritten(int offset)
         {
             return ListItems.Where(x => x > offset).ToList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeWhereParamToListTest(int offset)
         {
             return Enumerable.Range(0, 1000).Where(x => x > offset).ToList();
         } //EndMethod
 
-        public IEnumerable<int> RangeWhereParamToListTestRewritten(int offset)
+        [LinqRewrite]
+		public IEnumerable<int> RangeWhereParamToListTestRewritten(int offset)
         {
             return Enumerable.Range(0, 1000).Where(x => x > offset).ToList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeParamToListTest(int count)
         {
             return Enumerable.Range(0, count).ToList();
         } //EndMethod
 
-        public IEnumerable<int> RangeParamToListTestRewritten(int count)
+        [LinqRewrite]
+		public IEnumerable<int> RangeParamToListTestRewritten(int count)
         {
             return Enumerable.Range(0, count).ToList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatParamToListTest(int count)
         {
             return Enumerable.Repeat(0, count).ToList();
         } //EndMethod
 
-        public IEnumerable<int> RepeatParamToListTestRewritten(int count)
+        [LinqRewrite]
+		public IEnumerable<int> RepeatParamToListTestRewritten(int count)
         {
             return Enumerable.Repeat(0, count).ToList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatWhereParamToListTest(int offset)
         {
             return Enumerable.Repeat(0, 1000).Where((x, i) => i < offset).ToList();
         } //EndMethod
 
-        public IEnumerable<int> RepeatWhereParamToListTestRewritten(int offset)
+        [LinqRewrite]
+		public IEnumerable<int> RepeatWhereParamToListTestRewritten(int offset)
         {
             return Enumerable.Repeat(0, 1000).Where((x, i) => i < offset).ToList();
         } //EndMethod

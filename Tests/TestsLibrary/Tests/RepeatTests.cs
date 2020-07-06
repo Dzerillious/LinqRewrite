@@ -19,97 +19,97 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(RepeatDistinct), RepeatDistinct, RepeatDistinctRewritten);
         }
 
-        [NoRewrite]
         public IEnumerable<int> Repeat1()
         {
             return Enumerable.Repeat(0, 100);
         } //EndMethod
 
-        public IEnumerable<int> Repeat1Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> Repeat1Rewritten()
         {
             return Enumerable.Repeat(0, 100);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> Repeat2()
         {
             return Enumerable.Repeat(-100, 100);
         } //EndMethod
 
-        public IEnumerable<int> Repeat2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> Repeat2Rewritten()
         {
             return Enumerable.Repeat(-100, 100);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> Repeat3()
         {
             return Enumerable.Repeat(0, -100);
         } //EndMethod
 
-        public IEnumerable<int> Repeat3Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> Repeat3Rewritten()
         {
             return Enumerable.Repeat(0, -100);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> Repeat4()
         {
             return Enumerable.Repeat(123, 23);
         } //EndMethod
 
-        public IEnumerable<int> Repeat4Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> Repeat4Rewritten()
         {
             return Enumerable.Repeat(123, 23);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatToArray()
         {
             return Enumerable.Repeat(123, 23).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> RepeatToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatToArrayRewritten()
         {
             return Enumerable.Repeat(123, 23).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatToList()
         {
             return Enumerable.Repeat(123, 23).ToList();
         } //EndMethod
 
-        public IEnumerable<int> RepeatToListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatToListRewritten()
         {
             return Enumerable.Repeat(123, 23).ToList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatToSimpleList()
         {
             return Enumerable.Repeat(123, 23).ToSimpleList();
         } //EndMethod
 
-        public IEnumerable<int> RepeatToSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatToSimpleListRewritten()
         {
             return Enumerable.Repeat(123, 23).ToSimpleList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatDistinct()
         {
             return Enumerable.Repeat(123, 23).Distinct();
         } //EndMethod
 
-        public IEnumerable<int> RepeatDistinctRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatDistinctRewritten()
         {
             return Enumerable.Repeat(123, 23).Distinct();
         } //EndMethod

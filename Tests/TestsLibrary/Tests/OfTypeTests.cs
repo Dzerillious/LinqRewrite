@@ -28,145 +28,145 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(ArrayOfTypeToArray), ArrayOfTypeToArray, ArrayOfTypeToArrayRewritten);
         }
 
-        [NoRewrite]
         public IEnumerable<int> ArrayOfType()
         {
             return ArrayItems.OfType<int>();
         } //EndMethod
 
-        public IEnumerable<int> ArrayOfTypeRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayOfTypeRewritten()
         {
             return ArrayItems.OfType<int>();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<float> ArrayOfType2()
         {
             return ArrayItems.OfType<float>();
         } //EndMethod
         
-        public IEnumerable<float> ArrayOfType2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<float> ArrayOfType2Rewritten()
         {
             return ArrayItems.OfType<float>();
         } //EndMethod
         
         
-        [NoRewrite]
         public IEnumerable<double> ArrayOfType3()
         {
             return ArrayItems.OfType<double>();
         } //EndMethod
         
-        public IEnumerable<double> ArrayOfType3Rewritten()
+        [LinqRewrite]
+		public IEnumerable<double> ArrayOfType3Rewritten()
         {
             return ArrayItems.OfType<double>();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<double?> ArrayOfType4()
         {
             return ArrayItems.OfType<double?>();
         } //EndMethod
         
-        public IEnumerable<double?> ArrayOfType4Rewritten()
+        [LinqRewrite]
+		public IEnumerable<double?> ArrayOfType4Rewritten()
         {
             return ArrayItems.OfType<double?>();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySelectOfType()
         {
             return ArrayItems.Select(x => x + 0.2).OfType<int>();
         } //EndMethod
         
-        public IEnumerable<int> ArraySelectOfTypeRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectOfTypeRewritten()
         {
             return ArrayItems.Select(x => x + 0.2).OfType<int>();
         } //EndMethod
         
         
-        [NoRewrite]
         public IEnumerable<double> ArrayWhereOfType()
         {
             return ArrayItems.Where(x => x % 2 == 1).OfType<double>();
         } //EndMethod
         
-        public IEnumerable<double> ArrayWhereOfTypeRewritten()
+        [LinqRewrite]
+		public IEnumerable<double> ArrayWhereOfTypeRewritten()
         {
             return ArrayItems.Where(x => x % 2 == 1).OfType<double>();
         } //EndMethod
 
 
-        [NoRewrite]
         public double? ArrayOfTypeAverage()
         {
             return ArrayItems.OfType<double?>().Average();
         } //EndMethod
         
-        public double? ArrayOfTypeAverageRewritten()
+        [LinqRewrite]
+		public double? ArrayOfTypeAverageRewritten()
         {
             return ArrayItems.OfType<double?>().Average();
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArrayOfTypeAny()
         {
             return ArrayItems.OfType<double?>().Any(x => x == null);
         } //EndMethod
         
-        public bool ArrayOfTypeAnyRewritten()
+        [LinqRewrite]
+		public bool ArrayOfTypeAnyRewritten()
         {
             return ArrayItems.OfType<double?>().Any(x => x == null);
         } //EndMethod
 
 
-        [NoRewrite]
         public double ArrayOfTypeAggregate()
         {
             return ArrayItems.OfType<double>().Aggregate((x, y) => x * y);
         } //EndMethod
         
-        public double ArrayOfTypeAggregateRewritten()
+        [LinqRewrite]
+		public double ArrayOfTypeAggregateRewritten()
         {
             return ArrayItems.OfType<double>().Aggregate((x, y) => x * y);
         } //EndMethod
         
         
-        [NoRewrite]
         public IEnumerable<double> EnumerableOfType()
         {
             return EnumerableItems.OfType<double>();
         } //EndMethod
         
-        public IEnumerable<double> EnumerableOfTypeRewritten()
+        [LinqRewrite]
+		public IEnumerable<double> EnumerableOfTypeRewritten()
         {
             return EnumerableItems.OfType<double>();
         } //EndMethod
         
         
-        [NoRewrite]
         public IEnumerable<double> EnumerableOfTypeToArray()
         {
             return EnumerableItems.OfType<double>().ToArray();
         } //EndMethod
         
-        public IEnumerable<double> EnumerableOfTypeToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<double> EnumerableOfTypeToArrayRewritten()
         {
             return EnumerableItems.OfType<double>().ToArray();
         } //EndMethod
         
         
-        [NoRewrite]
         public IEnumerable<double> ArrayOfTypeToArray()
         {
             return ArrayItems.OfType<double>().ToArray();
         } //EndMethod
         
-        public IEnumerable<double> ArrayOfTypeToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<double> ArrayOfTypeToArrayRewritten()
         {
             return ArrayItems.OfType<double>().ToArray();
         } //EndMethod

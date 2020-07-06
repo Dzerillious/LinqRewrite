@@ -25,169 +25,169 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(EmptyAverage), EmptyAverage, EmptyAverageRewritten);
         }
 
-        [NoRewrite]
         public IEnumerable<int> Empty()
         {
             return Enumerable.Empty<int>();
         } //EndMethod
 
-        public IEnumerable<int> EmptyRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EmptyRewritten()
         {
             return Enumerable.Empty<int>();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EmptyToArray()
         {
             return Enumerable.Empty<int>().ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EmptyToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EmptyToArrayRewritten()
         {
             return Enumerable.Empty<int>().ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EmptyToList()
         {
             return Enumerable.Empty<int>().ToList();
         } //EndMethod
 
-        public IEnumerable<int> EmptyToListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EmptyToListRewritten()
         {
             return Enumerable.Empty<int>().ToList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EmptyToSimpleList()
         {
             return Enumerable.Empty<int>().ToSimpleList();
         } //EndMethod
 
-        public IEnumerable<int> EmptyToSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EmptyToSimpleListRewritten()
         {
             return Enumerable.Empty<int>().ToSimpleList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EmptySelect()
         {
             return Enumerable.Empty<int>().Select(x => x + 3);
         } //EndMethod
 
-        public IEnumerable<int> EmptySelectRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EmptySelectRewritten()
         {
             return Enumerable.Empty<int>().Select(x => x + 3);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EmptyWhere()
         {
             return Enumerable.Empty<int>().Where(x => x > 3);
         } //EndMethod
 
-        public IEnumerable<int> EmptyWhereRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EmptyWhereRewritten()
         {
             return Enumerable.Empty<int>().Where(x => x > 3);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EmptyDistinct()
         {
             return Enumerable.Empty<int>().Distinct();
         } //EndMethod
 
-        public IEnumerable<int> EmptyDistinctRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EmptyDistinctRewritten()
         {
             return Enumerable.Empty<int>().Distinct();
         } //EndMethod
 
 
-        [NoRewrite]
         public int EmptyCount()
         {
             return Enumerable.Empty<int>().Count();
         } //EndMethod
 
-        public int EmptyCountRewritten()
+        [LinqRewrite]
+		public int EmptyCountRewritten()
         {
             return Enumerable.Empty<int>().Count();
         } //EndMethod
 
 
-        [NoRewrite]
         public bool EmptyContains()
         {
             return Enumerable.Empty<int>().Contains(23);
         } //EndMethod
 
-        public bool EmptyContainsRewritten()
+        [LinqRewrite]
+		public bool EmptyContainsRewritten()
         {
             return Enumerable.Empty<int>().Contains(23);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<float> EmptyCast()
         {
             return Enumerable.Empty<int>().Cast<float>();
         } //EndMethod
 
-        public IEnumerable<float> EmptyCastRewritten()
+        [LinqRewrite]
+		public IEnumerable<float> EmptyCastRewritten()
         {
             return Enumerable.Empty<int>().Cast<float>();
         } //EndMethod
 
 
-        [NoRewrite]
         public bool EmptyAny()
         {
             return Enumerable.Empty<int>().Any();
         } //EndMethod
 
-        public bool EmptyAnyRewritten()
+        [LinqRewrite]
+		public bool EmptyAnyRewritten()
         {
             return Enumerable.Empty<int>().Any();
         } //EndMethod
 
 
-        [NoRewrite]
         public double EmptyAggregateDefault()
         {
             return Enumerable.Empty<int>().Aggregate(1.0, (x, y) => x + y);
         } //EndMethod
 
-        public double EmptyAggregateDefaultRewritten()
+        [LinqRewrite]
+		public double EmptyAggregateDefaultRewritten()
         {
             return Enumerable.Empty<int>().Aggregate(1.0, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public double EmptyAggregate()
         {
             return Enumerable.Empty<int>().Aggregate((x, y) => x + y);
         } //EndMethod
 
-        public double EmptyAggregateRewritten()
+        [LinqRewrite]
+		public double EmptyAggregateRewritten()
         {
             return Enumerable.Empty<int>().Aggregate((x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public double EmptyAverage()
         {
             return Enumerable.Empty<int>().Average();
         } //EndMethod
 
-        public double EmptyAverageRewritten()
+        [LinqRewrite]
+		public double EmptyAverageRewritten()
         {
             return Enumerable.Empty<int>().Average();
         } //EndMethod

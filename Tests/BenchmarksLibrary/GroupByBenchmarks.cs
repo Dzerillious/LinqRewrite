@@ -18,7 +18,6 @@ namespace BenchmarksLibrary
             EnumerableSource = Enumerable.Range(235, 10000);
         }
         
-        [NoRewrite]
         [Benchmark]
         public void ArrayGroupBy()
         {
@@ -26,12 +25,12 @@ namespace BenchmarksLibrary
         }
         
         [Benchmark]
-        public void ArrayGroupByRewritten()
+        [LinqRewrite]
+		public void ArrayGroupByRewritten()
         {
             ArraySource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
         }
         
-        [NoRewrite]
         [Benchmark]
         public void EnumerableGroupBy()
         {
@@ -39,7 +38,8 @@ namespace BenchmarksLibrary
         }
         
         [Benchmark]
-        public void EnumerableGroupByRewritten()
+        [LinqRewrite]
+		public void EnumerableGroupByRewritten()
         {
             EnumerableSource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
         }

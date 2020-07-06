@@ -2,11 +2,24 @@
 
 namespace LinqRewrite.Core
 {
-    public class NoRewriteAttribute : Attribute
+    [Flags]
+    public enum RewriteOptions
     {
+        None = 0,
+        Unchecked = 1
     }
     
-    public class UncheckedLinqAttribute : Attribute
+    public class LinqRewriteAttribute : Attribute
     {
+        public LinqRewriteAttribute(RewriteOptions options = RewriteOptions.None)
+        {
+        }
+    }
+    
+    public class NoLinqRewriteAttribute : Attribute
+    {
+        public NoLinqRewriteAttribute()
+        {
+        }
     }
 }

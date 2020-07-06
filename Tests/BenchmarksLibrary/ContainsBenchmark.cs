@@ -21,86 +21,93 @@ namespace BenchmarksLibrary
             EnumerableSource = Enumerable.Range(0, 1000);
         }
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool ArrayContains50()
         {
             return ArraySource.Contains(50);
         }//EndMethod
 
 		[Benchmark]
-        public bool ArrayContains50Rewritten()
+        [LinqRewrite]
+		public bool ArrayContains50Rewritten()
         {
             return ArraySource.Contains(50);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool ArrayContains900Condition()
         {
             return ArraySource.Contains(900);
         }//EndMethod
 
         [Benchmark]
-        public bool ArrayContains900ConditionRewritten()
+        [LinqRewrite]
+		public bool ArrayContains900ConditionRewritten()
         {
             return ArraySource.Contains(900);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool ArraySelectContains()
         {
             return ArraySource.Select(x => x + 3).Contains(200);
         }//EndMethod
 
         [Benchmark]
-        public bool ArraySelectContainsRewritten()
+        [LinqRewrite]
+		public bool ArraySelectContainsRewritten()
         {
             return ArraySource.Select(x => x + 3).Contains(200);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool ArrayWhereContains()
         {
             return ArraySource.Where(x => x > 100).Contains(50);
         }//EndMethod
 
         [Benchmark]
-        public bool ArrayWhereContainsRewritten()
+        [LinqRewrite]
+		public bool ArrayWhereContainsRewritten()
         {
             return ArraySource.Where(x => x > 100).Contains(50);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool ArrayWhereContains900()
         {
             return ArraySource.Where(x => x > 100).Contains(900);
         }//EndMethod
 
         [Benchmark]
-        public bool ArrayWhereContains900Rewritten()
+        [LinqRewrite]
+		public bool ArrayWhereContains900Rewritten()
         {
             return ArraySource.Where(x => x > 100).Contains(900);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool EnumerableContainsNotCondition()
         {
             return EnumerableSource.Contains(10000);
         }//EndMethod
 
         [Benchmark]
-        public bool EnumerableContainsNotConditionRewritten()
+        [LinqRewrite]
+		public bool EnumerableContainsNotConditionRewritten()
         {
             return EnumerableSource.Contains(10000);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool EnumerableContainsAllCondition()
         {
             return EnumerableSource.Contains(50);
         }//EndMethod
 
         [Benchmark]
-        public bool EnumerableContainsAllConditionRewritten()
+        [LinqRewrite]
+		public bool EnumerableContainsAllConditionRewritten()
         {
             return EnumerableSource.Contains(50);
         }//EndMethod

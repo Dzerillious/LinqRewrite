@@ -126,1022 +126,1022 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals("ArrayDistinctConcatArrayDistinctDistinct2Joind", ArrayDistinctConcatArrayDistinctDistinct2, ArrayDistinctConcatArrayDistinctDistinct2Rewritten);
         }
 
-        [NoRewrite]
         public IEnumerable<int> ArrayJoin()
         {
             return ArrayItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
-        public IEnumerable<int> ArrayJoinRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayJoinRewritten()
         {
             return ArrayItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayJoinToArray()
         {
             return ArrayItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         }  //EndMethod
 
-        public IEnumerable<int> ArrayJoinToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayJoinToArrayRewritten()
         {
             return ArrayItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListJoin()
         {
             return SimpleListItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
-        public IEnumerable<int> SimpleListJoinRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListJoinRewritten()
         {
             return SimpleListItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableJoin()
         {
             return EnumerableItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
-        public IEnumerable<int> EnumerableJoinRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableJoinRewritten()
         {
             return EnumerableItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableJoinToArray()
         {
             return EnumerableItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         }  //EndMethod
 
-        public IEnumerable<int> EnumerableJoinToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableJoinToArrayRewritten()
         {
             return EnumerableItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableMethodJoin()
         {
             return MethodEnumerable().Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
-        public IEnumerable<int> EnumerableMethodJoinRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableMethodJoinRewritten()
         {
             return MethodEnumerable().Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableMethodJoinToArray()
         {
             return MethodEnumerable().Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         }  //EndMethod
 
-        public IEnumerable<int> EnumerableMethodJoinToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableMethodJoinToArrayRewritten()
         {
             return MethodEnumerable().Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeJoin()
         {
             return Enumerable.Range(56, 125).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
-        public IEnumerable<int> RangeJoinRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeJoinRewritten()
         {
             return Enumerable.Range(56, 125).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeJoinToArray()
         {
             return Enumerable.Range(56, 125).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         }  //EndMethod
 
-        public IEnumerable<int> RangeJoinToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeJoinToArrayRewritten()
         {
             return Enumerable.Range(56, 125).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySelectJoin()
         {
             return ArrayItems.Select(x => x + 3).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
-        public IEnumerable<int> ArraySelectJoinRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectJoinRewritten()
         {
             return ArrayItems.Select(x => x + 3).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayWhereJoin()
         {
             return ArrayItems.Where(x => x > 10).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
-        public IEnumerable<int> ArrayWhereJoinRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayWhereJoinRewritten()
         {
             return ArrayItems.Where(x => x > 10).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayJoinWhereJoin()
         {
             return ArrayItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Where(x => x > 10).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
-        public IEnumerable<int> ArrayJoinWhereJoinRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayJoinWhereJoinRewritten()
         {
             return ArrayItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Where(x => x > 10).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayJoinConcatJoin()
         {
             return ArrayItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Concat(ArrayItems).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
-        public IEnumerable<int> ArrayJoinConcatJoinRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayJoinConcatJoinRewritten()
         {
             return ArrayItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Concat(ArrayItems).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayJoinConcatJoind()
         {
             return ArrayItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Concat(ArrayItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
-        public IEnumerable<int> ArrayJoinConcatJoindRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayJoinConcatJoindRewritten()
         {
             return ArrayItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Concat(ArrayItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayJoinConcatJoindConcatArray()
         {
             return ArrayItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Concat(ArrayItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Concat(ArrayItems);
         }  //EndMethod
 
-        public IEnumerable<int> ArrayJoinConcatJoindConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayJoinConcatJoindConcatArrayRewritten()
         {
             return ArrayItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Concat(ArrayItems.Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Concat(ArrayItems);
         }  //EndMethod
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatArray()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatArrayRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatSimpleList()
         {
             return ArrayItems.Concat(SimpleListItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatSimpleListRewritten()
         {
             return ArrayItems.Concat(SimpleListItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatEnumerable()
         {
             return ArrayItems.Concat(EnumerableItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatEnumerableRewritten()
         {
             return ArrayItems.Concat(EnumerableItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatMethod()
         {
             return ArrayItems.Concat(MethodEnumerable2()).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatMethodRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatMethodRewritten()
         {
             return ArrayItems.Concat(MethodEnumerable2()).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListConcatArray()
         {
             return SimpleListItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> SimpleListConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListConcatArrayRewritten()
         {
             return SimpleListItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListConcatSimpleList()
         {
             return SimpleListItems.Concat(SimpleListItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> SimpleListConcatSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListConcatSimpleListRewritten()
         {
             return SimpleListItems.Concat(SimpleListItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListConcatEnumerable()
         {
             return SimpleListItems.Concat(EnumerableItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> SimpleListConcatEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListConcatEnumerableRewritten()
         {
             return SimpleListItems.Concat(EnumerableItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListConcatMethod()
         {
             return SimpleListItems.Concat(MethodEnumerable2()).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> SimpleListConcatMethodRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListConcatMethodRewritten()
         {
             return SimpleListItems.Concat(MethodEnumerable2()).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableConcatArray()
         {
             return EnumerableItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableConcatArrayRewritten()
         {
             return EnumerableItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableConcatSimpleList()
         {
             return EnumerableItems.Concat(SimpleListItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableConcatSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableConcatSimpleListRewritten()
         {
             return EnumerableItems.Concat(SimpleListItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableConcatEnumerable()
         {
             return EnumerableItems.Concat(EnumerableItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableConcatEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableConcatEnumerableRewritten()
         {
             return EnumerableItems.Concat(EnumerableItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableConcatMethod()
         {
             return EnumerableItems.Concat(MethodEnumerable2()).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableConcatMethodRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableConcatMethodRewritten()
         {
             return EnumerableItems.Concat(MethodEnumerable2()).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MethodConcatArray()
         {
             return MethodEnumerable().Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> MethodConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MethodConcatArrayRewritten()
         {
             return MethodEnumerable().Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MethodConcatSimpleList()
         {
             return MethodEnumerable().Concat(SimpleListItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> MethodConcatSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MethodConcatSimpleListRewritten()
         {
             return MethodEnumerable().Concat(SimpleListItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MethodConcatEnumerable()
         {
             return MethodEnumerable().Concat(EnumerableItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> MethodConcatEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MethodConcatEnumerableRewritten()
         {
             return MethodEnumerable().Concat(EnumerableItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MethodConcatMethod()
         {
             return MethodEnumerable().Concat(MethodEnumerable2()).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> MethodConcatMethodRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MethodConcatMethodRewritten()
         {
             return MethodEnumerable().Concat(MethodEnumerable2()).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatArrayToArray()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatArrayToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatArrayToArrayRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatSimpleListToArray()
         {
             return ArrayItems.Concat(SimpleListItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatSimpleListToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatSimpleListToArrayRewritten()
         {
             return ArrayItems.Concat(SimpleListItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatEnumerableToArray()
         {
             return ArrayItems.Concat(EnumerableItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatEnumerableToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatEnumerableToArrayRewritten()
         {
             return ArrayItems.Concat(EnumerableItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListConcatArrayToArray()
         {
             return SimpleListItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListConcatArrayToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListConcatArrayToArrayRewritten()
         {
             return SimpleListItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListConcatSimpleListToArray()
         {
             return SimpleListItems.Concat(SimpleListItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListConcatSimpleListToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListConcatSimpleListToArrayRewritten()
         {
             return SimpleListItems.Concat(SimpleListItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListConcatEnumerableToArray()
         {
             return SimpleListItems.Concat(EnumerableItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListConcatEnumerableToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListConcatEnumerableToArrayRewritten()
         {
             return SimpleListItems.Concat(EnumerableItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableConcatArrayToArray()
         {
             return EnumerableItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableConcatArrayToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableConcatArrayToArrayRewritten()
         {
             return EnumerableItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableConcatSimpleListToArray()
         {
             return EnumerableItems.Concat(SimpleListItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableConcatSimpleListToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableConcatSimpleListToArrayRewritten()
         {
             return EnumerableItems.Concat(SimpleListItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableConcatEnumerableToArray()
         {
             return EnumerableItems.Concat(EnumerableItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableConcatEnumerableToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableConcatEnumerableToArrayRewritten()
         {
             return EnumerableItems.Concat(EnumerableItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySelectConcatArray()
         {
             return ArrayItems.Select(x => x + 50).Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArraySelectConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectConcatArrayRewritten()
         {
             return ArrayItems.Select(x => x + 50).Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySelectConcatArraySelect()
         {
             return ArrayItems.Select(x => x + 50).Concat(ArrayItems2.Select(x => x + 50)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArraySelectConcatArraySelectRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectConcatArraySelectRewritten()
         {
             return ArrayItems.Select(x => x + 50).Concat(ArrayItems2.Select(x => x + 50)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayWhereConcatArrayWhere()
         {
             return ArrayItems.Where(x => x > 50).Concat(ArrayItems2.Where(x => x > 50)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayWhereConcatArrayWhereRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayWhereConcatArrayWhereRewritten()
         {
             return ArrayItems.Where(x => x > 50).Concat(ArrayItems2.Where(x => x > 50)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayCount()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Count();
         } //EndMethod
 
-        public int ArrayConcatArrayCountRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayCountRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Count();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayCount2()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Count(x => x > 70);
         } //EndMethod
 
-        public int ArrayConcatArrayCount2Rewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayCount2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Count(x => x > 70);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArraySum()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Sum();
         } //EndMethod
 
-        public int ArrayConcatArraySumRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArraySumRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Sum();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArraySum2()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Sum(x => x + 10);
         } //EndMethod
 
-        public int ArrayConcatArraySum2Rewritten()
+        [LinqRewrite]
+		public int ArrayConcatArraySum2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Sum(x => x + 10);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatArrayDistinct()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Distinct().Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatArrayDistinctRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatArrayDistinctRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Distinct().Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatArrayDistinct2()
         {
             return ArrayItems.Concat(ArrayItems2).Distinct(EqualityComparer<int>.Default).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatArrayDistinct2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatArrayDistinct2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Distinct(EqualityComparer<int>.Default).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayElementAt()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ElementAt(45);
         } //EndMethod
 
-        public int ArrayConcatArrayElementAtRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayElementAtRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ElementAt(45);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayElementAtOrDefault()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ElementAtOrDefault(45);
         } //EndMethod
 
-        public int ArrayConcatArrayElementAtOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayElementAtOrDefaultRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).ElementAtOrDefault(45);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayFirst()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).First();
         } //EndMethod
 
-        public int ArrayConcatArrayFirstRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayFirstRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).First();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayFirstOrDefault()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).FirstOrDefault();
         } //EndMethod
 
-        public int ArrayConcatArrayFirstOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayFirstOrDefaultRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).FirstOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayLast()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Last();
         } //EndMethod
 
-        public int ArrayConcatArrayLastRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayLastRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Last();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayLastOrDefault()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).LastOrDefault();
         } //EndMethod
 
-        public int ArrayConcatArrayLastOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayLastOrDefaultRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).LastOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArraySingle()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Single();
         } //EndMethod
 
-        public int ArrayConcatArraySingleRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArraySingleRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Single();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArraySingle2()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Single(x => x == 76);
         } //EndMethod
 
-        public int ArrayConcatArraySingle2Rewritten()
+        [LinqRewrite]
+		public int ArrayConcatArraySingle2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Single(x => x == 76);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArraySingleOrDefault()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).SingleOrDefault();
         } //EndMethod
 
-        public int ArrayConcatArraySingleOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArraySingleOrDefaultRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).SingleOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayMin()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Min();
         } //EndMethod
 
-        public int ArrayConcatArrayMinRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayMinRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Min();
         } //EndMethod
 
 
-        [NoRewrite]
         public decimal ArrayConcatArrayMin2()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Min(x => x + 2m);
         } //EndMethod
 
-        public decimal ArrayConcatArrayMin2Rewritten()
+        [LinqRewrite]
+		public decimal ArrayConcatArrayMin2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Min(x => x + 2m);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayMax()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Max();
         } //EndMethod
 
-        public int ArrayConcatArrayMaxRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayMaxRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Max();
         } //EndMethod
 
 
-        [NoRewrite]
         public decimal ArrayConcatArrayMax2()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Max(x => x + 2m);
         } //EndMethod
 
-        public decimal ArrayConcatArrayMax2Rewritten()
+        [LinqRewrite]
+		public decimal ArrayConcatArrayMax2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Max(x => x + 2m);
         } //EndMethod
 
 
-        [NoRewrite]
         public long ArrayConcatArrayLongCount()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).LongCount();
         } //EndMethod
 
-        public long ArrayConcatArrayLongCountRewritten()
+        [LinqRewrite]
+		public long ArrayConcatArrayLongCountRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).LongCount();
         } //EndMethod
 
 
-        [NoRewrite]
         public long ArrayConcatArrayLongCount2()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).LongCount(x => x > 50);
         } //EndMethod
 
-        public long ArrayConcatArrayLongCount2Rewritten()
+        [LinqRewrite]
+		public long ArrayConcatArrayLongCount2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).LongCount(x => x > 50);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArrayConcatArrayContains()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Contains(56);
         } //EndMethod
 
-        public bool ArrayConcatArrayContainsRewritten()
+        [LinqRewrite]
+		public bool ArrayConcatArrayContainsRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Contains(56);
         } //EndMethod
 
 
-        [NoRewrite]
         public double ArrayConcatArrayAverage()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Average();
         } //EndMethod
 
-        public double ArrayConcatArrayAverageRewritten()
+        [LinqRewrite]
+		public double ArrayConcatArrayAverageRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Average();
         } //EndMethod
 
 
-        [NoRewrite]
         public double ArrayConcatArrayAverage2()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Average(x => x + 10);
         } //EndMethod
 
-        public double ArrayConcatArrayAverage2Rewritten()
+        [LinqRewrite]
+		public double ArrayConcatArrayAverage2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Average(x => x + 10);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArrayConcatArrayContains2()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Contains(56, EqualityComparer<int>.Default);
         } //EndMethod
 
-        public bool ArrayConcatArrayContains2Rewritten()
+        [LinqRewrite]
+		public bool ArrayConcatArrayContains2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Contains(56, EqualityComparer<int>.Default);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool SelectWhereArrayConcatSelectWhereArrayContains()
         {
             return ArrayItems.Select(x => x + 10).Where(x => x > 80).Concat(ArrayItems2.Select(x => x + 10).Where(x => x > 80)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Contains(112);
         } //EndMethod
 
-        public bool SelectWhereArrayConcatSelectWhereArrayContainsRewritten()
+        [LinqRewrite]
+		public bool SelectWhereArrayConcatSelectWhereArrayContainsRewritten()
         {
             return ArrayItems.Select(x => x + 10).Where(x => x > 80).Concat(ArrayItems2.Select(x => x + 10).Where(x => x > 80)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y).Contains(112);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeConcatArray()
         {
             return Enumerable.Range(20, 100).Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> RangeConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeConcatArrayRewritten()
         {
             return Enumerable.Range(20, 100).Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatConcatArray()
         {
             return Enumerable.Repeat(20, 100).Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> RepeatConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatConcatArrayRewritten()
         {
             return Enumerable.Repeat(20, 100).Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EmptyConcatArray()
         {
             return Enumerable.Empty<int>().Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> EmptyConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EmptyConcatArrayRewritten()
         {
             return Enumerable.Empty<int>().Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeEmpty2Array()
         {
             return ArrayItems.Where(x => false).Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> RangeEmpty2ArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeEmpty2ArrayRewritten()
         {
             return ArrayItems.Where(x => false).Concat(ArrayItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatRange()
         {
             return ArrayItems.Concat(Enumerable.Range(70, 260)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatRangeRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatRangeRewritten()
         {
             return ArrayItems.Concat(Enumerable.Range(70, 260)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatRepeat()
         {
             return ArrayItems.Concat(Enumerable.Repeat(70, 100)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatRepeatRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatRepeatRewritten()
         {
             return ArrayItems.Concat(Enumerable.Repeat(70, 100)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatEmpty()
         {
             return ArrayItems.Concat(Enumerable.Empty<int>()).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatEmptyRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatEmptyRewritten()
         {
             return ArrayItems.Concat(Enumerable.Empty<int>()).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatEmpty2()
         {
             return ArrayItems.Concat(ArrayItems2.Where(x => false)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatEmpty2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatEmpty2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2.Where(x => false)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatAll()
         {
             return ArrayItems.Concat(Enumerable.Range(0, 1000)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatAllRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatAllRewritten()
         {
             return ArrayItems.Concat(Enumerable.Range(0, 1000)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatNull()
         {
             return ArrayItems.Concat(null).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatNullRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatNullRewritten()
         {
             return ArrayItems.Concat(null).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatArrayConcatEnumerable()
         {
             return ArrayItems.Concat(ArrayItems).Concat(EnumerableItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatArrayConcatEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatArrayConcatEnumerableRewritten()
         {
             return ArrayItems.Concat(ArrayItems).Concat(EnumerableItems2).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatArrayConcatEnumerable2()
         {
             return ArrayItems.Concat(ArrayItems.Concat(EnumerableItems2)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatArrayConcatEnumerable2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatArrayConcatEnumerable2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems.Concat(EnumerableItems2)).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayDistinctConcatArrayDistinct()
         {
             return ArrayItems.Distinct().Concat(ArrayItems.Distinct()).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayDistinctConcatArrayDistinctRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayDistinctConcatArrayDistinctRewritten()
         {
             return ArrayItems.Distinct().Concat(ArrayItems.Distinct()).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayDistinctConcatArrayDistinctDistinct()
         {
             return ArrayItems.Distinct().Concat(ArrayItems.Distinct()).Distinct().Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayDistinctConcatArrayDistinctDistinctRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayDistinctConcatArrayDistinctDistinctRewritten()
         {
             return ArrayItems.Distinct().Concat(ArrayItems.Distinct()).Distinct().Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayDistinctConcatArrayDistinctDistinct2()
         {
             return ArrayItems.Distinct(EqualityComparer<int>.Default).Concat(ArrayItems.Distinct(EqualityComparer<int>.Default)).Distinct(EqualityComparer<int>.Default).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod
 
-        public IEnumerable<int> ArrayDistinctConcatArrayDistinctDistinct2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayDistinctConcatArrayDistinctDistinct2Rewritten()
         {
             return ArrayItems.Distinct(EqualityComparer<int>.Default).Concat(ArrayItems.Distinct(EqualityComparer<int>.Default)).Distinct(EqualityComparer<int>.Default).Join(ArrayItems2, x => x % 10, x => x % 10, (x, y) => x + y);
         } //EndMethod

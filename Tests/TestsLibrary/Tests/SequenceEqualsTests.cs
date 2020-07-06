@@ -73,385 +73,385 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(ArrayDistinctSequenceEqualArrayDistinct2), ArrayDistinctSequenceEqualArrayDistinct, ArrayDistinctSequenceEqualArrayDistinct2Rewritten);
         }
 
-        [NoRewrite]
         public bool ArraySequenceEqualArray()
         {
             return ArrayItems.SequenceEqual(ArrayItems2);
         } //EndMethod
 
-        public bool ArraySequenceEqualArrayRewritten()
+        [LinqRewrite]
+		public bool ArraySequenceEqualArrayRewritten()
         {
             return ArrayItems.SequenceEqual(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArraySequenceEqualSimpleList()
         {
             return ArrayItems.SequenceEqual(SimpleListItems2);
         } //EndMethod
 
-        public bool ArraySequenceEqualSimpleListRewritten()
+        [LinqRewrite]
+		public bool ArraySequenceEqualSimpleListRewritten()
         {
             return ArrayItems.SequenceEqual(SimpleListItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArraySequenceEqualEnumerable()
         {
             return ArrayItems.SequenceEqual(EnumerableItems2);
         } //EndMethod
 
-        public bool ArraySequenceEqualEnumerableRewritten()
+        [LinqRewrite]
+		public bool ArraySequenceEqualEnumerableRewritten()
         {
             return ArrayItems.SequenceEqual(EnumerableItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArraySequenceEqualMethod()
         {
             return ArrayItems.SequenceEqual(MethodEnumerable2());
         } //EndMethod
 
-        public bool ArraySequenceEqualMethodRewritten()
+        [LinqRewrite]
+		public bool ArraySequenceEqualMethodRewritten()
         {
             return ArrayItems.SequenceEqual(MethodEnumerable2());
         } //EndMethod
 
 
-        [NoRewrite]
         public bool SimpleListSequenceEqualArray()
         {
             return SimpleListItems.SequenceEqual(ArrayItems2);
         } //EndMethod
 
-        public bool SimpleListSequenceEqualArrayRewritten()
+        [LinqRewrite]
+		public bool SimpleListSequenceEqualArrayRewritten()
         {
             return SimpleListItems.SequenceEqual(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool SimpleListSequenceEqualSimpleList()
         {
             return SimpleListItems.SequenceEqual(SimpleListItems2);
         } //EndMethod
 
-        public bool SimpleListSequenceEqualSimpleListRewritten()
+        [LinqRewrite]
+		public bool SimpleListSequenceEqualSimpleListRewritten()
         {
             return SimpleListItems.SequenceEqual(SimpleListItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool SimpleListSequenceEqualEnumerable()
         {
             return SimpleListItems.SequenceEqual(EnumerableItems2);
         } //EndMethod
 
-        public bool SimpleListSequenceEqualEnumerableRewritten()
+        [LinqRewrite]
+		public bool SimpleListSequenceEqualEnumerableRewritten()
         {
             return SimpleListItems.SequenceEqual(EnumerableItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool SimpleListSequenceEqualMethod()
         {
             return SimpleListItems.SequenceEqual(MethodEnumerable2());
         } //EndMethod
 
-        public bool SimpleListSequenceEqualMethodRewritten()
+        [LinqRewrite]
+		public bool SimpleListSequenceEqualMethodRewritten()
         {
             return SimpleListItems.SequenceEqual(MethodEnumerable2());
         } //EndMethod
 
 
-        [NoRewrite]
         public bool EnumerableSequenceEqualArray()
         {
             return EnumerableItems.SequenceEqual(ArrayItems2);
         } //EndMethod
 
-        public bool EnumerableSequenceEqualArrayRewritten()
+        [LinqRewrite]
+		public bool EnumerableSequenceEqualArrayRewritten()
         {
             return EnumerableItems.SequenceEqual(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool EnumerableSequenceEqualSimpleList()
         {
             return EnumerableItems.SequenceEqual(SimpleListItems2);
         } //EndMethod
 
-        public bool EnumerableSequenceEqualSimpleListRewritten()
+        [LinqRewrite]
+		public bool EnumerableSequenceEqualSimpleListRewritten()
         {
             return EnumerableItems.SequenceEqual(SimpleListItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool EnumerableSequenceEqualEnumerable()
         {
             return EnumerableItems.SequenceEqual(EnumerableItems2);
         } //EndMethod
 
-        public bool EnumerableSequenceEqualEnumerableRewritten()
+        [LinqRewrite]
+		public bool EnumerableSequenceEqualEnumerableRewritten()
         {
             return EnumerableItems.SequenceEqual(EnumerableItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool EnumerableSequenceEqualMethod()
         {
             return EnumerableItems.SequenceEqual(MethodEnumerable2());
         } //EndMethod
 
-        public bool EnumerableSequenceEqualMethodRewritten()
+        [LinqRewrite]
+		public bool EnumerableSequenceEqualMethodRewritten()
         {
             return EnumerableItems.SequenceEqual(MethodEnumerable2());
         } //EndMethod
 
 
-        [NoRewrite]
         public bool MethodSequenceEqualArray()
         {
             return MethodEnumerable().SequenceEqual(ArrayItems2);
         } //EndMethod
 
-        public bool MethodSequenceEqualArrayRewritten()
+        [LinqRewrite]
+		public bool MethodSequenceEqualArrayRewritten()
         {
             return MethodEnumerable().SequenceEqual(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool MethodSequenceEqualSimpleList()
         {
             return MethodEnumerable().SequenceEqual(SimpleListItems2);
         } //EndMethod
 
-        public bool MethodSequenceEqualSimpleListRewritten()
+        [LinqRewrite]
+		public bool MethodSequenceEqualSimpleListRewritten()
         {
             return MethodEnumerable().SequenceEqual(SimpleListItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool MethodSequenceEqualEnumerable()
         {
             return MethodEnumerable().SequenceEqual(EnumerableItems2);
         } //EndMethod
 
-        public bool MethodSequenceEqualEnumerableRewritten()
+        [LinqRewrite]
+		public bool MethodSequenceEqualEnumerableRewritten()
         {
             return MethodEnumerable().SequenceEqual(EnumerableItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool MethodSequenceEqualMethod()
         {
             return MethodEnumerable().SequenceEqual(MethodEnumerable2());
         } //EndMethod
 
-        public bool MethodSequenceEqualMethodRewritten()
+        [LinqRewrite]
+		public bool MethodSequenceEqualMethodRewritten()
         {
             return MethodEnumerable().SequenceEqual(MethodEnumerable2());
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArraySelectSequenceEqualArray()
         {
             return ArrayItems.Select(x => x + 50).SequenceEqual(ArrayItems2);
         } //EndMethod
 
-        public bool ArraySelectSequenceEqualArrayRewritten()
+        [LinqRewrite]
+		public bool ArraySelectSequenceEqualArrayRewritten()
         {
             return ArrayItems.Select(x => x + 50).SequenceEqual(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArraySelectSequenceEqualArraySelect()
         {
             return ArrayItems.Select(x => x + 50).SequenceEqual(ArrayItems2.Select(x => x + 50));
         } //EndMethod
 
-        public bool ArraySelectSequenceEqualArraySelectRewritten()
+        [LinqRewrite]
+		public bool ArraySelectSequenceEqualArraySelectRewritten()
         {
             return ArrayItems.Select(x => x + 50).SequenceEqual(ArrayItems2.Select(x => x + 50));
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArrayWhereSequenceEqualArrayWhere()
         {
             return ArrayItems.Where(x => x > 50).SequenceEqual(ArrayItems2.Where(x => x > 50));
         } //EndMethod
 
-        public bool ArrayWhereSequenceEqualArrayWhereRewritten()
+        [LinqRewrite]
+		public bool ArrayWhereSequenceEqualArrayWhereRewritten()
         {
             return ArrayItems.Where(x => x > 50).SequenceEqual(ArrayItems2.Where(x => x > 50));
         } //EndMethod
 
 
-        [NoRewrite]
         public bool SelectWhereArraySequenceEqualSelectWhereArray()
         {
             return ArrayItems.Select(x => x + 10).Where(x => x > 80).SequenceEqual(ArrayItems2.Select(x => x + 10).Where(x => x > 80));
         } //EndMethod
 
-        public bool SelectWhereArraySequenceEqualSelectWhereArrayRewritten()
+        [LinqRewrite]
+		public bool SelectWhereArraySequenceEqualSelectWhereArrayRewritten()
         {
             return ArrayItems.Select(x => x + 10).Where(x => x > 80).SequenceEqual(ArrayItems2.Select(x => x + 10).Where(x => x > 80));
         } //EndMethod
 
 
-        [NoRewrite]
         public bool RangeSequenceEqualArray()
         {
             return Enumerable.Range(20, 100).SequenceEqual(ArrayItems2);
         } //EndMethod
 
-        public bool RangeSequenceEqualArrayRewritten()
+        [LinqRewrite]
+		public bool RangeSequenceEqualArrayRewritten()
         {
             return Enumerable.Range(20, 100).SequenceEqual(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool RepeatSequenceEqualArray()
         {
             return Enumerable.Repeat(20, 100).SequenceEqual(ArrayItems2);
         } //EndMethod
 
-        public bool RepeatSequenceEqualArrayRewritten()
+        [LinqRewrite]
+		public bool RepeatSequenceEqualArrayRewritten()
         {
             return Enumerable.Repeat(20, 100).SequenceEqual(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool EmptySequenceEqualArray()
         {
             return Enumerable.Empty<int>().SequenceEqual(ArrayItems2);
         } //EndMethod
 
-        public bool EmptySequenceEqualArrayRewritten()
+        [LinqRewrite]
+		public bool EmptySequenceEqualArrayRewritten()
         {
             return Enumerable.Empty<int>().SequenceEqual(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool RangeEmpty2Array()
         {
             return ArrayItems.Where(x => false).SequenceEqual(ArrayItems2);
         } //EndMethod
 
-        public bool RangeEmpty2ArrayRewritten()
+        [LinqRewrite]
+		public bool RangeEmpty2ArrayRewritten()
         {
             return ArrayItems.Where(x => false).SequenceEqual(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArraySequenceEqualRange()
         {
             return ArrayItems.SequenceEqual(Enumerable.Range(70, 260));
         } //EndMethod
 
-        public bool ArraySequenceEqualRangeRewritten()
+        [LinqRewrite]
+		public bool ArraySequenceEqualRangeRewritten()
         {
             return ArrayItems.SequenceEqual(Enumerable.Range(70, 260));
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArraySequenceEqualRepeat()
         {
             return ArrayItems.SequenceEqual(Enumerable.Repeat(70, 100));
         } //EndMethod
 
-        public bool ArraySequenceEqualRepeatRewritten()
+        [LinqRewrite]
+		public bool ArraySequenceEqualRepeatRewritten()
         {
             return ArrayItems.SequenceEqual(Enumerable.Repeat(70, 100));
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArraySequenceEqualEmpty()
         {
             return ArrayItems.SequenceEqual(Enumerable.Empty<int>());
         } //EndMethod
 
-        public bool ArraySequenceEqualEmptyRewritten()
+        [LinqRewrite]
+		public bool ArraySequenceEqualEmptyRewritten()
         {
             return ArrayItems.SequenceEqual(Enumerable.Empty<int>());
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArraySequenceEqualEmpty2()
         {
             return ArrayItems.SequenceEqual(ArrayItems2.Where(x => false));
         } //EndMethod
 
-        public bool ArraySequenceEqualEmpty2Rewritten()
+        [LinqRewrite]
+		public bool ArraySequenceEqualEmpty2Rewritten()
         {
             return ArrayItems.SequenceEqual(ArrayItems2.Where(x => false));
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArraySequenceEqualAll()
         {
             return ArrayItems.SequenceEqual(Enumerable.Range(0, 1000));
         } //EndMethod
 
-        public bool ArraySequenceEqualAllRewritten()
+        [LinqRewrite]
+		public bool ArraySequenceEqualAllRewritten()
         {
             return ArrayItems.SequenceEqual(Enumerable.Range(0, 1000));
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArraySequenceEqualNull()
         {
             return ArrayItems.SequenceEqual(null);
         } //EndMethod
 
-        public bool ArraySequenceEqualNullRewritten()
+        [LinqRewrite]
+		public bool ArraySequenceEqualNullRewritten()
         {
             return ArrayItems.SequenceEqual(null);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArrayDistinctSequenceEqualArrayDistinct()
         {
             return ArrayItems.Distinct().SequenceEqual(ArrayItems.Distinct());
         } //EndMethod
 
-        public bool ArrayDistinctSequenceEqualArrayDistinctRewritten()
+        [LinqRewrite]
+		public bool ArrayDistinctSequenceEqualArrayDistinctRewritten()
         {
             return ArrayItems.Distinct().SequenceEqual(ArrayItems.Distinct());
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArrayDistinctSequenceEqualArrayDistinct2()
         {
             return ArrayItems.Distinct(EqualityComparer<int>.Default).SequenceEqual(ArrayItems.Distinct(EqualityComparer<int>.Default));
         } //EndMethod
 
-        public bool ArrayDistinctSequenceEqualArrayDistinct2Rewritten()
+        [LinqRewrite]
+		public bool ArrayDistinctSequenceEqualArrayDistinct2Rewritten()
         {
             return ArrayItems.Distinct(EqualityComparer<int>.Default).SequenceEqual(ArrayItems.Distinct(EqualityComparer<int>.Default));
         } //EndMethod

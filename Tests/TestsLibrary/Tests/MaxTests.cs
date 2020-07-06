@@ -38,237 +38,237 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(EnumerableMax), EnumerableMax, EnumerableMaxRewritten);
         }
 
-        [NoRewrite]
         public int Max1()
         {
             return ArrayItems.Max();
         } //EndMethod
 
-        public int Max1Rewritten()
+        [LinqRewrite]
+		public int Max1Rewritten()
         {
             return ArrayItems.Max();
         } //EndMethod
 
 
-        [NoRewrite]
         public int Max2()
         {
             return ArrayItems.Max(x => x + 2);
         } //EndMethod
 
-        public int Max2Rewritten()
+        [LinqRewrite]
+		public int Max2Rewritten()
         {
             return ArrayItems.Max(x => x + 2);
         } //EndMethod
 
 
-        [NoRewrite]
         public float Max3()
         {
             return ArrayItems.Max(x => x + 2f);
         } //EndMethod
 
-        public float Max3Rewritten()
+        [LinqRewrite]
+		public float Max3Rewritten()
         {
             return ArrayItems.Max(x => x + 2f);
         } //EndMethod
 
 
-        [NoRewrite]
         public double Max4()
         {
             return ArrayItems.Max(x => x + 2d);
         } //EndMethod
 
-        public double Max4Rewritten()
+        [LinqRewrite]
+		public double Max4Rewritten()
         {
             return ArrayItems.Max(x => x + 2d);
         } //EndMethod
 
 
-        [NoRewrite]
         public decimal Max5()
         {
             return ArrayItems.Max(x => x + 2m);
         } //EndMethod
 
-        public decimal Max5Rewritten()
+        [LinqRewrite]
+		public decimal Max5Rewritten()
         {
             return ArrayItems.Max(x => x + 2m);
         } //EndMethod
 
 
-        [NoRewrite]
         public int? Max6()
         {
             return ArrayItems.Max(x => x > 10 ? (int?)null : x + 2);
         } //EndMethod
 
-        public int? Max6Rewritten()
+        [LinqRewrite]
+		public int? Max6Rewritten()
         {
             return ArrayItems.Max(x => x > 10 ? (int?)null : x + 2);
         } //EndMethod
 
 
-        [NoRewrite]
         public float? Max7()
         {
             return ArrayItems.Max(x => x > 10 ? (float?)null : x + 2);
         } //EndMethod
 
-        public float? Max7Rewritten()
+        [LinqRewrite]
+		public float? Max7Rewritten()
         {
             return ArrayItems.Max(x => x > 10 ? (float?)null : x + 2);
         } //EndMethod
 
 
-        [NoRewrite]
         public double? Max8()
         {
             return ArrayItems.Max(x => x > 10 ? (double?)null : x + 2);
         } //EndMethod
 
-        public double? Max8Rewritten()
+        [LinqRewrite]
+		public double? Max8Rewritten()
         {
             return ArrayItems.Max(x => x > 10 ? (double?)null : x + 2);
         } //EndMethod
 
 
-        [NoRewrite]
         public decimal? Max9()
         {
             return ArrayItems.Max(x => x > 10 ? (decimal?)null : x + 2);
         } //EndMethod
 
-        public decimal? Max9Rewritten()
+        [LinqRewrite]
+		public decimal? Max9Rewritten()
         {
             return ArrayItems.Max(x => x > 10 ? (decimal?)null : x + 2);
         } //EndMethod
 
 
-        [NoRewrite]
         public long Max10()
         {
             return ArrayItems.Max(x => x + 2L);
         } //EndMethod
 
-        public long Max10Rewritten()
+        [LinqRewrite]
+		public long Max10Rewritten()
         {
             return ArrayItems.Max(x => x + 2L);
         } //EndMethod
 
 
-        [NoRewrite]
         public long? Max11()
         {
             return ArrayItems.Max(x => x > 10 ? (long?)null : x + 2);
         } //EndMethod
 
-        public long? Max11Rewritten()
+        [LinqRewrite]
+		public long? Max11Rewritten()
         {
             return ArrayItems.Max(x => x > 10 ? (long?)null : x + 2);
         } //EndMethod
 
 
-        [NoRewrite]
         public int? Max12()
         {
             return ArrayItems.Max(Selector);
         } //EndMethod
 
-        public int? Max12Rewritten()
+        [LinqRewrite]
+		public int? Max12Rewritten()
         {
             return ArrayItems.Max(Selector);
         } //EndMethod
 
 
-        [NoRewrite]
         public int? MaxParam()
         {
             var a = 10;
             return ArrayItems.Max(x => x + a);
         } //EndMethod
 
-        public int? MaxParamRewritten()
+        [LinqRewrite]
+		public int? MaxParamRewritten()
         {
             var a = 10;
             return ArrayItems.Max(x => x + a);
         } //EndMethod
 
 
-        [NoRewrite]
         public int? MaxChangingParam()
         {
             var a = 10;
             return ArrayItems.Max(x => x + a++);
         } //EndMethod
 
-        public int? MaxChangingParamRewritten()
+        [LinqRewrite]
+		public int? MaxChangingParamRewritten()
         {
             var a = 10;
             return ArrayItems.Max(x => x + a++);
         } //EndMethod
 
 
-        [NoRewrite]
         public int? MaxChangingParam2()
         {
             var a = 10;
             return ArrayItems.Max(x => x + a--);
         } //EndMethod
 
-        public int? MaxChangingParam2Rewritten()
+        [LinqRewrite]
+		public int? MaxChangingParam2Rewritten()
         {
             var a = 10;
             return ArrayItems.Max(x => x + a--);
         } //EndMethod
 
 
-        [NoRewrite]
         public int? SelectMax()
         {
             var a = 10;
             return ArrayItems.Select(x => x + 3).Max();
         } //EndMethod
 
-        public int? SelectMaxRewritten()
+        [LinqRewrite]
+		public int? SelectMaxRewritten()
         {
             var a = 10;
             return ArrayItems.Select(x => x + 3).Max();
         } //EndMethod
 
 
-        [NoRewrite]
         public int? EmptyMax()
         {
             return Enumerable.Empty<int>().Max();
         } //EndMethod
 
-        public int? EmptyMaxRewritten()
+        [LinqRewrite]
+		public int? EmptyMaxRewritten()
         {
             return Enumerable.Empty<int>().Max();
         } //EndMethod
 
 
-        [NoRewrite]
         public int? EmptyMax2()
         {
             return ArrayItems.Where(x => false).Max();
         } //EndMethod
 
-        public int? EmptyMax2Rewritten()
+        [LinqRewrite]
+		public int? EmptyMax2Rewritten()
         {
             return ArrayItems.Where(x => false).Max();
         } //EndMethod
 
 
-        [NoRewrite]
         public int? EnumerableMax()
         {
             return EnumerableItems.Max();
         } //EndMethod
 
-        public int? EnumerableMaxRewritten()
+        [LinqRewrite]
+		public int? EnumerableMaxRewritten()
         {
             return EnumerableItems.Max();
         } //EndMethod

@@ -24,27 +24,29 @@ namespace BenchmarksLibrary
             EnumerableSource = Enumerable.Range(0, 1000);
         }
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArraySkipWhileToArray()
         {
             ArraySource.SkipWhile(x => x < Offset).ToArray();
         }//EndMethod
 
 		[Benchmark]
-        public void ArraySkipWhileToArrayRewritten()
+        [LinqRewrite]
+		public void ArraySkipWhileToArrayRewritten()
         {
             ArraySource.SkipWhile(x => x < Offset).ToArray();
         }//EndMethod
 
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArraySkipWhileToSimpleList()
         {
             ArraySource.SkipWhile(x => x < Offset).ToSimpleList();
         }//EndMethod
 
 		[Benchmark]
-        public void ArraySkipWhileToSimpleListRewritten()
+        [LinqRewrite]
+		public void ArraySkipWhileToSimpleListRewritten()
         {
             ArraySource.SkipWhile(x => x < Offset).ToSimpleList();
         }//EndMethod

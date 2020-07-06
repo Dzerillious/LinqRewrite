@@ -25,7 +25,7 @@ namespace BenchmarksLibrary
             _linqOptimizerQuery = ArraySource.AsQueryExpr().Skip(ToValue).Take(ToValue).Compile();
         }
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void SystemLinq()
         {
             ArraySource.Skip(ToValue).Take(ToValue).ToArray();
@@ -37,19 +37,19 @@ namespace BenchmarksLibrary
             ArraySource.Skip(ToValue).Take(ToValue).ToSimpleList();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void LinqOptimizer()
         {
             ArraySource.Skip(ToValue).Take(ToValue).AsQueryExpr().Compile()();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void LinqOptimizerWithoutOverhead()
         {
             _linqOptimizerQuery();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void LinqFasterChained()
         {
             ArraySource.SkipF(ToValue).TakeF(ToValue);

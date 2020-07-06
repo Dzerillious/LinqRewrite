@@ -46,345 +46,345 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(RepeatSkipToArray), RepeatSkipToArray, RepeatSkipToArrayRewritten);
         }
 
-        [NoRewrite]
         public IEnumerable<int> ArraySkip()
         {
             return ArrayItems.Skip(20);
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipRewritten()
         {
             return ArrayItems.Skip(20);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySkip0()
         {
             return ArrayItems.Skip(0);
         } //EndMethod
 
-        public IEnumerable<int> ArraySkip0Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkip0Rewritten()
         {
             return ArrayItems.Skip(0);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySkipM1()
         {
             return ArrayItems.Skip(-1);
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipM1Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipM1Rewritten()
         {
             return ArrayItems.Skip(-1);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySkip1000()
         {
             return ArrayItems.Skip(1000);
         } //EndMethod
 
-        public IEnumerable<int> ArraySkip1000Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkip1000Rewritten()
         {
             return ArrayItems.Skip(1000);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySkipParam()
         {
             var a = 50;
             return ArrayItems.Skip(a);
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipParamRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipParamRewritten()
         {
             var a = 50;
             return ArrayItems.Skip(a);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkip()
         {
             return EnumerableItems.Skip(20);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipRewritten()
         {
             return EnumerableItems.Skip(20);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkip0()
         {
             return EnumerableItems.Skip(0);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkip0Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkip0Rewritten()
         {
             return EnumerableItems.Skip(0);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipM1()
         {
             return EnumerableItems.Skip(-1);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipM1Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipM1Rewritten()
         {
             return EnumerableItems.Skip(-1);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkip1000()
         {
             return EnumerableItems.Skip(1000);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkip1000Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkip1000Rewritten()
         {
             return EnumerableItems.Skip(1000);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipParam()
         {
             var a = 50;
             return EnumerableItems.Skip(a);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipParamRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipParamRewritten()
         {
             var a = 50;
             return EnumerableItems.Skip(a);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeSkip()
         {
             return Enumerable.Range(0, 100).Skip(20);
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipRewritten()
         {
             return Enumerable.Range(0, 100).Skip(20);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeSkip0()
         {
             return Enumerable.Range(0, 100).Skip(0);
         } //EndMethod
 
-        public IEnumerable<int> RangeSkip0Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkip0Rewritten()
         {
             return Enumerable.Range(0, 100).Skip(0);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeSkipM1()
         {
             return Enumerable.Range(0, 100).Skip(-1);
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipM1Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipM1Rewritten()
         {
             return Enumerable.Range(0, 100).Skip(-1);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeSkip1000()
         {
             return Enumerable.Range(0, 100).Skip(1000);
         } //EndMethod
 
-        public IEnumerable<int> RangeSkip1000Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkip1000Rewritten()
         {
             return Enumerable.Range(0, 100).Skip(1000);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeSkipParam()
         {
             var a = 50;
             return Enumerable.Range(0, 100).Skip(a);
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipParamRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipParamRewritten()
         {
             var a = 50;
             return Enumerable.Range(0, 100).Skip(a);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatSkip()
         {
             return Enumerable.Repeat(0, 100).Skip(20);
         } //EndMethod
 
-        public IEnumerable<int> RepeatSkipRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatSkipRewritten()
         {
             return Enumerable.Repeat(0, 100).Skip(20);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatSkip0()
         {
             return Enumerable.Repeat(0, 100).Skip(0);
         } //EndMethod
 
-        public IEnumerable<int> RepeatSkip0Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatSkip0Rewritten()
         {
             return Enumerable.Repeat(0, 100).Skip(0);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatSkipM1()
         {
             return Enumerable.Repeat(0, 100).Skip(-1);
         } //EndMethod
 
-        public IEnumerable<int> RepeatSkipM1Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatSkipM1Rewritten()
         {
             return Enumerable.Repeat(0, 100).Skip(-1);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatSkip1000()
         {
             return Enumerable.Repeat(0, 100).Skip(1000);
         } //EndMethod
 
-        public IEnumerable<int> RepeatSkip1000Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatSkip1000Rewritten()
         {
             return Enumerable.Repeat(0, 100).Skip(1000);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatSkipParam()
         {
             var a = 50;
             return Enumerable.Repeat(0, 100).Skip(a);
         } //EndMethod
 
-        public IEnumerable<int> RepeatSkipParamRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatSkipParamRewritten()
         {
             var a = 50;
             return Enumerable.Repeat(0, 100).Skip(a);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySelectSkipToArray()
         {
             return ArrayItems.Select(x => x + 10).Skip(20).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArraySelectSkipToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectSkipToArrayRewritten()
         {
             return ArrayItems.Select(x => x + 10).Skip(20).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySelectSkipM1ToArray()
         {
             return ArrayItems.Select(x => x + 10).Skip(-1).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArraySelectSkipM1ToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectSkipM1ToArrayRewritten()
         {
             return ArrayItems.Select(x => x + 10).Skip(-1).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayWhereSkipToArray()
         {
             return ArrayItems.Where(x => x > 20).Skip(20).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayWhereSkipToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayWhereSkipToArrayRewritten()
         {
             return ArrayItems.Where(x => x > 20).Skip(20).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayWhereFalseSkipToArray()
         {
             return ArrayItems.Where(x => false).Skip(20).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayWhereFalseSkipToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayWhereFalseSkipToArrayRewritten()
         {
             return ArrayItems.Where(x => false).Skip(20).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySkipToArray()
         {
             return ArrayItems.Skip(20).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipToArrayRewritten()
         {
             return ArrayItems.Skip(20).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipToArray()
         {
             return EnumerableItems.Skip(20).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipToArrayRewritten()
         {
             return EnumerableItems.Skip(20).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeSkipToArray()
         {
             return Enumerable.Range(0, 100).Skip(20).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipToArrayRewritten()
         {
             return Enumerable.Range(0, 100).Skip(20).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatSkipToArray()
         {
             return Enumerable.Repeat(0, 100).Skip(20).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> RepeatSkipToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatSkipToArrayRewritten()
         {
             return Enumerable.Repeat(0, 100).Skip(20).ToArray();
         } //EndMethod

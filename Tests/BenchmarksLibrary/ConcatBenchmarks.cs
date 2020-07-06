@@ -23,170 +23,184 @@ namespace BenchmarksLibrary
             EnumerableSource2 = Enumerable.Range(500, 1000);
         }
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayConcatArrayToArray()
         {
             var res = ArraySource.Concat(ArraySource2).ToArray();
         }//EndMethod
         
         [Benchmark]
-        public void ArrayConcatArrayToArrayRewritten()
+        [LinqRewrite]
+		public void ArrayConcatArrayToArrayRewritten()
         {
             var res = ArraySource.Concat(ArraySource2).ToArray();
         }//EndMethod
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayWhereConcatArrayWhereToArray()
         {
             var res = ArraySource.Where(x => x > 500).Concat(ArraySource2.Where(x => x > 500)).ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereConcatArrayWhereToArrayRewritten()
+        [LinqRewrite]
+		public void ArrayWhereConcatArrayWhereToArrayRewritten()
         {
             var res = ArraySource.Where(x => x > 500).Concat(ArraySource2.Where(x => x > 500)).ToArray();
         }//EndMethod
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayConcatArrayWhereToArray()
         {
             var res = ArraySource.Concat(ArraySource2).Where(x => x > 500).ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayConcatArrayWhereToArrayRewritten()
+        [LinqRewrite]
+		public void ArrayConcatArrayWhereToArrayRewritten()
         {
             var res = ArraySource.Concat(ArraySource2).Where(x => x > 500).ToArray();
         }//EndMethod
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayConcatMultipleArrayToArray()
         {
             var res = ArraySource.Concat(ArraySource2).Concat(ArraySource2).Concat(ArraySource2).Concat(ArraySource2).ToArray();
         }//EndMethod
         
         [Benchmark]
-        public void ArrayConcatMultipleArrayToArrayRewritten()
+        [LinqRewrite]
+		public void ArrayConcatMultipleArrayToArrayRewritten()
         {
             var res = ArraySource.Concat(ArraySource2).Concat(ArraySource2).Concat(ArraySource2).Concat(ArraySource2).ToArray();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayConcatEnumerableToArray()
         {
             var res = ArraySource.Concat(EnumerableSource2).ToArray();
         }//EndMethod
         
         [Benchmark]
-        public void ArrayConcatEnumerableToArrayRewritten()
+        [LinqRewrite]
+		public void ArrayConcatEnumerableToArrayRewritten()
         {
             var res = ArraySource.Concat(EnumerableSource2).ToArray();
         }//EndMethod
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayWhereConcatEnumerableWhereToArray()
         {
             var res = ArraySource.Where(x => x > 500).Concat(EnumerableSource2.Where(x => x > 500)).ToArray();
         }//EndMethod
         
         [Benchmark]
-        public void ArrayWhereConcatEnumerableWhereToArrayRewritten()
+        [LinqRewrite]
+		public void ArrayWhereConcatEnumerableWhereToArrayRewritten()
         {
             var res = ArraySource.Where(x => x > 500).Concat(EnumerableSource2.Where(x => x > 500)).ToArray();
         }//EndMethod
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableConcatArrayToArray()
         {
             var res = EnumerableSource.Concat(ArraySource2).ToArray();
         }//EndMethod
         
         [Benchmark]
-        public void EnumerableConcatArrayToArrayRewritten()
+        [LinqRewrite]
+		public void EnumerableConcatArrayToArrayRewritten()
         {
             var res = EnumerableSource.Concat(ArraySource2).ToArray();
         }//EndMethod
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableWhereConcatArrayWhereToArray()
         {
             var res = EnumerableSource.Where(x => x > 500).Concat(ArraySource2).Where(x => x > 500).ToArray();
         }//EndMethod
         
         [Benchmark]
-        public void EnumerableWhereConcatArrayWhereToArrayRewritten()
+        [LinqRewrite]
+		public void EnumerableWhereConcatArrayWhereToArrayRewritten()
         {
             var res = EnumerableSource.Where(x => x > 500).Concat(ArraySource2.Where(x => x > 500)).ToArray();
         }//EndMethod
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableConcatEnumerableToArray()
         {
             var res = EnumerableSource.Concat(EnumerableSource2).ToArray();
         }//EndMethod
         
         [Benchmark]
-        public void EnumerableConcatEnumerableToArrayRewritten()
+        [LinqRewrite]
+		public void EnumerableConcatEnumerableToArrayRewritten()
         {
             var res = EnumerableSource.Concat(EnumerableSource2).ToArray();
         }//EndMethod
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableWhereConcatEnumerableWhereToArray()
         {
             var res = EnumerableSource.Where(x => x > 500).Concat(EnumerableSource2.Where(x => x > 500)).ToArray();
         }//EndMethod
         
         [Benchmark]
-        public void EnumerableWhereConcatEnumerableWhereToArrayRewritten()
+        [LinqRewrite]
+		public void EnumerableWhereConcatEnumerableWhereToArrayRewritten()
         {
             var res = EnumerableSource.Where(x => x > 500).Concat(EnumerableSource2.Where(x => x > 500)).ToArray();
         }//EndMethod
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayConcatArrayToSimpleList()
         {
             var res = ArraySource.Concat(ArraySource2).ToSimpleList();
         }//EndMethod
         
         [Benchmark]
-        public void ArrayConcatArrayToSimpleListRewritten()
+        [LinqRewrite]
+		public void ArrayConcatArrayToSimpleListRewritten()
         {
             var res = ArraySource.Concat(ArraySource2).ToSimpleList();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayWhereConcatArrayWhereToSimpleList()
         {
             var res = ArraySource.Where(x => x > 500).Concat(ArraySource2.Where(x => x > 500)).ToSimpleList();
         }//EndMethod
         
         [Benchmark]
-        public void ArrayWhereConcatArrayWhereToSimpleListRewritten()
+        [LinqRewrite]
+		public void ArrayWhereConcatArrayWhereToSimpleListRewritten()
         {
             var res = ArraySource.Where(x => x > 500).Concat(ArraySource2.Where(x => x > 500)).ToSimpleList();
         }//EndMethod
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableConcatEnumerableToSimpleList()
         {
             var res = EnumerableSource.Concat(EnumerableSource2).ToSimpleList();
         }//EndMethod
         
         [Benchmark]
-        public void EnumerableConcatEnumerableToSimpleListRewritten()
+        [LinqRewrite]
+		public void EnumerableConcatEnumerableToSimpleListRewritten()
         {
             var res = EnumerableSource.Concat(EnumerableSource2).ToSimpleList();
         }//EndMethod
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableWhereConcatEnumerableWhereToSimpleList()
         {
             var res = EnumerableSource.Where(x => x > 500).Concat(EnumerableSource2.Where(x => x > 500)).ToSimpleList();
         }//EndMethod
         
         [Benchmark]
-        public void EnumerableWhereConcatEnumerableWhereToSimpleListRewritten()
+        [LinqRewrite]
+		public void EnumerableWhereConcatEnumerableWhereToSimpleListRewritten()
         {
             var res = EnumerableSource.Where(x => x > 500).Concat(EnumerableSource2.Where(x => x > 500)).ToSimpleList();
         }//EndMethod

@@ -18,7 +18,6 @@ namespace BenchmarksLibrary
             EnumerableSource = Enumerable.Range(456, 654);
         }
         
-        [NoRewrite]
         [Benchmark]
         public double RangeAverage()
         {
@@ -31,67 +30,67 @@ namespace BenchmarksLibrary
             return Enumerable.Range(567, 675).Average();
         }
         
-        [NoRewrite]
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public double ArrayAverage5()
         {
             return ArraySource.Unchecked().Take(5).Average();
         }
         
         [Benchmark]
-        public double ArrayAverage5Rewritten()
+        [LinqRewrite]
+		public double ArrayAverage5Rewritten()
         {
             return ArraySource.Unchecked().Take(5).Average();
         }
         
-        [NoRewrite]
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public double ArrayAverage10()
         {
             return ArraySource.Unchecked().Take(10).Average();
         }
         
         [Benchmark]
-        public double ArrayAverage10Rewritten()
+        [LinqRewrite]
+		public double ArrayAverage10Rewritten()
         {
             return ArraySource.Unchecked().Take(10).Average();
         }
         
-        [NoRewrite]
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public double ArrayWhereAverage10()
         {
             return ArraySource.Where(x =>  x > 600).Average();
         }
         
         [Benchmark]
-        public double ArrayWhereAverageRewritten()
+        [LinqRewrite]
+		public double ArrayWhereAverageRewritten()
         {
             return ArraySource.Where(x =>  x > 600).Average();
         }
         
-        [NoRewrite]
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public double EnumerableAverage()
         {
             return EnumerableSource.Average();
         }
         
         [Benchmark]
-        public double EnumerableAverageRewritten()
+        [LinqRewrite]
+		public double EnumerableAverageRewritten()
         {
             return EnumerableSource.Average();
         }
         
-        [NoRewrite]
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public double EnumerableUncheckedAverage()
         {
             return EnumerableSource.Unchecked().Average();
         }
         
         [Benchmark]
-        public double EnumerableUncheckedAverageRewritten()
+        [LinqRewrite]
+		public double EnumerableUncheckedAverageRewritten()
         {
             return EnumerableSource.Unchecked().Average();
         }

@@ -25,79 +25,85 @@ namespace BenchmarksLibrary
         }
 
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayCastToArray()
         {
             ArraySource.Cast<B>().ToArray();
         }//EndMethod
 
 		[Benchmark]
-        public void ArrayCastToArrayRewritten()
+        [LinqRewrite]
+		public void ArrayCastToArrayRewritten()
         {
             ArraySource.Cast<B>().ToArray();
         }//EndMethod
 
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableCastToArray()
         {
             EnumerableSource.Cast<B>().ToArray();
         }//EndMethod
 
 		[Benchmark]
-        public void EnumerableCastToArrayRewritten()
+        [LinqRewrite]
+		public void EnumerableCastToArrayRewritten()
         {
             EnumerableSource.Cast<B>().ToArray();
         }//EndMethod
 
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayCastToSimpleList()
         {
             ArraySource.Cast<B>().ToSimpleList();
         }//EndMethod
 
 		[Benchmark]
-        public void ArrayCastToSimpleListRewritten()
+        [LinqRewrite]
+		public void ArrayCastToSimpleListRewritten()
         {
             ArraySource.Cast<B>().ToSimpleList();
         }//EndMethod
 
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void StaticArrayCastToArray()
         {
             StaticArraySource.Cast<B>().ToArray();
         }//EndMethod
 
 		[Benchmark]
-        public void StaticArrayCastToArrayRewritten()
+        [LinqRewrite]
+		public void StaticArrayCastToArrayRewritten()
         {
             StaticArraySource.Cast<B>().ToArray();
         }//EndMethod
 
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayUncheckedCastToArray()
         {
             ArraySource.Unchecked().Cast<B>().ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayUncheckedCastToArrayRewritten()
+        [LinqRewrite]
+		public void ArrayUncheckedCastToArrayRewritten()
         {
             ArraySource.Unchecked().Cast<B>().ToArray();
         }//EndMethod
 
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableUncheckedCastToSimpleList()
         {
             EnumerableSource.Cast<B>().ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableUncheckedToSimpleListRewritten()
+        [LinqRewrite]
+		public void EnumerableUncheckedToSimpleListRewritten()
         {
             EnumerableSource.Cast<B>().ToArray();
         }//EndMethod

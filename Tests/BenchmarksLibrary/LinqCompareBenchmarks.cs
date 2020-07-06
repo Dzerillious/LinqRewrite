@@ -20,7 +20,7 @@ namespace BenchmarksLibrary
             _linqOptimizerSumQuery = ArraySource.AsQueryExpr().Sum().Compile();
         }
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public int SystemLinqSum()
         {
             return ArraySource.Sum();
@@ -32,19 +32,19 @@ namespace BenchmarksLibrary
             return ArraySource.Sum();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void LinqOptimizerWithoutOverheadSum()
         {
             _linqOptimizerSumQuery();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void LinqFasterChainedSum()
         {
             ArraySource.SumF();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public int SystemLinqFirst()
         {
             return ArraySource.First();
@@ -56,7 +56,7 @@ namespace BenchmarksLibrary
             return ArraySource.First();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void LinqFasterChainedFirst()
         {
             ArraySource.FirstF();

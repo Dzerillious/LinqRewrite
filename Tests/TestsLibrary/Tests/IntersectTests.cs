@@ -110,829 +110,829 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(ArrayDistinctIntersectArrayDistinctDistinct2), ArrayDistinctIntersectArrayDistinctDistinct2, ArrayDistinctIntersectArrayDistinctDistinct2Rewritten);
         }
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectArray()
         {
             return ArrayItems.Intersect(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectArrayRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectSimpleList()
         {
             return ArrayItems.Intersect(SimpleListItems2);
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectSimpleListRewritten()
         {
             return ArrayItems.Intersect(SimpleListItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectEnumerable()
         {
             return ArrayItems.Intersect(EnumerableItems2);
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectEnumerableRewritten()
         {
             return ArrayItems.Intersect(EnumerableItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectMethod()
         {
             return ArrayItems.Intersect(MethodEnumerable2());
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectMethodRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectMethodRewritten()
         {
             return ArrayItems.Intersect(MethodEnumerable2());
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListIntersectArray()
         {
             return SimpleListItems.Intersect(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> SimpleListIntersectArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListIntersectArrayRewritten()
         {
             return SimpleListItems.Intersect(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListIntersectSimpleList()
         {
             return SimpleListItems.Intersect(SimpleListItems2);
         } //EndMethod
 
-        public IEnumerable<int> SimpleListIntersectSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListIntersectSimpleListRewritten()
         {
             return SimpleListItems.Intersect(SimpleListItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListIntersectEnumerable()
         {
             return SimpleListItems.Intersect(EnumerableItems2);
         } //EndMethod
 
-        public IEnumerable<int> SimpleListIntersectEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListIntersectEnumerableRewritten()
         {
             return SimpleListItems.Intersect(EnumerableItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListIntersectMethod()
         {
             return SimpleListItems.Intersect(MethodEnumerable2());
         } //EndMethod
 
-        public IEnumerable<int> SimpleListIntersectMethodRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListIntersectMethodRewritten()
         {
             return SimpleListItems.Intersect(MethodEnumerable2());
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableIntersectArray()
         {
             return EnumerableItems.Intersect(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableIntersectArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableIntersectArrayRewritten()
         {
             return EnumerableItems.Intersect(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableIntersectSimpleList()
         {
             return EnumerableItems.Intersect(SimpleListItems2);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableIntersectSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableIntersectSimpleListRewritten()
         {
             return EnumerableItems.Intersect(SimpleListItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableIntersectEnumerable()
         {
             return EnumerableItems.Intersect(EnumerableItems2);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableIntersectEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableIntersectEnumerableRewritten()
         {
             return EnumerableItems.Intersect(EnumerableItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableIntersectMethod()
         {
             return EnumerableItems.Intersect(MethodEnumerable2());
         } //EndMethod
 
-        public IEnumerable<int> EnumerableIntersectMethodRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableIntersectMethodRewritten()
         {
             return EnumerableItems.Intersect(MethodEnumerable2());
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MethodIntersectArray()
         {
             return MethodEnumerable().Intersect(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> MethodIntersectArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MethodIntersectArrayRewritten()
         {
             return MethodEnumerable().Intersect(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MethodIntersectSimpleList()
         {
             return MethodEnumerable().Intersect(SimpleListItems2);
         } //EndMethod
 
-        public IEnumerable<int> MethodIntersectSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MethodIntersectSimpleListRewritten()
         {
             return MethodEnumerable().Intersect(SimpleListItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MethodIntersectEnumerable()
         {
             return MethodEnumerable().Intersect(EnumerableItems2);
         } //EndMethod
 
-        public IEnumerable<int> MethodIntersectEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MethodIntersectEnumerableRewritten()
         {
             return MethodEnumerable().Intersect(EnumerableItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MethodIntersectMethod()
         {
             return MethodEnumerable().Intersect(MethodEnumerable2());
         } //EndMethod
 
-        public IEnumerable<int> MethodIntersectMethodRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MethodIntersectMethodRewritten()
         {
             return MethodEnumerable().Intersect(MethodEnumerable2());
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectArrayToArray()
         {
             return ArrayItems.Intersect(ArrayItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectArrayToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectArrayToArrayRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectSimpleListToArray()
         {
             return ArrayItems.Intersect(SimpleListItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectSimpleListToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectSimpleListToArrayRewritten()
         {
             return ArrayItems.Intersect(SimpleListItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectEnumerableToArray()
         {
             return ArrayItems.Intersect(EnumerableItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectEnumerableToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectEnumerableToArrayRewritten()
         {
             return ArrayItems.Intersect(EnumerableItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListIntersectArrayToArray()
         {
             return SimpleListItems.Intersect(ArrayItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListIntersectArrayToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListIntersectArrayToArrayRewritten()
         {
             return SimpleListItems.Intersect(ArrayItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListIntersectSimpleListToArray()
         {
             return SimpleListItems.Intersect(SimpleListItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListIntersectSimpleListToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListIntersectSimpleListToArrayRewritten()
         {
             return SimpleListItems.Intersect(SimpleListItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListIntersectEnumerableToArray()
         {
             return SimpleListItems.Intersect(EnumerableItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListIntersectEnumerableToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListIntersectEnumerableToArrayRewritten()
         {
             return SimpleListItems.Intersect(EnumerableItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableIntersectArrayToArray()
         {
             return EnumerableItems.Intersect(ArrayItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableIntersectArrayToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableIntersectArrayToArrayRewritten()
         {
             return EnumerableItems.Intersect(ArrayItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableIntersectSimpleListToArray()
         {
             return EnumerableItems.Intersect(SimpleListItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableIntersectSimpleListToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableIntersectSimpleListToArrayRewritten()
         {
             return EnumerableItems.Intersect(SimpleListItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableIntersectEnumerableToArray()
         {
             return EnumerableItems.Intersect(EnumerableItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableIntersectEnumerableToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableIntersectEnumerableToArrayRewritten()
         {
             return EnumerableItems.Intersect(EnumerableItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySelectIntersectArray()
         {
             return ArrayItems.Select(x => x + 50).Intersect(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> ArraySelectIntersectArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectIntersectArrayRewritten()
         {
             return ArrayItems.Select(x => x + 50).Intersect(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySelectIntersectArraySelect()
         {
             return ArrayItems.Select(x => x + 50).Intersect(ArrayItems2.Select(x => x + 50));
         } //EndMethod
 
-        public IEnumerable<int> ArraySelectIntersectArraySelectRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectIntersectArraySelectRewritten()
         {
             return ArrayItems.Select(x => x + 50).Intersect(ArrayItems2.Select(x => x + 50));
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayWhereIntersectArrayWhere()
         {
             return ArrayItems.Where(x => x > 50).Intersect(ArrayItems2.Where(x => x > 50));
         } //EndMethod
 
-        public IEnumerable<int> ArrayWhereIntersectArrayWhereRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayWhereIntersectArrayWhereRewritten()
         {
             return ArrayItems.Where(x => x > 50).Intersect(ArrayItems2.Where(x => x > 50));
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayIntersectArrayCount()
         {
             return ArrayItems.Intersect(ArrayItems2).Count();
         } //EndMethod
 
-        public int ArrayIntersectArrayCountRewritten()
+        [LinqRewrite]
+		public int ArrayIntersectArrayCountRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Count();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayIntersectArrayCount2()
         {
             return ArrayItems.Intersect(ArrayItems2).Count(x => x > 70);
         } //EndMethod
 
-        public int ArrayIntersectArrayCount2Rewritten()
+        [LinqRewrite]
+		public int ArrayIntersectArrayCount2Rewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Count(x => x > 70);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayIntersectArraySum()
         {
             return ArrayItems.Intersect(ArrayItems2).Sum();
         } //EndMethod
 
-        public int ArrayIntersectArraySumRewritten()
+        [LinqRewrite]
+		public int ArrayIntersectArraySumRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Sum();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayIntersectArraySum2()
         {
             return ArrayItems.Intersect(ArrayItems2).Sum(x => x + 10);
         } //EndMethod
 
-        public int ArrayIntersectArraySum2Rewritten()
+        [LinqRewrite]
+		public int ArrayIntersectArraySum2Rewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Sum(x => x + 10);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectArrayDistinct()
         {
             return ArrayItems.Intersect(ArrayItems2).Distinct();
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectArrayDistinctRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectArrayDistinctRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Distinct();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectArrayDistinct2()
         {
             return ArrayItems.Intersect(ArrayItems2).Distinct(EqualityComparer<int>.Default);
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectArrayDistinct2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectArrayDistinct2Rewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Distinct(EqualityComparer<int>.Default);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayIntersectArrayElementAt()
         {
             return ArrayItems.Intersect(ArrayItems2).ElementAt(45);
         } //EndMethod
 
-        public int ArrayIntersectArrayElementAtRewritten()
+        [LinqRewrite]
+		public int ArrayIntersectArrayElementAtRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).ElementAt(45);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayIntersectArrayElementAtOrDefault()
         {
             return ArrayItems.Intersect(ArrayItems2).ElementAtOrDefault(45);
         } //EndMethod
 
-        public int ArrayIntersectArrayElementAtOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayIntersectArrayElementAtOrDefaultRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).ElementAtOrDefault(45);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayIntersectArrayFirst()
         {
             return ArrayItems.Intersect(ArrayItems2).First();
         } //EndMethod
 
-        public int ArrayIntersectArrayFirstRewritten()
+        [LinqRewrite]
+		public int ArrayIntersectArrayFirstRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).First();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayIntersectArrayFirstOrDefault()
         {
             return ArrayItems.Intersect(ArrayItems2).FirstOrDefault();
         } //EndMethod
 
-        public int ArrayIntersectArrayFirstOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayIntersectArrayFirstOrDefaultRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).FirstOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayIntersectArrayLast()
         {
             return ArrayItems.Intersect(ArrayItems2).Last();
         } //EndMethod
 
-        public int ArrayIntersectArrayLastRewritten()
+        [LinqRewrite]
+		public int ArrayIntersectArrayLastRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Last();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayIntersectArrayLastOrDefault()
         {
             return ArrayItems.Intersect(ArrayItems2).LastOrDefault();
         } //EndMethod
 
-        public int ArrayIntersectArrayLastOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayIntersectArrayLastOrDefaultRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).LastOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayIntersectArraySingle()
         {
             return ArrayItems.Intersect(ArrayItems2).Single();
         } //EndMethod
 
-        public int ArrayIntersectArraySingleRewritten()
+        [LinqRewrite]
+		public int ArrayIntersectArraySingleRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Single();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayIntersectArraySingle2()
         {
             return ArrayItems.Intersect(ArrayItems2).Single(x => x == 76);
         } //EndMethod
 
-        public int ArrayIntersectArraySingle2Rewritten()
+        [LinqRewrite]
+		public int ArrayIntersectArraySingle2Rewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Single(x => x == 76);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayIntersectArraySingleOrDefault()
         {
             return ArrayItems.Intersect(ArrayItems2).SingleOrDefault();
         } //EndMethod
 
-        public int ArrayIntersectArraySingleOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayIntersectArraySingleOrDefaultRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).SingleOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayIntersectArrayMin()
         {
             return ArrayItems.Intersect(ArrayItems2).Min();
         } //EndMethod
 
-        public int ArrayIntersectArrayMinRewritten()
+        [LinqRewrite]
+		public int ArrayIntersectArrayMinRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Min();
         } //EndMethod
 
 
-        [NoRewrite]
         public decimal ArrayIntersectArrayMin2()
         {
             return ArrayItems.Intersect(ArrayItems2).Min(x => x + 2m);
         } //EndMethod
 
-        public decimal ArrayIntersectArrayMin2Rewritten()
+        [LinqRewrite]
+		public decimal ArrayIntersectArrayMin2Rewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Min(x => x + 2m);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayIntersectArrayMax()
         {
             return ArrayItems.Intersect(ArrayItems2).Max();
         } //EndMethod
 
-        public int ArrayIntersectArrayMaxRewritten()
+        [LinqRewrite]
+		public int ArrayIntersectArrayMaxRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Max();
         } //EndMethod
 
 
-        [NoRewrite]
         public decimal ArrayIntersectArrayMax2()
         {
             return ArrayItems.Intersect(ArrayItems2).Max(x => x + 2m);
         } //EndMethod
 
-        public decimal ArrayIntersectArrayMax2Rewritten()
+        [LinqRewrite]
+		public decimal ArrayIntersectArrayMax2Rewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Max(x => x + 2m);
         } //EndMethod
 
 
-        [NoRewrite]
         public long ArrayIntersectArrayLongCount()
         {
             return ArrayItems.Intersect(ArrayItems2).LongCount();
         } //EndMethod
 
-        public long ArrayIntersectArrayLongCountRewritten()
+        [LinqRewrite]
+		public long ArrayIntersectArrayLongCountRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).LongCount();
         } //EndMethod
 
 
-        [NoRewrite]
         public long ArrayIntersectArrayLongCount2()
         {
             return ArrayItems.Intersect(ArrayItems2).LongCount(x => x > 50);
         } //EndMethod
 
-        public long ArrayIntersectArrayLongCount2Rewritten()
+        [LinqRewrite]
+		public long ArrayIntersectArrayLongCount2Rewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).LongCount(x => x > 50);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArrayIntersectArrayContains()
         {
             return ArrayItems.Intersect(ArrayItems2).Contains(56);
         } //EndMethod
 
-        public bool ArrayIntersectArrayContainsRewritten()
+        [LinqRewrite]
+		public bool ArrayIntersectArrayContainsRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Contains(56);
         } //EndMethod
 
 
-        [NoRewrite]
         public double ArrayIntersectArrayAverage()
         {
             return ArrayItems.Intersect(ArrayItems2).Average();
         } //EndMethod
 
-        public double ArrayIntersectArrayAverageRewritten()
+        [LinqRewrite]
+		public double ArrayIntersectArrayAverageRewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Average();
         } //EndMethod
 
 
-        [NoRewrite]
         public double ArrayIntersectArrayAverage2()
         {
             return ArrayItems.Intersect(ArrayItems2).Average(x => x + 10);
         } //EndMethod
 
-        public double ArrayIntersectArrayAverage2Rewritten()
+        [LinqRewrite]
+		public double ArrayIntersectArrayAverage2Rewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Average(x => x + 10);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArrayIntersectArrayContains2()
         {
             return ArrayItems.Intersect(ArrayItems2).Contains(56, EqualityComparer<int>.Default);
         } //EndMethod
 
-        public bool ArrayIntersectArrayContains2Rewritten()
+        [LinqRewrite]
+		public bool ArrayIntersectArrayContains2Rewritten()
         {
             return ArrayItems.Intersect(ArrayItems2).Contains(56, EqualityComparer<int>.Default);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool SelectWhereArrayIntersectSelectWhereArrayContains()
         {
             return ArrayItems.Select(x => x + 10).Where(x => x > 80).Intersect(ArrayItems2.Select(x => x + 10).Where(x => x > 80)).Contains(112);
         } //EndMethod
 
-        public bool SelectWhereArrayIntersectSelectWhereArrayContainsRewritten()
+        [LinqRewrite]
+		public bool SelectWhereArrayIntersectSelectWhereArrayContainsRewritten()
         {
             return ArrayItems.Select(x => x + 10).Where(x => x > 80).Intersect(ArrayItems2.Select(x => x + 10).Where(x => x > 80)).Contains(112);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeIntersectArray()
         {
             return Enumerable.Range(20, 100).Intersect(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> RangeIntersectArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeIntersectArrayRewritten()
         {
             return Enumerable.Range(20, 100).Intersect(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatIntersectArray()
         {
             return Enumerable.Repeat(20, 100).Intersect(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> RepeatIntersectArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatIntersectArrayRewritten()
         {
             return Enumerable.Repeat(20, 100).Intersect(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EmptyIntersectArray()
         {
             return Enumerable.Empty<int>().Intersect(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> EmptyIntersectArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EmptyIntersectArrayRewritten()
         {
             return Enumerable.Empty<int>().Intersect(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeEmpty2Array()
         {
             return ArrayItems.Where(x => false).Intersect(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> RangeEmpty2ArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeEmpty2ArrayRewritten()
         {
             return ArrayItems.Where(x => false).Intersect(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectRange()
         {
             return ArrayItems.Intersect(Enumerable.Range(70, 260));
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectRangeRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectRangeRewritten()
         {
             return ArrayItems.Intersect(Enumerable.Range(70, 260));
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectRepeat()
         {
             return ArrayItems.Intersect(Enumerable.Repeat(70, 100));
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectRepeatRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectRepeatRewritten()
         {
             return ArrayItems.Intersect(Enumerable.Repeat(70, 100));
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectEmpty()
         {
             return ArrayItems.Intersect(Enumerable.Empty<int>());
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectEmptyRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectEmptyRewritten()
         {
             return ArrayItems.Intersect(Enumerable.Empty<int>());
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectEmpty2()
         {
             return ArrayItems.Intersect(ArrayItems2.Where(x => false));
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectEmpty2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectEmpty2Rewritten()
         {
             return ArrayItems.Intersect(ArrayItems2.Where(x => false));
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectAll()
         {
             return ArrayItems.Intersect(Enumerable.Range(0, 1000));
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectAllRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectAllRewritten()
         {
             return ArrayItems.Intersect(Enumerable.Range(0, 1000));
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectNull()
         {
             return ArrayItems.Intersect(null);
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectNullRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectNullRewritten()
         {
             return ArrayItems.Intersect(null);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectArrayIntersectEnumerable()
         {
             return ArrayItems.Intersect(ArrayItems).Intersect(EnumerableItems2);
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectArrayIntersectEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectArrayIntersectEnumerableRewritten()
         {
             return ArrayItems.Intersect(ArrayItems).Intersect(EnumerableItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayIntersectArrayIntersectEnumerable2()
         {
             return ArrayItems.Intersect(ArrayItems.Intersect(EnumerableItems2));
         } //EndMethod
 
-        public IEnumerable<int> ArrayIntersectArrayIntersectEnumerable2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayIntersectArrayIntersectEnumerable2Rewritten()
         {
             return ArrayItems.Intersect(ArrayItems.Intersect(EnumerableItems2));
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayDistinctIntersectArrayDistinct()
         {
             return ArrayItems.Distinct().Intersect(ArrayItems.Distinct());
         } //EndMethod
 
-        public IEnumerable<int> ArrayDistinctIntersectArrayDistinctRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayDistinctIntersectArrayDistinctRewritten()
         {
             return ArrayItems.Distinct().Intersect(ArrayItems.Distinct());
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayDistinctIntersectArrayDistinctDistinct()
         {
             return ArrayItems.Distinct().Intersect(ArrayItems.Distinct()).Distinct();
         } //EndMethod
 
-        public IEnumerable<int> ArrayDistinctIntersectArrayDistinctDistinctRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayDistinctIntersectArrayDistinctDistinctRewritten()
         {
             return ArrayItems.Distinct().Intersect(ArrayItems.Distinct()).Distinct();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayDistinctIntersectArrayDistinctDistinct2()
         {
             return ArrayItems.Distinct(EqualityComparer<int>.Default).Intersect(ArrayItems.Distinct(EqualityComparer<int>.Default)).Distinct(EqualityComparer<int>.Default);
         } //EndMethod
 
-        public IEnumerable<int> ArrayDistinctIntersectArrayDistinctDistinct2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayDistinctIntersectArrayDistinctDistinct2Rewritten()
         {
             return ArrayItems.Distinct(EqualityComparer<int>.Default).Intersect(ArrayItems.Distinct(EqualityComparer<int>.Default)).Distinct(EqualityComparer<int>.Default);
         } //EndMethod

@@ -33,187 +33,187 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(RepeatAnyTrue), RepeatAnyTrue, RepeatAnyTrueRewritten);
         }
         
-        [NoRewrite]
         public bool ArrayAny()
         {
             return ArrayItems.Any(x => x > 50);
         } //EndMethod
 
-        public bool ArrayAnyRewritten()
+        [LinqRewrite]
+		public bool ArrayAnyRewritten()
         {
             return ArrayItems.Any(x => x > 50);
         } //EndMethod
 
         
-        [NoRewrite]
         public bool ArraySelectAny()
         {
             return ArrayItems.Select(x => x + 10).Any(x => x > 50);
         } //EndMethod
 
-        public bool ArraySelectAnyRewritten()
+        [LinqRewrite]
+		public bool ArraySelectAnyRewritten()
         {
             return ArrayItems.Select(x => x + 10).Any(x => x > 50);
         } //EndMethod
 
         
-        [NoRewrite]
         public bool ArrayWhereAny()
         {
             return ArrayItems.Where(x => x > 40).Any(x => x > 50);
         } //EndMethod
 
-        public bool ArrayWhereAnyRewritten()
+        [LinqRewrite]
+		public bool ArrayWhereAnyRewritten()
         {
             return ArrayItems.Where(x => x > 40).Any(x => x > 50);
         } //EndMethod
 
         
-        [NoRewrite]
         public bool ArrayEmptyAny()
         {
             return ArrayItems.Any();
         } //EndMethod
 
-        public bool ArrayEmptyAnyRewritten()
+        [LinqRewrite]
+		public bool ArrayEmptyAnyRewritten()
         {
             return ArrayItems.Any();
         } //EndMethod
 
         
-        [NoRewrite]
         public bool ArraySelectEmptyAny()
         {
             return ArrayItems.Select(x => x - 40).Any();
         } //EndMethod
 
-        public bool ArraySelectEmptyAnyRewritten()
+        [LinqRewrite]
+		public bool ArraySelectEmptyAnyRewritten()
         {
             return ArrayItems.Select(x => x - 40).Any();
         } //EndMethod
 
         
-        [NoRewrite]
         public bool ArrayWhereEmptyAny()
         {
             return ArrayItems.Where(x => x > 40).Any();
         } //EndMethod
 
-        public bool ArrayWhereEmptyAnyRewritten()
+        [LinqRewrite]
+		public bool ArrayWhereEmptyAnyRewritten()
         {
             return ArrayItems.Where(x => x > 40).Any();
         } //EndMethod
 
         
-        [NoRewrite]
         public bool ArrayAnyFalse()
         {
             return ArrayItems.Any(x => x > 105);
         } //EndMethod
 
-        public bool ArrayAnyFalseRewritten()
+        [LinqRewrite]
+		public bool ArrayAnyFalseRewritten()
         {
             return ArrayItems.Any(x => x > 105);
         } //EndMethod
 
         
-        [NoRewrite]
         public bool ArrayAnyPredicate()
         {
             return ArrayItems.Any(Predicate);
         } //EndMethod
 
-        public bool ArrayAnyPredicateRewritten()
+        [LinqRewrite]
+		public bool ArrayAnyPredicateRewritten()
         {
             return ArrayItems.Any(Predicate);
         } //EndMethod
 
         
-        [NoRewrite]
         public bool ArrayAnyParameter()
         {
             var a = 5;
             return ArrayItems.Any(x => x > a);
         } //EndMethod
 
-        public bool ArrayAnyParameterRewritten()
+        [LinqRewrite]
+		public bool ArrayAnyParameterRewritten()
         {
             var a = 5;
             return ArrayItems.Any(x => x > a);
         } //EndMethod
 
         
-        [NoRewrite]
         public bool ArrayAnyChangingParameter()
         {
             var a = 5;
             return ArrayItems.Any(x => x > a++);
         } //EndMethod
 
-        public bool ArrayAnyChangingParameterRewritten()
+        [LinqRewrite]
+		public bool ArrayAnyChangingParameterRewritten()
         {
             var a = 5;
             return ArrayItems.Any(x => x > a++);
         } //EndMethod
 
         
-        [NoRewrite]
         public bool EnumerableAnyChangingParameter()
         {
             var a = 5;
             return EnumerableItems.Any(x => x > a++);
         } //EndMethod
 
-        public bool EnumerableAnyChangingParameterRewritten()
+        [LinqRewrite]
+		public bool EnumerableAnyChangingParameterRewritten()
         {
             var a = 5;
             return EnumerableItems.Any(x => x > a++);
         } //EndMethod
 
         
-        [NoRewrite]
         public bool EnumerableAny()
         {
             return EnumerableItems.Any(x => x > 50);
         } //EndMethod
 
-        public bool EnumerableAnyRewritten()
+        [LinqRewrite]
+		public bool EnumerableAnyRewritten()
         {
             return EnumerableItems.Any(x => x > 50);
         } //EndMethod
 
         
-        [NoRewrite]
         public bool RangeAny()
         {
             return Enumerable.Range(0, 100).Any(x => x > 50);
         } //EndMethod
 
-        public bool RangeAnyRewritten()
+        [LinqRewrite]
+		public bool RangeAnyRewritten()
         {
             return Enumerable.Range(0, 100).Any(x => x > 50);
         } //EndMethod
 
         
-        [NoRewrite]
         public bool RepeatAny()
         {
             return Enumerable.Repeat(0, 100).Any(x => x > 50);
         } //EndMethod
 
-        public bool RepeatAnyRewritten()
+        [LinqRewrite]
+		public bool RepeatAnyRewritten()
         {
             return Enumerable.Repeat(0, 100).Any(x => x > 50);
         } //EndMethod
 
         
-        [NoRewrite]
         public bool RepeatAnyTrue()
         {
             return Enumerable.Repeat(0, 100).Any(x => x > -1);
         } //EndMethod
 
-        public bool RepeatAnyTrueRewritten()
+        [LinqRewrite]
+		public bool RepeatAnyTrueRewritten()
         {
             return Enumerable.Repeat(0, 100).Any(x => x > -1);
         } //EndMethod

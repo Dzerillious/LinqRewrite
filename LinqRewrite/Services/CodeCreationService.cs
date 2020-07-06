@@ -91,7 +91,7 @@ namespace LinqRewrite.Services
         public ExpressionSyntax InlineOrCreateMethod(RewriteDesign p, DataFlowAnalysis currentFlow, Lambda lambda, TypeSyntax returnType,
             IEnumerable<VariableCapture> captures, TypedValueBridge[] replaceParameters)
         {
-            var fn = GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinqHelper");
+            string functionName = GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinqHelper");
             if (lambda.Body is ExpressionSyntax syntax) return ParenthesizedExpression(syntax);
 
             if (captures.Any(x => IsAnonymousType(x.GetSymbolType()))) 
@@ -99,7 +99,7 @@ namespace LinqRewrite.Services
             if (returnType == null) throw new NotSupportedException(); // Anonymous type
             
             var replaceParams = UpdateParameters(p, currentFlow, lambda, replaceParameters);
-            var method = MethodDeclaration(returnType, fn)
+            var method = MethodDeclaration(returnType, functionName)
                 .WithParameterList(ParameterList(SeparatedList(
                     replaceParams.Union(captures.Select(x => CreateParameter(x.Name, x.GetSymbolType())
                         .WithRef(x.Changes)))
@@ -114,7 +114,7 @@ namespace LinqRewrite.Services
 
             _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, method));
             return ParenthesizedExpression(InvocationExpression(
-                CreateMethod(fn),
+                CreateMethod(functionName),
                 CreateArguments(replaceParams.Select(x => SyntaxFactory.Argument(IdentifierName(x.Identifier.ValueText)))
                     .Union(captures.Select(x =>  SyntaxFactory.Argument(IdentifierName(x.OriginalName)).WithRef(x.Changes))))));
         }
@@ -125,9 +125,9 @@ namespace LinqRewrite.Services
             foreach (var symbol in currentFlow.DataFlowsIn)
             {
                 if (!(symbol is IParameterSymbol parameterSymbol)) continue;
-                var found = oldLambda.Parameters.FirstOrDefault(y => y.Identifier.Text == parameterSymbol.Name);
-                if (found == null) continue;
-                typedParams.Add(found.WithType(ParseTypeName(parameterSymbol.Type.ToDisplayString())));
+                var foundParameter = oldLambda.Parameters.FirstOrDefault(y => y.Identifier.Text == parameterSymbol.Name);
+                if (foundParameter == null) continue;
+                typedParams.Add(foundParameter.WithType(ParseTypeName(parameterSymbol.Type.ToDisplayString())));
             }
             var resultParams = new ParameterSyntax[typedParams.Count];
             for (var i = 0; i < typedParams.Count; i++)

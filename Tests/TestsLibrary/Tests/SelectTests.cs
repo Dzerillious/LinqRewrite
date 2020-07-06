@@ -63,284 +63,283 @@ public class SelectTests
         TestsExtensions.TestEquals(nameof(ArraySelectIndexMethod), ArraySelectIndexMethod, ArraySelectIndexMethodRewritten);
     }
 
-    [NoRewrite]
     public IEnumerable<int> NullSelect()
     {
         return NullItems.Select(x => x + 3);
     } //EndMethod
 
-    public IEnumerable<int> NullSelectRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> NullSelectRewritten()
     {
         return NullItems.Select(x => x + 3);
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> NullableSelect()
     {
         return NullItems?.Select(x => x + 3);
     } //EndMethod
 
-    public IEnumerable<int> NullableSelectRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> NullableSelectRewritten()
     {
         return NullItems?.Select(x => x + 3);
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectArray()
     {
         return ArrayItems.Select(x => x + 3);
     } //EndMethod
 
-    public IEnumerable<int> SelectArrayRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectArrayRewritten()
     {
         return ArrayItems.Select(x => x + 3);
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectList()
     {
         return ListItems.Select(x => x + 3);
     } //EndMethod
 
-    public IEnumerable<int> SelectListRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectListRewritten()
     {
         return ListItems.Select(x => x + 3);
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectSimpleList()
     {
         return SimpleListItems.Select(x => x + 3);
     } //EndMethod
 
-    public IEnumerable<int> SelectSimpleListRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectSimpleListRewritten()
     {
         return SimpleListItems.Select(x => x + 3);
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectEnumerable()
     {
         return EnumerableItems.Select(x => x + 3);
     } //EndMethod
 
-    public IEnumerable<int> SelectEnumerableRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectEnumerableRewritten()
     {
         return EnumerableItems.Select(x => x + 3);
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectArrayToArray()
     {
         return ArrayItems.Select(x => x + 3).ToArray();
     } //EndMethod
 
-    public IEnumerable<int> SelectArrayToArrayRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectArrayToArrayRewritten()
     {
         return ArrayItems.Select(x => x + 3).ToArray();
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectListToArray()
     {
         return ListItems.Select(x => x + 3).ToArray();
     } //EndMethod
 
-    public IEnumerable<int> SelectListToArrayRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectListToArrayRewritten()
     {
         return ListItems.Select(x => x + 3).ToArray();
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectEnumerableToArray()
     {
         return EnumerableItems.Select(x => x + 3).ToArray();
     } //EndMethod
 
-    public IEnumerable<int> SelectEnumerableToArrayRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectEnumerableToArrayRewritten()
     {
         return EnumerableItems.Select(x => x + 3).ToArray();
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectSimpleListToArray()
     {
         return SimpleListItems.Select(x => x + 3).ToArray();
     } //EndMethod
 
-    public IEnumerable<int> SelectSimpleListToArrayRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectSimpleListToArrayRewritten()
     {
         return SimpleListItems.Select(x => x + 3).ToArray();
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectArrayToSimpleList()
     {
         return ArrayItems.Select(x => x + 3).ToSimpleList();
     } //EndMethod
 
-    public IEnumerable<int> SelectArrayToSimpleListRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectArrayToSimpleListRewritten()
     {
         return ArrayItems.Select(x => x + 3).ToSimpleList();
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectListToSimpleList()
     {
         return ListItems.Select(x => x + 3).ToSimpleList();
     } //EndMethod
 
-    public IEnumerable<int> SelectListToSimpleListRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectListToSimpleListRewritten()
     {
         return ListItems.Select(x => x + 3).ToSimpleList();
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectEnumerableToSimpleList()
     {
         return EnumerableItems.Select(x => x + 3).ToSimpleList();
     } //EndMethod
 
-    public IEnumerable<int> SelectEnumerableToSimpleListRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectEnumerableToSimpleListRewritten()
     {
         return EnumerableItems.Select(x => x + 3).ToSimpleList();
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectSimpleListToSimpleList()
     {
         return SimpleListItems.Select(x => x + 3).ToSimpleList();
     } //EndMethod
 
-    public IEnumerable<int> SelectSimpleListToSimpleListRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectSimpleListToSimpleListRewritten()
     {
         return SimpleListItems.Select(x => x + 3).ToSimpleList();
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectArrayToList()
     {
         return ArrayItems.Select(x => x + 3).ToList();
     } //EndMethod
 
-    public IEnumerable<int> SelectArrayToListRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectArrayToListRewritten()
     {
         return ArrayItems.Select(x => x + 3).ToList();
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectListToList()
     {
         return ListItems.Select(x => x + 3).ToList();
     } //EndMethod
 
-    public IEnumerable<int> SelectListToListRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectListToListRewritten()
     {
         return ListItems.Select(x => x + 3).ToList();
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectEnumerableToList()
     {
         return EnumerableItems.Select(x => x + 3).ToList();
     } //EndMethod
 
-    public IEnumerable<int> SelectEnumerableToListRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectEnumerableToListRewritten()
     {
         return EnumerableItems.Select(x => x + 3).ToList();
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectSimpleListToList()
     {
         return SimpleListItems.Select(x => x + 3).ToList();
     } //EndMethod
 
-    public IEnumerable<int> SelectSimpleListToListRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectSimpleListToListRewritten()
     {
         return SimpleListItems.Select(x => x + 3).ToList();
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectStaticArray()
     {
         return StaticArrayItems.Select(x => x + 3);
     } //EndMethod
 
-    public IEnumerable<int> SelectStaticArrayRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectStaticArrayRewritten()
     {
         return StaticArrayItems.Select(x => x + 3);
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<double> SelectMethodSelector()
     {
         return ArrayItems.Select(Selector);
     } //EndMethod
 
-    public IEnumerable<double> SelectMethodSelectorRewritten()
+    [LinqRewrite]
+		public IEnumerable<double> SelectMethodSelectorRewritten()
     {
         return ArrayItems.Select(Selector);
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<double> SelectRetype()
     {
         return ArrayItems.Select(x => (double)x + 3);
     } //EndMethod
 
-    public IEnumerable<double> SelectRetypeRewritten()
+    [LinqRewrite]
+		public IEnumerable<double> SelectRetypeRewritten()
     {
         return ArrayItems.Select(x => (double)x + 3);
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int[]> SelectArrayFromArray()
     {
         return ArrayItems.Select(x => ArrayItems);
     } //EndMethod
 
-    public IEnumerable<int[]> SelectArrayFromArrayRewritten()
+    [LinqRewrite]
+		public IEnumerable<int[]> SelectArrayFromArrayRewritten()
     {
         return ArrayItems.Select(x => ArrayItems);
     } //EndMethod
 
-    [NoRewrite]
     public static IEnumerable<int> StaticSelect()
     {
         return StaticArrayItems.Select(x => x + 3);
     } //EndMethod
 
-    public static IEnumerable<int> StaticSelectRewritten()
+    [LinqRewrite]
+		public static IEnumerable<int> StaticSelectRewritten()
     {
         return StaticArrayItems.Select(x => x + 3);
     } //EndMethod
 
-    [NoRewrite]
     public static IEnumerable<int> StaticClassSelect()
     {
         return StaticSelectTests.StaticSelect();
     } //EndMethod
 
-    public static IEnumerable<int> StaticClassSelectRewritten()
+    [LinqRewrite]
+		public static IEnumerable<int> StaticClassSelectRewritten()
     {
         return StaticSelectTests.StaticSelectRewritten();
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectParams()
     {
         var a = 5;
         return ArrayItems.Select(x => x + a);
     } //EndMethod
 
-    public IEnumerable<int> SelectParamsRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectParamsRewritten()
     {
         var a = 5;
         return ArrayItems.Select(x => x + a);
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectMultipleParams()
     {
         var a = 5;
@@ -355,7 +354,8 @@ public class SelectTests
         return ArrayItems.Select(x => x + a + b + c + d + e + f + g + h + i);
     } //EndMethod
 
-    public IEnumerable<int> SelectMultipleParamsRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectMultipleParamsRewritten()
     {
         var a = 5;
         var b = 8;
@@ -369,120 +369,120 @@ public class SelectTests
         return ArrayItems.Select(x => x + a + b + c + d + e + f + g + h + i);
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> MultipleSelect()
     {
         return ArrayItems.Select(x => x + 3).Select(x => x + 3).Select(x => x + 3).Select(x => x + 3).Select(x => x + 3).Select(x => x + 3).Select(x => x + 3).Select(x => x + 3).Select(x => x + 3).Select(x => x + 3);
     } //EndMethod
 
-    public IEnumerable<int> MultipleSelectRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> MultipleSelectRewritten()
     {
         return ArrayItems.Select(x => x + 3).Select(x => x + 3).Select(x => x + 3).Select(x => x + 3).Select(x => x + 3).Select(x => x + 3).Select(x => x + 3).Select(x => x + 3).Select(x => x + 3).Select(x => x + 3);
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> MultipleSelect2()
     {
         return ArrayItems.Select(x => x + x).Select(x => x + x).Select(x => x + x).Select(x => x + x).Select(x => x + x).Select(x => x + x).Select(x => x + x).Select(x => x + x).Select(x => x + x).Select(x => x + x);
     } //EndMethod
 
-    public IEnumerable<int> MultipleSelect2Rewritten()
+    [LinqRewrite]
+		public IEnumerable<int> MultipleSelect2Rewritten()
     {
         return ArrayItems.Select(x => x + x).Select(x => x + x).Select(x => x + x).Select(x => x + x).Select(x => x + x).Select(x => x + x).Select(x => x + x).Select(x => x + x).Select(x => x + x).Select(x => x + x);
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectChangingParam()
     {
         var a = 0;
         return ArrayItems.Select(x => x + a++);
     } //EndMethod
 
-    public IEnumerable<int> SelectChangingParamRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectChangingParamRewritten()
     {
         var a = 0;
         return ArrayItems.Select(x => x + a++);
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectChangingParam2()
     {
         var a = 0;
         return ArrayItems.Select(x => x + a++).ToArray();
     } //EndMethod
 
-    public IEnumerable<int> SelectChangingParam2Rewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectChangingParam2Rewritten()
     {
         var a = 0;
         return ArrayItems.Select(x => x + a++).ToArray();
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectChangingParam3()
     {
         var a = 0;
         return ArrayItems.Select(x => x + a++).Select(x => x + a++).Select(x => x + a++).Select(x => x + a++).Select(x => x + a++);
     } //EndMethod
 
-    public IEnumerable<int> SelectChangingParam3Rewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectChangingParam3Rewritten()
     {
         var a = 0;
         return ArrayItems.Select(x => x + a++).Select(x => x + a++).Select(x => x + a++).Select(x => x + a++).Select(x => x + a++);
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> SelectChangingParam4()
     {
         var a = 0;
         return ArrayItems.Select(x => x + a++).Select(x => x + a++).Select(x => x + a++).Select(x => x + a++).Select(x => x + a++).ToArray();
     } //EndMethod
 
-    public IEnumerable<int> SelectChangingParam4Rewritten()
+    [LinqRewrite]
+		public IEnumerable<int> SelectChangingParam4Rewritten()
     {
         var a = 0;
         return ArrayItems.Select(x => x + a++).Select(x => x + a++).Select(x => x + a++).Select(x => x + a++).Select(x => x + a++).ToArray();
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<int> ArraySelectIndex()
     {
         return ArrayItems.Select((x, i) => x + i);
     } //EndMethod
 
-    public IEnumerable<int> ArraySelectIndexRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> ArraySelectIndexRewritten()
     {
         return ArrayItems.Select((x, i) => x + i);
     } //EndMethod
     
-    [NoRewrite]
     public IEnumerable<int> ArraySelectIndexToArray()
     {
         return ArrayItems.Select((x, i) => x + i).ToArray();
     } //EndMethod
 
-    public IEnumerable<int> ArraySelectIndexToArrayRewritten()
+    [LinqRewrite]
+		public IEnumerable<int> ArraySelectIndexToArrayRewritten()
     {
         return ArrayItems.Select((x, i) => x + i).ToArray();
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<double> ArraySelectIndexMethod()
     {
         return ArrayItems.Select(SelectorIndex);
     } //EndMethod
 
-    public IEnumerable<double> ArraySelectIndexMethodRewritten()
+    [LinqRewrite]
+		public IEnumerable<double> ArraySelectIndexMethodRewritten()
     {
         return ArrayItems.Select(SelectorIndex);
     } //EndMethod
 
-    [NoRewrite]
     public IEnumerable<double> ArraySelectIndexMethodToArray()
     {
         return ArrayItems.Select(SelectorIndex).ToArray();
     } //EndMethod
 
-    public IEnumerable<double> ArraySelectIndexMethodToArrayRewritten()
+    [LinqRewrite]
+		public IEnumerable<double> ArraySelectIndexMethodToArrayRewritten()
     {
         return ArrayItems.Select(SelectorIndex).ToArray();
     } //EndMethod
@@ -492,13 +492,13 @@ public static class StaticSelectTests
 {
     [Datapoints]
     private static int[] StaticArrayItems = Enumerable.Range(0, 100).ToArray();
-    [NoRewrite]
     public static IEnumerable<int> StaticSelect()
     {
         return StaticArrayItems.Select(x => x + 3);
     } //EndMethod
 
-    public static IEnumerable<int> StaticSelectRewritten()
+    [LinqRewrite]
+		public static IEnumerable<int> StaticSelectRewritten()
     {
         return StaticArrayItems.Select(x => x + 3);
     } //EndMethod

@@ -22,98 +22,106 @@ namespace BenchmarksLibrary
             EnumerableSource2 = Enumerable.Range(500, 1000);
         }
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool ArraySequenceEqualArray()
         {
             return ArraySource.SequenceEqual(ArraySource2);
         }//EndMethod
 
         [Benchmark]
-        public bool ArraySequenceEqualArrayRewritten()
+        [LinqRewrite]
+		public bool ArraySequenceEqualArrayRewritten()
         {
             return ArraySource.SequenceEqual(ArraySource2);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool ArrayWhereSequenceEqualArrayWhere()
         {
             return ArraySource.SequenceEqual(ArraySource2);
         }//EndMethod
 
         [Benchmark]
-        public bool ArrayWhereSequenceEqualArrayWhereRewritten()
+        [LinqRewrite]
+		public bool ArrayWhereSequenceEqualArrayWhereRewritten()
         {
             return ArraySource.SequenceEqual(ArraySource2);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool ArraySequenceEqualEnumerable()
         {
             return ArraySource.SequenceEqual(EnumerableSource2);
         }//EndMethod
 
         [Benchmark]
-        public bool ArraySequenceEqualEnumerableRewritten()
+        [LinqRewrite]
+		public bool ArraySequenceEqualEnumerableRewritten()
         {
             return ArraySource.SequenceEqual(EnumerableSource2);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool ArrayWhereSequenceEqualEnumerableWhere()
         {
             return ArraySource.SequenceEqual(EnumerableSource2);
         }//EndMethod
 
         [Benchmark]
-        public bool ArrayWhereSequenceEqualEnumerableWhereRewritten()
+        [LinqRewrite]
+		public bool ArrayWhereSequenceEqualEnumerableWhereRewritten()
         {
             return ArraySource.SequenceEqual(EnumerableSource2);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool EnumerableSequenceEqualArray()
         {
             return EnumerableSource.SequenceEqual(ArraySource2);
         }//EndMethod
 
         [Benchmark]
-        public bool EnumerableSequenceEqualArrayRewritten()
+        [LinqRewrite]
+		public bool EnumerableSequenceEqualArrayRewritten()
         {
             return EnumerableSource.SequenceEqual(ArraySource2);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool EnumerableWhereSequenceEqualArrayWhere()
         {
             return EnumerableSource.SequenceEqual(ArraySource2);
         }//EndMethod
 
         [Benchmark]
-        public bool EnumerableWhereSequenceEqualArrayWhereRewritten()
+        [LinqRewrite]
+		public bool EnumerableWhereSequenceEqualArrayWhereRewritten()
         {
             return EnumerableSource.SequenceEqual(ArraySource2);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool EnumerableSequenceEqualEnumerable()
         {
             return EnumerableSource.SequenceEqual(EnumerableSource2);
         }//EndMethod
 
         [Benchmark]
-        public bool EnumerableSequenceEqualEnumerableRewritten()
+        [LinqRewrite]
+		public bool EnumerableSequenceEqualEnumerableRewritten()
         {
             return EnumerableSource.SequenceEqual(EnumerableSource2);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool EnumerableWhereSequenceEqualEnumerableWhere()
         {
             return EnumerableSource.SequenceEqual(EnumerableSource2);
         }//EndMethod
 
         [Benchmark]
-        public bool EnumerableWhereSequenceEqualEnumerableWhereRewritten()
+        [LinqRewrite]
+		public bool EnumerableWhereSequenceEqualEnumerableWhereRewritten()
         {
             return EnumerableSource.SequenceEqual(EnumerableSource2);
         }//EndMethod

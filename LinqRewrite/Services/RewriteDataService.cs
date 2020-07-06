@@ -21,6 +21,7 @@ namespace LinqRewrite.Services
         public bool CurrentMethodIsStatic { get; set; }
         public bool CurrentMethodIsConditional { get; set; }
         public bool CurrentIsUnchecked { get; set; }
+        public bool CurrentRewrite { get; set; }
         public TypeParameterListSyntax CurrentMethodTypeParameters { get; set; }
         public SyntaxList<TypeParameterConstraintClauseSyntax> CurrentMethodConstraintClauses { get; set; }
 

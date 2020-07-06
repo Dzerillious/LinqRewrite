@@ -25,79 +25,85 @@ namespace BenchmarksLibrary
         }
 
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayOfTypeToArray()
         {
             ArraySource.OfType<B>().ToArray();
         }//EndMethod
 
 		[Benchmark]
-        public void ArrayOfTypeToArrayRewritten()
+        [LinqRewrite]
+		public void ArrayOfTypeToArrayRewritten()
         {
             ArraySource.OfType<B>().ToArray();
         }//EndMethod
 
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableOfTypeToArray()
         {
             EnumerableSource.OfType<B>().ToArray();
         }//EndMethod
 
 		[Benchmark]
-        public void EnumerableOfTypeToArrayRewritten()
+        [LinqRewrite]
+		public void EnumerableOfTypeToArrayRewritten()
         {
             EnumerableSource.OfType<B>().ToArray();
         }//EndMethod
 
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayOfTypeToSimpleList()
         {
             ArraySource.OfType<B>().ToSimpleList();
         }//EndMethod
 
 		[Benchmark]
-        public void ArrayOfTypeToSimpleListRewritten()
+        [LinqRewrite]
+		public void ArrayOfTypeToSimpleListRewritten()
         {
             ArraySource.OfType<B>().ToSimpleList();
         }//EndMethod
 
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void StaticArrayOfTypeToArray()
         {
             StaticArraySource.OfType<B>().ToArray();
         }//EndMethod
 
 		[Benchmark]
-        public void StaticArrayOfTypeToArrayRewritten()
+        [LinqRewrite]
+		public void StaticArrayOfTypeToArrayRewritten()
         {
             StaticArraySource.OfType<B>().ToArray();
         }//EndMethod
 
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayUncheckedOfTypeToArray()
         {
             ArraySource.Unchecked().OfType<B>().ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayUncheckedOfTypeToArrayRewritten()
+        [LinqRewrite]
+		public void ArrayUncheckedOfTypeToArrayRewritten()
         {
             ArraySource.Unchecked().OfType<B>().ToArray();
         }//EndMethod
 
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableUncheckedOfTypeToSimpleList()
         {
             EnumerableSource.OfType<B>().ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableUncheckedToSimpleListRewritten()
+        [LinqRewrite]
+		public void EnumerableUncheckedToSimpleListRewritten()
         {
             EnumerableSource.OfType<B>().ToArray();
         }//EndMethod

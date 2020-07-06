@@ -70,7 +70,7 @@ namespace LinqRewrite.Services
             var compilation = CompileRelease(project, syntaxTrees);
             if(PrintDiagnostics(compilation)) return false;
 
-            var projectDir =  Path.GetDirectoryName(project.FilePath);
+            string projectDir =  Path.GetDirectoryName(project.FilePath);
             CopyFile(project.FilePath, projectDir, dstDir);
 
             var rewrittenTrees = GetRewrittenTrees(syntaxTrees, compilation);
@@ -102,7 +102,7 @@ namespace LinqRewrite.Services
             compilation = CompileRelease(project, syntaxTrees);
             if(PrintDiagnostics(compilation)) return false;
 
-            var dstDir = Path.GetDirectoryName(dstPath);
+            string dstDir = Path.GetDirectoryName(dstPath);
             Directory.CreateDirectory(dstDir);
             foreach (var reference in project.MetadataReferences)
                 File.Copy(reference.Display, Path.Combine(dstDir, Path.GetFileName(reference.Display)), true);
@@ -126,7 +126,7 @@ namespace LinqRewrite.Services
 
         public bool RewriteFile(string path, string dstDir)
         {
-            var source = File.ReadAllText(path);
+            string source = File.ReadAllText(path);
             var isScript = Path.GetExtension(path).Equals(".csx");
             
             var syntaxTree = CSharpSyntaxTree.ParseText(source, new CSharpParseOptions(kind: isScript ? SourceCodeKind.Script : SourceCodeKind.Regular));
@@ -156,8 +156,8 @@ namespace LinqRewrite.Services
             foreach (var syntaxTree in syntaxTrees)
             {
                 var rewriter = new LinqRewriter(compilation.GetSemanticModel(syntaxTree));
-                var rewritten = rewriter.Visit(syntaxTree.GetRoot());
-                rewrittenTrees.Add(CSharpSyntaxTree.ParseText(rewritten.ToString()));
+                var rewrittenNode = rewriter.Visit(syntaxTree.GetRoot());
+                rewrittenTrees.Add(CSharpSyntaxTree.ParseText(rewrittenNode.ToString()));
             }
             return rewrittenTrees;
         }
@@ -165,7 +165,7 @@ namespace LinqRewrite.Services
         private bool PrintDiagnostics(Compilation compilation)
         {
             var error = false;
-            foreach (var item in compilation.GetDiagnostics())
+            foreach (Diagnostic item in compilation.GetDiagnostics())
             {
                 _printService.PrintDiagnostic(item);
                 if (item.Severity == DiagnosticSeverity.Error) error = true;
@@ -175,14 +175,14 @@ namespace LinqRewrite.Services
 
         private static void WriteFile(string fileName, string content, string projectDir, string dstDir)
         {
-            var writePath = fileName.Replace(projectDir, dstDir);
+            string writePath = fileName.Replace(projectDir, dstDir);
             Directory.CreateDirectory(Path.GetDirectoryName(writePath));
             File.WriteAllText(writePath, content);
         }
 
         private static void CopyFile(string fileName, string projectDir, string dstDir)
         {
-            var copiedPath = fileName.Replace(projectDir, dstDir);
+            string copiedPath = fileName.Replace(projectDir, dstDir);
             Directory.CreateDirectory(Path.GetDirectoryName(copiedPath));
             File.Copy(fileName, copiedPath, true);
         }

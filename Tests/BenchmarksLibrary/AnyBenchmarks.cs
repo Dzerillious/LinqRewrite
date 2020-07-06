@@ -21,98 +21,106 @@ namespace BenchmarksLibrary
             EnumerableSource = Enumerable.Range(0, 1000);
         }
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool ArrayAny()
         {
             return ArraySource.Any();
         }//EndMethod
 
 		[Benchmark]
-        public bool ArrayAnyRewritten()
+        [LinqRewrite]
+		public bool ArrayAnyRewritten()
         {
             return ArraySource.Any();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool ArrayAnyCondition()
         {
             return ArraySource.Any(x => x > 3);
         }//EndMethod
 
         [Benchmark]
-        public bool ArrayAnyConditionRewritten()
+        [LinqRewrite]
+		public bool ArrayAnyConditionRewritten()
         {
             return ArraySource.Any(x => x > 3);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool ArraySelectAny()
         {
             return ArraySource.Select(x => x + 3).Any();
         }//EndMethod
 
         [Benchmark]
-        public bool ArraySelectAnyRewritten()
+        [LinqRewrite]
+		public bool ArraySelectAnyRewritten()
         {
             return ArraySource.Select(x => x + 3).Any();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool ArrayWhereAny()
         {
             return ArraySource.Where(x => x > 100).Any();
         }//EndMethod
 
         [Benchmark]
-        public bool ArrayWhereAnyRewritten()
+        [LinqRewrite]
+		public bool ArrayWhereAnyRewritten()
         {
             return ArraySource.Where(x => x > 100).Any();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool ArrayWhereAnyCondition()
         {
             return ArraySource.Where(x => x > 100).Any(x => x > 200);
         }//EndMethod
 
         [Benchmark]
-        public bool ArrayWhereAnyConditionRewritten()
+        [LinqRewrite]
+		public bool ArrayWhereAnyConditionRewritten()
         {
             return ArraySource.Where(x => x > 100).Any(x => x > 200);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool EnumerableAnyCondition()
         {
             return EnumerableSource.Any(x => x > 3);
         }//EndMethod
 
         [Benchmark]
-        public bool EnumerableAnyConditionRewritten()
+        [LinqRewrite]
+		public bool EnumerableAnyConditionRewritten()
         {
             return EnumerableSource.Any(x => x > 3);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool EnumerableAnyNotCondition()
         {
             return EnumerableSource.Any(x => x > 10_000);
         }//EndMethod
 
         [Benchmark]
-        public bool EnumerableAnyNotConditionRewritten()
+        [LinqRewrite]
+		public bool EnumerableAnyNotConditionRewritten()
         {
             return EnumerableSource.Any(x => x > 10_000);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public bool EnumerableAnyAllCondition()
         {
             return EnumerableSource.Any(x => x > 0);
         }//EndMethod
 
         [Benchmark]
-        public bool EnumerableAnyAllConditionRewritten()
+        [LinqRewrite]
+		public bool EnumerableAnyAllConditionRewritten()
         {
             return EnumerableSource.Any(x => x > 0);
         }//EndMethod

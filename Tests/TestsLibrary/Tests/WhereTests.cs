@@ -38,33 +38,32 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(WhereIndexToArray), WhereIndexToArray, WhereIndexToArrayRewritten);
         }
         
-        [NoRewrite]
         public IEnumerable<int> ArrayWhereToSimpleList()
         {
             return ArrayItems.Where(x => x > 500).ToSimpleList();
         } //EndMethod
 
-        public IEnumerable<int> ArrayWhereToSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayWhereToSimpleListRewritten()
         {
             return ArrayItems.Where(x => x > 500).ToSimpleList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SelectWhereToSimpleList()
         {
             return ArrayItems.Select(x => x + 5)
                 .Where(x => x > 500).ToSimpleList();
         } //EndMethod
 
-        public IEnumerable<int> SelectWhereToSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SelectWhereToSimpleListRewritten()
         {
             return ArrayItems.Select(x => x + 5)
                 .Where(x => x > 500).ToSimpleList();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MultipleSelectWhereToSimpleList()
         {
             return ArrayItems.Select(x => x + 5)
@@ -78,7 +77,8 @@ namespace TestsLibrary.Tests
                 .ToSimpleList();
         } //EndMethod
 
-        public IEnumerable<int> MultipleSelectWhereToSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MultipleSelectWhereToSimpleListRewritten()
         {
             return ArrayItems.Select(x => x + 5)
                 .Where(x => x > 500)
@@ -92,21 +92,20 @@ namespace TestsLibrary.Tests
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SelectWhereToArray()
         {
             return ArrayItems.Select(x => x + 5)
                 .Where(x => x > 500).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> SelectWhereToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SelectWhereToArrayRewritten()
         {
             return ArrayItems.Select(x => x + 5)
                 .Where(x => x > 500).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MultipleSelectWhereToArray()
         {
             return ArrayItems.Select(x => x + 5)
@@ -120,7 +119,8 @@ namespace TestsLibrary.Tests
                 .ToSimpleList();
         } //EndMethod
 
-        public IEnumerable<int> MultipleSelectWhereToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MultipleSelectWhereToArrayRewritten()
         {
             return ArrayItems.Select(x => x + 5)
                 .Where(x => x > 500)
@@ -134,7 +134,6 @@ namespace TestsLibrary.Tests
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<double> MultipleSelectMethodWhereToArray()
         {
             return ArrayItems.Select(Selector)
@@ -148,7 +147,8 @@ namespace TestsLibrary.Tests
                 .ToArray();
         } //EndMethod
 
-        public IEnumerable<double> MultipleSelectWhereMethodToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<double> MultipleSelectWhereMethodToArrayRewritten()
         {
             return ArrayItems.Select(Selector)
                 .Where(Predicate)
@@ -162,33 +162,32 @@ namespace TestsLibrary.Tests
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ParametrizedWhere(int offset)
         {
             return ArrayItems.Where(x => x > offset);
         } //EndMethod
 
-        public IEnumerable<int> ParametrizedWhereRewritten(int offset)
+        [LinqRewrite]
+		public IEnumerable<int> ParametrizedWhereRewritten(int offset)
         {
             return ArrayItems.Where(x => x > offset);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ParametrizedWhereToArray(int offset)
         {
             return ArrayItems.Where(x => x > offset)
                 .ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ParametrizedWhereToArrayRewritten(int offset)
+        [LinqRewrite]
+		public IEnumerable<int> ParametrizedWhereToArrayRewritten(int offset)
         {
             return ArrayItems.Where(x => x > offset)
                 .ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ParametrizedWhereToSimpleList(int offset)
         {
             return ArrayItems.Where(x => x > offset)
@@ -196,13 +195,13 @@ namespace TestsLibrary.Tests
         } //EndMethod
 
 
-        public IEnumerable<int> ParametrizedWhereToSimpleListRewritten(int offset)
+        [LinqRewrite]
+		public IEnumerable<int> ParametrizedWhereToSimpleListRewritten(int offset)
         {
             return ArrayItems.Where(x => x > offset)
                 .ToSimpleList();
         } //EndMethod
         
-        [NoRewrite]
         public IEnumerable<int> WhereChangingParam()
         {
             var a = 50;
@@ -210,7 +209,8 @@ namespace TestsLibrary.Tests
                 .Select(x => x + a++);
         } //EndMethod
 
-        public IEnumerable<int> WhereChangingParamRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> WhereChangingParamRewritten()
         {
             var a = 50;
             return ArrayItems.Where(x => x > 2 * a)
@@ -218,7 +218,6 @@ namespace TestsLibrary.Tests
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> WhereChangingParamToArray()
         {
             var a = 50;
@@ -227,7 +226,8 @@ namespace TestsLibrary.Tests
                 .ToArray();
         } //EndMethod
 
-        public IEnumerable<int> WhereChangingParamToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> WhereChangingParamToArrayRewritten()
         {
             var a = 50;
             return ArrayItems.Where(x => x > 2 * a)
@@ -236,7 +236,6 @@ namespace TestsLibrary.Tests
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> WhereChangingParamToSimpleList()
         {
             var a = 50;
@@ -245,7 +244,8 @@ namespace TestsLibrary.Tests
                 .ToSimpleList();
         } //EndMethod
 
-        public IEnumerable<int> WhereChangingParamToSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> WhereChangingParamToSimpleListRewritten()
         {
             var a = 50;
             return ArrayItems.Where(x => x > 2 * a)
@@ -253,14 +253,14 @@ namespace TestsLibrary.Tests
                 .ToSimpleList();
         } //EndMethod
         
-        [NoRewrite]
         public IEnumerable<int> WhereIndexToArray()
         {
             return ArrayItems.Where((x, i) => x > 200 + i / 2)
                 .ToArray();
         } //EndMethod
 
-        public IEnumerable<int> WhereIndexToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> WhereIndexToArrayRewritten()
         {
             return ArrayItems.Where((x, i) => x > 200 + i / 2)
                 .ToArray();

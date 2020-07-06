@@ -33,186 +33,186 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(ArrayLastOrDefaultUsingLastOrDefault), ArrayLastOrDefaultUsingLastOrDefault, ArrayLastOrDefaultUsingLastOrDefaultRewritten);
         }
 
-        [NoRewrite]
         public int LastOrDefault()
         {
             return ArrayItems.LastOrDefault();
         } //EndMethod
 
-        public int LastOrDefaultRewritten()
+        [LinqRewrite]
+		public int LastOrDefaultRewritten()
         {
             return ArrayItems.LastOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int EnumerableLastOrDefault()
         {
             return EnumerableItems.LastOrDefault();
         } //EndMethod
 
-        public int EnumerableLastOrDefaultRewritten()
+        [LinqRewrite]
+		public int EnumerableLastOrDefaultRewritten()
         {
             return EnumerableItems.LastOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int LastOrDefaultCondition()
         {
             return ArrayItems.LastOrDefault(x => x > 30);
         } //EndMethod
 
-        public int LastOrDefaultConditionRewritten()
+        [LinqRewrite]
+		public int LastOrDefaultConditionRewritten()
         {
             return ArrayItems.LastOrDefault(x => x > 30);
         } //EndMethod
 
 
-        [NoRewrite]
         public int LastOrDefaultFalseCondition()
         {
             return ArrayItems.LastOrDefault(x => x > 105);
         } //EndMethod
 
-        public int LastOrDefaultFalseConditionRewritten()
+        [LinqRewrite]
+		public int LastOrDefaultFalseConditionRewritten()
         {
             return ArrayItems.LastOrDefault(x => x > 105);
         } //EndMethod
 
 
-        [NoRewrite]
         public int LastOrDefaultMethod()
         {
             return ArrayItems.LastOrDefault(Predicate);
         } //EndMethod
 
-        public int LastOrDefaultMethodRewritten()
+        [LinqRewrite]
+		public int LastOrDefaultMethodRewritten()
         {
             return ArrayItems.LastOrDefault(Predicate);
         } //EndMethod
 
 
-        [NoRewrite]
         public int LastOrDefaultWhereMethod()
         {
             return ArrayItems.Where(x => x > 10).LastOrDefault();
         } //EndMethod
 
-        public int LastOrDefaultWhereMethodRewritten()
+        [LinqRewrite]
+		public int LastOrDefaultWhereMethodRewritten()
         {
             return ArrayItems.Where(x => x > 10).LastOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int SelectLastOrDefaultMethod()
         {
             return ArrayItems.Select(x => x + 10).LastOrDefault();
         } //EndMethod
 
-        public int SelectLastOrDefaultMethodRewritten()
+        [LinqRewrite]
+		public int SelectLastOrDefaultMethodRewritten()
         {
             return ArrayItems.Select(x => x + 10).LastOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int RangeLastOrDefault()
         {
             return Enumerable.Range(0, 100).LastOrDefault();
         } //EndMethod
 
-        public int RangeLastOrDefaultRewritten()
+        [LinqRewrite]
+		public int RangeLastOrDefaultRewritten()
         {
             return Enumerable.Range(0, 100).LastOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int Range1LastOrDefault()
         {
             return Enumerable.Range(0, 1).LastOrDefault();
         } //EndMethod
 
-        public int Range1LastOrDefaultRewritten()
+        [LinqRewrite]
+		public int Range1LastOrDefaultRewritten()
         {
             return Enumerable.Range(0, 1).LastOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int RangeRepeat()
         {
             return Enumerable.Repeat(0, 100).LastOrDefault();
         } //EndMethod
 
-        public int RangeRepeatRewritten()
+        [LinqRewrite]
+		public int RangeRepeatRewritten()
         {
             return Enumerable.Repeat(0, 100).LastOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int EmptyLastOrDefault()
         {
             return Enumerable.Empty<int>().LastOrDefault();
         } //EndMethod
 
-        public int EmptyLastOrDefaultRewritten()
+        [LinqRewrite]
+		public int EmptyLastOrDefaultRewritten()
         {
             return Enumerable.Empty<int>().LastOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayDistinctLastOrDefault()
         {
             return ArrayItems.Distinct().LastOrDefault();
         } //EndMethod
 
-        public int ArrayDistinctLastOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayDistinctLastOrDefaultRewritten()
         {
             return ArrayItems.Distinct().LastOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayLastOrDefaultParam()
         {
             var a = 50;
             return ArrayItems.LastOrDefault(x => x > a);
         } //EndMethod
 
-        public int ArrayLastOrDefaultParamRewritten()
+        [LinqRewrite]
+		public int ArrayLastOrDefaultParamRewritten()
         {
             var a = 50;
             return ArrayItems.LastOrDefault(x => x > a);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayLastOrDefaultChangingParam()
         {
             var a = 100;
             return ArrayItems.LastOrDefault(x => x > a--);
         } //EndMethod
 
-        public int ArrayLastOrDefaultChangingParamRewritten()
+        [LinqRewrite]
+		public int ArrayLastOrDefaultChangingParamRewritten()
         {
             var a = 100;
             return ArrayItems.LastOrDefault(x => x > a--);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayLastOrDefaultUsingLastOrDefault()
         {
             var a = 100;
             return ArrayItems.LastOrDefault(x => x > ArrayItems.LastOrDefault(y => y > x));
         } //EndMethod
 
-        public int ArrayLastOrDefaultUsingLastOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayLastOrDefaultUsingLastOrDefaultRewritten()
         {
             var a = 100;
             return ArrayItems.LastOrDefault(x => x > ArrayItems.LastOrDefault(y => y > x));

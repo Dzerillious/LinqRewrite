@@ -37,145 +37,145 @@ namespace TestsLibrary.Tests
             }
         }
 
-        [NoRewrite]
         public ILookup<int, int> ArrayToLookupTest()
         {
             return ArrayItems.ToLookup(x => x, x => x);
         } //EndMethod
 
-        public ILookup<int, int> ArrayToLookupTestRewritten()
+        [LinqRewrite]
+		public ILookup<int, int> ArrayToLookupTestRewritten()
         {
             return ArrayItems.ToLookup(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public ILookup<int, int> ListToLookupTest()
         {
             return ListItems.ToLookup(x => x, x => x);
         } //EndMethod
 
-        public ILookup<int, int> ListToLookupTestRewritten()
+        [LinqRewrite]
+		public ILookup<int, int> ListToLookupTestRewritten()
         {
             return ListItems.ToLookup(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public ILookup<int, int> SimpleListToLookupTest()
         {
             return SimpleListItems.ToLookup(x => x, x => x);
         } //EndMethod
 
-        public ILookup<int, int> SimpleListToLookupTestRewritten()
+        [LinqRewrite]
+		public ILookup<int, int> SimpleListToLookupTestRewritten()
         {
             return SimpleListItems.ToLookup(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public ILookup<int, int> EnumerableToLookupTest()
         {
             return EnumerableItems.ToLookup(x => x, x => x);
         } //EndMethod
 
-        public ILookup<int, int> EnumerableToLookupTestRewritten()
+        [LinqRewrite]
+		public ILookup<int, int> EnumerableToLookupTestRewritten()
         {
             return EnumerableItems.ToLookup(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public ILookup<int, int> ArrayWhereParamToLookupTest(int offset)
         {
             return ArrayItems.Where(x => x > offset).ToLookup(x => x, x => x);
         } //EndMethod
 
-        public ILookup<int, int> ArrayWhereParamToLookupTestRewritten(int offset)
+        [LinqRewrite]
+		public ILookup<int, int> ArrayWhereParamToLookupTestRewritten(int offset)
         {
             return ArrayItems.Where(x => x > offset).ToLookup(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public ILookup<int, int> EnumerableWhereParamToLookupTest(int offset)
         {
             return EnumerableItems.Where(x => x > offset).ToLookup(x => x, x => x);
         } //EndMethod
 
-        public ILookup<int, int> EnumerableWhereParamToLookupTestRewritten(int offset)
+        [LinqRewrite]
+		public ILookup<int, int> EnumerableWhereParamToLookupTestRewritten(int offset)
         {
             return EnumerableItems.Where(x => x > offset).ToLookup(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public ILookup<int, int> SimpleListWhereParamToLookupTest(int offset)
         {
             return SimpleListItems.Where(x => x > offset).ToLookup(x => x, x => x);
         } //EndMethod
 
-        public ILookup<int, int> SimpleListWhereParamToLookupTestRewritten(int offset)
+        [LinqRewrite]
+		public ILookup<int, int> SimpleListWhereParamToLookupTestRewritten(int offset)
         {
             return SimpleListItems.Where(x => x > offset).ToLookup(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public ILookup<int, int> ListWhereParamToLookupTest(int offset)
         {
             return ListItems.Where(x => x > offset).ToLookup(x => x, x => x);
         } //EndMethod
 
-        public ILookup<int, int> ListWhereParamToLookupTestRewritten(int offset)
+        [LinqRewrite]
+		public ILookup<int, int> ListWhereParamToLookupTestRewritten(int offset)
         {
             return ListItems.Where(x => x > offset).ToLookup(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public ILookup<int, int> RangeWhereParamToLookupTest(int offset)
         {
             return Enumerable.Range(0, 1000).Where(x => x > offset).ToLookup(x => x, x => x);
         } //EndMethod
 
-        public ILookup<int, int> RangeWhereParamToLookupTestRewritten(int offset)
+        [LinqRewrite]
+		public ILookup<int, int> RangeWhereParamToLookupTestRewritten(int offset)
         {
             return Enumerable.Range(0, 1000).Where(x => x > offset).ToLookup(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public ILookup<int, int> RangeParamToLookupTest(int count)
         {
             return Enumerable.Range(0, count).ToLookup(x => x, x => x);
         } //EndMethod
 
-        public ILookup<int, int> RangeParamToLookupTestRewritten(int count)
+        [LinqRewrite]
+		public ILookup<int, int> RangeParamToLookupTestRewritten(int count)
         {
             return Enumerable.Range(0, count).ToLookup(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public ILookup<int, int> RepeatParamToLookupTest(int count)
         {
             return Enumerable.Repeat(0, count).ToLookup(x => x, x => x);
         } //EndMethod
 
-        public ILookup<int, int> RepeatParamToLookupTestRewritten(int count)
+        [LinqRewrite]
+		public ILookup<int, int> RepeatParamToLookupTestRewritten(int count)
         {
             return Enumerable.Repeat(0, count).ToLookup(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public ILookup<int, int> RepeatWhereParamToLookupTest(int offset)
         {
             return Enumerable.Repeat(0, 1000).Where((x, i) => i < offset).ToLookup(x => x, x => x);
         } //EndMethod
 
-        public ILookup<int, int> RepeatWhereParamToLookupTestRewritten(int offset)
+        [LinqRewrite]
+		public ILookup<int, int> RepeatWhereParamToLookupTestRewritten(int offset)
         {
             return Enumerable.Repeat(0, 1000).Where((x, i) => i < offset).ToLookup(x => x, x => x);
         } //EndMethod

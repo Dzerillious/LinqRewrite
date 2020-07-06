@@ -18,38 +18,41 @@ namespace BenchmarksLibrary
             EnumerableSource = Enumerable.Range(0, 1000);
         }
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public int ArrayElementAt()
         {
             return ArraySource.ElementAt(50);
         }//EndMethod
 
         [Benchmark]
-        public int ArrayElementAtRewritten()
+        [LinqRewrite]
+		public int ArrayElementAtRewritten()
         {
             return ArraySource.ElementAt(50);
         }//EndMethod
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public int ArrayWhereElementAt()
         {
             return ArraySource.Where(x => x > 25).ElementAt(50);
         }//EndMethod
 
         [Benchmark]
-        public int ArrayWhereElementAtRewritten()
+        [LinqRewrite]
+		public int ArrayWhereElementAtRewritten()
         {
             return ArraySource.Where(x => x > 25).ElementAt(50);
         }//EndMethod
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public int EnumerableElementAt()
         {
             return EnumerableSource.ElementAt(50);
         }//EndMethod
 
         [Benchmark]
-        public int EnumerableElementAtRewritten()
+        [LinqRewrite]
+		public int EnumerableElementAtRewritten()
         {
             return EnumerableSource.ElementAt(50);
         }//EndMethod

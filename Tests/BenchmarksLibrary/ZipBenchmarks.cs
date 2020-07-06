@@ -18,7 +18,6 @@ namespace BenchmarksLibrary
             EnumerableSource = Enumerable.Range(235, 10000);
         }
         
-        [NoRewrite]
         [Benchmark]
         public void ArrayZip()
         {
@@ -26,12 +25,12 @@ namespace BenchmarksLibrary
         }
         
         [Benchmark]
-        public void ArrayZipRewritten()
+        [LinqRewrite]
+		public void ArrayZipRewritten()
         {
             ArraySource.Zip(ArraySource, (x, y) => x + y).ToArray();
         }
         
-        [NoRewrite]
         [Benchmark]
         public void EnumerableZip()
         {
@@ -39,7 +38,8 @@ namespace BenchmarksLibrary
         }
         
         [Benchmark]
-        public void EnumerableZipRewritten()
+        [LinqRewrite]
+		public void EnumerableZipRewritten()
         {
             EnumerableSource.Zip(EnumerableSource, (x, y) => x + y).ToArray();
         }

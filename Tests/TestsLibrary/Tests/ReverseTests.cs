@@ -126,1022 +126,1022 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals("ArrayDistinctConcatArrayDistinctDistinct2Reversed", ArrayDistinctConcatArrayDistinctDistinct2, ArrayDistinctConcatArrayDistinctDistinct2Rewritten);
         }
 
-        [NoRewrite]
         public IEnumerable<int> ArrayReverse()
         {
             return ArrayItems.Reverse();
         }  //EndMethod
 
-        public IEnumerable<int> ArrayReverseRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayReverseRewritten()
         {
             return ArrayItems.Reverse();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayReverseToArray()
         {
             return ArrayItems.Reverse().ToArray();
         }  //EndMethod
 
-        public IEnumerable<int> ArrayReverseToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayReverseToArrayRewritten()
         {
             return ArrayItems.Reverse().ToArray();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListReverse()
         {
             return SimpleListItems.Reverse();
         }  //EndMethod
 
-        public IEnumerable<int> SimpleListReverseRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListReverseRewritten()
         {
             return SimpleListItems.Reverse();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableReverse()
         {
             return EnumerableItems.Reverse();
         }  //EndMethod
 
-        public IEnumerable<int> EnumerableReverseRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableReverseRewritten()
         {
             return EnumerableItems.Reverse();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableReverseToArray()
         {
             return EnumerableItems.Reverse().ToArray();
         }  //EndMethod
 
-        public IEnumerable<int> EnumerableReverseToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableReverseToArrayRewritten()
         {
             return EnumerableItems.Reverse().ToArray();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableMethodReverse()
         {
             return MethodEnumerable().Reverse();
         }  //EndMethod
 
-        public IEnumerable<int> EnumerableMethodReverseRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableMethodReverseRewritten()
         {
             return MethodEnumerable().Reverse();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableMethodReverseToArray()
         {
             return MethodEnumerable().Reverse().ToArray();
         }  //EndMethod
 
-        public IEnumerable<int> EnumerableMethodReverseToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableMethodReverseToArrayRewritten()
         {
             return MethodEnumerable().Reverse().ToArray();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeReverse()
         {
             return Enumerable.Range(56, 125).Reverse();
         }  //EndMethod
 
-        public IEnumerable<int> RangeReverseRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeReverseRewritten()
         {
             return Enumerable.Range(56, 125).Reverse();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeReverseToArray()
         {
             return Enumerable.Range(56, 125).Reverse().ToArray();
         }  //EndMethod
 
-        public IEnumerable<int> RangeReverseToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeReverseToArrayRewritten()
         {
             return Enumerable.Range(56, 125).Reverse().ToArray();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySelectReverse()
         {
             return ArrayItems.Select(x => x + 3).Reverse();
         }  //EndMethod
 
-        public IEnumerable<int> ArraySelectReverseRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectReverseRewritten()
         {
             return ArrayItems.Select(x => x + 3).Reverse();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayWhereReverse()
         {
             return ArrayItems.Where(x => x > 10).Reverse();
         }  //EndMethod
 
-        public IEnumerable<int> ArrayWhereReverseRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayWhereReverseRewritten()
         {
             return ArrayItems.Where(x => x > 10).Reverse();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayReverseWhereReverse()
         {
             return ArrayItems.Reverse().Where(x => x > 10).Reverse();
         }  //EndMethod
 
-        public IEnumerable<int> ArrayReverseWhereReverseRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayReverseWhereReverseRewritten()
         {
             return ArrayItems.Reverse().Where(x => x > 10).Reverse();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayReverseConcatReverse()
         {
             return ArrayItems.Reverse().Concat(ArrayItems).Reverse();
         }  //EndMethod
 
-        public IEnumerable<int> ArrayReverseConcatReverseRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayReverseConcatReverseRewritten()
         {
             return ArrayItems.Reverse().Concat(ArrayItems).Reverse();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayReverseConcatReversed()
         {
             return ArrayItems.Reverse().Concat(ArrayItems.Reverse()).Reverse();
         }  //EndMethod
 
-        public IEnumerable<int> ArrayReverseConcatReversedRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayReverseConcatReversedRewritten()
         {
             return ArrayItems.Reverse().Concat(ArrayItems.Reverse()).Reverse();
         }  //EndMethod
 
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayReverseConcatReversedConcatArray()
         {
             return ArrayItems.Reverse().Concat(ArrayItems.Reverse()).Reverse().Concat(ArrayItems);
         }  //EndMethod
 
-        public IEnumerable<int> ArrayReverseConcatReversedConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayReverseConcatReversedConcatArrayRewritten()
         {
             return ArrayItems.Reverse().Concat(ArrayItems.Reverse()).Reverse().Concat(ArrayItems);
         }  //EndMethod
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatArray()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatArrayRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatSimpleList()
         {
             return ArrayItems.Concat(SimpleListItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatSimpleListRewritten()
         {
             return ArrayItems.Concat(SimpleListItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatEnumerable()
         {
             return ArrayItems.Concat(EnumerableItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatEnumerableRewritten()
         {
             return ArrayItems.Concat(EnumerableItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatMethod()
         {
             return ArrayItems.Concat(MethodEnumerable2()).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatMethodRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatMethodRewritten()
         {
             return ArrayItems.Concat(MethodEnumerable2()).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListConcatArray()
         {
             return SimpleListItems.Concat(ArrayItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListConcatArrayRewritten()
         {
             return SimpleListItems.Concat(ArrayItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListConcatSimpleList()
         {
             return SimpleListItems.Concat(SimpleListItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListConcatSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListConcatSimpleListRewritten()
         {
             return SimpleListItems.Concat(SimpleListItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListConcatEnumerable()
         {
             return SimpleListItems.Concat(EnumerableItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListConcatEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListConcatEnumerableRewritten()
         {
             return SimpleListItems.Concat(EnumerableItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListConcatMethod()
         {
             return SimpleListItems.Concat(MethodEnumerable2()).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListConcatMethodRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListConcatMethodRewritten()
         {
             return SimpleListItems.Concat(MethodEnumerable2()).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableConcatArray()
         {
             return EnumerableItems.Concat(ArrayItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableConcatArrayRewritten()
         {
             return EnumerableItems.Concat(ArrayItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableConcatSimpleList()
         {
             return EnumerableItems.Concat(SimpleListItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableConcatSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableConcatSimpleListRewritten()
         {
             return EnumerableItems.Concat(SimpleListItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableConcatEnumerable()
         {
             return EnumerableItems.Concat(EnumerableItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableConcatEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableConcatEnumerableRewritten()
         {
             return EnumerableItems.Concat(EnumerableItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableConcatMethod()
         {
             return EnumerableItems.Concat(MethodEnumerable2()).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableConcatMethodRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableConcatMethodRewritten()
         {
             return EnumerableItems.Concat(MethodEnumerable2()).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MethodConcatArray()
         {
             return MethodEnumerable().Concat(ArrayItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> MethodConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MethodConcatArrayRewritten()
         {
             return MethodEnumerable().Concat(ArrayItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MethodConcatSimpleList()
         {
             return MethodEnumerable().Concat(SimpleListItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> MethodConcatSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MethodConcatSimpleListRewritten()
         {
             return MethodEnumerable().Concat(SimpleListItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MethodConcatEnumerable()
         {
             return MethodEnumerable().Concat(EnumerableItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> MethodConcatEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MethodConcatEnumerableRewritten()
         {
             return MethodEnumerable().Concat(EnumerableItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MethodConcatMethod()
         {
             return MethodEnumerable().Concat(MethodEnumerable2()).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> MethodConcatMethodRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MethodConcatMethodRewritten()
         {
             return MethodEnumerable().Concat(MethodEnumerable2()).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatArrayToArray()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatArrayToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatArrayToArrayRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatSimpleListToArray()
         {
             return ArrayItems.Concat(SimpleListItems2).Reverse().ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatSimpleListToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatSimpleListToArrayRewritten()
         {
             return ArrayItems.Concat(SimpleListItems2).Reverse().ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatEnumerableToArray()
         {
             return ArrayItems.Concat(EnumerableItems2).Reverse().ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatEnumerableToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatEnumerableToArrayRewritten()
         {
             return ArrayItems.Concat(EnumerableItems2).Reverse().ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListConcatArrayToArray()
         {
             return SimpleListItems.Concat(ArrayItems2).Reverse().ToArray();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListConcatArrayToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListConcatArrayToArrayRewritten()
         {
             return SimpleListItems.Concat(ArrayItems2).Reverse().ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListConcatSimpleListToArray()
         {
             return SimpleListItems.Concat(SimpleListItems2).Reverse().ToArray();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListConcatSimpleListToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListConcatSimpleListToArrayRewritten()
         {
             return SimpleListItems.Concat(SimpleListItems2).Reverse().ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListConcatEnumerableToArray()
         {
             return SimpleListItems.Concat(EnumerableItems2).Reverse().ToArray();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListConcatEnumerableToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListConcatEnumerableToArrayRewritten()
         {
             return SimpleListItems.Concat(EnumerableItems2).Reverse().ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableConcatArrayToArray()
         {
             return EnumerableItems.Concat(ArrayItems2).Reverse().ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableConcatArrayToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableConcatArrayToArrayRewritten()
         {
             return EnumerableItems.Concat(ArrayItems2).Reverse().ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableConcatSimpleListToArray()
         {
             return EnumerableItems.Concat(SimpleListItems2).Reverse().ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableConcatSimpleListToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableConcatSimpleListToArrayRewritten()
         {
             return EnumerableItems.Concat(SimpleListItems2).Reverse().ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableConcatEnumerableToArray()
         {
             return EnumerableItems.Concat(EnumerableItems2).Reverse().ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableConcatEnumerableToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableConcatEnumerableToArrayRewritten()
         {
             return EnumerableItems.Concat(EnumerableItems2).Reverse().ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySelectConcatArray()
         {
             return ArrayItems.Select(x => x + 50).Concat(ArrayItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArraySelectConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectConcatArrayRewritten()
         {
             return ArrayItems.Select(x => x + 50).Concat(ArrayItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySelectConcatArraySelect()
         {
             return ArrayItems.Select(x => x + 50).Concat(ArrayItems2.Select(x => x + 50)).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArraySelectConcatArraySelectRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectConcatArraySelectRewritten()
         {
             return ArrayItems.Select(x => x + 50).Concat(ArrayItems2.Select(x => x + 50)).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayWhereConcatArrayWhere()
         {
             return ArrayItems.Where(x => x > 50).Concat(ArrayItems2.Where(x => x > 50)).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayWhereConcatArrayWhereRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayWhereConcatArrayWhereRewritten()
         {
             return ArrayItems.Where(x => x > 50).Concat(ArrayItems2.Where(x => x > 50)).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayCount()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Count();
         } //EndMethod
 
-        public int ArrayConcatArrayCountRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayCountRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Count();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayCount2()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Count(x => x > 70);
         } //EndMethod
 
-        public int ArrayConcatArrayCount2Rewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayCount2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Count(x => x > 70);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArraySum()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Sum();
         } //EndMethod
 
-        public int ArrayConcatArraySumRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArraySumRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Sum();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArraySum2()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Sum(x => x + 10);
         } //EndMethod
 
-        public int ArrayConcatArraySum2Rewritten()
+        [LinqRewrite]
+		public int ArrayConcatArraySum2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Sum(x => x + 10);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatArrayDistinct()
         {
             return ArrayItems.Concat(ArrayItems2).Distinct().Reverse().Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatArrayDistinctRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatArrayDistinctRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Distinct().Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatArrayDistinct2()
         {
             return ArrayItems.Concat(ArrayItems2).Distinct(EqualityComparer<int>.Default).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatArrayDistinct2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatArrayDistinct2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Distinct(EqualityComparer<int>.Default).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayElementAt()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().ElementAt(45);
         } //EndMethod
 
-        public int ArrayConcatArrayElementAtRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayElementAtRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().ElementAt(45);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayElementAtOrDefault()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().ElementAtOrDefault(45);
         } //EndMethod
 
-        public int ArrayConcatArrayElementAtOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayElementAtOrDefaultRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().ElementAtOrDefault(45);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayFirst()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().First();
         } //EndMethod
 
-        public int ArrayConcatArrayFirstRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayFirstRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().First();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayFirstOrDefault()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().FirstOrDefault();
         } //EndMethod
 
-        public int ArrayConcatArrayFirstOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayFirstOrDefaultRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().FirstOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayLast()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Last();
         } //EndMethod
 
-        public int ArrayConcatArrayLastRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayLastRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Last();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayLastOrDefault()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().LastOrDefault();
         } //EndMethod
 
-        public int ArrayConcatArrayLastOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayLastOrDefaultRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().LastOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArraySingle()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Single();
         } //EndMethod
 
-        public int ArrayConcatArraySingleRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArraySingleRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Single();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArraySingle2()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Single(x => x == 76);
         } //EndMethod
 
-        public int ArrayConcatArraySingle2Rewritten()
+        [LinqRewrite]
+		public int ArrayConcatArraySingle2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Single(x => x == 76);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArraySingleOrDefault()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().SingleOrDefault();
         } //EndMethod
 
-        public int ArrayConcatArraySingleOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArraySingleOrDefaultRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().SingleOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayMin()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Min();
         } //EndMethod
 
-        public int ArrayConcatArrayMinRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayMinRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Min();
         } //EndMethod
 
 
-        [NoRewrite]
         public decimal ArrayConcatArrayMin2()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Min(x => x + 2m);
         } //EndMethod
 
-        public decimal ArrayConcatArrayMin2Rewritten()
+        [LinqRewrite]
+		public decimal ArrayConcatArrayMin2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Min(x => x + 2m);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayConcatArrayMax()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Max();
         } //EndMethod
 
-        public int ArrayConcatArrayMaxRewritten()
+        [LinqRewrite]
+		public int ArrayConcatArrayMaxRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Max();
         } //EndMethod
 
 
-        [NoRewrite]
         public decimal ArrayConcatArrayMax2()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Max(x => x + 2m);
         } //EndMethod
 
-        public decimal ArrayConcatArrayMax2Rewritten()
+        [LinqRewrite]
+		public decimal ArrayConcatArrayMax2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Max(x => x + 2m);
         } //EndMethod
 
 
-        [NoRewrite]
         public long ArrayConcatArrayLongCount()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().LongCount();
         } //EndMethod
 
-        public long ArrayConcatArrayLongCountRewritten()
+        [LinqRewrite]
+		public long ArrayConcatArrayLongCountRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().LongCount();
         } //EndMethod
 
 
-        [NoRewrite]
         public long ArrayConcatArrayLongCount2()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().LongCount(x => x > 50);
         } //EndMethod
 
-        public long ArrayConcatArrayLongCount2Rewritten()
+        [LinqRewrite]
+		public long ArrayConcatArrayLongCount2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().LongCount(x => x > 50);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArrayConcatArrayContains()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Contains(56);
         } //EndMethod
 
-        public bool ArrayConcatArrayContainsRewritten()
+        [LinqRewrite]
+		public bool ArrayConcatArrayContainsRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Contains(56);
         } //EndMethod
 
 
-        [NoRewrite]
         public double ArrayConcatArrayAverage()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Average();
         } //EndMethod
 
-        public double ArrayConcatArrayAverageRewritten()
+        [LinqRewrite]
+		public double ArrayConcatArrayAverageRewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Average();
         } //EndMethod
 
 
-        [NoRewrite]
         public double ArrayConcatArrayAverage2()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Average(x => x + 10);
         } //EndMethod
 
-        public double ArrayConcatArrayAverage2Rewritten()
+        [LinqRewrite]
+		public double ArrayConcatArrayAverage2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Average(x => x + 10);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArrayConcatArrayContains2()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Contains(56, EqualityComparer<int>.Default);
         } //EndMethod
 
-        public bool ArrayConcatArrayContains2Rewritten()
+        [LinqRewrite]
+		public bool ArrayConcatArrayContains2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2).Reverse().Contains(56, EqualityComparer<int>.Default);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool SelectWhereArrayConcatSelectWhereArrayContains()
         {
             return ArrayItems.Select(x => x + 10).Where(x => x > 80).Concat(ArrayItems2.Select(x => x + 10).Where(x => x > 80)).Reverse().Contains(112);
         } //EndMethod
 
-        public bool SelectWhereArrayConcatSelectWhereArrayContainsRewritten()
+        [LinqRewrite]
+		public bool SelectWhereArrayConcatSelectWhereArrayContainsRewritten()
         {
             return ArrayItems.Select(x => x + 10).Where(x => x > 80).Concat(ArrayItems2.Select(x => x + 10).Where(x => x > 80)).Reverse().Contains(112);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeConcatArray()
         {
             return Enumerable.Range(20, 100).Concat(ArrayItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> RangeConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeConcatArrayRewritten()
         {
             return Enumerable.Range(20, 100).Concat(ArrayItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatConcatArray()
         {
             return Enumerable.Repeat(20, 100).Concat(ArrayItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> RepeatConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatConcatArrayRewritten()
         {
             return Enumerable.Repeat(20, 100).Concat(ArrayItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EmptyConcatArray()
         {
             return Enumerable.Empty<int>().Concat(ArrayItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> EmptyConcatArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EmptyConcatArrayRewritten()
         {
             return Enumerable.Empty<int>().Concat(ArrayItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeEmpty2Array()
         {
             return ArrayItems.Where(x => false).Concat(ArrayItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> RangeEmpty2ArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeEmpty2ArrayRewritten()
         {
             return ArrayItems.Where(x => false).Concat(ArrayItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatRange()
         {
             return ArrayItems.Concat(Enumerable.Range(70, 260)).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatRangeRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatRangeRewritten()
         {
             return ArrayItems.Concat(Enumerable.Range(70, 260)).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatRepeat()
         {
             return ArrayItems.Concat(Enumerable.Repeat(70, 100)).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatRepeatRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatRepeatRewritten()
         {
             return ArrayItems.Concat(Enumerable.Repeat(70, 100)).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatEmpty()
         {
             return ArrayItems.Concat(Enumerable.Empty<int>()).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatEmptyRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatEmptyRewritten()
         {
             return ArrayItems.Concat(Enumerable.Empty<int>()).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatEmpty2()
         {
             return ArrayItems.Concat(ArrayItems2.Where(x => false)).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatEmpty2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatEmpty2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems2.Where(x => false)).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatAll()
         {
             return ArrayItems.Concat(Enumerable.Range(0, 1000)).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatAllRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatAllRewritten()
         {
             return ArrayItems.Concat(Enumerable.Range(0, 1000)).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatNull()
         {
             return ArrayItems.Concat(null).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatNullRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatNullRewritten()
         {
             return ArrayItems.Concat(null).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatArrayConcatEnumerable()
         {
             return ArrayItems.Concat(ArrayItems).Concat(EnumerableItems2).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatArrayConcatEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatArrayConcatEnumerableRewritten()
         {
             return ArrayItems.Concat(ArrayItems).Concat(EnumerableItems2).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayConcatArrayConcatEnumerable2()
         {
             return ArrayItems.Concat(ArrayItems.Concat(EnumerableItems2)).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayConcatArrayConcatEnumerable2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayConcatArrayConcatEnumerable2Rewritten()
         {
             return ArrayItems.Concat(ArrayItems.Concat(EnumerableItems2)).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayDistinctConcatArrayDistinct()
         {
             return ArrayItems.Distinct().Concat(ArrayItems.Distinct()).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayDistinctConcatArrayDistinctRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayDistinctConcatArrayDistinctRewritten()
         {
             return ArrayItems.Distinct().Concat(ArrayItems.Distinct()).Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayDistinctConcatArrayDistinctDistinct()
         {
             return ArrayItems.Distinct().Concat(ArrayItems.Distinct()).Distinct().Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayDistinctConcatArrayDistinctDistinctRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayDistinctConcatArrayDistinctDistinctRewritten()
         {
             return ArrayItems.Distinct().Concat(ArrayItems.Distinct()).Distinct().Reverse();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayDistinctConcatArrayDistinctDistinct2()
         {
             return ArrayItems.Distinct(EqualityComparer<int>.Default).Concat(ArrayItems.Distinct(EqualityComparer<int>.Default)).Distinct(EqualityComparer<int>.Default).Reverse();
         } //EndMethod
 
-        public IEnumerable<int> ArrayDistinctConcatArrayDistinctDistinct2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayDistinctConcatArrayDistinctDistinct2Rewritten()
         {
             return ArrayItems.Distinct(EqualityComparer<int>.Default).Concat(ArrayItems.Distinct(EqualityComparer<int>.Default)).Distinct(EqualityComparer<int>.Default).Reverse();
         } //EndMethod

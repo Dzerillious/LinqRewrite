@@ -33,186 +33,186 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(ArraySingleOrDefaultUsingSingleOrDefault), ArraySingleOrDefaultUsingSingleOrDefault, ArraySingleOrDefaultUsingSingleOrDefaultRewritten);
         }
 
-        [NoRewrite]
         public int SingleOrDefault()
         {
             return ArrayItems.SingleOrDefault();
         } //EndMethod
 
-        public int SingleOrDefaultRewritten()
+        [LinqRewrite]
+		public int SingleOrDefaultRewritten()
         {
             return ArrayItems.SingleOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int EnumerableSingleOrDefault()
         {
             return EnumerableItems.SingleOrDefault();
         } //EndMethod
 
-        public int EnumerableSingleOrDefaultRewritten()
+        [LinqRewrite]
+		public int EnumerableSingleOrDefaultRewritten()
         {
             return EnumerableItems.SingleOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int SingleOrDefaultCondition()
         {
             return ArrayItems.SingleOrDefault(x => x > 30);
         } //EndMethod
 
-        public int SingleOrDefaultConditionRewritten()
+        [LinqRewrite]
+		public int SingleOrDefaultConditionRewritten()
         {
             return ArrayItems.SingleOrDefault(x => x > 30);
         } //EndMethod
 
 
-        [NoRewrite]
         public int SingleOrDefaultFalseCondition()
         {
             return ArrayItems.SingleOrDefault(x => x > 105);
         } //EndMethod
 
-        public int SingleOrDefaultFalseConditionRewritten()
+        [LinqRewrite]
+		public int SingleOrDefaultFalseConditionRewritten()
         {
             return ArrayItems.SingleOrDefault(x => x > 105);
         } //EndMethod
 
 
-        [NoRewrite]
         public int SingleOrDefaultMethod()
         {
             return ArrayItems.SingleOrDefault(Predicate);
         } //EndMethod
 
-        public int SingleOrDefaultMethodRewritten()
+        [LinqRewrite]
+		public int SingleOrDefaultMethodRewritten()
         {
             return ArrayItems.SingleOrDefault(Predicate);
         } //EndMethod
 
 
-        [NoRewrite]
         public int SingleOrDefaultWhereMethod()
         {
             return ArrayItems.Where(x => x > 10).SingleOrDefault();
         } //EndMethod
 
-        public int SingleOrDefaultWhereMethodRewritten()
+        [LinqRewrite]
+		public int SingleOrDefaultWhereMethodRewritten()
         {
             return ArrayItems.Where(x => x > 10).SingleOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int SelectSingleOrDefaultMethod()
         {
             return ArrayItems.Select(x => x + 10).SingleOrDefault();
         } //EndMethod
 
-        public int SelectSingleOrDefaultMethodRewritten()
+        [LinqRewrite]
+		public int SelectSingleOrDefaultMethodRewritten()
         {
             return ArrayItems.Select(x => x + 10).SingleOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int RangeSingleOrDefault()
         {
             return Enumerable.Range(0, 100).SingleOrDefault();
         } //EndMethod
 
-        public int RangeSingleOrDefaultRewritten()
+        [LinqRewrite]
+		public int RangeSingleOrDefaultRewritten()
         {
             return Enumerable.Range(0, 100).SingleOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int Range1SingleOrDefault()
         {
             return Enumerable.Range(0, 1).SingleOrDefault();
         } //EndMethod
 
-        public int Range1SingleOrDefaultRewritten()
+        [LinqRewrite]
+		public int Range1SingleOrDefaultRewritten()
         {
             return Enumerable.Range(0, 1).SingleOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int RangeRepeat()
         {
             return Enumerable.Repeat(0, 100).SingleOrDefault();
         } //EndMethod
 
-        public int RangeRepeatRewritten()
+        [LinqRewrite]
+		public int RangeRepeatRewritten()
         {
             return Enumerable.Repeat(0, 100).SingleOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int EmptySingleOrDefault()
         {
             return Enumerable.Empty<int>().SingleOrDefault();
         } //EndMethod
 
-        public int EmptySingleOrDefaultRewritten()
+        [LinqRewrite]
+		public int EmptySingleOrDefaultRewritten()
         {
             return Enumerable.Empty<int>().SingleOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayDistinctSingleOrDefault()
         {
             return ArrayItems.Distinct().SingleOrDefault();
         } //EndMethod
 
-        public int ArrayDistinctSingleOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayDistinctSingleOrDefaultRewritten()
         {
             return ArrayItems.Distinct().SingleOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArraySingleOrDefaultParam()
         {
             var a = 50;
             return ArrayItems.SingleOrDefault(x => x > a);
         } //EndMethod
 
-        public int ArraySingleOrDefaultParamRewritten()
+        [LinqRewrite]
+		public int ArraySingleOrDefaultParamRewritten()
         {
             var a = 50;
             return ArrayItems.SingleOrDefault(x => x > a);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArraySingleOrDefaultChangingParam()
         {
             var a = 100;
             return ArrayItems.SingleOrDefault(x => x > a--);
         } //EndMethod
 
-        public int ArraySingleOrDefaultChangingParamRewritten()
+        [LinqRewrite]
+		public int ArraySingleOrDefaultChangingParamRewritten()
         {
             var a = 100;
             return ArrayItems.SingleOrDefault(x => x > a--);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArraySingleOrDefaultUsingSingleOrDefault()
         {
             var a = 100;
             return ArrayItems.SingleOrDefault(x => x > ArrayItems.SingleOrDefault(y => y > x));
         } //EndMethod
 
-        public int ArraySingleOrDefaultUsingSingleOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArraySingleOrDefaultUsingSingleOrDefaultRewritten()
         {
             var a = 100;
             return ArrayItems.SingleOrDefault(x => x > ArrayItems.SingleOrDefault(y => y > x));

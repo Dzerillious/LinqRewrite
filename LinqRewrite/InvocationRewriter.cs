@@ -21,7 +21,7 @@ namespace LinqRewrite
         {
             using var design = RewriteParametersFactory.BorrowParameters();
             design.SetData(collection, returnType, chain, node, false);
-            var names = chain.Select(x => x.MethodName).ToArray();
+            string[] names = chain.Select(x => x.MethodName).ToArray();
             
             var (simplePreCheck, simpleResult) = TryRewriteSimple(design, names);
             if (simplePreCheck && simpleResult != null) return simpleResult;
@@ -90,17 +90,17 @@ namespace LinqRewrite
             if (!MethodsCreateArray.Contains(names.First())) RewriteCollectionEnumeration.Rewrite(design, Array.Empty<RewrittenValueBridge>(), false);
             for (var i = 0; i < names.Length; i++)
             {
-                var res = RewriteSimplePart(names[i], design, i);
+                ExpressionSyntax rewrittenPart = RewriteSimplePart(names[i], design, i);
                 if (design.Error) return (true, null);
                 if (!design.SimpleEnumeration) return (true, null);
-                if (res != null) return (true, res);
+                if (rewrittenPart != null) return (true, rewrittenPart);
             }
 
             if (!MethodsWithResult.Contains(names.Last()))
             {
-                var res = RewriteToArray.SimpleRewrite(design, Array.Empty<RewrittenValueBridge>());
+                ExpressionSyntax rewrittenPart = RewriteToArray.SimpleRewrite(design, Array.Empty<RewrittenValueBridge>());
                 if (!design.SimpleEnumeration) return (true, null);
-                if (res != null) return (true, res);
+                if (rewrittenPart != null) return (true, rewrittenPart);
             }
             
             return (true, null);

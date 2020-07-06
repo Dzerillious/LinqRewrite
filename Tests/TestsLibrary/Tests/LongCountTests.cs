@@ -35,205 +35,205 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(EmptyDistinctLongCount), EmptyDistinctLongCount, EmptyDistinctLongCountRewritten);
         }
 
-        [NoRewrite]
         public long ArrayLongCount()
         {
             return ArrayItems.LongCount();
         } //EndMethod
 
-        public long ArrayLongCountRewritten()
+        [LinqRewrite]
+		public long ArrayLongCountRewritten()
         {
             return ArrayItems.LongCount();
         } //EndMethod=
 
 
-        [NoRewrite]
         public long ArrayLongCount2()
         {
             return ArrayItems.LongCount(x => x > 3);
         } //EndMethod
 
-        public long ArrayLongCount2Rewritten()
+        [LinqRewrite]
+		public long ArrayLongCount2Rewritten()
         {
             return ArrayItems.LongCount(x => x > 3);
         } //EndMethod
 
 
-        [NoRewrite]
         public long ArraySelectLongCount()
         {
             return ArrayItems.Select(x => x + 10).LongCount();
         } //EndMethod
 
-        public long ArraySelectLongCountRewritten()
+        [LinqRewrite]
+		public long ArraySelectLongCountRewritten()
         {
             return ArrayItems.Select(x => x + 10).LongCount();
         } //EndMethod
 
 
-        [NoRewrite]
         public long ArrayLongCount5()
         {
             return ArrayItems.Where(x => x > 4).LongCount(x => x % 2 == 0);
         } //EndMethod
 
-        public long ArrayLongCount5Rewritten()
+        [LinqRewrite]
+		public long ArrayLongCount5Rewritten()
         {
             return ArrayItems.Where(x => x > 4).LongCount(x => x % 2 == 0);
         } //EndMethod
 
 
-        [NoRewrite]
         public long EnumerableLongCount2()
         {
             return EnumerableItems.LongCount();
         } //EndMethod
 
-        public long EnumerableLongCount2Rewritten()
+        [LinqRewrite]
+		public long EnumerableLongCount2Rewritten()
         {
             return EnumerableItems.LongCount();
         } //EndMethod
 
 
-        [NoRewrite]
         public long EnumerableLongCount3()
         {
             return EnumerableItems.LongCount(x => x > 3);
         } //EndMethod
 
-        public long EnumerableLongCount3Rewritten()
+        [LinqRewrite]
+		public long EnumerableLongCount3Rewritten()
         {
             return EnumerableItems.LongCount(x => x > 3);
         } //EndMethod
 
 
-        [NoRewrite]
         public long EnumerableLongCount4()
         {
             return ArrayItems.Select(x => x + 10).LongCount();
         } //EndMethod
 
-        public long EnumerableLongCount4Rewritten()
+        [LinqRewrite]
+		public long EnumerableLongCount4Rewritten()
         {
             return ArrayItems.Select(x => x + 10).LongCount();
         } //EndMethod
 
 
-        [NoRewrite]
         public long EnumerableLongCount5()
         {
             return ArrayItems.Where(x => x > 4).LongCount(x => x % 2 == 0);
         } //EndMethod
 
-        public long EnumerableLongCount5Rewritten()
+        [LinqRewrite]
+		public long EnumerableLongCount5Rewritten()
         {
             return ArrayItems.Where(x => x > 4).LongCount(x => x % 2 == 0);
         } //EndMethod
 
 
-        [NoRewrite]
         public long RangeLongCount()
         {
             return Enumerable.Range(5, 256).LongCount();
         } //EndMethod
 
-        public long RangeLongCountRewritten()
+        [LinqRewrite]
+		public long RangeLongCountRewritten()
         {
             return Enumerable.Range(5, 256).LongCount();
         } //EndMethod
 
 
-        [NoRewrite]
         public long RangeSelectLongCount()
         {
             return Enumerable.Range(5, 256).Select(x => x + 3).LongCount();
         } //EndMethod
 
-        public long RangeSelectLongCountRewritten()
+        [LinqRewrite]
+		public long RangeSelectLongCountRewritten()
         {
             return Enumerable.Range(5, 256).Select(x => x + 3).LongCount();
         } //EndMethod
 
 
-        [NoRewrite]
         public long RangeWhereLongCount()
         {
             return Enumerable.Range(5, 256).Where(x => x > 100).LongCount();
         } //EndMethod
 
-        public long RangeWhereLongCountRewritten()
+        [LinqRewrite]
+		public long RangeWhereLongCountRewritten()
         {
             return Enumerable.Range(5, 256).Where(x => x > 100).LongCount();
         } //EndMethod
 
 
-        [NoRewrite]
         public long RangeLongCount2()
         {
             return Enumerable.Range(5, 256).LongCount(x => x > 100);
         } //EndMethod
 
-        public long RangeLongCount2Rewritten()
+        [LinqRewrite]
+		public long RangeLongCount2Rewritten()
         {
             return Enumerable.Range(5, 256).LongCount(x => x > 100);
         } //EndMethod
 
 
-        [NoRewrite]
         public long RepeatLongCount()
         {
             return Enumerable.Repeat(5, 256).LongCount();
         } //EndMethod
 
-        public long RepeatLongCountRewritten()
+        [LinqRewrite]
+		public long RepeatLongCountRewritten()
         {
             return Enumerable.Repeat(5, 256).LongCount();
         } //EndMethod
 
 
-        [NoRewrite]
         public long ArrayMethodLongCount()
         {
             return ArrayItems.LongCount(Predicate);
         } //EndMethod
 
-        public long ArrayMethodLongCountRewritten()
+        [LinqRewrite]
+		public long ArrayMethodLongCountRewritten()
         {
             return ArrayItems.LongCount(Predicate);
         } //EndMethod
 
 
-        [NoRewrite]
         public long ArrayDistinctLongCount()
         {
             return ArrayItems.Distinct().LongCount();
         } //EndMethod
 
-        public long ArrayDistinctLongCountRewritten()
+        [LinqRewrite]
+		public long ArrayDistinctLongCountRewritten()
         {
             return ArrayItems.Distinct().LongCount();
         } //EndMethod
 
 
-        [NoRewrite]
         public long EmptyLongCount()
         {
             return Enumerable.Empty<int>().LongCount();
         } //EndMethod
 
-        public long EmptyLongCountRewritten()
+        [LinqRewrite]
+		public long EmptyLongCountRewritten()
         {
             return Enumerable.Empty<int>().LongCount();
         } //EndMethod
 
 
-        [NoRewrite]
         public long EmptyDistinctLongCount()
         {
             return Enumerable.Empty<int>().Distinct().LongCount();
         } //EndMethod
 
-        public long EmptyDistinctLongCountRewritten()
+        [LinqRewrite]
+		public long EmptyDistinctLongCountRewritten()
         {
             return Enumerable.Empty<int>().Distinct().LongCount();
         } //EndMethod

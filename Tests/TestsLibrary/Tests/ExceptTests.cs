@@ -110,829 +110,829 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(ArrayDistinctExceptArrayDistinctDistinct2), ArrayDistinctExceptArrayDistinctDistinct2, ArrayDistinctExceptArrayDistinctDistinct2Rewritten);
         }
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptArray()
         {
             return ArrayItems.Except(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptArrayRewritten()
         {
             return ArrayItems.Except(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptSimpleList()
         {
             return ArrayItems.Except(SimpleListItems2);
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptSimpleListRewritten()
         {
             return ArrayItems.Except(SimpleListItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptEnumerable()
         {
             return ArrayItems.Except(EnumerableItems2);
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptEnumerableRewritten()
         {
             return ArrayItems.Except(EnumerableItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptMethod()
         {
             return ArrayItems.Except(MethodEnumerable2());
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptMethodRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptMethodRewritten()
         {
             return ArrayItems.Except(MethodEnumerable2());
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListExceptArray()
         {
             return SimpleListItems.Except(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> SimpleListExceptArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListExceptArrayRewritten()
         {
             return SimpleListItems.Except(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListExceptSimpleList()
         {
             return SimpleListItems.Except(SimpleListItems2);
         } //EndMethod
 
-        public IEnumerable<int> SimpleListExceptSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListExceptSimpleListRewritten()
         {
             return SimpleListItems.Except(SimpleListItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListExceptEnumerable()
         {
             return SimpleListItems.Except(EnumerableItems2);
         } //EndMethod
 
-        public IEnumerable<int> SimpleListExceptEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListExceptEnumerableRewritten()
         {
             return SimpleListItems.Except(EnumerableItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListExceptMethod()
         {
             return SimpleListItems.Except(MethodEnumerable2());
         } //EndMethod
 
-        public IEnumerable<int> SimpleListExceptMethodRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListExceptMethodRewritten()
         {
             return SimpleListItems.Except(MethodEnumerable2());
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableExceptArray()
         {
             return EnumerableItems.Except(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableExceptArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableExceptArrayRewritten()
         {
             return EnumerableItems.Except(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableExceptSimpleList()
         {
             return EnumerableItems.Except(SimpleListItems2);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableExceptSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableExceptSimpleListRewritten()
         {
             return EnumerableItems.Except(SimpleListItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableExceptEnumerable()
         {
             return EnumerableItems.Except(EnumerableItems2);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableExceptEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableExceptEnumerableRewritten()
         {
             return EnumerableItems.Except(EnumerableItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableExceptMethod()
         {
             return EnumerableItems.Except(MethodEnumerable2());
         } //EndMethod
 
-        public IEnumerable<int> EnumerableExceptMethodRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableExceptMethodRewritten()
         {
             return EnumerableItems.Except(MethodEnumerable2());
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MethodExceptArray()
         {
             return MethodEnumerable().Except(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> MethodExceptArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MethodExceptArrayRewritten()
         {
             return MethodEnumerable().Except(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MethodExceptSimpleList()
         {
             return MethodEnumerable().Except(SimpleListItems2);
         } //EndMethod
 
-        public IEnumerable<int> MethodExceptSimpleListRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MethodExceptSimpleListRewritten()
         {
             return MethodEnumerable().Except(SimpleListItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MethodExceptEnumerable()
         {
             return MethodEnumerable().Except(EnumerableItems2);
         } //EndMethod
 
-        public IEnumerable<int> MethodExceptEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MethodExceptEnumerableRewritten()
         {
             return MethodEnumerable().Except(EnumerableItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> MethodExceptMethod()
         {
             return MethodEnumerable().Except(MethodEnumerable2());
         } //EndMethod
 
-        public IEnumerable<int> MethodExceptMethodRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> MethodExceptMethodRewritten()
         {
             return MethodEnumerable().Except(MethodEnumerable2());
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptArrayToArray()
         {
             return ArrayItems.Except(ArrayItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptArrayToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptArrayToArrayRewritten()
         {
             return ArrayItems.Except(ArrayItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptSimpleListToArray()
         {
             return ArrayItems.Except(SimpleListItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptSimpleListToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptSimpleListToArrayRewritten()
         {
             return ArrayItems.Except(SimpleListItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptEnumerableToArray()
         {
             return ArrayItems.Except(EnumerableItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptEnumerableToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptEnumerableToArrayRewritten()
         {
             return ArrayItems.Except(EnumerableItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListExceptArrayToArray()
         {
             return SimpleListItems.Except(ArrayItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListExceptArrayToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListExceptArrayToArrayRewritten()
         {
             return SimpleListItems.Except(ArrayItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListExceptSimpleListToArray()
         {
             return SimpleListItems.Except(SimpleListItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListExceptSimpleListToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListExceptSimpleListToArrayRewritten()
         {
             return SimpleListItems.Except(SimpleListItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> SimpleListExceptEnumerableToArray()
         {
             return SimpleListItems.Except(EnumerableItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> SimpleListExceptEnumerableToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> SimpleListExceptEnumerableToArrayRewritten()
         {
             return SimpleListItems.Except(EnumerableItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableExceptArrayToArray()
         {
             return EnumerableItems.Except(ArrayItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableExceptArrayToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableExceptArrayToArrayRewritten()
         {
             return EnumerableItems.Except(ArrayItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableExceptSimpleListToArray()
         {
             return EnumerableItems.Except(SimpleListItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableExceptSimpleListToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableExceptSimpleListToArrayRewritten()
         {
             return EnumerableItems.Except(SimpleListItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableExceptEnumerableToArray()
         {
             return EnumerableItems.Except(EnumerableItems2).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableExceptEnumerableToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableExceptEnumerableToArrayRewritten()
         {
             return EnumerableItems.Except(EnumerableItems2).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySelectExceptArray()
         {
             return ArrayItems.Select(x => x + 50).Except(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> ArraySelectExceptArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectExceptArrayRewritten()
         {
             return ArrayItems.Select(x => x + 50).Except(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySelectExceptArraySelect()
         {
             return ArrayItems.Select(x => x + 50).Except(ArrayItems2.Select(x => x + 50));
         } //EndMethod
 
-        public IEnumerable<int> ArraySelectExceptArraySelectRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectExceptArraySelectRewritten()
         {
             return ArrayItems.Select(x => x + 50).Except(ArrayItems2.Select(x => x + 50));
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayWhereExceptArrayWhere()
         {
             return ArrayItems.Where(x => x > 50).Except(ArrayItems2.Where(x => x > 50));
         } //EndMethod
 
-        public IEnumerable<int> ArrayWhereExceptArrayWhereRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayWhereExceptArrayWhereRewritten()
         {
             return ArrayItems.Where(x => x > 50).Except(ArrayItems2.Where(x => x > 50));
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayExceptArrayCount()
         {
             return ArrayItems.Except(ArrayItems2).Count();
         } //EndMethod
 
-        public int ArrayExceptArrayCountRewritten()
+        [LinqRewrite]
+		public int ArrayExceptArrayCountRewritten()
         {
             return ArrayItems.Except(ArrayItems2).Count();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayExceptArrayCount2()
         {
             return ArrayItems.Except(ArrayItems2).Count(x => x > 70);
         } //EndMethod
 
-        public int ArrayExceptArrayCount2Rewritten()
+        [LinqRewrite]
+		public int ArrayExceptArrayCount2Rewritten()
         {
             return ArrayItems.Except(ArrayItems2).Count(x => x > 70);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayExceptArraySum()
         {
             return ArrayItems.Except(ArrayItems2).Sum();
         } //EndMethod
 
-        public int ArrayExceptArraySumRewritten()
+        [LinqRewrite]
+		public int ArrayExceptArraySumRewritten()
         {
             return ArrayItems.Except(ArrayItems2).Sum();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayExceptArraySum2()
         {
             return ArrayItems.Except(ArrayItems2).Sum(x => x + 10);
         } //EndMethod
 
-        public int ArrayExceptArraySum2Rewritten()
+        [LinqRewrite]
+		public int ArrayExceptArraySum2Rewritten()
         {
             return ArrayItems.Except(ArrayItems2).Sum(x => x + 10);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptArrayDistinct()
         {
             return ArrayItems.Except(ArrayItems2).Distinct();
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptArrayDistinctRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptArrayDistinctRewritten()
         {
             return ArrayItems.Except(ArrayItems2).Distinct();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptArrayDistinct2()
         {
             return ArrayItems.Except(ArrayItems2).Distinct(EqualityComparer<int>.Default);
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptArrayDistinct2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptArrayDistinct2Rewritten()
         {
             return ArrayItems.Except(ArrayItems2).Distinct(EqualityComparer<int>.Default);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayExceptArrayElementAt()
         {
             return ArrayItems.Except(ArrayItems2).ElementAt(45);
         } //EndMethod
 
-        public int ArrayExceptArrayElementAtRewritten()
+        [LinqRewrite]
+		public int ArrayExceptArrayElementAtRewritten()
         {
             return ArrayItems.Except(ArrayItems2).ElementAt(45);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayExceptArrayElementAtOrDefault()
         {
             return ArrayItems.Except(ArrayItems2).ElementAtOrDefault(45);
         } //EndMethod
 
-        public int ArrayExceptArrayElementAtOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayExceptArrayElementAtOrDefaultRewritten()
         {
             return ArrayItems.Except(ArrayItems2).ElementAtOrDefault(45);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayExceptArrayFirst()
         {
             return ArrayItems.Except(ArrayItems2).First();
         } //EndMethod
 
-        public int ArrayExceptArrayFirstRewritten()
+        [LinqRewrite]
+		public int ArrayExceptArrayFirstRewritten()
         {
             return ArrayItems.Except(ArrayItems2).First();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayExceptArrayFirstOrDefault()
         {
             return ArrayItems.Except(ArrayItems2).FirstOrDefault();
         } //EndMethod
 
-        public int ArrayExceptArrayFirstOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayExceptArrayFirstOrDefaultRewritten()
         {
             return ArrayItems.Except(ArrayItems2).FirstOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayExceptArrayLast()
         {
             return ArrayItems.Except(ArrayItems2).Last();
         } //EndMethod
 
-        public int ArrayExceptArrayLastRewritten()
+        [LinqRewrite]
+		public int ArrayExceptArrayLastRewritten()
         {
             return ArrayItems.Except(ArrayItems2).Last();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayExceptArrayLastOrDefault()
         {
             return ArrayItems.Except(ArrayItems2).LastOrDefault();
         } //EndMethod
 
-        public int ArrayExceptArrayLastOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayExceptArrayLastOrDefaultRewritten()
         {
             return ArrayItems.Except(ArrayItems2).LastOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayExceptArraySingle()
         {
             return ArrayItems.Except(ArrayItems2).Single();
         } //EndMethod
 
-        public int ArrayExceptArraySingleRewritten()
+        [LinqRewrite]
+		public int ArrayExceptArraySingleRewritten()
         {
             return ArrayItems.Except(ArrayItems2).Single();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayExceptArraySingle2()
         {
             return ArrayItems.Except(ArrayItems2).Single(x => x == 76);
         } //EndMethod
 
-        public int ArrayExceptArraySingle2Rewritten()
+        [LinqRewrite]
+		public int ArrayExceptArraySingle2Rewritten()
         {
             return ArrayItems.Except(ArrayItems2).Single(x => x == 76);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayExceptArraySingleOrDefault()
         {
             return ArrayItems.Except(ArrayItems2).SingleOrDefault();
         } //EndMethod
 
-        public int ArrayExceptArraySingleOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayExceptArraySingleOrDefaultRewritten()
         {
             return ArrayItems.Except(ArrayItems2).SingleOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayExceptArrayMin()
         {
             return ArrayItems.Except(ArrayItems2).Min();
         } //EndMethod
 
-        public int ArrayExceptArrayMinRewritten()
+        [LinqRewrite]
+		public int ArrayExceptArrayMinRewritten()
         {
             return ArrayItems.Except(ArrayItems2).Min();
         } //EndMethod
 
 
-        [NoRewrite]
         public decimal ArrayExceptArrayMin2()
         {
             return ArrayItems.Except(ArrayItems2).Min(x => x + 2m);
         } //EndMethod
 
-        public decimal ArrayExceptArrayMin2Rewritten()
+        [LinqRewrite]
+		public decimal ArrayExceptArrayMin2Rewritten()
         {
             return ArrayItems.Except(ArrayItems2).Min(x => x + 2m);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayExceptArrayMax()
         {
             return ArrayItems.Except(ArrayItems2).Max();
         } //EndMethod
 
-        public int ArrayExceptArrayMaxRewritten()
+        [LinqRewrite]
+		public int ArrayExceptArrayMaxRewritten()
         {
             return ArrayItems.Except(ArrayItems2).Max();
         } //EndMethod
 
 
-        [NoRewrite]
         public decimal ArrayExceptArrayMax2()
         {
             return ArrayItems.Except(ArrayItems2).Max(x => x + 2m);
         } //EndMethod
 
-        public decimal ArrayExceptArrayMax2Rewritten()
+        [LinqRewrite]
+		public decimal ArrayExceptArrayMax2Rewritten()
         {
             return ArrayItems.Except(ArrayItems2).Max(x => x + 2m);
         } //EndMethod
 
 
-        [NoRewrite]
         public long ArrayExceptArrayLongCount()
         {
             return ArrayItems.Except(ArrayItems2).LongCount();
         } //EndMethod
 
-        public long ArrayExceptArrayLongCountRewritten()
+        [LinqRewrite]
+		public long ArrayExceptArrayLongCountRewritten()
         {
             return ArrayItems.Except(ArrayItems2).LongCount();
         } //EndMethod
 
 
-        [NoRewrite]
         public long ArrayExceptArrayLongCount2()
         {
             return ArrayItems.Except(ArrayItems2).LongCount(x => x > 50);
         } //EndMethod
 
-        public long ArrayExceptArrayLongCount2Rewritten()
+        [LinqRewrite]
+		public long ArrayExceptArrayLongCount2Rewritten()
         {
             return ArrayItems.Except(ArrayItems2).LongCount(x => x > 50);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArrayExceptArrayContains()
         {
             return ArrayItems.Except(ArrayItems2).Contains(56);
         } //EndMethod
 
-        public bool ArrayExceptArrayContainsRewritten()
+        [LinqRewrite]
+		public bool ArrayExceptArrayContainsRewritten()
         {
             return ArrayItems.Except(ArrayItems2).Contains(56);
         } //EndMethod
 
 
-        [NoRewrite]
         public double ArrayExceptArrayAverage()
         {
             return ArrayItems.Except(ArrayItems2).Average();
         } //EndMethod
 
-        public double ArrayExceptArrayAverageRewritten()
+        [LinqRewrite]
+		public double ArrayExceptArrayAverageRewritten()
         {
             return ArrayItems.Except(ArrayItems2).Average();
         } //EndMethod
 
 
-        [NoRewrite]
         public double ArrayExceptArrayAverage2()
         {
             return ArrayItems.Except(ArrayItems2).Average(x => x + 10);
         } //EndMethod
 
-        public double ArrayExceptArrayAverage2Rewritten()
+        [LinqRewrite]
+		public double ArrayExceptArrayAverage2Rewritten()
         {
             return ArrayItems.Except(ArrayItems2).Average(x => x + 10);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool ArrayExceptArrayContains2()
         {
             return ArrayItems.Except(ArrayItems2).Contains(56, EqualityComparer<int>.Default);
         } //EndMethod
 
-        public bool ArrayExceptArrayContains2Rewritten()
+        [LinqRewrite]
+		public bool ArrayExceptArrayContains2Rewritten()
         {
             return ArrayItems.Except(ArrayItems2).Contains(56, EqualityComparer<int>.Default);
         } //EndMethod
 
 
-        [NoRewrite]
         public bool SelectWhereArrayExceptSelectWhereArrayContains()
         {
             return ArrayItems.Select(x => x + 10).Where(x => x > 80).Except(ArrayItems2.Select(x => x + 10).Where(x => x > 80)).Contains(112);
         } //EndMethod
 
-        public bool SelectWhereArrayExceptSelectWhereArrayContainsRewritten()
+        [LinqRewrite]
+		public bool SelectWhereArrayExceptSelectWhereArrayContainsRewritten()
         {
             return ArrayItems.Select(x => x + 10).Where(x => x > 80).Except(ArrayItems2.Select(x => x + 10).Where(x => x > 80)).Contains(112);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeExceptArray()
         {
             return Enumerable.Range(20, 100).Except(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> RangeExceptArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeExceptArrayRewritten()
         {
             return Enumerable.Range(20, 100).Except(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatExceptArray()
         {
             return Enumerable.Repeat(20, 100).Except(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> RepeatExceptArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatExceptArrayRewritten()
         {
             return Enumerable.Repeat(20, 100).Except(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EmptyExceptArray()
         {
             return Enumerable.Empty<int>().Except(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> EmptyExceptArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EmptyExceptArrayRewritten()
         {
             return Enumerable.Empty<int>().Except(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeEmpty2Array()
         {
             return ArrayItems.Where(x => false).Except(ArrayItems2);
         } //EndMethod
 
-        public IEnumerable<int> RangeEmpty2ArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeEmpty2ArrayRewritten()
         {
             return ArrayItems.Where(x => false).Except(ArrayItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptRange()
         {
             return ArrayItems.Except(Enumerable.Range(70, 260));
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptRangeRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptRangeRewritten()
         {
             return ArrayItems.Except(Enumerable.Range(70, 260));
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptRepeat()
         {
             return ArrayItems.Except(Enumerable.Repeat(70, 100));
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptRepeatRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptRepeatRewritten()
         {
             return ArrayItems.Except(Enumerable.Repeat(70, 100));
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptEmpty()
         {
             return ArrayItems.Except(Enumerable.Empty<int>());
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptEmptyRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptEmptyRewritten()
         {
             return ArrayItems.Except(Enumerable.Empty<int>());
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptEmpty2()
         {
             return ArrayItems.Except(ArrayItems2.Where(x => false));
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptEmpty2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptEmpty2Rewritten()
         {
             return ArrayItems.Except(ArrayItems2.Where(x => false));
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptAll()
         {
             return ArrayItems.Except(Enumerable.Range(0, 1000));
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptAllRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptAllRewritten()
         {
             return ArrayItems.Except(Enumerable.Range(0, 1000));
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptNull()
         {
             return ArrayItems.Except(null);
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptNullRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptNullRewritten()
         {
             return ArrayItems.Except(null);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptArrayExceptEnumerable()
         {
             return ArrayItems.Except(ArrayItems).Except(EnumerableItems2);
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptArrayExceptEnumerableRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptArrayExceptEnumerableRewritten()
         {
             return ArrayItems.Except(ArrayItems).Except(EnumerableItems2);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayExceptArrayExceptEnumerable2()
         {
             return ArrayItems.Except(ArrayItems.Except(EnumerableItems2));
         } //EndMethod
 
-        public IEnumerable<int> ArrayExceptArrayExceptEnumerable2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayExceptArrayExceptEnumerable2Rewritten()
         {
             return ArrayItems.Except(ArrayItems.Except(EnumerableItems2));
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayDistinctExceptArrayDistinct()
         {
             return ArrayItems.Distinct().Except(ArrayItems.Distinct());
         } //EndMethod
 
-        public IEnumerable<int> ArrayDistinctExceptArrayDistinctRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayDistinctExceptArrayDistinctRewritten()
         {
             return ArrayItems.Distinct().Except(ArrayItems.Distinct());
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayDistinctExceptArrayDistinctDistinct()
         {
             return ArrayItems.Distinct().Except(ArrayItems.Distinct()).Distinct();
         } //EndMethod
 
-        public IEnumerable<int> ArrayDistinctExceptArrayDistinctDistinctRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayDistinctExceptArrayDistinctDistinctRewritten()
         {
             return ArrayItems.Distinct().Except(ArrayItems.Distinct()).Distinct();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayDistinctExceptArrayDistinctDistinct2()
         {
             return ArrayItems.Distinct(EqualityComparer<int>.Default).Except(ArrayItems.Distinct(EqualityComparer<int>.Default)).Distinct(EqualityComparer<int>.Default);
         } //EndMethod
 
-        public IEnumerable<int> ArrayDistinctExceptArrayDistinctDistinct2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayDistinctExceptArrayDistinctDistinct2Rewritten()
         {
             return ArrayItems.Distinct(EqualityComparer<int>.Default).Except(ArrayItems.Distinct(EqualityComparer<int>.Default)).Distinct(EqualityComparer<int>.Default);
         } //EndMethod

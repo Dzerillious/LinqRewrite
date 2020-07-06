@@ -28,23 +28,23 @@ namespace LinqRewrite
             _data.Semantic = semantic;
         }
         public override SyntaxNode VisitInvocationExpression(InvocationExpressionSyntax node)
-            => TryVisitInvocationExpression(node, null) ?? base.VisitInvocationExpression(node);
+            => TryVisitInvocationExpression(node) ?? base.VisitInvocationExpression(node);
 
         public override SyntaxNode VisitConditionalAccessExpression(ConditionalAccessExpressionSyntax node)
         {
-            var old = _data.CurrentMethodIsConditional;
+            var oldIsConditional = _data.CurrentMethodIsConditional;
             _data.CurrentMethodIsConditional = true;
             try
             {
                 if (!(node.WhenNotNull is InvocationExpressionSyntax invocation))
                     return base.VisitConditionalAccessExpression(node);
                 
-                var rewritten = TryVisitInvocationExpression(invocation, null);
+                var rewritten = TryVisitInvocationExpression(invocation);
                 return node.WhenNotNull.ToString() == rewritten.ToString() ? node : rewritten;
             }
             finally
             {
-                _data.CurrentMethodIsConditional = old;
+                _data.CurrentMethodIsConditional = oldIsConditional;
             }
         }
 
@@ -53,28 +53,29 @@ namespace LinqRewrite
 
         public override SyntaxNode VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
-            var (noRewrite, uncheckedLinq) = CheckAttributes(node.AttributeLists);
-            if (noRewrite) return node;
-            var oldUnchecked = _data.CurrentIsUnchecked;
+            var (rewrite, uncheckedLinq) = CheckAttributes(node.AttributeLists);
+            var (oldRewrite, oldUnchecked) = (_data.CurrentRewrite, _data.CurrentIsUnchecked);
+            
+            _data.CurrentRewrite = rewrite ?? _data.CurrentRewrite;
             _data.CurrentIsUnchecked = _data.CurrentIsUnchecked || uncheckedLinq;
             
-            var old = RewrittenLinqQueries;
+            var oldRewritten = RewrittenLinqQueries;
             var syntaxNode = base.VisitMethodDeclaration(node);
 
-            _data.CurrentIsUnchecked = oldUnchecked;
-            if (RewrittenLinqQueries != old) RewrittenMethods++;
+            (_data.CurrentIsUnchecked, _data.CurrentRewrite) = (oldUnchecked, oldRewrite);
+            if (RewrittenLinqQueries != oldRewritten) RewrittenMethods++;
             return syntaxNode;
         }
 
         public override SyntaxNode VisitClassDeclaration(ClassDeclarationSyntax node)
             => VisitTypeDeclaration(node);
 
-        private ExpressionSyntax TryVisitInvocationExpression(InvocationExpressionSyntax node, ForEachStatementSyntax containingForEach)
+        private ExpressionSyntax TryVisitInvocationExpression(InvocationExpressionSyntax node)
         {
             var methodIdx = _data.MethodsToAddToCurrentType.Count;
             try
             {
-                var expressionSyntax = VisitInvocationExpression(node, containingForEach);
+                var expressionSyntax = VisitInvocation(node);
                 if (expressionSyntax != null)
                 {
                     RewrittenLinqQueries++;
@@ -88,41 +89,41 @@ namespace LinqRewrite
             return null;
         }
 
-        private ExpressionSyntax VisitInvocationExpression(InvocationExpressionSyntax node,
-            ForEachStatementSyntax containingForEach)
+        private ExpressionSyntax VisitInvocation(InvocationExpressionSyntax node)
         {
+            if (!_data.CurrentRewrite) return node;
             if (!(node.Expression is MemberAccessExpressionSyntax) && !(node.Expression is MemberBindingExpressionSyntax)) return null;
 
-            var owner = node.AncestorsAndSelf().FirstOrDefault(x => x is MethodDeclarationSyntax);
-            if (owner == null) return null;
+            var ownerNode = node.AncestorsAndSelf().FirstOrDefault(x => x is MethodDeclarationSyntax);
+            if (ownerNode == null) return null;
             
-            _data.CurrentMethodIsStatic = _data.Semantic.GetDeclaredSymbol((MethodDeclarationSyntax) owner).IsStatic;
-            _data.CurrentMethodName = ((MethodDeclarationSyntax) owner).Identifier.ValueText;
-            _data.CurrentMethodTypeParameters = ((MethodDeclarationSyntax) owner).TypeParameterList;
-            _data.CurrentMethodConstraintClauses = ((MethodDeclarationSyntax) owner).ConstraintClauses;
+            _data.CurrentMethodIsStatic = _data.Semantic.GetDeclaredSymbol((MethodDeclarationSyntax) ownerNode).IsStatic;
+            _data.CurrentMethodName = ((MethodDeclarationSyntax) ownerNode).Identifier.ValueText;
+            _data.CurrentMethodTypeParameters = ((MethodDeclarationSyntax) ownerNode).TypeParameterList;
+            _data.CurrentMethodConstraintClauses = ((MethodDeclarationSyntax) ownerNode).ConstraintClauses;
 
             if (!IsSupportedMethod(node)) return node;
-            var chain = GetInvocationStepChain(node, out var lastNode);
+            var chainList = GetInvocationStepChain(node, out var lastNode);
             
             var (rewrite, collection) = CheckIfRewriteInvocation(node, lastNode);
             if (!rewrite) return null;
             
             var returnType = _data.Semantic.GetTypeFromExpression(node);
 
-            return InvocationRewriter.TryRewrite(collection, returnType, chain, node)
-                .WithLeadingTrivia(((CSharpSyntaxNode) containingForEach ?? node).GetLeadingTrivia())
-                .WithTrailingTrivia(((CSharpSyntaxNode) containingForEach ?? node).GetTrailingTrivia());
+            return InvocationRewriter.TryRewrite(collection, returnType, chainList, node)
+                .WithLeadingTrivia(node.GetLeadingTrivia())
+                .WithTrailingTrivia(node.GetTrailingTrivia());
         }
 
         private SyntaxNode VisitTypeDeclaration(TypeDeclarationSyntax node)
         {
-            var (noRewrite, uncheckedLinq) = CheckAttributes(node.AttributeLists);
-            if (noRewrite) return node;
-            var oldUnchecked = _data.CurrentIsUnchecked;
-            _data.CurrentIsUnchecked = _data.CurrentIsUnchecked || uncheckedLinq;
-
-            var old = _data.CurrentType;
+            var (rewrite, uncheckedLinq) = CheckAttributes(node.AttributeLists);
+            var (oldType, oldRewrite, oldUnchecked) = (_data.CurrentType, _data.CurrentRewrite, _data.CurrentIsUnchecked);
+            
             _data.CurrentType = node;
+            _data.CurrentRewrite = rewrite ?? _data.CurrentRewrite;
+            _data.CurrentIsUnchecked = _data.CurrentIsUnchecked || uncheckedLinq;
+            
             var changed = (TypeDeclarationSyntax) (node is ClassDeclarationSyntax declarationSyntax
                 ? base.VisitClassDeclaration(declarationSyntax)
                 : base.VisitStructDeclaration((StructDeclarationSyntax) node));
@@ -139,28 +140,11 @@ namespace LinqRewrite
                     : ((StructDeclarationSyntax) changed).AddMembers(newMembers);
                 
                 _data.MethodsToAddToCurrentType.RemoveAll(x => x.Item1 == _data.CurrentType);
-                _data.CurrentType = old;
-                _data.CurrentIsUnchecked = oldUnchecked;
-                return withMethods.NormalizeWhitespace();
+                changed = withMethods.NormalizeWhitespace();
             }
-            _data.CurrentType = old;
-            _data.CurrentIsUnchecked = oldUnchecked;
+            (_data.CurrentType, _data.CurrentIsUnchecked, _data.CurrentRewrite) 
+                = (oldType, oldUnchecked, oldRewrite);
             return changed;
-        }
-
-        private SyntaxNode TryVisitForEachStatement(ForEachStatementSyntax node)
-        {
-            if (!(node.Expression is InvocationExpressionSyntax collection) || !IsSupportedMethod(collection))
-                return base.VisitForEachStatement(node);
-
-            var visitor = new CanReWrapForeachVisitor();
-            visitor.Visit(node.Statement);
-            if (visitor.Fail) return base.VisitForEachStatement(node);
-
-            var expressionSyntax = TryVisitInvocationExpression(collection, node);
-            return expressionSyntax != null
-                ? SyntaxFactory.ExpressionStatement(expressionSyntax)
-                : base.VisitForEachStatement(node);
         }
 
         private List<LinqStep> GetInvocationStepChain(InvocationExpressionSyntax node, out ExpressionSyntax lastNode)
@@ -196,23 +180,23 @@ namespace LinqRewrite
         private RewrittenValueBridge[] RewriteArguments(InvocationExpressionSyntax invocationExpression)
         {
             var arguments = new List<RewrittenValueBridge>();
-            foreach (var t in invocationExpression.ArgumentList.Arguments)
+            foreach (var argument in invocationExpression.ArgumentList.Arguments)
             {
-                var expression = t.Expression;
+                var expression = argument.Expression;
                 if (expression is InvocationExpressionSyntax newInvocation)
                 {
-                    var visited = TryVisitInvocationExpression(newInvocation, null);
-                    arguments.Add(new RewrittenValueBridge(expression, visited));
+                    var visitedExpression = TryVisitInvocationExpression(newInvocation);
+                    arguments.Add(new RewrittenValueBridge(expression, visitedExpression));
                 }
                 else if (expression is SimpleLambdaExpressionSyntax simpleLambdaExpression)
                 {
-                    var visited = VisitSimpleLambdaExpression(simpleLambdaExpression);
-                    arguments.Add(new RewrittenValueBridge(expression, SyntaxFactory.ParseExpression(visited.ToString())));
+                    var visitedNode = VisitSimpleLambdaExpression(simpleLambdaExpression);
+                    arguments.Add(new RewrittenValueBridge(expression, SyntaxFactory.ParseExpression(visitedNode.ToString())));
                 }
                 else if (expression is ParenthesizedLambdaExpressionSyntax parenthesizedLambdaExpression)
                 {
-                    var visited = VisitParenthesizedLambdaExpression(parenthesizedLambdaExpression);
-                    arguments.Add(new RewrittenValueBridge(expression, SyntaxFactory.ParseExpression(visited.ToString())));
+                    var visitedNode = VisitParenthesizedLambdaExpression(parenthesizedLambdaExpression);
+                    arguments.Add(new RewrittenValueBridge(expression, SyntaxFactory.ParseExpression(visitedNode.ToString())));
                 }
                 else arguments.Add(new RewrittenValueBridge(expression));
             }
@@ -252,12 +236,6 @@ namespace LinqRewrite
             return (true, lastNode);
         }
 
-        private static string GetMethodName(string name)
-        {
-            var index = name.IndexOf('<');
-            return index == -1 ? name : name.Substring(0, index);
-        }
-
         private static bool IsSupportedMethod(InvocationExpressionSyntax invocation) 
             => invocation.Expression switch
             {
@@ -266,20 +244,30 @@ namespace LinqRewrite
                 _ => false
             };
 
-        private (bool noRewrite, bool uncheckedLinq) CheckAttributes(SyntaxList<AttributeListSyntax> attributeLists)
+        private static string GetMethodName(string name)
         {
-            bool noRewrite = false;
+            var index = name.IndexOf('<');
+            return index == -1 ? name : name.Substring(0, index);
+        }
+
+        private (bool? rewrite, bool uncheckedLinq) CheckAttributes(SyntaxList<AttributeListSyntax> attributeLists)
+        {
+            bool? rewrite = null;
             bool uncheckedLinq = false;
             foreach (var attributeListSyntax in attributeLists)
             foreach (var attribute in attributeListSyntax.Attributes)
             {
-                var symbol = ((IMethodSymbol) _data.Semantic.GetSymbolInfo(attribute).Symbol).ContainingType.ToDisplayString();
-                if (symbol == "LinqRewrite.Core.NoRewriteAttribute")
-                    noRewrite = true;
-                if (symbol == "LinqRewrite.Core.UncheckedLinqAttribute")
-                    uncheckedLinq = true;
+                string symbol = ((IMethodSymbol) _data.Semantic.GetSymbolInfo(attribute).Symbol).ContainingType.ToDisplayString();
+                if (symbol == "LinqRewrite.Core.NoLinqRewriteAttribute")
+                    return (false, false);
+                
+                if (symbol != "LinqRewrite.Core.LinqRewriteAttribute") continue;
+                rewrite = true;
+                
+                if (attribute.ArgumentList != null && attribute.ArgumentList.Arguments.Count > 0)
+                    uncheckedLinq = attribute.ArgumentList.Arguments[0].ToString().Contains("RewriteOptions.Unchecked");
             }
-            return (noRewrite, uncheckedLinq);
+            return (rewrite, uncheckedLinq);
         }
     }
 }

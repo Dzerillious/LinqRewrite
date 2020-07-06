@@ -24,50 +24,55 @@ namespace BenchmarksLibrary
             EnumerableSource = Enumerable.Range(0, Offset);
         }
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayToSimpleList()
         {
             ArraySource.ToSimpleList();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayToSimpleListRewritten()
+        [LinqRewrite]
+		public void ArrayToSimpleListRewritten()
         {
             ArraySource.ToSimpleList(EnlargingCoefficient.By2);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void RangeToSimpleList()
         {
             Enumerable.Range(0, Offset).ToSimpleList();
         }//EndMethod
 
         [Benchmark]
-        public void RangeToSimpleListRewritten()
+        [LinqRewrite]
+		public void RangeToSimpleListRewritten()
         {
             Enumerable.Range(0, Offset).ToSimpleList(EnlargingCoefficient.By2);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableToSimpleList()
         {
             EnumerableSource.ToSimpleList();
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableToSimpleListBy2Rewritten()
+        [LinqRewrite]
+		public void EnumerableToSimpleListBy2Rewritten()
         {
             EnumerableSource.ToSimpleList(EnlargingCoefficient.By2);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableToSimpleListBy4Rewritten()
+        [LinqRewrite]
+		public void EnumerableToSimpleListBy4Rewritten()
         {
             EnumerableSource.ToSimpleList(EnlargingCoefficient.By4);
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableToSimpleListBy8Rewritten()
+        [LinqRewrite]
+		public void EnumerableToSimpleListBy8Rewritten()
         {
             EnumerableSource.ToSimpleList(EnlargingCoefficient.By8);
         }//EndMethod

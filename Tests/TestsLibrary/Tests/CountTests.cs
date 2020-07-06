@@ -35,205 +35,205 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(EmptyDistinctCount), EmptyDistinctCount, EmptyDistinctCountRewritten);
         }
 
-        [NoRewrite]
         public int ArrayCount()
         {
             return ArrayItems.Count();
         } //EndMethod
 
-        public int ArrayCountRewritten()
+        [LinqRewrite]
+		public int ArrayCountRewritten()
         {
             return ArrayItems.Count();
         } //EndMethod=
 
 
-        [NoRewrite]
         public int ArrayCount2()
         {
             return ArrayItems.Count(x => x > 3);
         } //EndMethod
 
-        public int ArrayCount2Rewritten()
+        [LinqRewrite]
+		public int ArrayCount2Rewritten()
         {
             return ArrayItems.Count(x => x > 3);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArraySelectCount()
         {
             return ArrayItems.Select(x => x + 10).Count();
         } //EndMethod
 
-        public int ArraySelectCountRewritten()
+        [LinqRewrite]
+		public int ArraySelectCountRewritten()
         {
             return ArrayItems.Select(x => x + 10).Count();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayCount5()
         {
             return ArrayItems.Where(x => x > 4).Count(x => x % 2 == 0);
         } //EndMethod
 
-        public int ArrayCount5Rewritten()
+        [LinqRewrite]
+		public int ArrayCount5Rewritten()
         {
             return ArrayItems.Where(x => x > 4).Count(x => x % 2 == 0);
         } //EndMethod
 
 
-        [NoRewrite]
         public int EnumerableCount2()
         {
             return EnumerableItems.Count();
         } //EndMethod
 
-        public int EnumerableCount2Rewritten()
+        [LinqRewrite]
+		public int EnumerableCount2Rewritten()
         {
             return EnumerableItems.Count();
         } //EndMethod
 
 
-        [NoRewrite]
         public int EnumerableCount3()
         {
             return EnumerableItems.Count(x => x > 3);
         } //EndMethod
 
-        public int EnumerableCount3Rewritten()
+        [LinqRewrite]
+		public int EnumerableCount3Rewritten()
         {
             return EnumerableItems.Count(x => x > 3);
         } //EndMethod
 
 
-        [NoRewrite]
         public int EnumerableCount4()
         {
             return ArrayItems.Select(x => x + 10).Count();
         } //EndMethod
 
-        public int EnumerableCount4Rewritten()
+        [LinqRewrite]
+		public int EnumerableCount4Rewritten()
         {
             return ArrayItems.Select(x => x + 10).Count();
         } //EndMethod
 
 
-        [NoRewrite]
         public int EnumerableCount5()
         {
             return ArrayItems.Where(x => x > 4).Count(x => x % 2 == 0);
         } //EndMethod
 
-        public int EnumerableCount5Rewritten()
+        [LinqRewrite]
+		public int EnumerableCount5Rewritten()
         {
             return ArrayItems.Where(x => x > 4).Count(x => x % 2 == 0);
         } //EndMethod
 
 
-        [NoRewrite]
         public int RangeCount()
         {
             return Enumerable.Range(5, 256).Count();
         } //EndMethod
 
-        public int RangeCountRewritten()
+        [LinqRewrite]
+		public int RangeCountRewritten()
         {
             return Enumerable.Range(5, 256).Count();
         } //EndMethod
 
 
-        [NoRewrite]
         public int RangeSelectCount()
         {
             return Enumerable.Range(5, 256).Select(x => x + 3).Count();
         } //EndMethod
 
-        public int RangeSelectCountRewritten()
+        [LinqRewrite]
+		public int RangeSelectCountRewritten()
         {
             return Enumerable.Range(5, 256).Select(x => x + 3).Count();
         } //EndMethod
 
 
-        [NoRewrite]
         public int RangeWhereCount()
         {
             return Enumerable.Range(5, 256).Where(x => x > 100).Count();
         } //EndMethod
 
-        public int RangeWhereCountRewritten()
+        [LinqRewrite]
+		public int RangeWhereCountRewritten()
         {
             return Enumerable.Range(5, 256).Where(x => x > 100).Count();
         } //EndMethod
 
 
-        [NoRewrite]
         public int RangeCount2()
         {
             return Enumerable.Range(5, 256).Count(x => x > 100);
         } //EndMethod
 
-        public int RangeCount2Rewritten()
+        [LinqRewrite]
+		public int RangeCount2Rewritten()
         {
             return Enumerable.Range(5, 256).Count(x => x > 100);
         } //EndMethod
 
 
-        [NoRewrite]
         public int RepeatCount()
         {
             return Enumerable.Repeat(5, 256).Count();
         } //EndMethod
 
-        public int RepeatCountRewritten()
+        [LinqRewrite]
+		public int RepeatCountRewritten()
         {
             return Enumerable.Repeat(5, 256).Count();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayMethodCount()
         {
             return ArrayItems.Count(Predicate);
         } //EndMethod
 
-        public int ArrayMethodCountRewritten()
+        [LinqRewrite]
+		public int ArrayMethodCountRewritten()
         {
             return ArrayItems.Count(Predicate);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayDistinctCount()
         {
             return ArrayItems.Distinct().Count();
         } //EndMethod
 
-        public int ArrayDistinctCountRewritten()
+        [LinqRewrite]
+		public int ArrayDistinctCountRewritten()
         {
             return ArrayItems.Distinct().Count();
         } //EndMethod
 
 
-        [NoRewrite]
         public int EmptyCount()
         {
             return Enumerable.Empty<int>().Count();
         } //EndMethod
 
-        public int EmptyCountRewritten()
+        [LinqRewrite]
+		public int EmptyCountRewritten()
         {
             return Enumerable.Empty<int>().Count();
         } //EndMethod
 
 
-        [NoRewrite]
         public int EmptyDistinctCount()
         {
             return Enumerable.Empty<int>().Distinct().Count();
         } //EndMethod
 
-        public int EmptyDistinctCountRewritten()
+        [LinqRewrite]
+		public int EmptyDistinctCountRewritten()
         {
             return Enumerable.Empty<int>().Distinct().Count();
         } //EndMethod

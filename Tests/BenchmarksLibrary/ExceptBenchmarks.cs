@@ -23,146 +23,158 @@ namespace BenchmarksLibrary
             EnumerableSource2 = Enumerable.Range(500, 1000);
         }
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayExceptArrayToArray()
         {
             var res = ArraySource.Except(ArraySource2).ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayExceptArrayToArrayRewritten()
+        [LinqRewrite]
+		public void ArrayExceptArrayToArrayRewritten()
         {
             var res = ArraySource.Except(ArraySource2).ToArray();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayWhereExceptArrayWhereToArray()
         {
             var res = ArraySource.Except(ArraySource2).ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereExceptArrayWhereToArrayRewritten()
+        [LinqRewrite]
+		public void ArrayWhereExceptArrayWhereToArrayRewritten()
         {
             var res = ArraySource.Except(ArraySource2).ToArray();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayExceptEnumerableToArray()
         {
             var res = ArraySource.Except(EnumerableSource2).ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayExceptEnumerableToArrayRewritten()
+        [LinqRewrite]
+		public void ArrayExceptEnumerableToArrayRewritten()
         {
             var res = ArraySource.Except(EnumerableSource2).ToArray();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayWhereExceptEnumerableWhereToArray()
         {
             var res = ArraySource.Except(EnumerableSource2).ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereExceptEnumerableWhereToArrayRewritten()
+        [LinqRewrite]
+		public void ArrayWhereExceptEnumerableWhereToArrayRewritten()
         {
             var res = ArraySource.Except(EnumerableSource2).ToArray();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableExceptArrayToArray()
         {
             var res = EnumerableSource.Except(ArraySource2).ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableExceptArrayToArrayRewritten()
+        [LinqRewrite]
+		public void EnumerableExceptArrayToArrayRewritten()
         {
             var res = EnumerableSource.Except(ArraySource2).ToArray();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableWhereExceptArrayWhereToArray()
         {
             var res = EnumerableSource.Except(ArraySource2).ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableWhereExceptArrayWhereToArrayRewritten()
+        [LinqRewrite]
+		public void EnumerableWhereExceptArrayWhereToArrayRewritten()
         {
             var res = EnumerableSource.Except(ArraySource2).ToArray();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableExceptEnumerableToArray()
         {
             var res = EnumerableSource.Except(EnumerableSource2).ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableExceptEnumerableToArrayRewritten()
+        [LinqRewrite]
+		public void EnumerableExceptEnumerableToArrayRewritten()
         {
             var res = EnumerableSource.Except(EnumerableSource2).ToArray();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableWhereExceptEnumerableWhereToArray()
         {
             var res = EnumerableSource.Except(EnumerableSource2).ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableWhereExceptEnumerableWhereToArrayRewritten()
+        [LinqRewrite]
+		public void EnumerableWhereExceptEnumerableWhereToArrayRewritten()
         {
             var res = EnumerableSource.Except(EnumerableSource2).ToArray();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayExceptArrayToSimpleList()
         {
             var res = ArraySource.Except(ArraySource2).ToSimpleList();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayExceptArrayToSimpleListRewritten()
+        [LinqRewrite]
+		public void ArrayExceptArrayToSimpleListRewritten()
         {
             var res = ArraySource.Except(ArraySource2).ToSimpleList();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayWhereExceptArrayWhereToSimpleList()
         {
             var res = ArraySource.Except(ArraySource2).ToSimpleList();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayWhereExceptArrayWhereToSimpleListRewritten()
+        [LinqRewrite]
+		public void ArrayWhereExceptArrayWhereToSimpleListRewritten()
         {
             var res = ArraySource.Except(ArraySource2).ToSimpleList();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableExceptEnumerableToSimpleList()
         {
             var res = EnumerableSource.Except(EnumerableSource2).ToSimpleList();
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableExceptEnumerableToSimpleListRewritten()
+        [LinqRewrite]
+		public void EnumerableExceptEnumerableToSimpleListRewritten()
         {
             var res = EnumerableSource.Except(EnumerableSource2).ToSimpleList();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableWhereExceptEnumerableWhereToSimpleList()
         {
             var res = EnumerableSource.Except(EnumerableSource2).ToSimpleList();
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableWhereExceptEnumerableWhereToSimpleListRewritten()
+        [LinqRewrite]
+		public void EnumerableWhereExceptEnumerableWhereToSimpleListRewritten()
         {
             var res = EnumerableSource.Except(EnumerableSource2).ToSimpleList();
         }//EndMethod

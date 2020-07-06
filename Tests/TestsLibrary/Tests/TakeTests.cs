@@ -46,347 +46,347 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(RepeatTakeToArray), RepeatTakeToArray, RepeatTakeToArrayRewritten);
         }
 
-        [NoRewrite]
         public IEnumerable<int> ArrayTake()
         {
             return ArrayItems.Take(20);
         } //EndMethod
 
-        public IEnumerable<int> ArrayTakeRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayTakeRewritten()
         {
             return ArrayItems.Take(20);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayTake0()
         {
             return ArrayItems.Take(0);
         } //EndMethod
 
-        public IEnumerable<int> ArrayTake0Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayTake0Rewritten()
         {
             return ArrayItems.Take(0);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayTakeM1()
         {
             return ArrayItems.Take(-1);
         } //EndMethod
 
-        public IEnumerable<int> ArrayTakeM1Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayTakeM1Rewritten()
         {
             return ArrayItems.Take(-1);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayTake1000()
         {
             return ArrayItems.Take(1000);
         } //EndMethod
 
-        public IEnumerable<int> ArrayTake1000Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayTake1000Rewritten()
         {
             return ArrayItems.Take(1000);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayTakeParam()
         {
             var a = 50;
             return ArrayItems.Take(a);
         } //EndMethod
 
-        public IEnumerable<int> ArrayTakeParamRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayTakeParamRewritten()
         {
             var a = 50;
             return ArrayItems.Take(a);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableTake()
         {
             return EnumerableItems.Take(20);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableTakeRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableTakeRewritten()
         {
             return EnumerableItems.Take(20);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableTake0()
         {
             return EnumerableItems.Take(0);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableTake0Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableTake0Rewritten()
         {
             return EnumerableItems.Take(0);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableTakeM1()
         {
             return EnumerableItems.Take(-1);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableTakeM1Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableTakeM1Rewritten()
         {
             return EnumerableItems.Take(-1);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableTake1000()
         {
             return EnumerableItems.Take(1000);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableTake1000Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableTake1000Rewritten()
         {
             return EnumerableItems.Take(1000);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableTakeParam()
         {
             var a = 50;
             return EnumerableItems.Take(a);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableTakeParamRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableTakeParamRewritten()
         {
             var a = 50;
             return EnumerableItems.Take(a);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeTake()
         {
             return Enumerable.Range(0, 100).Take(20);
         } //EndMethod
 
-        public IEnumerable<int> RangeTakeRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeTakeRewritten()
         {
             return Enumerable.Range(0, 100).Take(20);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeTake0()
         {
             return Enumerable.Range(0, 100).Take(0);
         } //EndMethod
 
-        public IEnumerable<int> RangeTake0Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeTake0Rewritten()
         {
             return Enumerable.Range(0, 100).Take(0);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeTakeM1()
         {
             return Enumerable.Range(0, 100).Take(-1);
         } //EndMethod
 
-        public IEnumerable<int> RangeTakeM1Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeTakeM1Rewritten()
         {
             return Enumerable.Range(0, 100).Take(-1);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeTake1000()
         {
             return Enumerable.Range(0, 100).Take(1000);
         } //EndMethod
 
-        public IEnumerable<int> RangeTake1000Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeTake1000Rewritten()
         {
             return Enumerable.Range(0, 100).Take(1000);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeTakeParam()
         {
             var a = 50;
             return Enumerable.Range(0, 100).Take(a);
         } //EndMethod
 
-        public IEnumerable<int> RangeTakeParamRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeTakeParamRewritten()
         {
             var a = 50;
             return Enumerable.Range(0, 100).Take(a);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatTake()
         {
             return Enumerable.Repeat(0, 100).Take(20);
         } //EndMethod
 
-        public IEnumerable<int> RepeatTakeRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatTakeRewritten()
         {
             return Enumerable.Repeat(0, 100).Take(20);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatTake0()
         {
             return Enumerable.Repeat(0, 100).Take(0);
         } //EndMethod
 
-        public IEnumerable<int> RepeatTake0Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatTake0Rewritten()
         {
             return Enumerable.Repeat(0, 100).Take(0);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatTakeM1()
         {
             return Enumerable.Repeat(0, 100).Take(-1);
         } //EndMethod
 
-        public IEnumerable<int> RepeatTakeM1Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatTakeM1Rewritten()
         {
             return Enumerable.Repeat(0, 100).Take(-1);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatTake1000()
         {
             return Enumerable.Repeat(0, 100).Take(1000);
         } //EndMethod
 
-        public IEnumerable<int> RepeatTake1000Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatTake1000Rewritten()
         {
             return Enumerable.Repeat(0, 100).Take(1000);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatTakeParam()
         {
             var a = 50;
             return Enumerable.Repeat(0, 100).Take(a);
         } //EndMethod
 
-        public IEnumerable<int> RepeatTakeParamRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatTakeParamRewritten()
         {
             var a = 50;
             return Enumerable.Repeat(0, 100).Take(a);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySelectTakeToArray()
         {
             return ArrayItems.Select(x => x + 10).Take(20).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArraySelectTakeToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectTakeToArrayRewritten()
         {
             return ArrayItems.Select(x => x + 10).Take(20).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySelectTakeM1ToArray()
         {
             var m1 = -1;
             return ArrayItems.Select(x => x + 10).Take(m1).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArraySelectTakeM1ToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectTakeM1ToArrayRewritten()
         {
             var m1 = -1;
             return ArrayItems.Select(x => x + 10).Take(m1).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayWhereTakeToArray()
         {
             return ArrayItems.Where(x => x > 20).Take(20).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayWhereTakeToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayWhereTakeToArrayRewritten()
         {
             return ArrayItems.Where(x => x > 20).Take(20).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayWhereFalseTakeToArray()
         {
             return ArrayItems.Where(x => false).Take(20).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayWhereFalseTakeToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayWhereFalseTakeToArrayRewritten()
         {
             return ArrayItems.Where(x => false).Take(20).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArrayTakeToArray()
         {
             return ArrayItems.Take(20).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayTakeToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayTakeToArrayRewritten()
         {
             return ArrayItems.Take(20).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableTakeToArray()
         {
             return EnumerableItems.Take(20).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableTakeToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableTakeToArrayRewritten()
         {
             return EnumerableItems.Take(20).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeTakeToArray()
         {
             return Enumerable.Range(0, 100).Take(20).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> RangeTakeToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeTakeToArrayRewritten()
         {
             return Enumerable.Range(0, 100).Take(20).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RepeatTakeToArray()
         {
             return Enumerable.Repeat(0, 100).Take(20).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> RepeatTakeToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RepeatTakeToArrayRewritten()
         {
             return Enumerable.Repeat(0, 100).Take(20).ToArray();
         } //EndMethod

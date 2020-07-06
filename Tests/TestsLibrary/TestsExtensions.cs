@@ -63,7 +63,6 @@ namespace TestsLibrary
             return (firstExcept, firstVal, secondExcept, secondVal);
         }
         
-        [NoRewrite]
         public static void TestEquals<T, Y>(string name, Func<ILookup<T, Y>> first, Func<ILookup<T, Y>> second)
         {
             var (ex1, val1, ex2, val2) = GetValues(first, second);
@@ -83,7 +82,6 @@ namespace TestsLibrary
             }
         }
         
-        [NoRewrite]
         public static void TestEquals<T, Y>(string name, Func<Dictionary<T, Y>> first, Func<Dictionary<T, Y>> second)
         {
             var (ex1, val1, ex2, val2) = GetValues(first, second);
@@ -103,7 +101,6 @@ namespace TestsLibrary
             }
         }
         
-        [NoRewrite]
         public static void TestEquals<T>(string name, Func<IEnumerable<IEnumerable<T>>> first, Func<IEnumerable<IEnumerable<T>>> second)
         {
             var (ex1, val1, ex2, val2) = GetValues(first, second);
@@ -126,7 +123,6 @@ namespace TestsLibrary
             }
         }
         
-        [NoRewrite]
         public static void TestEquals<T>(string name, Func<IEnumerable<T>> first, Func<IEnumerable<T>> second)
         {
             var (ex1, val1, ex2, val2) = GetValues(first, second);

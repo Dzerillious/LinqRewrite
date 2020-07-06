@@ -33,186 +33,186 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(ArrayFirstOrDefaultUsingFirstOrDefault), ArrayFirstOrDefaultUsingFirstOrDefault, ArrayFirstOrDefaultUsingFirstOrDefaultRewritten);
         }
 
-        [NoRewrite]
         public int FirstOrDefault()
         {
             return ArrayItems.FirstOrDefault();
         } //EndMethod
 
-        public int FirstOrDefaultRewritten()
+        [LinqRewrite]
+		public int FirstOrDefaultRewritten()
         {
             return ArrayItems.FirstOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int EnumerableFirstOrDefault()
         {
             return EnumerableItems.FirstOrDefault();
         } //EndMethod
 
-        public int EnumerableFirstOrDefaultRewritten()
+        [LinqRewrite]
+		public int EnumerableFirstOrDefaultRewritten()
         {
             return EnumerableItems.FirstOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int FirstOrDefaultCondition()
         {
             return ArrayItems.FirstOrDefault(x => x > 30);
         } //EndMethod
 
-        public int FirstOrDefaultConditionRewritten()
+        [LinqRewrite]
+		public int FirstOrDefaultConditionRewritten()
         {
             return ArrayItems.FirstOrDefault(x => x > 30);
         } //EndMethod
 
 
-        [NoRewrite]
         public int FirstOrDefaultFalseCondition()
         {
             return ArrayItems.FirstOrDefault(x => x > 105);
         } //EndMethod
 
-        public int FirstOrDefaultFalseConditionRewritten()
+        [LinqRewrite]
+		public int FirstOrDefaultFalseConditionRewritten()
         {
             return ArrayItems.FirstOrDefault(x => x > 105);
         } //EndMethod
 
 
-        [NoRewrite]
         public int FirstOrDefaultMethod()
         {
             return ArrayItems.FirstOrDefault(Predicate);
         } //EndMethod
 
-        public int FirstOrDefaultMethodRewritten()
+        [LinqRewrite]
+		public int FirstOrDefaultMethodRewritten()
         {
             return ArrayItems.FirstOrDefault(Predicate);
         } //EndMethod
 
 
-        [NoRewrite]
         public int FirstOrDefaultWhereMethod()
         {
             return ArrayItems.Where(x => x > 10).FirstOrDefault();
         } //EndMethod
 
-        public int FirstOrDefaultWhereMethodRewritten()
+        [LinqRewrite]
+		public int FirstOrDefaultWhereMethodRewritten()
         {
             return ArrayItems.Where(x => x > 10).FirstOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int SelectFirstOrDefaultMethod()
         {
             return ArrayItems.Select(x => x + 10).FirstOrDefault();
         } //EndMethod
 
-        public int SelectFirstOrDefaultMethodRewritten()
+        [LinqRewrite]
+		public int SelectFirstOrDefaultMethodRewritten()
         {
             return ArrayItems.Select(x => x + 10).FirstOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int RangeFirstOrDefault()
         {
             return Enumerable.Range(0, 100).FirstOrDefault();
         } //EndMethod
 
-        public int RangeFirstOrDefaultRewritten()
+        [LinqRewrite]
+		public int RangeFirstOrDefaultRewritten()
         {
             return Enumerable.Range(0, 100).FirstOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int Range1FirstOrDefault()
         {
             return Enumerable.Range(0, 1).FirstOrDefault();
         } //EndMethod
 
-        public int Range1FirstOrDefaultRewritten()
+        [LinqRewrite]
+		public int Range1FirstOrDefaultRewritten()
         {
             return Enumerable.Range(0, 1).FirstOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int RangeRepeat()
         {
             return Enumerable.Repeat(0, 100).FirstOrDefault();
         } //EndMethod
 
-        public int RangeRepeatRewritten()
+        [LinqRewrite]
+		public int RangeRepeatRewritten()
         {
             return Enumerable.Repeat(0, 100).FirstOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int EmptyFirstOrDefault()
         {
             return Enumerable.Empty<int>().FirstOrDefault();
         } //EndMethod
 
-        public int EmptyFirstOrDefaultRewritten()
+        [LinqRewrite]
+		public int EmptyFirstOrDefaultRewritten()
         {
             return Enumerable.Empty<int>().FirstOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayDistinctFirstOrDefault()
         {
             return ArrayItems.Distinct().FirstOrDefault();
         } //EndMethod
 
-        public int ArrayDistinctFirstOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayDistinctFirstOrDefaultRewritten()
         {
             return ArrayItems.Distinct().FirstOrDefault();
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayFirstOrDefaultParam()
         {
             var a = 50;
             return ArrayItems.FirstOrDefault(x => x > a);
         } //EndMethod
 
-        public int ArrayFirstOrDefaultParamRewritten()
+        [LinqRewrite]
+		public int ArrayFirstOrDefaultParamRewritten()
         {
             var a = 50;
             return ArrayItems.FirstOrDefault(x => x > a);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayFirstOrDefaultChangingParam()
         {
             var a = 100;
             return ArrayItems.FirstOrDefault(x => x > a--);
         } //EndMethod
 
-        public int ArrayFirstOrDefaultChangingParamRewritten()
+        [LinqRewrite]
+		public int ArrayFirstOrDefaultChangingParamRewritten()
         {
             var a = 100;
             return ArrayItems.FirstOrDefault(x => x > a--);
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayFirstOrDefaultUsingFirstOrDefault()
         {
             var a = 100;
             return ArrayItems.FirstOrDefault(x => x > ArrayItems.FirstOrDefault(y => y > x));
         } //EndMethod
 
-        public int ArrayFirstOrDefaultUsingFirstOrDefaultRewritten()
+        [LinqRewrite]
+		public int ArrayFirstOrDefaultUsingFirstOrDefaultRewritten()
         {
             var a = 100;
             return ArrayItems.FirstOrDefault(x => x > ArrayItems.FirstOrDefault(y => y > x));

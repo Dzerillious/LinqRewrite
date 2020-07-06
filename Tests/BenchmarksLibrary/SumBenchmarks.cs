@@ -19,31 +19,33 @@ namespace BenchmarksLibrary
             EnumerableSource = Enumerable.Range(0, 1000);
         }
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public int RangeSum()
         {
             return Enumerable.Range(567, 1000).Sum();
         }
         
         [Benchmark]
-        public int RangeSumRewritten()
+        [LinqRewrite]
+		public int RangeSumRewritten()
         {
             return Enumerable.Range(567, 1000).Sum();
         }
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public int ArraySum()
         {
             return ArraySource.Sum();
         }
         
         [Benchmark]
-        public int ArraySumRewritten()
+        [LinqRewrite]
+		public int ArraySumRewritten()
         {
             return ArraySource.Sum();
         }
         
-        [NoRewrite, UncheckedLinq, Benchmark]
+        [Benchmark]
         public int ArrayCompositeSum()
         {
             var sum = ExtendedLinq.Range(0, ArraySource.Length / 10, 10)
@@ -52,8 +54,9 @@ namespace BenchmarksLibrary
             return sum;
         }
         
-        [Benchmark, UncheckedLinq]
-        public int ArrayCompositeSumRewritten()
+        [Benchmark]
+        [LinqRewrite(RewriteOptions.Unchecked)]
+		public int ArrayCompositeSumRewritten()
         {
             var sum = ExtendedLinq.Range(0, ArraySource.Length / 10, 10)
                 .Sum(x => ArraySource.Skip(x).Take(10).Sum());
@@ -61,7 +64,7 @@ namespace BenchmarksLibrary
             return sum;
         }
         
-        [NoRewrite, UncheckedLinq, Benchmark]
+        [Benchmark]
         public int ArraySIMDSum()
         {
             var simdLength = Vector<int>.Count;
@@ -71,8 +74,9 @@ namespace BenchmarksLibrary
                 + ArraySource.Skip(ArraySource.Length / simdLength * simdLength).Sum();
         }
         
-        [Benchmark, UncheckedLinq]
-        public int ArraySIMDSumRewritten()
+        [Benchmark]
+        [LinqRewrite(RewriteOptions.Unchecked)]
+		public int ArraySIMDSumRewritten()
         {
             var simdLength = Vector<int>.Count;
             Vector<int> vsum = Vector<int>.Zero;
@@ -82,38 +86,41 @@ namespace BenchmarksLibrary
                    + ArraySource.Skip(ArraySource.Length / simdLength * simdLength).Sum();
         }
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public int ArrayWhereSum()
         {
             return ArraySource.Where(x => x > 700).Sum();
         }
         
         [Benchmark]
-        public int ArrayWhereSumRewritten()
+        [LinqRewrite]
+		public int ArrayWhereSumRewritten()
         {
             return ArraySource.Where(x => x > 700).Sum();
         }
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public int? ArrayNullableSum()
         {
             return ArraySource.Sum(x => x > 700 ? x : (int?)null);
         }
         
         [Benchmark]
-        public int? ArrayNullableSumRewritten()
+        [LinqRewrite]
+		public int? ArrayNullableSumRewritten()
         {
             return ArraySource.Sum(x => x > 700 ? x : (int?)null);
         }
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public int EnumerableSum()
         {
             return EnumerableSource.Sum();
         }
         
         [Benchmark]
-        public int EnumerableSumRewritten()
+        [LinqRewrite]
+		public int EnumerableSumRewritten()
         {
             return EnumerableSource.Sum();
         }

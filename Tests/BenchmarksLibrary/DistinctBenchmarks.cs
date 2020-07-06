@@ -18,26 +18,28 @@ namespace BenchmarksLibrary
             EnumerableSource = Enumerable.Range(0, 1000);
         }
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ArrayDistinct()
         {
             var res = ArraySource.Distinct().ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void ArrayDistinctRewritten()
+        [LinqRewrite]
+		public void ArrayDistinctRewritten()
         {
             var res = ArraySource.Distinct().ToArray();
         }//EndMethod
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void EnumerableDistinct()
         {
             var res = EnumerableSource.Distinct().ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void EnumerableDistinctRewritten()
+        [LinqRewrite]
+		public void EnumerableDistinctRewritten()
         {
             var res = EnumerableSource.Distinct().ToArray();
         }//EndMethod

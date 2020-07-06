@@ -23,63 +23,62 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(ArrayChangingParamsForEach), ArrayChangingParamsForEach, ArrayChangingParamsForEachRewritten);
         }
 
-        [NoRewrite]
         public int ArrayForEach()
         {
             ArrayItems.ForEach(x => _ = 3);
             return 0;
         } //EndMethod
 
-        public int ArrayForEachRewritten()
+        [LinqRewrite]
+		public int ArrayForEachRewritten()
         {
             ArrayItems.ForEach(x => _ = 3);
             return 0;
         } //EndMethod
 
         
-        [NoRewrite]
         public int EnumerableForEach()
         {
             EnumerableItems.ForEach(x => _ = 3);
             return 0;
         } //EndMethod
 
-        public int EnumerableForEachRewritten()
+        [LinqRewrite]
+		public int EnumerableForEachRewritten()
         {
             EnumerableItems.ForEach(x => _ = 3);
             return 0;
         } //EndMethod
 
 
-        [NoRewrite]
         public int NullForEach()
         {
             NullItems.ForEach(x => _ = 3);
             return 0;
         } //EndMethod
 
-        public int NullForEachRewritten()
+        [LinqRewrite]
+		public int NullForEachRewritten()
         {
             NullItems.ForEach(x => _ = 3);
             return 0;
         } //EndMethod
 
 
-        [NoRewrite]
         public int NullableForEach()
         {
             NullItems?.ForEach(x => _ = 3);
             return 0;
         } //EndMethod
 
-        public int NullableForEachRewritten()
+        [LinqRewrite]
+		public int NullableForEachRewritten()
         {
             NullItems?.Select(x => x + 3).ForEach(x => _ = 3);
             return 0;
         } //EndMethod
 
 
-        [NoRewrite]
         public int ArrayChangingParamsForEach()
         {
             var a = 0;
@@ -87,7 +86,8 @@ namespace TestsLibrary.Tests
             return a;
         } //EndMethod
 
-        public int ArrayChangingParamsForEachRewritten()
+        [LinqRewrite]
+		public int ArrayChangingParamsForEachRewritten()
         {
             var a = 0;
             NullItems.ForEach(x => a++);

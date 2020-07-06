@@ -37,145 +37,145 @@ namespace TestsLibrary.Tests
             }
         }
 
-        [NoRewrite]
         public Dictionary<int, int> ArrayToDictionaryTest()
         {
             return ArrayItems.ToDictionary(x => x, x => x);
         } //EndMethod
 
-        public Dictionary<int, int> ArrayToDictionaryTestRewritten()
+        [LinqRewrite]
+		public Dictionary<int, int> ArrayToDictionaryTestRewritten()
         {
             return ArrayItems.ToDictionary(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public Dictionary<int, int> ListToDictionaryTest()
         {
             return ListItems.ToDictionary(x => x, x => x);
         } //EndMethod
 
-        public Dictionary<int, int> ListToDictionaryTestRewritten()
+        [LinqRewrite]
+		public Dictionary<int, int> ListToDictionaryTestRewritten()
         {
             return ListItems.ToDictionary(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public Dictionary<int, int> SimpleListToDictionaryTest()
         {
             return SimpleListItems.ToDictionary(x => x, x => x);
         } //EndMethod
 
-        public Dictionary<int, int> SimpleListToDictionaryTestRewritten()
+        [LinqRewrite]
+		public Dictionary<int, int> SimpleListToDictionaryTestRewritten()
         {
             return SimpleListItems.ToDictionary(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public Dictionary<int, int> EnumerableToDictionaryTest()
         {
             return EnumerableItems.ToDictionary(x => x, x => x);
         } //EndMethod
 
-        public Dictionary<int, int> EnumerableToDictionaryTestRewritten()
+        [LinqRewrite]
+		public Dictionary<int, int> EnumerableToDictionaryTestRewritten()
         {
             return EnumerableItems.ToDictionary(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public Dictionary<int, int> ArrayWhereParamToDictionaryTest(int offset)
         {
             return ArrayItems.Where(x => x > offset).ToDictionary(x => x, x => x);
         } //EndMethod
 
-        public Dictionary<int, int> ArrayWhereParamToDictionaryTestRewritten(int offset)
+        [LinqRewrite]
+		public Dictionary<int, int> ArrayWhereParamToDictionaryTestRewritten(int offset)
         {
             return ArrayItems.Where(x => x > offset).ToDictionary(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public Dictionary<int, int> EnumerableWhereParamToDictionaryTest(int offset)
         {
             return EnumerableItems.Where(x => x > offset).ToDictionary(x => x, x => x);
         } //EndMethod
 
-        public Dictionary<int, int> EnumerableWhereParamToDictionaryTestRewritten(int offset)
+        [LinqRewrite]
+		public Dictionary<int, int> EnumerableWhereParamToDictionaryTestRewritten(int offset)
         {
             return EnumerableItems.Where(x => x > offset).ToDictionary(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public Dictionary<int, int> SimpleListWhereParamToDictionaryTest(int offset)
         {
             return SimpleListItems.Where(x => x > offset).ToDictionary(x => x, x => x);
         } //EndMethod
 
-        public Dictionary<int, int> SimpleListWhereParamToDictionaryTestRewritten(int offset)
+        [LinqRewrite]
+		public Dictionary<int, int> SimpleListWhereParamToDictionaryTestRewritten(int offset)
         {
             return SimpleListItems.Where(x => x > offset).ToDictionary(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public Dictionary<int, int> ListWhereParamToDictionaryTest(int offset)
         {
             return ListItems.Where(x => x > offset).ToDictionary(x => x, x => x);
         } //EndMethod
 
-        public Dictionary<int, int> ListWhereParamToDictionaryTestRewritten(int offset)
+        [LinqRewrite]
+		public Dictionary<int, int> ListWhereParamToDictionaryTestRewritten(int offset)
         {
             return ListItems.Where(x => x > offset).ToDictionary(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public Dictionary<int, int> RangeWhereParamToDictionaryTest(int offset)
         {
             return Enumerable.Range(0, 1000).Where(x => x > offset).ToDictionary(x => x, x => x);
         } //EndMethod
 
-        public Dictionary<int, int> RangeWhereParamToDictionaryTestRewritten(int offset)
+        [LinqRewrite]
+		public Dictionary<int, int> RangeWhereParamToDictionaryTestRewritten(int offset)
         {
             return Enumerable.Range(0, 1000).Where(x => x > offset).ToDictionary(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public Dictionary<int, int> RangeParamToDictionaryTest(int count)
         {
             return Enumerable.Range(0, count).ToDictionary(x => x, x => x);
         } //EndMethod
 
-        public Dictionary<int, int> RangeParamToDictionaryTestRewritten(int count)
+        [LinqRewrite]
+		public Dictionary<int, int> RangeParamToDictionaryTestRewritten(int count)
         {
             return Enumerable.Range(0, count).ToDictionary(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public Dictionary<int, int> RepeatParamToDictionaryTest(int count)
         {
             return Enumerable.Repeat(0, count).ToDictionary(x => x, x => x);
         } //EndMethod
 
-        public Dictionary<int, int> RepeatParamToDictionaryTestRewritten(int count)
+        [LinqRewrite]
+		public Dictionary<int, int> RepeatParamToDictionaryTestRewritten(int count)
         {
             return Enumerable.Repeat(0, count).ToDictionary(x => x, x => x);
         } //EndMethod
 
 
-        [NoRewrite]
         public Dictionary<int, int> RepeatWhereParamToDictionaryTest(int offset)
         {
             return Enumerable.Repeat(0, 1000).Where((x, i) => i < offset).ToDictionary(x => x, x => x);
         } //EndMethod
 
-        public Dictionary<int, int> RepeatWhereParamToDictionaryTestRewritten(int offset)
+        [LinqRewrite]
+		public Dictionary<int, int> RepeatWhereParamToDictionaryTestRewritten(int offset)
         {
             return Enumerable.Repeat(0, 1000).Where((x, i) => i < offset).ToDictionary(x => x, x => x);
         } //EndMethod

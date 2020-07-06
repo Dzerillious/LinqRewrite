@@ -18,7 +18,6 @@ namespace BenchmarksLibrary
             EnumerableSource = Enumerable.Range(235, 10000);
         }
         
-        [NoRewrite]
         [Benchmark]
         public void ArrayJoin()
         {
@@ -26,12 +25,12 @@ namespace BenchmarksLibrary
         }
         
         [Benchmark]
-        public void ArrayJoinRewritten()
+        [LinqRewrite]
+		public void ArrayJoinRewritten()
         {
             ArraySource.Join(ArraySource, x => x % 100, x => x % 100, (x, y) => x + y).ToArray();
         }
         
-        [NoRewrite]
         [Benchmark]
         public void EnumerableJoin()
         {
@@ -39,7 +38,8 @@ namespace BenchmarksLibrary
         }
         
         [Benchmark]
-        public void EnumerableJoinRewritten()
+        [LinqRewrite]
+		public void EnumerableJoinRewritten()
         {
             EnumerableSource.Join(EnumerableSource, x => x % 100, x => x % 100, (x, y) => x + y).ToArray();
         }

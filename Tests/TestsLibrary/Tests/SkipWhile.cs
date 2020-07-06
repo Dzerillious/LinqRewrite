@@ -82,121 +82,120 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(RangeSkipWhileChangingParamsToArray), RangeSkipWhileChangingParamsToArray, RangeSkipWhileChangingParamsToArrayRewritten);
         }
 
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhile()
         {
             return ArrayItems.SkipWhile(x => x < 50);
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileRewritten()
         {
             return ArrayItems.SkipWhile(x => x < 50);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhileReverse()
         {
             return ArrayItems.SkipWhile(x => x > 50);
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileReverseRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileReverseRewritten()
         {
             return ArrayItems.SkipWhile(x => x > 50);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhileTrue()
         {
             return ArrayItems.SkipWhile(x => true);
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileTrueRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileTrueRewritten()
         {
             return ArrayItems.SkipWhile(x => true);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhileFalse()
         {
             return ArrayItems.SkipWhile(x => false);
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileFalseRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileFalseRewritten()
         {
             return ArrayItems.SkipWhile(x => false);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> ArraySelectSkipWhile()
         {
             return ArrayItems.Select(x => x + 20).SkipWhile(x => x < 50);
         } //EndMethod
 
-        public IEnumerable<int> ArraySelectSkipWhileRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectSkipWhileRewritten()
         {
             return ArrayItems.Select(x => x + 20).SkipWhile(x => x < 50);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> ArrayWhereSkipWhile()
         {
             return ArrayItems.Where(x => x > 20).SkipWhile(x => x < 50);
         } //EndMethod
 
-        public IEnumerable<int> ArrayWhereSkipWhileRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayWhereSkipWhileRewritten()
         {
             return ArrayItems.Where(x => x > 20).SkipWhile(x => x < 50);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhileParam()
         {
             var a = 50;
             return ArrayItems.SkipWhile(x => x < a);
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileParamRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileParamRewritten()
         {
             var a = 50;
             return ArrayItems.SkipWhile(x => x < a);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhileChangingParam()
         {
             var a = 50;
             return ArrayItems.SkipWhile(x => x < a++);
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileChangingParamRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileChangingParamRewritten()
         {
             var a = 50;
             return ArrayItems.SkipWhile(x => x < a++);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhileChangingParam2()
         {
             var a = 50;
             return ArrayItems.SkipWhile(x => x < a--);
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileChangingParam2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileChangingParam2Rewritten()
         {
             var a = 50;
             return ArrayItems.SkipWhile(x => x < a--);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhileChangingParams()
         {
             var a = 50;
@@ -204,7 +203,8 @@ namespace TestsLibrary.Tests
             return ArrayItems.SkipWhile(x => x < a++ - b--);
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileChangingParamsRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileChangingParamsRewritten()
         {
             var a = 50;
             var b = 50;
@@ -212,7 +212,6 @@ namespace TestsLibrary.Tests
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhileChangingParamsIndexed()
         {
             var a = 50;
@@ -220,7 +219,8 @@ namespace TestsLibrary.Tests
             return ArrayItems.SkipWhile((x, i) => x < a++ - b-- + i);
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileChangingParamsIndexedRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileChangingParamsIndexedRewritten()
         {
             var a = 50;
             var b = 50;
@@ -228,121 +228,120 @@ namespace TestsLibrary.Tests
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhileToArray()
         {
             return ArrayItems.SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileToArrayRewritten()
         {
             return ArrayItems.SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhileReverseToArray()
         {
             return ArrayItems.SkipWhile(x => x > 50).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileReverseToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileReverseToArrayRewritten()
         {
             return ArrayItems.SkipWhile(x => x > 50).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhileTrueToArray()
         {
             return ArrayItems.SkipWhile(x => true).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileTrueToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileTrueToArrayRewritten()
         {
             return ArrayItems.SkipWhile(x => true).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhileFalseToArray()
         {
             return ArrayItems.SkipWhile(x => false).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileFalseToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileFalseToArrayRewritten()
         {
             return ArrayItems.SkipWhile(x => false).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> ArraySelectSkipWhileToArray()
         {
             return ArrayItems.Select(x => x + 20).SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArraySelectSkipWhileToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySelectSkipWhileToArrayRewritten()
         {
             return ArrayItems.Select(x => x + 20).SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> ArrayWhereSkipWhileToArray()
         {
             return ArrayItems.Where(x => x > 20).SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArrayWhereSkipWhileToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArrayWhereSkipWhileToArrayRewritten()
         {
             return ArrayItems.Where(x => x > 20).SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhileParamToArray()
         {
             var a = 50;
             return ArrayItems.SkipWhile(x => x < a).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileParamToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileParamToArrayRewritten()
         {
             var a = 50;
             return ArrayItems.SkipWhile(x => x < a).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhileChangingParamToArray()
         {
             var a = 50;
             return ArrayItems.SkipWhile(x => x < a++).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileChangingParamToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileChangingParamToArrayRewritten()
         {
             var a = 50;
             return ArrayItems.SkipWhile(x => x < a++).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhileChangingParamToArray2()
         {
             var a = 50;
             return ArrayItems.SkipWhile(x => x < a--).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileChangingParamToArray2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileChangingParamToArray2Rewritten()
         {
             var a = 50;
             return ArrayItems.SkipWhile(x => x < a--).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> ArraySkipWhileChangingParamsToArray()
         {
             var a = 50;
@@ -350,7 +349,8 @@ namespace TestsLibrary.Tests
             return ArrayItems.SkipWhile(x => x < a++ - b--).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> ArraySkipWhileChangingParamsToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> ArraySkipWhileChangingParamsToArrayRewritten()
         {
             var a = 50;
             var b = 50;
@@ -359,121 +359,120 @@ namespace TestsLibrary.Tests
 
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipWhile()
         {
             return EnumerableItems.SkipWhile(x => x < 50);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipWhileRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipWhileRewritten()
         {
             return EnumerableItems.SkipWhile(x => x < 50);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipWhileReverse()
         {
             return EnumerableItems.SkipWhile(x => x > 50);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipWhileReverseRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipWhileReverseRewritten()
         {
             return EnumerableItems.SkipWhile(x => x > 50);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipWhileTrue()
         {
             return EnumerableItems.SkipWhile(x => true);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipWhileTrueRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipWhileTrueRewritten()
         {
             return EnumerableItems.SkipWhile(x => true);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipWhileFalse()
         {
             return EnumerableItems.SkipWhile(x => false);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipWhileFalseRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipWhileFalseRewritten()
         {
             return EnumerableItems.SkipWhile(x => false);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> EnumerableSelectSkipWhile()
         {
             return EnumerableItems.Select(x => x + 20).SkipWhile(x => x < 50);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSelectSkipWhileRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSelectSkipWhileRewritten()
         {
             return EnumerableItems.Select(x => x + 20).SkipWhile(x => x < 50);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> EnumerableWhereSkipWhile()
         {
             return EnumerableItems.Where(x => x > 20).SkipWhile(x => x < 50);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableWhereSkipWhileRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableWhereSkipWhileRewritten()
         {
             return EnumerableItems.Where(x => x > 20).SkipWhile(x => x < 50);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipWhileParam()
         {
             var a = 50;
             return EnumerableItems.SkipWhile(x => x < a);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipWhileParamRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipWhileParamRewritten()
         {
             var a = 50;
             return EnumerableItems.SkipWhile(x => x < a);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipWhileChangingParam()
         {
             var a = 50;
             return EnumerableItems.SkipWhile(x => x < a++);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipWhileChangingParamRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipWhileChangingParamRewritten()
         {
             var a = 50;
             return EnumerableItems.SkipWhile(x => x < a++);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipWhileChangingParam2()
         {
             var a = 50;
             return EnumerableItems.SkipWhile(x => x < a--);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipWhileChangingParam2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipWhileChangingParam2Rewritten()
         {
             var a = 50;
             return EnumerableItems.SkipWhile(x => x < a--);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipWhileChangingParams()
         {
             var a = 50;
@@ -481,7 +480,8 @@ namespace TestsLibrary.Tests
             return EnumerableItems.SkipWhile(x => x < a++ - b--);
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipWhileChangingParamsRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipWhileChangingParamsRewritten()
         {
             var a = 50;
             var b = 50;
@@ -489,121 +489,120 @@ namespace TestsLibrary.Tests
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipWhileToArray()
         {
             return EnumerableItems.SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipWhileToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipWhileToArrayRewritten()
         {
             return EnumerableItems.SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipWhileReverseToArray()
         {
             return EnumerableItems.SkipWhile(x => x > 50).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipWhileReverseToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipWhileReverseToArrayRewritten()
         {
             return EnumerableItems.SkipWhile(x => x > 50).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipWhileTrueToArray()
         {
             return EnumerableItems.SkipWhile(x => true).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipWhileTrueToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipWhileTrueToArrayRewritten()
         {
             return EnumerableItems.SkipWhile(x => true).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipWhileFalseToArray()
         {
             return EnumerableItems.SkipWhile(x => false).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipWhileFalseToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipWhileFalseToArrayRewritten()
         {
             return EnumerableItems.SkipWhile(x => false).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> EnumerableSelectSkipWhileToArray()
         {
             return EnumerableItems.Select(x => x + 20).SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSelectSkipWhileToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSelectSkipWhileToArrayRewritten()
         {
             return EnumerableItems.Select(x => x + 20).SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> EnumerableWhereSkipWhileToArray()
         {
             return EnumerableItems.Where(x => x > 20).SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableWhereSkipWhileToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableWhereSkipWhileToArrayRewritten()
         {
             return EnumerableItems.Where(x => x > 20).SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipWhileParamToArray()
         {
             var a = 50;
             return EnumerableItems.SkipWhile(x => x < a).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipWhileParamToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipWhileParamToArrayRewritten()
         {
             var a = 50;
             return EnumerableItems.SkipWhile(x => x < a).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipWhileChangingParamToArray()
         {
             var a = 50;
             return EnumerableItems.SkipWhile(x => x < a++).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipWhileChangingParamToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipWhileChangingParamToArrayRewritten()
         {
             var a = 50;
             return EnumerableItems.SkipWhile(x => x < a++).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipWhileChangingParamToArray2()
         {
             var a = 50;
             return EnumerableItems.SkipWhile(x => x < a--).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipWhileChangingParamToArray2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipWhileChangingParamToArray2Rewritten()
         {
             var a = 50;
             return EnumerableItems.SkipWhile(x => x < a--).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> EnumerableSkipWhileChangingParamsToArray()
         {
             var a = 50;
@@ -611,7 +610,8 @@ namespace TestsLibrary.Tests
             return EnumerableItems.SkipWhile(x => x < a++ - b--).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> EnumerableSkipWhileChangingParamsToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> EnumerableSkipWhileChangingParamsToArrayRewritten()
         {
             var a = 50;
             var b = 50;
@@ -620,121 +620,120 @@ namespace TestsLibrary.Tests
 
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeSkipWhile()
         {
             return Enumerable.Range(0, 100).SkipWhile(x => x < 50);
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipWhileRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipWhileRewritten()
         {
             return Enumerable.Range(0, 100).SkipWhile(x => x < 50);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeSkipWhileReverse()
         {
             return Enumerable.Range(0, 100).SkipWhile(x => x > 50);
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipWhileReverseRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipWhileReverseRewritten()
         {
             return Enumerable.Range(0, 100).SkipWhile(x => x > 50);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeSkipWhileTrue()
         {
             return Enumerable.Range(0, 100).SkipWhile(x => true);
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipWhileTrueRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipWhileTrueRewritten()
         {
             return Enumerable.Range(0, 100).SkipWhile(x => true);
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeSkipWhileFalse()
         {
             return Enumerable.Range(0, 100).SkipWhile(x => false);
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipWhileFalseRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipWhileFalseRewritten()
         {
             return Enumerable.Range(0, 100).SkipWhile(x => false);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> RangeSelectSkipWhile()
         {
             return Enumerable.Range(0, 100).Select(x => x + 20).SkipWhile(x => x < 50);
         } //EndMethod
 
-        public IEnumerable<int> RangeSelectSkipWhileRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSelectSkipWhileRewritten()
         {
             return Enumerable.Range(0, 100).Select(x => x + 20).SkipWhile(x => x < 50);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> RangeWhereSkipWhile()
         {
             return Enumerable.Range(0, 100).Where(x => x > 20).SkipWhile(x => x < 50);
         } //EndMethod
 
-        public IEnumerable<int> RangeWhereSkipWhileRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeWhereSkipWhileRewritten()
         {
             return Enumerable.Range(0, 100).Where(x => x > 20).SkipWhile(x => x < 50);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> RangeSkipWhileParam()
         {
             var a = 50;
             return Enumerable.Range(0, 100).SkipWhile(x => x < a);
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipWhileParamRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipWhileParamRewritten()
         {
             var a = 50;
             return Enumerable.Range(0, 100).SkipWhile(x => x < a);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> RangeSkipWhileChangingParam()
         {
             var a = 50;
             return Enumerable.Range(0, 100).SkipWhile(x => x < a++);
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipWhileChangingParamRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipWhileChangingParamRewritten()
         {
             var a = 50;
             return Enumerable.Range(0, 100).SkipWhile(x => x < a++);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> RangeSkipWhileChangingParam2()
         {
             var a = 50;
             return Enumerable.Range(0, 100).SkipWhile(x => x < a--);
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipWhileChangingParam2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipWhileChangingParam2Rewritten()
         {
             var a = 50;
             return Enumerable.Range(0, 100).SkipWhile(x => x < a--);
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> RangeSkipWhileChangingParams()
         {
             var a = 50;
@@ -742,7 +741,8 @@ namespace TestsLibrary.Tests
             return Enumerable.Range(0, 100).SkipWhile(x => x < a++ - b--);
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipWhileChangingParamsRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipWhileChangingParamsRewritten()
         {
             var a = 50;
             var b = 50;
@@ -750,121 +750,120 @@ namespace TestsLibrary.Tests
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeSkipWhileToArray()
         {
             return Enumerable.Range(0, 100).SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipWhileToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipWhileToArrayRewritten()
         {
             return Enumerable.Range(0, 100).SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeSkipWhileReverseToArray()
         {
             return Enumerable.Range(0, 100).SkipWhile(x => x > 50).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipWhileReverseToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipWhileReverseToArrayRewritten()
         {
             return Enumerable.Range(0, 100).SkipWhile(x => x > 50).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeSkipWhileTrueToArray()
         {
             return Enumerable.Range(0, 100).SkipWhile(x => true).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipWhileTrueToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipWhileTrueToArrayRewritten()
         {
             return Enumerable.Range(0, 100).SkipWhile(x => true).ToArray();
         } //EndMethod
 
 
-        [NoRewrite]
         public IEnumerable<int> RangeSkipWhileFalseToArray()
         {
             return Enumerable.Range(0, 100).SkipWhile(x => false).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipWhileFalseToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipWhileFalseToArrayRewritten()
         {
             return Enumerable.Range(0, 100).SkipWhile(x => false).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> RangeSelectSkipWhileToArray()
         {
             return Enumerable.Range(0, 100).Select(x => x + 20).SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> RangeSelectSkipWhileToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSelectSkipWhileToArrayRewritten()
         {
             return Enumerable.Range(0, 100).Select(x => x + 20).SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> RangeWhereSkipWhileToArray()
         {
             return Enumerable.Range(0, 100).Where(x => x > 20).SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> RangeWhereSkipWhileToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeWhereSkipWhileToArrayRewritten()
         {
             return Enumerable.Range(0, 100).Where(x => x > 20).SkipWhile(x => x < 50).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> RangeSkipWhileParamToArray()
         {
             var a = 50;
             return Enumerable.Range(0, 100).SkipWhile(x => x < a).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipWhileParamToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipWhileParamToArrayRewritten()
         {
             var a = 50;
             return Enumerable.Range(0, 100).SkipWhile(x => x < a).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> RangeSkipWhileChangingParamToArray()
         {
             var a = 50;
             return Enumerable.Range(0, 100).SkipWhile(x => x < a++).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipWhileChangingParamToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipWhileChangingParamToArrayRewritten()
         {
             var a = 50;
             return Enumerable.Range(0, 100).SkipWhile(x => x < a++).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> RangeSkipWhileChangingParamToArray2()
         {
             var a = 50;
             return Enumerable.Range(0, 100).SkipWhile(x => x < a--).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipWhileChangingParamToArray2Rewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipWhileChangingParamToArray2Rewritten()
         {
             var a = 50;
             return Enumerable.Range(0, 100).SkipWhile(x => x < a--).ToArray();
         } //EndMethod
 
         
-        [NoRewrite]
         public IEnumerable<int> RangeSkipWhileChangingParamsToArray()
         {
             var a = 50;
@@ -872,7 +871,8 @@ namespace TestsLibrary.Tests
             return Enumerable.Range(0, 100).SkipWhile(x => x < a++ - b--).ToArray();
         } //EndMethod
 
-        public IEnumerable<int> RangeSkipWhileChangingParamsToArrayRewritten()
+        [LinqRewrite]
+		public IEnumerable<int> RangeSkipWhileChangingParamsToArrayRewritten()
         {
             var a = 50;
             var b = 50;

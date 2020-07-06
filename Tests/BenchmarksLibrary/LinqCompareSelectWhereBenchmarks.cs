@@ -25,7 +25,7 @@ namespace BenchmarksLibrary
             _linqOptimizerQuery = ArraySource.AsQueryExpr().Where(x => x <= ToValue).Select(x => x > 10).Compile();
         }
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void SystemLinq()
         {
             ArraySource.Where(x => x <= ToValue).Select(x => x > 10).ToArray();
@@ -37,37 +37,36 @@ namespace BenchmarksLibrary
             ArraySource.Where(x => x <= ToValue).Select(x => x > 10).ToSimpleList();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void ShamanLinqRewrite()
         {
             ShamanLinqRewrite_ProceduralLinq1(ArraySource);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void LinqOptimizer()
         {
             ArraySource.Where(x => x <= ToValue).Select(x => x > 10).AsQueryExpr().Compile()();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void LinqOptimizerWithoutOverhead()
         {
             _linqOptimizerQuery();
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void LinqFasterChained()
         {
             ArraySource.WhereF(x => x <= ToValue).SelectF(x => x + 10);
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void LinqFasterOptimized()
         {
             ArraySource.WhereSelectF(x => x <= ToValue, x => x + 10);
         }//EndMethod
 
-        [NoRewrite]
         int[] ShamanLinqRewrite_ProceduralLinq1(int[] _linqitems)
         {
             if (_linqitems == null)

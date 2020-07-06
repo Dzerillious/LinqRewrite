@@ -33,205 +33,205 @@ namespace TestsLibrary.Tests
             TestsExtensions.TestEquals(nameof(AggregateNull), AggregateNull, AggregateNullRewritten);
         }
         
-        [NoRewrite]
         public int AggregateSum()
         {
             return ArrayItems.Aggregate((x, y) => x + y);
         } //EndMethod
         
-        public int AggregateSumRewritten()
+        [LinqRewrite]
+		public int AggregateSumRewritten()
         {
             return ArrayItems.Aggregate((x, y) => x + y);
         } //EndMethod
         
         
-        [NoRewrite]
         public int EnumerableAggregateSum()
         {
             return EnumerableItems.Aggregate((x, y) => x + y);
         } //EndMethod
         
-        public int EnumerableAggregateSumRewritten()
+        [LinqRewrite]
+		public int EnumerableAggregateSumRewritten()
         {
             return EnumerableItems.Aggregate((x, y) => x + y);
         } //EndMethod
         
         
-        [NoRewrite]
         public int AggregateCount()
         {
             return ArrayItems.Aggregate((x, y) => x + 1);
         } //EndMethod
         
-        public int AggregateCountRewritten()
+        [LinqRewrite]
+		public int AggregateCountRewritten()
         {
             return ArrayItems.Aggregate((x, y) => x + 1);
         } //EndMethod
         
         
-        [NoRewrite]
         public int AggregateEma()
         {
             return ArrayItems.Aggregate((x, y) => (x + y) / 2);
         } //EndMethod
         
-        public int AggregateEmaRewritten()
+        [LinqRewrite]
+		public int AggregateEmaRewritten()
         {
             return ArrayItems.Aggregate((x, y) => (x + y) / 2);
         } //EndMethod
         
         
-        [NoRewrite]
         public double AggregateDoubleSum()
         {
             return ArrayItems.Aggregate(0.0, (x, y) => x + y);
         } //EndMethod
         
-        public double AggregateDoubleSumRewritten()
+        [LinqRewrite]
+		public double AggregateDoubleSumRewritten()
         {
             return ArrayItems.Aggregate(0.0, (x, y) => x + y);
         } //EndMethod
         
         
-        [NoRewrite]
         public double AggregateDoubleEma()
         {
             return ArrayItems.Aggregate(0.0, (x, y) => (x + y) / 2);
         } //EndMethod
         
-        public double AggregateDoubleEmaRewritten()
+        [LinqRewrite]
+		public double AggregateDoubleEmaRewritten()
         {
             return ArrayItems.Aggregate(0.0, (x, y) => (x + y) / 2);
         } //EndMethod
         
         
-        [NoRewrite]
         public double AggregateDoubleFactorial()
         {
             return ArrayItems.Aggregate(1.0, (x, y) => x * y);
         } //EndMethod
         
-        public double AggregateDoubleFactorialRewritten()
+        [LinqRewrite]
+		public double AggregateDoubleFactorialRewritten()
         {
             return ArrayItems.Aggregate(1.0, (x, y) => x * y);
         } //EndMethod
         
         
-        [NoRewrite]
         public double AggregateDoubleAverage()
         {
             return ArrayItems.Aggregate(0.0, (x, y) => x + y, x => x / ArrayItems.Length);
         } //EndMethod
         
-        public double AggregateDoubleAverageRewritten()
+        [LinqRewrite]
+		public double AggregateDoubleAverageRewritten()
         {
             return ArrayItems.Aggregate(0.0, (x, y) => x + y, x => x / ArrayItems.Length);
         } //EndMethod
         
         
-        [NoRewrite]
         public double AggregateDoubleAverageSelected()
         {
             return ArrayItems.Select(x => x + 5).Aggregate(0.0, (x, y) => x + y, x => x / ArrayItems.Length);
         } //EndMethod
         
-        public double AggregateDoubleAverageSelectedRewritten()
+        [LinqRewrite]
+		public double AggregateDoubleAverageSelectedRewritten()
         {
             return ArrayItems.Select(x => x + 5).Aggregate(0.0, (x, y) => x + y, x => x / ArrayItems.Length);
         } //EndMethod
         
         
-        [NoRewrite]
         public double AggregateDoubleAverageWhere()
         {
             return ArrayItems.Where(x => x % 2 == 0).Aggregate(0.0, (x, y) => x + y, x => x / ArrayItems.Length);
         } //EndMethod
         
-        public double AggregateDoubleAverageWhereRewritten()
+        [LinqRewrite]
+		public double AggregateDoubleAverageWhereRewritten()
         {
             return ArrayItems.Where(x => x % 2 == 0).Aggregate(0.0, (x, y) => x + y, x => x / ArrayItems.Length);
         } //EndMethod
         
         
-        [NoRewrite]
         public int AggregateRangeSum()
         {
             return Enumerable.Range(0, 100).Aggregate((x, y) => x + y);
         } //EndMethod
         
-        public int AggregateRangeSumRewritten()
+        [LinqRewrite]
+		public int AggregateRangeSumRewritten()
         {
             return Enumerable.Range(0, 100).Aggregate((x, y) => x + y);
         } //EndMethod
         
         
-        [NoRewrite]
         public double AggregateRangeFactorial0()
         {
             return Enumerable.Range(0, 100).Aggregate(1.0, (x, y) => x * y);
         } //EndMethod
         
-        public double AggregateRangeFactorial0Rewritten()
+        [LinqRewrite]
+		public double AggregateRangeFactorial0Rewritten()
         {
             return Enumerable.Range(0, 100).Aggregate(1.0, (x, y) => x * y);
         } //EndMethod
         
         
-        [NoRewrite]
         public double AggregateRangeFactorial20()
         {
             return Enumerable.Range(1, 20).Aggregate(1.0, (x, y) => x * y);
         } //EndMethod
         
-        public double AggregateRangeFactorial20Rewritten()
+        [LinqRewrite]
+		public double AggregateRangeFactorial20Rewritten()
         {
             return Enumerable.Range(1, 20).Aggregate(1.0, (x, y) => x * y);
         } //EndMethod
         
         
-        [NoRewrite]
         public double AggregateRangeFactorial100()
         {
             return Enumerable.Range(1, 100).Aggregate(1.0, (x, y) => x * y);
         } //EndMethod
         
-        public double AggregateRangeFactorial100Rewritten()
+        [LinqRewrite]
+		public double AggregateRangeFactorial100Rewritten()
         {
             return Enumerable.Range(1, 100).Aggregate(1.0, (x, y) => x * y);
         } //EndMethod
         
         
-        [NoRewrite]
         public double AggregateEmptyDefault()
         {
             return ArrayItems.Where(x => false).Aggregate(1.0, (x, y) => x + y);
         } //EndMethod
         
-        public double AggregateEmptyDefaultRewritten()
+        [LinqRewrite]
+		public double AggregateEmptyDefaultRewritten()
         {
             return ArrayItems.Where(x => false).Aggregate(1.0, (x, y) => x + y);
         } //EndMethod
         
         
-        [NoRewrite]
         public double AggregateEmpty()
         {
             return ArrayItems.Where(x => false).Aggregate((x, y) => x + y);
         } //EndMethod
         
-        public double AggregateEmptyRewritten()
+        [LinqRewrite]
+		public double AggregateEmptyRewritten()
         {
             return ArrayItems.Where(x => false).Aggregate((x, y) => x + y);
         } //EndMethod
         
         
-        [NoRewrite]
         public double AggregateNull()
         {
             return ArrayItems.Aggregate(null);
         } //EndMethod
         
-        public double AggregateNullRewritten()
+        [LinqRewrite]
+		public double AggregateNullRewritten()
         {
             return ArrayItems.Aggregate(null);
         } //EndMethod

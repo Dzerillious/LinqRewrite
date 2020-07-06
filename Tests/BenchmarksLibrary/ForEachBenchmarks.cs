@@ -18,7 +18,7 @@ namespace BenchmarksLibrary
             EnumerableSource = Enumerable.Range(0, 1000);
         }
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public int ArrayForEachSum()
         {
             var sum = 0;
@@ -27,14 +27,15 @@ namespace BenchmarksLibrary
         }//EndMethod
 
         [Benchmark]
-        public int ArrayForEachSumRewritten()
+        [LinqRewrite]
+		public int ArrayForEachSumRewritten()
         {
             var sum = 0;
             ArraySource.ForEach(x => sum += x);
             return sum;
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public int EnumerableForEachSum()
         {
             var sum = 0;
@@ -43,14 +44,15 @@ namespace BenchmarksLibrary
         }//EndMethod
 
         [Benchmark]
-        public int EnumerableForEachSumRewritten()
+        [LinqRewrite]
+		public int EnumerableForEachSumRewritten()
         {
             var sum = 0;
             EnumerableSource.ForEach(x => sum += x);
             return sum;
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public int ArrayWhereforeachSum()
         {
             var sum = 0;
@@ -62,7 +64,8 @@ namespace BenchmarksLibrary
         }//EndMethod
 
         [Benchmark]
-        public int ArrayWhereforeachSumRewritten()
+        [LinqRewrite]
+		public int ArrayWhereforeachSumRewritten()
         {
             var sum = 0;
             foreach (var i in ArraySource.Where(x => x > 3))
@@ -72,7 +75,7 @@ namespace BenchmarksLibrary
             return sum;
         }//EndMethod
 
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public int EnumerableWhereforeachSum()
         {
             var sum = 0;
@@ -84,7 +87,8 @@ namespace BenchmarksLibrary
         }//EndMethod
 
         [Benchmark]
-        public int EnumerableWhereforeachSumRewritten()
+        [LinqRewrite]
+		public int EnumerableWhereforeachSumRewritten()
         {
             var sum = 0;
             foreach (var i in EnumerableSource.Where(x => x > 3))

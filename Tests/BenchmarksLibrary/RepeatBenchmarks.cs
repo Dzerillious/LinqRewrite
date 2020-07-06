@@ -7,38 +7,41 @@ namespace BenchmarksLibrary
     [MemoryDiagnoser]
     public class RepeatBenchmarks
     {
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void RepeatElementAt()
         {
             var res = Enumerable.Repeat(500, 1000).ElementAt(50);
         }//EndMethod
 
         [Benchmark]
-        public void RepeatElementAtRewritten()
+        [LinqRewrite]
+		public void RepeatElementAtRewritten()
         {
             var res = Enumerable.Repeat(500, 1000).ElementAt(50);
         }//EndMethod
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void RepeatSum()
         {
             var res = Enumerable.Repeat(500, 1000).Sum();
         }//EndMethod
 
         [Benchmark]
-        public void RepeatSumRewritten()
+        [LinqRewrite]
+		public void RepeatSumRewritten()
         {
             var res = Enumerable.Repeat(500, 1000).Sum();
         }//EndMethod
         
-        [NoRewrite, Benchmark]
+        [Benchmark]
         public void RepeatToArray()
         {
             var res = Enumerable.Repeat(500, 1000).ToArray();
         }//EndMethod
 
         [Benchmark]
-        public void RepeatToArrayRewritten()
+        [LinqRewrite]
+		public void RepeatToArrayRewritten()
         {
             var res = Enumerable.Repeat(500, 1000).ToArray();
         }//EndMethod
