@@ -57,7 +57,7 @@ namespace LinqRewrite
             var (oldRewrite, oldUnchecked) = (_data.CurrentRewrite, _data.CurrentIsUnchecked);
             
             _data.CurrentRewrite = rewrite ?? _data.CurrentRewrite;
-            _data.CurrentIsUnchecked = _data.CurrentIsUnchecked || uncheckedLinq;
+            _data.CurrentIsUnchecked = uncheckedLinq ?? _data.CurrentIsUnchecked;
             
             var oldRewritten = RewrittenLinqQueries;
             var syntaxNode = base.VisitMethodDeclaration(node);
@@ -122,7 +122,7 @@ namespace LinqRewrite
             
             _data.CurrentType = node;
             _data.CurrentRewrite = rewrite ?? _data.CurrentRewrite;
-            _data.CurrentIsUnchecked = _data.CurrentIsUnchecked || uncheckedLinq;
+            _data.CurrentIsUnchecked = uncheckedLinq ?? _data.CurrentIsUnchecked;
             
             var changed = (TypeDeclarationSyntax) (node is ClassDeclarationSyntax declarationSyntax
                 ? base.VisitClassDeclaration(declarationSyntax)
@@ -250,19 +250,20 @@ namespace LinqRewrite
             return index == -1 ? name : name.Substring(0, index);
         }
 
-        private (bool? rewrite, bool uncheckedLinq) CheckAttributes(SyntaxList<AttributeListSyntax> attributeLists)
+        private (bool? rewrite, bool? uncheckedLinq) CheckAttributes(SyntaxList<AttributeListSyntax> attributeLists)
         {
             bool? rewrite = null;
-            bool uncheckedLinq = false;
+            bool? uncheckedLinq = null;
             foreach (var attributeListSyntax in attributeLists)
             foreach (var attribute in attributeListSyntax.Attributes)
             {
                 string symbol = ((IMethodSymbol) _data.Semantic.GetSymbolInfo(attribute).Symbol).ContainingType.ToDisplayString();
                 if (symbol == "LinqRewrite.Core.NoLinqRewriteAttribute")
-                    return (false, false);
+                    return (false, null);
                 
                 if (symbol != "LinqRewrite.Core.LinqRewriteAttribute") continue;
                 rewrite = true;
+                uncheckedLinq = false;
                 
                 if (attribute.ArgumentList != null && attribute.ArgumentList.Arguments.Count > 0)
                     uncheckedLinq = attribute.ArgumentList.Arguments[0].ToString().Contains("RewriteOptions.Unchecked");
