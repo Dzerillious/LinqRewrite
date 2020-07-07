@@ -24,8 +24,7 @@ namespace BenchmarksLibrary
             return Enumerable.Range(567, 1000).Max();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int RangeMaxRewritten()
         {
             return Enumerable.Range(567, 1000).Max();
@@ -37,8 +36,7 @@ namespace BenchmarksLibrary
             return ArraySource.Max();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayMaxRewritten()
         {
             return ArraySource.Max();
@@ -50,8 +48,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 700).Max();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereMaxRewritten()
         {
             return ArraySource.Where(x => x > 700).Max();
@@ -63,8 +60,7 @@ namespace BenchmarksLibrary
             return ArraySource.Max(x => x > 700 ? x : (int?)null);
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int? ArrayNullableMaxRewritten()
         {
             return ArraySource.Max(x => x > 700 ? x : (int?)null);
@@ -76,8 +72,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Max();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableMaxRewritten()
         {
             return EnumerableSource.Max();

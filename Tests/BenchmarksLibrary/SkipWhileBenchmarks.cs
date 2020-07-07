@@ -30,8 +30,7 @@ namespace BenchmarksLibrary
             ArraySource.SkipWhile(x => x < Offset).ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArraySkipWhileToArrayRewritten()
         {
             ArraySource.SkipWhile(x => x < Offset).ToArray();
@@ -44,8 +43,7 @@ namespace BenchmarksLibrary
             ArraySource.SkipWhile(x => x < Offset).ToSimpleList();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArraySkipWhileToSimpleListRewritten()
         {
             ArraySource.SkipWhile(x => x < Offset).ToSimpleList();

@@ -26,8 +26,7 @@ namespace BenchmarksLibrary
             return sum;
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayForEachSumRewritten()
         {
             var sum = 0;
@@ -43,8 +42,7 @@ namespace BenchmarksLibrary
             return sum;
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableForEachSumRewritten()
         {
             var sum = 0;
@@ -63,8 +61,7 @@ namespace BenchmarksLibrary
             return sum;
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereforeachSumRewritten()
         {
             var sum = 0;
@@ -86,8 +83,7 @@ namespace BenchmarksLibrary
             return sum;
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableWhereforeachSumRewritten()
         {
             var sum = 0;

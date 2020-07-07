@@ -59,7 +59,7 @@ namespace LinqRewrite
             _data.CurrentRewrite = rewrite ?? _data.CurrentRewrite;
             _data.CurrentIsUnchecked = uncheckedLinq ?? _data.CurrentIsUnchecked;
             
-            var oldRewritten = RewrittenLinqQueries;
+            int oldRewritten = RewrittenLinqQueries;
             var syntaxNode = base.VisitMethodDeclaration(node);
 
             (_data.CurrentIsUnchecked, _data.CurrentRewrite) = (oldUnchecked, oldRewrite);
@@ -72,7 +72,7 @@ namespace LinqRewrite
 
         private ExpressionSyntax TryVisitInvocationExpression(InvocationExpressionSyntax node)
         {
-            var methodIdx = _data.MethodsToAddToCurrentType.Count;
+            int methodIdx = _data.MethodsToAddToCurrentType.Count;
             try
             {
                 var expressionSyntax = VisitInvocation(node);

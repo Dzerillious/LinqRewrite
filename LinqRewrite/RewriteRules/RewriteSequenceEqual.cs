@@ -35,10 +35,10 @@ namespace LinqRewrite.RewriteRules
                 2 => args[1].ReusableConst(design).Access("Equals").Invoke(design.LastValue, enumeratorVariable.Access("Current"))
             };
             design.ForAdd(If(Not(enumeratorVariable.Access("MoveNext").Invoke().And(equalityTestValue)), 
-                        Return(false)));
+                            Return(false)));
 
             design.ResultAdd(If(enumeratorVariable.Access("MoveNext").Invoke(),
-                                            Return(false)));
+                                Return(false)));
 
             design.FinalAdd(enumeratorVariable.Access("Dispose").Invoke());
             design.ResultAdd(Return(true));

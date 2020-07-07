@@ -44,9 +44,9 @@ namespace LinqRewrite.DataStructures
             if (_preAddCalculated) return;
             _preAddCalculated = true;
             
-            ForBody.ForEach(x =>
+            ForBody.ForEach(statement =>
             {
-                if (x is IteratorDesign iteratorParameters)
+                if (statement is IteratorDesign iteratorParameters)
                     iteratorParameters.CalculatePreAdd(design);
             });
             if (ForFrom == null) PreFor.Insert(0, (StatementBridge)Enumerator.Assign(Collection.Access("GetEnumerator").Invoke()));
@@ -66,11 +66,11 @@ namespace LinqRewrite.DataStructures
         {
             CalculatePreAdd(design);
             if (IgnoreIterator) return Array.Empty<StatementSyntax>();
-            var content = ForBody.SelectMany(x => 
-                x is IteratorDesign parameters
-                    ? parameters.PreFor.Select(x => (StatementBridge)x).Concat(new[] {x})
-                        .Concat(parameters.PostFor.Select(x => (StatementBridge)x))
-                    : new[] {x}).Concat(ForEnd).ToList();
+            var content = ForBody.SelectMany(statement => 
+                statement is IteratorDesign parameters
+                    ? parameters.PreFor.Select(statement => (StatementBridge)statement).Concat(new[] {statement})
+                        .Concat(parameters.PostFor.Select(statement => (StatementBridge)statement))
+                    : new[] {statement}).Concat(ForEnd).ToList();
             
             if (ForFrom == null) return RewriteService.GetForEachStatement(design, Enumerator, content);
             if (IsReversed) return new StatementSyntax[]{RewriteService.GetReverseForStatement(design, ForIndexer, ForTo, ForInc, content)};

@@ -42,8 +42,8 @@ namespace LinqRewrite.RewriteRules
                     if (design.ResultSize == null) return;
                     var takeVariable = CreateGlobalVariable(design, Int);
                     design.PreUseAdd(If(takeValue > design.ResultSize, 
-                                     takeVariable.Assign(design.ResultSize),
-                                    takeVariable.Assign(takeValue)));
+                                         takeVariable.Assign(design.ResultSize),
+                                        takeVariable.Assign(takeValue)));
                     takeValue = new RewrittenValueBridge(takeVariable);
                 }
                 else if (takeInt > resultInt) takeValue = new RewrittenValueBridge(design.ResultSize);
@@ -60,7 +60,7 @@ namespace LinqRewrite.RewriteRules
             {
                 var takeVariable = CreateGlobalVariable(design, Int);
                 design.PreUseAdd(If(takeValue < 0, takeVariable.Assign(IntValue(0)),
-                                takeVariable.Assign(takeValue)));
+                                    takeVariable.Assign(takeValue)));
                 takeValue = new RewrittenValueBridge(takeVariable);
             }
         }

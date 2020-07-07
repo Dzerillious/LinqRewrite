@@ -24,8 +24,7 @@ namespace BenchmarksLibrary
             ArraySource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayGroupByRewritten()
         {
             ArraySource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
@@ -37,8 +36,7 @@ namespace BenchmarksLibrary
             EnumerableSource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableGroupByRewritten()
         {
             EnumerableSource.GroupBy(x => x % 100, (x, y) => y.Sum()).ToArray();

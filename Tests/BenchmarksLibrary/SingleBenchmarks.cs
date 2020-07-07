@@ -24,8 +24,7 @@ namespace BenchmarksLibrary
             return ArraySource.Single();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public int ArraySingleRewritten()
         {
             return ArraySource.Single();
@@ -37,8 +36,7 @@ namespace BenchmarksLibrary
             return ArraySource.Single(x => x >= 0);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArraySingleConditionRewritten()
         {
             return ArraySource.Single(x => x >= 0);
@@ -50,8 +48,7 @@ namespace BenchmarksLibrary
             return ArraySource.Select(x => x + 3).Single();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArraySelectSingleRewritten()
         {
             return ArraySource.Select(x => x + 3).Single();
@@ -63,8 +60,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x >= 0).Single();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereSingleRewritten()
         {
             return ArraySource.Where(x => x >= 0).Single();
@@ -76,8 +72,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x >= 0).Single(x => x >= 0);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereSingleConditionRewritten()
         {
             return ArraySource.Where(x => x >= 0).Single(x => x >= 0);
@@ -89,8 +84,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Single(x => x >= 0);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableSingleConditionRewritten()
         {
             return EnumerableSource.Single(x => x >= 0);
@@ -102,8 +96,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Single(x => x >= 10);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableSingleNotConditionRewritten()
         {
             return EnumerableSource.Single(x => x >= 10);

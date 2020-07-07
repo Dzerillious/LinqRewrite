@@ -31,7 +31,7 @@ namespace BenchmarksLibrary
             ArraySource.Where(x => x <= ToValue).Select(x => x > 10).ToArray();
         }//EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public void OptimizedLinqRewrite()
         {
             ArraySource.Where(x => x <= ToValue).Select(x => x > 10).ToSimpleList();

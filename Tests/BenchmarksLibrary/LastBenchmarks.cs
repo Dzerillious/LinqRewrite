@@ -24,8 +24,7 @@ namespace BenchmarksLibrary
             return ArraySource.Last();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public int ArrayLastRewritten()
         {
             return ArraySource.Last();
@@ -37,8 +36,7 @@ namespace BenchmarksLibrary
             return ArraySource.Last(x => x > 3);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayLastConditionRewritten()
         {
             return ArraySource.Last(x => x > 3);
@@ -50,8 +48,7 @@ namespace BenchmarksLibrary
             return ArraySource.Select(x => x + 3).Last();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArraySelectLastRewritten()
         {
             return ArraySource.Select(x => x + 3).Last();
@@ -63,8 +60,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 100).Last();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereLastRewritten()
         {
             return ArraySource.Where(x => x > 100).Last();
@@ -76,8 +72,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 100).Last(x => x > 200);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereLastConditionRewritten()
         {
             return ArraySource.Where(x => x > 100).Last(x => x > 200);
@@ -89,8 +84,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Last(x => x > 3);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableLastConditionRewritten()
         {
             return EnumerableSource.Last(x => x > 3);
@@ -102,8 +96,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Last(x => x > 10_000);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableLastNotConditionRewritten()
         {
             return EnumerableSource.Last(x => x > 10_000);
@@ -115,8 +108,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Last(x => x > 0);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableLastAllConditionRewritten()
         {
             return EnumerableSource.Last(x => x > 0);

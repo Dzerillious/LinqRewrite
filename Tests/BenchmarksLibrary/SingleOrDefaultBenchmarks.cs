@@ -24,8 +24,7 @@ namespace BenchmarksLibrary
             return ArraySource.SingleOrDefault();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public int ArraySingleOrDefaultRewritten()
         {
             return ArraySource.SingleOrDefault();
@@ -37,8 +36,7 @@ namespace BenchmarksLibrary
             return ArraySource.SingleOrDefault(x => x >= 0);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArraySingleOrDefaultConditionRewritten()
         {
             return ArraySource.SingleOrDefault(x => x >= 0);
@@ -50,8 +48,7 @@ namespace BenchmarksLibrary
             return ArraySource.Select(x => x + 3).SingleOrDefault();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArraySelectSingleOrDefaultRewritten()
         {
             return ArraySource.Select(x => x + 3).SingleOrDefault();
@@ -63,8 +60,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x >= 0).SingleOrDefault();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereSingleOrDefaultRewritten()
         {
             return ArraySource.Where(x => x >= 0).SingleOrDefault();
@@ -76,8 +72,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x >= 0).SingleOrDefault(x => x >= 0);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereSingleOrDefaultConditionRewritten()
         {
             return ArraySource.Where(x => x >= 0).SingleOrDefault(x => x >= 0);
@@ -89,8 +84,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.SingleOrDefault(x => x >= 0);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableSingleOrDefaultConditionRewritten()
         {
             return EnumerableSource.SingleOrDefault(x => x >= 0);
@@ -102,8 +96,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.SingleOrDefault(x => x >= 10);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableSingleOrDefaultNotConditionRewritten()
         {
             return EnumerableSource.SingleOrDefault(x => x >= 10);

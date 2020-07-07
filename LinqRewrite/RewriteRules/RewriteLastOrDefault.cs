@@ -27,12 +27,12 @@ namespace LinqRewrite.RewriteRules
             else
             {
                 design.ForAdd(If(args[0].Inline(design, design.LastValue),
-                            foundVariable.Assign(design.LastValue)));
+                                foundVariable.Assign(design.LastValue)));
             }
             
             design.ResultAdd(If(foundVariable.IsEqual(null),
-                            Return(Default(design.ReturnType)), 
-                            Return(foundVariable.Cast(design.ReturnType))));
+                                Return(Default(design.ReturnType)), 
+                                Return(foundVariable.Cast(design.ReturnType))));
         }
     }
 }

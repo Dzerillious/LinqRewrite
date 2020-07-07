@@ -31,8 +31,7 @@ namespace BenchmarksLibrary
             ArraySource.OfType<B>().ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArrayOfTypeToArrayRewritten()
         {
             ArraySource.OfType<B>().ToArray();
@@ -45,8 +44,7 @@ namespace BenchmarksLibrary
             EnumerableSource.OfType<B>().ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void EnumerableOfTypeToArrayRewritten()
         {
             EnumerableSource.OfType<B>().ToArray();
@@ -59,8 +57,7 @@ namespace BenchmarksLibrary
             ArraySource.OfType<B>().ToSimpleList();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArrayOfTypeToSimpleListRewritten()
         {
             ArraySource.OfType<B>().ToSimpleList();
@@ -73,8 +70,7 @@ namespace BenchmarksLibrary
             StaticArraySource.OfType<B>().ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void StaticArrayOfTypeToArrayRewritten()
         {
             StaticArraySource.OfType<B>().ToArray();
@@ -87,8 +83,7 @@ namespace BenchmarksLibrary
             ArraySource.Unchecked().OfType<B>().ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayUncheckedOfTypeToArrayRewritten()
         {
             ArraySource.Unchecked().OfType<B>().ToArray();
@@ -101,8 +96,7 @@ namespace BenchmarksLibrary
             EnumerableSource.OfType<B>().ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableUncheckedToSimpleListRewritten()
         {
             EnumerableSource.OfType<B>().ToArray();

@@ -36,8 +36,7 @@ namespace BenchmarksLibrary
             return ArraySource.Unchecked().Take(5).Aggregate((x, y) => x + y);
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public double ArrayAggregate5Rewritten()
         {
             return ArraySource.Unchecked().Take(5).Aggregate((x, y) => x + y);
@@ -49,8 +48,7 @@ namespace BenchmarksLibrary
             return ArraySource.Unchecked().Take(10).Aggregate((x, y) => x + y);
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public double ArrayAggregate10Rewritten()
         {
             return ArraySource.Unchecked().Take(10).Aggregate((x, y) => x + y);
@@ -62,8 +60,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x =>  x > 600).Aggregate((x, y) => x + y);
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public double ArrayWhereAggregateRewritten()
         {
             return ArraySource.Where(x =>  x > 600).Aggregate((x, y) => x + y);
@@ -75,8 +72,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Aggregate((x, y) => x + y);
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public double EnumerableAggregateRewritten()
         {
             return EnumerableSource.Aggregate((x, y) => x + y);

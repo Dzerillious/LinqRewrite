@@ -13,8 +13,7 @@ namespace BenchmarksLibrary
             var res = Enumerable.Range(500, 1000).ElementAt(50);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void RangeElementAtRewritten()
         {
             var res = Enumerable.Range(500, 1000).ElementAt(50);
@@ -26,8 +25,7 @@ namespace BenchmarksLibrary
             var res = Enumerable.Range(500, 1000).Sum();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void RangeSumRewritten()
         {
             var res = Enumerable.Range(500, 1000).Sum();
@@ -39,8 +37,7 @@ namespace BenchmarksLibrary
             var res = Enumerable.Range(500, 1000).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void RangeToArrayRewritten()
         {
             var res = Enumerable.Range(500, 1000).ToArray();

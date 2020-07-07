@@ -27,8 +27,7 @@ namespace BenchmarksLibrary
             return ArraySource.LongCount();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public long ArrayLongCountRewritten()
         {
             return ArraySource.LongCount();
@@ -40,8 +39,7 @@ namespace BenchmarksLibrary
             return ArraySource.LongCount(x => x > 3);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public long ArrayLongCountConditionRewritten()
         {
             return ArraySource.LongCount(x => x > 3);
@@ -53,8 +51,7 @@ namespace BenchmarksLibrary
             return ArraySource.Select(x => x + 3).LongCount();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public long ArraySelectLongCountRewritten()
         {
             return ArraySource.Select(x => x + 3).LongCount();
@@ -66,8 +63,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 100).LongCount();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public long ArrayWhereLongCountRewritten()
         {
             return ArraySource.Where(x => x > 100).LongCount();
@@ -79,8 +75,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 100).LongCount(x => x > 200);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public long ArrayWhereLongCountConditionRewritten()
         {
             return ArraySource.Where(x => x > 100).LongCount(x => x > 200);
@@ -92,8 +87,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.LongCount(x => x > 3);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public long EnumerableLongCountConditionRewritten()
         {
             return EnumerableSource.LongCount(x => x > 3);
@@ -105,8 +99,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.LongCount(x => x > 10_000);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public long EnumerableLongCountNotConditionRewritten()
         {
             return EnumerableSource.LongCount(x => x > 10_000);
@@ -118,8 +111,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.LongCount(x => x > 0);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public long EnumerableLongCountAllConditionRewritten()
         {
             return EnumerableSource.LongCount(x => x > 0);

@@ -17,8 +17,8 @@ namespace LinqRewrite.RewriteRules
             if (!TryGetInt(design.ResultSize, out var intSize) || intSize > Constants.SimpleRewriteMaxSimpleElements)
                 return null;
 
-            var items = Enumerable.Range(0, intSize).Select(x
-                => (ExpressionSyntax) Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x));
+            var items = Enumerable.Range(0, intSize).Select(i
+                => (ExpressionSyntax) Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + i));
             return ObjectCreationExpression(design.ReturnType, ArgumentList(CreateSeparatedList(new ArgumentSyntax[0])), 
                 InitializerExpression( SyntaxKind.ArrayInitializerExpression, SeparatedList(items)));
         }

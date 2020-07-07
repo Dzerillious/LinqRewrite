@@ -47,8 +47,8 @@ namespace LinqRewrite.RewriteRules
                 else if (!design.Unchecked)
                 {
                     var skippedVariable = CreateGlobalVariable(design, Int);
-                    design.InitialAdd(skippedVariable.Assign(ConditionalExpression(skippedValue > design.ResultSize, design.ResultSize,
-                        skippedValue)));
+                    design.InitialAdd(skippedVariable.Assign(ConditionalExpression(skippedValue > design.ResultSize, 
+                        design.ResultSize, skippedValue)));
                     skippedValue = new RewrittenValueBridge(skippedVariable);
                 }
             }

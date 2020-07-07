@@ -27,8 +27,7 @@ namespace BenchmarksLibrary
             return ArraySource.Count();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public int ArrayCountRewritten()
         {
             return ArraySource.Count();
@@ -40,8 +39,7 @@ namespace BenchmarksLibrary
             return ArraySource.Count(x => x > 3);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayCountConditionRewritten()
         {
             return ArraySource.Count(x => x > 3);
@@ -53,8 +51,7 @@ namespace BenchmarksLibrary
             return ArraySource.Select(x => x + 3).Count();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArraySelectCountRewritten()
         {
             return ArraySource.Select(x => x + 3).Count();
@@ -66,8 +63,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 100).Count();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereCountRewritten()
         {
             return ArraySource.Where(x => x > 100).Count();
@@ -79,8 +75,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 100).Count(x => x > 200);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereCountConditionRewritten()
         {
             return ArraySource.Where(x => x > 100).Count(x => x > 200);
@@ -92,8 +87,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Count(x => x > 3);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableCountConditionRewritten()
         {
             return EnumerableSource.Count(x => x > 3);
@@ -105,8 +99,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Count(x => x > 10_000);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableCountNotConditionRewritten()
         {
             return EnumerableSource.Count(x => x > 10_000);
@@ -118,8 +111,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Count(x => x > 0);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableCountAllConditionRewritten()
         {
             return EnumerableSource.Count(x => x > 0);

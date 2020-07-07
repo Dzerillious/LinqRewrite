@@ -36,7 +36,7 @@ namespace LinqRewrite.RewriteRules
             
             design.LastValue = design.LastValue.Reusable(design);
             design.ForAdd(If(Not(hashsetVariable.Access("Remove").Invoke(design.LastValue)),
-                Continue()));
+                            Continue()));
 
             if (sourceSizeValue != null && design.SourceSize != null) design.SourceSize += sourceSizeValue;
             else design.SourceSize = null;

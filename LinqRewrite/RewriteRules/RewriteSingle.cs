@@ -24,8 +24,8 @@ namespace LinqRewrite.RewriteRules
             if (args.Length == 0)
             {
                 design.ForAdd(If(foundVariable.IsEqual(null),
-                            foundVariable.Assign(design.LastValue), 
-                            Throw("System.InvalidOperationException", "The sequence contains more than single matching element.")));
+                                foundVariable.Assign(design.LastValue), 
+                                Throw("System.InvalidOperationException", "The sequence contains more than single matching element.")));
             }
             else
             {
@@ -35,8 +35,8 @@ namespace LinqRewrite.RewriteRules
                                 Throw("System.InvalidOperationException", "The sequence contains more than single matching element."))));
             }
             design.ResultAdd(If(foundVariable.IsEqual(null),
-                            Throw("System.InvalidOperationException", "The sequence did not contain any elements."), 
-                            Return(foundVariable.Cast(design.ReturnType))));
+                                Throw("System.InvalidOperationException", "The sequence did not contain any elements."), 
+                                Return(foundVariable.Cast(design.ReturnType))));
         }
     }
 }

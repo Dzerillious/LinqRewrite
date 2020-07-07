@@ -24,7 +24,7 @@ namespace LinqRewrite.RewriteRules
             else
             {
                 design.ForAdd(If(args[0].Inline(design, design.LastValue),
-                            Return(design.LastValue)));
+                                Return(design.LastValue)));
             }
             design.ResultAdd(Return(Default(design.ReturnType)));
         }

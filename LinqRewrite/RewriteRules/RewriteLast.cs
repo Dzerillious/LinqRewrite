@@ -27,12 +27,12 @@ namespace LinqRewrite.RewriteRules
             else
             {
                 design.ForAdd(If(args[0].Inline(design, design.LastValue),
-                            foundVariable.Assign(design.LastValue)));
+                                foundVariable.Assign(design.LastValue)));
             }
             
             design.ResultAdd(If(foundVariable.IsEqual(null),
-                            Throw("System.InvalidOperationException", "The sequence did not contain any elements."), 
-                            Return(foundVariable.Cast(design.ReturnType))));
+                                Throw("System.InvalidOperationException", "The sequence did not contain any elements."), 
+                                Return(foundVariable.Cast(design.ReturnType))));
         }
     }
 }

@@ -27,8 +27,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.All(x => x > 3);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayAllConditionRewritten()
         {
             var res = ArraySource.All(x => x > 3);
@@ -40,8 +39,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Where(x => x > 100).All(x => x > 200);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayWhereAllConditionRewritten()
         {
             var res = ArraySource.Where(x => x > 100).All(x => x > 200);
@@ -53,8 +51,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.All(x => x > 3);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableAllConditionRewritten()
         {
             var res = EnumerableSource.All(x => x > 3);
@@ -66,8 +63,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.All(x => x > 10_000);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableAllNotConditionRewritten()
         {
             var res = EnumerableSource.All(x => x > 10_000);
@@ -79,8 +75,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.All(x => x > 0);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableAllAllConditionRewritten()
         {
             var res = EnumerableSource.All(x => x > 0);

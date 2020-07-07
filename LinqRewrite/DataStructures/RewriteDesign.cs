@@ -77,7 +77,7 @@ namespace LinqRewrite
                     ModifiedEnumeration = false;
                     return;
                 }
-                IncompleteIterators.ForEach(x => x.ListEnumeration = false);
+                IncompleteIterators.ForEach(iterator => iterator.ListEnumeration = false);
             }
         }
 
@@ -116,8 +116,8 @@ namespace LinqRewrite
                 var iterator = IncompleteIterators.FirstOrDefault();
                 if (CurrentIndexer != null || iterator?.Indexer != null)
                 {
-                    var indexer = iterator.Indexer;
-                    IncompleteIterators.Where(x => x.Indexer == null).ForEach(x =>
+                    LocalVariable indexer = iterator.Indexer;
+                    IncompleteIterators.Where(iterator => iterator.Indexer == null).ForEach(x =>
                     {
                         x.Indexer = indexer;
                         x.ForEnd.Add((StatementBridge) indexer.PostIncrement());
@@ -128,7 +128,7 @@ namespace LinqRewrite
                 var indexerVariable = CreateSuperGlobalVariable(this, Int, 0);
                 indexerVariable.IsGlobal = true;
                     
-                IncompleteIterators.ForEach(x => x.Indexer = indexerVariable);
+                IncompleteIterators.ForEach(iterator => iterator.Indexer = indexerVariable);
                 ForEndAdd(indexerVariable.PostIncrement());
 
                 return CurrentIndexer = indexerVariable;
@@ -138,7 +138,7 @@ namespace LinqRewrite
                 if (value != null) throw new NotImplementedException("Implemented only for setting null");
                 
                 CurrentIndexer = null;
-                IncompleteIterators.ForEach(x => x.Indexer = null);
+                IncompleteIterators.ForEach(iterator => iterator.Indexer = null);
             }
         }
 
@@ -147,10 +147,10 @@ namespace LinqRewrite
             var iterator = IncompleteIterators.FirstOrDefault();
             if (CurrentIndexer != null || iterator?.Indexer != null)
             {
-                var indexer = iterator.Indexer;
+                LocalVariable indexer = iterator.Indexer;
                 if (indexer == null) return CurrentIndexer;
 
-                IncompleteIterators.Where(x => x.Indexer == null).ForEach(x =>
+                IncompleteIterators.Where(iterator => iterator.Indexer == null).ForEach(x =>
                 {
                     x.Indexer = indexer;
                     x.ForEnd.Add((StatementBridge) indexer.PostIncrement());
@@ -161,7 +161,7 @@ namespace LinqRewrite
             var indexerVariable = CreateGlobalVariable(this, type, 0);
             indexerVariable.IsGlobal = true;
                     
-            IncompleteIterators.ForEach(x => x.Indexer = indexerVariable);
+            IncompleteIterators.ForEach(iterator => iterator.Indexer = indexerVariable);
             ForEndAdd(indexerVariable.PostIncrement());
 
             return CurrentIndexer = indexerVariable;
@@ -211,7 +211,8 @@ namespace LinqRewrite
         public void PreUseAdd(StatementBridge _)
         {
             if (ResultIterators.Count == 0) InitialStatements.Add(_);
-            else if (ResultIterators.Any(x => !x.Complete)) ResultIterators.First(x => !x.Complete).PreFor.Add(_);
+            else if (ResultIterators.Any(iterrator => !iterrator.Complete)) 
+                ResultIterators.First(x => !x.Complete).PreFor.Add(_);
             else InitialAdd(_);
         }
         public void PreForAdd(StatementBridge _)
@@ -222,15 +223,15 @@ namespace LinqRewrite
         }
         public void PostForAdd(StatementBridge _)
         {
-            IncompleteIterators.ForEach(x => x.PostFor.Add(_));
+            IncompleteIterators.ForEach(iterator => iterator.PostFor.Add(_));
         }
         public void ForAdd(StatementBridge _)
         {
-            IncompleteIterators.ForEach(x => x.ForBody.Add(_));
+            IncompleteIterators.ForEach(iterator => iterator.ForBody.Add(_));
         }
         public void ForEndAdd(StatementBridge _)
         {
-            IncompleteIterators.ForEach(x => x.ForEnd.Add(_));
+            IncompleteIterators.ForEach(iterator => iterator.ForEnd.Add(_));
         }
         public void CurrentForAdd(StatementBridge _) => CurrentIterator.BodyAdd(_);
         public void FinalAdd(StatementBridge _) => FinalStatements.Add(_);
@@ -247,16 +248,16 @@ namespace LinqRewrite
         
         public IteratorDesign InsertIterator(CollectionValueBridge collection = null)
         {
-            var oldBody = CurrentIterator;
+            var oldIterator = CurrentIterator;
             CurrentIterator = new IteratorDesign(this, collection);
             Iterators.Insert(0, CurrentIterator);
             ResultIterators.Insert(0, CurrentIterator);
-            return oldBody;
+            return oldIterator;
         }
 
         public LocalVariable AddParameter(TypeBridge type, ExpressionSyntax value)
         {
-            var variable = "v" + VariableIndex++ % Constants.VariablesPeek;
+            string variable = "v" + VariableIndex++ % Constants.VariablesPeek;
             var created = new LocalVariable(variable, type);
             Variables.Add(created);
             
@@ -271,7 +272,7 @@ namespace LinqRewrite
         public void SwitchIsReversed()
         {
             if (Iterators.Count <= 0) throw new InvalidOperationException("Reversing not existing iterator");
-            var iterator = Iterators.Last(x => !x.Complete);
+            var iterator = Iterators.Last(iterator => !iterator.Complete);
             ValueBridge to = iterator.ForTo;
             iterator.ForTo = iterator.ForFrom;
             iterator.ForFrom = to;

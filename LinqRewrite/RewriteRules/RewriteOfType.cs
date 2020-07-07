@@ -22,14 +22,14 @@ namespace LinqRewrite.RewriteRules
             {
                 design.LastValue = design.LastValue.Reusable(design);
                 design.ForAdd(If(Not(design.LastValue.Is(type)),
-                    Continue()));
+                                Continue()));
                 design.LastValue = new TypedValueBridge(type, design.LastValue.Cast(type));
             }
             else
             {
                 design.LastValue = design.LastValue.Reusable(design);
                 design.ForAdd(If(Not(design.LastValue.Is(type)),
-                    Continue()));
+                                Continue()));
                 design.LastValue = new TypedValueBridge(type, design.LastValue.Cast(ParseTypeName("object")).Cast(type));
             }
 

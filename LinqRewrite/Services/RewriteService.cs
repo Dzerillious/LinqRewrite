@@ -42,18 +42,18 @@ namespace LinqRewrite.Services
 
         internal ExpressionSyntax GetMethodInvocationExpression(RewriteDesign design, IEnumerable<StatementSyntax> body)
         {
-            var functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
+            string functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
             var parameters = design.Data.CurrentMethodParams
-                .Where(x => design.HasResultMethod || !x.Modifiers.Any()).ToArray();
+                .Where(parameter => design.HasResultMethod || !parameter.Modifiers.Any()).ToArray();
             var coreFunction = GetCoreMethod(design.ReturnType, functionName, parameters, body);
 
             _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, coreFunction));
 
-            var args = _data.CurrentMethodArguments.Where(x => design.HasResultMethod || x.RefKindKeyword.Text != "ref")
-                .Select(x => (ArgumentBridge)x).ToArray();
-            var inv = _code.CreateMethod(functionName).Invoke(args);
+            var args = _data.CurrentMethodArguments.Where(argument => design.HasResultMethod || argument.RefKindKeyword.Text != "ref")
+                .Select(argument => (ArgumentBridge)argument).ToArray();
+            var invvocation = _code.CreateMethod(functionName).Invoke(args);
 
-            return inv;
+            return invvocation;
         }
 
         private static StatementSyntax GetBody(RewriteDesign design, List<IStatementSyntax> body) 

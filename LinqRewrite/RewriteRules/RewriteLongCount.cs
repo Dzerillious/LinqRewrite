@@ -20,7 +20,7 @@ namespace LinqRewrite.RewriteRules
             {
                 design.Indexer = null;
                 design.ForAdd(If(Not(args[0].Inline(design, design.LastValue)),
-                            Continue()));
+                                Continue()));
             }
             design.ResultAdd(Return(design.GetIndexer(Long)));
         }

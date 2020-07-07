@@ -23,12 +23,12 @@ namespace LinqRewrite.RewriteRules
             var rewritten = new RewrittenValueBridge(newExpression.ExpressionBody, collectionValue);
 
             var iteratorVariable = CreateGlobalVariable(design, method.ReturnItemType(design));
-            design.IncompleteIterators.ToArray().ForEach(x =>
+            design.IncompleteIterators.ToArray().ForEach(iterator =>
             {
                 var newIterator = new IteratorDesign(design, new CollectionValueBridge(design, method.ReturnType(design), method.ReturnItemType(design), rewritten, true));
-                x.ForBody.Add(newIterator);
+                iterator.ForBody.Add(newIterator);
                 design.Iterators.Add(newIterator);
-                design.Iterators.Remove(x);
+                design.Iterators.Remove(iterator);
                 design.CurrentIterator = newIterator;
                 RewriteCollectionEnumeration.RewriteOther(design, design.CurrentIterator.Collection, iteratorVariable);
             });

@@ -61,18 +61,18 @@ namespace LinqRewrite.Extensions
 
         public static VariableCapture CreateVariableCapture(ISymbol symbol, ISymbol[] changing)
         {
-            var changes = changing.Contains(symbol);
-            if (changes) return new VariableCapture(symbol, changes);
+            var isChanging = changing.Contains(symbol);
+            if (isChanging) return new VariableCapture(symbol, isChanging);
 
-            if (!(symbol is ILocalSymbol local)) return new VariableCapture(symbol, changes);
+            if (!(symbol is ILocalSymbol local)) return new VariableCapture(symbol, isChanging);
             var type = local.Type;
 
-            if (!type.IsValueType) return new VariableCapture(symbol, changes);
+            if (!type.IsValueType) return new VariableCapture(symbol, isChanging);
 
             // Pass big structs by ref for performance.
             var size = StructureExtensions.GetStructSize(type);
-            if (size > Constants.MaximumSizeForByValStruct) changes = true;
-            return new VariableCapture(symbol, changes);
+            if (size > Constants.MaximumSizeForByValStruct) isChanging = true;
+            return new VariableCapture(symbol, isChanging);
         }
         
         
@@ -88,7 +88,7 @@ namespace LinqRewrite.Extensions
         public static int VariableIndex;
         public static LocalVariable CreateSuperGlobalVariable(RewriteDesign design, TypeSyntax type, ValueBridge initial)
         {
-            var variable = "v" + VariableIndex++ % Constants.VariablesPeek;
+            string variable = "v" + VariableIndex++ % Constants.VariablesPeek;
             var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
             design.Variables.Add(created);
             
@@ -100,7 +100,7 @@ namespace LinqRewrite.Extensions
         
         public static LocalVariable CreateGlobalVariable(RewriteDesign design, TypeSyntax type)
         {
-            var variable = "v" + VariableIndex++ % Constants.VariablesPeek;
+            string variable = "v" + VariableIndex++ % Constants.VariablesPeek;
             var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
             design.Variables.Add(created);
             
@@ -111,7 +111,7 @@ namespace LinqRewrite.Extensions
         
         public static LocalVariable CreateGlobalVariable(RewriteDesign design, TypeSyntax type, ValueBridge initial, IteratorDesign iterator)
         {
-            var variable = "v" + VariableIndex++ % Constants.VariablesPeek;
+            string variable = "v" + VariableIndex++ % Constants.VariablesPeek;
             var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
             design.Variables.Add(created);
             
@@ -123,7 +123,7 @@ namespace LinqRewrite.Extensions
         
         public static LocalVariable CreateGlobalVariable(RewriteDesign design, TypeSyntax type, ValueBridge initial)
         {
-            var variable = "v" + VariableIndex++ % Constants.VariablesPeek;
+            string variable = "v" + VariableIndex++ % Constants.VariablesPeek;
             var created = new LocalVariable(variable, type) {IsGlobal = true, IsUsed = true};
             design.Variables.Add(created);
             
@@ -138,13 +138,13 @@ namespace LinqRewrite.Extensions
         
         public static LocalVariable CreateLocalVariable(RewriteDesign design, TypeBridge type, ValueBridge initial)
         {
-            var variable = "v" + VariableIndex++ % Constants.VariablesPeek;
+            string variable = "v" + VariableIndex++ % Constants.VariablesPeek;
             var stringType = type.ToString();
-            var found = design.Variables.FirstOrDefault(x => stringType == x.Type.ToString() && !x.IsGlobal && !x.IsUsed);
-            if (found != null)
+            var foundVariable = design.Variables.FirstOrDefault(x => stringType == x.Type.ToString() && !x.IsGlobal && !x.IsUsed);
+            if (foundVariable != null)
             {
-                found.IsUsed = true;
-                return found;
+                foundVariable.IsUsed = true;
+                return foundVariable;
             }
             var created = new LocalVariable(variable, type);
             design.Variables.Add(created);
@@ -158,13 +158,13 @@ namespace LinqRewrite.Extensions
         public static LocalVariable CreateLocalVariable(RewriteDesign design, TypeBridge type)
         {
             var stringType = type.ToString();
-            var found = design.Variables.FirstOrDefault(x => stringType == x.Type.ToString() && !x.IsGlobal && !x.IsUsed);
-            if (found != null)
+            var foundVariable = design.Variables.FirstOrDefault(x => stringType == x.Type.ToString() && !x.IsGlobal && !x.IsUsed);
+            if (foundVariable != null)
             {
-                found.IsUsed = true;
-                return found;
+                foundVariable.IsUsed = true;
+                return foundVariable;
             }
-            var variable = "v" + VariableIndex++ % Constants.VariablesPeek;
+            string variable = "v" + VariableIndex++ % Constants.VariablesPeek;
             var created = new LocalVariable(variable, type);
             design.Variables.Add(created);
 

@@ -19,7 +19,7 @@ namespace LinqRewrite.RewriteRules
 
             design.LastValue = design.LastValue.Reusable(design);
             design.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(design.LastValue)),
-                                Continue()));
+                            Continue()));
             
             design.ListEnumeration = false;
             design.ModifiedEnumeration = true;

@@ -29,8 +29,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Except(ArraySource2).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayExceptArrayToArrayRewritten()
         {
             var res = ArraySource.Except(ArraySource2).ToArray();
@@ -42,8 +41,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Except(ArraySource2).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayWhereExceptArrayWhereToArrayRewritten()
         {
             var res = ArraySource.Except(ArraySource2).ToArray();
@@ -55,8 +53,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Except(EnumerableSource2).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayExceptEnumerableToArrayRewritten()
         {
             var res = ArraySource.Except(EnumerableSource2).ToArray();
@@ -68,8 +65,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Except(EnumerableSource2).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayWhereExceptEnumerableWhereToArrayRewritten()
         {
             var res = ArraySource.Except(EnumerableSource2).ToArray();
@@ -81,8 +77,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Except(ArraySource2).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableExceptArrayToArrayRewritten()
         {
             var res = EnumerableSource.Except(ArraySource2).ToArray();
@@ -94,8 +89,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Except(ArraySource2).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableWhereExceptArrayWhereToArrayRewritten()
         {
             var res = EnumerableSource.Except(ArraySource2).ToArray();
@@ -107,8 +101,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Except(EnumerableSource2).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableExceptEnumerableToArrayRewritten()
         {
             var res = EnumerableSource.Except(EnumerableSource2).ToArray();
@@ -120,8 +113,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Except(EnumerableSource2).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableWhereExceptEnumerableWhereToArrayRewritten()
         {
             var res = EnumerableSource.Except(EnumerableSource2).ToArray();
@@ -133,8 +125,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Except(ArraySource2).ToSimpleList();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayExceptArrayToSimpleListRewritten()
         {
             var res = ArraySource.Except(ArraySource2).ToSimpleList();
@@ -146,8 +137,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Except(ArraySource2).ToSimpleList();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayWhereExceptArrayWhereToSimpleListRewritten()
         {
             var res = ArraySource.Except(ArraySource2).ToSimpleList();
@@ -159,8 +149,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Except(EnumerableSource2).ToSimpleList();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableExceptEnumerableToSimpleListRewritten()
         {
             var res = EnumerableSource.Except(EnumerableSource2).ToSimpleList();
@@ -172,8 +161,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Except(EnumerableSource2).ToSimpleList();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableWhereExceptEnumerableWhereToSimpleListRewritten()
         {
             var res = EnumerableSource.Except(EnumerableSource2).ToSimpleList();

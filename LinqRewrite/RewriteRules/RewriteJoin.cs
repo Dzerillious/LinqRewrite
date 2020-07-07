@@ -34,7 +34,7 @@ namespace LinqRewrite.RewriteRules
             design.ForAdd(If(groupingVariable.IsEqual(null), Continue()));
             var rewritten = new RewrittenValueBridge(((LambdaExpressionSyntax) innerKeySelector.Old).ExpressionBody, groupingVariable);
 
-            var iterator = CreateGlobalVariable(design, innerKeySelector.ReturnType(design));
+            var iteratorVariable = CreateGlobalVariable(design, innerKeySelector.ReturnType(design));
             design.IncompleteIterators.ToArray().ForEach(x =>
             {
                 var newIterator = new IteratorDesign(design, new CollectionValueBridge(design, groupingType, innerKeySelector.ReturnType(design), rewritten, true));
@@ -42,7 +42,7 @@ namespace LinqRewrite.RewriteRules
                 design.Iterators.Add(newIterator);
                 design.Iterators.Remove(x);
                 design.CurrentIterator = newIterator;
-                RewriteCollectionEnumeration.RewriteOther(design, design.CurrentIterator.Collection, iterator);
+                RewriteCollectionEnumeration.RewriteOther(design, design.CurrentIterator.Collection, iteratorVariable);
             });
 
             design.CurrentIterator = design.Iterators.Last();

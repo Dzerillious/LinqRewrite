@@ -49,8 +49,8 @@ namespace LinqRewrite.Extensions
         public static bool AssertLesserEqual(RewriteDesign design, ValueBridge smaller, ValueBridge bigger, bool initialCheck = true, bool preCheck = false)
         {
             if (design.Unchecked) return true;
-            var biggerPass = ExpressionSimplifier.TryGetDouble(bigger, out var biggerD);
-            var smallerPass = ExpressionSimplifier.TryGetDouble(smaller, out var smallerD);
+            bool biggerPass = ExpressionSimplifier.TryGetDouble(bigger, out double biggerD);
+            bool smallerPass = ExpressionSimplifier.TryGetDouble(smaller, out double smallerD);
             
             if (biggerPass && smallerPass)
             {
@@ -67,8 +67,8 @@ namespace LinqRewrite.Extensions
         public static bool AssertLesser(RewriteDesign design, ValueBridge smaller, ValueBridge bigger, bool initialCheck = true, bool preCheck = false)
         {
             if (design.Unchecked) return true;
-            var biggerPass = ExpressionSimplifier.TryGetDouble(bigger, out var biggerD);
-            var smallerPass = ExpressionSimplifier.TryGetDouble(smaller, out var smallerD);
+            bool biggerPass = ExpressionSimplifier.TryGetDouble(bigger, out double biggerD);
+            bool smallerPass = ExpressionSimplifier.TryGetDouble(smaller, out double smallerD);
             
             if (biggerPass && smallerPass)
             {

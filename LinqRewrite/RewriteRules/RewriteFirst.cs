@@ -23,7 +23,7 @@ namespace LinqRewrite.RewriteRules
             else
             {
                 design.ForAdd(If(args[0].Inline(design, design.LastValue),
-                            Return(design.LastValue)));
+                                Return(design.LastValue)));
             }
             
             if (!design.Unchecked) design.ResultAdd(Throw("System.InvalidOperationException", "The sequence did not contain any elements."));

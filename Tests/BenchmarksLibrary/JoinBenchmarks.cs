@@ -24,8 +24,7 @@ namespace BenchmarksLibrary
             ArraySource.Join(ArraySource, x => x % 100, x => x % 100, (x, y) => x + y).ToArray();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayJoinRewritten()
         {
             ArraySource.Join(ArraySource, x => x % 100, x => x % 100, (x, y) => x + y).ToArray();
@@ -37,8 +36,7 @@ namespace BenchmarksLibrary
             EnumerableSource.Join(EnumerableSource, x => x % 100, x => x % 100, (x, y) => x + y).ToArray();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableJoinRewritten()
         {
             EnumerableSource.Join(EnumerableSource, x => x % 100, x => x % 100, (x, y) => x + y).ToArray();

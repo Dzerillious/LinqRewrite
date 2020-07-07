@@ -17,7 +17,7 @@ namespace LinqRewrite.RewriteRules
                 return null;
 
             var items = Enumerable.Range(0, intSize)
-                .Select(x=> new TypedValueBridge(design.LastValue.Type, Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x)));
+                .Select(i=> new TypedValueBridge(design.LastValue.Type, Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + i)));
             
             var simpleValue = args.Length == 1 
                 ? items.Aggregate((x, y) => args[0].Inline(design, x, y))

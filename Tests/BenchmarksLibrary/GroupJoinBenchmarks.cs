@@ -24,8 +24,7 @@ namespace BenchmarksLibrary
             ArraySource.GroupJoin(ArraySource, x => x % 100, x => x % 100, (x, y) => y.Sum()).ToArray();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayGroupJoinRewritten()
         {
             ArraySource.GroupJoin(ArraySource, x => x % 100, x => x % 100, (x, y) => y.Sum()).ToArray();
@@ -37,8 +36,7 @@ namespace BenchmarksLibrary
             EnumerableSource.GroupJoin(EnumerableSource, x => x % 100, x => x % 100, (x, y) => y.Sum()).ToArray();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableGroupJoinRewritten()
         {
             EnumerableSource.GroupJoin(EnumerableSource, x => x % 100, x => x % 100, (x, y) => y.Sum()).ToArray();

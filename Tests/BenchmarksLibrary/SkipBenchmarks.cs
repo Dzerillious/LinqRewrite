@@ -25,8 +25,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Skip(a).ToArray();
         } //EndMethod
 
-        [Benchmark]
-        [LinqRewrite(RewriteOptions.Unchecked)]
+        [Benchmark, LinqRewrite(RewriteOptions.Unchecked)]
 		public void SkipToArrayUncheckedRewritten()
         {
             var a = 5;
@@ -40,8 +39,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void SkipToArrayRewritten()
         {
             var res = ArraySource.Select(x => x + 2).Skip(900).ToArray();
@@ -119,7 +117,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
-        [Benchmark, LinqRewrite()]
+        [Benchmark, LinqRewrite]
         public void SkipToArrayRewritten20()
         {
             var res = ArraySource.Select(x => x + 2).Skip(900).ToArray();
@@ -158,8 +156,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
-        [Benchmark]
-        [LinqRewrite(RewriteOptions.Unchecked)]
+        [Benchmark, LinqRewrite(RewriteOptions.Unchecked)]
 		public void EnumerableSkipToArrayUncheckedRewritten()
         {
             var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
@@ -172,8 +169,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Unchecked().Select(x => x + 2).Skip(900).ToArray();
         } //EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableSkipToArrayRewritten()
         {
             var res = EnumerableSource.Select(x => x + 2).Skip(900).ToArray();

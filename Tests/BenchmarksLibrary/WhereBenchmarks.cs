@@ -30,8 +30,7 @@ namespace BenchmarksLibrary
             ArraySource.Where(x => x < Offset).ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArrayWhereToArrayRewritten()
         {
             ArraySource.Where(x => x < Offset).ToArray();
@@ -44,8 +43,7 @@ namespace BenchmarksLibrary
             ArraySource.Where(x => x < Offset).ToSimpleList();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArrayWhereToSimpleListRewritten()
         {
             ArraySource.Where(x => x < Offset).ToSimpleList();

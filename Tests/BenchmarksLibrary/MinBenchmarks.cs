@@ -24,8 +24,7 @@ namespace BenchmarksLibrary
             return Enumerable.Range(567, 1000).Min();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int RangeMinRewritten()
         {
             return Enumerable.Range(567, 1000).Min();
@@ -37,8 +36,7 @@ namespace BenchmarksLibrary
             return ArraySource.Min();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayMinRewritten()
         {
             return ArraySource.Min();
@@ -50,8 +48,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 700).Min();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereMinRewritten()
         {
             return ArraySource.Where(x => x > 700).Min();
@@ -63,8 +60,7 @@ namespace BenchmarksLibrary
             return ArraySource.Min(x => x > 700 ? x : (int?)null);
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int? ArrayNullableMinRewritten()
         {
             return ArraySource.Min(x => x > 700 ? x : (int?)null);
@@ -76,8 +72,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Min();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableMinRewritten()
         {
             return EnumerableSource.Min();

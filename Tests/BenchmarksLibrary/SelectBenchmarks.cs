@@ -29,8 +29,7 @@ namespace BenchmarksLibrary
             ArraySource.Select(x => x + 3);
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArraySelectRewritten()
         {
             ArraySource.Select(x => x + 3);
@@ -43,8 +42,7 @@ namespace BenchmarksLibrary
             ArraySource.Select(x => x + 3).ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArraySelectToArrayRewritten()
         {
             ArraySource.Select(x => x + 3).ToArray();
@@ -57,8 +55,7 @@ namespace BenchmarksLibrary
             ArraySource.Select(Selector);
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArraySelectMethodRewritten()
         {
             ArraySource.Select(Selector);
@@ -71,8 +68,7 @@ namespace BenchmarksLibrary
             ArraySource.Select(Selector).ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArraySelectMethodToArrayRewritten()
         {
             ArraySource.Select(Selector).ToArray();
@@ -85,8 +81,7 @@ namespace BenchmarksLibrary
             ArraySource.Select(x => new int[10]);
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArraySelectArrayRewritten()
         {
             ArraySource.Select(x => new int[10]);
@@ -99,8 +94,7 @@ namespace BenchmarksLibrary
             ArraySource.Select(x => new int[10]).ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArraySelectArrayToArrayRewritten()
         {
             ArraySource.Select(x => new int[10]).ToArray();
@@ -122,8 +116,7 @@ namespace BenchmarksLibrary
                 .Select(x => x + 3);
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArraySelectMultipleRewritten()
         {
             ArraySource.Select(x => x + 3)
@@ -154,8 +147,7 @@ namespace BenchmarksLibrary
                 .Select(x => x + 3).ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArraySelectMultipleToArrayRewritten()
         {
             ArraySource.Select(x => x + 3)
@@ -186,8 +178,7 @@ namespace BenchmarksLibrary
                 .Select(x => x + x);
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArraySelectComplexMultipleRewritten()
         {
             ArraySource.Select(x => x + x)
@@ -218,8 +209,7 @@ namespace BenchmarksLibrary
                 .Select(x => x + x).ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArraySelectComplexMultipleToArrayRewritten()
         {
             ArraySource.Select(x => x + x)
@@ -250,8 +240,7 @@ namespace BenchmarksLibrary
                 .Select(Selector);
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArraySelectMethodMultipleRewritten()
         {
             ArraySource.Select(Selector)
@@ -282,8 +271,7 @@ namespace BenchmarksLibrary
                 .Select(Selector).ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArraySelectMethodMultipleToArrayRewritten()
         {
             ArraySource.Select(Selector)
@@ -305,8 +293,7 @@ namespace BenchmarksLibrary
             EnumerableSource.Select(x => x + 3).ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void EnumerableSelectToArrayRewritten()
         {
             EnumerableSource.Select(x => x + 3).ToArray();
@@ -319,8 +306,7 @@ namespace BenchmarksLibrary
             EnumerableSource.Select(Selector).ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void EnumerableSelectMethodToArrayRewritten()
         {
             EnumerableSource.Select(Selector).ToArray();
@@ -333,8 +319,7 @@ namespace BenchmarksLibrary
             EnumerableSource.Select(x => new int[10]).ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void EnumerableSelectArrayToArrayRewritten()
         {
             EnumerableSource.Select(x => new int[10]).ToArray();
@@ -356,8 +341,7 @@ namespace BenchmarksLibrary
                 .Select(x => x + 3).ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void EnumerableSelectMultipleToArrayRewritten()
         {
             EnumerableSource.Select(x => x + 3)
@@ -388,8 +372,7 @@ namespace BenchmarksLibrary
                 .Select(x => x + x).ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void EnumerableSelectComplexMultipleToArrayRewritten()
         {
             EnumerableSource.Select(x => x + x)
@@ -420,8 +403,7 @@ namespace BenchmarksLibrary
                 .Select(Selector).ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void EnumerableSelectMethodMultipleToArrayRewritten()
         {
             ArraySource.Select(Selector)
@@ -443,8 +425,7 @@ namespace BenchmarksLibrary
             ArraySource.Select(x => x + 3).ToSimpleList();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArraySelectToSimpleListRewritten()
         {
             ArraySource.Select(x => x + 3).ToSimpleList();
@@ -457,8 +438,7 @@ namespace BenchmarksLibrary
             StaticArraySource.Select(x => x + 3).ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void StaticArraySelectToArrayRewritten()
         {
             StaticArraySource.Select(x => x + 3).ToArray();
@@ -471,8 +451,7 @@ namespace BenchmarksLibrary
             StaticSelectBenchmarks.StaticClassSelectToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void StaticClassArraySelectToArrayRewritten()
         {
             StaticSelectBenchmarks.StaticClassSelectToArrayRewritten();

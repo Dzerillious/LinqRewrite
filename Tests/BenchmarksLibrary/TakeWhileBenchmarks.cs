@@ -30,8 +30,7 @@ namespace BenchmarksLibrary
             ArraySource.TakeWhile(x => x < Offset).ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArrayTakeWhileToArrayRewritten()
         {
             ArraySource.TakeWhile(x => x < Offset).ToArray();
@@ -44,8 +43,7 @@ namespace BenchmarksLibrary
             ArraySource.TakeWhile(x => x < Offset).ToSimpleList();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArrayTakeWhileToSimpleListRewritten()
         {
             ArraySource.TakeWhile(x => x < Offset).ToSimpleList();

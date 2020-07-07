@@ -17,8 +17,8 @@ namespace LinqRewrite.RewriteRules
                 return null;
             
             return CreateArray(design.CurrentCollection.ItemType.ArrayType(), design.ResultSize,
-                Enumerable.Range(0, intSize).Select(x 
-                    => (ExpressionSyntax) Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x)))
+                Enumerable.Range(0, intSize).Select(i 
+                    => (ExpressionSyntax) Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + i)))
                 .Cast(design.ReturnType);
         }
         

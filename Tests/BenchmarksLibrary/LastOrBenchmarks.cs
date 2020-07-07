@@ -24,8 +24,7 @@ namespace BenchmarksLibrary
             return ArraySource.LastOrDefault();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public int ArrayLastOrDefaultRewritten()
         {
             return ArraySource.LastOrDefault();
@@ -37,8 +36,7 @@ namespace BenchmarksLibrary
             return ArraySource.LastOrDefault(x => x > 3);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayLastOrDefaultConditionRewritten()
         {
             return ArraySource.LastOrDefault(x => x > 3);
@@ -50,8 +48,7 @@ namespace BenchmarksLibrary
             return ArraySource.Select(x => x + 3).LastOrDefault();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArraySelectLastOrDefaultRewritten()
         {
             return ArraySource.Select(x => x + 3).LastOrDefault();
@@ -63,8 +60,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 100).LastOrDefault();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereLastOrDefaultRewritten()
         {
             return ArraySource.Where(x => x > 100).LastOrDefault();
@@ -76,8 +72,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 100).LastOrDefault(x => x > 200);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereLastOrDefaultConditionRewritten()
         {
             return ArraySource.Where(x => x > 100).LastOrDefault(x => x > 200);
@@ -89,8 +84,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.LastOrDefault(x => x > 3);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableLastOrDefaultConditionRewritten()
         {
             return EnumerableSource.LastOrDefault(x => x > 3);
@@ -102,8 +96,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.LastOrDefault(x => x > 10_000);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableLastOrDefaultNotConditionRewritten()
         {
             return EnumerableSource.LastOrDefault(x => x > 10_000);
@@ -115,8 +108,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.LastOrDefault(x => x > 0);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableLastOrDefaultAllConditionRewritten()
         {
             return EnumerableSource.LastOrDefault(x => x > 0);

@@ -36,8 +36,7 @@ namespace BenchmarksLibrary
             return ArraySource.Unchecked().Take(5).Average();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public double ArrayAverage5Rewritten()
         {
             return ArraySource.Unchecked().Take(5).Average();
@@ -49,8 +48,7 @@ namespace BenchmarksLibrary
             return ArraySource.Unchecked().Take(10).Average();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public double ArrayAverage10Rewritten()
         {
             return ArraySource.Unchecked().Take(10).Average();
@@ -62,8 +60,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x =>  x > 600).Average();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public double ArrayWhereAverageRewritten()
         {
             return ArraySource.Where(x =>  x > 600).Average();
@@ -75,8 +72,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Average();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public double EnumerableAverageRewritten()
         {
             return EnumerableSource.Average();
@@ -88,8 +84,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Unchecked().Average();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public double EnumerableUncheckedAverageRewritten()
         {
             return EnumerableSource.Unchecked().Average();

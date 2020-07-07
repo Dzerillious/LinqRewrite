@@ -24,8 +24,7 @@ namespace BenchmarksLibrary
             return ArraySource.ElementAtOrDefault(50);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayElementAtOrDefaultRewritten()
         {
             return ArraySource.ElementAtOrDefault(50);
@@ -37,8 +36,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 25).ElementAtOrDefault(50);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereElementAtOrDefaultRewritten()
         {
             return ArraySource.Where(x => x > 25).ElementAtOrDefault(50);
@@ -50,8 +48,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.ElementAtOrDefault(50);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableElementAtOrDefaultRewritten()
         {
             return EnumerableSource.ElementAtOrDefault(50);

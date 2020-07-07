@@ -28,8 +28,7 @@ namespace BenchmarksLibrary
             return ArraySource.SequenceEqual(ArraySource2);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool ArraySequenceEqualArrayRewritten()
         {
             return ArraySource.SequenceEqual(ArraySource2);
@@ -41,8 +40,7 @@ namespace BenchmarksLibrary
             return ArraySource.SequenceEqual(ArraySource2);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool ArrayWhereSequenceEqualArrayWhereRewritten()
         {
             return ArraySource.SequenceEqual(ArraySource2);
@@ -54,8 +52,7 @@ namespace BenchmarksLibrary
             return ArraySource.SequenceEqual(EnumerableSource2);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool ArraySequenceEqualEnumerableRewritten()
         {
             return ArraySource.SequenceEqual(EnumerableSource2);
@@ -67,8 +64,7 @@ namespace BenchmarksLibrary
             return ArraySource.SequenceEqual(EnumerableSource2);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool ArrayWhereSequenceEqualEnumerableWhereRewritten()
         {
             return ArraySource.SequenceEqual(EnumerableSource2);
@@ -80,8 +76,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.SequenceEqual(ArraySource2);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool EnumerableSequenceEqualArrayRewritten()
         {
             return EnumerableSource.SequenceEqual(ArraySource2);
@@ -93,8 +88,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.SequenceEqual(ArraySource2);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool EnumerableWhereSequenceEqualArrayWhereRewritten()
         {
             return EnumerableSource.SequenceEqual(ArraySource2);
@@ -106,8 +100,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.SequenceEqual(EnumerableSource2);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool EnumerableSequenceEqualEnumerableRewritten()
         {
             return EnumerableSource.SequenceEqual(EnumerableSource2);
@@ -119,8 +112,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.SequenceEqual(EnumerableSource2);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool EnumerableWhereSequenceEqualEnumerableWhereRewritten()
         {
             return EnumerableSource.SequenceEqual(EnumerableSource2);

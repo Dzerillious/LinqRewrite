@@ -10,7 +10,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
         {
-            design.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
+            design.Variables.Where(variable => !variable.IsGlobal).ForEach(variable => variable.IsUsed = false);
             var fromValue = args[0];
             var countValue = args[1];
             var incrementValue = args.Length == 3 ? args[2].New : 1;

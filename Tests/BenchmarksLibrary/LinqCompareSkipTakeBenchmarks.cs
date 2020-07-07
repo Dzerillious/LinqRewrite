@@ -31,7 +31,7 @@ namespace BenchmarksLibrary
             ArraySource.Skip(ToValue).Take(ToValue).ToArray();
         }//EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public void OptimizedLinqRewrite()
         {
             ArraySource.Skip(ToValue).Take(ToValue).ToSimpleList();

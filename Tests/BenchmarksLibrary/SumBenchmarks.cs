@@ -25,8 +25,7 @@ namespace BenchmarksLibrary
             return Enumerable.Range(567, 1000).Sum();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int RangeSumRewritten()
         {
             return Enumerable.Range(567, 1000).Sum();
@@ -38,8 +37,7 @@ namespace BenchmarksLibrary
             return ArraySource.Sum();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArraySumRewritten()
         {
             return ArraySource.Sum();
@@ -54,8 +52,7 @@ namespace BenchmarksLibrary
             return sum;
         }
         
-        [Benchmark]
-        [LinqRewrite(RewriteOptions.Unchecked)]
+        [Benchmark, LinqRewrite(RewriteOptions.Unchecked)]
 		public int ArrayCompositeSumRewritten()
         {
             var sum = ExtendedLinq.Range(0, ArraySource.Length / 10, 10)
@@ -74,8 +71,7 @@ namespace BenchmarksLibrary
                 + ArraySource.Skip(ArraySource.Length / simdLength * simdLength).Sum();
         }
         
-        [Benchmark]
-        [LinqRewrite(RewriteOptions.Unchecked)]
+        [Benchmark, LinqRewrite(RewriteOptions.Unchecked)]
 		public int ArraySIMDSumRewritten()
         {
             var simdLength = Vector<int>.Count;
@@ -92,8 +88,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 700).Sum();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereSumRewritten()
         {
             return ArraySource.Where(x => x > 700).Sum();
@@ -105,8 +100,7 @@ namespace BenchmarksLibrary
             return ArraySource.Sum(x => x > 700 ? x : (int?)null);
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int? ArrayNullableSumRewritten()
         {
             return ArraySource.Sum(x => x > 700 ? x : (int?)null);
@@ -118,8 +112,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Sum();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableSumRewritten()
         {
             return EnumerableSource.Sum();

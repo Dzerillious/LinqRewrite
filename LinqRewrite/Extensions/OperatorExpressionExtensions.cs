@@ -135,15 +135,15 @@ namespace LinqRewrite.Extensions
         
         public static MemberAccessExpressionSyntax Access(this ExpressionSyntax source, params VariableBridge[] accessed)
         {
-            var item = source;
+            var expression = source;
             for (var i = 0; i < accessed.Length; i++)
             {
-                item = MemberAccessExpression(
+                expression = MemberAccessExpression(
                     SyntaxKind.SimpleMemberAccessExpression,
-                    item,
+                    expression,
                     accessed[i]);
             }
-            return (MemberAccessExpressionSyntax)item;
+            return (MemberAccessExpressionSyntax)expression;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args, InvocationExpressionSyntax invocation)
         {
-            design.Variables.Where(x => !x.IsGlobal).ForEach(x => x.IsUsed = false);
+            design.Variables.Where(variable => !variable.IsGlobal).ForEach(variable => variable.IsUsed = false);
             var access = (MemberAccessExpressionSyntax) invocation.Expression;
             var name = (GenericNameSyntax) access.Name;
             var type = name.TypeArgumentList.Arguments[0];

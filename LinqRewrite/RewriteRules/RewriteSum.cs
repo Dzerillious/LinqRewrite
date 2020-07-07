@@ -16,8 +16,8 @@ namespace LinqRewrite.RewriteRules
             if (!TryGetInt(design.ResultSize, out var intSize) || intSize > Constants.SimpleRewriteMaxMediumElements)
                 return null;
 
-            var items = Enumerable.Range(0, intSize).Select(x
-                => new TypedValueBridge(design.LastValue.Type, Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x)));
+            var items = Enumerable.Range(0, intSize).Select(i
+                => new TypedValueBridge(design.LastValue.Type, Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + i)));
             return items.Aggregate((x, y) => new TypedValueBridge(design.LastValue.Type, x + y));
         }
         

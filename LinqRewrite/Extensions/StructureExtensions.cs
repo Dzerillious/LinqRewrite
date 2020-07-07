@@ -31,11 +31,11 @@ namespace LinqRewrite.Extensions
             if (StructSizeCache.TryGetValue(type, out var size)) return size;
             
             size = 0;
-            foreach (var item in type.GetMembers())
+            foreach (var symbol in type.GetMembers())
             {
-                if (item.Kind != SymbolKind.Field || item.IsStatic) continue;
+                if (symbol.Kind != SymbolKind.Field || symbol.IsStatic) continue;
 
-                var field = (IFieldSymbol) item;
+                var field = (IFieldSymbol) symbol;
                 if (field.Type.IsValueType)
                 {
                     if (field.Type.Equals(type))

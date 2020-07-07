@@ -31,8 +31,7 @@ namespace BenchmarksLibrary
             ArraySource.Cast<B>().ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArrayCastToArrayRewritten()
         {
             ArraySource.Cast<B>().ToArray();
@@ -45,8 +44,7 @@ namespace BenchmarksLibrary
             EnumerableSource.Cast<B>().ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void EnumerableCastToArrayRewritten()
         {
             EnumerableSource.Cast<B>().ToArray();
@@ -59,8 +57,7 @@ namespace BenchmarksLibrary
             ArraySource.Cast<B>().ToSimpleList();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void ArrayCastToSimpleListRewritten()
         {
             ArraySource.Cast<B>().ToSimpleList();
@@ -73,8 +70,7 @@ namespace BenchmarksLibrary
             StaticArraySource.Cast<B>().ToArray();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public void StaticArrayCastToArrayRewritten()
         {
             StaticArraySource.Cast<B>().ToArray();
@@ -87,8 +83,7 @@ namespace BenchmarksLibrary
             ArraySource.Unchecked().Cast<B>().ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayUncheckedCastToArrayRewritten()
         {
             ArraySource.Unchecked().Cast<B>().ToArray();
@@ -101,8 +96,7 @@ namespace BenchmarksLibrary
             EnumerableSource.Cast<B>().ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableUncheckedToSimpleListRewritten()
         {
             EnumerableSource.Cast<B>().ToArray();

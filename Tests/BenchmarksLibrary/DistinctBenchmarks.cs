@@ -24,8 +24,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Distinct().ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayDistinctRewritten()
         {
             var res = ArraySource.Distinct().ToArray();
@@ -37,8 +36,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Distinct().ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableDistinctRewritten()
         {
             var res = EnumerableSource.Distinct().ToArray();

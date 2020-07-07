@@ -24,8 +24,7 @@ namespace BenchmarksLibrary
             return ArraySource.First();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public int ArrayFirstRewritten()
         {
             return ArraySource.First();
@@ -37,8 +36,7 @@ namespace BenchmarksLibrary
             return ArraySource.First(x => x > 3);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayFirstConditionRewritten()
         {
             return ArraySource.First(x => x > 3);
@@ -50,8 +48,7 @@ namespace BenchmarksLibrary
             return ArraySource.Select(x => x + 3).First();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArraySelectFirstRewritten()
         {
             return ArraySource.Select(x => x + 3).First();
@@ -63,8 +60,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 100).First();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereFirstRewritten()
         {
             return ArraySource.Where(x => x > 100).First();
@@ -76,8 +72,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 100).First(x => x > 200);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int ArrayWhereFirstConditionRewritten()
         {
             return ArraySource.Where(x => x > 100).First(x => x > 200);
@@ -89,8 +84,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.First(x => x > 3);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableFirstConditionRewritten()
         {
             return EnumerableSource.First(x => x > 3);
@@ -102,8 +96,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.First(x => x > 10_000);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableFirstNotConditionRewritten()
         {
             return EnumerableSource.First(x => x > 10_000);
@@ -115,8 +108,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.First(x => x > 0);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public int EnumerableFirstAllConditionRewritten()
         {
             return EnumerableSource.First(x => x > 0);

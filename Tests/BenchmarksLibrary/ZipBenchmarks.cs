@@ -24,8 +24,7 @@ namespace BenchmarksLibrary
             ArraySource.Zip(ArraySource, (x, y) => x + y).ToArray();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayZipRewritten()
         {
             ArraySource.Zip(ArraySource, (x, y) => x + y).ToArray();
@@ -37,8 +36,7 @@ namespace BenchmarksLibrary
             EnumerableSource.Zip(EnumerableSource, (x, y) => x + y).ToArray();
         }
         
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableZipRewritten()
         {
             EnumerableSource.Zip(EnumerableSource, (x, y) => x + y).ToArray();

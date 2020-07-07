@@ -29,8 +29,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Union(ArraySource2).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayUnionArrayToArrayRewritten()
         {
             var res = ArraySource.Union(ArraySource2).ToArray();
@@ -42,8 +41,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Union(ArraySource2).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayWhereUnionArrayWhereToArrayRewritten()
         {
             var res = ArraySource.Union(ArraySource2).ToArray();
@@ -55,8 +53,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Union(EnumerableSource2).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayUnionEnumerableToArrayRewritten()
         {
             var res = ArraySource.Union(EnumerableSource2).ToArray();
@@ -68,8 +65,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Union(EnumerableSource2).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayWhereUnionEnumerableWhereToArrayRewritten()
         {
             var res = ArraySource.Union(EnumerableSource2).ToArray();
@@ -81,8 +77,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Union(ArraySource2).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableUnionArrayToArrayRewritten()
         {
             var res = EnumerableSource.Union(ArraySource2).ToArray();
@@ -94,8 +89,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Union(ArraySource2).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableWhereUnionArrayWhereToArrayRewritten()
         {
             var res = EnumerableSource.Union(ArraySource2).ToArray();
@@ -107,8 +101,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Union(EnumerableSource2).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableUnionEnumerableToArrayRewritten()
         {
             var res = EnumerableSource.Union(EnumerableSource2).ToArray();
@@ -120,8 +113,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Union(EnumerableSource2).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableWhereUnionEnumerableWhereToArrayRewritten()
         {
             var res = EnumerableSource.Union(EnumerableSource2).ToArray();
@@ -133,8 +125,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Union(ArraySource2).ToSimpleList();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayUnionArrayToSimpleListRewritten()
         {
             var res = ArraySource.Union(ArraySource2).ToSimpleList();
@@ -146,8 +137,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Union(ArraySource2).ToSimpleList();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArrayWhereUnionArrayWhereToSimpleListRewritten()
         {
             var res = ArraySource.Union(ArraySource2).ToSimpleList();
@@ -159,8 +149,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Union(EnumerableSource2).ToSimpleList();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableUnionEnumerableToSimpleListRewritten()
         {
             var res = EnumerableSource.Union(EnumerableSource2).ToSimpleList();
@@ -172,8 +161,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Union(EnumerableSource2).ToSimpleList();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableWhereUnionEnumerableWhereToSimpleListRewritten()
         {
             var res = EnumerableSource.Union(EnumerableSource2).ToSimpleList();

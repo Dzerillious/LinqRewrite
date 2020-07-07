@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using LinqRewrite.Core;
 using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -51,7 +52,7 @@ namespace LinqRewrite.Services
             if (MSBuildLocator.CanRegister) MSBuildLocator.RegisterDefaults();
             var msWorkspace = MSBuildWorkspace.Create();
             var solution = msWorkspace.OpenSolutionAsync(path).Result;
-            return solution.Projects.All(x => RewriteProject(msWorkspace, x, dstDir));
+            return solution.Projects.All(project => RewriteProject(msWorkspace, project, dstDir));
         }
 
         public bool RewriteProject(MSBuildWorkspace workspace, Project project, string dstDir)
@@ -142,11 +143,11 @@ namespace LinqRewrite.Services
 
             if(PrintDiagnostics(compilation)) return false;
             var rewriter = new LinqRewriter(compilation.GetSemanticModel(syntaxTree));
-            var rewritten = rewriter.Visit(syntaxTree.GetRoot());
+            var rewrittenNode = rewriter.Visit(syntaxTree.GetRoot());
             
             Directory.Delete(dstDir, true);
             Directory.CreateDirectory(dstDir);
-            File.WriteAllText(rewritten.ToString(), Path.Combine(dstDir, Path.GetFileName(path)));
+            File.WriteAllText(rewrittenNode.ToString(), Path.Combine(dstDir, Path.GetFileName(path)));
             return true;
         }
 

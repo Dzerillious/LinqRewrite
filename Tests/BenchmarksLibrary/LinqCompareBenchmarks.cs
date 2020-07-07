@@ -26,7 +26,7 @@ namespace BenchmarksLibrary
             return ArraySource.Sum();
         }//EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public int OptimizedLinqRewriteSum()
         {
             return ArraySource.Sum();
@@ -50,7 +50,7 @@ namespace BenchmarksLibrary
             return ArraySource.First();
         }//EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public int OptimizedLinqRewriteFirst()
         {
             return ArraySource.First();

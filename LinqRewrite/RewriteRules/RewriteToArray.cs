@@ -18,8 +18,8 @@ namespace LinqRewrite.RewriteRules
             if (!TryGetInt(design.ResultSize, out var intSize) || intSize > Constants.SimpleRewriteMaxSimpleElements)
                 return null;
 
-            var items = Enumerable.Range(0, intSize).Select(x
-                => (ExpressionSyntax) Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + x));
+            var items = Enumerable.Range(0, intSize).Select(i
+                => (ExpressionSyntax) Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + i));
             return CreateArray((ArrayTypeSyntax) design.ReturnType, design.ResultSize, items);
         }
         
@@ -76,12 +76,12 @@ namespace LinqRewrite.RewriteRules
             var currentLengthVariable = CreateGlobalVariable(design, Int, currentLength);
 
             design.ForAdd(If(design.Indexer >= currentLengthVariable,
-                        "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeArray")
-                                .Invoke(enlarging, 
-                                    design.SourceSize, 
-                                    RefArg(resultVariable), 
-                                    RefArg(logVariable),
-                                    OutArg(currentLengthVariable))));
+                            "LinqRewrite".Access("Core", "EnlargeExtensions", "LogEnlargeArray")
+                                    .Invoke(enlarging, 
+                                        design.SourceSize, 
+                                        RefArg(resultVariable), 
+                                        RefArg(logVariable),
+                                        OutArg(currentLengthVariable))));
                 
             design.ForAdd(resultVariable[design.Indexer].Assign(design.LastValue));
             return resultVariable;

@@ -27,8 +27,7 @@ namespace BenchmarksLibrary
             return ArraySource.Contains(50);
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public bool ArrayContains50Rewritten()
         {
             return ArraySource.Contains(50);
@@ -40,8 +39,7 @@ namespace BenchmarksLibrary
             return ArraySource.Contains(900);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool ArrayContains900ConditionRewritten()
         {
             return ArraySource.Contains(900);
@@ -53,8 +51,7 @@ namespace BenchmarksLibrary
             return ArraySource.Select(x => x + 3).Contains(200);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool ArraySelectContainsRewritten()
         {
             return ArraySource.Select(x => x + 3).Contains(200);
@@ -66,8 +63,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 100).Contains(50);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool ArrayWhereContainsRewritten()
         {
             return ArraySource.Where(x => x > 100).Contains(50);
@@ -79,8 +75,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 100).Contains(900);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool ArrayWhereContains900Rewritten()
         {
             return ArraySource.Where(x => x > 100).Contains(900);
@@ -92,8 +87,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Contains(10000);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool EnumerableContainsNotConditionRewritten()
         {
             return EnumerableSource.Contains(10000);
@@ -105,8 +99,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Contains(50);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool EnumerableContainsAllConditionRewritten()
         {
             return EnumerableSource.Contains(50);

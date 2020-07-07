@@ -24,8 +24,7 @@ namespace BenchmarksLibrary
             var res = Enumerable.Range(500, 1000).SelectMany(x => Enumerable.Range(500, 1000)).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void RangeSelectManyRewritten()
         {
             var res = Enumerable.Range(500, 1000).SelectMany(x => Enumerable.Range(500, 1000)).ToArray();
@@ -37,8 +36,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.SelectMany(x => ArraySource).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void ArraySelectManyRewritten()
         {
             var res = ArraySource.SelectMany(x => ArraySource).ToArray();
@@ -50,8 +48,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.SelectMany(x => EnumerableSource).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableSelectManyRewritten()
         {
             var res = EnumerableSource.SelectMany(x => EnumerableSource).ToArray();

@@ -41,7 +41,7 @@ namespace LinqRewrite.Services
                 ? GenericName(
                     Identifier(identifier),
                     TypeArgumentList(CreateSeparatedList(_data.CurrentMethodTypeParameters.Parameters
-                            .Select(x => ParseTypeName(x.Identifier.ValueText)))))
+                            .Select(parameter => ParseTypeName(parameter.Identifier.ValueText)))))
                 : (NameSyntax) IdentifierName(identifier);
 
         public TypedValueBridge InlineLambda(RewriteDesign p, RewrittenValueBridge rewritten, TypeSyntax returnType, params TypedValueBridge[] replaceParameters)
@@ -55,8 +55,8 @@ namespace LinqRewrite.Services
             var currentFlow = _data.Semantic.AnalyzeDataFlow(oldLambda.Body);
             var changing = currentFlow.DataFlowsOut.Concat(currentFlow.WrittenInside).ToArray();
             var currentCaptures = currentFlow.DataFlowsIn
-                .Where(x => lambdaParams.All(y => x.Name != y.Identifier.ValueText) && (x as IParameterSymbol)?.IsThis != true)
-                .Select(x => CreateVariableCapture(x, changing))
+                .Where(symbol => lambdaParams.All(parameter => symbol.Name != parameter.Identifier.ValueText) && (symbol as IParameterSymbol)?.IsThis != true)
+                .Select(symbol => CreateVariableCapture(symbol, changing))
                 .ToArray();
 
             if (!p.HasResultMethod && p.Data.CurrentMethodParams.Any(x => x.Modifiers.Any()))
@@ -94,7 +94,7 @@ namespace LinqRewrite.Services
             string functionName = GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinqHelper");
             if (lambda.Body is ExpressionSyntax syntax) return ParenthesizedExpression(syntax);
 
-            if (captures.Any(x => IsAnonymousType(x.GetSymbolType()))) 
+            if (captures.Any(capture => IsAnonymousType(capture.GetSymbolType()))) 
                 throw new NotSupportedException();
             if (returnType == null) throw new NotSupportedException(); // Anonymous type
             
@@ -132,13 +132,13 @@ namespace LinqRewrite.Services
             var resultParams = new ParameterSyntax[typedParams.Count];
             for (var i = 0; i < typedParams.Count; i++)
             {
-                var value = replaceParameters[i].Value.Value;
-                while (value is ParenthesizedExpressionSyntax parenthesizedExpressionSyntax)
-                    value = parenthesizedExpressionSyntax.Expression;
+                var valueExpression = replaceParameters[i].Value.Value;
+                while (valueExpression is ParenthesizedExpressionSyntax parenthesizedExpressionSyntax)
+                    valueExpression = parenthesizedExpressionSyntax.Expression;
 
-                var identifier = value is IdentifierNameSyntax
-                    ? value : replaceParameters[i].Value.Reusable(p, typedParams[i].Type).Expression;
-                resultParams[i] = CreateParameter(identifier.ToString(), typedParams[i].Type);
+                var identifierExpression = valueExpression is IdentifierNameSyntax
+                    ? valueExpression : replaceParameters[i].Value.Reusable(p, typedParams[i].Type).Expression;
+                resultParams[i] = CreateParameter(identifierExpression.ToString(), typedParams[i].Type);
             }
             return resultParams;
         }
@@ -147,8 +147,8 @@ namespace LinqRewrite.Services
         {
             var parameters = replace.Select((x, i) => GetLambdaParameter(newLambda, i)).ToArray();
             var tokensToRename = newLambda.Body.DescendantNodesAndSelf()
-                .Where(x => x is IdentifierNameSyntax && 
-                            parameters.Any(y => y.Identifier.ValueText == x.ToString()));
+                .Where(node => node is IdentifierNameSyntax && 
+                            parameters.Any(y => y.Identifier.ValueText == node.ToString()));
             
             var syntax = ParenthesizedLambdaExpression(
                 CreateParameters(newLambda.Parameters.Select((x, i) =>  x)),

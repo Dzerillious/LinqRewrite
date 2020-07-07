@@ -27,8 +27,7 @@ namespace BenchmarksLibrary
             return ArraySource.Any();
         }//EndMethod
 
-		[Benchmark]
-        [LinqRewrite]
+		[Benchmark, LinqRewrite]
 		public bool ArrayAnyRewritten()
         {
             return ArraySource.Any();
@@ -40,8 +39,7 @@ namespace BenchmarksLibrary
             return ArraySource.Any(x => x > 3);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool ArrayAnyConditionRewritten()
         {
             return ArraySource.Any(x => x > 3);
@@ -53,8 +51,7 @@ namespace BenchmarksLibrary
             return ArraySource.Select(x => x + 3).Any();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool ArraySelectAnyRewritten()
         {
             return ArraySource.Select(x => x + 3).Any();
@@ -66,8 +63,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 100).Any();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool ArrayWhereAnyRewritten()
         {
             return ArraySource.Where(x => x > 100).Any();
@@ -79,8 +75,7 @@ namespace BenchmarksLibrary
             return ArraySource.Where(x => x > 100).Any(x => x > 200);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool ArrayWhereAnyConditionRewritten()
         {
             return ArraySource.Where(x => x > 100).Any(x => x > 200);
@@ -92,8 +87,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Any(x => x > 3);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool EnumerableAnyConditionRewritten()
         {
             return EnumerableSource.Any(x => x > 3);
@@ -105,8 +99,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Any(x => x > 10_000);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool EnumerableAnyNotConditionRewritten()
         {
             return EnumerableSource.Any(x => x > 10_000);
@@ -118,8 +111,7 @@ namespace BenchmarksLibrary
             return EnumerableSource.Any(x => x > 0);
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public bool EnumerableAnyAllConditionRewritten()
         {
             return EnumerableSource.Any(x => x > 0);

@@ -25,8 +25,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Unchecked().Select(x => x + 2).Take(0).ToArray();
         } //EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void TakeToArrayUncheckedRewritten()
         {
             var res = ArraySource.Unchecked().Select(x => x + 2).Take(0).ToArray();
@@ -39,8 +38,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Unchecked().Select(x => x + 2).Take(0).ToArray();
         } //EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void TakeToArrayRewritten()
         {
             var res = ArraySource.Select(x => x + 2).Take(0).ToArray();
@@ -53,7 +51,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Unchecked().Select(x => x + 2).Take(1).ToArray();
         } //EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite(RewriteOptions.Unchecked)]
         public void TakeToArrayUncheckedRewritten1()
         {
             var res = ArraySource.Unchecked().Select(x => x + 2).Take(1).ToArray();
@@ -66,7 +64,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Select(x => x + 2).Take(1).ToArray();
         } //EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public void TakeToArrayRewritten1()
         {
             var res = ArraySource.Select(x => x + 2).Take(1).ToArray();
@@ -79,7 +77,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Unchecked().Take(10).ToArray();
         } //EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite(RewriteOptions.Unchecked)]
         public void TakeToArrayUncheckedRewritten10()
         {
             var res = ArraySource.Unchecked().Take(10).ToArray();
@@ -92,7 +90,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Take(10).ToArray();
         } //EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public void TakeToArrayRewritten10()
         {
             var res = ArraySource.Take(10).ToArray();
@@ -105,7 +103,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Unchecked().Take(20).ToArray();
         } //EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite(RewriteOptions.Unchecked)]
         public void TakeToArrayUncheckedRewritten20()
         {
             var res = ArraySource.Unchecked().Take(20).ToArray();
@@ -118,7 +116,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Select(x => x + 2).Take(20).ToArray();
         } //EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public void TakeToArrayRewritten20()
         {
             var res = ArraySource.Select(x => x + 2).Take(20).ToArray();
@@ -131,7 +129,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Unchecked().Select(x => x + 2).Take(100).ToArray();
         } //EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite(RewriteOptions.Unchecked)]
         public void TakeToArrayUncheckedRewritten100()
         {
             var res = ArraySource.Unchecked().Select(x => x + 2).Take(100).ToArray();
@@ -144,7 +142,7 @@ namespace BenchmarksLibrary
             var res = ArraySource.Unchecked().Take(100).ToArray();
         } //EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public void TakeToArrayRewritten100()
         {
             var res = ArraySource.Unchecked().Select(x => x + 2).Take(100).ToArray();
@@ -157,8 +155,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Unchecked().Select(x => x + 2).Take(0).ToArray();
         } //EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite(RewriteOptions.Unchecked)]
 		public void EnumerableTakeToArrayUncheckedRewritten()
         {
             var res = EnumerableSource.Unchecked().Select(x => x + 2).Take(0).ToArray();
@@ -171,8 +168,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Unchecked().Select(x => x + 2).Take(0).ToArray();
         } //EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EnumerableTakeToArrayRewritten()
         {
             var res = EnumerableSource.Select(x => x + 2).Take(0).ToArray();
@@ -185,7 +181,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Select(x => x + 2).Take(0).ToArray();
         } //EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite(RewriteOptions.Unchecked)]
         public void EnumerableTakeToArrayUncheckedRewritten1()
         {
             var res = EnumerableSource.Unchecked().Select(x => x + 2).Take(1).ToArray();
@@ -198,7 +194,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Select(x => x + 2).Take(1).ToArray();
         } //EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public void EnumerableTakeToArrayRewritten1()
         {
             var res = EnumerableSource.Select(x => x + 2).Take(1).ToArray();
@@ -211,7 +207,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Unchecked().Take(10).ToArray();
         } //EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite(RewriteOptions.Unchecked)]
         public void EnumerableTakeToArrayUncheckedRewritten10()
         {
             var res = EnumerableSource.Unchecked().Take(10).ToArray();
@@ -224,7 +220,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Take(10).ToArray();
         } //EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public void EnumerableTakeToArrayRewritten10()
         {
             var res = EnumerableSource.Take(10).ToArray();
@@ -237,7 +233,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Unchecked().Take(20).ToArray();
         } //EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite(RewriteOptions.Unchecked)]
         public void EnumerableTakeToArrayUncheckedRewritten20()
         {
             var res = EnumerableSource.Unchecked().Take(20).ToArray();
@@ -250,7 +246,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Select(x => x + 2).Take(20).ToArray();
         } //EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public void EnumerableTakeToArrayRewritten20()
         {
             var res = EnumerableSource.Select(x => x + 2).Take(20).ToArray();
@@ -263,7 +259,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Unchecked().Select(x => x + 2).Take(100).ToArray();
         } //EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite(RewriteOptions.Unchecked)]
         public void EnumerableTakeToArrayUncheckedRewritten100()
         {
             var res = EnumerableSource.Unchecked().Select(x => x + 2).Take(100).ToArray();
@@ -276,7 +272,7 @@ namespace BenchmarksLibrary
             var res = EnumerableSource.Unchecked().Take(100).ToArray();
         } //EndMethod
 
-        [Benchmark]
+        [Benchmark, LinqRewrite]
         public void EnumerableTakeToArrayRewritten100()
         {
             var res = EnumerableSource.Unchecked().Select(x => x + 2).Take(100).ToArray();

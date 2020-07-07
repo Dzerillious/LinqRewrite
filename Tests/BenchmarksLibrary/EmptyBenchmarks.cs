@@ -13,8 +13,7 @@ namespace BenchmarksLibrary
             var res = Enumerable.Empty<int>().ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EmptyToArrayRewritten()
         {
             var res = Enumerable.Empty<int>().ToArray();
@@ -26,8 +25,7 @@ namespace BenchmarksLibrary
             var res = Enumerable.Empty<int>().Where(x => x > 5).ToArray();
         }//EndMethod
 
-        [Benchmark]
-        [LinqRewrite]
+        [Benchmark, LinqRewrite]
 		public void EmptyWhereToArrayRewritten()
         {
             var res = Enumerable.Empty<int>().Where(x => x > 5).ToArray();
