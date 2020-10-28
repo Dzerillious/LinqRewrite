@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Collections.Immutable;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -6,11 +7,11 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteForEach
     {
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             var inlinedValue = args.Length switch
             {
-                1 when args[0].OldVal.Invokable1Param(design) => args[0].Inline(design, design.LastValue),
+                1 when args[0].Value.Invokable1Param(design) => args[0].Inline(design, design.LastValue),
                 1 => args[0].Inline(design, design.LastValue, design.Indexer),
                 _ => design.LastValue
             };

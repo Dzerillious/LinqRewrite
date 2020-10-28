@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Collections.Immutable;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.ExpressionSimplifier;
@@ -10,7 +11,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteSingle
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             if (args.Length != 0) return null;
             return ConditionalExpression(design.ResultSize.IsEqual(1),
@@ -18,7 +19,7 @@ namespace LinqRewrite.RewriteRules
                 ThrowExpression("System.InvalidOperationException", "The sequence does not contain one element."));
         }
 
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             var foundVariable = CreateGlobalVariable(design, NullableType(design.ReturnType), null);
             if (args.Length == 0)

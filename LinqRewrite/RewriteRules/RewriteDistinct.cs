@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Collections.Immutable;
+using LinqRewrite.DataStructures;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
@@ -8,7 +9,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteDistinct
     {
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             var hashsetType = ParseTypeName($"LinqRewrite.Core.SimpleSet<{design.LastValue.Type}>");
             var hashsetVariable = CreateGlobalVariable(design, hashsetType, args.Length switch

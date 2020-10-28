@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Collections.Immutable;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
@@ -8,22 +9,22 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteGroupBy
     {
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
-            RewrittenValueBridge keySelector = args[0];
+            ValueBridge keySelector = args[0];
             var elementSelectorValue = args.Length switch
             {
                 1 => design.LastValue,
-                _ when args[1].OldVal.Invokable1Param(design) => args[1].Inline(design, design.LastValue),
+                _ when args[1].Value.Invokable1Param(design) => args[1].Inline(design, design.LastValue),
                 _ => design.LastValue
             };
 
             var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{keySelector.ReturnType(design)},{elementSelectorValue.Type}>");
             var lookupVariable = CreateGlobalVariable(design, lookupType, args.Length switch
             {
-                2 when !args[1].OldVal.IsInvokable(design) => New(lookupType, args[1]),
-                3 when !args[2].OldVal.IsInvokable(design) => New(lookupType, args[2]),
-                4 when !args[3].OldVal.IsInvokable(design) => New(lookupType, args[3]),
+                2 when !args[1].Value.IsInvokable(design) => New(lookupType, args[1]),
+                3 when !args[2].Value.IsInvokable(design) => New(lookupType, args[2]),
+                4 when !args[3].Value.IsInvokable(design) => New(lookupType, args[3]),
                 _ => New(lookupType, ParseTypeName($"System.Collections.Generic.EqualityComparer<{keySelector.ReturnType(design)}>").Access("Default"))
             });
 
@@ -44,7 +45,7 @@ namespace LinqRewrite.RewriteRules
             design.LastValue = args.Length switch
             {
                 1 => design.LastValue,
-                _ when !args[1].OldVal.Invokable1Param(design) => args[1].Inline(design, key, elements),
+                _ when !args[1].Value.Invokable1Param(design) => args[1].Inline(design, key, elements),
                 2 => design.LastValue,
                 _ => args[2].Inline(design, key, elements)
             };

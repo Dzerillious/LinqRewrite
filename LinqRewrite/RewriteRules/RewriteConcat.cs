@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Immutable;
+using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.AssertionExtension;
@@ -8,7 +9,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteConcat
     {
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             var sourceSizeValue = design.SourceSize;
             var resultSizeValue = design.ResultSize;

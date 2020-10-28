@@ -1,5 +1,6 @@
 ﻿// Forked and modified from https://github.com/antiufo/roslyn-linq-rewrite/tree/master/RoslynLinqRewrite
 
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace LinqRewrite.DataStructures
@@ -7,10 +8,10 @@ namespace LinqRewrite.DataStructures
     public class LinqStep
     {
         public string MethodName { get; }
-        public RewrittenValueBridge[] Arguments { get; }
+        public ImmutableArray<ValueBridge> Arguments { get; }
         public InvocationExpressionSyntax Invocation { get; }
         
-        public LinqStep(string methodName, RewrittenValueBridge[] arguments, InvocationExpressionSyntax invocation = null)
+        public LinqStep(string methodName, ImmutableArray<ValueBridge> arguments, InvocationExpressionSyntax invocation = null)
         {
             MethodName = methodName;
             Arguments = arguments;

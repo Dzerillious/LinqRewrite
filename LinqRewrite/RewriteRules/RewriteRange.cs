@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Immutable;
+using System.Linq;
 using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using static LinqRewrite.Extensions.AssertionExtension;
@@ -8,12 +9,12 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteRange
     {
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             design.Variables.Where(variable => !variable.IsGlobal).ForEach(variable => variable.IsUsed = false);
             var fromValue = args[0];
             var countValue = args[1];
-            var incrementValue = args.Length == 3 ? args[2].New : 1;
+            var incrementValue = args.Length == 3 ? args[2] : 1;
             if (!AssertGreaterEqual(design, countValue, 0)) return;
 
             design.FirstCollection = design.CurrentCollection = null;

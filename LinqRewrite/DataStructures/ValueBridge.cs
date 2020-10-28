@@ -6,7 +6,7 @@ namespace LinqRewrite.DataStructures
 {
     public class  ValueBridge
     {
-        public ExpressionSyntax Value { get; set; }
+        public ExpressionSyntax Value { get; }
         
         public ValueBridge this[ValueBridge i] => this.ArrayAccess(i);
 
@@ -64,7 +64,7 @@ namespace LinqRewrite.DataStructures
         
         public static implicit operator ValueBridge(string name)
             => new ValueBridge(name);
-        
+
         public static implicit operator ValueBridge(ExpressionSyntax value)
             => new ValueBridge(value);
         

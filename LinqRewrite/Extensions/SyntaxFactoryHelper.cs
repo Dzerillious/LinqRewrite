@@ -136,8 +136,8 @@ namespace LinqRewrite.Extensions
         public static DefaultExpressionSyntax Default(TypeBridge type)
             => DefaultExpression(type);
 
-        public static TypedValueBridge ReusableConst(this RewrittenValueBridge e, RewriteDesign design, bool? reuse = null)
-            => ReusableConst(e.New, design, e.Old.GetType(design), reuse);
+        public static TypedValueBridge ReusableConst(this ValueBridge e, RewriteDesign design, bool? reuse = null)
+            => ReusableConst(e.Value, design, e.GetType(design), reuse);
 
         public static TypedValueBridge ReusableConst(this TypedValueBridge e, RewriteDesign design, bool? reuse = null)
             => ReusableConst(e.Value, design, e.Type, reuse);
@@ -189,19 +189,15 @@ namespace LinqRewrite.Extensions
         public static TypedValueBridge Reusable(this TypedValueBridge e, RewriteDesign design, bool? reuse = null)
             => Reusable(e.Value, design, e.Type, reuse);
 
-        public static TypedValueBridge Inline(this ExpressionSyntax e, RewriteDesign design,
-            params TypedValueBridge[] values)
-            => Inline(new RewrittenValueBridge(e), design, values);
-
-        public static TypedValueBridge Inline(this RewrittenValueBridge e, RewriteDesign design,
+        public static TypedValueBridge Inline(this ValueBridge e, RewriteDesign design,
             params TypedValueBridge[] values)
         {
             TypeBridge returnType;
-            if (e.OldVal is LambdaExpressionSyntax lambda)
+            if (e.Value is LambdaExpressionSyntax lambda)
                 returnType = lambda.ReturnType(design);
-            else returnType = ParseTypeName(((INamedTypeSymbol)design.Semantic.GetTypeInfo(e.OldVal).ConvertedType).DelegateInvokeMethod.ReturnType.ToDisplayString());
+            else returnType = ParseTypeName(((INamedTypeSymbol)design.Semantic.GetTypeInfo(e.Value).ConvertedType).DelegateInvokeMethod.ReturnType.ToDisplayString());
             
-            if (IsLambdaSimple(e.OldVal))
+            if (IsLambdaSimple(e.Value))
                 return design.Code.InlineLambda(design, e, returnType, values);
 
             var val = values.Select(x =>
@@ -216,15 +212,17 @@ namespace LinqRewrite.Extensions
 
         public static bool IsLambdaSimple(ExpressionSyntax e)
         {
-            int maxParams;
-            if (e is SimpleLambdaExpressionSyntax l)
-                maxParams = Regex.Matches(l.ExpressionBody.ToString(), l.Parameter.ToString()).Count;
-            else if (e is ParenthesizedLambdaExpressionSyntax p)
-                maxParams = p.ParameterList.Parameters.Max(x => Regex.Matches(
-                    p.ExpressionBody.ToString(), x.ToString()).Count);
-            else return true;
+            // TODO: FIX
+            return false;
+            //int maxParams;
+            //if (e is SimpleLambdaExpressionSyntax l)
+            //    maxParams = Regex.Matches(l..ToString(), l.Parameter.ToString()).Count;
+            //else if (e is ParenthesizedLambdaExpressionSyntax p)
+            //    maxParams = p.ParameterList.Parameters.Max(x => Regex.Matches(
+            //        p.ExpressionBody.ToString(), x.ToString()).Count);
+            //else return true;
 
-            return maxParams <= 1;
+            //return maxParams <= 1;
         }
 
         public static bool IsReusable(ExpressionSyntax e)
@@ -284,9 +282,9 @@ namespace LinqRewrite.Extensions
         public static TypeBridge ReturnType(this LambdaExpressionSyntax lambda, RewriteDesign design)
             => CodeCreationService.GetLambdaReturnType(design.Semantic, lambda);
         
-        public static TypeBridge ReturnType(this RewrittenValueBridge rewritten, RewriteDesign design)
+        public static TypeBridge ReturnType(this ValueBridge rewritten, RewriteDesign design)
         {
-            var old = (LambdaExpressionSyntax) rewritten.OldVal;
+            var old = (LambdaExpressionSyntax) rewritten.Value;
             return CodeCreationService.GetLambdaReturnType(design.Semantic, old);
         }
 

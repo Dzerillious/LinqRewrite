@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Immutable;
+using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,7 +11,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteSum
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             if (args.Length != 0) return null;
             if (!TryGetInt(design.ResultSize, out var intSize) || intSize > Constants.SimpleRewriteMaxMediumElements)
@@ -21,7 +22,7 @@ namespace LinqRewrite.RewriteRules
             return items.Aggregate((x, y) => new TypedValueBridge(design.LastValue.Type, x + y));
         }
         
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             var elementType = design.ReturnType.Type is NullableTypeSyntax nullable
                 ? (TypeBridge)nullable.ElementType : design.ReturnType;

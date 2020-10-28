@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Immutable;
+using System.Linq;
 using LinqRewrite.DataStructures;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.ExpressionSimplifier;
@@ -9,7 +10,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteAll
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             if (!TryGetInt(design.ResultSize, out var intSize) || intSize > Constants.SimpleRewriteMaxMediumElements)
                 return null;
@@ -19,7 +20,7 @@ namespace LinqRewrite.RewriteRules
             return items.Aggregate((x, y) => x.And(y));
         }
 
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             design.ForAdd(If(Not(args[0].Inline(design, design.LastValue)),
                         Return(false)));

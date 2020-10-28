@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Collections.Immutable;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 
@@ -6,7 +7,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteContains
     {
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             var elementSyntax = design.Node.ArgumentList.Arguments.First().Expression;
             var elementEqualityValue = args.Length switch

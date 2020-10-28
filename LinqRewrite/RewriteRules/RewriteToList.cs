@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Immutable;
+using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
@@ -12,7 +13,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteToList
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             if (!TryGetInt(design.ResultSize, out var intSize) || intSize > Constants.SimpleRewriteMaxSimpleElements)
                 return null;
@@ -23,7 +24,7 @@ namespace LinqRewrite.RewriteRules
                 InitializerExpression( SyntaxKind.ArrayInitializerExpression, SeparatedList(items)));
         }
         
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             var listVariable = CreateGlobalVariable(design, design.ReturnType, New(design.ReturnType));
             design.ForAdd(listVariable.Access("Add").Invoke(design.LastValue));

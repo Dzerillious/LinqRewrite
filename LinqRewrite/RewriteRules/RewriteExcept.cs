@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Collections.Immutable;
+using LinqRewrite.DataStructures;
 using Microsoft.CodeAnalysis.CSharp;
 using static LinqRewrite.Extensions.AssertionExtension;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
@@ -9,7 +10,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteExcept
     {
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             var sourceSizeValue = design.SourceSize;
             var collectionValue = args[0];

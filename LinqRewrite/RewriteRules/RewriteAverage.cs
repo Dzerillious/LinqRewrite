@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Immutable;
+using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
@@ -12,7 +13,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteAverage
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             if (args.Length != 0) return null;
             if (!TryGetInt(design.ResultSize, out var intSize) || intSize > Constants.SimpleRewriteMaxMediumElements)
@@ -23,7 +24,7 @@ namespace LinqRewrite.RewriteRules
             return Parenthesize(items.Aggregate((x, y) => new TypedValueBridge(design.LastValue.Type, x + y))).Div(intSize);
         }
         
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             var selectionValue = args.Length switch
             {

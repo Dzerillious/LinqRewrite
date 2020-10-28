@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
@@ -44,16 +45,16 @@ namespace LinqRewrite.Services
                             .Select(parameter => ParseTypeName(parameter.Identifier.ValueText)))))
                 : (NameSyntax) IdentifierName(identifier);
 
-        public TypedValueBridge InlineLambda(RewriteDesign p, RewrittenValueBridge rewritten, TypeSyntax returnType, params TypedValueBridge[] replaceParameters)
+        public TypedValueBridge InlineLambda(RewriteDesign p, ValueBridge rewritten, TypeSyntax returnType, params TypedValueBridge[] replaceParameters)
         {
-            if (rewritten.OldVal is IdentifierNameSyntax identifier)
+            if (rewritten.Value is IdentifierNameSyntax identifier)
                 return new TypedValueBridge(returnType, identifier.Invoke(replaceParameters));
             
-            var oldLambda = new Lambda((LambdaExpressionSyntax)rewritten.OldVal);
+            var oldLambda = new Lambda((LambdaExpressionSyntax)rewritten.Value);
 
             var lambdaParams = replaceParameters.Select((x, i) => GetLambdaParameter(oldLambda, i)).ToArray();
             var currentFlow = _data.Semantic.AnalyzeDataFlow(oldLambda.Body);
-            var changing = currentFlow.DataFlowsOut.Concat(currentFlow.WrittenInside).ToArray();
+            var changing = currentFlow.DataFlowsOut.Concat(currentFlow.WrittenInside).ToImmutableHashSet();
             var currentCaptures = currentFlow.DataFlowsIn
                 .Where(symbol => lambdaParams.All(parameter => symbol.Name != parameter.Identifier.ValueText) && (symbol as IParameterSymbol)?.IsThis != true)
                 .Select(symbol => CreateVariableCapture(symbol, changing))
@@ -63,10 +64,10 @@ namespace LinqRewrite.Services
             {
                 var parameterTypes = replaceParameters.Select(x => x.Type.ToString()).Concat(new[] {returnType.ToString()});
                 var funcType = ParseTypeName($"System.Func<{string.Join(",", parameterTypes)}>");
-                var lambdaVariable = p.AddParameter(funcType, rewritten.NewVal);
+                var lambdaVariable = p.AddParameter(funcType, rewritten.Value);
                 return new TypedValueBridge(returnType, lambdaVariable.Invoke(replaceParameters));
             }
-            var newLambda = new Lambda((LambdaExpressionSyntax)rewritten.NewVal);
+            var newLambda = new Lambda((LambdaExpressionSyntax)rewritten.Value);
             newLambda = RenameSymbol(newLambda, replaceParameters);
             return new TypedValueBridge(returnType, InlineOrCreateMethod(p, currentFlow, newLambda, returnType, currentCaptures, replaceParameters));
         }
@@ -83,7 +84,11 @@ namespace LinqRewrite.Services
             };
         
         public static ValueBridge GetLastLambdaExpression(LambdaExpressionSyntax lambdaExpression)
-            => lambdaExpression.ExpressionBody ?? GetStatementExpression(lambdaExpression.Block.Statements.Last());
+        {
+            // TODO: FIX
+            return null;
+            //return lambdaExpression.ExpressionBody ?? GetStatementExpression(lambdaExpression.Block.Statements.Last());
+        }
 
         public static TypeSyntax GetLambdaReturnType(SemanticModel semantic, LambdaExpressionSyntax lambdaExpression) 
             => semantic.GetTypeFromExpression(GetLastLambdaExpression(lambdaExpression));
@@ -102,7 +107,7 @@ namespace LinqRewrite.Services
             var method = MethodDeclaration(returnType, functionName)
                 .WithParameterList(ParameterList(SeparatedList(
                     replaceParams.Union(captures.Select(x => CreateParameter(x.Name, x.GetSymbolType())
-                        .WithRef(x.Changes)))
+                        .WithRef(x.IsChanging)))
                 )))
                 .WithBody(lambda.Body as BlockSyntax ?? (lambda.Body is StatementSyntax statementSyntax
                               ? Block(statementSyntax)
@@ -116,7 +121,7 @@ namespace LinqRewrite.Services
             return ParenthesizedExpression(InvocationExpression(
                 CreateMethod(functionName),
                 CreateArguments(replaceParams.Select(x => SyntaxFactory.Argument(IdentifierName(x.Identifier.ValueText)))
-                    .Union(captures.Select(x =>  SyntaxFactory.Argument(IdentifierName(x.OriginalName)).WithRef(x.Changes))))));
+                    .Union(captures.Select(x =>  SyntaxFactory.Argument(IdentifierName(x.OriginalName)).WithRef(x.IsChanging))))));
         }
 
         private static ParameterSyntax[] UpdateParameters(RewriteDesign p, DataFlowAnalysis currentFlow, Lambda oldLambda, TypedValueBridge[] replaceParameters)

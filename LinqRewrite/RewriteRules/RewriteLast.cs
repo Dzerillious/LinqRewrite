@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Collections.Immutable;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.AssertionExtension;
@@ -11,13 +12,13 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteLast
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             if (args.Length != 0) return null;
             return Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMax);
         }
 
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             if (!AssertResultSizeGreaterEqual(design, 0, true)) return;
             var foundVariable = CreateGlobalVariable(design, NullableType(design.ReturnType), null);

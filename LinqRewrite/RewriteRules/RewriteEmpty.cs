@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Immutable;
+using System.Linq;
 using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -9,7 +10,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteEmpty
     {
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args, InvocationExpressionSyntax invocation)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args, InvocationExpressionSyntax invocation)
         {
             design.Variables.Where(variable => !variable.IsGlobal).ForEach(variable => variable.IsUsed = false);
             var access = (MemberAccessExpressionSyntax) invocation.Expression;

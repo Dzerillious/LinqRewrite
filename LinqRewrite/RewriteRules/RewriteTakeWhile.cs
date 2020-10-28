@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Collections.Immutable;
+using LinqRewrite.DataStructures;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -8,12 +9,12 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteTakeWhile
     {
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             design.LastValue = design.LastValue.Reusable(design);
             var value = args.Length switch
             {
-                1 when args[0].OldVal is SimpleLambdaExpressionSyntax => args[0].Inline(design, design.LastValue),
+                1 when args[0].Value is SimpleLambdaExpressionSyntax => args[0].Inline(design, design.LastValue),
                 1 => args[0].Inline(design, design.LastValue, design.Indexer)
             };
             if (design.Iterators.All.Count > 1)

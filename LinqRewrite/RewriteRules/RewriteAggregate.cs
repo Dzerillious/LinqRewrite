@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Immutable;
+using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,7 +12,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteAggregate
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             if (!TryGetInt(design.ResultSize, out var intSize) || intSize > Constants.SimpleRewriteMaxMediumElements)
                 return null;
@@ -28,7 +29,7 @@ namespace LinqRewrite.RewriteRules
                 : simpleValue;
         }
         
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             if (args.Length == 1 && !AssertResultSizeGreaterEqual(design, 1, true)) return;
             var aggregationValue = args.Length switch
@@ -48,7 +49,7 @@ namespace LinqRewrite.RewriteRules
             }));
         }
 
-        private static TypedValueBridge ListAggregate(RewriteDesign design, RewrittenValueBridge aggregationValue,  RewrittenValueBridge[] args)
+        private static TypedValueBridge ListAggregate(RewriteDesign design, ValueBridge aggregationValue, ImmutableArray<ValueBridge> args)
         {
             var resultValue = args.Length switch
             {
@@ -62,7 +63,7 @@ namespace LinqRewrite.RewriteRules
             return resultVariable;
         }
         
-        private static TypedValueBridge EnumerableAggregate(RewriteDesign design, RewrittenValueBridge aggregationValue,  RewrittenValueBridge[] args)
+        private static TypedValueBridge EnumerableAggregate(RewriteDesign design, ValueBridge aggregationValue, ImmutableArray<ValueBridge> args)
         {
             var resultValue = args.Length switch
             {

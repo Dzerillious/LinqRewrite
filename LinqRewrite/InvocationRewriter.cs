@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
@@ -98,7 +99,7 @@ namespace LinqRewrite
 
             if (!MethodsWithResult.Contains(names.Last()))
             {
-                ExpressionSyntax rewrittenPart = RewriteToArray.SimpleRewrite(design, Array.Empty<RewrittenValueBridge>());
+                ExpressionSyntax rewrittenPart = RewriteToArray.SimpleRewrite(design, ImmutableArray<ValueBridge>.Empty);
                 if (!design.SimpleEnumeration) return (true, null);
                 if (rewrittenPart != null) return (true, rewrittenPart);
             }

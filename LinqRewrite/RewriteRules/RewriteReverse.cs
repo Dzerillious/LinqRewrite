@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Collections.Immutable;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -9,7 +10,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteReverse
     {
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             if (!design.ModifiedEnumeration)
             {

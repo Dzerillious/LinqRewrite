@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using LinqRewrite.DataStructures;
 using Microsoft.CodeAnalysis;
@@ -59,7 +60,7 @@ namespace LinqRewrite.Extensions
                 arrayType.WithRankSpecifiers(new SyntaxList<ArrayRankSpecifierSyntax>(newRankSpecifiers)));
         }
 
-        public static VariableCapture CreateVariableCapture(ISymbol symbol, ISymbol[] changing)
+        public static VariableCapture CreateVariableCapture(ISymbol symbol, ImmutableHashSet<ISymbol> changing)
         {
             var isChanging = changing.Contains(symbol);
             if (isChanging) return new VariableCapture(symbol, isChanging);
@@ -70,7 +71,7 @@ namespace LinqRewrite.Extensions
             if (!type.IsValueType) return new VariableCapture(symbol, isChanging);
 
             // Pass big structs by ref for performance.
-            var size = StructureExtensions.GetStructSize(type);
+            int size = StructureExtensions.GetStructSize(type);
             if (size > Constants.MaximumSizeForByValStruct) isChanging = true;
             return new VariableCapture(symbol, isChanging);
         }

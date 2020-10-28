@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Collections.Immutable;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.ExpressionSimplifier;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -8,7 +9,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteTake
     {
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             if (design.Iterators.Count > 1) design.ListEnumeration = false;
             
@@ -28,7 +29,7 @@ namespace LinqRewrite.RewriteRules
             design.Indexer = null;
         }
 
-        private static void CheckBounds(RewriteDesign design, ref RewrittenValueBridge takeValue)
+        private static void CheckBounds(RewriteDesign design, ref ValueBridge takeValue)
         {
             if (design.Unchecked) return;
             var takeIntPass = TryGetInt(takeValue, out var takeInt);

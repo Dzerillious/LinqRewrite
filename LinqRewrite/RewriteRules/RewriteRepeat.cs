@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Immutable;
+using System.Linq;
 using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
@@ -9,7 +10,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteRepeat
     {
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             design.Variables.Where(variable => !variable.IsGlobal).ForEach(variable => variable.IsUsed = false);
             var itemValue = args[0];

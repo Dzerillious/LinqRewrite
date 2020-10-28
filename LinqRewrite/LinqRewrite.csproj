@@ -1,81 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.1.2</Version>
-    <AssemblyVersion>1.1.2</AssemblyVersion>
-    <FileVersion>1.1.2</FileVersion>
-    <LangVersion>latest</LangVersion>
-    <Authors>Daniel Šerý</Authors>
-    <Product>Turing ecosystem</Product>
-    <Description>Optimized Linq queries by rewriting to procedural code</Description>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DisableMSBuildAssemblyCopyCheck>true</DisableMSBuildAssemblyCopyCheck>
-    <OutputType>Exe</OutputType>
-    <Title>LinqRewrite</Title>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <OutputType>Exe</OutputType>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <Optimize>false</Optimize>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <Optimize>false</Optimize>
+  <PropertyGroup>
+    <PackageId>LinqRewrite</PackageId>
+    <PackageVersion>1.0.0.0</PackageVersion>
+    <Authors>Jiri</Authors>
+    <PackageLicenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</PackageLicenseUrl>
+    <PackageProjectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</PackageProjectUrl>
+    <PackageIconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</PackageIconUrl>
+    <RepositoryUrl>http://REPOSITORY_URL_HERE_OR_DELETE_THIS_LINE</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Description>LinqRewrite</Description>
+    <PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
+    <Copyright>Copyright</Copyright>
+    <PackageTags>LinqAnalyzer, analyzers</PackageTags>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LinqRewrite.Core">
-      <Version>1.2.0</Version>
-    </PackageReference>
-    <PackageReference Include="MathNet.Symbolics">
-      <Version>0.21.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Build.Locator">
-      <Version>1.2.6</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Build">
-      <Version>16.5.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Build.Tasks.Core">
-      <Version>16.5.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Build.Utilities.Core">
-      <Version>16.5.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.Common">
-      <Version>3.6.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp">
-      <Version>3.6.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces">
-      <Version>3.6.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common">
-      <Version>3.6.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild">
-      <Version>3.6.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.NETCore.Targets">
-      <Version>2.1.0</Version>
-    </PackageReference>
-    <PackageReference Include="NuGet.ProjectModel">
-      <Version>5.6.0</Version>
-    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.6.2" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.10" PrivateAssets="all" />
+    <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
   </ItemGroup>
-  
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" Condition="'$(TargetFramework)' == 'net472'" />
+    <Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
+    <EmbeddedResource Update="Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
   </ItemGroup>
-  
+
   <ItemGroup>
-    <None Remove="icon.ico" />
+    <None Update="tools\*.ps1" CopyToOutputDirectory="Always" Pack="true" PackagePath="" />
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LinqRewrite.Core\LinqRewrite.Core.csproj" />
+  </ItemGroup>
+
 </Project>

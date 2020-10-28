@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Collections.Immutable;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LinqRewrite.Extensions.ExpressionSimplifier;
@@ -9,7 +10,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteFirstOrDefault
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             if (args.Length != 0) return null;
             return ConditionalExpression(design.FirstCollection.Count.IsEqual(0),
@@ -17,7 +18,7 @@ namespace LinqRewrite.RewriteRules
                 Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin));
         }
 
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             if (args.Length == 0)
                 design.ForAdd(Return(design.LastValue));

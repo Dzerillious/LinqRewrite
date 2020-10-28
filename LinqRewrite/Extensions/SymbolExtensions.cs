@@ -29,15 +29,15 @@ namespace LinqRewrite.Extensions
         public static ParameterSyntax GetLambdaParameter(Lambda lambda, int index)
             => lambda.Parameters[index];
 
-        public static TypeBridge ItemType(this RewrittenValueBridge collection, RewriteDesign design)
+        public static TypeBridge ItemType(this ValueBridge collection, RewriteDesign design)
         {
-            var itemString = collection.Old.GetItemTypeSymbol(design).ToDisplayString();
+            var itemString = collection.GetItemTypeSymbol(design).ToDisplayString();
             return SyntaxFactory.ParseTypeName(itemString);
         }
         
-        public static TypeBridge ReturnItemType(this RewrittenValueBridge rewritten, RewriteDesign design)
+        public static TypeBridge ReturnItemType(this ValueBridge rewritten, RewriteDesign design)
         {
-            var old = (LambdaExpressionSyntax) rewritten.OldVal;
+            var old = (LambdaExpressionSyntax) rewritten.Value;
             var itemString = CodeCreationService.GetLastLambdaExpression(old).GetItemTypeSymbol(design).ToDisplayString();
             return SyntaxFactory.ParseTypeName(itemString);
         }

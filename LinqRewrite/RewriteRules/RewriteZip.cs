@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Collections.Immutable;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.AssertionExtension;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
@@ -10,7 +11,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteZip
     {
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             var collectionValue = args[0];
             if (!AssertNotNull(design, collectionValue)) return;

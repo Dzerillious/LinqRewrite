@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Collections.Immutable;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.ExpressionSimplifier;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -9,7 +10,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteSkip
     {
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             if (design.Iterators.Count > 1) design.ListEnumeration = false;
             
@@ -36,7 +37,7 @@ namespace LinqRewrite.RewriteRules
             design.Indexer = null;
         }
 
-        private static bool CheckBounds(RewriteDesign design, ref RewrittenValueBridge skippedValue)
+        private static bool CheckBounds(RewriteDesign design, ref ValueBridge skippedValue)
         {
             if (design.ResultSize == null) return true;
             if (TryGetInt(skippedValue, out var skippedInt))

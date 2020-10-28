@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Collections.Immutable;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using static LinqRewrite.Extensions.VariableExtensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
@@ -7,13 +8,13 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteGroupJoin
     {
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
-            RewrittenValueBridge inner = args[0];
-            RewrittenValueBridge outerKeySelector = args[1];
-            RewrittenValueBridge innerKeySelector = args[2];
-            RewrittenValueBridge resultSelector = args[3];
-            RewrittenValueBridge comparer = args.Length == 5 ? args[4] : null;
+            ValueBridge inner = args[0];
+            ValueBridge outerKeySelector = args[1];
+            ValueBridge innerKeySelector = args[2];
+            ValueBridge resultSelector = args[3];
+            ValueBridge comparer = args.Length == 5 ? args[4] : null;
 
             var lookupType = ParseTypeName($"LinqRewrite.Core.SimpleLookup<{inner.ItemType(design)},{innerKeySelector.ReturnType(design)}>");
             var lookupVariable = CreateGlobalVariable(design, lookupType, lookupType.Access("CreateForJoin")

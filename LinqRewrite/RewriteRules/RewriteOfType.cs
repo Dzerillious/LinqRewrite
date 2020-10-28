@@ -1,4 +1,5 @@
-﻿using LinqRewrite.DataStructures;
+﻿using System.Collections.Immutable;
+using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,7 +11,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteOfType
     {
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args, InvocationExpressionSyntax invocation)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args, InvocationExpressionSyntax invocation)
         {
             var access = (MemberAccessExpressionSyntax) invocation.Expression;
             var name = (GenericNameSyntax) access.Name;

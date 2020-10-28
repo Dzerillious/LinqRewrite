@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Immutable;
+using System.Linq;
 using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
@@ -13,7 +14,7 @@ namespace LinqRewrite.RewriteRules
 {
     public static class RewriteToArray
     {
-        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static ExpressionSyntax SimpleRewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             if (!TryGetInt(design.ResultSize, out var intSize) || intSize > Constants.SimpleRewriteMaxSimpleElements)
                 return null;
@@ -23,7 +24,7 @@ namespace LinqRewrite.RewriteRules
             return CreateArray((ArrayTypeSyntax) design.ReturnType, design.ResultSize, items);
         }
         
-        public static void Rewrite(RewriteDesign design, RewrittenValueBridge[] args)
+        public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             var enlarging = args.FirstOrDefault()?.ToString() switch
             {
