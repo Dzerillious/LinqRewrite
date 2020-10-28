@@ -62,7 +62,7 @@ namespace LinqRewrite.RewriteRules
             
             design.Indexer = null;
             design.Iterators.All.ForEach(x => x.Complete = true);
-            design.AddIterator(new CollectionValueBridge(design, resultVariable.Type, design.LastValue.Type, resultVariable, true));
+            design.AddIterator(new CollectionValueBridge(design, resultVariable.Type, design.LastValue.Type, resultVariable));
             design.CurrentCollection = design.CurrentIterator.Collection;
             RewriteCollectionEnumeration.RewriteOther(design, design.CurrentCollection);
             
@@ -92,7 +92,7 @@ namespace LinqRewrite.RewriteRules
             design.Indexer = null;
             design.Iterators.All.ForEach(x => x.Complete = true);
             
-            design.AddIterator(new CollectionValueBridge(design, resultVariable.Type, design.LastValue.Type, resultVariable, true));
+            design.AddIterator(new CollectionValueBridge(design, resultVariable.Type, design.LastValue.Type, resultVariable));
             design.CurrentCollection = design.CurrentIterator.Collection;
             RewriteCollectionEnumeration.RewriteOther(design, design.CurrentCollection);
             

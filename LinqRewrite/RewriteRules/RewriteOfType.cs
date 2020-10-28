@@ -16,7 +16,7 @@ namespace LinqRewrite.RewriteRules
             var access = (MemberAccessExpressionSyntax) invocation.Expression;
             var name = (GenericNameSyntax) access.Name;
             var type = name.TypeArgumentList.Arguments[0];
-            var typeSymbol = design.Semantic.GetTypeInfo(type).Type;
+            var typeSymbol = design.Info.Semantic.GetTypeInfo(type).Type;
             
             if (SymbolExtensions.IsSameType(typeSymbol, design.LastValue.Type)) {}
             else if (design.Unchecked || SymbolExtensions.IsDescendantType(typeSymbol, design.LastValue.Type))

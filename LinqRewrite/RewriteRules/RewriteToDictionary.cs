@@ -17,11 +17,11 @@ namespace LinqRewrite.RewriteRules
                 _ => design.LastValue
             };
             var keyValue = args[0].Inline(design, design.LastValue);
-            var dictionaryVariable = CreateGlobalVariable(design, design.ReturnType, args.Length switch
+            var dictionaryVariable = CreateGlobalVariable(design, design.Info.ReturnType, args.Length switch
             {
-                2 when !args[1].Value.IsInvokable(design) => New(design.ReturnType, args[1]),
-                3 => New(design.ReturnType, args[2]),
-                _ => New(design.ReturnType)
+                2 when !args[1].Value.IsInvokable(design) => New(design.Info.ReturnType, args[1]),
+                3 => New(design.Info.ReturnType, args[2]),
+                _ => New(design.Info.ReturnType)
             });
 
             design.ForAdd(dictionaryVariable.Access("Add").Invoke(keyValue, elementValue));

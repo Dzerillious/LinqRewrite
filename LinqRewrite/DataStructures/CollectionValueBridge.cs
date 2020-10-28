@@ -21,7 +21,7 @@ namespace LinqRewrite.DataStructures
         
         public new TypedValueBridge this[ValueBridge i] => new TypedValueBridge(ItemType, this.ArrayAccess(i));
             
-        public CollectionValueBridge(RewriteDesign design, TypeBridge collectionType, TypeBridge itemType, ValueBridge name, bool reuse) : base(collectionType, name)
+        public CollectionValueBridge(RewriteDesign design, TypeBridge collectionType, TypeBridge itemType, ValueBridge name) : base(collectionType, name)
         {
             ItemType = itemType;
             if (collectionType.Type is ArrayTypeSyntax) CollectionType = CollectionType.Array;
@@ -39,11 +39,11 @@ namespace LinqRewrite.DataStructures
             Count = CodeCreationService.CreateCollectionCount(Value, CollectionType);
 
             if (CollectionType == CollectionType.IEnumerable) return;
-            if (reuse) Value = name.ReusableConst(design, Type, CollectionType == CollectionType.SimpleList ? true : (bool?)null);
-            if (reuse) Count = Count.ReusableConst(design, Int);
+            Value = name.ReusableConst(design, Type, CollectionType == CollectionType.SimpleList ? true : (bool?)null);
+            Count = Count.ReusableConst(design, Int);
         }
             
-        public CollectionValueBridge(RewriteDesign design, ITypeSymbol type, ValueBridge name, bool reuse) : base(null as TypeSyntax, name)
+        public CollectionValueBridge(RewriteDesign design, ITypeSymbol type, ValueBridge name) : base(null as TypeSyntax, name)
         {
             ItemType = SyntaxFactory.ParseTypeName(SymbolExtensions.GetItemType(type).ToDisplayString());
             Type = SyntaxFactory.ParseTypeName(type.ToDisplayString());
@@ -63,8 +63,8 @@ namespace LinqRewrite.DataStructures
             Count = CodeCreationService.CreateCollectionCount(Value, CollectionType);
 
             if (CollectionType == CollectionType.IEnumerable) return;
-            if (reuse) Value = name.ReusableConst(design, Type, CollectionType == CollectionType.SimpleList ? true : (bool?)null);
-            if (reuse) Count = Count.ReusableConst(design, Int);
+            Value = name.ReusableConst(design, Type, CollectionType == CollectionType.SimpleList ? true : (bool?)null);
+            Count = Count.ReusableConst(design, Int);
         }
         
         public override string ToString() => Value.ToString();

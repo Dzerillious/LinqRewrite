@@ -44,13 +44,13 @@ namespace LinqRewrite.Extensions
 
         public static ITypeSymbol GetItemTypeSymbol(this TypeBridge collection, RewriteDesign design)
         {
-            var collectionType = ModelExtensions.GetTypeInfo(design.Semantic, collection).Type;
+            var collectionType = ModelExtensions.GetTypeInfo(design.Info.Semantic, collection).Type;
             return GetItemType(collectionType);
         }
 
         public static ITypeSymbol GetItemTypeSymbol(this ValueBridge collection, RewriteDesign design)
         {
-            var collectionType = ModelExtensions.GetTypeInfo(design.Semantic, collection.Value).Type;
+            var collectionType = ModelExtensions.GetTypeInfo(design.Info.Semantic, collection.Value).Type;
             return GetItemType(collectionType);
         }
 

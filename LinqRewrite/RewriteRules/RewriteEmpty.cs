@@ -17,7 +17,7 @@ namespace LinqRewrite.RewriteRules
             var name = (GenericNameSyntax) access.Name;
             var type = name.TypeArgumentList.Arguments[0];
             
-            if (design.RewriteChain.Count == 1)
+            if (design.Info.LinqChain.Length == 1)
             {
                 design.NotRewrite = true;
                 return;

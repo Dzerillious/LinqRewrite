@@ -13,8 +13,8 @@ namespace LinqRewrite.RewriteRules
         public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
             if (!AssertResultSizeGreaterEqual(design, 1)) return;
-            var elementType = design.ReturnType.Type is NullableTypeSyntax nullable
-                ? (TypeBridge)nullable.ElementType : design.ReturnType;
+            var elementType = design.Info.ReturnType is NullableTypeSyntax nullable
+                ? nullable.ElementType : design.Info.ReturnType;
 
             var minVariable = elementType.ToString() switch
             {
@@ -31,7 +31,7 @@ namespace LinqRewrite.RewriteRules
                 0 => design.LastValue.Reusable(design),
                 1 => args[0].Inline(design, design.LastValue).Reusable(design)
             };
-            if (design.ReturnType.Type is NullableTypeSyntax)
+            if (design.Info.ReturnType is NullableTypeSyntax)
             {
                 design.ForAdd(If(value.IsEqual(null).Or(value >= minVariable), Continue()));
                 design.ForAdd(minVariable.Assign(value.Cast(elementType)));

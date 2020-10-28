@@ -27,32 +27,40 @@ namespace LinqRewrite
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
 		{
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-
+            
             foreach (var diagnostic in context.Diagnostics)
             {
                 var diagnosticSpan = diagnostic.Location.SourceSpan;
-                var linqInvocation = (InvocationExpressionSyntax)root.FindNode(diagnosticSpan);
+                var invocation = (InvocationExpressionSyntax)root.FindNode(diagnosticSpan);
 
-                var stepChain = GetInvocationStepChain(linqInvocation, out ExpressionSyntax lastExpression);
+                var stepChain = GetInvocationStepChain(invocation, out ExpressionSyntax sourceCollection);
                 var title = $"{TitlePrefix} {string.Join(".", stepChain)}";
 
                 context.RegisterCodeFix(
                     CodeAction.Create(
                         title: title,
-                        createChangedSolution: cancellation => MakeProcedural(context.Document, root, linqInvocation, cancellation),
+                        createChangedSolution: cancellation => MakeProcedural(context.Document, root, sourceCollection, invocation, stepChain, cancellation),
                         equivalenceKey: title),
                     diagnostic);
             }
 		}
 
-		private async Task<Solution> MakeProcedural(Document document, SyntaxNode root, InvocationExpressionSyntax linqInvocation, CancellationToken cancellationToken)
+		private async Task<Solution> MakeProcedural(Document document, SyntaxNode root, ExpressionSyntax sourceCollection, 
+            InvocationExpressionSyntax linqExpression, ImmutableArray<LinqStep> linqChain, CancellationToken cancellationToken)
 		{
             try
             {
-                var methodDeclaration = linqInvocation.FirstAncestorOrSelf<MethodDeclarationSyntax>();
-                //root.InsertNodesAfter(methodDeclaration, ImmutableArray.Create(
-                //    ))
+                var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
+                var rewriteInfo = new RewriteInfo(
+                    semantic: semanticModel,
+                    source: sourceCollection,
+                    linqExpression: linqExpression,
+                    linqChain: linqChain,
+                    captures: GetCaptures(linqExpression, semanticModel));
 
+                InvocationRewriter.TryRewrite(rewriteInfo);
+
+                var methodDeclaration = linqExpression.FirstAncestorOrSelf<MethodDeclarationSyntax>();
                 return document.WithSyntaxRoot(root).Project.Solution;
             }
             catch (Exception e)
@@ -109,11 +117,6 @@ namespace LinqRewrite
                 .ToImmutableHashSet();
             var captures = flowsIn
                 .Union(flows.DataFlowsOut)
-                .Where(symbol =>
-                {
-                    if (!(symbol is IParameterSymbol parameter)) return false;
-                    return !parameter.IsThis && !parameter.IsStatic;
-                })
                 .Select(symbol => VariableExtensions.CreateVariableCapture(symbol, changingParams))
                 .ToImmutableArray();
 

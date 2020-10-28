@@ -21,7 +21,7 @@ namespace LinqRewrite.RewriteRules
 
             var items = Enumerable.Range(0, intSize).Select(i
                 => (ExpressionSyntax) Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + i));
-            return CreateArray((ArrayTypeSyntax) design.ReturnType, design.ResultSize, items);
+            return CreateArray((ArrayTypeSyntax) design.Info.ReturnType, design.ResultSize, items);
         }
         
         public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)

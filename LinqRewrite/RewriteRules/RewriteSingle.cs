@@ -21,7 +21,7 @@ namespace LinqRewrite.RewriteRules
 
         public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
-            var foundVariable = CreateGlobalVariable(design, NullableType(design.ReturnType), null);
+            var foundVariable = CreateGlobalVariable(design, NullableType(design.Info.ReturnType), null);
             if (args.Length == 0)
             {
                 design.ForAdd(If(foundVariable.IsEqual(null),
@@ -37,7 +37,7 @@ namespace LinqRewrite.RewriteRules
             }
             design.ResultAdd(If(foundVariable.IsEqual(null),
                                 Throw("System.InvalidOperationException", "The sequence did not contain any elements."), 
-                                Return(foundVariable.Cast(design.ReturnType))));
+                                Return(foundVariable.Cast(design.Info.ReturnType))));
         }
     }
 }

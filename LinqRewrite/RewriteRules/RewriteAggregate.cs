@@ -58,7 +58,7 @@ namespace LinqRewrite.RewriteRules
             };
             if (args.Length == 1) design.CurrentIterator.ForFrom += design.CurrentIterator.ForInc;
             
-            var resultVariable = CreateGlobalVariable(design, design.ReturnType, resultValue);
+            var resultVariable = CreateGlobalVariable(design, design.Info.ReturnType, resultValue);
             design.ForAdd(resultVariable.Assign(aggregationValue.Inline(design, resultVariable, design.LastValue)));
             return resultVariable;
         }
@@ -70,7 +70,7 @@ namespace LinqRewrite.RewriteRules
                 1 => new TypedValueBridge(design.LastValue.Type, Default(design.LastValue.Type)),
                 _ => new TypedValueBridge(design, args[0])
             };
-            var resultVariable = CreateGlobalVariable(design, design.ReturnType, resultValue);
+            var resultVariable = CreateGlobalVariable(design, design.Info.ReturnType, resultValue);
             var firstVariable = CreateGlobalVariable(design, Bool, true);
             
             design.ForAdd(If(firstVariable, Block(

@@ -15,13 +15,13 @@ namespace LinqRewrite.RewriteRules
         {
             if (args.Length != 0) return null;
             return ConditionalExpression(design.ResultSize.IsEqual(0),
-                Default(design.ReturnType),
+                Default(design.Info.ReturnType),
                 Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMax));
         }
 
         public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
-            var foundVariable = CreateGlobalVariable(design, NullableType(design.ReturnType), null);
+            var foundVariable = CreateGlobalVariable(design, NullableType(design.Info.ReturnType), null);
             
             if (args.Length == 0)
                 design.ForAdd(foundVariable.Assign(design.LastValue));
@@ -32,8 +32,8 @@ namespace LinqRewrite.RewriteRules
             }
             
             design.ResultAdd(If(foundVariable.IsEqual(null),
-                                Return(Default(design.ReturnType)), 
-                                Return(foundVariable.Cast(design.ReturnType))));
+                                Return(Default(design.Info.ReturnType)), 
+                                Return(foundVariable.Cast(design.Info.ReturnType))));
         }
     }
 }

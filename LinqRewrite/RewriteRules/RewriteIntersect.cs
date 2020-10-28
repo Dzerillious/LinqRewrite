@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using LinqRewrite.DataStructures;
+using Microsoft.CodeAnalysis;
 using static LinqRewrite.Extensions.AssertionExtension;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -17,8 +18,8 @@ namespace LinqRewrite.RewriteRules
             if (!AssertNotNull(design, collectionValue)) return;
 
             var oldLastValue = design.LastValue;
-            var collectionType = design.Data.GetTypeInfo(collectionValue).Type;
-            var oldIterator = design.InsertIterator(new CollectionValueBridge(design, collectionType, collectionValue, true));
+            var collectionType = design.Info.Semantic.GetTypeInfo(collectionValue).Type;
+            var oldIterator = design.InsertIterator(new CollectionValueBridge(design, collectionType, collectionValue));
             RewriteCollectionEnumeration.RewriteOther(design, design.CurrentIterator.Collection);
 
             var hashsetType = ParseTypeName($"LinqRewrite.Core.SimpleSet<{design.LastValue.Type}>");

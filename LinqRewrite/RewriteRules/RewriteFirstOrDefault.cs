@@ -14,7 +14,7 @@ namespace LinqRewrite.RewriteRules
         {
             if (args.Length != 0) return null;
             return ConditionalExpression(design.FirstCollection.Count.IsEqual(0),
-                Default(design.ReturnType),
+                Default(design.Info.ReturnType),
                 Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin));
         }
 
@@ -27,7 +27,7 @@ namespace LinqRewrite.RewriteRules
                 design.ForAdd(If(args[0].Inline(design, design.LastValue),
                                 Return(design.LastValue)));
             }
-            design.ResultAdd(Return(Default(design.ReturnType)));
+            design.ResultAdd(Return(Default(design.Info.ReturnType)));
         }
     }
 }

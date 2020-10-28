@@ -33,7 +33,7 @@ namespace LinqRewrite.RewriteRules
             design.Iterators.All.ForEach(x => x.Complete = true);
 
             var iGroupingType = ParseTypeName($"System.Linq.IGrouping<{keySelector.ReturnType(design)},{elementSelectorValue.Type}>");
-            design.AddIterator(new CollectionValueBridge(design, lookupType, iGroupingType, lookupVariable, true));
+            design.AddIterator(new CollectionValueBridge(design, lookupType, iGroupingType, lookupVariable));
             RewriteCollectionEnumeration.RewriteOther(design, design.CurrentIterator.Collection);
             var elementsType = ParseTypeName($"System.Collections.IEnumerable<{elementSelectorValue.Type}>");
             

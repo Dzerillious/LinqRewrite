@@ -63,17 +63,16 @@ namespace LinqRewrite.Extensions
         public static VariableCapture CreateVariableCapture(ISymbol symbol, ImmutableHashSet<ISymbol> changing)
         {
             var isChanging = changing.Contains(symbol);
-            if (isChanging) return new VariableCapture(symbol, isChanging);
+            if (isChanging) return new VariableCapture(symbol, true);
 
-            if (!(symbol is ILocalSymbol local)) return new VariableCapture(symbol, isChanging);
+            if (!(symbol is ILocalSymbol local)) return new VariableCapture(symbol, false);
             var type = local.Type;
 
-            if (!type.IsValueType) return new VariableCapture(symbol, isChanging);
+            if (!type.IsValueType) return new VariableCapture(symbol, false);
 
             // Pass big structs by ref for performance.
             int size = StructureExtensions.GetStructSize(type);
-            if (size > Constants.MaximumSizeForByValStruct) isChanging = true;
-            return new VariableCapture(symbol, isChanging);
+            return new VariableCapture(symbol, size > Constants.MaximumSizeForByValStruct);
         }
         
         

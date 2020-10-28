@@ -9,7 +9,7 @@ namespace LinqRewrite.RewriteRules
     {
         public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
-            var elementSyntax = design.Node.ArgumentList.Arguments.First().Expression;
+            var elementSyntax = design.Info.LinqExpression.ArgumentList.Arguments.First().Expression;
             var elementEqualityValue = args.Length switch
             {
                 1 => design.LastValue.IsEqual(elementSyntax),

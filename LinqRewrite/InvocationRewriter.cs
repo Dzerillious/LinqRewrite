@@ -18,15 +18,16 @@ namespace LinqRewrite
 {
     public static class InvocationRewriter
     {
-        public static ExpressionSyntax TryRewrite(ValueBridge collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node) 
+        public static ExpressionSyntax TryRewrite(RewriteInfo rewriteInfo)
         {
-            using var design = RewriteParametersFactory.BorrowParameters();
-            design.SetData(collection, returnType, chain, node, false);
-            string[] names = chain.Select(x => x.MethodName).ToArray();
+            var design = new RewriteDesign(rewriteInfo);
+            string[] names = rewriteInfo.LinqChain
+                .Select(step => step.MethodName)
+                .ToArray();
             
             var (simplePreCheck, simpleResult) = TryRewriteSimple(design, names);
             if (simplePreCheck && simpleResult != null) return simpleResult;
-            if (simplePreCheck) design.SetData(collection, returnType, chain, node, true);
+            if (simplePreCheck) design = new RewriteDesign(rewriteInfo);
 
             design.HasResultMethod = MethodsWithResult.Contains(names.Last());
             RewriteComposite(design, names);
@@ -34,9 +35,9 @@ namespace LinqRewrite
             var body = design.Error ? new []{design.InitialStatements[0]} : GetMethodBody(design);
             if (design.NotRewrite) throw new NotSupportedException("Not good for rewrite");
 
-            if (design.Data.CurrentMethodIsConditional && design.ReturnType.Type.ToString() != "void")
-                return ConditionalExpression(design.CurrentCollection.IsEqual(null),
-                Default(design.ReturnType), design.Rewrite.GetMethodInvocationExpression(design, body));
+            //if (design.Data.CurrentMethodIsConditional && design.ReturnType.Type.ToString() != "void")
+            //    return ConditionalExpression(design.CurrentCollection.IsEqual(null),
+            //    Default(design.ReturnType), design.Rewrite.GetMethodInvocationExpression(design, body));
             return design.Rewrite.GetMethodInvocationExpression(design, body);
         }
 
@@ -67,8 +68,8 @@ namespace LinqRewrite
 
         private static void RewriteComposite(RewriteDesign design, string[] names)
         {
-            if (design.Data.CurrentMethodIsConditional && design.ReturnType.Type.ToString() == "void")
-                design.InitialAdd(If(design.CurrentCollection.IsEqual(null), ReturnStatement()));
+            //if (design.Data.CurrentMethodIsConditional && design.ReturnType.Type.ToString() == "void")
+            //    design.InitialAdd(If(design.CurrentCollection.IsEqual(null), ReturnStatement()));
             
             if (!MethodsCreateArray.Contains(names.First())) RewriteCollectionEnumeration.Rewrite(design, Array.Empty<RewrittenValueBridge>(), true);
             for (var i = 0; i < names.Length; i++)
@@ -86,7 +87,7 @@ namespace LinqRewrite
         {
             if (design.CurrentCollection?.CollectionType == CollectionType.IEnumerable) return (false, null);
             if (names.Any(x => MethodsModifyingEnumeration.Contains(x))) return (false, null);
-            if (design.Data.CurrentMethodParams.Any(x => x.Modifiers.Any())) return (false, null);
+            //if (design.Info.CurrentMethodParams.Any(x => x.Modifiers.Any())) return (false, null);
 
             if (!MethodsCreateArray.Contains(names.First())) RewriteCollectionEnumeration.Rewrite(design, Array.Empty<RewrittenValueBridge>(), false);
             for (var i = 0; i < names.Length; i++)
@@ -109,7 +110,7 @@ namespace LinqRewrite
 
         private static ExpressionSyntax RewriteSimplePart(string last, RewriteDesign design, int i)
         {
-            var args = design.RewriteChain[i].Arguments;
+            var args = design.Info.LinqChain[i].Arguments;
             switch (last)
             {
                 case "Aggregate": return RewriteAggregate.SimpleRewrite(design, args);
@@ -132,13 +133,13 @@ namespace LinqRewrite
                 
                 case "Range": RewriteRange.Rewrite(design, args); return null;
                 case "Repeat": RewriteRepeat.Rewrite(design, args); return null;
-                case "Empty": RewriteEmpty.Rewrite(design, args,  design.RewriteChain[i].Invocation); return null;
+                case "Empty": RewriteEmpty.Rewrite(design, args, design.Info.LinqChain[i].Invocation); return null;
                 
                 case "Skip": RewriteSkip.Rewrite(design, args); return null;
                 case "Take": RewriteTake.Rewrite(design, args); return null;
                 case "Reverse": RewriteReverse.Rewrite(design, args); return null;
                 case "Select": RewriteSelect.Rewrite(design, args); return null;
-                case "Cast": RewriteCast.Rewrite(design, args, design.RewriteChain[i].Invocation); return null;
+                case "Cast": RewriteCast.Rewrite(design, args, design.Info.LinqChain[i].Invocation); return null;
                 
                 case "ToArray": return RewriteToArray.SimpleRewrite(design, args);
                 case "ToList": return RewriteToList.SimpleRewrite(design, args);
@@ -151,7 +152,7 @@ namespace LinqRewrite
 
         private static void RewritePart(string last, RewriteDesign design, int i)
         {
-            var args = design.RewriteChain[i].Arguments;
+            var args = design.Info.LinqChain[i].Arguments;
             switch (last)
             {
                 case "All": RewriteAll.Rewrite(design, args); return;
@@ -179,7 +180,7 @@ namespace LinqRewrite
                 
                 case "Range": RewriteRange.Rewrite(design, args); return;
                 case "Repeat": RewriteRepeat.Rewrite(design, args); return;
-                case "Empty": RewriteEmpty.Rewrite(design, args,  design.RewriteChain[i].Invocation); return;
+                case "Empty": RewriteEmpty.Rewrite(design, args,  design.Info.LinqChain[i].Invocation); return;
                 
                 case "Skip": RewriteSkip.Rewrite(design, args); return;
                 case "SkipWhile": RewriteSkipWhile.Rewrite(design, args); return;
@@ -190,8 +191,8 @@ namespace LinqRewrite
                 case "Select": RewriteSelect.Rewrite(design, args); return;
                 case "SelectMany": RewriteSelectMany.Rewrite(design, args); return;
                 case "Where": RewriteWhere.Rewrite(design, args); return;
-                case "Cast": RewriteCast.Rewrite(design, args, design.RewriteChain[i].Invocation); return;
-                case "OfType": RewriteOfType.Rewrite(design, args, design.RewriteChain[i].Invocation); return;
+                case "Cast": RewriteCast.Rewrite(design, args, design.Info.LinqChain[i].Invocation); return;
+                case "OfType": RewriteOfType.Rewrite(design, args, design.Info.LinqChain[i].Invocation); return;
                 
                 case "Concat": RewriteConcat.Rewrite(design, args); return;
                 case "Union": RewriteUnion.Rewrite(design, args); return;

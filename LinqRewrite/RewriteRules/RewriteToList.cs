@@ -20,13 +20,13 @@ namespace LinqRewrite.RewriteRules
 
             var items = Enumerable.Range(0, intSize).Select(i
                 => (ExpressionSyntax) Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + i));
-            return ObjectCreationExpression(design.ReturnType, ArgumentList(CreateSeparatedList(new ArgumentSyntax[0])), 
+            return ObjectCreationExpression(design.Info.ReturnType, ArgumentList(CreateSeparatedList(new ArgumentSyntax[0])), 
                 InitializerExpression( SyntaxKind.ArrayInitializerExpression, SeparatedList(items)));
         }
         
         public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
-            var listVariable = CreateGlobalVariable(design, design.ReturnType, New(design.ReturnType));
+            var listVariable = CreateGlobalVariable(design, design.Info.ReturnType, New(design.Info.ReturnType));
             design.ForAdd(listVariable.Access("Add").Invoke(design.LastValue));
             design.ResultAdd(Return(listVariable));
         }

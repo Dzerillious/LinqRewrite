@@ -17,12 +17,10 @@ namespace LinqRewrite.Services
         public static RewriteService Instance => _instance ??= new RewriteService();
         public Func<ExpressionSyntax, ExpressionSyntax> Visit { get; set; }
 
-        private readonly RewriteDataService _data;
         private readonly CodeCreationService _code;
 
         public RewriteService()
         {
-            _data = RewriteDataService.Instance;
             _code = CodeCreationService.Instance;
         }
 
@@ -42,18 +40,19 @@ namespace LinqRewrite.Services
 
         internal ExpressionSyntax GetMethodInvocationExpression(RewriteDesign design, IEnumerable<StatementSyntax> body)
         {
-            string functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
-            var parameters = design.Data.CurrentMethodParams
-                .Where(parameter => design.HasResultMethod || !parameter.Modifiers.Any()).ToArray();
-            var coreFunction = GetCoreMethod(design.ReturnType, functionName, parameters, body);
+            return null;
+            //string functionName = _code.GetUniqueName($"{_data.CurrentMethodName}_ProceduralLinq");
+            //var parameters = design.Data.CurrentMethodParams
+            //    .Where(parameter => design.HasResultMethod || !parameter.Modifiers.Any()).ToArray();
+            //var coreFunction = GetCoreMethod(design.ReturnType, functionName, parameters, body);
 
-            _data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, coreFunction));
+            //_data.MethodsToAddToCurrentType.Add(Tuple.Create(_data.CurrentType, coreFunction));
 
-            var args = _data.CurrentMethodArguments.Where(argument => design.HasResultMethod || argument.RefKindKeyword.Text != "ref")
-                .Select(argument => (ArgumentBridge)argument).ToArray();
-            var invvocation = _code.CreateMethod(functionName).Invoke(args);
+            //var args = _data.CurrentMethodArguments.Where(argument => design.HasResultMethod || argument.RefKindKeyword.Text != "ref")
+            //    .Select(argument => (ArgumentBridge)argument).ToArray();
+            //var invvocation = _code.CreateMethod(functionName).Invoke(args);
 
-            return invvocation;
+            //return invvocation;
         }
 
         private static StatementSyntax GetBody(RewriteDesign design, List<IStatementSyntax> body) 
@@ -99,11 +98,14 @@ namespace LinqRewrite.Services
             string functionName, 
             IEnumerable<ParameterSyntax> parameters,
             IEnumerable<StatementSyntax> body)
-            => MethodDeclaration(returnType, functionName)
-                .WithParameterList(CreateParameters(parameters))
-                .WithBody(Block(body))
-                .WithStatic(_data.CurrentMethodIsStatic)
-                .WithTypeParameterList(_data.CurrentMethodTypeParameters)
-                .WithConstraintClauses(_data.CurrentMethodConstraintClauses);
+        {
+            return null;
+            //return MethodDeclaration(returnType, functionName)
+            //    .WithParameterList(CreateParameters(parameters))
+            //    .WithBody(Block(body))
+            //    .WithStatic(_data.CurrentMethodIsStatic)
+            //    .WithTypeParameterList(_data.CurrentMethodTypeParameters)
+            //    .WithConstraintClauses(_data.CurrentMethodConstraintClauses);
+        }
     }
 }

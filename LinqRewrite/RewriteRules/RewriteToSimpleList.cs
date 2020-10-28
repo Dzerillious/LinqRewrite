@@ -20,7 +20,7 @@ namespace LinqRewrite.RewriteRules
             return CreateArray(design.CurrentCollection.ItemType.ArrayType(), design.ResultSize,
                 Enumerable.Range(0, intSize).Select(i 
                     => (ExpressionSyntax) Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + i)))
-                .Cast(design.ReturnType);
+                .Cast(design.Info.ReturnType);
         }
         
         public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)

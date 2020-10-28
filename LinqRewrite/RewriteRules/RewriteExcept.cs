@@ -17,8 +17,8 @@ namespace LinqRewrite.RewriteRules
             if (!AssertNotNull(design, collectionValue)) return;
 
             var oldLast = design.LastValue;
-            var collectionType = design.Data.GetTypeInfo(collectionValue).Type;
-            var oldIterator = design.InsertIterator(new CollectionValueBridge(design, collectionType, collectionValue, true));
+            var collectionType = design.Info.Semantic.GetTypeInfo(collectionValue).Type;
+            var oldIterator = design.InsertIterator(new CollectionValueBridge(design, collectionType, collectionValue));
             RewriteCollectionEnumeration.RewriteOther(design, design.CurrentIterator.Collection);
 
             var hashsetType = SyntaxFactory.ParseTypeName($"LinqRewrite.Core.SimpleSet<{design.LastValue.Type}>");

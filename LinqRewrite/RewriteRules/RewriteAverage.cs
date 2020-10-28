@@ -33,10 +33,10 @@ namespace LinqRewrite.RewriteRules
             };
             
             var elementType = selectionValue.Type is NullableTypeSyntax nullable2
-                ? (TypeBridge)nullable2.ElementType : design.ReturnType;;
+                ? nullable2.ElementType : design.Info.ReturnType;
             var sumVariable = CreateGlobalVariable(design, elementType, 0);
 
-            if (design.ReturnType.Type is NullableTypeSyntax) CalculateNullableAverage(design, elementType, selectionValue, sumVariable);
+            if (design.Info.ReturnType is NullableTypeSyntax) CalculateNullableAverage(design, elementType, selectionValue, sumVariable);
             else CalculateSimpleAverage(design, selectionValue, sumVariable);
             
         }
@@ -48,9 +48,9 @@ namespace LinqRewrite.RewriteRules
             design.ForAdd(sumVariable.AddAssign(inlinedValue.Cast(elementType)));
             design.Indexer = null;
 
-            if (design.Unchecked) design.ResultAdd(sumVariable.Cast(design.ReturnType.Type) / design.Indexer);
+            if (design.Unchecked) design.ResultAdd(sumVariable.Cast(design.Info.ReturnType) / design.Indexer);
             else design.ResultAdd(Return(SyntaxFactory.ConditionalExpression(design.Indexer.IsEqual(0),
-                Null, sumVariable.Cast(design.ReturnType.Type) / design.Indexer)));
+                Null, sumVariable.Cast(design.Info.ReturnType) / design.Indexer)));
         }
 
         private static void CalculateSimpleAverage(RewriteDesign design, TypedValueBridge selectionValue, LocalVariable sumVariable)

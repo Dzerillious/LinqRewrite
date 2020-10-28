@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis;
 using static LinqRewrite.Extensions.AssertionExtension;
 using static LinqRewrite.Extensions.OperatorExpressionExtensions;
 using static LinqRewrite.Extensions.SyntaxFactoryHelper;
@@ -36,8 +37,8 @@ namespace LinqRewrite.RewriteRules
             }
             itemVariable.IsGlobal = true;
             
-            var collectionType = design.Data.GetTypeInfo(collectionValue).Type;
-            design.AddIterator(new CollectionValueBridge(design, collectionType, collectionValue, true));
+            var collectionType = design.Info.Semantic.GetTypeInfo(collectionValue).Type;
+            design.AddIterator(new CollectionValueBridge(design, collectionType, collectionValue));
             RewriteCollectionEnumeration.RewriteOther(design, design.CurrentIterator.Collection, itemVariable, true);
             design.ForAdd(If(Not(hashsetVariable.Access("Add").Invoke(design.LastValue)),
                 Continue()));

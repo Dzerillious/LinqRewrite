@@ -5,28 +5,20 @@ using LinqRewrite.Core;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
 using LinqRewrite.Services;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using static LinqRewrite.Extensions.SyntaxFactoryHelper;
 using static LinqRewrite.Extensions.VariableExtensions;
 
 namespace LinqRewrite
 {
-    public class RewriteDesign : IDisposable
+    public class RewriteDesign
     {
         public RewriteService Rewrite { get; }
         public CodeCreationService Code { get; }
-        public RewriteDataService Data { get; }
-        public SemanticModel Semantic => Data.Semantic;
 
+        public RewriteInfo Info { get; }
 
-        public InvocationExpressionSyntax Node { get; private set; }
         public CollectionValueBridge FirstCollection { get; set; }
         public CollectionValueBridge CurrentCollection { get; set; }
-        public List<LinqStep> RewriteChain { get; private set; }
-
-
-        public TypeBridge ReturnType { get; private set; }
 
         public ValueBridge GetResultSize() => ResultSize ?? Indexer;
         private ValueBridge _resultSize;
@@ -81,7 +73,7 @@ namespace LinqRewrite
             }
         }
 
-        private bool _simpleEnumeration;
+        private bool _simpleEnumeration = true;
         public bool SimpleEnumeration
         {
             get => _simpleEnumeration;
@@ -167,41 +159,12 @@ namespace LinqRewrite
             return CurrentIndexer = indexerVariable;
         }
         
-        public RewriteDesign()
+        public RewriteDesign(RewriteInfo rewriteInfo)
         {
             Rewrite = RewriteService.Instance;
             Code = CodeCreationService.Instance;
-            Data = RewriteDataService.Instance;
-        }
-        
-        public void SetData(ValueBridge collection, TypeSyntax returnType, List<LinqStep> chain, InvocationExpressionSyntax node, bool reuse)
-        {
-            InitialStatements.Clear();
-            FinalStatements.Clear();
-            ResultStatements.Clear();
-            Iterators.Clear();
-            Variables.Clear();
-            ResultIterators.Clear();
-            CurrentIterator = null;
-            
-            var collectionType = Semantic.GetTypeInfo(collection).Type;
-            FirstCollection = CurrentCollection = new CollectionValueBridge(this, collectionType, collection, reuse);
+            FirstCollection = CurrentCollection = new CollectionValueBridge(this, rewriteInfo.SourceTypeSymbol, rewriteInfo.Source);
             _sourceSize = _resultSize = FirstCollection.Count;
-
-            ReturnType = returnType;
-            RewriteChain = chain;
-            Node = node;
-
-            HasResultMethod = false;
-            NotRewrite = false;
-            SimpleEnumeration = true;
-            CurrentIndexer = null;
-            NotRewrite = false;
-            WrapWithTry = false;
-            Unchecked = Data.CurrentIsUnchecked;
-            Error = false;
-
-            LastValue = null;
         }
 
         public void InitialAdd(StatementBridge _)
@@ -261,13 +224,11 @@ namespace LinqRewrite
             var created = new LocalVariable(variable, type);
             Variables.Add(created);
             
-            Data.CurrentMethodParams.Add(CreateParameter(variable, type));
-            Data.CurrentMethodArguments.Add(Argument(value));
+            //Data.CurrentMethodParams.Add(CreateParameter(variable, type));
+            //Data.CurrentMethodArguments.Add(Argument(value));
 
             return created;
         }
-
-        public void Dispose() => RewriteParametersFactory.ReturnParameters(this);
 
         public void SwitchIsReversed()
         {

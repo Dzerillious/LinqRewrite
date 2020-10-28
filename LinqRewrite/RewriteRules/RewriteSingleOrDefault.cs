@@ -17,13 +17,13 @@ namespace LinqRewrite.RewriteRules
             return ConditionalExpression(design.CurrentCollection.Count.IsEqual(1),
                 Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin),
                 ConditionalExpression(design.ResultSize.IsEqual(0),
-                    Default(design.ReturnType),
+                    Default(design.Info.ReturnType),
                     ThrowExpression("System.InvalidOperationException", "The sequence contains more than one element.")));
         }
 
         public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
-            var foundVariable = CreateGlobalVariable(design, NullableType(design.ReturnType), null);
+            var foundVariable = CreateGlobalVariable(design, NullableType(design.Info.ReturnType), null);
             if (args.Length == 0)
             {
                 design.ForAdd(If(foundVariable.IsEqual(null),
@@ -38,8 +38,8 @@ namespace LinqRewrite.RewriteRules
                         Throw("System.InvalidOperationException", "The sequence contains more than single matching element."))));
             }
             design.ResultAdd(If(foundVariable.IsEqual(null),
-                                Return(Default(design.ReturnType)), 
-                                Return(foundVariable.Cast(design.ReturnType))));
+                                Return(Default(design.Info.ReturnType)), 
+                                Return(foundVariable.Cast(design.Info.ReturnType))));
         }
     }
 }

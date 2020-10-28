@@ -2,6 +2,7 @@
 using System.Linq;
 using LinqRewrite.DataStructures;
 using LinqRewrite.Extensions;
+using Microsoft.CodeAnalysis;
 using static LinqRewrite.Extensions.AssertionExtension;
 using static LinqRewrite.Extensions.VariableExtensions;
 
@@ -30,8 +31,8 @@ namespace LinqRewrite.RewriteRules
             }
             itemVariable.IsGlobal = true;
             
-            var collectionType = design.Data.GetTypeInfo(collectionValue).Type;
-            design.AddIterator(new CollectionValueBridge(design, collectionType, collectionValue, true));
+            var collectionType = design.Info.Semantic.GetTypeInfo(collectionValue).Type;
+            design.AddIterator(new CollectionValueBridge(design, collectionType, collectionValue));
             RewriteCollectionEnumeration.RewriteOther(design, design.CurrentIterator.Collection, itemVariable, true);
             design.ListEnumeration = design.IncompleteIterators.All(x => x.ListEnumeration);
 

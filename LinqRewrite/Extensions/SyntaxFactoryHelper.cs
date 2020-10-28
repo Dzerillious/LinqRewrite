@@ -195,7 +195,7 @@ namespace LinqRewrite.Extensions
             TypeBridge returnType;
             if (e.Value is LambdaExpressionSyntax lambda)
                 returnType = lambda.ReturnType(design);
-            else returnType = ParseTypeName(((INamedTypeSymbol)design.Semantic.GetTypeInfo(e.Value).ConvertedType).DelegateInvokeMethod.ReturnType.ToDisplayString());
+            else returnType = ParseTypeName(((INamedTypeSymbol)design.Info.Semantic.GetTypeInfo(e.Value).ConvertedType).DelegateInvokeMethod.ReturnType.ToDisplayString());
             
             if (IsLambdaSimple(e.Value))
                 return design.Code.InlineLambda(design, e, returnType, values);
@@ -245,10 +245,10 @@ namespace LinqRewrite.Extensions
         }
 
         public static TypeBridge GetType(this RewrittenValueBridge expression, RewriteDesign design)
-            => design.Semantic.GetTypeFromExpression(expression.Old);
+            => design.Info.Semantic.GetTypeFromExpression(expression.Old);
 
         public static TypeBridge GetType(this ValueBridge expression, RewriteDesign design)
-            => design.Semantic.GetTypeFromExpression(expression);
+            => design.Info.Semantic.GetTypeFromExpression(expression);
 
         public static BlockSyntax Block(params StatementBridge[] statements)
             => SyntaxFactory.Block(statements.Select(x => (StatementSyntax) x));
@@ -280,12 +280,12 @@ namespace LinqRewrite.Extensions
         }
 
         public static TypeBridge ReturnType(this LambdaExpressionSyntax lambda, RewriteDesign design)
-            => CodeCreationService.GetLambdaReturnType(design.Semantic, lambda);
+            => CodeCreationService.GetLambdaReturnType(design.Info.Semantic, lambda);
         
         public static TypeBridge ReturnType(this ValueBridge rewritten, RewriteDesign design)
         {
             var old = (LambdaExpressionSyntax) rewritten.Value;
-            return CodeCreationService.GetLambdaReturnType(design.Semantic, old);
+            return CodeCreationService.GetLambdaReturnType(design.Info.Semantic, old);
         }
 
         public static ValueBridge Parenthesize(ExpressionSyntax expression)
@@ -302,7 +302,7 @@ namespace LinqRewrite.Extensions
                 default:
                     try
                     {
-                        return ((INamedTypeSymbol) design.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.Parameters.Length < 2;
+                        return ((INamedTypeSymbol) design.Info.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.Parameters.Length < 2;
                     }
                     catch (Exception)
                     {
@@ -321,7 +321,7 @@ namespace LinqRewrite.Extensions
                 default:
                     try
                     {
-                        var _ = ((INamedTypeSymbol) design.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.Parameters;
+                        var _ = ((INamedTypeSymbol) design.Info.Semantic.GetTypeInfo(e).ConvertedType).DelegateInvokeMethod.Parameters;
                         return true;
                     }
                     catch (Exception)

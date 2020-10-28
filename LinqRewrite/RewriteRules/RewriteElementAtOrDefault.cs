@@ -13,7 +13,7 @@ namespace LinqRewrite.RewriteRules
         public static ExpressionSyntax SimpleRewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
             => ConditionalExpression(design.ResultSize > args[0],
                 Substitute(design.LastValue, design.CurrentIterator.ForIndexer, design.CurrentMin + args[0]),
-                Default(design.ReturnType));
+                Default(design.Info.ReturnType));
         
         public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
@@ -21,7 +21,7 @@ namespace LinqRewrite.RewriteRules
             design.ForAdd(If(design.Indexer.IsEqual(positionValue),
                             Return(design.LastValue)));
             
-            design.ResultAdd(Return(Default(design.ReturnType)));
+            design.ResultAdd(Return(Default(design.Info.ReturnType)));
         }
     }
 }

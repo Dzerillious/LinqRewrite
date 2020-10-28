@@ -24,8 +24,8 @@ namespace LinqRewrite.RewriteRules
         
         public static void Rewrite(RewriteDesign design, ImmutableArray<ValueBridge> args)
         {
-            var elementType = design.ReturnType.Type is NullableTypeSyntax nullable
-                ? (TypeBridge)nullable.ElementType : design.ReturnType;
+            var elementType = design.Info.ReturnType is NullableTypeSyntax nullable
+                ? nullable.ElementType : design.Info.ReturnType;
             var sumVariable = CreateGlobalVariable(design, elementType, 0);
             
             var value = args.Length switch
@@ -33,7 +33,7 @@ namespace LinqRewrite.RewriteRules
                 0 => design.LastValue,
                 1 => args[0].Inline(design, design.LastValue)
             };
-            if (design.ReturnType.Type is NullableTypeSyntax)
+            if (design.Info.ReturnType is NullableTypeSyntax)
             {
                 value = value.Reusable(design);
                 design.ForAdd(If(value.NotEqual(null),
