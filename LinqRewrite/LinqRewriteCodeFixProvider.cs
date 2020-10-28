@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
@@ -11,111 +12,102 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Rename;
 
 namespace LinqRewrite
 {
 	[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(LinqRewriteCodeFixProvider)), Shared]
 	public class LinqRewriteCodeFixProvider : CodeFixProvider
 	{
-		private const string title = "Make uppercase";
+		private const string TitlePrefix = "Make procedural";
 
-		public sealed override ImmutableArray<string> FixableDiagnosticIds
-		{
-			get { return ImmutableArray.Create(LinqRewriteAnalyzer.DiagnosticId); }
-		}
+		public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(LinqRewriteAnalyzer.DiagnosticId);
 
-		public sealed override FixAllProvider GetFixAllProvider()
-		{
-			// See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/FixAllProvider.md for more information on Fix All Providers
-			return WellKnownFixAllProviders.BatchFixer;
-		}
+        public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
-		public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+        public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
 		{
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
-			// TODO: Replace the following code with your own analysis, generating a CodeAction for each fix to suggest
-			var diagnostic = context.Diagnostics.First();
-			var diagnosticSpan = diagnostic.Location.SourceSpan;
+            foreach (var diagnostic in context.Diagnostics)
+            {
+                var diagnosticSpan = diagnostic.Location.SourceSpan;
+                var linqInvocation = (InvocationExpressionSyntax)root.FindNode(diagnosticSpan);
 
-			// Find the type declaration identified by the diagnostic.
-			var declaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<TypeDeclarationSyntax>().First();
+                var stepChain = GetInvocationStepChain(linqInvocation, out ExpressionSyntax lastExpression);
+                var title = $"{TitlePrefix} {string.Join(".", stepChain)}";
 
-			// Register a code action that will invoke the fix.
-			context.RegisterCodeFix(
-				CodeAction.Create(
-					title: title,
-					createChangedSolution: c => MakeUppercaseAsync(context.Document, declaration, c),
-					equivalenceKey: title),
-				diagnostic);
+                context.RegisterCodeFix(
+                    CodeAction.Create(
+                        title: title,
+                        createChangedSolution: cancellation => MakeProcedural(context.Document, root, linqInvocation, cancellation),
+                        equivalenceKey: title),
+                    diagnostic);
+            }
 		}
 
-		private async Task<Solution> MakeUppercaseAsync(Document document, TypeDeclarationSyntax typeDecl, CancellationToken cancellationToken)
+		private async Task<Solution> MakeProcedural(Document document, SyntaxNode root, InvocationExpressionSyntax linqInvocation, CancellationToken cancellationToken)
 		{
-			// Compute new uppercase name.
-			var identifierToken = typeDecl.Identifier;
-			var newName = identifierToken.Text.ToUpperInvariant();
+            try
+            {
+                var methodDeclaration = linqInvocation.FirstAncestorOrSelf<MethodDeclarationSyntax>();
+                //root.InsertNodesAfter(methodDeclaration, ImmutableArray.Create(
+                //    ))
 
-			// Get the symbol representing the type to be renamed.
-			var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
-			var typeSymbol = semanticModel.GetDeclaredSymbol(typeDecl, cancellationToken);
-
-			// Produce a new solution that has all references to that type renamed, including the declaration.
-			var originalSolution = document.Project.Solution;
-			var optionSet = originalSolution.Workspace.Options;
-			var newSolution = await Renamer.RenameSymbolAsync(document.Project.Solution, typeSymbol, newName, optionSet, cancellationToken).ConfigureAwait(false);
-
-			// Return the new solution with the now-uppercase type name.
-			return newSolution;
+                return document.WithSyntaxRoot(root).Project.Solution;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
-        private static List<LinqStep> GetInvocationStepChain(InvocationExpressionSyntax node, out ExpressionSyntax lastNode)
+        private static ImmutableArray<LinqStep> GetInvocationStepChain(InvocationExpressionSyntax invocation, out ExpressionSyntax lastExpression)
         {
-            var chain = new List<LinqStep>();
-            var invocationExpression = node;
-            lastNode = node;
+            var invocationChain = new List<LinqStep>();
+            var currentExpression = invocation;
+            lastExpression = invocation;
             while (true)
             {
-                if (!IsSupportedMethod(invocationExpression)) break;
-                var arguments = invocationExpression.ArgumentList.Arguments
-                    .Select(argument => (ValueBridge)argument.Expression)
+                if (!IsSupportedMethod(currentExpression)) break;
+                var arguments = currentExpression.ArgumentList.Arguments
+                    .Select(argument => (ValueBridge) argument.Expression)
                     .ToImmutableArray();
 
-                if (invocationExpression.Expression is MemberAccessExpressionSyntax access)
+                if (currentExpression.Expression is MemberAccessExpressionSyntax access)
                 {
-                    chain.Insert(0, new LinqStep(GetMethodName(access.Name.ToString()), arguments, invocationExpression));
-                    lastNode = access.Expression;
-                    if (lastNode is InvocationExpressionSyntax invocation)
-                        invocationExpression = invocation;
+                    invocationChain.Insert(0, new LinqStep(GetMethodName(access.Name.ToString()), arguments, currentExpression));
+                    lastExpression = access.Expression;
+                    if (lastExpression is InvocationExpressionSyntax invocationExpressionSyntax)
+                        currentExpression = invocationExpressionSyntax;
                     else break;
                 }
-                else if (invocationExpression.Expression is MemberBindingExpressionSyntax binding)
+                else if (currentExpression.Expression is MemberBindingExpressionSyntax binding)
                 {
-                    chain.Insert(0, new LinqStep(GetMethodName(binding.Name.ToString()), arguments, invocationExpression));
-                    var conditional = (ConditionalAccessExpressionSyntax)node.Parent;
-                    lastNode = conditional.Expression;
+                    invocationChain.Insert(0, new LinqStep(GetMethodName(binding.Name.ToString()), arguments, currentExpression));
+                    var conditional = (ConditionalAccessExpressionSyntax) invocation.Parent;
+                    lastExpression = conditional.Expression;
                     break;
                 }
                 else break;
             }
-            return chain;
+            return invocationChain.ToImmutableArray();
         }
 
-        private static (bool, ExpressionSyntax) CheckIfRewriteInvocation(InvocationExpressionSyntax invocation, SemanticModel semanticModel)
+        private static ImmutableArray<VariableCapture> GetCaptures(InvocationExpressionSyntax invocation, SemanticModel semanticModel)
         {
-            var typeInfo = semanticModel.GetTypeInfo(invocation);
             var flows = semanticModel.AnalyzeDataFlow(invocation);
 
             var flowsIn = flows.DataFlowsIn.Concat(invocation.DescendantNodesAndSelf()
                 .Where(node => node is IdentifierNameSyntax)
                 .Select(node => semanticModel.GetSymbolInfo(node).Symbol)
-                .Where(symbol => symbol is IFieldSymbol)).ToArray();
+                .Where(symbol => symbol is IFieldSymbol))
+                .ToImmutableArray();
 
             var changingParams = flows.DataFlowsOut
                 .Concat(flows.WrittenInside)
                 .ToImmutableHashSet();
-            var currentFlow = flowsIn
+            var captures = flowsIn
                 .Union(flows.DataFlowsOut)
                 .Where(symbol =>
                 {
@@ -123,15 +115,9 @@ namespace LinqRewrite
                     return !parameter.IsThis && !parameter.IsStatic;
                 })
                 .Select(symbol => VariableExtensions.CreateVariableCapture(symbol, changingParams))
-                .ToArray();
+                .ToImmutableArray();
 
-            if (Extensions.SyntaxExtensions.IsAnonymousType(typeInfo.Type)) return (false, null);
-            var returnType = typeInfo.Type;
-            if (Extensions.SyntaxExtensions.IsAnonymousType(returnType) ||
-                currentFlow.Any(x => Extensions.SyntaxExtensions.IsAnonymousType(SymbolExtensions.GetType(x.Symbol))))
-                return (false, null);
-
-            return (true, invocation);
+            return captures;
         }
 
         private static bool IsSupportedMethod(InvocationExpressionSyntax invocation)

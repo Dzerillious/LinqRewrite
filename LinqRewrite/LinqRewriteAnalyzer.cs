@@ -17,7 +17,7 @@ namespace LinqRewrite
 		private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.AnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
 		private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.AnalyzerDescription), Resources.ResourceManager, typeof(Resources));
 		
-		private static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: Description);
+		private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: Description);
 
 		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -36,8 +36,7 @@ namespace LinqRewrite
 			var semanticModel = context.SemanticModel;
 			var typeInfo = semanticModel.GetTypeInfo(expression);
 			if (typeInfo.Type is INamedTypeSymbol type 
-                && type.Name.Equals("IEnumerable", StringComparison.Ordinal) 
-                && type.TypeArguments.Length == 1)
+                && type.Name.Equals("IEnumerable", StringComparison.Ordinal))
             {
                 if (!IsSupportedMethod(expression)) return;
                 context.ReportDiagnostic(Diagnostic.Create(Rule, expression.GetLocation(), type.TypeArguments[0].Name));
