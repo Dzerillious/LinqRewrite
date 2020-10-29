@@ -33,13 +33,13 @@ namespace LinqRewrite
                 var diagnosticSpan = diagnostic.Location.SourceSpan;
                 var invocation = (InvocationExpressionSyntax)root.FindNode(diagnosticSpan);
 
-                var stepChain = GetInvocationStepChain(invocation, out ExpressionSyntax sourceCollection);
+Minor                var stepChain = GetInvocationStepChain(invocation);
                 var title = $"{TitlePrefix} {string.Join(".", stepChain)}";
 
                 context.RegisterCodeFix(
                     CodeAction.Create(
                         title: title,
-                        createChangedSolution: cancellation => MakeProcedural(context.Document, root, sourceCollection, invocation, stepChain, cancellation),
+                        createChangedSolution: cancellation => MakeProcedural(context.Document, root, null, invocation, stepChain, cancellation),
                         equivalenceKey: title),
                     diagnostic);
             }
@@ -51,6 +51,8 @@ namespace LinqRewrite
             try
             {
                 var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
+                var methodDeclaration = linqExpression.FirstAncestorOrSelf<MethodDeclarationSyntax>();
+
                 var rewriteInfo = new RewriteInfo(
                     semantic: semanticModel,
                     source: sourceCollection,
@@ -60,43 +62,46 @@ namespace LinqRewrite
 
                 InvocationRewriter.TryRewrite(rewriteInfo);
 
-                var methodDeclaration = linqExpression.FirstAncestorOrSelf<MethodDeclarationSyntax>();
                 return document.WithSyntaxRoot(root).Project.Solution;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                return document.Project.Solution;
             }
         }
 
-        private static ImmutableArray<LinqStep> GetInvocationStepChain(InvocationExpressionSyntax invocation, out ExpressionSyntax lastExpression)
+        private static ImmutableArray<LinqStep> GetInvocationStepChain(InvocationExpressionSyntax invocationExpression)
         {
             var invocationChain = new List<LinqStep>();
-            var currentExpression = invocation;
-            lastExpression = invocation;
+            ExpressionSyntax lastExpression = invocationExpression.Expression;
+            InvocationExpressionSyntax lastInvocation = invocationExpression;
+            ImmutableArray<ValueBridge> lastArguments = invocationExpression.ArgumentList.Arguments
+                .Select(argument => (ValueBridge)argument.Expression)
+                .ToImmutableArray();
+
             while (true)
             {
-                if (!IsSupportedMethod(currentExpression)) break;
-                var arguments = currentExpression.ArgumentList.Arguments
-                    .Select(argument => (ValueBridge) argument.Expression)
-                    .ToImmutableArray();
+                if (lastExpression is InvocationExpressionSyntax invocation)
+                {
+                    if (!IsSupportedMethod(invocation)) break;
+                    lastArguments = invocation.ArgumentList.Arguments
+                        .Select(argument => (ValueBridge)argument.Expression)
+                        .ToImmutableArray();
 
-                if (currentExpression.Expression is MemberAccessExpressionSyntax access)
-                {
-                    invocationChain.Insert(0, new LinqStep(GetMethodName(access.Name.ToString()), arguments, currentExpression));
-                    lastExpression = access.Expression;
-                    if (lastExpression is InvocationExpressionSyntax invocationExpressionSyntax)
-                        currentExpression = invocationExpressionSyntax;
-                    else break;
+                    lastInvocation = invocation;
                 }
-                else if (currentExpression.Expression is MemberBindingExpressionSyntax binding)
+                else if (lastExpression is MemberAccessExpressionSyntax access)
                 {
-                    invocationChain.Insert(0, new LinqStep(GetMethodName(binding.Name.ToString()), arguments, currentExpression));
-                    var conditional = (ConditionalAccessExpressionSyntax) invocation.Parent;
-                    lastExpression = conditional.Expression;
-                    break;
+                    invocationChain.Add(new LinqStep(GetMethodName(access.Name.ToString()), lastArguments, lastInvocation));
                 }
+                else if (lastExpression is MemberBindingExpressionSyntax binding)
+                {
+                    invocationChain.Add(new LinqStep(GetMethodName(binding.Name.ToString()), lastArguments, lastInvocation));
+                }
+                else break;
+
+                if (lastExpression.Parent is ExpressionSyntax bindingExpression)
+                    lastExpression = bindingExpression;
                 else break;
             }
             return invocationChain.ToImmutableArray();

@@ -29,11 +29,7 @@ namespace LinqRewrite
 		private static void AnalyzeLinq(SyntaxNodeAnalysisContext context)
 		{
 			var expression = (InvocationExpressionSyntax)context.Node;
-			if (expression.Parent is EqualsValueClauseSyntax 
-                || expression.Parent is AssignmentExpressionSyntax)
-				return;
-
-			var semanticModel = context.SemanticModel;
+            var semanticModel = context.SemanticModel;
 			var typeInfo = semanticModel.GetTypeInfo(expression);
 			if (typeInfo.Type is INamedTypeSymbol type 
                 && type.Name.Equals("IEnumerable", StringComparison.Ordinal))
